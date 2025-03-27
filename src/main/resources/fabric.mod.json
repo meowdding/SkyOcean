@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "skyocean",
+  "version": "${version}",
+  "name": "SkyOcean",
+  "description": "SkyOcean is a hypixel skyblock mod that aims to provide a better playing experience by integrating QOL elements in an unnoticeable way.",
+  "contact": {
+  },
+  "authors": [
+    "meoworawr"
+  ],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "codes.cookies.skyocean.SkyOcean"
+      }
+    ]
+  },
+  "mixins": [
+    {
+      "config": "skyocean.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "accessWidener": "skyocean.accesswidener",
+  "depends": {
+    "fabric": "*",
+    "minecraft": "1.21.5"
+  }
+}
