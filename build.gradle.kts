@@ -3,9 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     idea
-    kotlin("jvm") version "2.0.20"
+    kotlin("jvm") version "2.1.0"
     alias(libs.plugins.loom)
     id("maven-publish")
+    id("com.google.devtools.ksp") version "2.1.0-1.0.29"
 }
 
 base {
@@ -59,6 +60,8 @@ repositories {
 }
 
 dependencies {
+    compileOnly(ksp(project(":annotations"))!!)
+
     minecraft(libs.minecraft)
     mappings(loom.layered {
         officialMojangMappings()

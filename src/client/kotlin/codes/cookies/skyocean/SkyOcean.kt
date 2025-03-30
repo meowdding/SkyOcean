@@ -1,21 +1,26 @@
 package codes.cookies.skyocean
 
-import codes.cookies.skyocean.api.event.EntityEvents
-import codes.cookies.skyocean.features.misc.SlayerHighlight
-import codes.cookies.skyocean.helper.SbEntity
-import codes.cookies.skyocean.utils.ChatUtils
+import codes.cookies.skyocean.config.Config
+import codes.cookies.skyocean.generated.Modules
+import codes.cookies.skyocean.modules.Module
+import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
+import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import net.fabricmc.api.ClientModInitializer
-import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
+import tech.thatgravyboat.repolib.api.RepoAPI
+import tech.thatgravyboat.repolib.api.RepoVersion
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
-import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 
+@Module
 object SkyOcean : ClientModInitializer {
+
+    val configurator = Configurator("skyocean")
+
     override fun onInitializeClient() {
-        SkyBlockAPI.eventBus.register(SbEntity)
-        SkyBlockAPI.eventBus.register(EntityEvents)
-        SkyBlockAPI.eventBus.register(SlayerHighlight)
-        SkyBlockAPI.eventBus.register(SkyOcean)
+        Config.register(configurator)
+        RepoAPI.setup(RepoVersion.V1_21_5)
+        Modules.load()
     }
 
 
@@ -23,7 +28,9 @@ object SkyOcean : ClientModInitializer {
     fun commands(event: RegisterCommandsEvent) {
         event.register("skyocean") {
             this.callback {
-                ChatUtils.prefix.send()
+                McClient.tell {
+                    McClient.setScreen(ResourcefulConfigScreen.getFactory("skyocean").apply(null))
+                }
             }
         }
     }

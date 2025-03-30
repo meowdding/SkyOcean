@@ -4,13 +4,5 @@
   "compatibilityLevel": "JAVA_21",
   "package": "codes.cookies.skyocean.mixins",
   "client": [
-    "ClientLevelMixin",
-    "ClientPacketListenerMixin",
-    "DebugScreenOverlayMixin",
-    "EntityRendererMixin",
-    "EntityRenderStateMixin"
-  ],
-  "mixins": [
-    "EntityMixin"
   ]
 }

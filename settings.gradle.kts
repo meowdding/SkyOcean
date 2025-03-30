@@ -16,3 +16,5 @@ dependencyResolutionManagement {
         create("libs")
     }
 }
+
+include("annotations")
