@@ -1,8 +1,12 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "compatibilityLevel": "JAVA_21",
-  "package": "codes.cookies.skyocean.mixins",
-  "client": [
-  ]
+    "required": true,
+    "minVersion": "0.8",
+    "compatibilityLevel": "JAVA_21",
+    "package": "codes.cookies.skyocean.mixins",
+    "client": [
+        "accessor.SlayerAPIAccessor"
+    ],
+    "mixins": [
+        "EntityMixin"
+    ]
 }

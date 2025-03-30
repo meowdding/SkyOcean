@@ -3,11 +3,10 @@ package codes.cookies.skyocean.config.features.mining
 import codes.cookies.skyocean.config.translation
 import codes.cookies.skyocean.features.mining.mineshaft.MineshaftAnnouncement.ShaftAnnounceType
 import com.teamresourceful.resourcefulconfig.api.annotations.ConfigOption
-import com.teamresourceful.resourcefulconfig.api.types.options.TranslatableValue
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 
 object MineshaftConfig : CategoryKt("mineshaft") {
-    override val name = TranslatableValue("skyocean.mining.mineshaft")
+    override val name get() = Translated("skyocean.mining.mineshaft")
 
     @ConfigOption.Separator("Mineshaft Announcement")
     val shaftSeparator = ""
