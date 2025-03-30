@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulconfigkt.api.ConfigKt
 object Config : ConfigKt("skyocean/config") {
 
     override val name: TranslatableValue = TranslatableValue("SkyOcean")
-    override val description: TranslatableValue = TranslatableValue("SkyOcean (v${SkyOcean.self.metadata.version.friendlyString})")
+    override val description: TranslatableValue = TranslatableValue("SkyOcean (v${SkyOcean.VERSION})")
     override val links: Array<ResourcefulConfigLink> = emptyArray()
 
     init {

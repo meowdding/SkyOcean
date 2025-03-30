@@ -16,7 +16,8 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 @Module
 object SkyOcean : ClientModInitializer {
 
-    val self = FabricLoader.getInstance().getModContainer("skyocean").get()
+    val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
+    val VERSION = SELF.metadata.version.friendlyString
 
     val configurator = Configurator("skyocean")
 
