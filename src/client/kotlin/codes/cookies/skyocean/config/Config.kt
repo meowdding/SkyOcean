@@ -1,15 +1,19 @@
 package codes.cookies.skyocean.config
 
-import com.teamresourceful.resourcefulconfig.api.annotations.Config
-import com.teamresourceful.resourcefulconfig.api.annotations.ConfigInfo
+import codes.cookies.skyocean.SkyOcean
+import codes.cookies.skyocean.config.features.mining.MineshaftConfig
+import com.teamresourceful.resourcefulconfig.api.types.info.ResourcefulConfigLink
+import com.teamresourceful.resourcefulconfig.api.types.options.TranslatableValue
 import com.teamresourceful.resourcefulconfigkt.api.ConfigKt
 
-@Config("skyocean/config")
-@ConfigInfo.Provider(ConfigInfoProvider::class)
 object Config : ConfigKt("skyocean/config") {
 
-    var shaftAnnouncement by boolean(false) {
-        translation = "skyocean.shaft"
+    override val name: TranslatableValue = TranslatableValue("SkyOcean")
+    override val description: TranslatableValue = TranslatableValue("SkyOcean (v${SkyOcean.VERSION})")
+    override val links: Array<ResourcefulConfigLink> = emptyArray()
+
+    init {
+        category(MineshaftConfig)
     }
 
 }
