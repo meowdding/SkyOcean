@@ -6,6 +6,7 @@ import codes.cookies.skyocean.modules.Module
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.loader.api.FabricLoader
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.RepoVersion
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -14,6 +15,8 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 @Module
 object SkyOcean : ClientModInitializer {
+
+    val self = FabricLoader.getInstance().getModContainer("skyocean").get()
 
     val configurator = Configurator("skyocean")
 
@@ -25,7 +28,7 @@ object SkyOcean : ClientModInitializer {
 
 
     @Subscription
-    fun commands(event: RegisterCommandsEvent) {
+    fun onCommand(event: RegisterCommandsEvent) {
         event.register("skyocean") {
             this.callback {
                 McClient.tell {
