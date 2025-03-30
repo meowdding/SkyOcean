@@ -1,6 +1,10 @@
 {
     "__config__": "Config",
 
+    "skyocean.slayer": "Slayer",
+    "skyocean.slayer.blaze_highlight": "Blaze Slayer Highlight",
+    "skyocean.slayer.blaze_highlight.desc": "Highlights the balze slayer in the color of the current attunement",
+
     "skyocean.mining.mineshaft": "Mineshaft Config",
     "skyocean.mining.mineshaft.announce": "Announce Mineshaft Enter",
     "skyocean.mining.mineshaft.announce.desc": "Send a chat or party message when you enter a Mineshaft.\nWill send in chat if not in a party.",
