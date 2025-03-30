@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 object MineshaftConfig : CategoryKt("mineshaft") {
     override val name = TranslatableValue("skyocean.mining.mineshaft")
 
-    @ConfigOption.Separator("Mineshaft Announce")
+    @ConfigOption.Separator("Mineshaft Announcement")
     val shaftSeparator = ""
 
     var shaftAnnouncement by boolean(false) {
