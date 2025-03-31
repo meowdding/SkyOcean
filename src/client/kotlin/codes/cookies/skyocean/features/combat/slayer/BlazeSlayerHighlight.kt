@@ -16,7 +16,7 @@ object BlazeSlayerHighlight {
     private val colors = mapOf(
         "immune" to TextColor.RED,
         "ashen" to TextColor.DARK_GRAY,
-        "auric" to TextColor.GOLD,
+        "auric" to TextColor.YELLOW,
         "crystal" to TextColor.AQUA,
         "spirit" to TextColor.WHITE
     ).toList()
