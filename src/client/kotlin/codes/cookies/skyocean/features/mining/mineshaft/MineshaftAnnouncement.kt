@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package codes.cookies.skyocean.features.mining.mineshaft
 
 import codes.cookies.skyocean.config.features.mining.MineshaftConfig
@@ -13,6 +11,7 @@ import tech.thatgravyboat.skyblockapi.api.events.location.mineshaft.CorpseSpawnE
 import tech.thatgravyboat.skyblockapi.api.events.location.mineshaft.MineshaftEnteredEvent
 import tech.thatgravyboat.skyblockapi.api.events.location.mineshaft.MineshaftFoundEvent
 import tech.thatgravyboat.skyblockapi.api.profile.party.PartyAPI
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -63,7 +62,7 @@ object MineshaftAnnouncement {
             ShaftAnnounceType.PARTY -> {
                 if (PartyAPI.inParty) {
                     ChatUtils.chat("Sending message into party chat...")
-                    ChatUtils.command("/pc ${text.stripped}")
+                    McClient.sendCommand("/pc ${text.stripped}")
                 } else ChatUtils.chat(text)
             }
         }
