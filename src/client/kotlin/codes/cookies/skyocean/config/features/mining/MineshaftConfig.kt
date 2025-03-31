@@ -23,7 +23,7 @@ object MineshaftConfig : CategoryKt("mineshaft") {
     val waypointSeparator = ""
 
     var corpseWaypoint by boolean(false) {
-        translation = "skyocean.mining.mineshaft.waypoint"
+        translation = "skyocean.config.mining.mineshaft.waypoint"
     }
 
 

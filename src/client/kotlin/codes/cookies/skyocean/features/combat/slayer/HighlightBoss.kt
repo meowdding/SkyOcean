@@ -34,7 +34,7 @@ object HighlightBoss {
         }
 
         event.slayerInfo.entity.isGlowing = true
-        event.slayerInfo.entity.glowingColor = colors[event.slayerInfo.type]?: TextColor.GRAY
+        event.slayerInfo.entity.glowingColor = colors[event.slayerInfo.type] ?: TextColor.GRAY
     }
 
 }
