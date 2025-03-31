@@ -7,6 +7,8 @@ import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.RepoVersion
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -14,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 @Module
-object SkyOcean : ClientModInitializer {
+object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOcean") {
 
     val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
     val VERSION = SELF.metadata.version.friendlyString
