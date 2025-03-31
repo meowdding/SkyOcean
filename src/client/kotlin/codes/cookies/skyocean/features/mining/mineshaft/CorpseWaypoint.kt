@@ -1,5 +1,6 @@
 package codes.cookies.skyocean.features.mining.mineshaft
 
+import codes.cookies.skyocean.config.features.mining.MineshaftConfig
 import codes.cookies.skyocean.events.RenderWorldEvent
 import codes.cookies.skyocean.modules.Module
 import codes.cookies.skyocean.utils.ChatUtils
@@ -52,6 +53,7 @@ object CorpseWaypoint {
     @Subscription
     @OnlyIn(SkyBlockIsland.MINESHAFT)
     fun onRender(event: RenderWorldEvent) {
+        if (!MineshaftConfig.corpseWaypoint) return
         val corpses = mineshaftCorpses.find { it.id == if (MineshaftAPI.isCrystal) "CRYSTAL" else MineshaftAPI.mineshaftType?.id }
 
         corpses?.positions?.forEach {

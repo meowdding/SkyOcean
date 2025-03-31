@@ -10,7 +10,7 @@ object MineshaftConfig : CategoryKt("mineshaft") {
     override val name = TranslatableValue("skyocean.mining.mineshaft")
 
     @ConfigOption.Separator("Mineshaft Announcement")
-    val shaftSeparator = ""
+    val announceSeparator = ""
 
     var shaftAnnouncement by boolean(false) {
         translation = "skyocean.mining.mineshaft.announce"
@@ -19,5 +19,13 @@ object MineshaftConfig : CategoryKt("mineshaft") {
     var shaftAnnounceType by enum(ShaftAnnounceType.CHAT) {
         translation = "skyocean.mining.mineshaft.announce-type"
     }
+
+    @ConfigOption.Separator("Corpse Waypoint")
+    val waypointSeparator = ""
+
+    var corpseWaypoint by boolean(false) {
+        translation = "skyocean.mining.mineshaft.waypoint"
+    }
+
 
 }
