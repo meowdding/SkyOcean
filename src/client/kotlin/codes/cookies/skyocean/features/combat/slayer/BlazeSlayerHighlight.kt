@@ -16,15 +16,16 @@ object BlazeSlayerHighlight {
     private val colors = mapOf(
         "immune" to TextColor.RED,
         "ashen" to TextColor.DARK_GRAY,
-        "auric" to TextColor.GOLD,
+        "auric" to TextColor.YELLOW,
         "crystal" to TextColor.AQUA,
         "spirit" to TextColor.WHITE
     ).toList()
 
-    @Subscription
+    @Subscription(priority = Subscription.HIGH)
     @OnlySlayerType([SlayerType.INFERNO_DEMONLORD], acceptDemons = true)
     fun onBlazeSlayerLineChange(event: SlayerInfoLineChangeEvent) {
         if (!SlayerConfig.enableBlazeHighlight) {
+            event.slayerInfo.entity.isGlowing = false
             return
         }
 

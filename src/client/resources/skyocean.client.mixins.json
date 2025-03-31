@@ -7,6 +7,8 @@
         "accessor.SlayerAPIAccessor"
     ],
     "mixins": [
-        "EntityMixin"
+        "ComponentMixin",
+        "EntityMixin",
+        "LanguageMixin"
     ]
 }

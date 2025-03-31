@@ -1,15 +1,40 @@
 {
-    "__config__": "Config",
-
-    "skyocean.slayer": "Slayer",
-    "skyocean.slayer.blaze_highlight": "Blaze Slayer Highlight",
-    "skyocean.slayer.blaze_highlight.desc": "Highlights the balze slayer in the color of the current attunement",
-
-    "skyocean.mining.mineshaft": "Mineshaft Config",
-    "skyocean.mining.mineshaft.announce": "Announce Mineshaft Enter",
-    "skyocean.mining.mineshaft.announce.desc": "Send a chat or party message when you enter a Mineshaft.\nWill send in chat if not in a party.",
-    "skyocean.mining.mineshaft.announce-type": "Announcement Type",
-    "skyocean.mining.mineshaft.announce-type.desc": "The type of message to send when you enter a Mineshaft.",
-    "skyocean.mining.mineshaft.waypoint": "Corpse Waypoint",
-    "skyocean.mining.mineshaft.waypoint.desc": "Show a waypoint on all possible Corpse Locations in a Mineshaft."
+  "@ocean:metadata": {
+    "allowMultiline": true,
+    "allowReferences": true,
+    "allowTags": true,
+    "objectAsKeys": true,
+    "prefix": "skyocean"
+  },
+  "config": {
+    "slayer": {
+      "@value": "Slayer",
+      "highlights": {
+        "blaze": {
+          "@value": "Blaze Slayer Highlight",
+          "desc": "Highlights the blaze slayer in the color of the current attunement"
+        }
+      }
+    },
+    "mining": {
+      "mineshaft": {
+        "@value": "Mineshaft Config",
+        "announce": {
+          "@value": "Announce Mineshaft Enter",
+          "desc": [
+            "Send a chat or party message when you enter a Mineshaft.",
+            "Will send in chat if not in a party."
+          ]
+        },
+        "announce-type": {
+          "@value": "Announcement Type",
+          "desc": "The type of message to send when you enter a Mineshaft."
+        },
+        "waypoint": {
+          "@value": "Corpse Waypoint",
+          "desc": "Show a waypoint on all possible Corpse Locations in a Mineshaft."
+        }
+      }
+    }
+  }
 }
