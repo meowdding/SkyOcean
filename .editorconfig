@@ -18,6 +18,9 @@ ij_any_line_comment_add_space = true
 # Max line length
 max_line_length = 160
 
+[*.json*]
+indent_size = 2
+
 [*.kt]
 ktlint_code_style = intellij_idea
 

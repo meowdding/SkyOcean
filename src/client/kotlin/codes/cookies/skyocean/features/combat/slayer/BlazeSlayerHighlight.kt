@@ -21,10 +21,11 @@ object BlazeSlayerHighlight {
         "spirit" to TextColor.WHITE
     ).toList()
 
-    @Subscription
+    @Subscription(priority = Subscription.HIGH)
     @OnlySlayerType([SlayerType.INFERNO_DEMONLORD], acceptDemons = true)
     fun onBlazeSlayerLineChange(event: SlayerInfoLineChangeEvent) {
         if (!SlayerConfig.enableBlazeHighlight) {
+            event.slayerInfo.entity.isGlowing = false
             return
         }
 
