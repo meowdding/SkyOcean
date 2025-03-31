@@ -13,6 +13,18 @@
         "blaze": {
           "@value": "Blaze Slayer Highlight",
           "desc": "Highlights the blaze slayer in the color of the current attunement"
+        },
+        "own_boss": {
+          "@value": "Highlight Own Boss",
+          "desc": "Adds a glow effect to your own slayer bosses."
+        },
+        "minis": {
+          "@value": "Highlight minis",
+          "desc": "Adds a <red>red</red> glow effect to slayer minibosses ",
+          "big_boys": {
+            "@value": "Highlight big minis",
+            "desc": "Changes the color of big minibosses to be <dark_red>dark red</dark_red>."
+          }
         }
       }
     },

@@ -11,14 +11,14 @@ object SlayerConfig: CategoryKt("slayer") {
     }
 
     var highlightOwnBoss by boolean(true) {
-        this.translation = "skyocean.config.slayer.highlight_own_boss"
+        this.translation = "skyocean.config.slayer.highlights.own_boss"
     }
 
     var highlightMini by boolean(true) {
-        this.translation = "skyocean.config.slayer.highlight.mini"
+        this.translation = "skyocean.config.slayer.highlights.minis"
     }
 
     var highlightBigBoys by boolean(true) {
-        this.translation = "skyocean.config.slayer.highlight.mini.big"
+        this.translation = "skyocean.config.slayer.highlights.minis.big_boys"
     }
 }

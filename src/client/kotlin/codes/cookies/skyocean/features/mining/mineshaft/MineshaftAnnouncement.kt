@@ -32,13 +32,13 @@ object MineshaftAnnouncement {
     @Subscription
     fun onShaftEnter(event: MineshaftEnteredEvent) {
         foundShaftType = true
-        trySend()
+        McClient.tell { trySend() }
     }
 
     @Subscription
     fun onCorpseSpawn(event: CorpseSpawnEvent) {
         foundCorpse = true
-        trySend()
+        McClient.tell { trySend() }
     }
 
     private fun trySend() {
@@ -74,6 +74,9 @@ object MineshaftAnnouncement {
     fun onWorldSwitch(event: ServerChangeEvent) = reset()
 
     private fun reset() {
+        if (lastFound != 0L && !hasSend) {
+            return
+        }
         foundShaftType = false
         foundCorpse = false
         lastFound = 0L
