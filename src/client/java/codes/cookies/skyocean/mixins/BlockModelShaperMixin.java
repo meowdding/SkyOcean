@@ -32,13 +32,10 @@ public class BlockModelShaperMixin {
         cancellable = true
     )
     private void getBlockModel(CallbackInfoReturnable<BlockStateModel> cir, @Local(argsOnly = true) BlockState blockState) {
-        final BlockModelEvent blockModelEvent = new BlockModelEvent(blockState, modelByStateCache);
+        final BlockModelEvent blockModelEvent = new BlockModelEvent(blockState);
         blockModelEvent.post(SkyBlockAPI.getEventBus());
-        final BlockStateModel model = blockModelEvent.getModel();
 
-        if (model != null) {
-            cir.setReturnValue(orNotFound(model));
-        } else if (blockModelEvent.getState() != blockState) {
+        if (blockModelEvent.getState() != blockState) {
             cir.setReturnValue(orNotFound(modelByStateCache.get(blockState)));
         }
     }

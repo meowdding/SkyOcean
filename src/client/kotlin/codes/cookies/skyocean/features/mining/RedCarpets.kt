@@ -12,13 +12,12 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 @Module
 object RedCarpets {
 
-
     @Subscription
     @OnlyIn(SkyBlockIsland.DWARVEN_MINES)
     fun onBlockModel(event: BlockModelEvent) {
         if (!MiningConfig.recolorCarpets) return
-        if (event.state.block !in BlockTagKey.DWARVEN_MINES_CARPETS) return
-        event.model = event.modelByStateCache[Blocks.RED_CARPET.defaultBlockState()]
+        if (event.block !in BlockTagKey.DWARVEN_MINES_CARPETS) return
+        event.block = Blocks.RED_CARPET
     }
 
 }

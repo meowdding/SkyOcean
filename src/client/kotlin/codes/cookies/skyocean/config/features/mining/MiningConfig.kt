@@ -10,7 +10,7 @@ object MiningConfig : CategoryKt("mining") {
 
     override val name get() = Translated("skyocean.config.mining")
 
-    var recolorCarpets by  boolean(false) {
+    var recolorCarpets by boolean(false) {
         translation = "mining.retexture.carpets"
     }
 

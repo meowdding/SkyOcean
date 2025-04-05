@@ -89,10 +89,11 @@ public class LanguageMixin {
     ) {
         final LanguageMetadata languageMetadata = metadataRef.get();
         if (languageMetadata == null || languageMetadata.prefix() == null) {
+            //noinspection MixinExtrasOperationParameters
             original.call(instance, t, u);
             return;
         }
-
+        //noinspection MixinExtrasOperationParameters
         original.call(instance, languageMetadata.prefix() + "." + t, u);
     }
 
