@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.resources.ResourceLocation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tech.thatgravyboat.repolib.api.RepoAPI
@@ -40,4 +41,6 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
             }
         }
     }
+
+    fun id(path: String) = ResourceLocation.fromNamespaceAndPath(SELF.metadata.id, path)
 }

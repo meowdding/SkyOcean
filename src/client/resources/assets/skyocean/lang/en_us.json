@@ -17,6 +17,16 @@
       }
     },
     "mining": {
+      "@value": "Mining",
+      "retexture": {
+        "carpets": {
+          "@value": "Retexture carpets",
+          "desc": [
+            "Turns most carpets in the dwarven mines <red>red</red> to make them more visible.",
+            "<yellow>Only updates on chunk refresh, use <bold>F3+A</bold> to force a refresh"
+          ]
+        }
+      },
       "mineshaft": {
         "@value": "Mineshaft",
         "announce": {

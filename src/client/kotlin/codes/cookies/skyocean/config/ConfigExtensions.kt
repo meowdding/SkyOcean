@@ -5,7 +5,14 @@ import com.teamresourceful.resourcefulconfigkt.api.builders.TypeBuilder
 
 var TypeBuilder.translation: String
     set(value) {
-        name =  Translated(value)
-        description =  Translated("$value.desc")
+        val actualValue: String
+        if (!value.startsWith("skyocean.config")) {
+            actualValue = "skyocean.config.$value"
+        } else {
+            actualValue = value
+        }
+
+        name =  Translated(actualValue)
+        description =  Translated("$actualValue.desc")
     }
     get() = ""
