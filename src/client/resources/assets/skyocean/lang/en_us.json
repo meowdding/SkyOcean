@@ -18,7 +18,7 @@
     },
     "mining": {
       "mineshaft": {
-        "@value": "Mineshaft Config",
+        "@value": "Mineshaft",
         "announce": {
           "@value": "Announce Mineshaft Enter",
           "desc": [
@@ -37,7 +37,7 @@
       }
     },
     "chat": {
-      "@value": "Chat Config",
+      "@value": "Chat",
       "profile_in_chat": {
         "@value": "Profile in Chat",
         "desc": "Show the profile icon in chat messages."
