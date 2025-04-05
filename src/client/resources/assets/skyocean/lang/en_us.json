@@ -35,6 +35,13 @@
           "desc": "Show a waypoint on all possible Corpse Locations in a Mineshaft."
         }
       }
+    },
+    "chat": {
+      "@value": "Chat Config",
+      "profile_in_chat": {
+        "@value": "Profile in Chat",
+        "desc": "Show the profile icon in chat messages."
+      }
     }
   }
 }

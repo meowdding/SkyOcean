@@ -1,6 +1,7 @@
 package codes.cookies.skyocean.config
 
 import codes.cookies.skyocean.SkyOcean
+import codes.cookies.skyocean.config.features.chat.ChatConfig
 import codes.cookies.skyocean.config.features.combat.SlayerConfig
 import codes.cookies.skyocean.config.features.mining.MineshaftConfig
 import com.teamresourceful.resourcefulconfig.api.types.info.ResourcefulConfigLink
@@ -16,6 +17,7 @@ object Config : ConfigKt("skyocean/config") {
     init {
         category(MineshaftConfig)
         category(SlayerConfig)
+        category(ChatConfig)
     }
 
 }
