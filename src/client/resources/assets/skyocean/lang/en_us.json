@@ -18,7 +18,7 @@
     },
     "mining": {
       "mineshaft": {
-        "@value": "Mineshaft Config",
+        "@value": "Mineshaft",
         "announce": {
           "@value": "Announce Mineshaft Enter",
           "desc": [
@@ -34,6 +34,13 @@
           "@value": "Corpse Waypoint",
           "desc": "Show a waypoint on all possible Corpse Locations in a Mineshaft."
         }
+      }
+    },
+    "chat": {
+      "@value": "Chat",
+      "profile_in_chat": {
+        "@value": "Profile in Chat",
+        "desc": "Show the profile icon in chat messages."
       }
     }
   }
