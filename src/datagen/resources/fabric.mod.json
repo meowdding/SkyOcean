@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "skyocean_datagen",
+  "version": "${version}",
+  "name": "SkyOcean Datagen",
+  "description": "Datagen for skyocean :3",
+  "authors": [
+    "meoworawr"
+  ],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-datagen": [
+      {
+        "adapter": "kotlin",
+        "value": "codes.cookies.skyocean.datagen.SkyOceanDatagen"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "codes.cookies.skyocean.SkyOcean"
+      }
+    ]
+  },
+  "depends": {
+    "fabric": "*",
+    "minecraft": "1.21.5"
+  }
+}

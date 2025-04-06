@@ -4,7 +4,10 @@
     "allowReferences": true,
     "allowTags": true,
     "objectAsKeys": true,
-    "prefix": "skyocean"
+    "prefix": "skyocean",
+    "@references": {
+      "force_reload_chunks": "<yellow>Only updates on chunk refresh, use <bold>F3+A</bold> to force a refresh."
+    }
   },
   "config": {
     "slayer": {
@@ -13,6 +16,18 @@
         "blaze": {
           "@value": "Blaze Slayer Highlight",
           "desc": "Highlights the blaze slayer in the color of the current attunement"
+        },
+        "own_boss": {
+          "@value": "Highlight own slayer boss",
+          "desc": "Adds glow highlights to your slayer boss"
+        },
+        "minis": {
+          "@value": "Highlight minis",
+          "desc": "Highlights all minibosses with a <red>red</red> glow effect.",
+          "big_boys": {
+            "@value": "Highlight high tier minis",
+            "desc": "Highlight higher tier mini bosses in <dark_red>dark red</dark_red>."
+          }
         }
       }
     },
@@ -23,7 +38,21 @@
           "@value": "Retexture carpets",
           "desc": [
             "Turns most carpets in the dwarven mines <red>red</red> to make them more visible.",
-            "<yellow>Only updates on chunk refresh, use <bold>F3+A</bold> to force a refresh"
+            { "@id": "force_reload_chunks" }
+          ]
+        },
+        "general": {
+          "@value": "Retexture Mining blocks",
+          "desc": [
+            "Allows resource packs to change the appearance of mining blocks.",
+            { "@id": "force_reload_chunks" }
+          ]
+        },
+        "mist": {
+          "@value": "Retexture Mist",
+          "desc": [
+            "Allows resource packs to change the appearance of blocks in the mist.",
+            { "@id": "force_reload_chunks" }
           ]
         }
       },

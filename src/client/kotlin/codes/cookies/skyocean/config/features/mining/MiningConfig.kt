@@ -14,4 +14,11 @@ object MiningConfig : CategoryKt("mining") {
         translation = "mining.retexture.carpets"
     }
 
+    var customMiningTextures by boolean(false) {
+        translation = "mining.retexture.general"
+    }
+
+    var customMist by boolean(false) {
+        translation = "mining.retexture.mist"
+    }
 }

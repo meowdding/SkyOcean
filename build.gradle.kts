@@ -29,6 +29,11 @@ loom {
             vmArg("-Ddevauth.enabled=true")
             vmArg("-Dskyblockapi.debug=true")
         }
+        afterEvaluate {
+            getByName("datagen") {
+                vmArg("-Ddevauth.enabled=false")
+            }
+        }
     }
 
     mods {
@@ -48,6 +53,19 @@ loom {
             }
         }
     }
+}
+
+fabricApi {
+    configureDataGeneration {
+        client = true
+        createSourceSet = true
+        addToResources = true
+        outputDirectory.set(project.layout.buildDirectory.dir("generated/datagen").get().asFile)
+    }
+}
+
+tasks.getByName("sourcesJar").apply {
+    dependsOn(tasks.getByName("runDatagen"))
 }
 
 repositories {
@@ -116,5 +134,11 @@ idea {
         isDownloadSources = true
 
         excludeDirs.add(file("run"))
+    }
+}
+
+afterEvaluate {
+    tasks.getByName("kspDatagenKotlin") {
+        enabled = false
     }
 }
