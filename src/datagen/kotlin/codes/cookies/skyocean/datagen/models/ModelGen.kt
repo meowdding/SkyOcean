@@ -31,6 +31,13 @@ class ModelGen(output: FabricDataOutput) : FabricModelProvider(output) {
         createCopy(Blocks.WHITE_STAINED_GLASS, MistBlocks.MIST_MAIN_GLASS, blockStateModelGenerator)
         createSnowBlocks(MistBlocks.MIST_SNOW_BLOCK, MistBlocks.MIST_SNOW, blockStateModelGenerator)
         createGlassPane(Blocks.LIGHT_BLUE_STAINED_GLASS, Blocks.LIGHT_BLUE_STAINED_GLASS_PANE, MistBlocks.MIST_GLASS_PANE, blockStateModelGenerator)
+        createCarpetCopy(Blocks.WHITE_WOOL, MistBlocks.MIST_CARPET, blockStateModelGenerator)
+        createCopy(Blocks.LIGHT_BLUE_STAINED_GLASS, MistBlocks.MIST_GLASS, blockStateModelGenerator)
+    }
+
+    private fun createCarpetCopy(wool: Block, destination: Block, generator: BlockModelGenerators) {
+        val multiVariant = BlockModelGenerators.plainVariant(TexturedModel.CARPET.get(wool).create(destination, generator.modelOutput))
+        generator.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(destination, multiVariant))
     }
 
     private fun createCopy(origin: Block, destination: Block, generator: BlockModelGenerators) {
@@ -84,7 +91,7 @@ class ModelGen(output: FabricDataOutput) : FabricModelProvider(output) {
                 PropertyDispatch.initial(BlockStateProperties.LAYERS).generate {
                     if (it < 8) {
                         ModelTemplate(
-                            Optional.of(ResourceLocation.withDefaultNamespace("snow_height${it * 2}")),
+                            Optional.of(ResourceLocation.withDefaultNamespace("block/snow_height${it * 2}")),
                             Optional.empty(),
                             TextureSlot.TEXTURE,
                             TextureSlot.PARTICLE,

@@ -22,8 +22,8 @@ public class TerrainRenderContextMixin {
         CallbackInfo ci,
         @Local(argsOnly = true) LocalRef<BlockStateModel> model,
         @Local(argsOnly = true) LocalRef<BlockState> blockState,
-        @Local(argsOnly = true)BlockPos blockPos
-        ) {
+        @Local(argsOnly = true) BlockPos blockPos
+    ) {
         final BlockModelEvent blockModelEvent = new BlockModelEvent(blockState.get(), blockPos);
         blockModelEvent.post(SkyBlockAPI.getEventBus());
         if (blockModelEvent.getState() != blockState.get()) {

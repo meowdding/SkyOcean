@@ -20,10 +20,14 @@ object MistBlocks {
     val MIST_CLAY = register("mist_clay")
     val MIST_GLASS_PANE = register("mist_glass_pane", { StainedGlassPaneBlock(DyeColor.WHITE, it) })
     val MIST_ICE = register("mist_ice", ::IceBlock)
+    val MIST_GLASS = register("mist_glass_secondary", { StainedGlassBlock(DyeColor.PINK, it) })
+    val MIST_CARPET = register("mist_carpet", { WoolCarpetBlock(DyeColor.WHITE, it) })
 
     init {
         BlockRenderLayerMap.INSTANCE.putBlock(MIST_GLASS_PANE, RenderType.translucent())
         BlockRenderLayerMap.INSTANCE.putBlock(MIST_MAIN_GLASS, RenderType.translucent())
+        BlockRenderLayerMap.INSTANCE.putBlock(MIST_GLASS, RenderType.translucent())
+        BlockRenderLayerMap.INSTANCE.putBlock(MIST_CARPET, RenderType.cutout())
     }
 
     @Subscription
@@ -38,6 +42,8 @@ object MistBlocks {
             event.state.`is`(Blocks.CLAY) -> MIST_CLAY.defaultBlockState()
             event.state.`is`(Blocks.LIGHT_BLUE_STAINED_GLASS_PANE) || event.state.`is`(Blocks.BLUE_STAINED_GLASS_PANE) -> MIST_GLASS_PANE.withPropertiesOf(event.state)
             event.state.`is`(Blocks.WHITE_STAINED_GLASS) -> MIST_MAIN_GLASS.defaultBlockState()
+            event.state.`is`(Blocks.LIGHT_BLUE_STAINED_GLASS) -> MIST_GLASS.defaultBlockState()
+            event.state.`is`(Blocks.WHITE_WOOL) -> MIST_CARPET.defaultBlockState()
             else -> event.state
         }
     }

@@ -1,4 +1,3 @@
-
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -130,5 +129,11 @@ idea {
         isDownloadSources = true
 
         excludeDirs.add(file("run"))
+    }
+}
+
+afterEvaluate {
+    tasks.getByName("kspDatagenKotlin") {
+        enabled = false
     }
 }
