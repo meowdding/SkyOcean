@@ -1,3 +1,4 @@
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -48,6 +49,19 @@ loom {
             }
         }
     }
+}
+
+fabricApi {
+    configureDataGeneration {
+        client = true
+        createSourceSet = true
+        addToResources = true
+        outputDirectory.set(project.layout.buildDirectory.dir("generated/datagen").get().asFile)
+    }
+}
+
+tasks.getByName("sourcesJar").apply {
+    dependsOn(tasks.getByName("runDatagen"))
 }
 
 repositories {
