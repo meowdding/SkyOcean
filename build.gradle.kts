@@ -29,6 +29,11 @@ loom {
             vmArg("-Ddevauth.enabled=true")
             vmArg("-Dskyblockapi.debug=true")
         }
+        afterEvaluate {
+            getByName("datagen") {
+                vmArg("-Ddevauth.enabled=false")
+            }
+        }
     }
 
     mods {
