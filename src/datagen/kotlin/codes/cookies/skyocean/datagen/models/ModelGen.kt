@@ -1,6 +1,7 @@
 package codes.cookies.skyocean.datagen.models
 
 import codes.cookies.skyocean.SkyOcean
+import codes.cookies.skyocean.features.textures.GemstoneBlocks
 import codes.cookies.skyocean.features.textures.GlaciteBlocks
 import codes.cookies.skyocean.features.textures.MistBlocks
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider
@@ -33,6 +34,21 @@ class ModelGen(output: FabricDataOutput) : FabricModelProvider(output) {
         createGlassPane(Blocks.LIGHT_BLUE_STAINED_GLASS, Blocks.LIGHT_BLUE_STAINED_GLASS_PANE, MistBlocks.MIST_GLASS_PANE, blockStateModelGenerator)
         createCarpetCopy(Blocks.WHITE_WOOL, MistBlocks.MIST_CARPET, blockStateModelGenerator)
         createCopy(Blocks.LIGHT_BLUE_STAINED_GLASS, MistBlocks.MIST_GLASS, blockStateModelGenerator)
+
+        createGemstones(blockStateModelGenerator)
+    }
+
+    private fun createGemstones(generator: BlockModelGenerators) {
+        GemstoneBlocks.map.entries.chunked(2) {
+            val (originalBlock, newBlock) = it.first()
+            val (originalPane, newPane) = it.last()
+            createGlassAndGlassPane(originalBlock, originalPane, newBlock, newPane, generator)
+        }
+    }
+
+    fun createGlassAndGlassPane(original: Block, originalPane: Block, new: Block, newPane: Block, generator: BlockModelGenerators) {
+        createCopy(original, new, generator)
+        createGlassPane(original, originalPane, newPane, generator)
     }
 
     private fun createCarpetCopy(wool: Block, destination: Block, generator: BlockModelGenerators) {

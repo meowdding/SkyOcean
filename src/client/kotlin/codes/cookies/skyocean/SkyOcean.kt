@@ -30,7 +30,6 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         Modules.load()
     }
 
-
     @Subscription
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("skyocean") {

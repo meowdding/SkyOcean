@@ -1,4 +1,4 @@
-package codes.cookies.skyocean.utils.aabb
+package codes.cookies.skyocean.utils.boundingboxes
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
