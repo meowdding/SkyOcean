@@ -7,16 +7,13 @@ import codes.cookies.skyocean.utils.boundingboxes.DwarvenMinesBB
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.IronBarsBlock
-import net.minecraft.world.level.block.TransparentBlock
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 @Module
 object GemstoneBlocks : BlockRetexture() {
-    val RUBY = register(Blocks.RED_STAINED_GLASS, register("ruby", ::TransparentBlock))
+    /*val RUBY = register(Blocks.RED_STAINED_GLASS, register("ruby", ::TransparentBlock))
     val RUBY_PANE = register(Blocks.RED_STAINED_GLASS_PANE, register("ruby_pane", ::IronBarsBlock))
 
     val AMBER = register(Blocks.ORANGE_STAINED_GLASS, register("amber", ::TransparentBlock))
@@ -51,7 +48,7 @@ object GemstoneBlocks : BlockRetexture() {
 
     val PERIDOT = register(Blocks.GREEN_STAINED_GLASS, register("peridot", ::TransparentBlock))
     val PERIDOT_PANE = register(Blocks.GREEN_STAINED_GLASS_PANE, register("peridot_pane", ::IronBarsBlock))
-
+*/
     override fun register(defaultBlock: Block, newBlock: Block): Block {
         BlockRenderLayerMap.INSTANCE.putBlock(newBlock, RenderType.translucent())
         return super.register(defaultBlock, newBlock)
