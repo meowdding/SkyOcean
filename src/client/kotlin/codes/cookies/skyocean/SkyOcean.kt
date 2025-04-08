@@ -1,16 +1,17 @@
 package codes.cookies.skyocean
 
 import codes.cookies.skyocean.config.Config
+import codes.cookies.skyocean.events.FakeBlockModelEvent
 import codes.cookies.skyocean.generated.Modules
-import codes.cookies.skyocean.helpers.SkyOceanPreparableModelLoadingPlugin
+import codes.cookies.skyocean.helpers.fakeblocks.FakeBlocks
 import codes.cookies.skyocean.modules.Module
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.resources.FileToIdConverter
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.block.Blocks
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tech.thatgravyboat.repolib.api.RepoAPI
@@ -18,7 +19,6 @@ import tech.thatgravyboat.repolib.api.RepoVersion
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import java.util.concurrent.CompletableFuture
 
 @Module
 object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOcean") {
@@ -33,12 +33,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         RepoAPI.setup(RepoVersion.V1_21_5)
         Modules.load()
 
-        PreparableModelLoadingPlugin.register({ manager, executor ->
-            FileToIdConverter.json("overwrite/blockstates").listMatchingResources(manager)
-
-            CompletableFuture.completedFuture(listOf())
-        }, SkyOceanPreparableModelLoadingPlugin)
-
+        PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
     }
 
     @Subscription
@@ -49,6 +44,13 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
                     McClient.setScreen(ResourcefulConfigScreen.getFactory("skyocean").apply(null))
                 }
             }
+        }
+    }
+
+    @Subscription
+    fun replaceModels(event: FakeBlockModelEvent) {
+        event.register(Blocks.STONE, id("test")) { _, pos ->
+            pos.y < 0
         }
     }
 

@@ -1,4 +1,4 @@
-package codes.cookies.skyocean.helpers
+package codes.cookies.skyocean.helpers.fakeblocks
 
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBlockStateModel
@@ -12,7 +12,10 @@ import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
 import java.util.function.Predicate
 
-class SelectBakedModel(val model: BlockStateModel): FabricBlockStateModel by model, BlockStateModel {
+class FakeBlockModel(
+    val model: BlockStateModel,
+    val alternatives: List<FakeBlockModelEntry>
+): FabricBlockStateModel by model, BlockStateModel {
 
     override fun emitQuads(
         emitter: QuadEmitter,
@@ -22,11 +25,16 @@ class SelectBakedModel(val model: BlockStateModel): FabricBlockStateModel by mod
         random: RandomSource,
         cullTest: Predicate<Direction?>,
     ) {
-        if ((pos.x % 2).or(pos.z % 2) == 0) {
-            //alt.emitQuads(emitter, blockView, pos, state, random, cullTest)
-            return
+        if (alternatives.isNotEmpty()) {
+            for (entry in alternatives) {
+                val (model, predicate) = entry
+                val stateModel = model[state]
+                if (stateModel != null && predicate.invoke(state, pos)) {
+                    stateModel.emitQuads(emitter, cullTest)
+                    return
+                }
+            }
         }
-
         model.emitQuads(emitter, blockView, pos, state, random, cullTest)
     }
 
