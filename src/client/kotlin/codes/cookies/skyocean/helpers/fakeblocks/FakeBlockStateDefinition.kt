@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.block.model.BlockStateModel
 import net.minecraft.client.resources.model.ModelBaker
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.StateDefinition
 import kotlin.jvm.optionals.getOrNull
 
 class FakeBlockStateDefinition(
@@ -19,8 +18,17 @@ class FakeBlockStateDefinition(
     val blend: BlendMode?
 ) {
 
-    fun instantiate(state: StateDefinition<Block, BlockState>, baker: ModelBaker, id: String): Map<BlockState, BlockStateModel> {
-        return model.instantiate(state) { id }.mapValues { (state, model) -> model.bake(state, baker) }
+    private var roots: Map<BlockState, BlockStateModel.UnbakedRoot>? = null
+
+    fun getRoots(block: Block): Map<BlockState, BlockStateModel.UnbakedRoot> {
+        if (roots == null) {
+            roots = model.instantiate(block.stateDefinition) { block.builtInRegistryHolder().key().location().toString() }
+        }
+        return roots!!
+    }
+
+    fun instantiate(block: Block, baker: ModelBaker): Map<BlockState, BlockStateModel> {
+        return getRoots(block).mapValues { (state, model) -> model.bake(state, baker) }
     }
 
     companion object {

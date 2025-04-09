@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 
 typealias FakeBlockEntry = Pair<ResourceLocation, (BlockState, BlockPos) -> Boolean>
+typealias FakeBlockUnbakedEntry = Pair<FakeBlockStateDefinition, (BlockState, BlockPos) -> Boolean>
 
 const val BLOCK_STATES_PATH = "overwrite/blockstates"
 
@@ -66,22 +67,18 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlock
     }
 
     override fun initialize(definitions: Map<ResourceLocation, FakeBlockStateDefinition>, context: ModelLoadingPlugin.Context) {
-        context.modifyBlockModelAfterBake().register { original, context ->
+        context.modifyBlockModelOnLoad().register { original, context ->
             val block = context.state().block
 
             fakeBlocks[block]?.let { entries ->
-                val modelEntries = mutableListOf<FakeBlockModelEntry>()
+                val unbakedEntries = mutableListOf<FakeBlockUnbakedEntry>()
                 for (entry in entries) {
                     val (id, predicate) = entry
                     val definition = definitions[id] ?: error("Failed to load fake block state definition for $id")
-                    modelEntries.add(FakeBlockModelEntry(
-                        definition.blend,
-                        definition.instantiate(block.stateDefinition, context.baker(), id.toString()),
-                        predicate
-                    ))
+                    unbakedEntries.add(FakeBlockUnbakedEntry(definition, predicate))
                 }
 
-                FakeBlockModel(original, modelEntries)
+                FakeBlockUnbakedModel(block, original, unbakedEntries)
             } ?: original
         }
     }
