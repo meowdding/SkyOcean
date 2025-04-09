@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 @Module
 object MistBlocks : BlockRetexture() {
@@ -25,7 +26,7 @@ object MistBlocks : BlockRetexture() {
     }
 
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
-        //if (!SkyBlockIsland.DWARVEN_MINES.inIsland()) return false
+        if (!SkyBlockIsland.DWARVEN_MINES.inIsland()) return false
         return DwarvenMinesBB.MIST.isInside(blockPos)
     }
 }

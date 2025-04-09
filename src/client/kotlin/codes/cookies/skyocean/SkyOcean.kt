@@ -1,12 +1,9 @@
 package codes.cookies.skyocean
 
 import codes.cookies.skyocean.config.Config
-import codes.cookies.skyocean.events.RenderWorldEvent
 import codes.cookies.skyocean.generated.Modules
 import codes.cookies.skyocean.helpers.fakeblocks.FakeBlocks
 import codes.cookies.skyocean.modules.Module
-import codes.cookies.skyocean.utils.boundingboxes.DwarvenMinesBB
-import codes.cookies.skyocean.utils.boundingboxes.OctreeDebugRenderer
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import net.fabricmc.api.ClientModInitializer
@@ -41,13 +38,6 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         Modules.load()
 
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
-    }
-
-    val debug = OctreeDebugRenderer(DwarvenMinesBB.MIST)
-
-    @Subscription
-    fun debug(event: RenderWorldEvent) {
-        debug.render(event)
     }
 
     @Subscription

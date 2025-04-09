@@ -19,7 +19,7 @@ import java.util.concurrent.Executor
 typealias FakeBlockEntry = Pair<ResourceLocation, (BlockState, BlockPos) -> Boolean>
 typealias FakeBlockUnbakedEntry = Pair<FakeBlockStateDefinition, (BlockState, BlockPos) -> Boolean>
 
-const val BLOCK_STATES_PATH = "overwrite/blockstates"
+const val BLOCK_STATES_PATH = "virtualblockstates"
 
 object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlockStateDefinition>> {
 

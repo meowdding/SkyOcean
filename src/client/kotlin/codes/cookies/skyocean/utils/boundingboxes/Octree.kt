@@ -46,9 +46,7 @@ interface Node {
 }
 
 class CompoundLeaf(leafBox: BoundingBox, private val boxes: List<BoundingBox>) : Leaf(leafBox, leafBox) {
-    override fun isInside(pos: BlockPos): Boolean {
-        return boxes.any { it.isInside(pos) }
-    }
+    override fun isInside(pos: BlockPos) = boxes.any { it.isInside(pos) }
 }
 
 open class Leaf(private val leafBox: BoundingBox, private val box: BoundingBox) : Node {
@@ -64,9 +62,7 @@ open class Leaf(private val leafBox: BoundingBox, private val box: BoundingBox) 
 
     override fun getNode(pos: BlockPos) = this
 
-    open fun isInside(pos: BlockPos): Boolean {
-        return box.isInside(pos)
-    }
+    open fun isInside(pos: BlockPos) = box.isInside(pos)
 }
 
 class Branch(private val boundingBox: BoundingBox, boxes: List<BoundingBox>) : Node {
