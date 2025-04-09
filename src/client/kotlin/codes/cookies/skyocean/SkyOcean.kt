@@ -2,10 +2,12 @@ package codes.cookies.skyocean
 
 import codes.cookies.skyocean.config.Config
 import codes.cookies.skyocean.generated.Modules
+import codes.cookies.skyocean.helpers.fakeblocks.FakeBlocks
 import codes.cookies.skyocean.modules.Module
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.ResourceLocation
 import org.slf4j.Logger
@@ -24,12 +26,19 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
 
     val configurator = Configurator("skyocean")
 
+    private var isInitialized = false
+
     override fun onInitializeClient() {
+        if (isInitialized) {
+            return
+        }
+        isInitialized = true
         Config.register(configurator)
         RepoAPI.setup(RepoVersion.V1_21_5)
         Modules.load()
-    }
 
+        PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
+    }
 
     @Subscription
     fun onCommand(event: RegisterCommandsEvent) {
@@ -41,6 +50,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
             }
         }
     }
+
 
     fun id(path: String) = ResourceLocation.fromNamespaceAndPath(SELF.metadata.id, path)
 }

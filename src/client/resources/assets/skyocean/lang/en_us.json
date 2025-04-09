@@ -54,6 +54,13 @@
             "Allows resource packs to change the appearance of blocks in the mist.",
             { "@id": "force_reload_chunks" }
           ]
+        },
+        "gemstone": {
+          "@value": "Retexture Gemstones",
+          "desc": [
+            "Allows resource packs to change the appearance of gemstones.",
+            { "@id": "force_reload_chunks" }
+          ]
         }
       },
       "mineshaft": {

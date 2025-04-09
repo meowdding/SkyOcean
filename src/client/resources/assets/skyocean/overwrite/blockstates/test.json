@@ -1,0 +1,8 @@
+{
+  "blend": "CUTOUT",
+  "variants": {
+    "": {
+      "model": "minecraft:block/cobweb"
+    }
+  }
+}

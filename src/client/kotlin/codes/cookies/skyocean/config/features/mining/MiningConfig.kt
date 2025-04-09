@@ -21,4 +21,8 @@ object MiningConfig : CategoryKt("mining") {
     var customMist by boolean(false) {
         translation = "mining.retexture.mist"
     }
+
+    var customGemstoneTextures by boolean(false) {
+        translation = "mining.retexture.gemstone"
+    }
 }
