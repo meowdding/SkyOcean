@@ -44,7 +44,7 @@ object GemstoneBlocks : BlockRetexture() {
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
         return when (LocationAPI.island) {
             SkyBlockIsland.DWARVEN_MINES -> DwarvenMinesBB.GEMSTONE_LOCATIONS.isInside(blockPos)
-            SkyBlockIsland.MINESHAFT -> true
+            SkyBlockIsland.MINESHAFT, SkyBlockIsland.CRYSTAL_HOLLOWS -> true
             else -> false
         }
     }
