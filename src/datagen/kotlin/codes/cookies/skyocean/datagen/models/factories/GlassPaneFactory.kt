@@ -7,11 +7,8 @@ import net.minecraft.client.data.models.BlockModelGenerators
 import net.minecraft.client.data.models.BlockModelGenerators.Y_ROT_270
 import net.minecraft.client.data.models.BlockModelGenerators.Y_ROT_90
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator
-import net.minecraft.client.data.models.model.ModelTemplate
 import net.minecraft.client.data.models.model.ModelTemplates
 import net.minecraft.client.data.models.model.TextureMapping
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.StainedGlassPaneBlock
@@ -43,12 +40,6 @@ object GlassPaneFactory : BlockModelFactory {
 
     override fun create(block: Block, fakeBlock: FakeBlockEntry, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
         val textureMapping = TextureMapping.pane(getBaseGlassBlock(block), block)
-        fun ModelTemplate.create(location: ResourceLocation): ResourceLocation {
-            val apply = this.getDefaultModelLocation(block).let {
-                ResourceLocation.fromNamespaceAndPath(location.namespace, it.path.replace(BuiltInRegistries.BLOCK.getKey(block).path, location.path))
-            }
-            return create(apply, textureMapping, generator.modelOutput)
-        }
         val post = (ModelTemplates.STAINED_GLASS_PANE_POST.plainVariant(fakeBlock.first, block, textureMapping, generator))
         val side = (ModelTemplates.STAINED_GLASS_PANE_SIDE.plainVariant(fakeBlock.first, block, textureMapping, generator))
         val sideAlt = (ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.plainVariant(fakeBlock.first, block, textureMapping, generator))

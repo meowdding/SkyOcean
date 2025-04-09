@@ -1,12 +1,28 @@
 package codes.cookies.skyocean.features.textures
 
+import codes.cookies.skyocean.events.RegisterFakeBlocksEvent
 import codes.cookies.skyocean.modules.Module
+import codes.cookies.skyocean.utils.boundingboxes.DwarvenMinesBB
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 
 @Module
 object GlaciteBlocks : BlockRetexture() {
-    //val GLACITE_SNOW = register(Blocks.SNOW, register("glacite_snow", ::SnowLayerBlock))
-    //val GLACITE_SNOW_BLOCK = register(Blocks.SNOW_BLOCK, register("glacite_snow_block"))
-    //val GLACITE = register(Blocks.PACKED_ICE, register("glacite"))
-    //val GLACITE_HARD_STONE = register(Blocks.INFESTED_STONE, register("glacite_hard_stone"))
-    //val GLACITE_HARD_STONE_WOOL = register(Blocks.LIGHT_GRAY_WOOL, register("glacite_hard_stone_wool"))
+
+    @Subscription
+    fun registerFakeBlocks(event: RegisterFakeBlocksEvent) = with(event) {
+        register(Blocks.SNOW, "glacite_snow")
+        register(Blocks.SNOW_BLOCK, "glacite_snow_block")
+        register(Blocks.PACKED_ICE, "glacite")
+        register(Blocks.INFESTED_STONE, "glacite_hard_stone")
+        register(Blocks.LIGHT_GRAY_WOOL, "glacite_hard_stone_wool")
+    }
+
+    override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
+        //if (!SkyBlockIsland.DWARVEN_MINES.inIsland()) return false
+        return DwarvenMinesBB.GLACITE_TUNNELS.isInside(blockPos)
+    }
+
 }

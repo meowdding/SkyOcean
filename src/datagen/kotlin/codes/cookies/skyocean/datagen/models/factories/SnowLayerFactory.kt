@@ -8,7 +8,6 @@ import net.minecraft.client.data.models.BlockModelGenerators
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator
 import net.minecraft.client.data.models.blockstates.PropertyDispatch
 import net.minecraft.client.data.models.model.ModelTemplate
-import net.minecraft.client.data.models.model.ModelTemplates
 import net.minecraft.client.data.models.model.TextureMapping
 import net.minecraft.client.data.models.model.TextureSlot
 import net.minecraft.resources.ResourceLocation
@@ -21,16 +20,7 @@ object SnowLayerFactory : BlockModelFactory {
     override fun isFor(block: Block) = block == Blocks.SNOW
 
     override fun create(block: Block, fakeBlock: FakeBlockEntry, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
-        val textureMapping = TextureMapping.cube(Blocks.SNOW)
-        val multiVariant = BlockModelGenerators.plainVariant(
-            SkyOcean.id(
-                ModelTemplates.CUBE_ALL.create(
-                    getBlockModelLocation(fakeBlock.first),
-                    textureMapping,
-                    generator.modelOutput,
-                ).path,
-            ),
-        )
+        val multiVariant = BlockModelGenerators.plainVariant(SkyOcean.id(createCopy(Blocks.SNOW_BLOCK, fakeBlock, generator).path))
         modelGenContext.collectState(
             fakeBlock.first,
             MultiVariantGenerator.dispatch(block).with(
@@ -50,6 +40,5 @@ object SnowLayerFactory : BlockModelFactory {
                 },
             ),
         )
-        //modelGenContext.collectState(fakeBlock.first, BlockModelGenerators.createSimpleBlock(Blocks.SNOW_BLOCK, multiVariant))
     }
 }

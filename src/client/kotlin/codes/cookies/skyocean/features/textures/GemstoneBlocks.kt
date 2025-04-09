@@ -1,51 +1,46 @@
 package codes.cookies.skyocean.features.textures
 
+import codes.cookies.skyocean.events.RegisterFakeBlocksEvent
 import codes.cookies.skyocean.modules.Module
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.world.level.block.Block
+import codes.cookies.skyocean.utils.boundingboxes.DwarvenMinesBB
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 
 @Module
 object GemstoneBlocks : BlockRetexture() {
-    /*val RUBY = register(Blocks.RED_STAINED_GLASS, register("ruby", ::TransparentBlock))
-    val RUBY_PANE = register(Blocks.RED_STAINED_GLASS_PANE, register("ruby_pane", ::IronBarsBlock))
 
-    val AMBER = register(Blocks.ORANGE_STAINED_GLASS, register("amber", ::TransparentBlock))
-    val AMBER_PANE = register(Blocks.ORANGE_STAINED_GLASS_PANE, register("amber_pane", ::IronBarsBlock))
-
-    val SAPPHIRE = register(Blocks.LIGHT_BLUE_STAINED_GLASS, register("sapphire", ::TransparentBlock))
-    val SAPPHIRE_PANE = register(Blocks.LIGHT_BLUE_STAINED_GLASS_PANE, register("sapphire_pane", ::IronBarsBlock))
-
-    val JADE = register(Blocks.LIME_STAINED_GLASS, register("jade", ::TransparentBlock))
-    val JADE_PANE = register(Blocks.LIME_STAINED_GLASS_PANE, register("jade_pane", ::IronBarsBlock))
-
-    val AMETHYST = register(Blocks.PURPLE_STAINED_GLASS, register("amethyst", ::TransparentBlock))
-    val AMETHYST_PANE = register(Blocks.PURPLE_STAINED_GLASS_PANE, register("amethyst_pane", ::IronBarsBlock))
-
-    val OPAL = register(Blocks.WHITE_STAINED_GLASS, register("opal", ::TransparentBlock))
-    val OPAL_PANE = register(Blocks.WHITE_STAINED_GLASS_PANE, register("opal_pane", ::IronBarsBlock))
-
-    val TOPAZ = register(Blocks.YELLOW_STAINED_GLASS, register("topaz", ::TransparentBlock))
-    val TOPAZ_PANE = register(Blocks.YELLOW_STAINED_GLASS_PANE, register("topaz_pane", ::IronBarsBlock))
-
-    val JASPER = register(Blocks.MAGENTA_STAINED_GLASS, register("jasper", ::TransparentBlock))
-    val JASPER_PANE = register(Blocks.MAGENTA_STAINED_GLASS_PANE, register("jasper_pane", ::IronBarsBlock))
-
-    val ONYX = register(Blocks.BLACK_STAINED_GLASS, register("onyx", ::TransparentBlock))
-    val ONYX_PANE = register(Blocks.BLACK_STAINED_GLASS_PANE, register("onyx_pane", ::IronBarsBlock))
-
-    val AQUAMARINE = register(Blocks.BLUE_STAINED_GLASS, register("aquamarine", ::TransparentBlock))
-    val AQUAMARINE_PANE = register(Blocks.BLUE_STAINED_GLASS_PANE, register("aquamarine_pane", ::IronBarsBlock))
-
-    val CITRINE = register(Blocks.BROWN_STAINED_GLASS, register("citrine", ::TransparentBlock))
-    val CITRINE_PANE = register(Blocks.BROWN_STAINED_GLASS_PANE, register("citrine_pane", ::IronBarsBlock))
-
-    val PERIDOT = register(Blocks.GREEN_STAINED_GLASS, register("peridot", ::TransparentBlock))
-    val PERIDOT_PANE = register(Blocks.GREEN_STAINED_GLASS_PANE, register("peridot_pane", ::IronBarsBlock))
-*/
-    override fun register(defaultBlock: Block, newBlock: Block): Block {
-        BlockRenderLayerMap.INSTANCE.putBlock(newBlock, RenderType.translucent())
-        return super.register(defaultBlock, newBlock)
+    @Subscription
+    fun registerFakeBlocks(event: RegisterFakeBlocksEvent) = with(event) {
+        register(Blocks.RED_STAINED_GLASS, "ruby")
+        register(Blocks.RED_STAINED_GLASS_PANE, "ruby_pane")
+        register(Blocks.ORANGE_STAINED_GLASS, "amber")
+        register(Blocks.ORANGE_STAINED_GLASS_PANE, "amber_pane")
+        register(Blocks.LIGHT_BLUE_STAINED_GLASS, "sapphire")
+        register(Blocks.LIGHT_BLUE_STAINED_GLASS_PANE, "sapphire_pane")
+        register(Blocks.LIME_STAINED_GLASS, "jade")
+        register(Blocks.LIME_STAINED_GLASS_PANE, "jade_pane")
+        register(Blocks.PURPLE_STAINED_GLASS, "amethyst")
+        register(Blocks.PURPLE_STAINED_GLASS_PANE, "amethyst_pane")
+        register(Blocks.WHITE_STAINED_GLASS, "opal")
+        register(Blocks.WHITE_STAINED_GLASS_PANE, "opal_pane")
+        register(Blocks.YELLOW_STAINED_GLASS, "topaz")
+        register(Blocks.YELLOW_STAINED_GLASS_PANE, "topaz_pane")
+        register(Blocks.MAGENTA_STAINED_GLASS, "jasper")
+        register(Blocks.MAGENTA_STAINED_GLASS_PANE, "jasper_pane")
+        register(Blocks.BLACK_STAINED_GLASS, "onyx")
+        register(Blocks.BLACK_STAINED_GLASS_PANE, "onyx_pane")
+        register(Blocks.BLUE_STAINED_GLASS, "aquamarine")
+        register(Blocks.BLUE_STAINED_GLASS_PANE, "aquamarine_pane")
+        register(Blocks.BROWN_STAINED_GLASS, "citrine")
+        register(Blocks.BROWN_STAINED_GLASS_PANE, "citrine_pane")
+        register(Blocks.GREEN_STAINED_GLASS, "peridot")
+        register(Blocks.GREEN_STAINED_GLASS_PANE, "peridot_pane")
     }
 
+    override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
+        //if (!SkyBlockIsland.DWARVEN_MINES.inIsland()) return false
+        return DwarvenMinesBB.GEMSTONE_LOCATIONS.isInside(blockPos)
+    }
 }

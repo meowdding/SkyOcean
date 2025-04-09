@@ -14,7 +14,7 @@ class Octree(val boxes: List<BoundingBox>) {
         val encapsulatingBox = BoundingBox.encapsulatingBoxes(boxes).get()
         val center = encapsulatingBox.center
         val span = max(encapsulatingBox.xSpan, encapsulatingBox.zSpan) / 2 + 5
-        root = Branch(BoundingBox(center).inflatedBy(span, encapsulatingBox.ySpan / 2 + 5, span), boxes)
+        root = Branch(BoundingBox(center).inflatedBy(span, span, span), boxes)
     }
 
     override fun toString(): String {
@@ -33,7 +33,7 @@ class Octree(val boxes: List<BoundingBox>) {
     }
 
     fun isInside(pos: BlockPos): Boolean {
-        return findLeaf(pos)?.boxes?.isInside(pos) ?: false
+        return findLeaf(pos)?.isInside(pos) ?: false
     }
 
     operator fun contains(pos: BlockPos): Boolean = isInside(pos)
@@ -45,7 +45,13 @@ interface Node {
     fun getNode(pos: BlockPos): Leaf?
 }
 
-data class Leaf(val leafBox: BoundingBox, val boxes: BoundingBox) : Node {
+class CompoundLeaf(leafBox: BoundingBox, private val boxes: List<BoundingBox>) : Leaf(leafBox, leafBox) {
+    override fun isInside(pos: BlockPos): Boolean {
+        return boxes.any { it.isInside(pos) }
+    }
+}
+
+open class Leaf(private val leafBox: BoundingBox, private val box: BoundingBox) : Node {
 
     override fun getBox(): BoundingBox = leafBox
     override fun toString(): String {
@@ -57,6 +63,10 @@ data class Leaf(val leafBox: BoundingBox, val boxes: BoundingBox) : Node {
     }
 
     override fun getNode(pos: BlockPos) = this
+
+    open fun isInside(pos: BlockPos): Boolean {
+        return box.isInside(pos)
+    }
 }
 
 class Branch(private val boundingBox: BoundingBox, boxes: List<BoundingBox>) : Node {
@@ -73,7 +83,11 @@ class Branch(private val boundingBox: BoundingBox, boxes: List<BoundingBox>) : N
                     return@forEach
                 }
                 if (this.areChildrenLeaves()) {
-                    nodes[index] = Leaf(getChildBox(index), boxes.first())
+                    nodes[index] = if (boxes.size > 1) {
+                        CompoundLeaf(getChildBox(index), boxes)
+                    } else {
+                        Leaf(getChildBox(index), boxes.first())
+                    }
                     return@forEach
                 }
                 if (boxes.size == 1) {

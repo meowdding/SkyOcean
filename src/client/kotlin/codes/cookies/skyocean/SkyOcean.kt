@@ -1,17 +1,18 @@
 package codes.cookies.skyocean
 
 import codes.cookies.skyocean.config.Config
-import codes.cookies.skyocean.events.FakeBlockModelEvent
+import codes.cookies.skyocean.events.RenderWorldEvent
 import codes.cookies.skyocean.generated.Modules
 import codes.cookies.skyocean.helpers.fakeblocks.FakeBlocks
 import codes.cookies.skyocean.modules.Module
+import codes.cookies.skyocean.utils.boundingboxes.DwarvenMinesBB
+import codes.cookies.skyocean.utils.boundingboxes.OctreeDebugRenderer
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.level.block.Blocks
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tech.thatgravyboat.repolib.api.RepoAPI
@@ -42,6 +43,13 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
     }
 
+    val debug = OctreeDebugRenderer(DwarvenMinesBB.MIST)
+
+    @Subscription
+    fun debug(event: RenderWorldEvent) {
+        debug.render(event)
+    }
+
     @Subscription
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("skyocean") {
@@ -53,12 +61,6 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         }
     }
 
-    @Subscription
-    fun replaceModels(event: FakeBlockModelEvent) {
-        event.register(Blocks.SNOW, id("glacite_snow")) { _, pos ->
-            pos.y < 0 && pos.x % 2 == 0 && pos.z % 2 == 0
-        }
-    }
 
     fun id(path: String) = ResourceLocation.fromNamespaceAndPath(SELF.metadata.id, path)
 }

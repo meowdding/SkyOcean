@@ -12,7 +12,7 @@ typealias FakeBlockModelEventRegistrar = (
     predicate: (BlockState, BlockPos) -> Boolean
 ) -> Unit
 
-data class FakeBlockModelEvent(private val registrar: FakeBlockModelEventRegistrar) : CancellableSkyBlockEvent() {
+data class RegisterFakeBlocksEvent(private val registrar: FakeBlockModelEventRegistrar) : CancellableSkyBlockEvent() {
 
     fun register(
         block: Block,
@@ -21,5 +21,6 @@ data class FakeBlockModelEvent(private val registrar: FakeBlockModelEventRegistr
     ) {
         registrar(block, definition, predicate)
     }
+
 }
 

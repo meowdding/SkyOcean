@@ -1,32 +1,23 @@
 package codes.cookies.skyocean.features.textures
 
 import codes.cookies.skyocean.SkyOcean
-import net.minecraft.core.Registry
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceKey
+import codes.cookies.skyocean.events.RegisterFakeBlocksEvent
+import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties
+import net.minecraft.world.level.block.state.BlockState
 
-open class BlockRetexture {
+typealias Condition = (BlockState, BlockPos) -> Boolean
+
+abstract class BlockRetexture {
     val map = mutableMapOf<Block, Block>()
 
-    fun register(name: String, properties: Properties = Properties.of()) = register(name, ::Block, properties)
-    fun register(name: String, factory: (Properties) -> Block, properties: Properties = Properties.of()): Block {
-        val resourceKey = ResourceKey.create(Registries.BLOCK, SkyOcean.id(name))
-        properties.setId(resourceKey)
-        return Registry.register(BuiltInRegistries.BLOCK, resourceKey, factory(properties))
+    abstract fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean
+
+    fun RegisterFakeBlocksEvent.register(block: Block, id: String, condition: Condition = ::defaultCondition) {
+        this.register(block, SkyOcean.id(id), condition)
     }
 
-    open fun registerMultiple(defaultBlocks: Array<Block>, newBlock: Block): Block {
-        defaultBlocks.forEach {
-            map[it] = newBlock
-        }
-        return newBlock
-    }
-
-    open fun register(defaultBlock: Block, newBlock: Block): Block {
-        map[defaultBlock] = newBlock
-        return newBlock
+    fun RegisterFakeBlocksEvent.registerMultiple(vararg defaultBlocks: Block, id: String, condition: Condition = ::defaultCondition){
+        defaultBlocks.forEach { this.register(it, id, condition) }
     }
 }

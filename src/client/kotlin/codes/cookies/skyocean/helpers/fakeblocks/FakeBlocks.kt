@@ -1,6 +1,6 @@
 package codes.cookies.skyocean.helpers.fakeblocks
 
-import codes.cookies.skyocean.events.FakeBlockModelEvent
+import codes.cookies.skyocean.events.RegisterFakeBlocksEvent
 import com.google.gson.JsonParser
 import com.mojang.logging.LogUtils
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
@@ -38,7 +38,7 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlock
 
     fun init(manager: ResourceManager, executor: Executor): CompletableFuture<Map<ResourceLocation, FakeBlockStateDefinition>> {
         fakeBlocks.clear()
-        FakeBlockModelEvent(this::register).post(SkyBlockAPI.eventBus)
+        RegisterFakeBlocksEvent(this::register).post(SkyBlockAPI.eventBus)
 
         return CompletableFuture.supplyAsync<Map<ResourceLocation, FakeBlockStateDefinition>>(
             {
