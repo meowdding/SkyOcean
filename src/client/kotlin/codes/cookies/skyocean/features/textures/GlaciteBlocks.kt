@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 @Module
@@ -17,13 +18,19 @@ object GlaciteBlocks : BlockRetexture() {
         register(Blocks.SNOW, "glacite_snow")
         register(Blocks.SNOW_BLOCK, "glacite_snow_block")
         register(Blocks.PACKED_ICE, "glacite")
-        register(Blocks.INFESTED_STONE, "glacite_hard_stone")
+        registerMultiple(Blocks.INFESTED_STONE, Blocks.STONE, id = "glacite_hard_stone") { state, pos ->
+            if (state.block == Blocks.STONE && !SkyBlockIsland.MINESHAFT.inIsland()) return@registerMultiple false
+            return@registerMultiple defaultCondition(state, pos)
+        }
         register(Blocks.LIGHT_GRAY_WOOL, "glacite_hard_stone_wool")
     }
 
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
-        if (!SkyBlockIsland.DWARVEN_MINES.inIsland()) return false
-        return DwarvenMinesBB.GLACITE_TUNNELS.isInside(blockPos)
+        return when (LocationAPI.island) {
+            SkyBlockIsland.DWARVEN_MINES -> DwarvenMinesBB.GLACITE_TUNNELS.isInside(blockPos)
+            SkyBlockIsland.MINESHAFT -> true
+            else -> false
+        }
     }
 
 }
