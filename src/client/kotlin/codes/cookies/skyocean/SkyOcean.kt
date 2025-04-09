@@ -28,7 +28,13 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
 
     val configurator = Configurator("skyocean")
 
+    private var isInitialized = false
+
     override fun onInitializeClient() {
+        if (isInitialized) {
+            return
+        }
+        isInitialized = true
         Config.register(configurator)
         RepoAPI.setup(RepoVersion.V1_21_5)
         Modules.load()
@@ -49,7 +55,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
 
     @Subscription
     fun replaceModels(event: FakeBlockModelEvent) {
-        event.register(Blocks.STONE, id("test")) { _, pos ->
+        event.register(Blocks.SNOW, id("glacite_snow")) { _, pos ->
             pos.y < 0 && pos.x % 2 == 0 && pos.z % 2 == 0
         }
     }

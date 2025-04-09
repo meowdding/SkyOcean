@@ -1,7 +1,12 @@
 package codes.cookies.skyocean.datagen.models
 
 import codes.cookies.skyocean.SkyOcean
+import codes.cookies.skyocean.datagen.models.factories.DefaultModelFactory
+import codes.cookies.skyocean.datagen.models.factories.GlassPaneFactory
+import codes.cookies.skyocean.datagen.models.factories.SnowLayerFactory
 import codes.cookies.skyocean.features.textures.GemstoneBlocks
+import codes.cookies.skyocean.helpers.fakeblocks.BLOCK_STATES_PATH
+import codes.cookies.skyocean.helpers.fakeblocks.FakeBlocks
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.minecraft.client.data.models.BlockModelGenerators
@@ -12,28 +17,42 @@ import net.minecraft.client.data.models.blockstates.MultiPartGenerator
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator
 import net.minecraft.client.data.models.blockstates.PropertyDispatch
 import net.minecraft.client.data.models.model.*
+import net.minecraft.data.CachedOutput
+import net.minecraft.data.PackOutput
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.resources.ReloadableResourceManager
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import java.util.*
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 class ModelGen(output: FabricDataOutput) : FabricModelProvider(output) {
+    val blockStatePathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, BLOCK_STATES_PATH)
+    val fakeBlockStateCollector = FakeBlockStateCollector(mutableListOf())
+    val context = ModelGenContext(fakeBlockStateCollector, output)
+
+    val factories = listOf(
+        SnowLayerFactory,
+        GlassPaneFactory,
+        DefaultModelFactory,
+    )
+
+    override fun run(output: CachedOutput): CompletableFuture<*> {
+        return CompletableFuture.allOf(super.run(output), fakeBlockStateCollector.save(output, blockStatePathProvider))
+    }
+
     override fun generateBlockStateModels(blockStateModelGenerator: BlockModelGenerators) {
-        //createCopy(Blocks.PACKED_ICE, GlaciteBlocks.GLACITE, blockStateModelGenerator)
-        //createCopy(Blocks.STONE, GlaciteBlocks.GLACITE_HARD_STONE, blockStateModelGenerator)
-        //createCopy(Blocks.LIGHT_GRAY_WOOL, GlaciteBlocks.GLACITE_HARD_STONE_WOOL, blockStateModelGenerator)
-        //createSnowBlocks(GlaciteBlocks.GLACITE_SNOW_BLOCK, GlaciteBlocks.GLACITE_SNOW, blockStateModelGenerator)
-
-        //createCopy(Blocks.ICE, MistBlocks.MIST_ICE, blockStateModelGenerator)
-        //createCopy(Blocks.CLAY, MistBlocks.MIST_CLAY, blockStateModelGenerator)
-        //createCopy(Blocks.WHITE_STAINED_GLASS, MistBlocks.MIST_MAIN_GLASS, blockStateModelGenerator)
-        //createSnowBlocks(MistBlocks.MIST_SNOW_BLOCK, MistBlocks.MIST_SNOW, blockStateModelGenerator)
-        //createGlassPane(Blocks.LIGHT_BLUE_STAINED_GLASS, Blocks.LIGHT_BLUE_STAINED_GLASS_PANE, MistBlocks.MIST_GLASS_PANE, blockStateModelGenerator)
-        //createCarpetCopy(Blocks.WHITE_WOOL, MistBlocks.MIST_CARPET, blockStateModelGenerator)
-        //createCopy(Blocks.LIGHT_BLUE_STAINED_GLASS, MistBlocks.MIST_GLASS, blockStateModelGenerator)
-
-        //createGemstones(blockStateModelGenerator)
+        FakeBlocks.init(ReloadableResourceManager(PackType.CLIENT_RESOURCES), CompletableFuture.delayedExecutor(1, TimeUnit.MILLISECONDS))
+        FakeBlocks.fakeBlocks.entries.forEach { (block, entries) ->
+            factories.firstOrNull { it.isFor(block) }?.let {
+                entries.forEach { model ->
+                    it.create(block, model, blockStateModelGenerator, context)
+                }
+            }
+        }
     }
 
     private fun createGemstones(generator: BlockModelGenerators) {

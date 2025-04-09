@@ -18,17 +18,19 @@ import java.util.concurrent.Executor
 
 typealias FakeBlockEntry = Pair<ResourceLocation, (BlockState, BlockPos) -> Boolean>
 
+const val BLOCK_STATES_PATH = "overwrite/blockstates"
+
 object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlockStateDefinition>> {
 
     private val logger = LogUtils.getLogger()
-    private val path = FileToIdConverter.json("overwrite/blockstates")
+    private val path = FileToIdConverter.json(BLOCK_STATES_PATH)
 
-    private val fakeBlocks = mutableMapOf<Block, MutableList<FakeBlockEntry>>()
+    val fakeBlocks = mutableMapOf<Block, MutableList<FakeBlockEntry>>()
 
     private fun register(
         block: Block,
         definition: ResourceLocation,
-        predicate: (BlockState, BlockPos) -> Boolean
+        predicate: (BlockState, BlockPos) -> Boolean,
     ) {
         fakeBlocks.getOrPut(block, ::mutableListOf).add(FakeBlockEntry(definition, predicate))
     }
