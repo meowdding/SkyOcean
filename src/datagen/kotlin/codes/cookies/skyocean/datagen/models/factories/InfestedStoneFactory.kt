@@ -7,7 +7,7 @@ import net.minecraft.client.data.models.BlockModelGenerators
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 
-object InfestedStoneFactory : BlockModelFactory {
+object InfestedStoneFactory : BlockModelFactory() {
     private val blocks = listOf(
         Blocks.INFESTED_CHISELED_STONE_BRICKS,
         Blocks.INFESTED_COBBLESTONE,

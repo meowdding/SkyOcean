@@ -1,8 +1,10 @@
 package codes.cookies.skyocean.datagen.models
 
+import codes.cookies.skyocean.SkyOcean
 import codes.cookies.skyocean.helpers.fakeblocks.FakeBlockEntry
 import net.minecraft.client.data.models.BlockModelGenerators
 import net.minecraft.client.data.models.MultiVariant
+import net.minecraft.client.data.models.model.ModelInstance
 import net.minecraft.client.data.models.model.ModelTemplate
 import net.minecraft.client.data.models.model.TextureMapping
 import net.minecraft.core.registries.BuiltInRegistries
@@ -10,10 +12,12 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import java.util.*
 
-interface BlockModelFactory {
+val savedModels = mutableSetOf<ResourceLocation>()
+abstract class BlockModelFactory {
 
-    fun isFor(block: Block): Boolean
-    fun create(
+    lateinit var generator: BlockModelGenerators
+    abstract fun isFor(block: Block): Boolean
+    abstract fun create(
         block: Block,
         fakeBlock: FakeBlockEntry,
         generator: BlockModelGenerators,
@@ -24,7 +28,6 @@ interface BlockModelFactory {
         location: ResourceLocation,
         block: Block,
         textureMapping: TextureMapping,
-        generator: BlockModelGenerators,
     ): MultiVariant {
         val apply = this.getDefaultModelLocation(block).let {
             ResourceLocation.fromNamespaceAndPath(
@@ -32,7 +35,7 @@ interface BlockModelFactory {
                 it.path.replace(BuiltInRegistries.BLOCK.getKey(block).path, location.path),
             )
         }
-        return BlockModelGenerators.plainVariant(create(apply, textureMapping, generator.modelOutput))
+        return BlockModelGenerators.plainVariant(create(apply, textureMapping, ::modelOutput))
     }
 
     fun getBlockModelLocation(location: ResourceLocation, suffix: String = ""): ResourceLocation {
@@ -41,15 +44,23 @@ interface BlockModelFactory {
 
     fun getModelLocation(block: Block) = BuiltInRegistries.BLOCK.getKey(block).withPrefix("block/")
 
-    fun createCopy(block: Block, fakeBlock: FakeBlockEntry, generator: BlockModelGenerators): ResourceLocation {
+    fun createCopy(block: Block, fakeBlock: FakeBlockEntry): ResourceLocation {
         return ModelTemplate(
             Optional.of(getModelLocation(block)),
             Optional.empty()
         ).create(
             getBlockModelLocation(fakeBlock.first),
             TextureMapping(),
-            generator.modelOutput,
+            ::modelOutput,
         )
     }
 
+    fun modelOutput(location: ResourceLocation, model: ModelInstance) {
+        if (savedModels.contains(location)) {
+            SkyOcean.info("Model with id {} already registered, skipping!", location)
+            return
+        }
+        savedModels.add(location)
+        generator.modelOutput.accept(location, model)
+    }
 }

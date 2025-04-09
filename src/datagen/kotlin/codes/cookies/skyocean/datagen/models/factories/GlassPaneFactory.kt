@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.StainedGlassPaneBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 
-object GlassPaneFactory : BlockModelFactory {
+object GlassPaneFactory : BlockModelFactory() {
     override fun isFor(block: Block) = block is StainedGlassPaneBlock || block == Blocks.GLASS_PANE
 
     private fun getBaseGlassBlock(block: Block) = when (block) {
@@ -40,11 +40,11 @@ object GlassPaneFactory : BlockModelFactory {
 
     override fun create(block: Block, fakeBlock: FakeBlockEntry, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
         val textureMapping = TextureMapping.pane(getBaseGlassBlock(block), block)
-        val post = (ModelTemplates.STAINED_GLASS_PANE_POST.plainVariant(fakeBlock.first, block, textureMapping, generator))
-        val side = (ModelTemplates.STAINED_GLASS_PANE_SIDE.plainVariant(fakeBlock.first, block, textureMapping, generator))
-        val sideAlt = (ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.plainVariant(fakeBlock.first, block, textureMapping, generator))
-        val noSide = (ModelTemplates.STAINED_GLASS_PANE_NOSIDE.plainVariant(fakeBlock.first, block, textureMapping, generator))
-        val noSideAlt = (ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.plainVariant(fakeBlock.first, block, textureMapping, generator))
+        val post = (ModelTemplates.STAINED_GLASS_PANE_POST.plainVariant(fakeBlock.first, block, textureMapping))
+        val side = (ModelTemplates.STAINED_GLASS_PANE_SIDE.plainVariant(fakeBlock.first, block, textureMapping))
+        val sideAlt = (ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.plainVariant(fakeBlock.first, block, textureMapping))
+        val noSide = (ModelTemplates.STAINED_GLASS_PANE_NOSIDE.plainVariant(fakeBlock.first, block, textureMapping))
+        val noSideAlt = (ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.plainVariant(fakeBlock.first, block, textureMapping))
         MultiPartGenerator.multiPart(block).with(post)
             .with(BlockModelGenerators.condition().term(BlockStateProperties.NORTH, true), side)
             .with(BlockModelGenerators.condition().term(BlockStateProperties.EAST, true), side.with(Y_ROT_90))

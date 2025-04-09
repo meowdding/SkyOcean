@@ -16,11 +16,11 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import java.util.*
 
-object SnowLayerFactory : BlockModelFactory {
+object SnowLayerFactory : BlockModelFactory() {
     override fun isFor(block: Block) = block == Blocks.SNOW
 
     override fun create(block: Block, fakeBlock: FakeBlockEntry, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
-        val multiVariant = BlockModelGenerators.plainVariant(SkyOcean.id(createCopy(Blocks.SNOW_BLOCK, fakeBlock, generator).path))
+        val multiVariant = BlockModelGenerators.plainVariant(SkyOcean.id(createCopy(Blocks.SNOW_BLOCK, fakeBlock).path))
         modelGenContext.collectState(
             fakeBlock.first,
             MultiVariantGenerator.dispatch(block).with(
