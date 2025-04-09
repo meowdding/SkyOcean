@@ -49,8 +49,8 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
 
     @Subscription
     fun replaceModels(event: FakeBlockModelEvent) {
-        event.register(Blocks.STONE, id("test")) { _, pos ->
-            pos.y < 0
+        event.register(Blocks.OAK_FENCE, id("test")) { _, pos ->
+            pos.y < 0 && pos.x % 2 == 0 && pos.z % 2 == 0
         }
     }
 

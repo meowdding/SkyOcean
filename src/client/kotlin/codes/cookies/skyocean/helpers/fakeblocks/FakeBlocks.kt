@@ -5,7 +5,8 @@ import com.google.gson.JsonParser
 import com.mojang.logging.LogUtils
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin
-import net.minecraft.client.renderer.block.model.BlockModelPart
+import net.minecraft.client.renderer.block.model.BlockModelDefinition
+import net.minecraft.client.renderer.block.model.BlockStateModel
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.FileToIdConverter
 import net.minecraft.resources.ResourceLocation
@@ -17,10 +18,10 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 
-typealias FakeBlockModelEntry = Pair<Map<BlockState, BlockModelPart>, (BlockState, BlockPos) -> Boolean>
+typealias FakeBlockModelEntry = Pair<Map<BlockState, BlockStateModel>, (BlockState, BlockPos) -> Boolean>
 typealias FakeBlockEntry = Pair<ResourceLocation, (BlockState, BlockPos) -> Boolean>
 
-object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlockStateDefinition>> {
+object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, BlockModelDefinition>> {
 
     private val logger = LogUtils.getLogger()
     private val path = FileToIdConverter.json("overwrite/blockstates")
@@ -29,24 +30,24 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlock
 
     private fun register(
         block: Block,
-        model: ResourceLocation,
+        definition: ResourceLocation,
         predicate: (BlockState, BlockPos) -> Boolean
     ) {
-        fakeBlocks.getOrPut(block, ::mutableListOf).add(FakeBlockEntry(model, predicate))
+        fakeBlocks.getOrPut(block, ::mutableListOf).add(FakeBlockEntry(definition, predicate))
     }
 
-    fun init(manager: ResourceManager, executor: Executor): CompletableFuture<Map<ResourceLocation, FakeBlockStateDefinition>> {
+    fun init(manager: ResourceManager, executor: Executor): CompletableFuture<Map<ResourceLocation, BlockModelDefinition>> {
         fakeBlocks.clear()
         FakeBlockModelEvent(this::register).post(SkyBlockAPI.eventBus)
 
-        return CompletableFuture.supplyAsync<Map<ResourceLocation, FakeBlockStateDefinition>>(
+        return CompletableFuture.supplyAsync<Map<ResourceLocation, BlockModelDefinition>>(
             {
-                val output = mutableMapOf<ResourceLocation, FakeBlockStateDefinition>()
+                val output = mutableMapOf<ResourceLocation, BlockModelDefinition>()
 
                 for ((file, resource) in path.listMatchingResources(manager)) {
                     runCatching {
                         val definition = resource.openAsReader()?.use { reader ->
-                            JsonParser.parseReader(reader).toDataOrThrow(FakeBlockStateDefinition.CODEC)
+                            JsonParser.parseReader(reader).toDataOrThrow(BlockModelDefinition.CODEC)
                         }
 
                         if (definition != null) {
@@ -65,15 +66,18 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlock
         )
     }
 
-    override fun initialize(models: Map<ResourceLocation, FakeBlockStateDefinition>, context: ModelLoadingPlugin.Context) {
+    override fun initialize(definitions: Map<ResourceLocation, BlockModelDefinition>, context: ModelLoadingPlugin.Context) {
         context.modifyBlockModelAfterBake().register { original, context ->
             val block = context.state().block
 
             fakeBlocks[block]?.let { entries ->
                 val modelEntries = mutableListOf<FakeBlockModelEntry>()
                 for (entry in entries) {
-                    val (model, predicate) = entry
-                    val fakeModel = models[model]?.init(block, context.baker()) ?: error("Model $model not found")
+                    val (definition, predicate) = entry
+                    val fakeModel = definitions[definition]
+                        ?.instantiate(block.stateDefinition) { definition.toString() }
+                        ?.mapValues { (state, model) -> model.bake(state, context.baker()) }
+                        ?: error("Failed to load fake block model for $definition")
                     modelEntries.add(FakeBlockModelEntry(fakeModel, predicate))
                 }
 

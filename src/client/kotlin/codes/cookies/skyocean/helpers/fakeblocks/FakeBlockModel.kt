@@ -25,17 +25,20 @@ class FakeBlockModel(
         random: RandomSource,
         cullTest: Predicate<Direction?>,
     ) {
+        var base = model
+
         if (alternatives.isNotEmpty()) {
             for (entry in alternatives) {
                 val (model, predicate) = entry
                 val stateModel = model[state]
                 if (stateModel != null && predicate.invoke(state, pos)) {
-                    stateModel.emitQuads(emitter, cullTest)
-                    return
+                    base = stateModel
+                    break
                 }
             }
         }
-        model.emitQuads(emitter, blockView, pos, state, random, cullTest)
+
+        base.emitQuads(emitter, blockView, pos, state, random, cullTest)
     }
 
     override fun collectParts(randomSource: RandomSource, list: MutableList<BlockModelPart>) {
