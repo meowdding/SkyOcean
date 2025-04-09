@@ -34,6 +34,7 @@ class ModelGen(output: FabricDataOutput) : FabricModelProvider(output) {
     }
 
     override fun generateBlockStateModels(blockStateModelGenerator: BlockModelGenerators) {
+        factories.forEach { it.generator = blockStateModelGenerator }
         FakeBlocks.init(ReloadableResourceManager(PackType.CLIENT_RESOURCES), CompletableFuture.delayedExecutor(1, TimeUnit.MILLISECONDS))
         FakeBlocks.fakeBlocks.entries.forEach { (block, entries) ->
             factories.firstOrNull { it.isFor(block) }?.let {

@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 @Module
@@ -41,7 +42,10 @@ object GemstoneBlocks : BlockRetexture() {
     }
 
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
-        if (!SkyBlockIsland.DWARVEN_MINES.inIsland()) return false
-        return DwarvenMinesBB.GEMSTONE_LOCATIONS.isInside(blockPos)
+        return when (LocationAPI.island) {
+            SkyBlockIsland.DWARVEN_MINES -> DwarvenMinesBB.GEMSTONE_LOCATIONS.isInside(blockPos)
+            SkyBlockIsland.MINESHAFT, SkyBlockIsland.CRYSTAL_HOLLOWS -> true
+            else -> false
+        }
     }
 }
