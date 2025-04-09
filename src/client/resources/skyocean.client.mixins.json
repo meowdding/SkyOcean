@@ -3,11 +3,6 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_21",
   "package": "codes.cookies.skyocean.mixins",
-  "client": [
-    "SectionCompilerMixin",
-    "Sodium_ChunkBuilderMeshingTask",
-    "TerrainRenderContextMixin"
-  ],
   "mixins": [
     "ComponentMixin",
     "EntityMixin",

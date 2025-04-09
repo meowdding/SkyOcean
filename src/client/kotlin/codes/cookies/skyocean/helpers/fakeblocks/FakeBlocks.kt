@@ -5,8 +5,6 @@ import com.google.gson.JsonParser
 import com.mojang.logging.LogUtils
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin
-import net.minecraft.client.renderer.block.model.BlockModelDefinition
-import net.minecraft.client.renderer.block.model.BlockStateModel
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.FileToIdConverter
 import net.minecraft.resources.ResourceLocation
@@ -18,10 +16,9 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 
-typealias FakeBlockModelEntry = Pair<Map<BlockState, BlockStateModel>, (BlockState, BlockPos) -> Boolean>
 typealias FakeBlockEntry = Pair<ResourceLocation, (BlockState, BlockPos) -> Boolean>
 
-object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, BlockModelDefinition>> {
+object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlockStateDefinition>> {
 
     private val logger = LogUtils.getLogger()
     private val path = FileToIdConverter.json("overwrite/blockstates")
@@ -36,18 +33,18 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, BlockMode
         fakeBlocks.getOrPut(block, ::mutableListOf).add(FakeBlockEntry(definition, predicate))
     }
 
-    fun init(manager: ResourceManager, executor: Executor): CompletableFuture<Map<ResourceLocation, BlockModelDefinition>> {
+    fun init(manager: ResourceManager, executor: Executor): CompletableFuture<Map<ResourceLocation, FakeBlockStateDefinition>> {
         fakeBlocks.clear()
         FakeBlockModelEvent(this::register).post(SkyBlockAPI.eventBus)
 
-        return CompletableFuture.supplyAsync<Map<ResourceLocation, BlockModelDefinition>>(
+        return CompletableFuture.supplyAsync<Map<ResourceLocation, FakeBlockStateDefinition>>(
             {
-                val output = mutableMapOf<ResourceLocation, BlockModelDefinition>()
+                val output = mutableMapOf<ResourceLocation, FakeBlockStateDefinition>()
 
                 for ((file, resource) in path.listMatchingResources(manager)) {
                     runCatching {
                         val definition = resource.openAsReader()?.use { reader ->
-                            JsonParser.parseReader(reader).toDataOrThrow(BlockModelDefinition.CODEC)
+                            JsonParser.parseReader(reader).toDataOrThrow(FakeBlockStateDefinition.CODEC)
                         }
 
                         if (definition != null) {
@@ -66,19 +63,20 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, BlockMode
         )
     }
 
-    override fun initialize(definitions: Map<ResourceLocation, BlockModelDefinition>, context: ModelLoadingPlugin.Context) {
+    override fun initialize(definitions: Map<ResourceLocation, FakeBlockStateDefinition>, context: ModelLoadingPlugin.Context) {
         context.modifyBlockModelAfterBake().register { original, context ->
             val block = context.state().block
 
             fakeBlocks[block]?.let { entries ->
                 val modelEntries = mutableListOf<FakeBlockModelEntry>()
                 for (entry in entries) {
-                    val (definition, predicate) = entry
-                    val fakeModel = definitions[definition]
-                        ?.instantiate(block.stateDefinition) { definition.toString() }
-                        ?.mapValues { (state, model) -> model.bake(state, context.baker()) }
-                        ?: error("Failed to load fake block model for $definition")
-                    modelEntries.add(FakeBlockModelEntry(fakeModel, predicate))
+                    val (id, predicate) = entry
+                    val definition = definitions[id] ?: error("Failed to load fake block state definition for $id")
+                    modelEntries.add(FakeBlockModelEntry(
+                        definition.blend,
+                        definition.instantiate(block.stateDefinition, context.baker(), id.toString()),
+                        predicate
+                    ))
                 }
 
                 FakeBlockModel(original, modelEntries)

@@ -1,7 +1,6 @@
 package codes.cookies.skyocean.features.textures
 
 import codes.cookies.skyocean.SkyOcean
-import codes.cookies.skyocean.events.BlockModelEvent
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -29,9 +28,5 @@ open class BlockRetexture {
     open fun register(defaultBlock: Block, newBlock: Block): Block {
         map[defaultBlock] = newBlock
         return newBlock
-    }
-
-    fun replaceBlocks(event: BlockModelEvent) {
-        event.state = map[event.block]?.withPropertiesOf(event.state) ?: event.state
     }
 }

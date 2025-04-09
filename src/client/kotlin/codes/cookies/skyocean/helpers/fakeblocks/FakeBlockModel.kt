@@ -1,6 +1,9 @@
 package codes.cookies.skyocean.helpers.fakeblocks
 
+import net.fabricmc.fabric.api.renderer.v1.Renderer
+import net.fabricmc.fabric.api.renderer.v1.material.BlendMode
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadTransform
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBlockStateModel
 import net.minecraft.client.renderer.block.model.BlockModelPart
 import net.minecraft.client.renderer.block.model.BlockStateModel
@@ -11,6 +14,29 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
 import java.util.function.Predicate
+
+data class FakeBlockModelEntry(
+    val blend: BlendMode? = null,
+    val models: Map<BlockState, BlockStateModel>,
+    val predicate: (BlockState, BlockPos) -> Boolean,
+) {
+
+    val transform: QuadTransform by lazy {
+        val materials = Renderer.get()?.materialFinder()
+        if (blend != null && materials != null) {
+            QuadTransform { quad ->
+                quad.material(materials.copyFrom(quad.material()).blendMode(blend).find())
+                true
+            }
+        } else {
+            QuadTransform { true }
+        }
+    }
+
+    fun isActive(state: BlockState, pos: BlockPos): Boolean {
+        return predicate(state, pos)
+    }
+}
 
 class FakeBlockModel(
     val model: BlockStateModel,
@@ -25,20 +51,19 @@ class FakeBlockModel(
         random: RandomSource,
         cullTest: Predicate<Direction?>,
     ) {
-        var base = model
-
         if (alternatives.isNotEmpty()) {
             for (entry in alternatives) {
-                val (model, predicate) = entry
-                val stateModel = model[state]
-                if (stateModel != null && predicate.invoke(state, pos)) {
-                    base = stateModel
-                    break
+                val stateModel = entry.models[state]
+                if (stateModel != null && entry.isActive(state, pos)) {
+                    emitter.pushTransform(entry.transform)
+                    stateModel.emitQuads(emitter, blockView, pos, state, random, cullTest)
+                    emitter.popTransform()
+                    return
                 }
             }
         }
 
-        base.emitQuads(emitter, blockView, pos, state, random, cullTest)
+        model.emitQuads(emitter, blockView, pos, state, random, cullTest)
     }
 
     override fun collectParts(randomSource: RandomSource, list: MutableList<BlockModelPart>) {

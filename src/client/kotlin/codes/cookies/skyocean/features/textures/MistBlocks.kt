@@ -1,12 +1,6 @@
 package codes.cookies.skyocean.features.textures
 
-import codes.cookies.skyocean.config.features.mining.MiningConfig
-import codes.cookies.skyocean.events.BlockModelEvent
 import codes.cookies.skyocean.modules.Module
-import codes.cookies.skyocean.utils.boundingboxes.DwarvenMinesBB
-import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 @Module
 object MistBlocks : BlockRetexture() {
@@ -28,13 +22,5 @@ object MistBlocks : BlockRetexture() {
         //BlockRenderLayerMap.INSTANCE.putBlock(MIST_MAIN_GLASS, RenderType.translucent())
         //BlockRenderLayerMap.INSTANCE.putBlock(MIST_GLASS, RenderType.translucent())
         //BlockRenderLayerMap.INSTANCE.putBlock(MIST_CARPET, RenderType.cutout())
-    }
-
-    @Subscription
-    @OnlyIn(SkyBlockIsland.DWARVEN_MINES)
-    fun onBlockModelEvent(event: BlockModelEvent) {
-        if (!MiningConfig.customMist) return
-        if (event.pos !in DwarvenMinesBB.MIST) return
-        replaceBlocks(event)
     }
 }

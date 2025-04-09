@@ -1,15 +1,9 @@
 package codes.cookies.skyocean.features.textures
 
-import codes.cookies.skyocean.config.features.mining.MiningConfig
-import codes.cookies.skyocean.events.BlockModelEvent
 import codes.cookies.skyocean.modules.Module
-import codes.cookies.skyocean.utils.boundingboxes.DwarvenMinesBB
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.world.level.block.Block
-import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 @Module
 object GemstoneBlocks : BlockRetexture() {
@@ -52,14 +46,6 @@ object GemstoneBlocks : BlockRetexture() {
     override fun register(defaultBlock: Block, newBlock: Block): Block {
         BlockRenderLayerMap.INSTANCE.putBlock(newBlock, RenderType.translucent())
         return super.register(defaultBlock, newBlock)
-    }
-
-    @Subscription
-    @OnlyIn(SkyBlockIsland.DWARVEN_MINES)
-    fun onDwarvenMinesBlockModelEvent(event: BlockModelEvent) {
-        if (!MiningConfig.customGemstoneTextures) return
-        if (!DwarvenMinesBB.GEMSTONE_LOCATIONS.isInside(event.pos)) return
-        replaceBlocks(event)
     }
 
 }
