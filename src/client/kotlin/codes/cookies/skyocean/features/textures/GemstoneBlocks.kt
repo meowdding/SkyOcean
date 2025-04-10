@@ -25,8 +25,8 @@ object GemstoneBlocks : BlockRetexture() {
         register(Blocks.LIME_STAINED_GLASS_PANE, "jade_pane")
         register(Blocks.PURPLE_STAINED_GLASS, "amethyst")
         register(Blocks.PURPLE_STAINED_GLASS_PANE, "amethyst_pane")
-        register(Blocks.WHITE_STAINED_GLASS, "opal")
-        register(Blocks.WHITE_STAINED_GLASS_PANE, "opal_pane")
+        register(Blocks.WHITE_STAINED_GLASS, "opal", ::opalCondition) // opal can only generate in mineshafts and crimson isle
+        register(Blocks.WHITE_STAINED_GLASS_PANE, "opal_pane", ::opalCondition) // opal can only generate in mineshafts and crimson isle
         register(Blocks.YELLOW_STAINED_GLASS, "topaz")
         register(Blocks.YELLOW_STAINED_GLASS_PANE, "topaz_pane")
         register(Blocks.MAGENTA_STAINED_GLASS, "jasper")
@@ -39,6 +39,13 @@ object GemstoneBlocks : BlockRetexture() {
         register(Blocks.BROWN_STAINED_GLASS_PANE, "citrine_pane")
         register(Blocks.GREEN_STAINED_GLASS, "peridot")
         register(Blocks.GREEN_STAINED_GLASS_PANE, "peridot_pane")
+    }
+
+    fun opalCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
+        if (SkyBlockIsland.inAnyIsland(SkyBlockIsland.CRYSTAL_HOLLOWS, SkyBlockIsland.DWARVEN_MINES)) {
+            return false
+        }
+        return defaultCondition(blockState, blockPos)
     }
 
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
