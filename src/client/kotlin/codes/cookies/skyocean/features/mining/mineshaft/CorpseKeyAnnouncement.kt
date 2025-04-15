@@ -52,14 +52,10 @@ object CorpseKeyAnnouncement {
 
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
-        event.register("dev") {
-            then("test") {
-                then("corpsekey") {
-                    callback {
-                        val test = CorpseType.entries.map(::Corpse)
-                        sendKeys(test)
-                    }
-                }
+        event.register("dev test corpsekey") {
+            callback {
+                val test = CorpseType.entries.map(::Corpse)
+                sendKeys(test)
             }
         }
     }
