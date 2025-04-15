@@ -22,6 +22,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOcean") {
 
     val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
+    val MOD_ID = SELF.metadata.id
     val VERSION = SELF.metadata.version.friendlyString
 
     val configurator = Configurator("skyocean")
@@ -52,5 +53,5 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     }
 
 
-    fun id(path: String) = ResourceLocation.fromNamespaceAndPath(SELF.metadata.id, path)
+    fun id(path: String) = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
 }
