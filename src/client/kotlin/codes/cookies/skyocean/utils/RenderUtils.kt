@@ -5,7 +5,9 @@ import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -23,6 +25,17 @@ object RenderUtils {
         this.pushPose()
         this.action()
         this.popPose()
+    }
+
+    inline fun GuiGraphics.translated(x: Number = 0, y: Number = 0, z: Number = 0, action: PoseStack.() -> Unit) {
+        this.pose().translated(x, y, z, action)
+    }
+
+    inline fun PoseStack.translated(x: Number = 0, y: Number = 0, z: Number = 0, action: PoseStack.() -> Unit) {
+        this.pushPop {
+            this.translate(x.toFloat(), y.toFloat(), z.toFloat())
+            this.action()
+        }
     }
 
     fun RenderWorldEvent.renderTextInWorld(
@@ -63,4 +76,15 @@ object RenderUtils {
             )
         }
     }
+
+    fun drawSlotHighlightBack(graphics: GuiGraphics, slotX: Int, slotY: Int) {
+        graphics.blitSprite(RenderType::guiTextured, SLOT_HIGHLIGHT_BACK_SPRITE, slotX - 4, slotY - 4, 24, 24)
+    }
+
+    fun drawSlotHighlightFront(graphics: GuiGraphics, slotX: Int, slotY: Int) {
+        graphics.blitSprite(RenderType::guiTextured, SLOT_HIGHLIGHT_FRONT_TEXTURE, slotX - 4, slotY - 4, 24, 24)
+    }
+
+    private val SLOT_HIGHLIGHT_BACK_SPRITE = ResourceLocation.withDefaultNamespace("container/slot_highlight_back")
+    private val SLOT_HIGHLIGHT_FRONT_TEXTURE = ResourceLocation.withDefaultNamespace("container/slot_highlight_front")
 }
