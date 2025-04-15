@@ -5,6 +5,7 @@ import codes.cookies.skyocean.helpers.ClientSideInventory
 import codes.cookies.skyocean.modules.Module
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 class ForgeRecipeScreen : ClientSideInventory(Text.of("Forge"), 6) {
@@ -17,11 +18,11 @@ class ForgeRecipeScreen : ClientSideInventory(Text.of("Forge"), 6) {
     companion object {
         @Subscription
         fun onCommand(event: RegisterSkyOceanCommandEvent) {
-//             event.register("forge") {
-//                 callback {
-//                     McClient.setScreen(ForgeRecipeScreen())
-//                 }
-//             }
+            event.register("forge") {
+                callback {
+                    McClient.setScreen(ForgeRecipeScreen())
+                }
+            }
         }
     }
 }
