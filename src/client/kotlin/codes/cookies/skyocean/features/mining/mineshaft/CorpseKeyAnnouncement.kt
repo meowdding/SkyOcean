@@ -3,10 +3,15 @@ package codes.cookies.skyocean.features.mining.mineshaft
 import codes.cookies.skyocean.config.features.mining.MineshaftConfig
 import codes.cookies.skyocean.modules.Module
 import codes.cookies.skyocean.utils.ChatUtils
+import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.Corpse
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.CorpseType
+import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
+import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.location.mineshaft.CorpseSpawnEvent
+import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.profile.sacks.SacksAPI
+import tech.thatgravyboat.skyblockapi.api.profile.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Module
@@ -16,20 +21,44 @@ object CorpseKeyAnnouncement {
     fun onCorpseSpawn(event: CorpseSpawnEvent) {
         if (!MineshaftConfig.keyAnnouncement) return
 
-        val corpses = CorpseType.entries.associateWith { corpse ->
-            val amount = event.corpses.filter { corpse == it.type }.size
+        sendKeys(event.corpses)
+    }
+
+    private fun sendKeys(corpses: List<Corpse>) {
+        val keys = CorpseType.entries.associateWith { corpse ->
+            val amount = corpses.filter { corpse == it.type }.size
             val sackAmount = SacksAPI.sackItems[corpse.key] ?: 0
-            amount to sackAmount
+            val enderChestAmount = StorageAPI.enderchests.flatMap { it.items }.filter { it.getData(DataTypes.ID) == corpse.key }.sumOf { it.count }
+            val storageAmount = StorageAPI.backpacks.flatMap { it.items }.filter { it.getData(DataTypes.ID) == corpse.key }.sumOf { it.count }
+            amount to sackAmount + enderChestAmount + storageAmount
         }.filter { it.value.first > 0 && it.key != CorpseType.LAPIS }
+
+        if (keys.isEmpty()) return
 
         val text = Text.join(
             "Corpse Keys | ",
-            corpses.map { (type, pair) ->
+            keys.map { (type, pair) ->
                 val (count, keys) = pair
-                "$count${type.name.first()} ($keys in sacks)"
-            }.joinToString(", ")
+                "$count${type.name.first()} ($keys available)"
+            }.joinToString(", "),
         )
 
         ChatUtils.chat(text)
+    }
+
+    @Subscription
+    fun onCommand(event: RegisterCommandsEvent) {
+        event.register("skyocean") {
+            then("dev") {
+                then("test") {
+                    then("corpsekey") {
+                        callback {
+                            val test = CorpseType.entries.map(::Corpse)
+                            sendKeys(test)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
