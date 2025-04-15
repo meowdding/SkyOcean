@@ -1,6 +1,7 @@
 package codes.cookies.skyocean.utils
 
 import codes.cookies.skyocean.SkyOcean
+import codes.cookies.skyocean.events.RegisterSkyOceanCommandEvent
 import codes.cookies.skyocean.modules.Module
 import codes.cookies.skyocean.utils.commands.VirtualResourceArgument
 import com.mojang.brigadier.context.CommandContext
@@ -11,7 +12,6 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -55,28 +55,24 @@ internal object DevUtils {
     fun isOn(location: ResourceLocation) = states.getOrDefault(location, false)
 
     @Subscription
-    fun onCommandRegister(event: RegisterCommandsEvent) {
-        event.register("skyocean") {
-            then("dev") {
-                then("toggle") {
-                    then("location", VirtualResourceArgument(states.keys, SkyOcean.MOD_ID), DevToolSuggestionProvider) {
-                        callback {
-                            val argument = this.getArgument("location", ResourceLocation::class.java)
-                            toggle(argument)
-                            ChatUtils.chat(
-                                Text.of("Toggled ") {
-                                    append(argument.toString()) {
-                                        this.color = TextColor.GOLD
-                                    }
-                                    if (isOn(argument)) {
-                                        append(" on") { this.color = TextColor.GREEN }
-                                    } else {
-                                        append(" off") { this.color = TextColor.RED }
-                                    }
-                                },
-                            )
-                        }
-                    }
+    fun onCommandRegister(event: RegisterSkyOceanCommandEvent) {
+        event.register("dev toggle") {
+            then("location", VirtualResourceArgument(states.keys, SkyOcean.MOD_ID), DevToolSuggestionProvider) {
+                callback {
+                    val argument = this.getArgument("location", ResourceLocation::class.java)
+                    toggle(argument)
+                    ChatUtils.chat(
+                        Text.of("Toggled ") {
+                            append(argument.toString()) {
+                                this.color = TextColor.GOLD
+                            }
+                            if (isOn(argument)) {
+                                append(" on") { this.color = TextColor.GREEN }
+                            } else {
+                                append(" off") { this.color = TextColor.RED }
+                            }
+                        },
+                    )
                 }
             }
         }
