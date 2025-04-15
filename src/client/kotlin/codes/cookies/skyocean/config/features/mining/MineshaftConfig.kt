@@ -11,7 +11,7 @@ object MineshaftConfig : CategoryKt("mineshaft") {
     @ConfigOption.Separator("Mineshaft Announcement")
     val announceSeparator = ""
 
-    var shaftAnnouncement by boolean(false) {
+    var shaftAnnouncement by boolean(true) {
         translation = "skyocean.config.mining.mineshaft.announce"
     }
 
@@ -22,8 +22,15 @@ object MineshaftConfig : CategoryKt("mineshaft") {
     @ConfigOption.Separator("Corpse Waypoint")
     val waypointSeparator = ""
 
-    var corpseWaypoint by boolean(false) {
+    var corpseWaypoint by boolean(true) {
         translation = "skyocean.config.mining.mineshaft.waypoint"
+    }
+
+    @ConfigOption.Separator("Mineshaft Keys")
+    val keysSeparator = ""
+
+    var keyAnnouncement by boolean(true) {
+        translation = "skyocean.config.mining.mineshaft.key-announce"
     }
 
 

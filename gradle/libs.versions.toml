@@ -8,7 +8,7 @@ loader = "0.16.10"
 # Dependencies
 fabric = "0.119.5+1.21.5"
 fabrickotlin = "1.13.0+kotlin.2.1.0"
-skyblockapi = "1.0.0-beta.87"
+skyblockapi = "1.0.0-beta.90"
 hypixelapi = "1.0.1+build.1+mc1.21"
 rconfig = "3.5.0"
 rconfigkt = "3.4.3"
