@@ -52,7 +52,7 @@ object CorpseKeyAnnouncement {
 
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
-        event.register("dev test corpsekey") {
+        event.registerDev("test corpsekey") {
             callback {
                 val test = CorpseType.entries.map(::Corpse)
                 sendKeys(test)
