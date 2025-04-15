@@ -29,6 +29,18 @@ class RegisterSkyOceanCommandEvent(private val dispatcher: CommandDispatcher<Fab
             ?.apply { LiteralCommandBuilder(this).then(command, action = builder) }
             ?.let(dispatcher::register)
     }
+
+    fun registerDev(command: LiteralArgumentBuilder<FabricClientCommandSource>) {
+        register(ClientCommandManager.literal("dev").then(command))
+    }
+
+    fun registerDev(command: String, builder: LiteralCommandBuilder.() -> Unit) {
+        register(
+            ClientCommandManager.literal("dev").apply {
+                LiteralCommandBuilder(this).then(command, action = builder)
+            },
+        )
+    }
 }
 
 class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal constructor(
