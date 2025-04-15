@@ -1,6 +1,7 @@
 package codes.cookies.skyocean.features.recipe
 
 import codes.cookies.skyocean.helpers.ClientSideInventory
+import codes.cookies.skyocean.helpers.InventoryBuilder
 import codes.cookies.skyocean.modules.Module
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
@@ -17,14 +18,22 @@ import tech.thatgravyboat.repolib.api.recipes.ingredient.PetIngredient
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import tech.thatgravyboat.skyblockapi.api.remote.RepoRecipeAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import java.util.concurrent.CompletableFuture
 
-class ForgeRecipeScreen(val id: String) : ClientSideInventory(Text.of("Forge"), 6) {
+class ForgeRecipeScreen(val id: String) : ClientSideInventory("Forge", 6) {
+    val recipe = RepoRecipeAPI.getForgeRecipe(id)
+
     init {
-        val items = List(6 * 9) { Items.BARRIER.defaultInstance }
+        val items = InventoryBuilder().apply {
+            add(14, Items.FURNACE)
+            add(16, recipe?.result()?.type()?.let { RepoItemsAPI.getItem(it) } ?: Items.BARRIER.defaultInstance)
+
+            fill(Items.BLACK_STAINED_GLASS_PANE)
+        }.build()
+
         addItems(items)
     }
 
@@ -35,7 +44,7 @@ class ForgeRecipeScreen(val id: String) : ClientSideInventory(Text.of("Forge"), 
         @Subscription
         fun onCommand(event: RegisterCommandsEvent) {
             event.register("viewforgerecipe") {
-                then("recipe", StringArgumentType.string(), ForgeSuggestionProvider) {
+                then("recipe", StringArgumentType.greedyString(), ForgeSuggestionProvider) {
                     callback {
                         McClient.setScreen(ForgeRecipeScreen(this.getArgument("recipe", String::class.java)))
                     }

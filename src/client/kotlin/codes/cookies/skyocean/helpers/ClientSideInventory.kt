@@ -7,14 +7,16 @@ import codes.cookies.skyocean.utils.RenderUtils.translated
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.RenderType
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
-abstract class ClientSideInventory(val titleComponent: Component?, val rows: Int) : Screen(titleComponent) {
+abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) : Screen(titleComponent?.let { Text.of(it) }) {
     val backgroundHeight = 114 + rows * 18;
     val backgroundWidth = 176
     val x get() = (this.width - backgroundWidth) / 2
@@ -29,7 +31,7 @@ abstract class ClientSideInventory(val titleComponent: Component?, val rows: Int
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         if (titleComponent != null) {
-            guiGraphics.drawString(McFont.self, titleComponent, this.x + 8, this.y + 6, -1, false);
+            guiGraphics.drawString(McFont.self, Text.of(titleComponent) { color = TextColor.DARK_GRAY }, this.x + 8, this.y + 6, -1, false)
         }
         val offsetX = x + 8
         val offsetY = y + 18
@@ -50,31 +52,31 @@ abstract class ClientSideInventory(val titleComponent: Component?, val rows: Int
         if (renderBackground) {
             renderMenuBackground(guiGraphics)
         }
-        val i = (this.width - backgroundWidth) / 2
-        val j = (this.height - this.backgroundHeight) / 2
+        val textureX = (this.width - backgroundWidth) / 2
+        val textureY = (this.height - backgroundHeight) / 2
         guiGraphics.blit(
             RenderType::guiTextured,
             TEXTURE,
-            i,
-            j,
+            textureX,
+            textureY,
             0.0F,
             0.0F,
             backgroundWidth,
             this.rows * 18 + 17,
             256,
-            256
+            256,
         )
         guiGraphics.blit(
             RenderType::guiTextured,
             TEXTURE,
-            i,
-            j + this.rows * 18 + 17,
+            textureX,
+            textureY + this.rows * 18 + 17,
             0.0F,
             126.0F,
             backgroundWidth,
             96,
             256,
-            256
+            256,
         )
     }
 
