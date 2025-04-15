@@ -9,6 +9,9 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import net.minecraft.ResourceLocationException
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 class VirtualResourceArgument(
     private val locations: Collection<ResourceLocation>,
@@ -17,7 +20,10 @@ class VirtualResourceArgument(
 
     private val commandException: SimpleCommandExceptionType = SimpleCommandExceptionType(Component.translatable("argument.id.invalid"))
     private val identifierNotFound: DynamicCommandExceptionType = DynamicCommandExceptionType { id: Any? ->
-        ChatUtils.prefix.copy().append("Identifier $id not found")
+        ChatUtils.prefix.copy().append("Identifier ") {
+            append("$id") { this.color = TextColor.GOLD }
+            append(" not found")
+        }
     }
 
     override fun parse(reader: StringReader): ResourceLocation {
@@ -30,7 +36,7 @@ class VirtualResourceArgument(
     }
 
     @Throws(CommandSyntaxException::class)
-    fun fromCommandInput(reader: StringReader): ResourceLocation {
+    private fun fromCommandInput(reader: StringReader): ResourceLocation {
         val i = reader.cursor
         while (reader.canRead() && ResourceLocation.validPathChar(reader.peek())) {
             reader.skip()
@@ -45,7 +51,7 @@ class VirtualResourceArgument(
         }
     }
 
-    protected fun split(id: String): Array<String> {
+    private fun split(id: String): Array<String> {
         val strings = arrayOf(this.namespace, id)
         val i = id.indexOf(':')
         if (i >= 0) {
