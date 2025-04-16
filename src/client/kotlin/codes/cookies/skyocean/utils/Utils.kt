@@ -6,6 +6,8 @@ import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.nio.file.Files
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
 
 // TODO: surely better name maybe?
 object Utils {
@@ -19,4 +21,28 @@ object Utils {
     }
 
     fun MutableComponent.append(text: String, init: MutableComponent.() -> Unit): MutableComponent = this.append(Text.of(text, init))
+
+    fun Duration.formatReadableTime(biggestUnit: DurationUnit = DurationUnit.DAYS, maxUnits: Int = 2): String {
+        val units = listOf(
+            DurationUnit.DAYS to this.inWholeDays,
+            DurationUnit.HOURS to this.inWholeHours % 24,
+            DurationUnit.MINUTES to this.inWholeMinutes % 60,
+            DurationUnit.SECONDS to this.inWholeSeconds % 60,
+        )
+
+        val unitNames = mapOf(
+            DurationUnit.DAYS to "d",
+            DurationUnit.HOURS to "h",
+            DurationUnit.MINUTES to "min",
+            DurationUnit.SECONDS to "s",
+        )
+
+        val filteredUnits = units.dropWhile { it.first != biggestUnit }
+            .filter { it.second > 0 }
+            .take(maxUnits)
+
+        return filteredUnits.joinToString(", ") { (unit, value) ->
+            "$value${unitNames[unit]}"
+        }.ifEmpty { "0 seconds" }
+    }
 }

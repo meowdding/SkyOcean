@@ -4,6 +4,7 @@ import codes.cookies.skyocean.helpers.ClientSideInventory
 import codes.cookies.skyocean.helpers.InventoryBuilder
 import codes.cookies.skyocean.modules.Module
 import codes.cookies.skyocean.utils.Utils.append
+import codes.cookies.skyocean.utils.Utils.formatReadableTime
 import codes.cookies.skyocean.utils.withTooltip
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
@@ -29,6 +30,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.CompletableFuture
+import kotlin.time.Duration.Companion.seconds
 
 class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
     val id = RepoItemsAPI.getItemIdByName(input) ?: input
@@ -86,6 +88,16 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
             }
             add(16, forgeItemStack)
 
+            add(23, Items.CLOCK) {
+                add("Time: ") {
+                    color = TextColor.GREEN
+
+                    append("${recipe?.time?.seconds?.formatReadableTime()}") {
+                        color = TextColor.YELLOW
+                    }
+                }
+            }
+
             fill(Items.BLACK_STAINED_GLASS_PANE.defaultInstance.withTooltip())
         }.build()
 
@@ -135,7 +147,8 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
             }
 
             private fun suggest(builder: SuggestionsBuilder, name: String) {
-                val filtered = name.filter { it.isDigit() || it.isLetter() || it == ' ' || it == '_' }.trim()
+                val validChars = listOf(' ', '_', '-')
+                val filtered = name.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()
                 if (SharedSuggestionProvider.matchesSubStr(builder.remaining.lowercase(), filtered.lowercase())) {
                     builder.suggest(filtered)
                 }
