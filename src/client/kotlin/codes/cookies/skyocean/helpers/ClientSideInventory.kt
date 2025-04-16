@@ -1,7 +1,6 @@
 package codes.cookies.skyocean.helpers
 
 import codes.cookies.skyocean.helpers.ClientSideInventory.Slot.Companion.asSlots
-import codes.cookies.skyocean.utils.ChatUtils
 import codes.cookies.skyocean.utils.RenderUtils
 import codes.cookies.skyocean.utils.RenderUtils.translated
 import net.minecraft.client.gui.GuiGraphics
@@ -132,9 +131,7 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
             fun List<ItemStack>.asSlots() = mapIndexed { index, itemStack ->
                 val x = (index % 9) * 18
                 val y = (index / 9) * 18
-                Slot(x, y, itemStack) {
-                    ChatUtils.chat("Clicked on slot $index")
-                }
+                Slot(x, y, itemStack)
             }
 
             fun playerInventoryAsSlots(rows: Int): List<Slot> {
