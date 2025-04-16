@@ -17,22 +17,60 @@ import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.repolib.api.recipes.ingredient.ItemIngredient
 import tech.thatgravyboat.repolib.api.recipes.ingredient.PetIngredient
+import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
+import tech.thatgravyboat.skyblockapi.api.remote.PetQuery
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import tech.thatgravyboat.skyblockapi.api.remote.RepoPetsAPI
+import tech.thatgravyboat.skyblockapi.api.remote.RepoRecipeAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.CompletableFuture
 
-class ForgeRecipeScreen(val id: String) : ClientSideInventory("Forge", 6) {
-    val forgeItemStack = RepoItemsAPI.getItemOrNull(id) ?: RepoItemsAPI.getItem(RepoItemsAPI.getItemIdByName(id) ?: id)
+class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
+    val id = RepoItemsAPI.getItemIdByName(input) ?: input
+    val recipe = RepoRecipeAPI.getForgeRecipe(id)
+    val forgeItemStack = RepoItemsAPI.getItemOrNull(id)
+        ?: RepoPetsAPI.getPetAsItemOrNull(PetQuery(id, SkyBlockRarity.LEGENDARY, 100))
+        ?: Items.BARRIER.defaultInstance.withTooltip {
+            add("Item not found")
+            add("ID: $id")
+        }
+
+    val sizes = mapOf(
+        1 to listOf(10),
+        2 to listOf(10, 19),
+        3 to listOf(10, 11, 19),
+        4 to listOf(10, 11, 19, 20),
+        5 to listOf(10, 11, 19, 20, 28),
+        6 to listOf(10, 11, 19, 20, 28, 29),
+        7 to listOf(10, 11, 12, 19, 20, 28, 29),
+        8 to listOf(10, 11, 12, 19, 20, 21, 28, 29),
+        9 to listOf(10, 11, 12, 19, 20, 21, 28, 29, 30),
+    )
 
     init {
         val items = InventoryBuilder().apply {
+            val inputs = recipe?.inputs()?.filterIsInstance<ItemIngredient>() ?: emptyList()
+            val slots = sizes[inputs.size] ?: emptyList()
+            val inputItemStacks = inputs.map { input ->
+                (RepoItemsAPI.getItemOrNull(input.id) ?: Items.BARRIER.defaultInstance).apply {
+                    this.count = input.count
+                }
+            }
+            val inputItemStacksWithSlots = slots.zip(inputItemStacks)
+
+            inputItemStacksWithSlots.forEach { (index, item) ->
+                add(index, item)
+            }
+
             add(14, Items.FURNACE) {
-                add("Forge")
+                add("Forge Recipe") {
+                    color = TextColor.GREEN
+                }
                 add("<-- ") {
                     color = TextColor.WHITE
                     append("Required Items") {
@@ -86,7 +124,7 @@ class ForgeRecipeScreen(val id: String) : ClientSideInventory("Forge", 6) {
                         is PetIngredient -> {
                             (recipe.result() as PetIngredient).let {
                                 suggest(builder, it.id)
-                                // TODO: Add pet name suggestion
+                                suggest(builder, RepoItemsAPI.getItemName(it.id).stripped)
                             }
                         }
 
