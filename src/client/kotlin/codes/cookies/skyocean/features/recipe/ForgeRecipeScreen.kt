@@ -42,7 +42,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
 
     val sizes = mapOf(
         1 to listOf(10),
-        2 to listOf(10, 19),
+        2 to listOf(10, 11),
         3 to listOf(10, 11, 19),
         4 to listOf(10, 11, 19, 20),
         5 to listOf(10, 11, 19, 20, 28),
