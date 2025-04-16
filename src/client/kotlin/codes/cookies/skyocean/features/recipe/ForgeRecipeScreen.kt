@@ -1,5 +1,6 @@
 package codes.cookies.skyocean.features.recipe
 
+import codes.cookies.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import codes.cookies.skyocean.helpers.ClientSideInventory
 import codes.cookies.skyocean.helpers.InventoryBuilder
 import codes.cookies.skyocean.modules.Module
@@ -103,56 +104,56 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
 
         addItems(items)
     }
+}
 
-    @Module
-    companion object {
-        val forgeRecipes by lazy { RepoAPI.recipes().getRecipes(Recipe.Type.FORGE) }
+@Module
+object ForgeRecipeScreenHandler {
+    val forgeRecipes by lazy { RepoAPI.recipes().getRecipes(Recipe.Type.FORGE) }
 
-        @Subscription
-        fun onCommand(event: RegisterCommandsEvent) {
-            event.register("viewforgerecipe") {
-                then("recipe", StringArgumentType.greedyString(), ForgeSuggestionProvider) {
-                    callback {
-                        McClient.setScreen(ForgeRecipeScreen(this.getArgument("recipe", String::class.java)))
-                    }
+    @Subscription
+    fun onCommand(event: RegisterCommandsEvent) {
+        event.register("viewforgerecipe") {
+            then("recipe", StringArgumentType.greedyString(), ForgeSuggestionProvider) {
+                callback {
+                    McClient.setScreen(ForgeRecipeScreen(this.getArgument("recipe", String::class.java)))
                 }
             }
         }
+    }
+}
 
-        object ForgeSuggestionProvider : SuggestionProvider<FabricClientCommandSource> {
-            override fun getSuggestions(
-                context: CommandContext<FabricClientCommandSource?>,
-                builder: SuggestionsBuilder,
-            ): CompletableFuture<Suggestions?>? {
-                forgeRecipes.forEach { recipe ->
-                    when (recipe.result) {
-                        is ItemIngredient -> {
-                            (recipe.result() as ItemIngredient).let {
-                                suggest(builder, it.id)
-                                suggest(builder, RepoItemsAPI.getItemName(it.id).stripped)
-                            }
-                        }
-
-                        is PetIngredient -> {
-                            (recipe.result() as PetIngredient).let {
-                                suggest(builder, it.id)
-                                suggest(builder, RepoItemsAPI.getItemName(it.id).stripped)
-                            }
-                        }
-
-                        else -> {}
+object ForgeSuggestionProvider : SuggestionProvider<FabricClientCommandSource> {
+    override fun getSuggestions(
+        context: CommandContext<FabricClientCommandSource?>,
+        builder: SuggestionsBuilder,
+    ): CompletableFuture<Suggestions?>? {
+        forgeRecipes.forEach { recipe ->
+            when (recipe.result) {
+                is ItemIngredient -> {
+                    (recipe.result() as ItemIngredient).let {
+                        suggest(builder, it.id)
+                        suggest(builder, RepoItemsAPI.getItemName(it.id).stripped)
                     }
                 }
-                return builder.buildFuture()
-            }
 
-            private fun suggest(builder: SuggestionsBuilder, name: String) {
-                val validChars = listOf(' ', '_', '-')
-                val filtered = name.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()
-                if (SharedSuggestionProvider.matchesSubStr(builder.remaining.lowercase(), filtered.lowercase())) {
-                    builder.suggest(filtered)
+                is PetIngredient -> {
+                    (recipe.result() as PetIngredient).let {
+                        suggest(builder, it.id)
+                        suggest(builder, RepoItemsAPI.getItemName(it.id).stripped)
+                    }
                 }
+
+                else -> {}
             }
+        }
+        return builder.buildFuture()
+    }
+
+    private fun suggest(builder: SuggestionsBuilder, name: String) {
+        val validChars = listOf(' ', '_', '-')
+        val filtered = name.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()
+        if (SharedSuggestionProvider.matchesSubStr(builder.remaining.lowercase(), filtered.lowercase())) {
+            builder.suggest(filtered)
         }
     }
 }
