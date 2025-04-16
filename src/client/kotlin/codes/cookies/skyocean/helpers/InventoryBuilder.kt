@@ -10,7 +10,7 @@ class InventoryBuilder(val maxSize: Int = 54) {
 
     fun add(slot: Int, item: ItemStack, init: (TooltipBuilder.() -> Unit)? = null) {
         if (slot >= maxSize || slot < 0) {
-            throw IllegalStateException("Inventory is full")
+            throw IllegalStateException("Inventory Index out of bounds")
         }
         items[slot] = init?.let { item.withTooltip(it) } ?: item
     }
@@ -20,7 +20,7 @@ class InventoryBuilder(val maxSize: Int = 54) {
     fun add(x: Int, y: Int, item: ItemStack, init: (TooltipBuilder.() -> Unit)? = null) {
         val slot = x + y * 9
         if (slot >= maxSize || slot < 0) {
-            throw IllegalStateException("Inventory is full")
+            throw IllegalStateException("Inventory Index out of bounds")
         }
         items[slot] = init?.let { item.withTooltip(it) } ?: item
     }
