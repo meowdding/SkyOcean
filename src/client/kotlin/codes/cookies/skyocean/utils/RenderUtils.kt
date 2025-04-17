@@ -1,7 +1,6 @@
 package codes.cookies.skyocean.utils
 
 import codes.cookies.skyocean.events.RenderWorldEvent
-import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.LightTexture
@@ -10,33 +9,12 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.awt.Color
 import kotlin.math.max
 
-
 object RenderUtils {
-
-    inline fun GuiGraphics.pushPop(action: PoseStack.() -> Unit) {
-        this.pose().pushPop(action)
-    }
-
-    inline fun PoseStack.pushPop(action: PoseStack.() -> Unit) {
-        this.pushPose()
-        this.action()
-        this.popPose()
-    }
-
-    inline fun GuiGraphics.translated(x: Number = 0, y: Number = 0, z: Number = 0, action: PoseStack.() -> Unit) {
-        this.pose().translated(x, y, z, action)
-    }
-
-    inline fun PoseStack.translated(x: Number = 0, y: Number = 0, z: Number = 0, action: PoseStack.() -> Unit) {
-        this.pushPop {
-            this.translate(x.toFloat(), y.toFloat(), z.toFloat())
-            this.action()
-        }
-    }
 
     fun RenderWorldEvent.renderTextInWorld(
         position: Vec3,
