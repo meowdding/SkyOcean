@@ -97,6 +97,7 @@ dependencies {
     modImplementation(libs.olympus)
     modImplementation(libs.placeholders)
     modImplementation(libs.repo)
+    modImplementation(libs.meowdding.lib)
 
     include(libs.hypixelapi)
     include(libs.skyblockapi)
@@ -106,6 +107,7 @@ dependencies {
     include(libs.olympus)
     include(libs.placeholders)
     include(libs.repo)
+    include(libs.meowdding.lib)
 
     modRuntimeOnly(libs.devauth)
     modRuntimeOnly(libs.modmenu)

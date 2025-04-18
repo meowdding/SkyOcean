@@ -2,11 +2,9 @@ package codes.cookies.skyocean.features.recipe
 
 import codes.cookies.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import codes.cookies.skyocean.helpers.ClientSideInventory
-import codes.cookies.skyocean.helpers.InventoryBuilder
 import codes.cookies.skyocean.modules.Module
 import codes.cookies.skyocean.utils.Utils.append
 import codes.cookies.skyocean.utils.Utils.formatReadableTime
-import codes.cookies.skyocean.utils.withTooltip
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
@@ -15,6 +13,8 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.world.item.Items
+import tech.thatgravyboat.lib.builder.InventoryBuilder
+import tech.thatgravyboat.lib.extensions.withTooltip
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.repolib.api.recipes.ingredient.ItemIngredient

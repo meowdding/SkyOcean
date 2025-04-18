@@ -56,7 +56,7 @@ internal object DevUtils {
 
     @Subscription
     fun onCommandRegister(event: RegisterSkyOceanCommandEvent) {
-        event.register("dev toggle") {
+        event.registerDev("toggle") {
             then("location", VirtualResourceArgument(states.keys, SkyOcean.MOD_ID), DevToolSuggestionProvider) {
                 callback {
                     val argument = this.getArgument("location", ResourceLocation::class.java)

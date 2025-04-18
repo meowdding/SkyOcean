@@ -1,8 +1,8 @@
 package codes.cookies.skyocean.config
 
-import codes.cookies.skyocean.utils.getPath
 import com.google.gson.JsonObject
 import org.intellij.lang.annotations.Language
+import tech.thatgravyboat.skyblockapi.utils.json.getPath
 import java.util.function.UnaryOperator
 
 fun renameOption(@Language("JSONPath") pathOrigin: String, @Language("JSONPath") moveTo: String) = patch {
