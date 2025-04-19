@@ -91,6 +91,14 @@
       "profile_in_chat": {
         "@value": "Profile in Chat",
         "desc": "Show the profile icon in chat messages."
+      },
+      "sack_notification": {
+        "@value": "Sack Notification",
+        "desc": "Show a notification when you gain specific sack items."
+      },
+      "sack_notification_items": {
+        "@value": "Sack Notification Items",
+        "desc": "The items to show notifications for."
       }
     }
   }
