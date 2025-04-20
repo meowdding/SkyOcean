@@ -92,9 +92,7 @@ dependencies {
     modImplementation(libs.hypixelapi)
     modImplementation(libs.skyblockapi)
     modImplementation(libs.rconfig)
-    modImplementation(libs.rconfigkt) {
-        isTransitive = false
-    }
+    modImplementation(libs.rconfigkt)
     modImplementation(libs.rlib)
     modImplementation(libs.olympus)
     modImplementation(libs.placeholders)
