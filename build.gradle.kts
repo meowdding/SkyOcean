@@ -104,9 +104,7 @@ dependencies {
     include(libs.hypixelapi)
     include(libs.skyblockapi)
     include(libs.rconfig)
-    include(libs.rconfigkt) {
-        isTransitive = false
-    }
+    include(libs.rconfigkt)
     include(libs.rlib)
     include(libs.olympus)
     include(libs.placeholders)
