@@ -1,0 +1,77 @@
+[versions]
+
+
+# Minecraft
+minecraft = "1.21.5"
+loom = "1.10-SNAPSHOT"
+loader = "0.16.10"
+parchmentmc = "2025.04.19@zip"
+
+# Dependencies
+fabric = "0.119.5+1.21.5"
+fabrickotlin = "1.13.0+kotlin.2.1.0"
+skyblockapi = "1.0.0-beta.92"
+hypixelapi = "1.0.1+build.1+mc1.21"
+rconfig = "3.5.0"
+rconfigkt = "3.5.0"
+olympus = "1.3.0"
+rlib = "3.5.0"
+placeholders = "2.6.1+1.21.5"
+keval = "1.1.1"
+repolib = "1.2.0"
+meowdding-lib = "1.0.3"
+meowdding-ktmodules = "1.0.2"
+
+# Keep kt version in sync with first segment of ksp version
+kotlin = "2.1.20"
+ksp = "2.1.20-2.0.0"
+repo = "1.0.2"
+resources = "1.0.0"
+
+
+# Dev Dependencies
+devauth = "1.2.1"
+modmenu = "14.0.0-rc.2"
+
+[libraries]
+
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+loader = { module = "net.fabricmc:fabric-loader", version.ref = "loader" }
+fabric = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric" }
+fabrickotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabrickotlin" }
+
+# Libs with mc version in artifact id
+skyblockapi = { module = "tech.thatgravyboat:skyblock-api-<mc_version>", version.ref = "skyblockapi" }
+rconfig = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-<mc_version>", version.ref = "rconfig" }
+rconfigkt = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-fabric-<mc_version>", version.ref = "rconfigkt" }
+olympus = { module = "earth.terrarium.olympus:olympus-fabric-<mc_version>", version.ref = "olympus" }
+rlib = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-<mc_version>", version.ref = "rlib" }
+parchmentmc = { module = "org.parchmentmc.data:parchment-<mc_version>", version.ref = "parchmentmc" }
+meowdding-lib = { module = "tech.thatgravyboat.meowdding-lib:meowdding-lib-<mc_version>", version.ref = "meowdding-lib" }
+
+# Other libs
+hypixelapi = { module = "maven.modrinth:hypixel-mod-api", version.ref = "hypixelapi" }
+placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
+keval = { module = "com.notkamui.libs:keval", version.ref = "keval" }
+repo = { module = "tech.thatgravyboat.repo-lib:repo-lib", version.ref = "repolib" }
+meowdding-ktmodules = { module = "me.owdding.ktmodules:KtModules", version.ref = "meowdding-ktmodules" }
+
+# Dev libs
+devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
+modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
+
+[bundles]
+
+fabric = ["loader", "fabric", "fabrickotlin"]
+meowdding = ["meowdding-lib"]
+sbapi = ["skyblockapi", "hypixelapi"]
+rconfig = ["rconfig", "rconfigkt"]
+libs = ["rlib", "olympus", "placeholders"]
+
+[plugins]
+
+loom = { id = "fabric-loom", version.ref = "loom" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+resources = { id = "me.owdding.resources", version.ref="resources" }
+repo = { id = "me.owdding.repo", version.ref = "repo" }

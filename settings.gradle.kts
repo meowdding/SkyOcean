@@ -13,8 +13,8 @@ pluginManagement {
 
 dependencyResolutionManagement {
     versionCatalogs {
-        create("libs")
+        create("libs") {
+            from(files("libs.versions.toml"))
+        }
     }
 }
-
-include("annotations")

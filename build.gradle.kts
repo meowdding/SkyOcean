@@ -1,12 +1,14 @@
+import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
+import org.gradle.api.internal.artifacts.dependencies.DefaultMinimalDependency
+import org.gradle.api.internal.artifacts.dependencies.DefaultMutableVersionConstraint
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     idea
-    kotlin("jvm") version "2.1.0"
     alias(libs.plugins.loom)
-    id("maven-publish")
-    id("com.google.devtools.ksp") version "2.1.0-1.0.29"
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin)
 }
 
 base {
@@ -44,9 +46,7 @@ loom {
     }
 
     afterEvaluate {
-        val mixinPath = configurations.compileClasspath.get()
-            .files { it.group == "net.fabricmc" && it.name == "sponge-mixin" }
-            .first()
+        val mixinPath = configurations.compileClasspath.get().incoming.dependencies.first { it.group == "net.fabricmc" && it.name == "sponge-mixin" }
         runConfigs {
             "client" {
                 vmArgs.add("-javaagent:$mixinPath")
@@ -78,36 +78,26 @@ repositories {
 }
 
 dependencies {
-    compileOnly(ksp(project(":annotations"))!!)
+    compileOnly(libs.meowdding.ktmodules)
+    ksp(libs.meowdding.ktmodules)
 
     minecraft(libs.minecraft)
+    @Suppress("UnstableApiUsage")
     mappings(loom.layered {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.21.3:2024.12.07@zip")
+        parchment(libs.parchmentmc.get().withMcVersion().toString())
     })
-    modImplementation(libs.loader)
-    modImplementation(libs.fabrickotlin)
-    modImplementation(libs.fabric)
 
-    modImplementation(libs.hypixelapi)
-    modImplementation(libs.skyblockapi)
-    modImplementation(libs.rconfig)
-    modImplementation(libs.rconfigkt)
-    modImplementation(libs.rlib)
-    modImplementation(libs.olympus)
-    modImplementation(libs.placeholders)
-    modImplementation(libs.repo)
-    modImplementation(libs.meowdding.lib)
+    modImplementation(libs.bundles.fabric)
 
-    include(libs.hypixelapi)
-    include(libs.skyblockapi)
-    include(libs.rconfig)
-    include(libs.rconfigkt)
-    include(libs.rlib)
-    include(libs.olympus)
-    include(libs.placeholders)
-    include(libs.repo)
-    include(libs.meowdding.lib)
+    implementation(libs.repo) // included in sbapi, exposed through implementation
+
+    includeModImplementationBundle(libs.bundles.sbapi)
+    includeModImplementationBundle(libs.bundles.rconfig)
+    includeModImplementationBundle(libs.bundles.libs)
+    includeModImplementationBundle(libs.bundles.meowdding)
+
+    includeImplementation(libs.keval)
 
     modRuntimeOnly(libs.devauth)
     modRuntimeOnly(libs.modmenu)
@@ -144,3 +134,36 @@ afterEvaluate {
         enabled = false
     }
 }
+
+ksp {
+    arg("meowdding.modules.project_name", project.name)
+    arg("meowdding.modules.package", "me.owdding.skyocean.generated")
+}
+
+fun ExternalModuleDependency.withMcVersion(): ExternalModuleDependency {
+    return DefaultMinimalDependency(
+        DefaultModuleIdentifier.newId(this.group, this.name.replace("<mc_version>", libs.versions.minecraft.get())),
+        DefaultMutableVersionConstraint(this.versionConstraint)
+    )
+}
+
+@Suppress("unused")
+fun DependencyHandlerScope.includeImplementationBundle(bundle: Provider<ExternalModuleDependencyBundle>) = bundle.get().forEach {
+    includeImplementation(provider { it })
+}
+
+fun DependencyHandlerScope.includeModImplementationBundle(bundle: Provider<ExternalModuleDependencyBundle>) = bundle.get().forEach {
+    includeModImplementation(provider { it })
+}
+
+fun <T : ExternalModuleDependency> DependencyHandlerScope.includeImplementation(dependencyNotation: Provider<T>) =
+    with(dependencyNotation.get().withMcVersion()) {
+        include(this)
+        modImplementation(this)
+    }
+
+fun <T : ExternalModuleDependency> DependencyHandlerScope.includeModImplementation(dependencyNotation: Provider<T>) =
+    with(dependencyNotation.get().withMcVersion()) {
+        include(this)
+        modImplementation(this)
+    }

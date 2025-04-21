@@ -39,6 +39,7 @@ class ModelGen(output: FabricDataOutput) : FabricModelProvider(output) {
         FakeBlocks.fakeBlocks.entries.forEach { (block, entries) ->
             factories.firstOrNull { it.isFor(block) }?.let {
                 entries.forEach { model ->
+                    println("Creating ${model.first}")
                     it.create(block, model, blockStateModelGenerator, context)
                 }
             }

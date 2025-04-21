@@ -1,7 +1,7 @@
 package codes.cookies.skyocean.features.chat
 
 import codes.cookies.skyocean.config.features.chat.ChatConfig
-import codes.cookies.skyocean.modules.Module
+import me.owdding.ktmodules.Module
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock

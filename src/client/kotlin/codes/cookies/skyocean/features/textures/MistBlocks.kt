@@ -1,7 +1,7 @@
 package codes.cookies.skyocean.features.textures
 
 import codes.cookies.skyocean.events.RegisterFakeBlocksEvent
-import codes.cookies.skyocean.modules.Module
+import me.owdding.ktmodules.Module
 import codes.cookies.skyocean.utils.boundingboxes.DwarvenMinesBB
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Blocks

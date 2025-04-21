@@ -2,7 +2,7 @@ package codes.cookies.skyocean.features.mining.mineshaft
 
 import codes.cookies.skyocean.config.features.mining.MineshaftConfig
 import codes.cookies.skyocean.events.RenderWorldEvent
-import codes.cookies.skyocean.modules.Module
+import me.owdding.ktmodules.Module
 import codes.cookies.skyocean.utils.ChatUtils
 import codes.cookies.skyocean.utils.RenderUtils.renderTextInWorld
 import codes.cookies.skyocean.utils.Utils

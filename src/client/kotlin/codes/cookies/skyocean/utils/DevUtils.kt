@@ -2,7 +2,7 @@ package codes.cookies.skyocean.utils
 
 import codes.cookies.skyocean.SkyOcean
 import codes.cookies.skyocean.events.RegisterSkyOceanCommandEvent
-import codes.cookies.skyocean.modules.Module
+import me.owdding.ktmodules.Module
 import codes.cookies.skyocean.utils.commands.VirtualResourceArgument
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider

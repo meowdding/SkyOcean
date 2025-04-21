@@ -1,11 +1,11 @@
 package codes.cookies.skyocean
 
 import codes.cookies.skyocean.config.Config
-import codes.cookies.skyocean.generated.Modules
 import codes.cookies.skyocean.helpers.fakeblocks.FakeBlocks
-import codes.cookies.skyocean.modules.Module
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
+import me.owdding.ktmodules.Module
+import me.owdding.skyocean.generated.SkyOceanModules
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin
 import net.fabricmc.loader.api.FabricLoader
@@ -14,6 +14,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.RepoVersion
+import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -27,16 +28,10 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
 
     val configurator = Configurator("skyocean")
 
-    private var isInitialized = false
-
     override fun onInitializeClient() {
-        if (isInitialized) {
-            return
-        }
-        isInitialized = true
         Config.register(configurator)
         RepoAPI.setup(RepoVersion.V1_21_5)
-        Modules.load()
+        SkyOceanModules.init { SkyBlockAPI.eventBus.register(it) }
 
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
     }

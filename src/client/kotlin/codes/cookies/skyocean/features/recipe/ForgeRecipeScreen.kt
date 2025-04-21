@@ -2,7 +2,7 @@ package codes.cookies.skyocean.features.recipe
 
 import codes.cookies.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import codes.cookies.skyocean.helpers.ClientSideInventory
-import codes.cookies.skyocean.modules.Module
+import me.owdding.ktmodules.Module
 import codes.cookies.skyocean.utils.Utils.append
 import codes.cookies.skyocean.utils.Utils.formatReadableTime
 import com.mojang.brigadier.arguments.StringArgumentType

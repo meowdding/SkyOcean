@@ -3,7 +3,7 @@ package codes.cookies.skyocean.features.combat.slayer
 import codes.cookies.skyocean.config.features.combat.SlayerConfig
 import codes.cookies.skyocean.helpers.glowingColor
 import codes.cookies.skyocean.helpers.isGlowing
-import codes.cookies.skyocean.modules.Module
+import me.owdding.ktmodules.Module
 import tech.thatgravyboat.skyblockapi.api.area.slayer.SlayerMiniBoss
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlySlayerMiniBosses

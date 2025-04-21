@@ -1,7 +1,7 @@
 package codes.cookies.skyocean.features.mining.mineshaft
 
 import codes.cookies.skyocean.config.features.mining.MineshaftConfig
-import codes.cookies.skyocean.modules.Module
+import me.owdding.ktmodules.Module
 import codes.cookies.skyocean.utils.ChatUtils
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.CorpseType
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.MineshaftAPI

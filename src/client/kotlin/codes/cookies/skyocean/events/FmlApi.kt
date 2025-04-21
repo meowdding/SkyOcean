@@ -1,6 +1,6 @@
 package codes.cookies.skyocean.events
 
-import codes.cookies.skyocean.modules.Module
+import me.owdding.ktmodules.Module
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI

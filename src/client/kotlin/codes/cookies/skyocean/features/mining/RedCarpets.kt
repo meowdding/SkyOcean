@@ -2,7 +2,7 @@ package codes.cookies.skyocean.features.mining
 
 import codes.cookies.skyocean.config.features.mining.MiningConfig
 import codes.cookies.skyocean.events.BlockModelEvent
-import codes.cookies.skyocean.modules.Module
+import me.owdding.ktmodules.Module
 import codes.cookies.skyocean.utils.tags.BlockTagKey
 import net.minecraft.world.level.block.Blocks
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription

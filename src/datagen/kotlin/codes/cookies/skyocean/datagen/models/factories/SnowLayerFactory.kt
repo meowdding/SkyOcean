@@ -34,7 +34,7 @@ object SnowLayerFactory : BlockModelFactory() {
                         ).create(
                             getBlockModelLocation(fakeBlock.first),
                             TextureMapping.defaultTexture(Blocks.SNOW),
-                        ) { path, model -> generator.modelOutput.accept(path.withSuffix("_height${it * 2}"), model) }
+                        ) { path, model -> modelOutput(path.withSuffix("_height${it * 2}"), model) }
                         BlockModelGenerators.plainVariant(getBlockModelLocation(fakeBlock.first, "_height${it * 2}"))
                     } else multiVariant
                 },

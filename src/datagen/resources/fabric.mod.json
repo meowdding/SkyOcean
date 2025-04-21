@@ -15,12 +15,6 @@
         "adapter": "kotlin",
         "value": "codes.cookies.skyocean.datagen.SkyOceanDatagen"
       }
-    ],
-    "client": [
-      {
-        "adapter": "kotlin",
-        "value": "codes.cookies.skyocean.SkyOcean"
-      }
     ]
   },
   "depends": {

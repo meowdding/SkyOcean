@@ -1,8 +1,8 @@
 package codes.cookies.skyocean.features.chat
 
 import codes.cookies.skyocean.config.features.chat.ChatConfig
-import codes.cookies.skyocean.modules.Module
 import codes.cookies.skyocean.utils.ChatUtils
+import me.owdding.ktmodules.Module
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.SacksChangeEvent
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
