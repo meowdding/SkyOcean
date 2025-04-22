@@ -20,11 +20,25 @@ object Config : ConfigKt("skyocean/config") {
         category(MiningConfig)
         category(SlayerConfig)
         category(ChatConfig)
+        separator {
+            title = "skyocean.config.main.modifications"
+            description = "skyocean.config.main.modifications.desc"
+        }
+    }
+
+    val enableDebugSettings by boolean(true) {
+        translation = "skyocean.config.main.debug"
     }
 
     override val version: Int = 1
     override val patches: Map<Int, UnaryOperator<JsonObject>> = listOf(
         renameOption("mineshaft", "mining.mineshaft"),
+        compoundPatch(
+            renameOption("mining.recolorCarpets", "mining.retexture.recolorCarpets"),
+            renameOption("mining.customMiningTextures", "mining.retexture.customGlaciteTextures"),
+            renameOption("mining.customMist", "mining.retexture.customMist"),
+            renameOption("mining.customGemstoneTextures", "mining.retexture.customGemstoneTextures"),
+        )
     ).mapIndexed { index, unaryOperator -> index to unaryOperator }.toMap()
 
 }

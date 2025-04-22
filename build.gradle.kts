@@ -1,3 +1,4 @@
+import com.google.gson.JsonObject
 import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.internal.artifacts.dependencies.DefaultMinimalDependency
 import org.gradle.api.internal.artifacts.dependencies.DefaultMutableVersionConstraint
@@ -9,6 +10,8 @@ plugins {
     alias(libs.plugins.loom)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin)
+    alias(libs.plugins.repo)
+    alias(libs.plugins.resources)
 }
 
 base {
@@ -103,6 +106,10 @@ dependencies {
     modRuntimeOnly(libs.modmenu)
 }
 
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
@@ -140,6 +147,29 @@ ksp {
     arg("meowdding.modules.package", "me.owdding.skyocean.generated")
 }
 
+
+compactingResources {
+    sourceSets = mutableListOf("client", "main")
+    basePath = "repo"
+}
+
+repo {
+    hotm {
+        excludeAllExcept {
+            name()
+            cost()
+        }
+        withPredicate {
+            when (it) {
+                is JsonObject -> it.size() > 1
+                else -> true
+            }
+        }
+    }
+}
+
+// <editor-fold desc="Util Methods">
+
 fun ExternalModuleDependency.withMcVersion(): ExternalModuleDependency {
     return DefaultMinimalDependency(
         DefaultModuleIdentifier.newId(this.group, this.name.replace("<mc_version>", libs.versions.minecraft.get())),
@@ -167,3 +197,4 @@ fun <T : ExternalModuleDependency> DependencyHandlerScope.includeModImplementati
         include(this)
         modImplementation(this)
     }
+// </editor-fold>

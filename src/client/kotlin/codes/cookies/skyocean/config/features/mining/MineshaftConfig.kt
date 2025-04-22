@@ -1,15 +1,16 @@
 package codes.cookies.skyocean.config.features.mining
 
-import codes.cookies.skyocean.config.translation
 import codes.cookies.skyocean.features.mining.mineshaft.MineshaftAnnouncement.ShaftAnnounceType
-import com.teamresourceful.resourcefulconfig.api.annotations.ConfigOption
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 
 object MineshaftConfig : CategoryKt("mineshaft") {
     override val name get() = Translated("skyocean.config.mining.mineshaft")
 
-    @ConfigOption.Separator("Mineshaft Announcement")
-    val announceSeparator = ""
+    init {
+        separator {
+            this.title = "Mineshaft Announcement"
+        }
+    }
 
     var shaftAnnouncement by boolean(true) {
         translation = "skyocean.config.mining.mineshaft.announce"
@@ -19,15 +20,21 @@ object MineshaftConfig : CategoryKt("mineshaft") {
         translation = "skyocean.config.mining.mineshaft.announce-type"
     }
 
-    @ConfigOption.Separator("Corpse Waypoint")
-    val waypointSeparator = ""
+    init {
+        separator {
+            this.title = "Corpse Waypoint"
+        }
+    }
 
     var corpseWaypoint by boolean(true) {
         translation = "skyocean.config.mining.mineshaft.waypoint"
     }
 
-    @ConfigOption.Separator("Mineshaft Keys")
-    val keysSeparator = ""
+    init {
+        separator {
+            this.title = "Mineshaft Keys"
+        }
+    }
 
     var keyAnnouncement by boolean(true) {
         translation = "skyocean.config.mining.mineshaft.key-announce"

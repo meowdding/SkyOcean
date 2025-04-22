@@ -1,6 +1,5 @@
 package codes.cookies.skyocean.config.features.combat
 
-import codes.cookies.skyocean.config.translation
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 
 object SlayerConfig: CategoryKt("slayer") {

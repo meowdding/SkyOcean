@@ -1,8 +1,9 @@
 package codes.cookies.skyocean.features.textures
 
+import codes.cookies.skyocean.config.features.mining.MiningRetexture
 import codes.cookies.skyocean.events.RegisterFakeBlocksEvent
-import me.owdding.ktmodules.Module
 import codes.cookies.skyocean.utils.boundingboxes.DwarvenMinesBB
+import me.owdding.ktmodules.Module
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
@@ -26,6 +27,8 @@ object GlaciteBlocks : BlockRetexture() {
     }
 
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
+        if (!MiningRetexture.customGlaciteTextures) return false
+
         return when (LocationAPI.island) {
             SkyBlockIsland.DWARVEN_MINES -> DwarvenMinesBB.GLACITE_TUNNELS.isInside(blockPos)
             SkyBlockIsland.MINESHAFT -> true

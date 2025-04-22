@@ -1,28 +1,29 @@
 package codes.cookies.skyocean.config.features.mining
 
-import codes.cookies.skyocean.config.translation
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 
 object MiningConfig : CategoryKt("mining") {
     init {
         category(MineshaftConfig)
+        category(MiningRetexture)
     }
 
     override val name get() = Translated("skyocean.config.mining")
 
-    var recolorCarpets by boolean(false) {
-        translation = "mining.retexture.carpets"
+    var hotmStackSize by boolean(true) {
+        translation = "skyocean.config.mining.hotm.stackSize"
     }
 
-    var customMiningTextures by boolean(false) {
-        translation = "mining.retexture.general"
+    var hotmTotalProgress by boolean(true) {
+        translation = "skyocean.config.mining.hotm.totalProgress"
     }
 
-    var customMist by boolean(false) {
-        translation = "mining.retexture.mist"
+    var hotmDisplayShiftCost by boolean(true) {
+        translation = "skyocean.config.mining.hotm.shiftCost"
     }
 
-    var customGemstoneTextures by boolean(false) {
-        translation = "mining.retexture.gemstone"
+    var hotmDisplayTotalLeft by boolean(true) {
+        translation = "skyocean.config.mining.hotm.totalLeft"
     }
+
 }
