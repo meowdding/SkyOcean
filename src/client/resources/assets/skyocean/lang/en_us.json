@@ -4,10 +4,7 @@
     "allowReferences": true,
     "allowTags": true,
     "objectAsKeys": true,
-    "prefix": "skyocean",
-    "@references": {
-      "force_reload_chunks": "<yellow>Only updates on chunk refresh, use <bold>F3+A</bold> to force a refresh."
-    }
+    "prefix": "skyocean"
   },
   "config": {
     "main": {
@@ -50,42 +47,34 @@
     },
     "mining": {
       "@value": "Mining",
+      "modifyCommissions": {
+        "@value": "Modify Commissions",
+        "desc": "Modifies commission items to be visually different when you started or finished it."
+      },
       "retexture": {
         "@value": "Retexture",
         "carpets": {
           "@value": "Retexture carpets",
           "desc": [
-            "Turns most carpets in the dwarven mines <red>red</red> to make them more visible.",
-            {
-              "@id": "force_reload_chunks"
-            }
+            "Turns most carpets in the dwarven mines <red>red</red> to make them more visible."
           ]
         },
         "glacite": {
           "@value": "Retexture Glacite Tunnel blocks",
           "desc": [
-            "Allows resource packs to change the appearance of glacite tunnel blocks.",
-            {
-              "@id": "force_reload_chunks"
-            }
+            "Allows resource packs to change the appearance of glacite tunnel blocks."
           ]
         },
         "mist": {
           "@value": "Retexture Mist",
           "desc": [
-            "Allows resource packs to change the appearance of blocks in the mist.",
-            {
-              "@id": "force_reload_chunks"
-            }
+            "Allows resource packs to change the appearance of blocks in the mist."
           ]
         },
         "gemstone": {
           "@value": "Retexture Gemstones",
           "desc": [
-            "Allows resource packs to change the appearance of gemstones.",
-            {
-              "@id": "force_reload_chunks"
-            }
+            "Allows resource packs to change the appearance of gemstones."
           ]
         }
       },

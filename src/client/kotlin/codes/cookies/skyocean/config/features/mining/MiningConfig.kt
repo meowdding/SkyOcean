@@ -10,6 +10,10 @@ object MiningConfig : CategoryKt("mining") {
 
     override val name get() = Translated("skyocean.config.mining")
 
+    var modifyCommissions by boolean(true) {
+        translation = "skyocean.config.mining.modifyCommissions"
+    }
+
     var hotmStackSize by boolean(true) {
         translation = "skyocean.config.mining.hotm.stackSize"
     }

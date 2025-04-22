@@ -2,6 +2,8 @@ package codes.cookies.skyocean.utils
 
 import codes.cookies.skyocean.SkyOcean
 import kotlinx.coroutines.runBlocking
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import java.nio.file.Files
 import kotlin.time.Duration
@@ -45,4 +47,5 @@ object Utils {
     infix fun Int.exclusiveInclusive(other: Int) = (this + 1) .. other
     infix fun Int.exclusiveExclusive(other: Int) = (this + 1) .. (other - 1)
 
+    operator fun Item.contains(stack: ItemStack): Boolean = stack.item == this
 }
