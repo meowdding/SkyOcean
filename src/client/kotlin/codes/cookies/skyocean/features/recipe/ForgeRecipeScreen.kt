@@ -2,19 +2,18 @@ package codes.cookies.skyocean.features.recipe
 
 import codes.cookies.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import codes.cookies.skyocean.helpers.ClientSideInventory
-import me.owdding.ktmodules.Module
-import codes.cookies.skyocean.utils.Utils.append
 import codes.cookies.skyocean.utils.Utils.formatReadableTime
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
+import me.owdding.ktmodules.Module
+import me.owdding.lib.builder.InventoryBuilder
+import me.owdding.lib.extensions.withTooltip
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.world.item.Items
-import tech.thatgravyboat.lib.builder.InventoryBuilder
-import tech.thatgravyboat.lib.extensions.withTooltip
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.repolib.api.recipes.ingredient.ItemIngredient
@@ -27,6 +26,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoPetsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoRecipeAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color

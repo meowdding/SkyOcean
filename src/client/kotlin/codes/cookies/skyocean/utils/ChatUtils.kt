@@ -11,6 +11,10 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 internal object ChatUtils {
     private const val gradient = "#87CEEB #7FFFD4"
 
+    const val ICON = "\uD83C\uDF0A"
+    const val ICON_WITH_SPACE = "$ICON "
+    const val DARK_OCEAN_BLUE = 0x355AA0
+
     val prefix = TagParser.QUICK_TEXT_SAFE.parseText("<gray>[<gr $gradient>SkyOcean</gr>]</gray> ", ParserContext.of()).copy().withoutShadow()
 
     fun asSkyOceanColor(text: String) = TagParser.QUICK_TEXT_SAFE.parseText("<gr $gradient>$text</gr>", ParserContext.of()).copy().withoutShadow()

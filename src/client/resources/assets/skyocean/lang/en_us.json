@@ -10,6 +10,23 @@
     }
   },
   "config": {
+    "main": {
+      "modifications": {
+        "@value": "Visual Changes",
+        "desc": [
+          "The mod may change the appearance of an item, by for example manipulating it's tooltip.",
+          "",
+          "If such a modification is present the item name will be prefixed with a <color #355AA0>\uD83C\uDF0A</color> this is done to help identify the origin of any changes and therefore can't be disabled."
+        ]
+      },
+      "debug": {
+        "@value": "Enable Debug Mode",
+        "desc": [
+          "Enables a few different debugs, throughout the mod",
+          "<red>May lead to crashes or unexpected/undefined behaviour"
+        ]
+      }
+    },
     "slayer": {
       "@value": "Slayer",
       "highlights": {
@@ -34,32 +51,41 @@
     "mining": {
       "@value": "Mining",
       "retexture": {
+        "@value": "Retexture",
         "carpets": {
           "@value": "Retexture carpets",
           "desc": [
             "Turns most carpets in the dwarven mines <red>red</red> to make them more visible.",
-            { "@id": "force_reload_chunks" }
+            {
+              "@id": "force_reload_chunks"
+            }
           ]
         },
-        "general": {
-          "@value": "Retexture Mining blocks",
+        "glacite": {
+          "@value": "Retexture Glacite Tunnel blocks",
           "desc": [
-            "Allows resource packs to change the appearance of mining blocks.",
-            { "@id": "force_reload_chunks" }
+            "Allows resource packs to change the appearance of glacite tunnel blocks.",
+            {
+              "@id": "force_reload_chunks"
+            }
           ]
         },
         "mist": {
           "@value": "Retexture Mist",
           "desc": [
             "Allows resource packs to change the appearance of blocks in the mist.",
-            { "@id": "force_reload_chunks" }
+            {
+              "@id": "force_reload_chunks"
+            }
           ]
         },
         "gemstone": {
           "@value": "Retexture Gemstones",
           "desc": [
             "Allows resource packs to change the appearance of gemstones.",
-            { "@id": "force_reload_chunks" }
+            {
+              "@id": "force_reload_chunks"
+            }
           ]
         }
       },
@@ -83,6 +109,24 @@
         "key-announce": {
           "@value": "Key Announce",
           "desc": "Send a chat message how many keys of the current mineshaft corpses you have in your sacks."
+        }
+      },
+      "hotm": {
+        "shiftCost": {
+          "@value": "Show shift click cost",
+          "desc": "Shows the amount of powder that will be consumed on shift click."
+        },
+        "totalProgress": {
+          "@value": "Show total progress",
+          "desc": "Shows your total progress to maxing a perk."
+        },
+        "stackSize": {
+          "@value": "Show level as amount",
+          "desc": "Shows the perk level as item stack count."
+        },
+        "totalLeft": {
+          "@value": "Show total amount left",
+          "desc": "Displays the total amount that is still required to max a perk."
         }
       }
     },

@@ -1,8 +1,9 @@
 package codes.cookies.skyocean.features.textures
 
+import codes.cookies.skyocean.config.features.mining.MiningRetexture
 import codes.cookies.skyocean.events.RegisterFakeBlocksEvent
-import me.owdding.ktmodules.Module
 import codes.cookies.skyocean.utils.boundingboxes.DwarvenMinesBB
+import me.owdding.ktmodules.Module
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
@@ -26,6 +27,8 @@ object MistBlocks : BlockRetexture() {
     }
 
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
+        if (!MiningRetexture.customMist) return false
+
         if (!SkyBlockIsland.DWARVEN_MINES.inIsland()) return false
         return DwarvenMinesBB.MIST.isInside(blockPos)
     }
