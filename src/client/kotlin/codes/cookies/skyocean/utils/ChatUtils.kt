@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 
 internal object ChatUtils {
@@ -14,6 +15,8 @@ internal object ChatUtils {
     const val ICON = "\uD83C\uDF0A"
     const val ICON_WITH_SPACE = "$ICON "
     const val DARK_OCEAN_BLUE = 0x355AA0
+    val ICON_COMPONENT = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
+    val ICON_SPACE_COMPONENT = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
 
     val prefix = TagParser.QUICK_TEXT_SAFE.parseText("<gray>[<gr $gradient>SkyOcean</gr>]</gray> ", ParserContext.of()).copy().withoutShadow()
 

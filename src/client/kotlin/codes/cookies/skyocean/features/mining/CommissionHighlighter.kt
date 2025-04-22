@@ -2,7 +2,6 @@ package codes.cookies.skyocean.features.mining
 
 import codes.cookies.skyocean.config.features.mining.MiningConfig
 import codes.cookies.skyocean.utils.ChatUtils
-import codes.cookies.skyocean.utils.ChatUtils.ICON_WITH_SPACE
 import codes.cookies.skyocean.utils.Utils.contains
 import me.owdding.ktmodules.Module
 import net.minecraft.core.component.DataComponents
@@ -12,7 +11,6 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
 @Module
@@ -38,7 +36,7 @@ object CommissionHighlighter {
 
             name(
                 Text.of {
-                    append(ICON_WITH_SPACE) { withColor(ChatUtils.DARK_OCEAN_BLUE) }
+                    append(ChatUtils.ICON_SPACE_COMPONENT)
                     append(event.item.hoverName)
                 },
             )

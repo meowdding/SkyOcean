@@ -3,7 +3,6 @@ package codes.cookies.skyocean.features.mining
 import codes.cookies.skyocean.config.features.mining.MiningConfig
 import codes.cookies.skyocean.repo.HotmData
 import codes.cookies.skyocean.utils.ChatUtils
-import codes.cookies.skyocean.utils.ChatUtils.ICON_WITH_SPACE
 import codes.cookies.skyocean.utils.Utils.exclusiveInclusive
 import codes.cookies.skyocean.utils.tags.ItemTagKey
 import me.owdding.ktmodules.Module
@@ -58,7 +57,7 @@ object HotmHelper {
             }
             name(
                 Text.of {
-                    append(ICON_WITH_SPACE) { withColor(ChatUtils.DARK_OCEAN_BLUE) }
+                    append(ChatUtils.ICON_SPACE_COMPONENT)
                     append(event.item.hoverName)
                 },
             )
