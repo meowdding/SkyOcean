@@ -8,8 +8,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 fun <T, B : TypeBuilder> CategoryKt.observable(entry: Entry<T, B>, onChange: () -> Unit) =
     this.observable(entry) { _, _ -> onChange() }
 
-fun CategoryKt.requiresChunkRebuild(entry: Entry<Boolean, *>) = observable(entry, ::rebuildChunk)
-
-private fun rebuildChunk() {
+fun CategoryKt.requiresChunkRebuild(entry: Entry<Boolean, *>) = observable(entry) {
     McClient.self.levelRenderer.allChanged()
 }
