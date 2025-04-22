@@ -2,7 +2,6 @@ package codes.cookies.skyocean.features.recipe
 
 import codes.cookies.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import codes.cookies.skyocean.helpers.ClientSideInventory
-import codes.cookies.skyocean.utils.Utils.formatReadableTime
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
@@ -10,6 +9,7 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.InventoryBuilder
+import me.owdding.lib.extensions.toReadableTime
 import me.owdding.lib.extensions.withTooltip
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.SharedSuggestionProvider
@@ -93,7 +93,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
                 add("Time: ") {
                     color = TextColor.GREEN
 
-                    append("${recipe?.time?.seconds?.formatReadableTime()}") {
+                    append("${recipe?.time?.seconds?.toReadableTime()}") {
                         color = TextColor.YELLOW
                     }
                 }
