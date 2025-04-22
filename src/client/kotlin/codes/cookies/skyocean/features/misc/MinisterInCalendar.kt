@@ -45,7 +45,7 @@ object MinisterInCalendar {
 
             tooltip {
                 add("The minister has been elected for") { color = TextColor.GRAY }
-                val year = ElectionAPI.rawData?.mayor?.election?.year ?: "§cUnknown§7"
+                val year = ElectionAPI.rawData?.mayor?.election?.year?.plus(1) ?: "§cUnknown§7"
                 add("year $year by the whole SkyBlock") { color = TextColor.GRAY }
                 add("community.") { color = TextColor.GRAY }
                 space()
