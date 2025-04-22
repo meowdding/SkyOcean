@@ -13,14 +13,13 @@ import me.owdding.lib.extensions.applyToTooltip
 import me.owdding.lib.extensions.round
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.TooltipFlag
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap
@@ -40,7 +39,7 @@ object HotmHelper {
         if (event.isInPlayerInventory) return
         if (event.item !in ItemTagKey.HOTM_PERK_ITEMS) return
         val perkByName = HotmData.perkByName(event.item.cleanName) ?: return
-        val tooltipLines = event.item.getTooltipLines(Item.TooltipContext.EMPTY, null, TooltipFlag.NORMAL).drop(1)
+        val tooltipLines = event.item.getLore()
         val isLocked = event.item.item == Items.COAL
         val level = tooltipLines.firstOrNull()?.let {
             val isBoosted = it.siblings.any { sibling -> sibling.style.color?.serialize() == "aqua" }

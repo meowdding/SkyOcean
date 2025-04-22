@@ -30,7 +30,6 @@ object Config : ConfigKt("skyocean/config") {
         translation = "skyocean.config.main.debug"
     }
 
-    override val version: Int = 1
     override val patches: Map<Int, UnaryOperator<JsonObject>> = listOf(
         renameOption("mineshaft", "mining.mineshaft"),
         compoundPatch(
@@ -40,5 +39,6 @@ object Config : ConfigKt("skyocean/config") {
             renameOption("mining.customGemstoneTextures", "mining.retexture.customGemstoneTextures"),
         )
     ).mapIndexed { index, unaryOperator -> index to unaryOperator }.toMap()
+    override val version: Int = patches.size
 
 }
