@@ -50,6 +50,10 @@
     },
     "mining": {
       "@value": "Mining",
+      "modifyCommissions": {
+        "@value": "Modify Commissions",
+        "desc": "Modifies commission items to be visually different when you started or finished it."
+      },
       "retexture": {
         "@value": "Retexture",
         "carpets": {

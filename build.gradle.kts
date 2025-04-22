@@ -49,10 +49,10 @@ loom {
     }
 
     afterEvaluate {
-        val mixinPath = configurations.compileClasspath.get().incoming.dependencies.first { it.group == "net.fabricmc" && it.name == "sponge-mixin" }
+        val mixinPath = configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") }?: return@afterEvaluate
         runConfigs {
             "client" {
-                vmArgs.add("-javaagent:$mixinPath")
+                vmArgs.add("-javaagent:${mixinPath.toPath().toAbsolutePath()}")
             }
         }
     }
