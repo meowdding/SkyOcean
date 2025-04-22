@@ -4,7 +4,6 @@ rootProject.name = "SkyOcean"
 
 pluginManagement {
     repositories {
-        mavenLocal()
         maven("https://maven.fabricmc.net/") {
             name = "Fabric"
         }
