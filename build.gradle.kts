@@ -149,7 +149,7 @@ ksp {
 
 
 compactingResources {
-    sourceSets = mutableListOf("client", "main")
+    this@compactingResources.sourceSets = mutableListOf("client", "main")
     basePath = "repo"
 }
 
