@@ -26,10 +26,6 @@ object Config : ConfigKt("skyocean/config") {
         }
     }
 
-    val enableDebugSettings by boolean(true) {
-        translation = "skyocean.config.main.debug"
-    }
-
     override val patches: Map<Int, UnaryOperator<JsonObject>> = listOf(
         renameOption("mineshaft", "mining.mineshaft"),
         compoundPatch(
