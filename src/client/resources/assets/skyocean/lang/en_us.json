@@ -133,6 +133,13 @@
         "@value": "Sack Notification Items",
         "desc": "The items to show notifications for."
       }
+    },
+    "misc": {
+      "@value": "Miscellaneous",
+      "ministerInCalendar": {
+        "@value": "Minister in Calendar",
+        "desc": "Adds a current minister next to the mayor in the calendar."
+      }
     }
   }
 }

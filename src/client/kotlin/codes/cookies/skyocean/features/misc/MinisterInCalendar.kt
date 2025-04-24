@@ -3,7 +3,6 @@ package codes.cookies.skyocean.features.misc
 import codes.cookies.skyocean.SkyOcean
 import codes.cookies.skyocean.config.features.misc.MiscConfig
 import codes.cookies.skyocean.utils.ChatUtils
-import codes.cookies.skyocean.utils.Utils.split
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import me.owdding.ktmodules.Module
@@ -21,6 +20,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
+import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitToWidth
 import java.util.*
 
 @Module
@@ -72,7 +72,7 @@ object MinisterInCalendar {
 
                 minister.activePerks.forEach {
                     add(it.perkName) { color = TextColor.ORANGE }
-                    it.description.split(" ", 140).forEach {
+                    it.description.splitToWidth(" ", 140).forEach {
                         add(it) { color = TextColor.GRAY }
                     }
                 }
