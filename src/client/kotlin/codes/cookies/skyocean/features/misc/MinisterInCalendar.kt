@@ -34,7 +34,7 @@ object MinisterInCalendar {
         if (event.slot.index != 38) return
         if (!titleRegex.matches(event.title)) return
         if (event.item !in ItemTag.GLASS_PANES) {
-            SkyOcean.warn("Failed to replace mayor item in calendar, item is not a glass pane")
+            SkyOcean.warn("Failed to place minister item in calendar, item is not a glass pane")
             return
         }
         val minister = ElectionAPI.currentMinister ?: return
