@@ -6,8 +6,6 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import java.nio.file.Files
-import kotlin.time.Duration
-import kotlin.time.DurationUnit
 
 // TODO: surely better name maybe?
 object Utils {
@@ -20,32 +18,8 @@ object Utils {
         }
     }
 
-    fun Duration.formatReadableTime(biggestUnit: DurationUnit = DurationUnit.DAYS, maxUnits: Int = 2): String {
-        val units = listOf(
-            DurationUnit.DAYS to this.inWholeDays,
-            DurationUnit.HOURS to this.inWholeHours % 24,
-            DurationUnit.MINUTES to this.inWholeMinutes % 60,
-            DurationUnit.SECONDS to this.inWholeSeconds % 60,
-        )
-
-        val unitNames = mapOf(
-            DurationUnit.DAYS to "d",
-            DurationUnit.HOURS to "h",
-            DurationUnit.MINUTES to "min",
-            DurationUnit.SECONDS to "s",
-        )
-
-        val filteredUnits = units.dropWhile { it.first != biggestUnit }
-            .filter { it.second > 0 }
-            .take(maxUnits)
-
-        return filteredUnits.joinToString(", ") { (unit, value) ->
-            "$value${unitNames[unit]}"
-        }.ifEmpty { "0 seconds" }
-    }
-
-    infix fun Int.exclusiveInclusive(other: Int) = (this + 1) .. other
-    infix fun Int.exclusiveExclusive(other: Int) = (this + 1) .. (other - 1)
+    infix fun Int.exclusiveInclusive(other: Int) = (this + 1)..other
+    infix fun Int.exclusiveExclusive(other: Int) = (this + 1)..(other - 1)
 
     operator fun Item.contains(stack: ItemStack): Boolean = stack.item == this
 }
