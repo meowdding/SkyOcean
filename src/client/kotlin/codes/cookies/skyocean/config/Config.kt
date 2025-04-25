@@ -5,6 +5,7 @@ import codes.cookies.skyocean.config.features.chat.ChatConfig
 import codes.cookies.skyocean.config.features.combat.SlayerConfig
 import codes.cookies.skyocean.config.features.mining.MiningConfig
 import codes.cookies.skyocean.config.features.misc.MiscConfig
+import codes.cookies.skyocean.config.patcher.ConfigPatches
 import com.google.gson.JsonObject
 import com.teamresourceful.resourcefulconfig.api.types.info.ResourcefulConfigLink
 import com.teamresourceful.resourcefulconfig.api.types.options.TranslatableValue
@@ -28,15 +29,7 @@ object Config : ConfigKt("skyocean/config") {
         }
     }
 
-    override val patches: Map<Int, UnaryOperator<JsonObject>> = listOf(
-        renameOption("mineshaft", "mining.mineshaft"),
-        compoundPatch(
-            renameOption("mining.recolorCarpets", "mining.retexture.recolorCarpets"),
-            renameOption("mining.customMiningTextures", "mining.retexture.customGlaciteTextures"),
-            renameOption("mining.customMist", "mining.retexture.customMist"),
-            renameOption("mining.customGemstoneTextures", "mining.retexture.customGemstoneTextures"),
-        )
-    ).mapIndexed { index, unaryOperator -> index to unaryOperator }.toMap()
+    override val patches: Map<Int, UnaryOperator<JsonObject>> = ConfigPatches.loadPatches()
     override val version: Int = patches.size
 
 }

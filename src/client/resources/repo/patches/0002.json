@@ -1,0 +1,25 @@
+{
+  "type": "skyocean:compound",
+  "patches": [
+    {
+      "type": "skyocean:move",
+      "from": "mining.recolorCarpets",
+      "to": "mining.retexture.recolorCarpets"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "mining.customMiningTextures",
+      "to": "mining.retexture.customGlaciteTextures"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "mining.customMist",
+      "to": "mining.retexture.customMist"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "mining.customGemstoneTextures",
+      "to": "mining.retexture.customGemstoneTextures"
+    }
+  ]
+}
