@@ -26,13 +26,11 @@ import java.util.*
 @Module
 object MinisterInCalendar {
 
-    private val titleRegex = "Calendar and Events".toRegex()
-
     @Subscription
     fun onInventoryChange(event: InventoryChangeEvent) {
         if (!MiscConfig.ministerInCalendar) return
         if (event.slot.index != 38) return
-        if (!titleRegex.matches(event.title)) return
+        if (event.title != "Calendar and Events") return
         if (event.item !in ItemTag.GLASS_PANES) {
             SkyOcean.warn("Failed to place minister item in calendar, item is not a glass pane")
             return
@@ -70,9 +68,9 @@ object MinisterInCalendar {
                     color = TextColor.DARK_GRAY
                 }
 
-                minister.activePerks.forEach {
-                    add(it.perkName) { color = TextColor.ORANGE }
-                    it.description.splitToWidth(" ", 140).forEach {
+                minister.activePerks.forEach { perk ->
+                    add(perk.perkName) { color = TextColor.ORANGE }
+                    perk.description.splitToWidth(" ", 140).forEach {
                         add(it) { color = TextColor.GRAY }
                     }
                 }
