@@ -1,4 +1,1 @@
 accessWidener v2 named
-accessible method net/minecraft/client/renderer/GameRenderer setPostEffect (Lnet/minecraft/resources/ResourceLocation;)V
-accessible field net/minecraft/network/syncher/SynchedEntityData itemsById [Lnet/minecraft/network/syncher/SynchedEntityData$DataItem;
-accessible field net/minecraft/world/entity/Entity DATA_CUSTOM_NAME Lnet/minecraft/network/syncher/EntityDataAccessor;
