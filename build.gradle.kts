@@ -30,7 +30,15 @@ loom {
 
     runs {
         getByName("client") {
+            name = "clientHypixel"
             programArg("--quickPlayMultiplayer=hypixel.net")
+            vmArg("-Ddevauth.enabled=true")
+            vmArg("-Dskyblockapi.debug=true")
+        }
+        create("clientSinglePlayer") {
+            client()
+
+            programArg("--quickPlaySingleplayer=\"New World\"")
             vmArg("-Ddevauth.enabled=true")
             vmArg("-Dskyblockapi.debug=true")
         }
