@@ -15,7 +15,7 @@
     "client": [
       {
         "adapter": "kotlin",
-        "value": "codes.cookies.skyocean.SkyOcean"
+        "value": "me.owdding.skyocean.SkyOcean"
       }
     ]
   },

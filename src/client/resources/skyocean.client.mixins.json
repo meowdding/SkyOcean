@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_21",
-  "package": "codes.cookies.skyocean.mixins",
+  "package": "me.owdding.skyocean.mixins",
   "mixins": [
     "EntityMixin"
   ],
