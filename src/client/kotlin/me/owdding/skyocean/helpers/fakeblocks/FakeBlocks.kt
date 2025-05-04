@@ -74,7 +74,7 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlock
                 val unbakedEntries = mutableListOf<FakeBlockUnbakedEntry>()
                 for (entry in entries) {
                     val (id, predicate) = entry
-                    val definition = definitions[id] ?: error("Failed to load fake block state definition for $id")
+                    val definition = definitions[id] ?: continue
                     unbakedEntries.add(FakeBlockUnbakedEntry(definition, predicate))
                 }
 
