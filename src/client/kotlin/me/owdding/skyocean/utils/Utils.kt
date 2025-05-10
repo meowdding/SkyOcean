@@ -1,5 +1,6 @@
 package me.owdding.skyocean.utils
 
+import com.mojang.brigadier.context.CommandContext
 import kotlinx.coroutines.runBlocking
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.world.item.Item
@@ -22,4 +23,6 @@ object Utils {
     infix fun Int.exclusiveExclusive(other: Int) = (this + 1)..(other - 1)
 
     operator fun Item.contains(stack: ItemStack): Boolean = stack.item == this
+
+    inline fun <reified T, P> CommandContext<P>.getArgument(name: String) = this.getArgument(name, T::class.java)
 }
