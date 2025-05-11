@@ -5,6 +5,7 @@ import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.events.RenderWorldEvent
+import me.owdding.skyocean.utils.Utils.atCamera
 import me.owdding.skyocean.utils.boundingboxes.CrystalHollowsBB
 import me.owdding.skyocean.utils.rendering.RenderUtils
 import net.minecraft.core.BlockPos
@@ -37,7 +38,7 @@ object AreaWalls {
     fun onRender(event: RenderWorldEvent) {
         if (!MiningConfig.chAreaWalls) return
 
-        event.pose.translated(-event.camera.position.x, -event.camera.position.y, -event.camera.position.z) {
+        event.pose.atCamera {
             val blockPosition = event.camera.blockPosition
             when (blockPosition) {
                 in Area.NUCLEUS -> renderNucleus(event)
