@@ -92,7 +92,7 @@ object RenderUtils {
         z: Float,
         color: Int,
     ) {
-        val a = when (direction) {
+        val vec6 = when (direction) {
             Direction.UP, Direction.DOWN -> Vec6f(startX, z, startY, endX, z, endY)
             Direction.NORTH, Direction.SOUTH -> Vec6f(startX, startY, z, endX, endY, z)
             Direction.EAST, Direction.WEST -> Vec6f(z, startX, startY, z, endX, endY)
@@ -101,12 +101,12 @@ object RenderUtils {
             event.pose,
             event.buffer.getBuffer(RenderTypes.BLOCK_FILL),
             direction,
-            a.a,
-            a.b,
-            a.c,
-            a.d,
-            a.e,
-            a.f,
+            vec6.a,
+            vec6.b,
+            vec6.c,
+            vec6.d,
+            vec6.e,
+            vec6.f,
             ARGB.redFloat(color),
             ARGB.greenFloat(color),
             ARGB.blueFloat(color),

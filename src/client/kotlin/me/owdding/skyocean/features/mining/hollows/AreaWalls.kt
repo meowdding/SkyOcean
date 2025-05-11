@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.mining.hollows
 import com.teamresourceful.resourcefullib.common.color.Color
 import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.events.RenderWorldEvent
 import me.owdding.skyocean.utils.boundingboxes.CrystalHollowsBB
 import me.owdding.skyocean.utils.rendering.RenderUtils
@@ -12,7 +13,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
-import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 
 @Module
@@ -35,9 +35,9 @@ object AreaWalls {
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onRender(event: RenderWorldEvent) {
-        event.pose.pushPop {
+        if (!MiningConfig.chAreaWalls) return
 
-            translate(-event.camera.position.x, -event.camera.position.y, -event.camera.position.z)
+        event.pose.translated(-event.camera.position.x, -event.camera.position.y, -event.camera.position.z) {
             val blockPosition = event.camera.blockPosition
             when (blockPosition) {
                 in Area.NUCLEUS -> renderNucleus(event)
@@ -81,12 +81,12 @@ object AreaWalls {
 
     private fun renderMagmaFields(event: RenderWorldEvent) {
         event.pose.translated(0, -0.01, 0) {
-            renderOutsideBox(event, Area.NUCLEUS, skipIf = { it != Direction.DOWN })
+            renderOutsideShape(event, Area.NUCLEUS, Direction.DOWN)
         }
-        renderOutsideBox(event, Area.MITHRIL, skipIf = { it != Direction.DOWN })
-        renderOutsideBox(event, Area.PRECURSOR, skipIf = { it != Direction.DOWN })
-        renderOutsideBox(event, Area.GOBLIN, skipIf = { it != Direction.DOWN })
-        renderOutsideBox(event, Area.JUNGLE, skipIf = { it != Direction.DOWN })
+        renderOutsideShape(event, Area.MITHRIL, Direction.DOWN)
+        renderOutsideShape(event, Area.PRECURSOR, Direction.DOWN)
+        renderOutsideShape(event, Area.GOBLIN, Direction.DOWN)
+        renderOutsideShape(event, Area.JUNGLE, Direction.DOWN)
     }
 
     private fun renderMagmaFieldsTop(event: RenderWorldEvent) {

@@ -30,4 +30,7 @@ object MiningConfig : CategoryKt("mining") {
         translation = "skyocean.config.mining.hotm.totalLeft"
     }
 
+    var chAreaWalls by boolean(false) {
+        translation = "skyocean.config.mining.ch.area_walls"
+    }
 }
