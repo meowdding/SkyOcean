@@ -18,7 +18,7 @@ object CalcCommand {
         event.register("calc") {
             then("expression", StringArgumentType.greedyString()) {
                 callback {
-                    val expression: String = this.getArgument("expression")
+                    val expression: String = this.getArgument<String>("expression")!!
                     try {
                         val value = expression.keval {
                             includeDefault() // Todo maybe make some player stats available as variable

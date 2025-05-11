@@ -24,5 +24,5 @@ object Utils {
 
     operator fun Item.contains(stack: ItemStack): Boolean = stack.item == this
 
-    inline fun <reified T, P> CommandContext<P>.getArgument(name: String) = this.getArgument(name, T::class.java)
+    inline fun <reified T> CommandContext<*>.getArgument(name: String): T? = this.getArgument(name, T::class.java)
 }
