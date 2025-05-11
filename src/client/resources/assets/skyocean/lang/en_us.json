@@ -117,6 +117,12 @@
           "@value": "Show total amount left",
           "desc": "Displays the total amount that is still required to max a perk."
         }
+      },
+      "ch": {
+        "area_walls": {
+          "@value": "Area Walls",
+          "desc": "Adds walls between the areas in the crystal hollows."
+        }
       }
     },
     "chat": {

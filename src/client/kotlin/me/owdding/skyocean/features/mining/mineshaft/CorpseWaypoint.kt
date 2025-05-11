@@ -8,8 +8,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.events.RenderWorldEvent
 import me.owdding.skyocean.utils.ChatUtils
-import me.owdding.skyocean.utils.RenderUtils.renderTextInWorld
 import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.rendering.RenderUtils.renderTextInWorld
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
