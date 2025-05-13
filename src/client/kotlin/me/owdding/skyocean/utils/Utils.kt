@@ -24,16 +24,6 @@ object Utils {
         }
     }
 
-    fun Number.ordinal(): String {
-        val value = this.toLong()
-        if (value % 100 in 11..13) return "th"
-        return when (value % 10) {
-            1L -> "st"
-            2L -> "nd"
-            3L -> "rd"
-            else -> "th"
-        }
-    }
 
     infix fun Int.exclusiveInclusive(other: Int) = (this + 1)..other
     infix fun Int.exclusiveExclusive(other: Int) = (this + 1)..(other - 1)
