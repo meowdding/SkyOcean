@@ -1,7 +1,9 @@
 package me.owdding.skyocean.config.features.chat
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.skyocean.config.ConfigCategory
 
+@ConfigCategory
 object ChatConfig: CategoryKt("chat") {
     override val name = Translated("skyocean.config.chat")
 

@@ -11,9 +11,9 @@
       "modifications": {
         "@value": "Visual Changes",
         "desc": [
-          "The mod may change the appearance of an item, by for example manipulating it's tooltip.",
+          "The mod may change the appearance of an item (or other visual components), by for example manipulating it's tooltip.",
           "",
-          "If such a modification is present the item name will be prefixed with a <color #355AA0>\uD83C\uDF0A</color> this is done to help identify the origin of any changes and therefore can't be disabled."
+          "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix, this is done to help identify the origin of any changes and therefore can't be disabled."
         ]
       },
       "debug": {
@@ -145,6 +145,13 @@
       "ministerInCalendar": {
         "@value": "Minister in Calendar",
         "desc": "Adds a current minister next to the mayor in the calendar."
+      }
+    },
+    "fishing": {
+      "@value": "Fishing",
+      "trophy_numbers": {
+        "@value": "Trophy Numbers",
+        "desc": "Displays the amount of trophy fishes you caught upon catching one."
       }
     }
   }

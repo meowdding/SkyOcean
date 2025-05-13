@@ -10,7 +10,7 @@ parchmentmc = "2025.04.19@zip"
 # Dependencies
 fabric = "0.119.5+1.21.5"
 fabrickotlin = "1.13.0+kotlin.2.1.0"
-skyblockapi = "1.0.0-beta.103"
+skyblockapi = "1.0.0-beta.106"
 hypixelapi = "1.0.1+build.1+mc1.21"
 rconfig = "3.5.4"
 rconfigkt = "3.5.5"
@@ -20,7 +20,7 @@ placeholders = "2.6.1+1.21.5"
 keval = "1.1.1"
 repolib = "1.3.1"
 meowdding-lib = "1.0.6"
-meowdding-ktmodules = "1.0.2"
+meowdding-ktmodules = "1.0.3"
 
 # Keep kt version in sync with first segment of ksp version
 kotlin = "2.1.20"
