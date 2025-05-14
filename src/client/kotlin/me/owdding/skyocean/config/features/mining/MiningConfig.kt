@@ -1,7 +1,9 @@
 package me.owdding.skyocean.config.features.mining
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.skyocean.config.ConfigCategory
 
+@ConfigCategory
 object MiningConfig : CategoryKt("mining") {
     init {
         category(MineshaftConfig)

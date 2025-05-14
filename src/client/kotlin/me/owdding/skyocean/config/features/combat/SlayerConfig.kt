@@ -1,7 +1,9 @@
 package me.owdding.skyocean.config.features.combat
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.skyocean.config.ConfigCategory
 
+@ConfigCategory
 object SlayerConfig: CategoryKt("slayer") {
     override val name = Translated("skyocean.config.slayer")
 
