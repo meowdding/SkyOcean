@@ -10,5 +10,9 @@ object MiscConfig : CategoryKt("misc") {
     var ministerInCalendar by boolean(true) {
         translation = "skyocean.config.misc.ministerInCalendar"
     }
+
+    var anvilHelper by boolean(false) {
+        translation = "skyocean.config.misc.anvilHelper"
+    }
 }
 
