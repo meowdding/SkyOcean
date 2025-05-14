@@ -18,5 +18,9 @@ object MiscConfig : CategoryKt("misc") {
     var previousServerTime by int(360) {
         translation = "skyocean.config.misc.previousServerTime"
     }
+
+    var anvilHelper by boolean(false) {
+        translation = "skyocean.config.misc.anvilHelper"
+    }
 }
 

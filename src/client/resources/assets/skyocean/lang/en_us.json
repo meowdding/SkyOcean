@@ -146,6 +146,10 @@
         "@value": "Minister in Calendar",
         "desc": "Adds a current minister next to the mayor in the calendar."
       },
+      "anvilHelper": {
+        "@value": "Anvil helper",
+        "desc": "Highlights books that have the same enchantment as the ones in the anvil."
+      },
       "previousServer": {
         "@value": "Previous Server",
         "desc": "Sends a chat message when you join a server you were previously in."
@@ -153,7 +157,6 @@
       "previousServerTime": {
         "@value": "Previous Server Time",
         "desc": "After leaving a server, the time in seconds before the mod forgets that you were in that server."
-        // TODO hilfe ich kann nicht englisch
       }
     },
     "fishing": {
