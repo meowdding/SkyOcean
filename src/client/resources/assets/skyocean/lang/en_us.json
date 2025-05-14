@@ -156,7 +156,7 @@
       },
       "previousServerTime": {
         "@value": "Previous Server Time",
-        "desc": "After leaving a server, the time in seconds before the mod forgets that you were in that server."
+        "desc": "The time a server is cached and shows up as previously joined."
       }
     },
     "fishing": {
