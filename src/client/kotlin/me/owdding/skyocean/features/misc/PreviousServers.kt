@@ -15,39 +15,32 @@ import kotlin.time.Duration.Companion.seconds
 @Module
 object PreviousServers {
 
-    private var lastServers: List<Server> = emptyList()
+    private val lastServers: MutableList<Server> = mutableListOf()
 
     @Subscription
     fun onServerChange(event: ServerChangeEvent) {
         if (!MiscConfig.previousServer) return
 
-        var sorted = lastServers.sortedByDescending { it.lastTimeInServer }
-
         // Update time of the last server because we still want to alert about being in it,
-        // even when one joined it 10 minutes ago.
-        sorted.lastOrNull()?.let { it.lastTimeInServer = Clock.System.now() }
+        // even when one joined it ages ago.
+        lastServers.maxByOrNull { it.lastTimeInServer }?.let { it.lastTimeInServer = Clock.System.now() }
 
-        sorted = sorted.filter { it.lastTimeInServer.since() < MiscConfig.previousServerTime.seconds }
+        lastServers.removeIf { it.lastTimeInServer.since() > MiscConfig.previousServerTime.seconds }
 
-        sorted.find { it.name == event.name }?.let {
+        lastServers.find { it.name == event.name }?.let {
             Text.of {
                 append("You've already been on this server ")
                 append(it.lastTimeInServer.since().toReadableTime())
                 append(" ago")
             }.sendWithPrefix()
         } ?: run {
-            sorted = sorted + Server(event.name, Clock.System.now())
+            lastServers.add(Server(event.name, Clock.System.now()))
         }
-
-        lastServers = sorted
     }
 
     private data class Server(
         val name: String,
         var lastTimeInServer: Instant,
     )
-
-
-    //lastServers[server] = Clock.System.now()
 
 }
