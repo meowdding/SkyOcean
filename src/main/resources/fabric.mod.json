@@ -23,6 +23,10 @@
     {
       "config": "skyocean.client.mixins.json",
       "environment": "client"
+    },
+    {
+      "config": "skyocean.hidearmour.mixins.json",
+      "environment": "client"
     }
   ],
   "accessWidener": "skyocean.accesswidener",
