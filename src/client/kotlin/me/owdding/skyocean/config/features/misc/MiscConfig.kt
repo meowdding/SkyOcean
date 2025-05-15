@@ -14,5 +14,24 @@ object MiscConfig : CategoryKt("misc") {
     var anvilHelper by boolean(false) {
         translation = "skyocean.config.misc.anvilHelper"
     }
+
+    init {
+        separator {
+            title = "skyocean.config.misc.transparentArmor"
+            description = "skyocean.config.misc.transparentArmor.desc"
+        }
+    }
+
+    var transparentArmorSelf by int(255) {
+        slider = true
+        range = 0..255
+        translation = "skyocean.config.misc.transparentArmor.self"
+    }
+
+    var transparentArmorOthers by int(255) {
+        slider = true
+        range = 0..255
+        translation = "skyocean.config.misc.transparentArmor.others"
+    }
 }
 
