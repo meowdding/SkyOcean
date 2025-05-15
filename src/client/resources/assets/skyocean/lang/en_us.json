@@ -149,6 +149,21 @@
       "anvilHelper": {
         "@value": "Anvil helper",
         "desc": "Highlights books that have the same enchantment as the ones in the anvil."
+      },
+      "transparentArmor": {
+        "@value": "Transparent Armour",
+        "desc": [
+          "Settings to change the appearance of armours on either yourself or others, values range from 0-100%, 100% means it is fully visible.",
+          "<italic>Does not apply to npcs.</italic>"
+        ],
+        "self": {
+          "@value": "Self",
+          "desc": "Only applies to your armour."
+        },
+        "others": {
+          "@value": "Others",
+          "desc": "Only applies to other players."
+        }
       }
     },
     "fishing": {
