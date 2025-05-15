@@ -20,8 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 public class HumanoidArmorLayerMixin {
 
     @WrapOperation(
-        method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/renderer/entity/state/HumanoidRenderState;FF)V",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;renderArmorPiece(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;ILnet/minecraft/client/model/HumanoidModel;)V")
+            method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/renderer/entity/state/HumanoidRenderState;FF)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;renderArmorPiece(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;ILnet/minecraft/client/model/HumanoidModel;)V")
     )
     public <S extends HumanoidRenderState, A extends HumanoidModel<S>> void render(
         @SuppressWarnings("rawtypes") HumanoidArmorLayer instance,
@@ -34,15 +34,14 @@ public class HumanoidArmorLayerMixin {
         Operation<Void> original,
         @Local(argsOnly = true) S renderState
     ) {
-        if (!(renderState instanceof PlayerRenderStateAccessor accessor) || accessor.skyocean$isNpc()) {
-            return;
+        if (renderState instanceof PlayerRenderStateAccessor accessor && !accessor.skyocean$isNpc()) {
+            if (accessor.skyocean$isSelf()) {
+                ItemStackAccessor.setAlpha(armorItem, MiscConfig.INSTANCE.getTransparentArmorSelf());
+            } else {
+                ItemStackAccessor.setAlpha(armorItem, MiscConfig.INSTANCE.getTransparentArmorOthers());
+            }
         }
 
-        if (accessor.skyocean$isSelf()) {
-            ItemStackAccessor.setAlpha(armorItem, MiscConfig.INSTANCE.getTransparentArmorSelf());
-        } else {
-            ItemStackAccessor.setAlpha(armorItem, MiscConfig.INSTANCE.getTransparentArmorOthers());
-        }
 
         //noinspection MixinExtrasOperationParameters
         original.call(instance, poseStack, bufferSource, armorItem, slot, packedLight, model);

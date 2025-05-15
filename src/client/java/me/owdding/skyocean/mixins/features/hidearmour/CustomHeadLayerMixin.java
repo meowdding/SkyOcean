@@ -36,13 +36,12 @@ public class CustomHeadLayerMixin {
         Operation<Void> original,
         @Local(argsOnly = true) S renderState
     ) {
-        if (!(renderState instanceof PlayerRenderStateAccessor accessor) || accessor.skyocean$isNpc()) {
-            return;
-        }
-        if (accessor.skyocean$isSelf()) {
-            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorSelf();
-        } else {
-            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorOthers();
+        if (renderState instanceof PlayerRenderStateAccessor accessor && !accessor.skyocean$isNpc()) {
+            if (accessor.skyocean$isSelf()) {
+                HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorSelf();
+            } else {
+                HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorOthers();
+            }
         }
         original.call(direction, yRot, mouthAnimation, poseStack, bufferSource, packedLight, model, renderType);
         HeadLayerAlphaHolder.alpha = null;
@@ -64,13 +63,12 @@ public class CustomHeadLayerMixin {
         Operation<Void> original,
         @Local(argsOnly = true) S renderState
     ) {
-        if (!(renderState instanceof PlayerRenderStateAccessor accessor) || accessor.skyocean$isNpc()) {
-            return;
-        }
-        if (accessor.skyocean$isSelf()) {
-            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorSelf();
-        } else {
-            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorOthers();
+        if (renderState instanceof PlayerRenderStateAccessor accessor && !accessor.skyocean$isNpc()) {
+            if (accessor.skyocean$isSelf()) {
+                HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorSelf();
+            } else {
+                HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorOthers();
+            }
         }
         original.call(instance, poseStack, bufferSource, packedLight, packedOverlay);
         HeadLayerAlphaHolder.alpha = null;
