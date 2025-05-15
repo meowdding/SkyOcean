@@ -20,14 +20,9 @@
     ]
   },
   "mixins": [
-    {
-      "config": "skyocean.client.mixins.json",
-      "environment": "client"
-    },
-    {
-      "config": "skyocean.hidearmour.mixins.json",
-      "environment": "client"
-    }
+    "skyocean.client.mixins.json",
+    "mixins/skyocean.hidearmour.mixins.json",
+    "mixins/skyocean.hidelightning.mixins.json"
   ],
   "accessWidener": "skyocean.accesswidener",
   "depends": {

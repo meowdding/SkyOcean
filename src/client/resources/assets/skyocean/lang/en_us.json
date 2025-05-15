@@ -158,6 +158,10 @@
         "@value": "Previous Server Time",
         "desc": "The time a server is cached and shows up as previously joined."
       },
+      "hideLightning": {
+        "@value": "Hide Lightning",
+        "desc": "Hides the lightning bolt and sky flash effect."
+      },
       "transparentArmor": {
         "@value": "Transparent Armour",
         "desc": [
