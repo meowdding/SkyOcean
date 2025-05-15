@@ -160,7 +160,7 @@
       },
       "hideLightning": {
         "@value": "Hide Lightning",
-        "desc": "Hides the lightning bolt and sky flash effect."
+        "desc": "Hides lightning bolts and sky flash effect."
       },
       "transparentArmor": {
         "@value": "Transparent Armour",
