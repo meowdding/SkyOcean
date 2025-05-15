@@ -11,6 +11,14 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.ministerInCalendar"
     }
 
+    var previousServer by boolean(false) {
+        translation = "skyocean.config.misc.previousServer"
+    }
+
+    var previousServerTime by int(360) {
+        translation = "skyocean.config.misc.previousServerTime"
+    }
+
     var anvilHelper by boolean(false) {
         translation = "skyocean.config.misc.anvilHelper"
     }
