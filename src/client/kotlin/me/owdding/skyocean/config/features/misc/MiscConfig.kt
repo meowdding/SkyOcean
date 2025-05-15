@@ -23,6 +23,10 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.anvilHelper"
     }
 
+    var hideLightning by boolean(false) {
+        translation = "skyocean.config.misc.hideLightning"
+    }
+
     init {
         separator {
             title = "skyocean.config.misc.transparentArmor"
