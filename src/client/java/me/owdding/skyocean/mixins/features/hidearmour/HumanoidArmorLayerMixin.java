@@ -39,9 +39,9 @@ public class HumanoidArmorLayerMixin {
         }
 
         if (accessor.skyocean$isSelf()) {
-            ItemStackAccessor.setAlpha(armorItem, MiscConfig.INSTANCE.transparentArmorSelf8bit());
+            ItemStackAccessor.setAlpha(armorItem, MiscConfig.INSTANCE.getTransparentArmorSelf());
         } else {
-            ItemStackAccessor.setAlpha(armorItem, MiscConfig.INSTANCE.transparentArmorOther8bit());
+            ItemStackAccessor.setAlpha(armorItem, MiscConfig.INSTANCE.getTransparentArmorOthers());
         }
 
         //noinspection MixinExtrasOperationParameters
