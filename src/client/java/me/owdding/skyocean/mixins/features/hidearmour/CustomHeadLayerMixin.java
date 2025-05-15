@@ -40,9 +40,9 @@ public class CustomHeadLayerMixin {
             return;
         }
         if (accessor.skyocean$isSelf()) {
-            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorSelf();
+            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.transparentArmorSelf8bit();
         } else {
-            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorOthers();
+            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.transparentArmorOther8bit();
         }
         original.call(direction, yRot, mouthAnimation, poseStack, bufferSource, packedLight, model, renderType);
         HeadLayerAlphaHolder.alpha = null;
@@ -68,9 +68,9 @@ public class CustomHeadLayerMixin {
             return;
         }
         if (accessor.skyocean$isSelf()) {
-            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorSelf();
+            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.transparentArmorSelf8bit();
         } else {
-            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorOthers();
+            HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.transparentArmorOther8bit();
         }
         original.call(instance, poseStack, bufferSource, packedLight, packedOverlay);
         HeadLayerAlphaHolder.alpha = null;

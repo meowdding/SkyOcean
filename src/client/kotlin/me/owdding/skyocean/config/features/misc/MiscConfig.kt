@@ -22,16 +22,19 @@ object MiscConfig : CategoryKt("misc") {
         }
     }
 
-    var transparentArmorSelf by int(255) {
+    var transparentArmorSelf by int(100) {
         slider = true
-        range = 0..255
+        range = 0..100
         translation = "skyocean.config.misc.transparentArmor.self"
     }
 
-    var transparentArmorOthers by int(255) {
+    var transparentArmorOthers by int(100) {
         slider = true
-        range = 0..255
+        range = 0..100
         translation = "skyocean.config.misc.transparentArmor.others"
     }
+
+    fun transparentArmorSelf8bit() = ((255 / 100.0) * transparentArmorSelf).toInt()
+    fun transparentArmorOther8bit() = ((255 / 100.0) * transparentArmorOthers).toInt()
 }
 
