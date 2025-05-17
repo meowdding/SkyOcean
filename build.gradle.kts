@@ -26,6 +26,7 @@ java {
 loom {
     splitEnvironmentSourceSets()
 
+    log4jConfigs.from(project.layout.projectDirectory.file("gradle/log4j.config.xml"))
     accessWidenerPath.set(project.projectDir.resolve("src/main/resources/skyocean.accesswidener"))
 
     runs {

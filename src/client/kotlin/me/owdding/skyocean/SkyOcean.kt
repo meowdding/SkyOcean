@@ -51,6 +51,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         repoPatcher = patch
     }
 
+    private var postInit = false
     val configurator = Configurator("skyocean")
 
     override fun onInitializeClient() {

@@ -5,6 +5,7 @@ import com.google.gson.JsonParser
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.serialization.Codec
 import kotlinx.coroutines.runBlocking
+import me.owdding.ktmodules.AutoCollect
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.generated.SkyOceanCodecs
@@ -113,3 +114,8 @@ object Utils {
     }
 
 }
+
+@AutoCollect("RepoModules")
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+annotation class RequireRepoModule

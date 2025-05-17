@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Loggers>
+        <Logger level="TRACE" name="SkyOcean">
+            <AppenderRef ref="DebugFile"/>
+            <AppenderRef ref="SysOut"/>
+            <AppenderRef ref="LatestFile"/>
+            <AppenderRef ref="ServerGuiConsole"/>
+        </Logger>
+    </Loggers>
+</Configuration>
