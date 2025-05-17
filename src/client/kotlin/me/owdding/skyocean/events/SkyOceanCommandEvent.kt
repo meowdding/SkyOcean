@@ -30,8 +30,20 @@ class RegisterSkyOceanCommandEvent(private val dispatcher: CommandDispatcher<Fab
             ?.let(dispatcher::register)
     }
 
+    fun registerWithCallback(command: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
+        register(command) {
+            this.callback(callback)
+        }
+    }
+
     fun registerDev(command: LiteralArgumentBuilder<FabricClientCommandSource>) {
         register(ClientCommandManager.literal("dev").then(command))
+    }
+
+    fun registerDevWithCallback(command: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
+        registerDev(command) {
+            this.callback(callback)
+        }
     }
 
     fun registerDev(command: String, builder: LiteralCommandBuilder.() -> Unit) {
@@ -41,6 +53,7 @@ class RegisterSkyOceanCommandEvent(private val dispatcher: CommandDispatcher<Fab
             },
         )
     }
+
 }
 
 class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal constructor(

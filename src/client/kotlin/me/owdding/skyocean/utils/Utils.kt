@@ -3,6 +3,7 @@ package me.owdding.skyocean.utils
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.brigadier.context.CommandContext
 import kotlinx.coroutines.runBlocking
+import me.owdding.ktmodules.AutoCollect
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -45,3 +46,8 @@ object Utils {
         this.popPose()
     }
 }
+
+@AutoCollect("RepoModules")
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+annotation class RequireRepoModule

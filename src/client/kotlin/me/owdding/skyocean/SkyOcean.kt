@@ -23,9 +23,10 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOcean") {
 
     val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
-    val MOD_ID = SELF.metadata.id
-    val VERSION = SELF.metadata.version.friendlyString
+    val MOD_ID: String = SELF.metadata.id
+    val VERSION: String = SELF.metadata.version.friendlyString
 
+    private var postInit = false
     val configurator = Configurator("skyocean")
 
     override fun onInitializeClient() {
@@ -35,7 +36,6 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
 
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
     }
-
     @Subscription
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("skyocean") {
