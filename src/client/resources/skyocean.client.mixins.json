@@ -7,6 +7,8 @@
     "EntityMixin"
   ],
   "client": [
-    "BlockModelShaperMixin"
+    "BlockModelShaperMixin",
+    "EntityRendererMixin",
+    "EntityRenderStateMixin"
   ]
 }

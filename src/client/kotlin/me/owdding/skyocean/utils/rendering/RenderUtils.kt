@@ -1,6 +1,7 @@
 package me.owdding.skyocean.utils.rendering
 
 import me.owdding.skyocean.events.RenderWorldEvent
+import me.owdding.skyocean.utils.Utils.atCamera
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.LightTexture
@@ -15,7 +16,9 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.awt.Color
+import kotlin.math.cos
 import kotlin.math.max
+import kotlin.math.sin
 
 object RenderUtils {
 
@@ -112,5 +115,38 @@ object RenderUtils {
             ARGB.blueFloat(color),
             ARGB.alphaFloat(color),
         )
+    }
+
+    fun renderCricle(
+        event: RenderWorldEvent,
+        x: Float,
+        y: Float,
+        z: Float,
+        radius: Float,
+        height: Float = 0.1f,
+        color: Int,
+    ) {
+        val (stack, buffer) = event
+
+        event.pose.atCamera {
+            translate(x, y, z)
+            val buffer = buffer.getBuffer(RenderType.debugFilledBox())
+
+            for (i in 0 .. 360) {
+                val rad = Math.toRadians(i.toDouble())
+                val nextRad = Math.toRadians((i + 1).mod(360).toDouble())
+
+                val x1 = radius * cos(rad)
+                val y1 = radius * sin(rad)
+
+                val x2 = radius * cos(nextRad)
+                val y2 = radius * sin(nextRad)
+
+                buffer.addVertex(stack.last().pose(), x2.toFloat(), 0f, y2.toFloat()).setColor(color)
+                buffer.addVertex(stack.last().pose(), x1.toFloat(), 0f, y1.toFloat()).setColor(color)
+                buffer.addVertex(stack.last().pose(), x2.toFloat(), height, y2.toFloat()).setColor(color)
+                buffer.addVertex(stack.last().pose(), x1.toFloat(), height, y1.toFloat()).setColor(color)
+            }
+        }
     }
 }

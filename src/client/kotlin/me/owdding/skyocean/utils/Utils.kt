@@ -33,7 +33,7 @@ object Utils {
     inline fun <reified T> CommandContext<*>.getArgument(name: String): T? = this.getArgument(name, T::class.java)
 
     @OptIn(ExperimentalContracts::class)
-    fun PoseStack.atCamera(task: PoseStack.() -> Unit) {
+    inline fun PoseStack.atCamera(task: PoseStack.() -> Unit) {
         contract {
             callsInPlace(task, InvocationKind.EXACTLY_ONCE)
         }
