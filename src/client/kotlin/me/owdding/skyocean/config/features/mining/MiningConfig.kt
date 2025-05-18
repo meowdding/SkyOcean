@@ -36,7 +36,7 @@ object MiningConfig : CategoryKt("mining") {
         translation = "skyocean.config.mining.ch.area_walls"
     }
 
-    var puzzlerSolver by boolean(false) {
+    var puzzlerSolver by boolean(true) {
         translation = "skyocean.config.mining.puzzler"
     }
 }
