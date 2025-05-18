@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.fishing
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.config.features.fishing.FishingConfig
 import me.owdding.skyocean.helpers.nameTagScale
 import net.minecraft.world.entity.LivingEntity
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -20,6 +21,6 @@ object FishingWarningScale {
         if (!event.component.stripped.matches(hookWarningRegex)) return
         if (event.attachedTo != McPlayer.self?.fishing) return
         val armorStand = event.infoLineEntity as? LivingEntity ?: return
-        armorStand.nameTagScale = 2.0f
+        armorStand.nameTagScale = FishingConfig.hookTextScale
     }
 }
