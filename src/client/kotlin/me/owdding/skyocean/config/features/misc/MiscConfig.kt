@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.ConfigCategory
+import me.owdding.skyocean.utils.transparency
 
 @ConfigCategory
 object MiscConfig : CategoryKt("misc") {
@@ -34,30 +35,12 @@ object MiscConfig : CategoryKt("misc") {
         }
     }
 
-    var transparentArmorSelf by transform(
-        int(100) {
-            slider = true
-            range = 0..100
-            translation = "skyocean.config.misc.transparentArmor.self"
-        },
-        ::from8BitChannel, ::to8BitChannel,
-    )
-
-    var transparentArmorOthers by transform(
-        int(100) {
-            slider = true
-            range = 0..100
-            translation = "skyocean.config.misc.transparentArmor.others"
-        },
-        ::from8BitChannel, ::to8BitChannel,
-    )
-
-    fun from8BitChannel(int: Int): Int {
-        return (int / 255.0).toInt()
+    var transparentArmorSelf by transparency(100) {
+        translation = "skyocean.config.misc.transparentArmor.self"
     }
 
-    fun to8BitChannel(percentage: Int): Int {
-        return ((255 / 100.0) * percentage).toInt()
+    var transparentArmorOthers by transparency(100) {
+        translation = "skyocean.config.misc.transparentArmor.others"
     }
 }
 

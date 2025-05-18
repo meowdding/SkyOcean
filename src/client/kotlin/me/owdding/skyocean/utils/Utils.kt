@@ -12,6 +12,7 @@ import java.nio.file.Files
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.math.roundToInt
 
 // TODO: surely better name maybe?
 object Utils {
@@ -27,6 +28,10 @@ object Utils {
 
     infix fun Int.exclusiveInclusive(other: Int) = (this + 1)..other
     infix fun Int.exclusiveExclusive(other: Int) = (this + 1)..(other - 1)
+
+    fun Double.roundToHalf(): Double {
+        return (this * 2).roundToInt() / 2.0
+    }
 
     operator fun Item.contains(stack: ItemStack): Boolean = stack.item == this
 

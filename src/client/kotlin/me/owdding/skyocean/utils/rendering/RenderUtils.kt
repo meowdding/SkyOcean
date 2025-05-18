@@ -117,7 +117,7 @@ object RenderUtils {
         )
     }
 
-    fun renderCricle(
+    fun renderCylinder(
         event: RenderWorldEvent,
         x: Float,
         y: Float,
@@ -134,7 +134,7 @@ object RenderUtils {
 
             for (i in 0 .. 360) {
                 val rad = Math.toRadians(i.toDouble())
-                val nextRad = Math.toRadians((i + 1).mod(360).toDouble())
+                val nextRad = Math.toRadians(i + 1.toDouble())
 
                 val x1 = radius * cos(rad)
                 val y1 = radius * sin(rad)
@@ -146,6 +146,37 @@ object RenderUtils {
                 buffer.addVertex(stack.last().pose(), x1.toFloat(), 0f, y1.toFloat()).setColor(color)
                 buffer.addVertex(stack.last().pose(), x2.toFloat(), height, y2.toFloat()).setColor(color)
                 buffer.addVertex(stack.last().pose(), x1.toFloat(), height, y1.toFloat()).setColor(color)
+            }
+        }
+    }
+
+    fun renderCircle(
+        event: RenderWorldEvent,
+        x: Float,
+        y: Float,
+        z: Float,
+        radius: Float,
+        color: Int,
+    ) {
+        val (stack, buffer) = event
+
+        event.pose.atCamera {
+            translate(x, y, z)
+            val buffer = buffer.getBuffer(RenderType.debugFilledBox())
+
+            for (i in 0 .. 360) {
+                val rad = Math.toRadians(i.toDouble())
+                val nextRad = Math.toRadians(i + 1.toDouble())
+
+                val x1 = radius * cos(rad)
+                val y1 = radius * sin(rad)
+
+                val x2 = radius * cos(nextRad)
+                val y2 = radius * sin(nextRad)
+
+                buffer.addVertex(stack.last().pose(), 0f, 0f, 0f).setColor(color)
+                buffer.addVertex(stack.last().pose(), x1.toFloat(), 0f, y1.toFloat()).setColor(color)
+                buffer.addVertex(stack.last().pose(), x2.toFloat(), 0f, y2.toFloat()).setColor(color)
             }
         }
     }
