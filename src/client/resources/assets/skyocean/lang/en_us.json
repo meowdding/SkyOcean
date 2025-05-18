@@ -123,6 +123,10 @@
           "@value": "Area Walls",
           "desc": "Adds walls between the areas in the crystal hollows."
         }
+      },
+      "puzzler": {
+        "@value": "Puzzler Solver",
+        "desc": "Highlights the correct block for the puzzler."
       }
     },
     "chat": {
