@@ -8,6 +8,7 @@ import me.owdding.skyocean.utils.ChatUtils
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
@@ -23,6 +24,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object PetCandy {
 
     @Subscription
+    @OnlyOnSkyBlock
     fun onInv(event: InventoryChangeEvent) {
         if (!MiscConfig.showHiddenPetCandy) return
         val item = event.item
