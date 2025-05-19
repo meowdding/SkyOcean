@@ -38,7 +38,7 @@ object TrophyFishingNumbers {
     @OnlyIn(SkyBlockIsland.CRIMSON_ISLE)
     fun modifyChatMessage(event: ChatReceivedEvent.Post) {
         if (!FishingConfig.enableTrophyNumbers) return
-        if (!event.text.startsWith("♔ TROPHY FISH! You caught a ")) return
+        if (!event.text.startsWith("♔ TROPHY FISH! You caught ")) return
         val lastCaught = lastFishCaught ?: return
         val lastTier = lastFishTier ?: return
         event.component = Text.of {
