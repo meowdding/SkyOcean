@@ -168,7 +168,7 @@
       },
       "showHiddenPetCandy": {
         "@value": "Show Hidden Pet Candy",
-        "desc": "Hypixel hides the pet candy line once its max level, this feature readds the line."
+        "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
       },
       "transparentArmor": {
         "@value": "Transparent Armour",
