@@ -25,7 +25,6 @@ import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.utils.extentions.forEachBelow
 import kotlin.math.pow
@@ -85,9 +84,7 @@ object HotspotHighlighter {
 
             val distance = ((packet.x - entry.pos!!.x).pow(2) + (packet.z - entry.pos!!.z).pow(2))
             if (distance <= maxHotspotSize + 0.5) {
-                McClient.tell {
-                    entry.radius = sqrt(distance).roundToHalf()
-                }
+                entry.radius = sqrt(distance).roundToHalf()
                 event.cancel()
                 return
             }
@@ -141,7 +138,7 @@ data class HotspotData(
     var radius: Double? = null,
 )
 
-enum class HotspotType(val color: Color, val regex: Regex) {
+enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
     SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+α Sea Creature Chance"),
     FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+☂ Fishing Speed"),
     DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+⚓ Double Hook Chance"),
@@ -150,7 +147,7 @@ enum class HotspotType(val color: Color, val regex: Regex) {
     UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
     ;
 
-    constructor(color: Color, @Language("regexp") regex: String) : this(color, Regex(regex))
+    val regex: Regex = Regex(regex)
 
     companion object {
 
