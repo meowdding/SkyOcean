@@ -166,6 +166,10 @@
         "@value": "Hide Lightning",
         "desc": "Hides lightning bolts and sky flash effect."
       },
+      "showHiddenPetCandy": {
+        "@value": "Show Hidden Pet Candy",
+        "desc": "Hypixel hides the pet candy line once its max level, this feature readds the line."
+      },
       "transparentArmor": {
         "@value": "Transparent Armour",
         "desc": [
