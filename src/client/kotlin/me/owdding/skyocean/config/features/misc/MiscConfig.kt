@@ -27,6 +27,10 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.hideLightning"
     }
 
+    var showHiddenPetCandy by boolean(true) {
+        translation = "skyocean.config.misc.showHiddenPetCandy"
+    }
+
     init {
         separator {
             title = "skyocean.config.misc.transparentArmor"
