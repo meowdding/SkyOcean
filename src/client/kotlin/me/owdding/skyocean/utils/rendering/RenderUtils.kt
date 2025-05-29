@@ -1,7 +1,5 @@
 package me.owdding.skyocean.utils.rendering
 
-import me.owdding.skyocean.events.RenderWorldEvent
-import me.owdding.skyocean.utils.Utils.atCamera
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.LightTexture
@@ -12,6 +10,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ARGB
 import net.minecraft.world.phys.Vec3
+import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -41,10 +40,10 @@ object RenderUtils {
 
         val scale = max((camera.position.distanceTo(position).toFloat() / 10).toDouble(), 1.0).toFloat() * 0.025f
 
-        pose.pushPop {
-            pose.translate(position.x - x + 0.5, position.y - y + 1.07f, position.z - z + 0.5)
-            pose.mulPose(camera.rotation())
-            pose.scale(scale, -scale, scale)
+        poseStack.pushPop {
+            poseStack.translate(position.x - x + 0.5, position.y - y + 1.07f, position.z - z + 0.5)
+            poseStack.mulPose(camera.rotation())
+            poseStack.scale(scale, -scale, scale)
             val xOffset = if (center) -McFont.width(text) / 2.0f else 0.0f
             McFont.self.drawInBatch(
                 text,
@@ -52,7 +51,7 @@ object RenderUtils {
                 0.0f,
                 Color.WHITE.rgb,
                 false,
-                pose.last().pose(),
+                poseStack.last().pose(),
                 buffer,
                 Font.DisplayMode.SEE_THROUGH,
                 0,
@@ -74,8 +73,7 @@ object RenderUtils {
 
     private data class Vec6f(var a: Float, var b: Float, var c: Float, var d: Float, var e: Float, var f: Float)
 
-    fun renderPlane(
-        event: RenderWorldEvent,
+    fun RenderWorldEvent.renderPlane(
         direction: Direction,
         startX: Int,
         startY: Int,
@@ -83,10 +81,9 @@ object RenderUtils {
         endY: Int,
         z: Int,
         color: Int,
-    ) = renderPlane(event, direction, startX.toFloat(), startY.toFloat(), endX.toFloat(), endY.toFloat(), z.toFloat(), color)
+    ) = renderPlane(direction, startX.toFloat(), startY.toFloat(), endX.toFloat(), endY.toFloat(), z.toFloat(), color)
 
-    fun renderPlane(
-        event: RenderWorldEvent,
+    fun RenderWorldEvent.renderPlane(
         direction: Direction,
         startX: Float,
         startY: Float,
@@ -101,8 +98,8 @@ object RenderUtils {
             Direction.EAST, Direction.WEST -> Vec6f(z, startX, startY, z, endX, endY)
         }
         ShapeRenderer.renderFace(
-            event.pose,
-            event.buffer.getBuffer(RenderTypes.BLOCK_FILL),
+            poseStack,
+            buffer.getBuffer(RenderTypes.BLOCK_FILL),
             direction,
             vec6.a,
             vec6.b,
@@ -117,8 +114,7 @@ object RenderUtils {
         )
     }
 
-    fun renderCylinder(
-        event: RenderWorldEvent,
+    fun RenderWorldEvent.renderCylinder(
         x: Float,
         y: Float,
         z: Float,
@@ -126,13 +122,11 @@ object RenderUtils {
         height: Float = 0.1f,
         color: Int,
     ) {
-        val (stack, buffer) = event
-
-        event.pose.atCamera {
+        atCamera {
             translate(x, y, z)
             val buffer = buffer.getBuffer(RenderType.debugFilledBox())
 
-            for (i in 0 .. 360) {
+            for (i in 0..360) {
                 val rad = Math.toRadians(i.toDouble())
                 val nextRad = Math.toRadians(i + 1.toDouble())
 
@@ -142,29 +136,26 @@ object RenderUtils {
                 val x2 = radius * cos(nextRad)
                 val y2 = radius * sin(nextRad)
 
-                buffer.addVertex(stack.last().pose(), x2.toFloat(), 0f, y2.toFloat()).setColor(color)
-                buffer.addVertex(stack.last().pose(), x1.toFloat(), 0f, y1.toFloat()).setColor(color)
-                buffer.addVertex(stack.last().pose(), x2.toFloat(), height, y2.toFloat()).setColor(color)
-                buffer.addVertex(stack.last().pose(), x1.toFloat(), height, y1.toFloat()).setColor(color)
+                buffer.addVertex(poseStack.last().pose(), x2.toFloat(), 0f, y2.toFloat()).setColor(color)
+                buffer.addVertex(poseStack.last().pose(), x1.toFloat(), 0f, y1.toFloat()).setColor(color)
+                buffer.addVertex(poseStack.last().pose(), x2.toFloat(), height, y2.toFloat()).setColor(color)
+                buffer.addVertex(poseStack.last().pose(), x1.toFloat(), height, y1.toFloat()).setColor(color)
             }
         }
     }
 
-    fun renderCircle(
-        event: RenderWorldEvent,
+    fun RenderWorldEvent.renderCircle(
         x: Float,
         y: Float,
         z: Float,
         radius: Float,
         color: Int,
     ) {
-        val (stack, buffer) = event
-
-        event.pose.atCamera {
+        atCamera {
             translate(x, y, z)
             val buffer = buffer.getBuffer(RenderType.debugFilledBox())
 
-            for (i in 0 .. 360) {
+            for (i in 0..360) {
                 val rad = Math.toRadians(i.toDouble())
                 val nextRad = Math.toRadians(i + 1.toDouble())
 
@@ -174,9 +165,9 @@ object RenderUtils {
                 val x2 = radius * cos(nextRad)
                 val y2 = radius * sin(nextRad)
 
-                buffer.addVertex(stack.last().pose(), 0f, 0f, 0f).setColor(color)
-                buffer.addVertex(stack.last().pose(), x1.toFloat(), 0f, y1.toFloat()).setColor(color)
-                buffer.addVertex(stack.last().pose(), x2.toFloat(), 0f, y2.toFloat()).setColor(color)
+                buffer.addVertex(poseStack.last().pose(), 0f, 0f, 0f).setColor(color)
+                buffer.addVertex(poseStack.last().pose(), x1.toFloat(), 0f, y1.toFloat()).setColor(color)
+                buffer.addVertex(poseStack.last().pose(), x2.toFloat(), 0f, y2.toFloat()).setColor(color)
             }
         }
     }

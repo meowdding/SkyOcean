@@ -4,10 +4,9 @@ import com.teamresourceful.resourcefullib.common.color.Color
 import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.fishing.HotspotHighlightConfig
-import me.owdding.skyocean.events.RenderWorldEvent
-import me.owdding.skyocean.features.fishing.HotspotType.entries
 import me.owdding.skyocean.utils.Utils.roundToHalf
-import me.owdding.skyocean.utils.rendering.RenderUtils
+import me.owdding.skyocean.utils.rendering.RenderUtils.renderCircle
+import me.owdding.skyocean.utils.rendering.RenderUtils.renderCylinder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.DustParticleOptions
 import net.minecraft.core.particles.ParticleTypes
@@ -23,6 +22,7 @@ import tech.thatgravyboat.skyblockapi.api.events.entity.EntityRemovedEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.NameChangedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
+import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
@@ -92,7 +92,7 @@ object HotspotHighlighter {
     }
 
     @Subscription
-    fun onRenderWorldEvent(event: RenderWorldEvent) {
+    fun onRenderWorldEvent(event: RenderWorldEvent.AfterTranslucent) {
         if (!this.isEnabled()) return
 
         this.hotspots.values.forEach { (_, type, pos, radius) ->
@@ -100,8 +100,7 @@ object HotspotHighlighter {
             val pos = pos ?: return@forEach
 
             if (HotspotHighlightConfig.circleOutline) {
-                RenderUtils.renderCylinder(
-                    event,
+                event.renderCylinder(
                     pos.x.toFloat(), pos.y.toFloat(), pos.z.toFloat(),
                     radius.toFloat(),
                     0.1f,
@@ -110,8 +109,7 @@ object HotspotHighlighter {
             }
 
             if (HotspotHighlightConfig.circleSurface) {
-                RenderUtils.renderCircle(
-                    event,
+                event.renderCircle(
                     pos.x.toFloat(), pos.y.toFloat(), pos.z.toFloat(),
                     radius.toFloat(),
                     ARGB.color(HotspotHighlightConfig.surfaceTransparency, type.color.value),

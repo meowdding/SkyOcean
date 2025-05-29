@@ -2,7 +2,6 @@ package me.owdding.skyocean.features.mining
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
-import me.owdding.skyocean.events.RenderWorldEvent
 import me.owdding.skyocean.utils.Utils.atCamera
 import me.owdding.skyocean.utils.Utils.plus
 import net.minecraft.client.renderer.LightTexture
@@ -19,6 +18,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
+import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
@@ -45,10 +45,10 @@ object PuzzlerSolver {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.DWARVEN_MINES)
-    fun onRenderWorld(event: RenderWorldEvent) {
+    fun onRenderWorld(event: RenderWorldEvent.AfterTranslucent) {
         if (!MiningConfig.puzzlerSolver) return
         val solution = solution ?: return
-        event.pose.atCamera {
+        event.poseStack.atCamera {
             translate(solution.x.toFloat(), solution.y.toFloat(), solution.z.toFloat())
 
             val worldBlock = McLevel.self.getBlockState(solution)
@@ -60,7 +60,7 @@ object PuzzlerSolver {
             }
 
             ModelBlockRenderer.renderModel(
-                event.pose.last(),
+                event.poseStack.last(),
                 event.buffer.getBuffer(RenderType.entityCutoutNoCullZOffset(TextureAtlas.LOCATION_BLOCKS)),
                 McClient.self.blockRenderer.getBlockModel(state),
                 1f,
