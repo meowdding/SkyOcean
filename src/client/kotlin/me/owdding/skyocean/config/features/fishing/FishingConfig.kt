@@ -11,4 +11,16 @@ object FishingConfig : CategoryKt("fishing") {
         this.translation = "skyocean.config.fishing.trophy_numbers"
     }
 
+    var hookTextScale by float(1f) {
+        this.range = 0.25f..5f
+        this.slider = true
+        this.translation = "skyocean.config.fishing.hook_text_scale"
+    }
+
+    init {
+        obj("hotspot", HotspotHighlightConfig) {
+            this.translation = "skyocean.config.fishing.hotspot"
+        }
+    }
+
 }

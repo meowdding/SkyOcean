@@ -4,7 +4,10 @@
     "allowReferences": true,
     "allowTags": true,
     "objectAsKeys": true,
-    "prefix": "skyocean"
+    "prefix": "skyocean",
+    "@references": {
+      "transparency": "Values range from 0-100%, 100% means it is fully visible."
+    }
   },
   "config": {
     "main": {
@@ -173,7 +176,10 @@
       "transparentArmor": {
         "@value": "Transparent Armour",
         "desc": [
-          "Settings to change the appearance of armours on either yourself or others, values range from 0-100%, 100% means it is fully visible.",
+          "Settings to change the appearance of armours on either yourself or others.",
+          {
+            "@id": "transparency"
+          },
           "<italic>Does not apply to npcs.</italic>"
         ],
         "self": {
@@ -191,6 +197,40 @@
       "trophy_numbers": {
         "@value": "Trophy Numbers",
         "desc": "Displays the amount of trophy fishes you caught upon catching one."
+      },
+      "hook_text_scale": {
+        "@value": "Hook Text Scale",
+        "desc": "Changes the scale of the text above your fishing hook/bobber."
+      },
+      "hotspot": {
+        "@value": "Hotspot Highlight",
+        "desc": "All settings for the hotspot highlight.",
+        "circle_surface": {
+          "@value": "Surface",
+          "desc": "Render a \"solid\" circle instead of the particle outline."
+        },
+        "surface_transparency": {
+          "@value": "Surface Transparency",
+          "desc": [
+            "Changes the transparency of the surface.",
+            {
+              "@id": "transparency"
+            }
+          ]
+        },
+        "circle_outline": {
+          "@value": "Outline",
+          "desc": "Render a \"solid\" outline instead of the particle outline."
+        },
+        "outline_transparency": {
+          "@value": "Surface Transparency",
+          "desc": [
+            "Changes the transparency of the outline.",
+            {
+              "@id": "transparency"
+            }
+          ]
+        }
       }
     }
   }
