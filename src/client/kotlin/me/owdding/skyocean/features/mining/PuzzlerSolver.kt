@@ -2,7 +2,6 @@ package me.owdding.skyocean.features.mining
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
-import me.owdding.skyocean.utils.Utils.atCamera
 import me.owdding.skyocean.utils.Utils.plus
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.RenderType
@@ -48,7 +47,7 @@ object PuzzlerSolver {
     fun onRenderWorld(event: RenderWorldEvent.AfterTranslucent) {
         if (!MiningConfig.puzzlerSolver) return
         val solution = solution ?: return
-        event.poseStack.atCamera {
+        event.atCamera {
             translate(solution.x.toFloat(), solution.y.toFloat(), solution.z.toFloat())
 
             val worldBlock = McLevel.self.getBlockState(solution)
