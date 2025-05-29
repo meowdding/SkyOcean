@@ -1,5 +1,7 @@
 package me.owdding.skyocean.utils
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.brigadier.context.CommandContext
 import kotlinx.coroutines.runBlocking
@@ -10,10 +12,16 @@ import net.minecraft.world.item.ItemStack
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
+import java.nio.charset.Charset
 import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.io.path.readText
+import kotlin.io.path.writeText
 
 // TODO: surely better name maybe?
 object Utils {
@@ -48,4 +56,15 @@ object Utils {
     }
 
     operator fun BlockPos.plus(vec: Vector3dc) = BlockPos(this.x + vec.x().toInt(), this.y + vec.y().toInt(), this.z + vec.z().toInt())
+
+    fun Path.readAsJson(): JsonElement = JsonParser.parseString(this.readText())
+    fun <T : JsonElement> Path.readJson(): T = this.readAsJson() as T
+    fun Path.writeJson(
+        element: JsonElement,
+        charset: Charset = Charsets.UTF_8,
+        vararg options: StandardOpenOption = arrayOf(
+            StandardOpenOption.TRUNCATE_EXISTING,
+            StandardOpenOption.CREATE,
+        ),
+    ) = this.writeText(element.toPrettyString(), charset, *options)
 }
