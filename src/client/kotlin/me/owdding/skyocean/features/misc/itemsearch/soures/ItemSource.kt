@@ -8,11 +8,14 @@ interface ItemSource {
     fun remove(item: TrackedItem)
     val type: ItemSources
 
-
 }
 
-enum class ItemSources {
-    CHEST,
-    STORAGE,
+enum class ItemSources(val itemSource: ItemSource) {
+    CHEST(ChestItemSource),
+    STORAGE(StorageItemSource),
     ;
+
+    companion object {
+        fun getAllItems(): Iterable<TrackedItem> = entries.flatMap { it.itemSource.getAll() }.filterNot { (itemStack, _) -> itemStack.isEmpty }
+    }
 }
