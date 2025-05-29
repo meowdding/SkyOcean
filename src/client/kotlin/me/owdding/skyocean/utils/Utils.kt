@@ -4,8 +4,10 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.brigadier.context.CommandContext
 import kotlinx.coroutines.runBlocking
 import me.owdding.skyocean.SkyOcean
+import net.minecraft.core.BlockPos
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import java.nio.file.Files
@@ -49,4 +51,6 @@ object Utils {
         this.task()
         this.popPose()
     }
+
+    operator fun BlockPos.plus(vec: Vector3dc) = BlockPos(this.x + vec.x().toInt(), this.y + vec.y().toInt(), this.z + vec.z().toInt())
 }

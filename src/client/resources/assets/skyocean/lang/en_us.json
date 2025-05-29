@@ -123,6 +123,10 @@
           "@value": "Area Walls",
           "desc": "Adds walls between the areas in the crystal hollows."
         }
+      },
+      "puzzler": {
+        "@value": "Puzzler Solver",
+        "desc": "Highlights the correct block for the puzzler."
       }
     },
     "chat": {
@@ -161,6 +165,10 @@
       "hideLightning": {
         "@value": "Hide Lightning",
         "desc": "Hides lightning bolts and sky flash effect."
+      },
+      "showHiddenPetCandy": {
+        "@value": "Show Hidden Pet Candy",
+        "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
       },
       "transparentArmor": {
         "@value": "Transparent Armour",
