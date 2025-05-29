@@ -67,4 +67,16 @@ object Utils {
             StandardOpenOption.CREATE,
         ),
     ) = this.writeText(element.toPrettyString(), charset, *options)
+
+    inline fun <K, V, R> Map<out K, V>.mapNotNull(consumer: (Map.Entry<K, V>) -> Unit, transform: (Map.Entry<K, V>) -> R?): List<R> {
+        return this.mapNotNull { it ->
+            val value = transform(it)
+
+            if (value == null) {
+                consumer(it)
+            }
+
+            value
+        }
+    }
 }

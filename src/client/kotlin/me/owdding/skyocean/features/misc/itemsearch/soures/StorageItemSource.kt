@@ -14,7 +14,7 @@ object StorageItemSource : ItemSource {
 
     private fun List<PlayerStorageInstance>.convert(function: (Int) -> ItemContext): List<TrackedItem> {
         return this.flatMap { (index, stacks) ->
-            val context = function(index)
+            val context = function(index + 1)
             stacks.map { stack -> TrackedItem(stack, context) }
         }
     }

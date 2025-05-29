@@ -13,6 +13,14 @@ interface ItemSource {
 enum class ItemSources(val itemSource: ItemSource) {
     CHEST(ChestItemSource),
     STORAGE(StorageItemSource),
+    WARDROBE(WardrobeItemSource),
+    SACKS(SacksItemSource),
+    INVENTORY(TODO()),
+    FORGE(TODO()),
+    VAULT(TODO()),
+    SACK_OF_SACKS(TODO()),
+    POTION_BAG(TODO()),
+    ACCESSORY_BAG(TODO())
     ;
 
     companion object {
