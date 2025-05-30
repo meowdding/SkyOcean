@@ -1,29 +1,41 @@
 package me.owdding.skyocean.features.misc.itemsearch.soures
 
-import me.owdding.skyocean.features.misc.itemsearch.TrackedItem
+import me.owdding.skyocean.features.misc.itemsearch.item.SimpleTrackedItem
+import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 
 interface ItemSource {
 
-    fun getAll(): List<TrackedItem>
-    fun remove(item: TrackedItem)
+    fun getAll(): List<SimpleTrackedItem>
+    fun remove(item: SimpleTrackedItem)
     val type: ItemSources
+
+    fun createFromIdAndAmount(id: String, amount: Int): ItemStack? = RepoItemsAPI.getItemOrNull(id)?.copyWithCount(amount)
 
 }
 
-enum class ItemSources(val itemSource: ItemSource) {
+enum class ItemSources(val itemSource: ItemSource?) {
+    BUNDLE(null),
     CHEST(ChestItemSource),
     STORAGE(StorageItemSource),
     WARDROBE(WardrobeItemSource),
     SACKS(SacksItemSource),
-    INVENTORY(TODO()),
-    FORGE(TODO()),
-    VAULT(TODO()),
-    SACK_OF_SACKS(TODO()),
-    POTION_BAG(TODO()),
-    ACCESSORY_BAG(TODO())
+    ACCESSORY_BAG(AccessoryBagItemSource),
+    FORGE(ForgeItemSource),
+    INVENTORY(InventoryItemSource),
+    VAULT(VaultItemSource),
     ;
+    // todo SACK_OF_SACKS(TODO()),
+    // todo POTION_BAG(TODO()),
+
+    init {
+        if (itemSource == null && ordinal != 0) {
+            throw IllegalArgumentException("Only BUNDLE might not have a source!")
+        }
+    }
 
     companion object {
-        fun getAllItems(): Iterable<TrackedItem> = entries.flatMap { it.itemSource.getAll() }.filterNot { (itemStack, _) -> itemStack.isEmpty }
+        fun getAllItems(): Iterable<SimpleTrackedItem> =
+            entries.mapNotNull { it.itemSource?.getAll() }.flatten().filterNot { (itemStack, _) -> itemStack.isEmpty }
     }
 }

@@ -21,6 +21,13 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         }
     }
 
+    fun LayoutElement.applyAndGetElements(): MutableList<AbstractWidget> {
+        this.applyLayout()
+        val elements = mutableListOf<AbstractWidget>()
+        this.visitWidgets(elements::add)
+        return elements
+    }
+
     fun LayoutElement.applyAsRenderable() {
         this.visitWidgets {
             it.isFocused = true
@@ -44,12 +51,24 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         }
     }
 
+    fun Layout.asScrollableWidget(
+        width: Int,
+        height: Int,
+        init: LayoutWidget<FrameLayout>.() -> Unit = {},
+        allwaysShowScrollBar: Boolean = false,
+    ): LayoutWidget<FrameLayout> {
+        this.arrangeElements()
+        val widget = LayoutWidget(this).also { it.visible = true }.withStretchToContentSize()
+
+        return widget.asScrollable(width, height, init, allwaysShowScrollBar)
+    }
+
     fun AbstractWidget.asScrollable(
         width: Int,
         height: Int,
         init: LayoutWidget<FrameLayout>.() -> Unit = {},
         allwaysShowScrollBar: Boolean = false,
-    ): AbstractWidget {
+    ): LayoutWidget<FrameLayout> {
         val scrollable = Widgets.frame { frame ->
             frame.withScrollableY(TriState.of(allwaysShowScrollBar.takeIf { it }))
                 .withSize(width, this.height.coerceAtMost(height))
@@ -60,5 +79,15 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         }
 
         return scrollable
+    }
+}
+
+fun List<List<LayoutElement>>.asTable(spacing: Int = 0): Layout {
+    return LayoutFactory.vertical(spacing) {
+        this@asTable.map {
+            LayoutFactory.horizontal(spacing) {
+                it.forEach(::widget)
+            }
+        }.forEach(::widget)
     }
 }

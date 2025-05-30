@@ -2,15 +2,15 @@ package me.owdding.skyocean.features.misc.itemsearch.soures
 
 import me.owdding.skyocean.data.profile.IslandChestData
 import me.owdding.skyocean.features.misc.itemsearch.ItemContext
-import me.owdding.skyocean.features.misc.itemsearch.TrackedItem
+import me.owdding.skyocean.features.misc.itemsearch.item.SimpleTrackedItem
 import net.minecraft.core.BlockPos
 
 object ChestItemSource : ItemSource {
     override fun getAll() = IslandChestData.getItems().map { (itemStack, _, pos, _) ->
-        TrackedItem(itemStack, ChestItemContext(pos))
+        SimpleTrackedItem(itemStack, ChestItemContext(pos))
     }
 
-    override fun remove(item: TrackedItem) {
+    override fun remove(item: SimpleTrackedItem) {
 
     }
 
@@ -20,6 +20,7 @@ object ChestItemSource : ItemSource {
 data class ChestItemContext(
     val chestPos: BlockPos,
 ) : ItemContext {
+    override val source = ItemSources.CHEST
     override fun collectLines() = build {
         add {
             append("Position: ")

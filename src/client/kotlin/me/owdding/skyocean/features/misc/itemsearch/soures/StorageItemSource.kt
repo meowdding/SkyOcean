@@ -1,32 +1,34 @@
 package me.owdding.skyocean.features.misc.itemsearch.soures
 
 import me.owdding.skyocean.features.misc.itemsearch.ItemContext
-import me.owdding.skyocean.features.misc.itemsearch.TrackedItem
+import me.owdding.skyocean.features.misc.itemsearch.item.SimpleTrackedItem
 import tech.thatgravyboat.skyblockapi.api.profile.storage.PlayerStorageInstance
 import tech.thatgravyboat.skyblockapi.api.profile.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 object StorageItemSource : ItemSource {
-    override fun getAll(): List<TrackedItem> = buildList {
+    override fun getAll(): List<SimpleTrackedItem> = buildList {
         addAll(StorageAPI.backpacks.convert(::BackpackStorageItemContext))
         addAll(StorageAPI.enderchests.convert(::EnderChestStorageItemContext))
     }
 
-    private fun List<PlayerStorageInstance>.convert(function: (Int) -> ItemContext): List<TrackedItem> {
+    private fun List<PlayerStorageInstance>.convert(function: (Int) -> ItemContext): List<SimpleTrackedItem> {
         return this.flatMap { (index, stacks) ->
             val context = function(index + 1)
-            stacks.map { stack -> TrackedItem(stack, context) }
+            stacks.map { stack -> SimpleTrackedItem(stack, context) }
         }
     }
 
-    override fun remove(item: TrackedItem) {
+    override fun remove(item: SimpleTrackedItem) {
         TODO("Not yet implemented")
     }
 
     override val type = ItemSources.STORAGE
 }
 
-interface AbstractStorageItemContext : ItemContext
+interface AbstractStorageItemContext : ItemContext {
+    override val source get() = ItemSources.STORAGE
+}
 
 object StorageItemContext : AbstractStorageItemContext {
     override fun collectLines() = build {
