@@ -1,40 +1,62 @@
 package me.owdding.skyocean.features.misc.itemsearch.matcher
 
-import com.teamresourceful.resourcefullib.common.utils.TriState
+import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.component.DataComponents
+import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataType
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
+import java.util.*
 
 object ItemMatcher {
 
-    fun compare(first: ItemStack, second: ItemStack): TriState {
-        fun match(dataType: DataType<*>): Boolean {
-            val firstData = first.getData(dataType)
-            val secondData = second.getData(dataType)
-
-            if (firstData == null && secondData == null) return false
-
-            if (firstData is Map<*, *> && secondData is Map<*, *>) {
-                return !firstData.all { (key, value) ->
-                    secondData.containsKey(key) && secondData[key] == value
-                }
-            }
-
-            if (firstData == secondData) return false
-
-            return true
+    fun compare(first: ItemStack, second: ItemStack): Boolean {
+        if (first.item !== second.item) {
+            return false
         }
-
-        return when {
-            match(DataTypes.UUID) -> TriState.FALSE
-            match(DataTypes.TIMESTAMP) -> TriState.of(!match(DataTypes.API_ID))
-            match(DataTypes.API_ID) -> TriState.UNDEFINED
-            match(DataTypes.ENCHANTMENTS) -> TriState.UNDEFINED
-            match(DataTypes.ATTRIBUTES) -> TriState.UNDEFINED
-            else -> TriState.UNDEFINED
+        if (!isSame(first, second, DataTypes.API_ID)) {
+            return false
         }
+        if (!isSame(first, second, DataTypes.ENCHANTMENTS)) {
+            return false
+        }
+        if (!isSame(first, second, DataTypes.ATTRIBUTES)) {
+            return false
+        }
+        if (!isSame(first, second, DataComponents.CUSTOM_NAME)) {
+            return false
+        }
+        return isSame(first, second, DataTypes.MODIFIER)
     }
 
+    fun <T> dataType(type: DataType<T>): (ItemStack) -> T? = { it.getData(type) }
+    fun <T> component(type: DataComponentType<T>): (ItemStack) -> T? = { it.get(type) }
+    fun <T> isSame(first: ItemStack, second: ItemStack, type: DataType<T>) = isSame(first, second, dataType(type))
+    fun <T> isSame(first: ItemStack, second: ItemStack, type: DataComponentType<T>) = isSame(first, second, component(type))
+    fun <T> isSame(first: ItemStack, second: ItemStack, dataGetter: (ItemStack) -> T?): Boolean {
+        val firstComponent: T? = dataGetter(first)
+        val secondComponent: T? = dataGetter(second)
+
+        if (firstComponent == null || secondComponent == null) {
+            return firstComponent == null && secondComponent == null
+        }
+
+        if (firstComponent is MutableMap<*, *> && secondComponent is MutableMap<*, *>) {
+            for (firstMapKey in firstComponent.keys) {
+                if (!secondComponent.containsKey(firstMapKey)) {
+                    return false
+                }
+                if (secondComponent[firstMapKey] != firstComponent[firstMapKey]) {
+                    return false
+                }
+            }
+        } else if (firstComponent is Component && secondComponent is Component && !firstComponent.stripped.equals(secondComponent.stripped, true)) {
+            return false
+        }
+
+        return Objects.deepEquals(firstComponent, secondComponent)
+    }
 
 }

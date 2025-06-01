@@ -1,6 +1,5 @@
 package me.owdding.skyocean.features.misc.itemsearch.screen
 
-import com.teamresourceful.resourcefullib.common.utils.TriState
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.lib.builder.LayoutFactory
@@ -12,6 +11,7 @@ import me.owdding.lib.extensions.rightPad
 import me.owdding.lib.extensions.shorten
 import me.owdding.skyocean.SkyOcean.olympus
 import me.owdding.skyocean.features.misc.itemsearch.item.TrackedItem
+import me.owdding.skyocean.features.misc.itemsearch.item.TrackedItemBundle
 import me.owdding.skyocean.features.misc.itemsearch.matcher.ItemMatcher
 import me.owdding.skyocean.features.misc.itemsearch.soures.ItemSources
 import me.owdding.skyocean.utils.SkyOceanScreen
@@ -47,8 +47,13 @@ object ItemSearchScreen : SkyOceanScreen() {
             ItemSources.getAllItems().fold(mutableListOf()) { list, item ->
                 val (itemStack) = item
 
-                list.find { ItemMatcher.compare(it.itemStack, itemStack) != TriState.FALSE }?.let {
-                    it.add(item)
+                list.find { ItemMatcher.compare(it.itemStack, itemStack) }?.let {
+                    if (it !is TrackedItemBundle) {
+                        list.remove(it)
+                        list.add(it.add(item))
+                    } else {
+                        it.add(item)
+                    }
                     return@fold list
                 }
 
@@ -137,9 +142,9 @@ object ItemSearchScreen : SkyOceanScreen() {
                 showStackSize = false,
                 customStackText = if (itemStack.count > 1) itemStack.count.shorten(0) else null,
             ).withTooltip {
-                    getTooltipFromItem(McClient.self, itemStack).forEach(::add)
-                    space()
-                    context.collectLines().forEach(::add)
+                getTooltipFromItem(McClient.self, itemStack).forEach(::add)
+                space()
+                context.collectLines().forEach(::add)
             }.withPadding(2).asButton { button -> button.withCallback(context::open) }
         }.rightPad(columns * rows, Displays.empty(20, 20).asWidget()).chunked(columns)
         return LayoutFactory.frame {

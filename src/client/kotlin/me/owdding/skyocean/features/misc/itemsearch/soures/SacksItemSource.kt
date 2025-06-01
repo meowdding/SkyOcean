@@ -4,7 +4,6 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.misc.itemsearch.ItemContext
 import me.owdding.skyocean.features.misc.itemsearch.item.SimpleTrackedItem
 import me.owdding.skyocean.utils.Utils.mapNotNull
-import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.profile.sacks.SacksAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
@@ -25,7 +24,9 @@ object SackItemContext : ItemContext {
 
     override val source = ItemSources.SACKS
 
-    override fun collectLines(): List<Component> = emptyList()
+    override fun collectLines() = build {
+        add("Sacks :3")
+    }
 
     override fun open() = McClient.sendCommand("sacks")
 }

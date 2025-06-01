@@ -5,6 +5,7 @@ import me.owdding.skyocean.features.misc.itemsearch.soures.*
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 
 class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
     override val itemStack: ItemStack = trackedItem.itemStack.copy()
@@ -58,8 +59,9 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
     override fun collectLines() = build {
         map.entries.sortedBy { it.key.ordinal }.forEach { (key, value) ->
             add(key.name.toTitleCase()) {
-                add(CommonComponents.SPACE)
-                add(value)
+                append(":")
+                append(CommonComponents.SPACE)
+                append(value)
             }
         }
     }
