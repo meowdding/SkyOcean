@@ -39,6 +39,9 @@ object Utils {
 
     operator fun BlockPos.plus(vec: Vector3dc) = BlockPos(this.x + vec.x().toInt(), this.y + vec.y().toInt(), this.z + vec.z().toInt())
 
+    /** Translatable Component **with** shadow */
     operator fun String.unaryPlus(): MutableComponent = Component.translatable("skyocean.$this")
+
+    /** Translatable Component **without** shadow */
     operator fun String.unaryMinus(): MutableComponent = Component.translatable("skyocean.$this").withoutShadow()
 }
