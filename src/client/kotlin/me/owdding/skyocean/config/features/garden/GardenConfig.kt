@@ -11,6 +11,5 @@ object GardenConfig : CategoryKt("garden") {
         this.translation = "skyocean.config.garden.pest_bait_type"
     }
 
-
 }
 
