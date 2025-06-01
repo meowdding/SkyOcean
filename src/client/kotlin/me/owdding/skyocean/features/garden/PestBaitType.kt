@@ -55,6 +55,7 @@ object PestBaitType {
         if (!GardenConfig.pestBaitType) return
         val container = event.screen as? AbstractContainerScreen<*> ?: return
         if (container.title.stripped !in listOf("Pest Trap", "Mouse Trap")) return
+        // todo: remove accesswidener once api update
         display.render(event.graphics, container.left + container.imageWidth + 5, container.top)
     }
 
