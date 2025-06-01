@@ -147,6 +147,13 @@
         "desc": "The items to show notifications for."
       }
     },
+    "garden": {
+      "@value": "Garden",
+      "pest_bait_type": {
+        "@value": "Pest Bait Type",
+        "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
+      }
+    },
     "misc": {
       "@value": "Miscellaneous",
       "ministerInCalendar": {
@@ -233,5 +240,8 @@
         }
       }
     }
+  },
+  "garden": {
+    "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>"
   }
 }
