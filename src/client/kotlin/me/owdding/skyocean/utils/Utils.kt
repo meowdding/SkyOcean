@@ -56,6 +56,7 @@ object Utils {
     }
 
     operator fun BlockPos.plus(vec: Vector3dc) = BlockPos(this.x + vec.x().toInt(), this.y + vec.y().toInt(), this.z + vec.z().toInt())
+    operator fun BlockPos.plus(vec: BlockPos): BlockPos = this.offset(vec.x, vec.y, vec.z)
 
     fun Path.readAsJson(): JsonElement = JsonParser.parseString(this.readText())
     fun <T : JsonElement> Path.readJson(): T = this.readAsJson() as T

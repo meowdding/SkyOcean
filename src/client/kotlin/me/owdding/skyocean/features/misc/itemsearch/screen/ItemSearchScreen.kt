@@ -16,7 +16,6 @@ import me.owdding.skyocean.features.misc.itemsearch.matcher.ItemMatcher
 import me.owdding.skyocean.features.misc.itemsearch.soures.ItemSources
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asTable
-import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
@@ -145,13 +144,13 @@ object ItemSearchScreen : SkyOceanScreen() {
                 getTooltipFromItem(McClient.self, itemStack).forEach(::add)
                 space()
                 context.collectLines().forEach(::add)
-            }.withPadding(2).asButton { button -> button.withCallback(context::open) }
+            }.withPadding(2).asButton { button -> context.open() }
         }.rightPad(columns * rows, Displays.empty(20, 20).asWidget()).chunked(columns)
         return LayoutFactory.frame {
             widget(items.asTable())
             display(
-                ExtraDisplays.inventoryBackground(columns, items.size, Displays.empty(columns * 20, items.size * 20).withPadding(2))
-                    .withPadding(top = 5, bottom = 5),
+                //ExtraDisplays.inventoryBackground(columns, items.size, Displays.empty(columns * 20, items.size * 20).withPadding(2))
+                Displays.empty(columns * 20, items.size * 20).withPadding(2).withPadding(top = 5, bottom = 5),
             )
         }
     }

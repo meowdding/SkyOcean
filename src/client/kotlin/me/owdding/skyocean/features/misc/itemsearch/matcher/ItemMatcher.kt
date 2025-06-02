@@ -8,7 +8,6 @@ import tech.thatgravyboat.skyblockapi.api.datatype.DataType
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
-import java.util.*
 
 object ItemMatcher {
 
@@ -56,7 +55,7 @@ object ItemMatcher {
             return false
         }
 
-        return Objects.deepEquals(firstComponent, secondComponent)
+        return firstComponent == secondComponent
     }
 
 }

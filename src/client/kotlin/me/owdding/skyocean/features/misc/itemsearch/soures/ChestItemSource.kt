@@ -1,12 +1,12 @@
 package me.owdding.skyocean.features.misc.itemsearch.soures
 
-import me.owdding.skyocean.data.profile.IslandChestData
+import me.owdding.skyocean.data.profile.IslandChestStorage
 import me.owdding.skyocean.features.misc.itemsearch.ItemContext
 import me.owdding.skyocean.features.misc.itemsearch.item.SimpleTrackedItem
 import net.minecraft.core.BlockPos
 
 object ChestItemSource : ItemSource {
-    override fun getAll() = IslandChestData.getItems().map { (itemStack, _, pos, _) ->
+    override fun getAll() = IslandChestStorage.getItems().map { (itemStack, _, pos, _) ->
         SimpleTrackedItem(itemStack, ChestItemContext(pos))
     }
 

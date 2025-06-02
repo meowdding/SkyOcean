@@ -8,7 +8,7 @@ import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.ItemStack
 
-object IslandChestData {
+object IslandChestStorage {
 
     private val storage = ProfileStorage(
         0,
