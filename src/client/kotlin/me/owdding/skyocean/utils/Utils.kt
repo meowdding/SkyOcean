@@ -3,7 +3,10 @@ package me.owdding.skyocean.utils
 import com.mojang.brigadier.context.CommandContext
 import kotlinx.coroutines.runBlocking
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector3dc
@@ -35,4 +38,10 @@ object Utils {
     inline fun <reified T> CommandContext<*>.getArgument(name: String): T? = this.getArgument(name, T::class.java)
 
     operator fun BlockPos.plus(vec: Vector3dc) = BlockPos(this.x + vec.x().toInt(), this.y + vec.y().toInt(), this.z + vec.z().toInt())
+
+    /** Translatable Component **with** shadow */
+    operator fun String.unaryPlus(): MutableComponent = Component.translatable("skyocean.$this")
+
+    /** Translatable Component **without** shadow */
+    operator fun String.unaryMinus(): MutableComponent = Component.translatable("skyocean.$this").withoutShadow()
 }
