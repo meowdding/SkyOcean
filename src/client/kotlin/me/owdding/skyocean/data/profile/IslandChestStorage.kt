@@ -2,20 +2,21 @@ package me.owdding.skyocean.data.profile
 
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
-import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.CodecHelpers
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.ItemStack
+import java.util.concurrent.CopyOnWriteArrayList
 
 object IslandChestStorage {
 
     private val storage = ProfileStorage(
         0,
-        { mutableListOf<ChestItem>() },
+        { CopyOnWriteArrayList() },
         "chests",
         {
-            CodecUtils.mutableList(SkyOceanCodecs.ChestItemCodec.codec())
+            CodecHelpers.copyOnWriteList(SkyOceanCodecs.ChestItemCodec.codec())
         },
     )
 
@@ -23,6 +24,21 @@ object IslandChestStorage {
         return storage.get() ?: mutableListOf()
     }
 
+    fun removeBlock(position: BlockPos) {
+        val list = storage.get() ?: return
+        list.removeAll { (_, _, pos) -> pos == position }
+        val filter = list.filter { (_, _, _, pos2) -> pos2 == position }
+        list.removeAll(filter)
+        list.addAll(filter.map { (itemStack, slot, pos) -> ChestItem(itemStack, slot, pos, null) })
+    }
+
+    fun addItem(item: ItemStack, slot: Int, pos1: BlockPos, pos2: BlockPos?) {
+        this.storage.get()?.add(ChestItem(item, slot, pos1, pos2))
+    }
+
+    fun save() {
+        this.storage.save()
+    }
 }
 
 @GenerateCodec

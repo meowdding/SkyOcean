@@ -149,7 +149,7 @@ object ItemSearchScreen : SkyOceanScreen() {
         return LayoutFactory.frame {
             widget(items.asTable())
             display(
-                //ExtraDisplays.inventoryBackground(columns, items.size, Displays.empty(columns * 20, items.size * 20).withPadding(2))
+                //ExtraDisplays.inventoryBackground(columns, items.size, Displays.empty(columns * 20, items.size * 20).withPadding(2)),
                 Displays.empty(columns * 20, items.size * 20).withPadding(2).withPadding(top = 5, bottom = 5),
             )
         }
