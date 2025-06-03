@@ -138,6 +138,10 @@
         "@value": "Profile in Chat",
         "desc": "Show the profile icon in chat messages."
       },
+      "piggy_repair_helper": {
+        "@value": "Piggy Repair Helper",
+        "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."
+      },
       "sack_notification": {
         "@value": "Sack Notification",
         "desc": "Show a notification when you gain specific sack items."
