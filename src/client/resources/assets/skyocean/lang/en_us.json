@@ -9,6 +9,7 @@
       "transparency": "Values range from 0-100%, 100% means it is fully visible."
     }
   },
+  "@value": "SkyOcean",
   "config": {
     "main": {
       "modifications": {
