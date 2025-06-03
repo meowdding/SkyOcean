@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.misc.itemsearch.screen
 
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.utils.ListenableState
+import me.owdding.lib.builder.LEFT
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.builder.RIGHT
@@ -16,7 +17,6 @@ import me.owdding.skyocean.features.misc.itemsearch.matcher.ItemMatcher
 import me.owdding.skyocean.features.misc.itemsearch.soures.ItemSources
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asTable
-import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.world.item.ItemStack
@@ -97,6 +97,16 @@ object ItemSearchScreen : SkyOceanScreen() {
                 spacer(height = 2)
                 spacer(width = 4, height - 26)
             }
+            vertical {
+                vertical(alignment = LEFT) {
+                    spacer(width)
+                    LayoutFactory.horizontal {
+                        spacer(height = 24)
+                    }.add()
+                }
+                spacer(height = 2)
+                spacer(width = 4, height - 26)
+            }
         }.center().applyLayout()
         addItems()
     }
@@ -120,11 +130,6 @@ object ItemSearchScreen : SkyOceanScreen() {
                 }
             }
         }.center().applyAndGetElements().let(lastStuff::addAll)
-    }
-
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
-        //rebuildWidgets()
-        super.render(graphics, mouseX, mouseY, f)
     }
 
     fun matches(itemStack: ItemStack): Boolean {
@@ -155,12 +160,9 @@ object ItemSearchScreen : SkyOceanScreen() {
         }
     }
 
+
     fun refreshSearch(search: String) {
         this.search = search.takeUnless { it.isEmpty() }
         addItems()
-    }
-
-    override fun renderBlurredBackground() {
-
     }
 }
