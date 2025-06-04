@@ -33,6 +33,9 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
+import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.math.max
@@ -124,16 +127,30 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
             }
 
             ItemValueSource.ENCHANTMENT -> {
-
+                val enchants = item.getData(DataTypes.ENCHANTMENTS) ?: emptyMap()
                 CLickToExpandWidget(
-                    Widgets.text("Enchantment: ${amount.toFormattedString()}"),
-                    LayoutFactory.vertical {
-                        item.getData(DataTypes.ENCHANTMENTS)?.forEach {
-                            val value = Pricing.getPrice("ENCHANTMENT_${it.key}_${it.value}")
-                            string("${it.key} (${it.value}) ${value.toFormattedString()}") {
-                                this.color = TextColor.PINK
+                    Widgets.text(
+                        Text.of("Enchantments: ") {
+                            this.color = TextColor.DARK_GRAY
+                            append("§7(§e${enchants.size}§7)")
+                            append(" ${amount.toFormattedString()}") {
+                                this.color = TextColor.GOLD
                             }
-                        }
+                        },
+                    ),
+                    LayoutFactory.vertical {
+                        enchants.map { (k, v) -> (k to v) to Pricing.getPrice("ENCHANTMENT_${k}_${v}") }
+                            .filter { it.second > 0 }
+                            .sortedByDescending { it.second }
+                            .forEach { (it, value) ->
+                                if (value <= 0) return@forEach
+                                string("${it.first.toTitleCase()} (${it.second}) ") {
+                                    this.color = TextColor.AQUA
+                                    append(value.toFormattedString()) {
+                                        this.color = TextColor.GOLD
+                                    }
+                                }
+                            }
                     },
                     callback,
                 )
@@ -164,7 +181,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
     }
 }
 
-class CLickToExpandWidget(title: LayoutElement, body: LayoutElement, val callback: () -> Unit) : BaseParentWidget() {
+class CLickToExpandWidget(title: LayoutElement, body: LayoutElement, val callback: () -> Unit, val bodyOffset: Int = 5) : BaseParentWidget() {
     val title = title.asWidget()
     val body = body.asWidget()
     var expanded = false
@@ -174,7 +191,7 @@ class CLickToExpandWidget(title: LayoutElement, body: LayoutElement, val callbac
         this.addRenderableWidget(this.body)
     }
 
-    override fun getWidth() = if (expanded) max(body.width, title.width) else title.width
+    override fun getWidth() = if (expanded) max(body.width + bodyOffset, title.width) else title.width
     override fun getHeight() = title.height + if (expanded) body.height else 0
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -194,7 +211,7 @@ class CLickToExpandWidget(title: LayoutElement, body: LayoutElement, val callbac
         title.setPosition(this.x, this.y)
         title.render(graphics, mouseX, mouseY, partialTicks)
         if (expanded) {
-            body.setPosition(this.x, this.y + title.height)
+            body.setPosition(this.x + bodyOffset, this.y + title.height)
             body.render(graphics, mouseX, mouseY, partialTicks)
         }
 
