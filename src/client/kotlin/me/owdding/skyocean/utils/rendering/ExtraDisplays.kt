@@ -15,7 +15,7 @@ object ExtraDisplays {
             override fun getHeight() = display.getHeight()
 
             override fun render(graphics: GuiGraphics) {
-                RenderUtils.drawInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), size, orientation, color)
+                InventoryRenderer.renderMonoInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), size, orientation, color)
                 graphics.translated(0, 0, 2) {
                     display.render(graphics)
                 }
@@ -36,7 +36,7 @@ object ExtraDisplays {
             override fun getHeight() = display.getHeight()
 
             override fun render(graphics: GuiGraphics) {
-                RenderUtils.drawInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), columns, rows, color)
+                InventoryRenderer.renderNormalInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), columns, rows, color)
                 graphics.translated(0, 0, 2) {
                     display.render(graphics)
                 }

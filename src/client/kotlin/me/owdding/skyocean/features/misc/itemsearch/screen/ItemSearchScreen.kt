@@ -17,6 +17,7 @@ import me.owdding.skyocean.features.misc.itemsearch.matcher.ItemMatcher
 import me.owdding.skyocean.features.misc.itemsearch.soures.ItemSources
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asTable
+import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.world.item.ItemStack
@@ -154,8 +155,8 @@ object ItemSearchScreen : SkyOceanScreen() {
         return LayoutFactory.frame {
             widget(items.asTable())
             display(
-                //ExtraDisplays.inventoryBackground(columns, items.size, Displays.empty(columns * 20, items.size * 20).withPadding(2)),
-                Displays.empty(columns * 20, items.size * 20).withPadding(2).withPadding(top = 5, bottom = 5),
+                ExtraDisplays.inventoryBackground(columns, items.size, Displays.empty(columns * 20, items.size * 20).withPadding(2)),
+//                 Displays.empty(columns * 20, items.size * 20).withPadding(2).withPadding(top = 5, bottom = 5),
             )
         }
     }
