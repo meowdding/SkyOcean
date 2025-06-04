@@ -156,6 +156,10 @@
       "pest_bait_type": {
         "@value": "Pest Bait Type",
         "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
+      },
+      "desk_pest_highlight": {
+        "@value": "Desk Pest Highlight",
+        "desc": "Highlights on what Plot how many pests are on in the 'Configure Plots' menu."
       }
     },
     "misc": {
