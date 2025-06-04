@@ -11,6 +11,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
+import me.owdding.lib.extensions.shorten
 import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidget
@@ -22,12 +23,11 @@ import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.layouts.LayoutSettings
 import net.minecraft.world.item.ItemStack
 import org.lwjgl.glfw.GLFW
-import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
-import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
+import tech.thatgravyboat.skyblockapi.api.item.calculator.GroupedEntry
+import tech.thatgravyboat.skyblockapi.api.item.calculator.ItemEntry
 import tech.thatgravyboat.skyblockapi.api.item.calculator.ItemValueSource
-import tech.thatgravyboat.skyblockapi.api.item.calculator.Pricing
 import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -37,6 +37,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.math.max
 
@@ -46,7 +47,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
     val widgetHeight get() = (height / 3).coerceAtLeast(100) + 50
 
     override fun init() {
-        val (raw, price, sources) = item.getItemValue()
+        val (raw, price, _, tree) = item.getItemValue()
 
         val width = widgetWidth
         val height = widgetHeight
@@ -84,10 +85,8 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
                     lateinit var callback: () -> Unit
 
                     LayoutFactory.vertical {
-                        sources.filterValues { it > 0 }.forEach {
-                            widget(
-                                it.key.asWidget(it.value) { callback() },
-                            )
+                        tree.filter { it.price > 0 }.forEach {
+                            widget(it.asWidget() { callback() })
                         }
                     }.asRefreshableScrollable(width - 5, height = widgetHeight - 29) { callback = it }.add()
                 }
@@ -120,33 +119,40 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
         )
     }
 
-    private fun ItemValueSource.asWidget(amount: Long, callback: () -> Unit): LayoutElement {
-        return when (this) {
+    private fun GroupedEntry.asWidget(callback: () -> Unit): LayoutElement {
+        return when (this.source) {
             ItemValueSource.REFORGE -> {
-                Widgets.text("Reforge: ${amount.toFormattedString()}")
+                Widgets.text("Reforge: ${price.toFormattedString()}")
             }
 
             ItemValueSource.ENCHANTMENT -> {
-                val enchants = item.getData(DataTypes.ENCHANTMENTS) ?: emptyMap()
+                val enchants = this.entries.filterIsInstance<ItemEntry>()
                 CLickToExpandWidget(
                     Widgets.text(
-                        Text.of("Enchantments: ") {
+                        Text.of("${enchants.size} Enchantments: ") {
                             this.color = TextColor.DARK_GRAY
-                            append("§7(§e${enchants.size}§7)")
-                            append(" ${amount.toFormattedString()}") {
+                            append(" ${price.shorten()}") {
                                 this.color = TextColor.GOLD
                             }
                         },
                     ),
                     LayoutFactory.vertical {
-                        enchants.map { (k, v) -> (k to v) to Pricing.getPrice("ENCHANTMENT_${k}_${v}") }
-                            .filter { it.second > 0 }
-                            .sortedByDescending { it.second }
-                            .forEach { (it, value) ->
-                                if (value <= 0) return@forEach
-                                string("${it.first.toTitleCase()} (${it.second}) ") {
-                                    this.color = TextColor.AQUA
-                                    append(value.toFormattedString()) {
+                        enchants.filter { it.price > 0 }
+                            .sortedByDescending { it.price }
+                            .forEach {
+                                val (name, level) = it.itemId.removePrefix("ENCHANTMENT_").let { str ->
+                                    str.substringBeforeLast('_') to str.substringAfterLast('_').toInt()
+                                }
+                                val isUltimate = name.startsWith("ULTIMATE_", true)
+                                string("") {
+                                    append(name.toTitleCase() + " $level") {
+                                        this.color = if (isUltimate) TextColor.PINK else TextColor.DARK_PURPLE
+                                        this.bold = isUltimate
+                                    }
+                                    append(": ") {
+                                        this.color = TextColor.DARK_GRAY
+                                    }
+                                    append(it.price.shorten()) {
                                         this.color = TextColor.GOLD
                                     }
                                 }
@@ -157,7 +163,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
             }
 
             else -> {
-                Widgets.text("${this.name}: ${amount.toFormattedString()}")
+                Widgets.text("${this.source.name}: ${price.shorten()}")
             }
         }
     }
