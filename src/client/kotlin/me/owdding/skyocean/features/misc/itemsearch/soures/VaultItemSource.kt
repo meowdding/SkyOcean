@@ -2,7 +2,7 @@ package me.owdding.skyocean.features.misc.itemsearch.soures
 
 import me.owdding.skyocean.features.misc.itemsearch.ItemContext
 import me.owdding.skyocean.features.misc.itemsearch.item.SimpleTrackedItem
-import tech.thatgravyboat.skyblockapi.api.area.hub.VaultAPI
+import tech.thatgravyboat.skyblockapi.api.profile.items.vault.VaultAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 object VaultItemSource : ItemSource {
