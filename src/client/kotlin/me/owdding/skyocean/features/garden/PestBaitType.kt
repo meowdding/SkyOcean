@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderScreenForegroundEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
-import tech.thatgravyboat.skyblockapi.utils.extentions.left
+import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -36,7 +36,7 @@ object PestBaitType {
                 }
 
                 Spray.entries.forEach { spray ->
-                    val pests = Pest.entries.filter { it.spray == spray }
+                    val pests = Pest.getPests(spray)
 
                     horizontal(alignment = Alignment.CENTER) {
                         display(Displays.item(spray.itemStack))
@@ -55,8 +55,7 @@ object PestBaitType {
         if (!GardenConfig.pestBaitType) return
         val container = event.screen as? AbstractContainerScreen<*> ?: return
         if (container.title.stripped !in listOf("Pest Trap", "Mouse Trap")) return
-        // todo: remove accesswidener once api update
-        display.render(event.graphics, container.left + container.imageWidth + 5, container.top)
+        display.render(event.graphics, container.right + 5, container.top)
     }
 
 }
