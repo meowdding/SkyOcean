@@ -14,13 +14,15 @@ enum class SortModes(private vararg val additionalSortModes: AdditionalSortModes
     MEOW,
     ;
 
+    val comparator = additionalSortModes.map { it.comparator }.reduce { c1, c2 -> c1.thenComparing(c2) }
 }
 
-private enum class AdditionalSortModes(val comparator: Comparator<in ItemStack>) {
+private enum class AdditionalSortModes(val comparator: Comparator<ItemStack>) {
     NAME(Comparator.comparing { it.cleanName }),
-    AMOUNT(Comparator.comparingInt { it.count }),
+    AMOUNT(re(Comparator.comparingInt { it.count })),
     RARITY(re(Comparator.comparingInt { (it.getData(DataTypes.RARITY)?.ordinal ?: -1) })),
-    PRICE(re(Comparator.comparing { it.getItemValue().price }))
+    PRICE(re(Comparator.comparing { it.getItemValue().price })),
+    ;
 
 }
 
