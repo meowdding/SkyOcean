@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.misc
 
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.base.BaseParentWidget
+import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.LEFT
 import me.owdding.lib.builder.LayoutFactory
@@ -10,12 +11,15 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
+import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidget
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
+import net.minecraft.client.gui.layouts.LayoutSettings
 import net.minecraft.world.item.ItemStack
 import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
@@ -74,17 +78,46 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
                 vertical {
                     spacer(width, 26)
 
+                    lateinit var callback: () -> Unit
+
                     LayoutFactory.vertical {
                         sources.filterValues { it > 0 }.forEach {
-                            widget(it.key.asWidget(it.value))
+                            widget(
+                                it.key.asWidget(it.value) { callback() },
+                            )
                         }
-                    }.asScrollable(width - 5, height = height - 29).add()
+                    }.asRefreshableScrollable(width - 5, height = widgetHeight - 29) { callback = it }.add()
                 }
             }
         }.center().applyLayout()
     }
 
-    private fun ItemValueSource.asWidget(amount: Long): LayoutElement {
+    fun Layout.asRefreshableScrollable(
+        width: Int,
+        height: Int,
+        refreshCallback: (() -> Unit) -> Unit,
+    ): LayoutElement {
+        return LayoutWidget(this).also { it.visible = true }.withStretchToContentSize().asScrollable(
+            width, height,
+            {
+                val callback: () -> Unit = {
+                    this@asRefreshableScrollable.arrangeElements()
+                    val widget = LayoutWidget(this@asRefreshableScrollable).also { it.visible = true }.withStretchToContentSize()
+                    this.withSize(width, height)
+                        .withContents { contents ->
+                            contents.setMinWidth(width - 10)
+                            contents.setMinHeight(height)
+                            (contents as? FrameLayoutAccessor)?.children()?.clear()
+                            contents.addChild(widget, LayoutSettings.defaults().alignHorizontallyCenter().alignVerticallyMiddle())
+                        }
+                }
+                callback.invoke()
+                refreshCallback(callback)
+            },
+        )
+    }
+
+    private fun ItemValueSource.asWidget(amount: Long, callback: () -> Unit): LayoutElement {
         return when (this) {
             ItemValueSource.REFORGE -> {
                 Widgets.text("Reforge: ${amount.toFormattedString()}")
@@ -102,6 +135,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
                             }
                         }
                     },
+                    callback,
                 )
             }
 
@@ -130,7 +164,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
     }
 }
 
-class CLickToExpandWidget(title: LayoutElement, body: LayoutElement) : BaseParentWidget() {
+class CLickToExpandWidget(title: LayoutElement, body: LayoutElement, val callback: () -> Unit) : BaseParentWidget() {
     val title = title.asWidget()
     val body = body.asWidget()
     var expanded = false
@@ -149,6 +183,7 @@ class CLickToExpandWidget(title: LayoutElement, body: LayoutElement) : BaseParen
             title.isFocused = expanded
             body.visible = expanded
             body.isFocused = expanded
+            callback()
             return true
         }
 
@@ -159,7 +194,7 @@ class CLickToExpandWidget(title: LayoutElement, body: LayoutElement) : BaseParen
         title.setPosition(this.x, this.y)
         title.render(graphics, mouseX, mouseY, partialTicks)
         if (expanded) {
-            body.setPosition(this.x + title.height, this.y)
+            body.setPosition(this.x, this.y + title.height)
             body.render(graphics, mouseX, mouseY, partialTicks)
         }
 
