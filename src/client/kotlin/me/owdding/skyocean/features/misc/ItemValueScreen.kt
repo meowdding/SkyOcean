@@ -1,7 +1,7 @@
 package me.owdding.skyocean.features.misc
 
 import earth.terrarium.olympus.client.components.Widgets
-import earth.terrarium.olympus.client.utils.ListenableState
+import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.LEFT
 import me.owdding.lib.builder.LayoutFactory
@@ -11,8 +11,10 @@ import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
 import me.owdding.skyocean.utils.SkyOceanScreen
+import me.owdding.skyocean.utils.asWidget
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.client.KeyMapping
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.world.item.ItemStack
 import org.lwjgl.glfw.GLFW
@@ -29,13 +31,12 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import kotlin.math.max
 
 class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
 
     val widgetWidth get() = (width / 3).coerceAtLeast(100) + 50
     val widgetHeight get() = (height / 3).coerceAtLeast(100) + 50
-
-    val state = ListenableState<String>.of("")
 
     override fun init() {
         val (raw, price, sources) = item.getItemValue()
@@ -90,19 +91,18 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
             }
 
             ItemValueSource.ENCHANTMENT -> {
-                LayoutFactory.vertical {
-                    string("Enchants:") {
-                        this.color = TextColor.DARK_GRAY
-                        append(amount.toFormattedString())
-                    }
 
-                    item.getData(DataTypes.ENCHANTMENTS)?.forEach {
-                        val value = Pricing.getPrice("ENCHANTMENT_${it.key}_${it.value}")
-                        string("${it.key} (${it.value}) ${value.toFormattedString()}") {
-                            this.color = TextColor.PINK
+                CLickToExpandWidget(
+                    Widgets.text("Enchantment: ${amount.toFormattedString()}"),
+                    LayoutFactory.vertical {
+                        item.getData(DataTypes.ENCHANTMENTS)?.forEach {
+                            val value = Pricing.getPrice("ENCHANTMENT_${it.key}_${it.value}")
+                            string("${it.key} (${it.value}) ${value.toFormattedString()}") {
+                                this.color = TextColor.PINK
+                            }
                         }
-                    }
-                }
+                    },
+                )
             }
 
             else -> {
@@ -127,5 +127,42 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
             val item = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty } ?: return
             McClient.setScreenAsync(ItemValueScreen(item))
         }
+    }
+}
+
+class CLickToExpandWidget(title: LayoutElement, body: LayoutElement) : BaseParentWidget() {
+    val title = title.asWidget()
+    val body = body.asWidget()
+    var expanded = false
+
+    init {
+        this.addRenderableWidget(this.title)
+        this.addRenderableWidget(this.body)
+    }
+
+    override fun getWidth() = if (expanded) max(body.width, title.width) else title.width
+    override fun getHeight() = title.height + if (expanded) body.height else 0
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (title.isMouseOver(mouseX, mouseY) && button == 0) {
+            expanded = !expanded
+            title.isFocused = expanded
+            body.visible = expanded
+            body.isFocused = expanded
+            return true
+        }
+
+        return super.mouseReleased(mouseX, mouseY, button)
+    }
+
+    override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        title.setPosition(this.x, this.y)
+        title.render(graphics, mouseX, mouseY, partialTicks)
+        if (expanded) {
+            body.setPosition(this.x + title.height, this.y)
+            body.render(graphics, mouseX, mouseY, partialTicks)
+        }
+
+        super.renderWidget(graphics, mouseX, mouseY, partialTicks)
     }
 }
