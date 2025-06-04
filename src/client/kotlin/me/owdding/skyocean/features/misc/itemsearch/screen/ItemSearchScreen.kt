@@ -1,7 +1,9 @@
 package me.owdding.skyocean.features.misc.itemsearch.screen
 
 import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.components.dropdown.DropdownState
 import earth.terrarium.olympus.client.utils.ListenableState
+import earth.terrarium.olympus.client.utils.StateUtils
 import me.owdding.lib.builder.LEFT
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
@@ -20,12 +22,18 @@ import me.owdding.skyocean.utils.asTable
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 
 object ItemSearchScreen : SkyOceanScreen() {
     val state: ListenableState<String> = ListenableState.of("")
+    val dropdownState: DropdownState<SortModes> = DropdownState.of(SortModes.AMOUNT)
+    val ascending: ListenableState<Boolean> = ListenableState.of(true)
     var search: String? = null
     val lastStuff = mutableListOf<AbstractWidget>()
 
@@ -61,7 +69,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                 list
             },
         )
-        items.sortByDescending { it.itemStack.count }
+        this.refreshSort()
         this.requireRebuild = false
     }
 
@@ -81,20 +89,61 @@ object ItemSearchScreen : SkyOceanScreen() {
 
         LayoutFactory.frame(width, height) {
             vertical {
-                vertical(alignment = RIGHT) {
-                    spacer(width)
-                    LayoutFactory.horizontal {
-                        spacer(height = 24)
-                        Widgets.textInput(state) { box ->
-                            box.withChangeCallback(::refreshSearch)
-                            box.withPlaceholder("Search...")
-                            box.withSize(100, 20)
-                        }.add {
-                            alignVerticallyMiddle()
-                        }
-                        spacer(width = 2)
-                    }.add()
-                }
+                LayoutFactory.frame {
+                    vertical(alignment = RIGHT) {
+                        spacer(width)
+                        LayoutFactory.horizontal {
+                            spacer(height = 24)
+                            Widgets.textInput(state) { box ->
+                                box.withChangeCallback(::refreshSearch)
+                                box.withPlaceholder("Search...")
+                                box.withSize(100, 20)
+                            }.add {
+                                alignVerticallyMiddle()
+                            }
+                            spacer(width = 2)
+                        }.add()
+                    }
+                    vertical(alignment = LEFT) {
+                        spacer(width)
+                        LayoutFactory.horizontal {
+                            spacer(height = 24, width = 2)
+                            Widgets.dropdown(
+                                dropdownState,
+                                SortModes.entries,
+                                { modes ->
+                                    Text.of(modes.name)
+                                },
+                                { button -> button.withSize(80, 20) },
+                            ) { builder ->
+                                builder.withCallback(::refreshSort)
+                            }.add {
+                                alignVerticallyMiddle()
+                            }
+                            Widgets.button { factory ->
+                                factory.withCallback {
+                                    StateUtils.booleanToggle(ascending).run()
+                                    refreshSort()
+                                    McClient.tell {
+                                        factory.isFocused = false
+                                    }
+                                }
+                                factory.withRenderer { graphics, widget, partialTick ->
+                                    val texture = if (ascending.get()) {
+                                        olympus("icons/chevron_up")
+                                    } else {
+                                        olympus("icons/chevron_down")
+                                    }
+                                    graphics.blitSprite(RenderType::guiTextured, texture, widget.x + 5, widget.y + 5, 10, 10, ARGB.opaque(TextColor.DARK_GRAY))
+                                }
+                                factory.withSize(20)
+                            }.add {
+                                alignVerticallyMiddle()
+                            }
+                            spacer(width = 2)
+                        }.add()
+                    }
+                }.add()
                 spacer(height = 2)
                 spacer(width = 4, height - 26)
             }
@@ -161,9 +210,13 @@ object ItemSearchScreen : SkyOceanScreen() {
         }
     }
 
-
     fun refreshSearch(search: String) {
         this.search = search.takeUnless { it.isEmpty() }
+        addItems()
+    }
+
+    fun refreshSort(mode: SortModes = dropdownState.get() ?: SortModes.AMOUNT) {
+        this.items.sortWith(mode.let { if (ascending.get() == true) it else it.reversed() })
         addItems()
     }
 }
