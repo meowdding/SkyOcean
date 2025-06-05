@@ -16,14 +16,14 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland;
 import java.util.Map;
 
 @SuppressWarnings("UnstableApiUsage")
-@Mixin(FluidRenderHandlerRegistryImpl.class)
+@Mixin(value = FluidRenderHandlerRegistryImpl.class, remap = false)
 public class FluidRenderHandlerRegistryImplMixin {
 
-    @Shadow(remap = false)
+    @Shadow
     @Final
     private Map<Fluid, FluidRenderHandler> handlers;
 
-    @Inject(method = "get", at = @At("HEAD"), cancellable = true, remap = false)
+    @Inject(method = "get", at = @At("HEAD"), cancellable = true)
     private void skyocean$redirectLavaRendering(Fluid fluid, CallbackInfoReturnable<FluidRenderHandler> cir) {
         if (!SkyBlockIsland.CRIMSON_ISLE.inIsland()) return;
         if (!FishingConfig.INSTANCE.getLavaReplacement()) return;
