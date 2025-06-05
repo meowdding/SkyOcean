@@ -215,7 +215,7 @@
       },
       "lava_replacement": {
         "@value": "Lava Replacement",
-        "desc": "Replaces the lava texture while in the Crimson Isle for the water texture."
+        "desc": "Replaces the lava texture for the water texture while in the Crimson Isle."
       },
       "hotspot": {
         "@value": "Hotspot Highlight",
