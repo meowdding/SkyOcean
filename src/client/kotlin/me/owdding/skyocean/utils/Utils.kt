@@ -3,6 +3,7 @@ package me.owdding.skyocean.utils
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.context.CommandContext
 import kotlinx.coroutines.runBlocking
 import me.owdding.skyocean.SkyOcean
@@ -80,4 +81,12 @@ object Utils {
             value
         }
     }
+
+    fun StringReader.peekNext(amount: Int): String = with(StringBuilder()) {
+        val current = this@peekNext.cursor
+        (0 until (amount)).forEach { _ ->
+            append(read())
+        }
+        cursor = current
+    }.toString()
 }

@@ -70,7 +70,7 @@ object InventoryRenderer {
 
         ByteBufferBuilder(4 * DefaultVertexFormat.POSITION_TEX_COLOR.vertexSize).use { builder ->
 
-            var buffer = BufferBuilder(builder, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
+            val buffer = BufferBuilder(builder, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
             buffer.addVertex(-1f, -1f, 0f).setUv(0f, 0f).setColor(color)
             buffer.addVertex(-1f, 1f, 0f).setUv(0f, 1f).setColor(color)
             buffer.addVertex(1f, 1f, 0f).setUv(1f, 1f).setColor(color)
