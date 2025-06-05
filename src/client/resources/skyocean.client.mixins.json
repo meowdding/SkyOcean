@@ -10,6 +10,6 @@
     "BlockModelShaperMixin",
     "EntityRendererMixin",
     "EntityRenderStateMixin",
-    "features.FluidRenderHandlerRegistryImplMixin"
+    "features.lavareplacement.FluidRenderHandlerRegistryImplMixin"
   ]
 }
