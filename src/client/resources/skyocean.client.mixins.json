@@ -9,6 +9,7 @@
   "client": [
     "BlockModelShaperMixin",
     "EntityRendererMixin",
-    "EntityRenderStateMixin"
+    "EntityRenderStateMixin",
+    "features.FluidRenderHandlerRegistryImplMixin"
   ]
 }

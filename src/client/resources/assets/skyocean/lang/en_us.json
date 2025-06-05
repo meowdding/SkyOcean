@@ -213,6 +213,10 @@
         "@value": "Hook Text Scale",
         "desc": "Changes the scale of the text above your fishing hook/bobber."
       },
+      "lava_replacement": {
+        "@value": "Lava Replacement",
+        "desc": "Replaces the lava texture while in the Crimson Isle for the water texture."
+      },
       "hotspot": {
         "@value": "Hotspot Highlight",
         "desc": "All settings for the hotspot highlight.",
