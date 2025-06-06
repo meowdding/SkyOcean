@@ -2,11 +2,11 @@ package me.owdding.skyocean.utils
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
-import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.context.CommandContext
+import com.mojang.serialization.Codec
 import kotlinx.coroutines.runBlocking
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
@@ -15,30 +15,18 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.math.roundToInt
 
 // TODO: surely better name maybe?
 object Utils {
-    inline fun <reified T : Any> loadFromRepo(file: String) = runBlocking {
-        try {
-            SkyOcean.SELF.findPath("repo/$file.json").orElseThrow()?.let(Files::readString)?.readJson<T>() ?: return@runBlocking null
-        } catch (e: Exception) {
-            SkyOcean.error("Failed to load $file from repo", e)
-            null
-        }
-    }
-
-
     infix fun Int.exclusiveInclusive(other: Int) = (this + 1)..other
     infix fun Int.exclusiveExclusive(other: Int) = (this + 1)..(other - 1)
 
@@ -82,11 +70,30 @@ object Utils {
         }
     }
 
-    fun StringReader.peekNext(amount: Int): String = with(StringBuilder()) {
-        val current = this@peekNext.cursor
-        (0 until (amount)).forEach { _ ->
-            append(read())
+
+    inline fun <reified T : Any> loadFromRepo(file: String) = runBlocking {
+        try {
+            SkyOcean.SELF.findPath("repo/$file.json").orElseThrow()?.let(Files::readString)?.readJson<T>() ?: return@runBlocking null
+        } catch (e: Exception) {
+            SkyOcean.error("Failed to load $file from repo", e)
+            null
         }
-        cursor = current
-    }.toString()
+    }
+
+    internal inline fun <reified T : Any> loadRepoData(file: String): T {
+        return loadRepoData<T, T>(file) { it }
+    }
+
+    internal inline fun <reified T : Any, B : Any> loadRepoData(file: String, modifier: (Codec<T>) -> Codec<B>): B {
+        return loadFromRepo<JsonElement>(file).toDataOrThrow(SkyOceanCodecs.getCodec<T>().let(modifier))
+    }
+
+    internal inline fun <B : Any> loadRepoData(file: String, supplier: () -> Codec<B>): B {
+        return loadFromRepo<JsonElement>(file).toDataOrThrow(supplier())
+    }
+
+    internal fun <B : Any> loadRepoData(file: String, codec: Codec<B>): B {
+        return loadFromRepo<JsonElement>(file).toDataOrThrow(codec)
+    }
+
 }
