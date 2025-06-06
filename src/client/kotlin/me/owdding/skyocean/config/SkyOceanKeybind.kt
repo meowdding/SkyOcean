@@ -9,3 +9,4 @@ data class SkyOceanKeybind(private val translationKey: String, private val keyCo
     fun matches(keyCode: Int, scancode: Int) = key.matches(keyCode, scancode)
 
 }
+

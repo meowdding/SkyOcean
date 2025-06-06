@@ -32,7 +32,7 @@ object HotmHelper {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun test(event: InventoryChangeEvent) {
+    fun onInventoryUpdate(event: InventoryChangeEvent) {
         if (!MiningConfig.hotmDisplayTotalLeft && MiningConfig.hotmDisplayShiftCost && !MiningConfig.hotmTotalProgress && !MiningConfig.hotmStackSize) return
         if (event.title != "Heart of the Mountain") return
         if (event.isInPlayerInventory) return
@@ -51,16 +51,11 @@ object HotmHelper {
         }
 
         event.item.replaceVisually {
-            item = event.item.item
+            copyFrom(event.item)
+            namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
             if (MiningConfig.hotmStackSize) {
                 count = level
             }
-            name(
-                Text.of {
-                    append(ChatUtils.ICON_SPACE_COMPONENT)
-                    append(event.item.hoverName)
-                },
-            )
             tooltip {
                 val listMerger = ListMerger(tooltipLines)
 
