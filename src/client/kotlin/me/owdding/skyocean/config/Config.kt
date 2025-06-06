@@ -25,7 +25,7 @@ object Config : ConfigKt("skyocean/config") {
     }
 
     override val patches: Map<Int, UnaryOperator<JsonObject>> = ConfigPatches.loadPatches()
-    override val version: Int = patches.size
+    override val version: Int = patches.size + 1
 }
 
 @AutoCollect("ConfigCategories")

@@ -157,6 +157,10 @@
       "pest_bait_type": {
         "@value": "Pest Bait Type",
         "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
+      },
+      "desk_pest_highlight": {
+        "@value": "Desk Pest Highlight",
+        "desc": "Highlights on what Plot how many pests are on in the 'Configure Plots' menu."
       }
     },
     "misc": {
@@ -213,6 +217,10 @@
       "hook_text_scale": {
         "@value": "Hook Text Scale",
         "desc": "Changes the scale of the text above your fishing hook/bobber."
+      },
+      "lava_replacement": {
+        "@value": "Lava Replacement",
+        "desc": "Replaces the lava texture with the water texture while in the Crimson Isle."
       },
       "hotspot": {
         "@value": "Hotspot Highlight",

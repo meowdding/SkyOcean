@@ -64,7 +64,11 @@ object HotspotHighlighter {
 
     @Subscription
     fun onEntityRemoved(event: EntityRemovedEvent) {
-        hotspots.remove(event.entity.position().toVec2d())
+        val pos = event.entity.position().toVec2d()
+        val hotspot = hotspots[pos] ?: return
+        if (hotspot.id == event.entity.id) {
+            hotspots.remove(pos)
+        }
     }
 
     @Subscription
