@@ -1,6 +1,5 @@
-package me.owdding.skyocean.features.misc
+package me.owdding.skyocean.features.item.value
 
-import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import me.owdding.ktmodules.Module
@@ -11,8 +10,8 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
-import me.owdding.lib.extensions.shorten
 import me.owdding.skyocean.config.SkyOceanKeybind
+import me.owdding.skyocean.features.item.value.SourceToWidget.asWidget
 import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidget
@@ -24,16 +23,11 @@ import net.minecraft.world.item.ItemStack
 import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
-import tech.thatgravyboat.skyblockapi.api.item.calculator.GroupedEntry
-import tech.thatgravyboat.skyblockapi.api.item.calculator.ItemEntry
-import tech.thatgravyboat.skyblockapi.api.item.calculator.ItemValueSource
 import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
-import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.math.max
@@ -83,7 +77,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
 
                     LayoutFactory.vertical {
                         tree.filter { it.price > 0 }.forEach {
-                            widget(it.asWidget() { callback() })
+                            widget(it.asWidget { callback() })
                         }
                     }.asRefreshableScrollable(width - 5, height = widgetHeight - 29) { callback = it }.add()
                 }
@@ -114,42 +108,6 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
                 refreshCallback(callback)
             },
         )
-    }
-
-    private fun GroupedEntry.asWidget(callback: () -> Unit): LayoutElement {
-        return when (this.source) {
-            ItemValueSource.REFORGE -> {
-                Widgets.text("Reforge: ${price.toFormattedString()}")
-            }
-
-            ItemValueSource.ENCHANTMENT -> {
-                val enchants = this.entries.filterIsInstance<ItemEntry>()
-                CLickToExpandWidget(
-                    Widgets.text(
-                        Text.of("${enchants.size} Enchantments: ") {
-                            this.color = TextColor.DARK_GRAY
-                            append(" ${price.shorten()}") { this.color = TextColor.GOLD }
-                        },
-                    ),
-                    LayoutFactory.vertical {
-                        enchants.filter { it.price > 0 }
-                            .sortedByDescending { it.price }
-                            .forEach {
-                                string("") {
-                                    append(it.itemStack.hoverName)
-                                    append(": ") { this.color = TextColor.DARK_GRAY }
-                                    append(it.price.shorten()) { this.color = TextColor.GOLD }
-                                }
-                            }
-                    },
-                    callback,
-                )
-            }
-
-            else -> {
-                Widgets.text("${this.source.name}: ${price.shorten()}")
-            }
-        }
     }
 
     @Module
