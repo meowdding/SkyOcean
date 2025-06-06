@@ -4,11 +4,9 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.notkamui.keval.*
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
-import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.getArgument
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -39,9 +37,6 @@ object CalcCommand {
                     }
                 }
             }
-        }
-        event.registerWithCallback("balls") {
-            McClient.setScreen(ItemSearchScreen)
         }
     }
 
