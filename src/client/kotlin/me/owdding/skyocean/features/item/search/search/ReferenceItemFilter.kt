@@ -4,7 +4,7 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 
-class BundleItemFilter(
+class ReferenceItemFilter(
     val reference: ItemStack,
 ) : ItemFilter {
     val id = reference.getData(DataTypes.API_ID)

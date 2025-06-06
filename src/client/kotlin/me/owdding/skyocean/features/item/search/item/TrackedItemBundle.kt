@@ -2,11 +2,11 @@ package me.owdding.skyocean.features.item.search.item
 
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
-import me.owdding.skyocean.features.item.search.search.BundleItemFilter
 import me.owdding.skyocean.features.item.search.soures.*
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 
@@ -85,7 +85,7 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
 
     override val source = ItemSources.BUNDLE
 
-    override fun open() {
-        ItemHighlighter.setHighlight(BundleItemFilter(item), chests)
+    override fun open() = McClient.tell {
+        ItemHighlighter.addChests(chests)
     }
 }

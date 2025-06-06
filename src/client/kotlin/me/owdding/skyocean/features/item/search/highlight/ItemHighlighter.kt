@@ -15,6 +15,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.time.Duration.Companion.seconds
 
 @Module
@@ -23,14 +24,17 @@ object ItemHighlighter {
     private var currentSearch: ItemFilter? = null
     private val allItems = mutableSetOf<ItemStack>()
     private var future: Job? = null
-    private var chests: Iterable<BlockPos>? = null
+    private var chests: MutableList<BlockPos> = CopyOnWriteArrayList()
 
-    fun setHighlight(filter: ItemFilter?, chests: Iterable<BlockPos> = emptyList()) = McClient.tell {
+    fun setHighlight(filter: ItemFilter?) = McClient.tell {
         allItems.forEach { it.replaceVisually(null) }
         currentSearch = filter
-        this.chests = chests
+        chests.clear()
         cancelOrScheduleClear()
     }
+
+    fun addChests(chests: Collection<BlockPos>) = this.chests.addAll(chests)
+    fun addChest(chest: BlockPos) = this.chests.add(chest)
 
     fun cancelOrScheduleClear() {
         future?.cancel(CancellationException("Item search has been canceled"))
@@ -59,7 +63,7 @@ object ItemHighlighter {
     @Subscription
     fun RenderWorldEvent.AfterTranslucent.renderWorld() {
         atCamera {
-            chests?.forEach { block ->
+            chests.forEach { block ->
                 renderBox(block, ARGB.color(125, Color.RAINBOW.value).toUInt())
             }
         }

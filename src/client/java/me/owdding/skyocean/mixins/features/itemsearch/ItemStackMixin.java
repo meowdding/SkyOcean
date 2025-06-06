@@ -15,7 +15,7 @@ public class ItemStackMixin {
     @Unique
     private static boolean inEventExecution = false;
 
-    @Inject(method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("RETURN"))
+    @Inject(method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("RETURN"), order = 1100)
     void init(CallbackInfo ci) {
         if (inEventExecution) {
             return;

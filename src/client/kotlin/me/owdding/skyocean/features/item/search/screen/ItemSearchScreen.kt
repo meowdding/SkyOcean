@@ -13,9 +13,11 @@ import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.extensions.rightPad
 import me.owdding.lib.extensions.shorten
 import me.owdding.skyocean.SkyOcean.olympus
+import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.item.TrackedItem
 import me.owdding.skyocean.features.item.search.item.TrackedItemBundle
 import me.owdding.skyocean.features.item.search.matcher.ItemMatcher
+import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.item.search.soures.ItemSources
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asTable
@@ -30,6 +32,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 
+// todo add keybind stuff from item-value
 object ItemSearchScreen : SkyOceanScreen() {
     val state: ListenableState<String> = ListenableState.of("")
     val dropdownState: DropdownState<SortModes> = DropdownState.of(SortModes.AMOUNT)
@@ -199,13 +202,17 @@ object ItemSearchScreen : SkyOceanScreen() {
                 getTooltipFromItem(McClient.self, itemStack).forEach(::add)
                 space()
                 context.collectLines().forEach(::add)
-            }.withPadding(2).asButton { button -> context.open() }
+            }.withPadding(2).asButton { button ->
+                ItemHighlighter.setHighlight(ReferenceItemFilter(itemStack))
+                context.open()
+                McClient.setScreen(null)
+            }
         }.rightPad(columns * rows, Displays.empty(20, 20).asWidget()).chunked(columns)
         return LayoutFactory.frame {
-            widget(items.asTable())
+            items.asTable().add { alignVerticallyMiddle() }
             display(
-                ExtraDisplays.inventoryBackground(columns, items.size, Displays.empty(columns * 20, items.size * 20).withPadding(2)),
-//                 Displays.empty(columns * 20, items.size * 20).withPadding(2).withPadding(top = 5, bottom = 5),
+                ExtraDisplays.inventoryBackground(columns, items.size, Displays.empty(columns * 20, items.size * 20).withPadding(2))
+                    .withPadding(top = 5, bottom = 5),
             )
         }
     }
