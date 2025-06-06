@@ -29,10 +29,10 @@ import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 
-// todo add keybind stuff from item-value
 object ItemSearchScreen : SkyOceanScreen() {
     val state: ListenableState<String> = ListenableState.of("")
     val dropdownState: DropdownState<SortModes> = DropdownState.of(SortModes.AMOUNT)
@@ -199,7 +199,8 @@ object ItemSearchScreen : SkyOceanScreen() {
                 showStackSize = false,
                 customStackText = if (itemStack.count > 1) itemStack.count.shorten(0) else null,
             ).withTooltip {
-                getTooltipFromItem(McClient.self, itemStack).forEach(::add)
+                add(itemStack.hoverName)
+                itemStack.getLore().forEach(::add)
                 space()
                 context.collectLines().forEach(::add)
             }.withPadding(2).asButton { button ->

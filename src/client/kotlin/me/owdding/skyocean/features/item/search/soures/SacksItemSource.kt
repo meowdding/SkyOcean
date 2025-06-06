@@ -6,6 +6,8 @@ import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
 import me.owdding.skyocean.utils.Utils.mapNotNull
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object SacksItemSource : ItemSource {
     override fun getAll() = SacksAPI.sackItems.mapNotNull(
@@ -25,7 +27,7 @@ object SackItemContext : ItemContext {
     override val source = ItemSources.SACKS
 
     override fun collectLines() = build {
-        add("Sacks :3")
+        add("Sacks :3") { color = TextColor.GRAY }
     }
 
     override fun open() = McClient.sendCommand("sacks")

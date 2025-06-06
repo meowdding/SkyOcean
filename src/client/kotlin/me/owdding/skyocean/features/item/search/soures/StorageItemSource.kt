@@ -5,6 +5,8 @@ import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.PlayerStorageInstance
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object StorageItemSource : ItemSource {
     override fun getAll(): List<SimpleTrackedItem> = buildList {
@@ -32,7 +34,7 @@ interface AbstractStorageItemContext : ItemContext {
 
 object StorageItemContext : AbstractStorageItemContext {
     override fun collectLines() = build {
-        add("Storage")
+        add("Storage") { color = TextColor.GRAY }
     }
 
     override fun open() = McClient.sendCommand("storage")
@@ -42,7 +44,7 @@ data class BackpackStorageItemContext(
     val index: Int,
 ) : AbstractStorageItemContext {
     override fun collectLines() = build {
-        add("Backpack: $index")
+        add("Backpack: $index") { color = TextColor.GRAY }
     }
 
     override fun open() = McClient.sendCommand("/bp $index")
@@ -52,7 +54,7 @@ data class EnderChestStorageItemContext(
     val index: Int,
 ) : AbstractStorageItemContext {
     override fun collectLines() = build {
-        add("Enderchest: $index")
+        add("Enderchest: $index") { color = TextColor.GRAY }
     }
 
     override fun open() = McClient.sendCommand("/ec $index")

@@ -6,6 +6,8 @@ import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
 import net.minecraft.core.BlockPos
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object ChestItemSource : ItemSource {
     override fun getAll() = IslandChestStorage.getItems().map { (itemStack, _, pos, secondPos) ->
@@ -28,6 +30,7 @@ data class ChestItemContext(
         add {
             append("Position: ")
             append(chestPos.toString())
+            color = TextColor.GRAY
         }
     }
 

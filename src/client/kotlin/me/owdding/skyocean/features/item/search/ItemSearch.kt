@@ -11,7 +11,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 @Module
 object ItemSearch {
 
-    val key = SkyOceanKeybind("skyocean.itemsearch.keybind", GLFW.GLFW_KEY_O) {
+    val key = SkyOceanKeybind("skyocean.item_search.keybind", GLFW.GLFW_KEY_O) {
         McClient.setScreen(ItemSearchScreen)
     }
 

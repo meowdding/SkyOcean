@@ -4,6 +4,8 @@ import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object InventoryItemSource : ItemSource {
     override fun getAll() = buildList {
@@ -30,9 +32,9 @@ interface OnPlayerItemContext : ItemContext {
 }
 
 object EquipmentItemContext : OnPlayerItemContext {
-    override fun collectLines() = build { add("You are wearing this item!") }
+    override fun collectLines() = build { add("You are wearing this item!") { color = TextColor.GRAY } }
 }
 
 object InventoryItemContext : OnPlayerItemContext {
-    override fun collectLines() = build { add("This item is in your inventory!") }
+    override fun collectLines() = build { add("This item is in your inventory!") { color = TextColor.GRAY } }
 }
