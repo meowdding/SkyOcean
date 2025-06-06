@@ -221,6 +221,10 @@
         "@value": "Lava Replacement",
         "desc": "Replaces the lava texture with the water texture while in the Crimson Isle."
       },
+      "bobber_fix": {
+        "@value": "Bobber Fix",
+        "desc": "Fixes bobbers rubberbanding when fishing."
+      },
       "hotspot": {
         "@value": "Hotspot Highlight",
         "desc": "All settings for the hotspot highlight.",
