@@ -1,6 +1,6 @@
-package me.owdding.skyocean.features.misc.itemsearch.soures
+package me.owdding.skyocean.features.item.search.soures
 
-import me.owdding.skyocean.features.misc.itemsearch.item.SimpleTrackedItem
+import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 

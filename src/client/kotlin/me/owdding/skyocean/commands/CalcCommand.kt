@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.notkamui.keval.*
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
-import me.owdding.skyocean.features.misc.itemsearch.screen.ItemSearchScreen
+import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.getArgument
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription

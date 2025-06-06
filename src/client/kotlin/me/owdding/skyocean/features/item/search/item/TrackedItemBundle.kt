@@ -1,7 +1,10 @@
-package me.owdding.skyocean.features.misc.itemsearch.item
+package me.owdding.skyocean.features.item.search.item
 
-import me.owdding.skyocean.features.misc.itemsearch.ItemContext
-import me.owdding.skyocean.features.misc.itemsearch.soures.*
+import me.owdding.skyocean.features.item.search.ItemContext
+import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
+import me.owdding.skyocean.features.item.search.search.BundleItemFilter
+import me.owdding.skyocean.features.item.search.soures.*
+import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
@@ -56,6 +59,9 @@ class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
 }
 
 data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMapOf()) : ItemContext {
+    val chests = mutableSetOf<BlockPos>()
+    lateinit var item: ItemStack
+
     override fun collectLines() = build {
         map.entries.sortedBy { it.key.ordinal }.forEach { (key, value) ->
             add(key.name.toTitleCase()) {
@@ -68,8 +74,18 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
 
     fun add(newItem: TrackedItem) {
         assert(newItem.context.source != ItemSources.BUNDLE)
+        if (!this::item.isInitialized) {
+            this.item = newItem.itemStack
+        }
         map.merge(newItem.context.source, newItem.itemStack.count, Int::plus)
+        if (newItem.context is ChestItemContext) {
+            chests.add((newItem.context as ChestItemContext).chestPos)
+        }
     }
 
     override val source = ItemSources.BUNDLE
+
+    override fun open() {
+        ItemHighlighter.setHighlight(BundleItemFilter(item), chests)
+    }
 }

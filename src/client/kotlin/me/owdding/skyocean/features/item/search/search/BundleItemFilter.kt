@@ -1,16 +1,12 @@
-package me.owdding.skyocean.features.misc.itemsearch.search
+package me.owdding.skyocean.features.item.search.search
 
-import me.owdding.skyocean.features.misc.itemsearch.item.TrackedItemBundle
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 
 class BundleItemFilter(
-    bundle: TrackedItemBundle,
+    val reference: ItemStack,
 ) : ItemFilter {
-
-    val reference = bundle.itemStack
-
     val id = reference.getData(DataTypes.API_ID)
     val attributes = reference.getData(DataTypes.ATTRIBUTES)
     val enchants = reference.getData(DataTypes.ENCHANTMENTS)

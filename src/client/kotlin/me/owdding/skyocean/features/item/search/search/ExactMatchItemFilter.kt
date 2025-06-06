@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.misc.itemsearch.search
+package me.owdding.skyocean.features.item.search.search
 
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes

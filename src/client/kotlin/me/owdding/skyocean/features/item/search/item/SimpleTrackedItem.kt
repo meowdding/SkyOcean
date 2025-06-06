@@ -1,6 +1,6 @@
-package me.owdding.skyocean.features.misc.itemsearch.item
+package me.owdding.skyocean.features.item.search.item
 
-import me.owdding.skyocean.features.misc.itemsearch.ItemContext
+import me.owdding.skyocean.features.item.search.ItemContext
 import net.minecraft.world.item.ItemStack
 
 data class SimpleTrackedItem(

@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.misc.itemsearch.matcher
+package me.owdding.skyocean.features.item.search.matcher
 
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.component.DataComponents

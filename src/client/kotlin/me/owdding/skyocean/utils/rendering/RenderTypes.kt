@@ -21,4 +21,17 @@ object RenderTypes {
             .createCompositeState(false),
     )
 
+    val BLOCK_FILL_TRIANGLE: RenderType = RenderType.create(
+        "skyocean/depth_block_fill/triangle",
+        131072,
+        RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
+            .withLocation("pipeline/debug_filled_box")
+            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_STRIP)
+            .withDepthBias(-1f, -10f)
+            .build(),
+        RenderType.CompositeState.builder()
+            .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
+            .createCompositeState(false),
+    )
+
 }
