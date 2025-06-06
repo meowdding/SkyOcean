@@ -10,7 +10,6 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
 @Module
@@ -26,6 +25,8 @@ object CommissionHighlighter {
         val lore = event.item.getLore()
         val stripped = lore.last().stripped.trim()
         event.item.replaceVisually {
+            copyFrom(event.item)
+            namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
             item = when (stripped) {
                 "Click to claim rewards!" -> Items.KNOWLEDGE_BOOK
                 "0%" -> Items.WRITTEN_BOOK
@@ -33,14 +34,6 @@ object CommissionHighlighter {
             }
 
             set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false)
-
-            name(
-                Text.of {
-                    append(ChatUtils.ICON_SPACE_COMPONENT)
-                    append(event.item.hoverName)
-                },
-            )
-            tooltip { lore.forEach { add(it) } }
         }
     }
 
