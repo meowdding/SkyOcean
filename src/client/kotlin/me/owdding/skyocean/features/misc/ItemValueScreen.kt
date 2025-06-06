@@ -12,11 +12,10 @@ import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.extensions.shorten
+import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidget
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
-import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
@@ -33,11 +32,9 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
-import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.math.max
 
@@ -131,30 +128,17 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
                     Widgets.text(
                         Text.of("${enchants.size} Enchantments: ") {
                             this.color = TextColor.DARK_GRAY
-                            append(" ${price.shorten()}") {
-                                this.color = TextColor.GOLD
-                            }
+                            append(" ${price.shorten()}") { this.color = TextColor.GOLD }
                         },
                     ),
                     LayoutFactory.vertical {
                         enchants.filter { it.price > 0 }
                             .sortedByDescending { it.price }
                             .forEach {
-                                val (name, level) = it.itemId.removePrefix("ENCHANTMENT_").let { str ->
-                                    str.substringBeforeLast('_') to str.substringAfterLast('_').toInt()
-                                }
-                                val isUltimate = name.startsWith("ULTIMATE_", true)
                                 string("") {
-                                    append(name.toTitleCase() + " $level") {
-                                        this.color = if (isUltimate) TextColor.PINK else TextColor.DARK_PURPLE
-                                        this.bold = isUltimate
-                                    }
-                                    append(": ") {
-                                        this.color = TextColor.DARK_GRAY
-                                    }
-                                    append(it.price.shorten()) {
-                                        this.color = TextColor.GOLD
-                                    }
+                                    append(it.itemStack.hoverName)
+                                    append(": ") { this.color = TextColor.DARK_GRAY }
+                                    append(it.price.shorten()) { this.color = TextColor.GOLD }
                                 }
                             }
                     },
@@ -170,13 +154,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
 
     @Module
     companion object {
-        val ITEM_VALUE_KEY: KeyMapping = KeyBindingHelper.registerKeyBinding(
-            KeyMapping(
-                "skyocean.keybind.item_value",
-                GLFW.GLFW_KEY_J,
-                "skyocean",
-            ),
-        )
+        val ITEM_VALUE_KEY = SkyOceanKeybind("skyocean.keybind.item_value", GLFW.GLFW_KEY_J)
 
         @Subscription
         fun onKeypress(event: ScreenKeyReleasedEvent) {
