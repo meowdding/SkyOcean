@@ -5,15 +5,14 @@ import kotlinx.coroutines.*
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.events.ItemSearchComponent
 import me.owdding.skyocean.events.ItemStackCreateEvent
-import me.owdding.skyocean.events.RenderWorldEvent
 import me.owdding.skyocean.features.item.search.search.ItemFilter
-import me.owdding.skyocean.utils.Utils.atCamera
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderBox
 import net.minecraft.core.BlockPos
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import kotlin.time.Duration.Companion.seconds
@@ -58,8 +57,8 @@ object ItemHighlighter {
     }
 
     @Subscription
-    fun RenderWorldEvent.renderWorld() {
-        pose.atCamera {
+    fun RenderWorldEvent.AfterTranslucent.renderWorld() {
+        atCamera {
             chests?.forEach { block ->
                 renderBox(block, ARGB.color(125, Color.RAINBOW.value).toUInt())
             }

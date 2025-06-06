@@ -2,7 +2,7 @@ package me.owdding.skyocean.features.item.search.soures
 
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
-import tech.thatgravyboat.skyblockapi.api.profile.wardrobe.WardrobeAPI
+import tech.thatgravyboat.skyblockapi.api.profile.items.wardrobe.WardrobeAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 object WardrobeItemSource : ItemSource {

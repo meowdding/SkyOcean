@@ -2,8 +2,8 @@ package me.owdding.skyocean.features.item.search.soures
 
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
-import tech.thatgravyboat.skyblockapi.api.profile.storage.PlayerStorageInstance
-import tech.thatgravyboat.skyblockapi.api.profile.storage.StorageAPI
+import tech.thatgravyboat.skyblockapi.api.profile.items.storage.PlayerStorageInstance
+import tech.thatgravyboat.skyblockapi.api.profile.items.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 object StorageItemSource : ItemSource {

@@ -4,7 +4,7 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
 import me.owdding.skyocean.utils.Utils.mapNotNull
-import tech.thatgravyboat.skyblockapi.api.profile.mining.forge.ForgeAPI
+import tech.thatgravyboat.skyblockapi.api.profile.items.forge.ForgeAPI
 
 object ForgeItemSource : ItemSource {
     override fun getAll() = ForgeAPI.getForgeSlots().mapNotNull(

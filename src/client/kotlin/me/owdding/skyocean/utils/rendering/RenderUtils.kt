@@ -1,7 +1,6 @@
 package me.owdding.skyocean.utils.rendering
 
-import me.owdding.skyocean.events.RenderWorldEvent
-import me.owdding.skyocean.utils.rendering.RenderTypes.BLOCK_FILL_TRIANGLE
+import me.owdding.skyocean.utils.rendering.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.LightTexture
@@ -27,8 +26,8 @@ object RenderUtils {
     fun RenderWorldEvent.renderBox(pos: BlockPos, color: UInt = 0xFFFFFFFFu) {
         val color = color.toInt()
         ShapeRenderer.addChainedFilledBoxVertices(
-            this.pose,
-            this.buffer.getBuffer(BLOCK_FILL_TRIANGLE),
+            poseStack,
+            buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
             pos.x.toDouble(),
             pos.y.toDouble(),
             pos.z.toDouble(),
