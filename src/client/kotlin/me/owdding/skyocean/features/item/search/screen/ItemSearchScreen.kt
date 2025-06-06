@@ -38,7 +38,7 @@ object ItemSearchScreen : SkyOceanScreen() {
     val dropdownState: DropdownState<SortModes> = DropdownState.of(SortModes.AMOUNT)
     val ascending: ListenableState<Boolean> = ListenableState.of(true)
     var search: String? = null
-    val lastStuff = mutableListOf<AbstractWidget>()
+    val currentWidgets = mutableListOf<AbstractWidget>()
 
     val widgetWidth get() = (width / 3).coerceAtLeast(100) + 50
     val widgetHeight get() = (height / 3).coerceAtLeast(100) + 50
@@ -168,8 +168,8 @@ object ItemSearchScreen : SkyOceanScreen() {
         val width = widgetWidth
         val height = widgetHeight
 
-        lastStuff.forEach { this.removeWidget(it) }
-        lastStuff.clear()
+        currentWidgets.forEach { this.removeWidget(it) }
+        currentWidgets.clear()
         LayoutFactory.frame(width, height) {
             vertical {
                 spacer(width, 26)
@@ -182,7 +182,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                     }
                 }
             }
-        }.center().applyAndGetElements().let(lastStuff::addAll)
+        }.center().applyAndGetElements().let(currentWidgets::addAll)
     }
 
     fun matches(itemStack: ItemStack): Boolean {
