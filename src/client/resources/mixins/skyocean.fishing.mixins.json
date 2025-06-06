@@ -1,6 +1,6 @@
 {
   "required": false,
-  "package": "me.owdding.skyocean.mixins.features.lavareplacement",
+  "package": "me.owdding.skyocean.mixins.features.fishing",
   "parent": "skyocean.client.mixins.json",
   "client": [
     "FluidRenderHandlerRegistryImplMixin"

@@ -1,4 +1,4 @@
-package me.owdding.skyocean.mixins.features.bobberfix;
+package me.owdding.skyocean.mixins.features.fishing;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

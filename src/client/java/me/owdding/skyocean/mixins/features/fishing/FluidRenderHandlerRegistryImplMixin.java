@@ -1,4 +1,4 @@
-package me.owdding.skyocean.mixins.features.lavareplacement;
+package me.owdding.skyocean.mixins.features.fishing;
 
 import me.owdding.skyocean.config.features.fishing.FishingConfig;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
