@@ -4,7 +4,10 @@
     "allowReferences": true,
     "allowTags": true,
     "objectAsKeys": true,
-    "prefix": "skyocean"
+    "prefix": "skyocean",
+    "@references": {
+      "transparency": "Values range from 0-100%, 100% means it is fully visible."
+    }
   },
   "config": {
     "main": {
@@ -135,6 +138,10 @@
         "@value": "Profile in Chat",
         "desc": "Show the profile icon in chat messages."
       },
+      "piggy_repair_helper": {
+        "@value": "Piggy Repair Helper",
+        "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."
+      },
       "sack_notification": {
         "@value": "Sack Notification",
         "desc": "Show a notification when you gain specific sack items."
@@ -142,6 +149,17 @@
       "sack_notification_items": {
         "@value": "Sack Notification Items",
         "desc": "The items to show notifications for."
+      }
+    },
+    "garden": {
+      "@value": "Garden",
+      "pest_bait_type": {
+        "@value": "Pest Bait Type",
+        "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
+      },
+      "desk_pest_highlight": {
+        "@value": "Desk Pest Highlight",
+        "desc": "Highlights on what Plot how many pests are on in the 'Configure Plots' menu."
       }
     },
     "misc": {
@@ -173,7 +191,10 @@
       "transparentArmor": {
         "@value": "Transparent Armour",
         "desc": [
-          "Settings to change the appearance of armours on either yourself or others, values range from 0-100%, 100% means it is fully visible.",
+          "Settings to change the appearance of armours on either yourself or others.",
+          {
+            "@id": "transparency"
+          },
           "<italic>Does not apply to npcs.</italic>"
         ],
         "self": {
@@ -191,7 +212,48 @@
       "trophy_numbers": {
         "@value": "Trophy Numbers",
         "desc": "Displays the amount of trophy fishes you caught upon catching one."
+      },
+      "hook_text_scale": {
+        "@value": "Hook Text Scale",
+        "desc": "Changes the scale of the text above your fishing hook/bobber."
+      },
+      "lava_replacement": {
+        "@value": "Lava Replacement",
+        "desc": "Replaces the lava texture with the water texture while in the Crimson Isle."
+      },
+      "hotspot": {
+        "@value": "Hotspot Highlight",
+        "desc": "All settings for the hotspot highlight.",
+        "circle_surface": {
+          "@value": "Surface",
+          "desc": "Render a \"solid\" circle instead of the particle outline."
+        },
+        "surface_transparency": {
+          "@value": "Surface Transparency",
+          "desc": [
+            "Changes the transparency of the surface.",
+            {
+              "@id": "transparency"
+            }
+          ]
+        },
+        "circle_outline": {
+          "@value": "Outline",
+          "desc": "Render a \"solid\" outline instead of the particle outline."
+        },
+        "outline_transparency": {
+          "@value": "Surface Transparency",
+          "desc": [
+            "Changes the transparency of the outline.",
+            {
+              "@id": "transparency"
+            }
+          ]
+        }
       }
     }
+  },
+  "garden": {
+    "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>"
   }
 }

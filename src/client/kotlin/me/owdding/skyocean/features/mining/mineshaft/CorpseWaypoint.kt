@@ -6,7 +6,6 @@ import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
-import me.owdding.skyocean.events.RenderWorldEvent
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderTextInWorld
@@ -16,6 +15,7 @@ import org.joml.Vector3f
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.MineshaftAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
+import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 @Module
@@ -52,7 +52,7 @@ object CorpseWaypoint {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.MINESHAFT)
-    fun onRender(event: RenderWorldEvent) {
+    fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         if (!MineshaftConfig.corpseWaypoint) return
         val corpses = mineshaftCorpses.find { it.id == if (MineshaftAPI.isCrystal) "CRYSTAL" else MineshaftAPI.mineshaftType?.id }
 

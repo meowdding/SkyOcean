@@ -7,11 +7,13 @@ import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.context.CommandContext
 import kotlinx.coroutines.runBlocking
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector3dc
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import java.nio.charset.Charset
@@ -23,6 +25,7 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
+import kotlin.math.roundToInt
 
 // TODO: surely better name maybe?
 object Utils {
@@ -39,24 +42,21 @@ object Utils {
     infix fun Int.exclusiveInclusive(other: Int) = (this + 1)..other
     infix fun Int.exclusiveExclusive(other: Int) = (this + 1)..(other - 1)
 
+    fun Double.roundToHalf(): Double {
+        return (this * 2).roundToInt() / 2.0
+    }
+
     operator fun Item.contains(stack: ItemStack): Boolean = stack.item == this
 
     inline fun <reified T> CommandContext<*>.getArgument(name: String): T? = this.getArgument(name, T::class.java)
 
-    @OptIn(ExperimentalContracts::class)
-    fun PoseStack.atCamera(task: PoseStack.() -> Unit) {
-        contract {
-            callsInPlace(task, InvocationKind.EXACTLY_ONCE)
-        }
-
-        val camera = McClient.self.gameRenderer.mainCamera
-        this.pushPose()
-        this.translate(-camera.position.x, -camera.position.y, -camera.position.z)
-        this.task()
-        this.popPose()
-    }
-
     operator fun BlockPos.plus(vec: Vector3dc) = BlockPos(this.x + vec.x().toInt(), this.y + vec.y().toInt(), this.z + vec.z().toInt())
+
+    /** Translatable Component **with** shadow */
+    operator fun String.unaryPlus(): MutableComponent = Component.translatable("skyocean.$this")
+
+    /** Translatable Component **without** shadow */
+    operator fun String.unaryMinus(): MutableComponent = Component.translatable("skyocean.$this").withoutShadow()
     operator fun BlockPos.plus(vec: BlockPos): BlockPos = this.offset(vec.x, vec.y, vec.z)
 
     fun Path.readAsJson(): JsonElement = JsonParser.parseString(this.readText())
