@@ -39,7 +39,8 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
     val widgetHeight get() = (height / 3).coerceAtLeast(100) + 50
 
     override fun init() {
-        val (raw, price, _, tree) = item.getItemValue()
+        // todo add raw price at the bottom
+        val (_, price, _, tree) = item.getItemValue()
 
         val width = widgetWidth
         val height = widgetHeight
@@ -86,7 +87,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
                     lateinit var callback: () -> Unit
 
                     LayoutFactory.vertical {
-                        tree.filter { it.price > 0 }.forEach {
+                        tree.filter { it.price > 0 }.sortedByDescending { it.price }.forEach {
                             widget(it.asWidget { callback() })
                         }
                     }.asRefreshableScrollable(width - 5, height = widgetHeight - 29) { callback = it }.add()
@@ -133,7 +134,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
     }
 }
 
-class CLickToExpandWidget(title: LayoutElement, body: LayoutElement, val callback: () -> Unit, val bodyOffset: Int = 5) : BaseParentWidget() {
+class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val callback: () -> Unit, val bodyOffset: Int = 5) : BaseParentWidget() {
     val title = title.asWidget()
     val body = body.asWidget()
     var expanded = false
