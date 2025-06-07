@@ -100,6 +100,7 @@ dependencies {
 
     modImplementation(libs.bundles.fabric)
 
+    implementation(libs.kotlin.stdlib)
     implementation(libs.repo) // included in sbapi, exposed through implementation
 
     includeModImplementationBundle(libs.bundles.sbapi)
