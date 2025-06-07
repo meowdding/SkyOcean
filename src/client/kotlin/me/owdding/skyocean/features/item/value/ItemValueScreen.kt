@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.item.value
 import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import me.owdding.ktmodules.Module
+import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LEFT
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
@@ -52,16 +53,25 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
         LayoutFactory.frame(width, height) {
             vertical {
                 vertical(alignment = LEFT) {
-                    LayoutFactory.horizontal(5, MIDDLE) {
+                    LayoutFactory.horizontal(alignment = MIDDLE) {
                         spacer(2, 24)
                         background(
                             olympus("textbox/normal"),
                             Displays.item(item, showTooltip = true).withPadding(2),
                         ).asWidget().add()
-                        string(item.hoverName)
-                        string(price.toFormattedString()) {
-                            this.color = TextColor.GOLD
-                        }
+                        spacer(5)
+                        val titleWidth = width - 2 - 20 - 5 - 2 // 2 for padding left, 20 for icon, 5 for spacing, 2 for padding right
+                        display(
+                            Displays.fixedWidth(
+                                DisplayFactory.horizontal(5) {
+                                    string(item.hoverName)
+                                    string(price.toFormattedString()) {
+                                        this.color = TextColor.GOLD
+                                    }
+                                },
+                                titleWidth,
+                            ),
+                        )
                     }.add()
                     spacer(width)
                 }
