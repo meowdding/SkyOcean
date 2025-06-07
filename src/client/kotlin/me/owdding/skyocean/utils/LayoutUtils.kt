@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefullib.common.utils.TriState
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import me.owdding.lib.builder.LayoutFactory
+import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.Layout
@@ -12,8 +13,13 @@ import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.layouts.LayoutSettings
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseCursorScreen(title) {
+    constructor(title: String) : this(Text.of(title))
+
+    fun olympus(path: String) = SkyOcean.olympus(path)
+
     fun LayoutElement.applyLayout() {
         this.visitWidgets {
             it.isFocused = true
@@ -80,6 +86,12 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
 
         return scrollable
     }
+}
+
+fun LayoutElement.asWidget(): AbstractWidget = when (this) {
+    is AbstractWidget -> this
+    is Layout -> LayoutWidget(this).withStretchToContentSize()
+    else -> throw IllegalArgumentException("Cant convert $this into a widget")
 }
 
 fun List<List<LayoutElement>>.asTable(spacing: Int = 0): Layout {
