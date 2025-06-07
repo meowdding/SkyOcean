@@ -152,10 +152,8 @@ afterEvaluate {
 }
 
 ksp {
-    arg("meowdding.modules.project_name", project.name)
-    arg("meowdding.modules.package", "me.owdding.skyocean.generated")
-    arg("meowdding.codecs.project_name", project.name)
-    arg("meowdding.codecs.package", "me.owdding.skyocean.generated")
+    arg("meowdding.project_name", project.name)
+    arg("meowdding.package", "me.owdding.skyocean.generated")
 }
 
 

@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.item.search.screen
 
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
+import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.StateUtils
 import me.owdding.lib.builder.LEFT
@@ -128,14 +129,16 @@ object ItemSearchScreen : SkyOceanScreen() {
                                     StateUtils.booleanToggle(ascending).run()
                                     refreshSort()
                                     McClient.tell {
+                                        // this is done because minecraft keeps things focused when they are clicked once,
+                                        // since that in our case changes the texture we manually remove the focus again.
                                         factory.isFocused = false
                                     }
                                 }
                                 factory.withRenderer { graphics, widget, partialTick ->
                                     val texture = if (ascending.get()) {
-                                        olympus("icons/chevron_up")
+                                        UIIcons.CHEVRON_UP
                                     } else {
-                                        olympus("icons/chevron_down")
+                                        UIIcons.CHEVRON_DOWN
                                     }
                                     graphics.blitSprite(RenderType::guiTextured, texture, widget.x + 5, widget.y + 5, 10, 10, ARGB.opaque(TextColor.DARK_GRAY))
                                 }
