@@ -24,6 +24,10 @@ object FishingConfig : CategoryKt("fishing") {
         }
     )
 
+    var fixBobber by boolean(true) {
+        this.translation = "skyocean.config.fishing.bobber_fix"
+    }
+
     init {
         obj("hotspot", HotspotHighlightConfig) {
             this.translation = "skyocean.config.fishing.hotspot"
