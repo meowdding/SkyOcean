@@ -29,7 +29,7 @@ internal class ProfileStorage<T : Any>(
 
     @Module
     companion object {
-        lateinit var currentProfile: String
+        var currentProfile: String? = null
 
         @Subscription
         fun onProfileSwitch(event: ProfileChangeEvent) {
@@ -37,14 +37,14 @@ internal class ProfileStorage<T : Any>(
         }
 
         val defaultPath: Path = FabricLoader.getInstance().configDir.resolve("skyocean/data")
-        private fun hasProfile() = ::currentProfile.isInitialized
+        private fun hasProfile() = currentProfile != null
     }
 
-    private fun isCurrentlyActive() = this::lastProfile.isInitialized && hasProfile() && currentProfile == lastProfile
+    private fun isCurrentlyActive() = lastProfile != null && hasProfile() && currentProfile == lastProfile
 
     lateinit var data: T
     lateinit var lastPath: Path
-    lateinit var lastProfile: String
+    var lastProfile: String? = null
 
     fun get(): T? {
         if (isCurrentlyActive()) {
@@ -66,6 +66,7 @@ internal class ProfileStorage<T : Any>(
         }
 
         lastProfile = currentProfile
+        val lastProfile = lastProfile ?: return
         lastPath = defaultPath.resolve(McPlayer.uuid.toString())
             .resolve(lastProfile)
             .resolve("$fileName.json")
