@@ -5,10 +5,10 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.notkamui.keval.keval
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.exclusiveInclusive
 import net.minecraft.ChatFormatting
-import tech.thatgravyboat.skyblockapi.generated.KCodec
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -22,7 +22,7 @@ object HotmData {
             Codec.STRING.fieldOf("name").forGetter(HotmPerk::name),
             Codec.INT.fieldOf("max_level").forGetter(HotmPerk::maxLevel),
             Codec.STRING.fieldOf("cost_formula").forGetter(HotmPerk::costFormula),
-            KCodec.getCodec<PowderType>().fieldOf("powder_type").forGetter(HotmPerk::powderType),
+            SkyOceanCodecs.getCodec<PowderType>().fieldOf("powder_type").forGetter(HotmPerk::powderType),
         ).apply(it, ::HotmPerk)
     }
 

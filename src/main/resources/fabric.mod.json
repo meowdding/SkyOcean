@@ -23,6 +23,7 @@
     "skyocean.client.mixins.json",
     "mixins/skyocean.hidearmour.mixins.json",
     "mixins/skyocean.hidelightning.mixins.json",
+    "mixins/skyocean.itemsearch.mixins.json",
     "mixins/skyocean.lavareplacement.mixins.json"
   ],
   "accessWidener": "skyocean.accesswidener",
