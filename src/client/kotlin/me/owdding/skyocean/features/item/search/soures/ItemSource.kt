@@ -28,8 +28,8 @@ enum class ItemSources(val itemSource: ItemSource?) {
     // todo POTION_BAG(TODO()),
 
     init {
-        if (itemSource == null && ordinal != 0) {
-            throw IllegalArgumentException("Only BUNDLE might not have a source!")
+        assert(itemSource == null && ordinal != 0) {
+            "Only BUNDLE might not have a source!"
         }
     }
 
