@@ -1,10 +1,12 @@
 package me.owdding.skyocean.utils.rendering
 
+import me.owdding.skyocean.utils.rendering.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.ShapeRenderer
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -20,6 +22,24 @@ import kotlin.math.max
 import kotlin.math.sin
 
 object RenderUtils {
+
+    fun RenderWorldEvent.renderBox(pos: BlockPos, color: UInt = 0xFFFFFFFFu) {
+        val color = color.toInt()
+        ShapeRenderer.addChainedFilledBoxVertices(
+            poseStack,
+            buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
+            pos.x.toDouble(),
+            pos.y.toDouble(),
+            pos.z.toDouble(),
+            pos.x.toDouble() + 1.0,
+            pos.y.toDouble() + 1.0,
+            pos.z.toDouble() + 1.0,
+            ARGB.redFloat(color),
+            ARGB.greenFloat(color),
+            ARGB.blueFloat(color),
+            ARGB.alphaFloat(color),
+        )
+    }
 
     fun RenderWorldEvent.renderTextInWorld(
         position: Vec3,

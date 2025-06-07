@@ -9,6 +9,7 @@
       "transparency": "Values range from 0-100%, 100% means it is fully visible."
     }
   },
+  "@value": "SkyOcean",
   "config": {
     "main": {
       "modifications": {
@@ -255,5 +256,8 @@
   },
   "garden": {
     "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>"
+  },
+  "item_search": {
+    "keybind": "Item Search"
   }
 }

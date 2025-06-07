@@ -90,6 +90,8 @@ repositories {
 dependencies {
     compileOnly(libs.meowdding.ktmodules)
     ksp(libs.meowdding.ktmodules)
+    compileOnly(libs.meowdding.ktcodecs)
+    ksp(libs.meowdding.ktcodecs)
 
     minecraft(libs.minecraft)
     @Suppress("UnstableApiUsage")
@@ -150,8 +152,8 @@ afterEvaluate {
 }
 
 ksp {
-    arg("meowdding.modules.project_name", project.name)
-    arg("meowdding.modules.package", "me.owdding.skyocean.generated")
+    arg("meowdding.project_name", project.name)
+    arg("meowdding.package", "me.owdding.skyocean.generated")
 }
 
 
@@ -173,6 +175,7 @@ repo {
             }
         }
     }
+    sacks { includeAll() }
 }
 
 // <editor-fold desc="Util Methods">
