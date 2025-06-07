@@ -56,7 +56,7 @@ object ChestTracker {
             if (chestType !== ChestType.LEFT) {
                 diff = diff.multiply(-1)
             }
-            val doubleChestPosition: BlockPos? = this.first!!.plus(diff)
+            val doubleChestPosition: BlockPos = this.first!!.plus(diff)
             if (type == DoubleBlockCombiner.BlockType.FIRST) {
                 this.second = doubleChestPosition
             } else {

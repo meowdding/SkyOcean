@@ -23,7 +23,7 @@ object SackItemContext : ItemContext {
     override val source = ItemSources.SACKS
 
     override fun collectLines() = build {
-        add("Sacks :3") { color = TextColor.GRAY }
+        add("Sacks") { color = TextColor.GRAY }
         add("Click to open sacks!") { this.color = TextColor.YELLOW }
     }
 

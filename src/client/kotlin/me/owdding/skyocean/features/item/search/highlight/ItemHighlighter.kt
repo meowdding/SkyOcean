@@ -106,14 +106,15 @@ object ItemHighlighter {
         if (event.isInBottomRow) return
         val item = event.item
 
-        val items: List<PlayerStorageInstance> = if (item.cleanName.matches(enderchest)) {
+        val cleanName = item.cleanName
+        val items: List<PlayerStorageInstance> = if (cleanName.matches(enderchest)) {
             StorageAPI.enderchests
-        } else if (item.cleanName.matches(backpack)) {
+        } else if (cleanName.matches(backpack)) {
             StorageAPI.backpacks
         } else {
             return
         }
-        val id: Int = item.cleanName.filter { it.isDigit() }.toInt()
+        val id: Int = cleanName.filter { it.isDigit() }.toInt()
 
         items.find { storage -> storage.index == (id - 1) }?.let { handleStorage(it, item, filter) }
     }
