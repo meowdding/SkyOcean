@@ -9,16 +9,21 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
     override val itemStack: ItemStack = trackedItem.itemStack.copy()
     override var context: ItemContext = trackedItem.context
+        private set
+    override var price: Long = trackedItem.price
         private set
 
     val items: MutableList<TrackedItem> = mutableListOf(trackedItem)
 
     override fun add(other: TrackedItem): TrackedItem {
         this.items.add(other)
+        this.price += other.price
         this.itemStack.count += other.itemStack.count
         this.updateContext(other)
         return this
@@ -68,6 +73,7 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
                 append(":")
                 append(CommonComponents.SPACE)
                 append(value)
+                this.color = TextColor.GRAY
             }
         }
     }

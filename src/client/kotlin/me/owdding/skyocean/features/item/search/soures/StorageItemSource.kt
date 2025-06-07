@@ -41,7 +41,7 @@ data class BackpackStorageItemContext(
     val index: Int,
 ) : AbstractStorageItemContext {
     override fun collectLines() = build {
-        add("Backpack: $index") { color = TextColor.GRAY }
+        add("Backpack Page $index") { color = TextColor.GRAY }
         add("Click to open backpack!") { this.color = TextColor.YELLOW }
     }
 
@@ -52,7 +52,7 @@ data class EnderChestStorageItemContext(
     val index: Int,
 ) : AbstractStorageItemContext {
     override fun collectLines() = build {
-        add("Enderchest: $index") { color = TextColor.GRAY }
+        add("Enderchest Page $index") { color = TextColor.GRAY }
         add("Click to open enderchest!") { this.color = TextColor.YELLOW }
     }
 

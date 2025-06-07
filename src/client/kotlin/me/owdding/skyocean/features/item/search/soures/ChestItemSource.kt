@@ -24,8 +24,7 @@ data class ChestItemContext(
     override val source = ItemSources.CHEST
     override fun collectLines() = build {
         add {
-            append("Position: ")
-            append(chestPos.toString())
+            append("Chest at x: ${chestPos.x}, y: ${chestPos.y}, z: ${chestPos.z}")
             color = TextColor.GRAY
         }
         add("Click to highlight chest!") { this.color = TextColor.YELLOW }

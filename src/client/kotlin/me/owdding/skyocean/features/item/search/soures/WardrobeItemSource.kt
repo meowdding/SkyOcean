@@ -8,7 +8,9 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object WardrobeItemSource : ItemSource {
-    override fun getAll() = WardrobeAPI.slots.flatMap { (slot, items) -> items.map { SimpleTrackedItem(it, WardrobeContext(slot)) } }
+    override fun getAll() = WardrobeAPI.slots
+        .filter { (slot, _) -> slot != WardrobeAPI.currentSlot }
+        .flatMap { (slot, items) -> items.map { SimpleTrackedItem(it, WardrobeContext(slot)) } }
 
     override val type = ItemSources.WARDROBE
 }
@@ -18,7 +20,7 @@ data class WardrobeContext(
 ) : ItemContext {
     override val source = ItemSources.WARDROBE
     override fun collectLines() = build {
-        add("Wardrobe: $slot") { color = TextColor.GRAY }
+        add("Wardrobe Slot $slot") { color = TextColor.GRAY }
         add("Click to open wardrobe!") { this.color = TextColor.YELLOW }
     }
 

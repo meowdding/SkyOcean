@@ -23,6 +23,7 @@ import me.owdding.skyocean.features.item.search.soures.ItemSources
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asTable
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.renderer.RenderType
@@ -31,8 +32,11 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
+import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object ItemSearchScreen : SkyOceanScreen() {
     val state: ListenableState<String> = ListenableState.of("")
@@ -116,7 +120,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                                 dropdownState,
                                 SortModes.entries,
                                 { modes ->
-                                    Text.of(modes.name)
+                                    Text.of(modes.name.toTitleCase())
                                 },
                                 { button -> button.withSize(80, 20) },
                             ) { builder ->
@@ -167,6 +171,16 @@ object ItemSearchScreen : SkyOceanScreen() {
         addItems()
     }
 
+    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
+        if (McClient.self.screen !is ItemSearchScreen) {
+            Displays.disableTooltips {
+                super.render(graphics, mouseX, mouseY, f)
+            }
+        } else {
+            super.render(graphics, mouseX, mouseY, f)
+        }
+    }
+
     fun addItems() {
         val width = widgetWidth
         val height = widgetHeight
@@ -196,7 +210,7 @@ object ItemSearchScreen : SkyOceanScreen() {
     fun buildItems(width: Int, height: Int): Layout {
         val columns = (width - 5) / 20
         val rows = (height - 5) / 20
-        val items = this.items.filter { (itemStack) -> matches(itemStack) }.map { (itemStack, context) ->
+        val items = this.items.filter { (itemStack) -> matches(itemStack) }.map { (itemStack, context, price) ->
             Displays.item(
                 itemStack,
                 showStackSize = false,
@@ -205,6 +219,24 @@ object ItemSearchScreen : SkyOceanScreen() {
                 add(itemStack.hoverName)
                 itemStack.getLore().forEach(::add)
                 space()
+                val count = itemStack.count
+                when (dropdownState.get()) {
+                    SortModes.PRICE -> {
+                        if (count > 1) {
+                            val avg = price / count.toFloat()
+                            add("Avg. Price Per: ${avg.shorten()}") { this.color = TextColor.GRAY }
+                        }
+                        add("Total Price: ${price.shorten()}") { this.color = TextColor.GRAY }
+                        space()
+                    }
+
+                    SortModes.AMOUNT -> {
+                        add("Amount: ${count.toFormattedString()}") { this.color = TextColor.GRAY }
+                        space()
+                    }
+
+                    else -> {}
+                }
                 context.collectLines().forEach(::add)
             }.withPadding(2).asButton { button ->
                 ItemHighlighter.setHighlight(ReferenceItemFilter(itemStack))
