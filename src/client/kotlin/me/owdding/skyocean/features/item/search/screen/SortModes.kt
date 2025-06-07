@@ -8,7 +8,6 @@ import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 
 enum class SortModes(vararg additionalSortModes: AdditionalSortModes) : Comparator<TrackedItem> {
-
     AMOUNT(AdditionalSortModes.AMOUNT, AdditionalSortModes.NAME, AdditionalSortModes.RARITY),
     PRICE(AdditionalSortModes.PRICE, AdditionalSortModes.NAME),
     RARITY(AdditionalSortModes.RARITY, AdditionalSortModes.AMOUNT, AdditionalSortModes.NAME),
