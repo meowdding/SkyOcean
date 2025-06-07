@@ -31,6 +31,7 @@ interface AbstractStorageItemContext : ItemContext {
 object StorageItemContext : AbstractStorageItemContext {
     override fun collectLines() = build {
         add("Storage") { color = TextColor.GRAY }
+        add("Click to open storage!") { this.color = TextColor.YELLOW }
     }
 
     override fun open() = McClient.sendCommand("storage")

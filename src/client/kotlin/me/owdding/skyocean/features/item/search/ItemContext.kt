@@ -21,7 +21,7 @@ interface ItemContext {
 
     fun requiresCookie(runnable: () -> Unit) {
         if (!EffectsAPI.isBoosterCookieActive) {
-            Text.of("Requires cookie!").sendWithPrefix()
+            Text.of("Requires a booster cookie!").sendWithPrefix()
             return
         }
         runnable()
