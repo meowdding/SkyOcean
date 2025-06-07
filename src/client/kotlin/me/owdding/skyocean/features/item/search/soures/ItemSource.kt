@@ -28,7 +28,7 @@ enum class ItemSources(val itemSource: ItemSource?) {
     // todo POTION_BAG(TODO()),
 
     init {
-        require(itemSource != null && ordinal != 0) { "Only BUNDLE might not have a source!" }
+        require(itemSource == null && ordinal != 0) { "Only BUNDLE might not have a source!" }
     }
 
     companion object {
