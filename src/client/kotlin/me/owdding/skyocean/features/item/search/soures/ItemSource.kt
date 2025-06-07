@@ -7,7 +7,6 @@ import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 interface ItemSource {
 
     fun getAll(): List<SimpleTrackedItem>
-    fun remove(item: SimpleTrackedItem)
     val type: ItemSources
 
     fun createFromIdAndAmount(id: String, amount: Int): ItemStack? = RepoItemsAPI.getItemOrNull(id)?.copyWithCount(amount)

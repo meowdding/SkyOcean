@@ -14,10 +14,6 @@ object ChestItemSource : ItemSource {
         SimpleTrackedItem(itemStack, ChestItemContext(pos, secondPos))
     }
 
-    override fun remove(item: SimpleTrackedItem) {
-
-    }
-
     override val type = ItemSources.CHEST
 }
 
@@ -32,6 +28,7 @@ data class ChestItemContext(
             append(chestPos.toString())
             color = TextColor.GRAY
         }
+        add("Click to highlight chest!") { this.color = TextColor.YELLOW }
     }
 
     override fun open() = McClient.tell {

@@ -16,10 +16,6 @@ object ForgeItemSource : ItemSource {
         },
     )
 
-    override fun remove(item: SimpleTrackedItem) {
-        TODO("Not yet implemented")
-    }
-
     override val type = ItemSources.FORGE
 }
 

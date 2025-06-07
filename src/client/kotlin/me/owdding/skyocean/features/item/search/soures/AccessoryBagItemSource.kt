@@ -10,16 +10,13 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object AccessoryBagItemSource : ItemSource {
     override fun getAll() = AccessoryBagAPI.getItems().map { (stack, page) -> SimpleTrackedItem(stack, AccessoryBagItemContext(page)) }
 
-    override fun remove(item: SimpleTrackedItem) {
-        TODO("Not yet implemented")
-    }
-
     override val type = ItemSources.ACCESSORY_BAG
 }
 
 data class AccessoryBagItemContext(val page: Int) : ItemContext {
     override fun collectLines() = build {
         add("Accessory bag page $page") { color = TextColor.GRAY }
+        add("Click to open accessories!") { color = TextColor.YELLOW }
     }
 
     override val source = ItemSources.ACCESSORY_BAG

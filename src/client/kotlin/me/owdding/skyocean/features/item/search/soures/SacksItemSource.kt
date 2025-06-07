@@ -15,10 +15,6 @@ object SacksItemSource : ItemSource {
         { (id, amount) -> createFromIdAndAmount(id, amount) },
     ).map { SimpleTrackedItem(it, SackItemContext) }
 
-    override fun remove(item: SimpleTrackedItem) {
-        TODO("Not yet implemented")
-    }
-
     override val type = ItemSources.SACKS
 }
 
@@ -28,6 +24,7 @@ object SackItemContext : ItemContext {
 
     override fun collectLines() = build {
         add("Sacks :3") { color = TextColor.GRAY }
+        add("Click to open sacks!") { this.color = TextColor.YELLOW }
     }
 
     override fun open() = McClient.sendCommand("sacks")

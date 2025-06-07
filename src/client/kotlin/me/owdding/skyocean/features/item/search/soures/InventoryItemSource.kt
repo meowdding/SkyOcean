@@ -20,10 +20,6 @@ object InventoryItemSource : ItemSource {
         addEquipment(McPlayer.boots)
     }
 
-    override fun remove(item: SimpleTrackedItem) {
-        TODO("Not yet implemented")
-    }
-
     override val type = ItemSources.INVENTORY
 }
 

@@ -21,10 +21,6 @@ object StorageItemSource : ItemSource {
         }
     }
 
-    override fun remove(item: SimpleTrackedItem) {
-        TODO("Not yet implemented")
-    }
-
     override val type = ItemSources.STORAGE
 }
 
@@ -45,6 +41,7 @@ data class BackpackStorageItemContext(
 ) : AbstractStorageItemContext {
     override fun collectLines() = build {
         add("Backpack: $index") { color = TextColor.GRAY }
+        add("Click to open backpack!") { this.color = TextColor.YELLOW }
     }
 
     override fun open() = McClient.sendCommand("/bp $index")
@@ -55,6 +52,7 @@ data class EnderChestStorageItemContext(
 ) : AbstractStorageItemContext {
     override fun collectLines() = build {
         add("Enderchest: $index") { color = TextColor.GRAY }
+        add("Click to open enderchest!") { this.color = TextColor.YELLOW }
     }
 
     override fun open() = McClient.sendCommand("/ec $index")
