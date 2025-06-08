@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.item.value
 
 import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
+import earth.terrarium.olympus.client.ui.UIIcons
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LEFT
@@ -11,6 +12,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.features.item.value.SourceToWidget.asWidget
 import me.owdding.skyocean.mixins.FrameLayoutAccessor
@@ -134,8 +136,17 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
     }
 }
 
-class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val callback: () -> Unit, val bodyOffset: Int = 5) : BaseParentWidget() {
-    val title = title.asWidget()
+class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val callback: () -> Unit, val bodyOffset: Int = 7) : BaseParentWidget() {
+    val title = LayoutFactory.horizontal(alignment = MIDDLE) {
+        display(
+            Displays.supplied {
+                val chevron = if (expanded) UIIcons.CHEVRON_DOWN else SkyOcean.id("chevron_right")
+                background(chevron, Displays.empty(10, 10), TextColor.DARK_GRAY)
+            },
+        )
+        spacer(2)
+        widget(title)
+    }.asWidget()
     val body = body.asWidget()
     var expanded = false
 
@@ -148,7 +159,7 @@ class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val callbac
     override fun getHeight() = title.height + if (expanded) body.height else 0
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (title.isMouseOver(mouseX, mouseY) && button == 0) {
+        if ((title.isMouseOver(mouseX, mouseY) || body.isMouseOver(mouseX, mouseY)) && button == 0) {
             expanded = !expanded
             title.isFocused = expanded
             body.visible = expanded

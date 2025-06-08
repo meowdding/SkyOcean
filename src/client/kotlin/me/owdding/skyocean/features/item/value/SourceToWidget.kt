@@ -24,12 +24,12 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object SourceToWidget {
 
-    fun text(string: String, init: MutableComponent.() -> Unit = {}) = text(Text.of(string, init))
-    fun text(init: MutableComponent.() -> Unit) = text(Text.of(init))
-    fun text(text: Component): TextWidget = Widgets.text(text)
-    fun LayoutBuilder.text(string: String, init: MutableComponent.() -> Unit = {}) = text(Text.of(string, init))
-    fun LayoutBuilder.text(init: MutableComponent.() -> Unit) = text(Text.of(init))
-    fun LayoutBuilder.text(text: Component) = SourceToWidget.text(text).add()
+    private fun text(string: String, init: MutableComponent.() -> Unit = {}) = text(Text.of(string, init))
+    private fun text(init: MutableComponent.() -> Unit) = text(Text.of(init))
+    private fun text(text: Component): TextWidget = Widgets.text(text)
+    private fun LayoutBuilder.text(string: String, init: MutableComponent.() -> Unit = {}) = text(Text.of(string, init))
+    private fun LayoutBuilder.text(init: MutableComponent.() -> Unit) = text(Text.of(init))
+    private fun LayoutBuilder.text(text: Component) = SourceToWidget.text(text).add()
 
     fun CalculationEntry.asWidget(callback: () -> Unit): LayoutElement {
         return when (this) {
@@ -64,12 +64,13 @@ object SourceToWidget {
                         this.color = TextColor.GOLD
                     }
                     append(" ($limit/$limit)") {
-                        this.color = TextColor.GRAY
+                        this.color = TextColor.DARK_GRAY
                     }
                 }
             }
 
             is ReforgeEntry -> {
+                // todo improve
                 text("Reforge: ${this.price.toFormattedString()}")
             }
 
@@ -86,7 +87,7 @@ object SourceToWidget {
                         is EssenceCost -> text {
                             this.color = TextColor.DARK_GRAY
                             append("${cost.amount.toFormattedString()}x ")
-                            append(RepoItemsAPI.getItem("ESSENCE_${cost.essenceType.name}").hoverName.string)
+                            append(RepoItemsAPI.getItem(cost.essenceType.bazaarId ?: "").hoverName.string)
                             append(": ")
                             append(cost.amount.toFormattedString()) { this.color = TextColor.GOLD }
                         }
@@ -131,7 +132,7 @@ object SourceToWidget {
                 if (conversionCost == null) {
                     stars.add()
                 } else {
-                    ClickToExpandWidget(SourceToWidget.text("Conversion Cost:"), stars, callback).add()
+                    ClickToExpandWidget(SourceToWidget.text("Stars:"), stars, callback).add()
                 }
             }
 
@@ -143,32 +144,15 @@ object SourceToWidget {
         }
     }
 
-    val names = mapOf(
-        ENCHANTMENT to ("Enchantment" to "s"),
-    )
-
-    private fun getName(source: ItemValueSource, amount: Int): String {
-        if (names.containsKey(source)) {
-            val pair = names[source]!!
-            return if (amount != 1) {
-                "${pair.first}${pair.second}"
-            } else pair.first
-        }
-
-        return if (amount != 1) {
-            "${source.name.toTitleCase()}s"
-        } else source.name.toTitleCase()
-    }
-
     private fun GroupedEntry.asWidget(callback: () -> Unit): LayoutElement {
         val filtered = entries.filter { it.price > 0 }
             .sortedByDescending { it.price }
         return when (this.source) {
             ENCHANTMENT, GEMSTONE, NECRON_SCROLLS, ITEM_STARS, DRILL_COMPONENTS, FISHING_ROD_PARTS -> {
                 ClickToExpandWidget(
-                    text("${filtered.size} ${getName(source, filtered.size)}: ") {
+                    text("${filtered.size} ${source.name.toTitleCase()}: ") {
                         this.color = TextColor.DARK_GRAY
-                        append(" ${price.shorten()}") { this.color = TextColor.GOLD }
+                        append(price.shorten()) { this.color = TextColor.GOLD }
                     },
                     LayoutFactory.vertical {
                         filtered.forEach {
