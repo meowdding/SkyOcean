@@ -63,7 +63,7 @@ object SourceToWidget {
                     append(price.shorten()) {
                         this.color = TextColor.GOLD
                     }
-                    append(" ($limit/$limit)") {
+                    append(" ($amount/$limit)") {
                         this.color = TextColor.DARK_GRAY
                     }
                 }

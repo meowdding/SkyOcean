@@ -167,7 +167,7 @@ class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val callbac
             return true
         }
 
-        return super.mouseReleased(mouseX, mouseY, button)
+        return super.mouseClicked(mouseX, mouseY, button)
     }
 
     override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
