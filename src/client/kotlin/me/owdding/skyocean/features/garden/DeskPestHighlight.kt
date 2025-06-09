@@ -13,7 +13,6 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.anyMatch
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Module
 object DeskPestHighlight {
@@ -28,12 +27,7 @@ object DeskPestHighlight {
             val amount = amount.toIntValue().takeUnless { it == 0 } ?: return@anyMatch
             event.item.replaceVisually {
                 copyFrom(event.item)
-                name(
-                    Text.join(
-                        ChatUtils.ICON_SPACE_COMPONENT,
-                        event.item.hoverName,
-                    ),
-                )
+                namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
                 backgroundItem = Items.RED_STAINED_GLASS_PANE.defaultInstance
                 customSlotText = "§6$amount"
             }

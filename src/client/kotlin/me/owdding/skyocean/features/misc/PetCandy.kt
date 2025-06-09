@@ -34,13 +34,8 @@ object PetCandy {
         val candy = item.getData(DataTypes.PET_DATA)?.candyUsed?.takeUnless { it == 0 } ?: return
 
         item.replaceVisually {
-            copyFrom(item)
-            name(
-                Text.of {
-                    append(ChatUtils.ICON_SPACE_COMPONENT)
-                    append(event.item.hoverName)
-                },
-            )
+            copyFrom(event.item)
+            namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
             tooltip {
                 val merger = ListMerger(event.item.getLore())
 

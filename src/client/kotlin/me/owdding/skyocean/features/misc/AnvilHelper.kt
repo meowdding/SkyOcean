@@ -12,7 +12,6 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Module
 object AnvilHelper {
@@ -35,14 +34,9 @@ object AnvilHelper {
         val itemEnchants = event.slot.item.getData(DataTypes.ENCHANTMENTS) ?: return
         if (itemEnchants[enchants.first] != enchants.second) return
         event.slot.item.replaceVisually {
-            copyFrom(event.slot.item)
+            copyFrom(event.item)
+            namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
             this.item = Items.KNOWLEDGE_BOOK
-            this.name(
-                Text.of {
-                    append(ChatUtils.ICON_SPACE_COMPONENT)
-                    append(event.slot.item.hoverName)
-                },
-            )
         }
     }
 
