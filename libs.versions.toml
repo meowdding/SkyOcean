@@ -40,6 +40,7 @@ minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 loader = { module = "net.fabricmc:fabric-loader", version.ref = "loader" }
 fabric = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric" }
 fabrickotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabrickotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
 # Libs with mc version in artifact id
 skyblockapi = { module = "tech.thatgravyboat:skyblock-api-<mc_version>", version.ref = "skyblockapi" }
