@@ -257,6 +257,9 @@
   "garden": {
     "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>"
   },
+  "inventory": {
+    "sack_value": "<dark_gray>Sack Value</dark_gray>"
+  },
   "item_search": {
     "keybind": "Item Search"
   }
