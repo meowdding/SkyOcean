@@ -70,8 +70,27 @@ object SourceToWidget {
             }
 
             is ReforgeEntry -> {
-                // todo improve
-                text("Reforge: ${this.price.toFormattedString()}")
+                LayoutFactory.vertical {
+                    text {
+                        color = TextColor.DARK_GRAY
+                        append(RepoItemsAPI.getItemName(this@asWidget.reforge))
+                        append(": ")
+                        append(this@asWidget.price.toFormattedString()) {
+                            this.color = TextColor.GOLD
+                        }
+                    }
+                    val applyCost = this@asWidget.applyCost
+                    if (applyCost > 0) {
+                        text {
+                            color = TextColor.DARK_GRAY
+                            append(" Apply Cost: ")
+                            append(applyCost.shorten()) {
+                                this.color = TextColor.GOLD
+                            }
+                        }
+                    }
+                    text(" ")
+                }
             }
 
             is CostEntries -> LayoutFactory.vertical {
