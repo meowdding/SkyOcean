@@ -163,17 +163,12 @@ object SourceToWidget {
                 )
             }
 
-            HOT_POTATO, REFORGE, RECOMBOBULATOR, SILEX, DIVAN_POWDER_COATING, POLARVOID, POWER_ABILITY_SCROLL, APPLIED_RUNE, APPLIED_DYE, HELMET_SKIN -> {
+            else -> {
                 LayoutFactory.vertical {
                     filtered.forEach {
                         widget(it.asWidget(callback))
                     }
                 }
-            }
-
-
-            else -> {
-                text("${this.source.name}: ${price.shorten()}")
             }
         }
     }

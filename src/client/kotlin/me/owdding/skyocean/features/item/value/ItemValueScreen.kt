@@ -112,7 +112,6 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
                     this.withSize(width, height)
                         .withContents { contents ->
                             contents.setMinWidth(width - 10)
-                            contents.setMinHeight(height)
                             (contents as? FrameLayoutAccessor)?.children()?.clear()
                             contents.addChild(widget, LayoutSettings.defaults().alignHorizontallyCenter().alignVerticallyMiddle())
                         }
