@@ -25,7 +25,7 @@ seamless way.
 
 - Item Value Screen
     - When hovering over an item in any inventory, you can press `J` to open the item value screen.
-    - This screens shows a breakdown of item value sources by category, such as item stars, recombs, and more.
+    - This screen shows a breakdown of item value sources by category, such as item stars, recombs, and more.
 - Item Search Screen
     - Press `o` or run `/skyocean search` to open the item search screen.
     - Search through all your enderchest and storage pages, vault, island chests, ... to find items.
