@@ -87,6 +87,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
                     lateinit var callback: () -> Unit
 
                     LayoutFactory.vertical {
+                        spacer(height = 1)
                         tree.filter { it.price > 0 }.sortedByDescending { it.price }.forEach {
                             widget(it.asWidget { callback() })
                         }

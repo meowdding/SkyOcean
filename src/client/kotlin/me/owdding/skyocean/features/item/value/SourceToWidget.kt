@@ -26,6 +26,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object SourceToWidget {
 
+    const val BETTER_GOLD = 0xfc6f03
+    
     private fun text(string: String, init: MutableComponent.() -> Unit = {}) = text(Text.of(string, init))
     private fun text(init: MutableComponent.() -> Unit) = text(Text.of(init))
     private fun text(text: Component): TextWidget = Widgets.text(text)
@@ -43,7 +45,7 @@ object SourceToWidget {
                         append(rune?.name ?: itemId.removePrefix("rune:"))
                         append(": ")
                         append(price.shorten()) {
-                            this.color = TextColor.GOLD
+                            this.color = BETTER_GOLD
                         }
                     }
                 }
@@ -52,7 +54,7 @@ object SourceToWidget {
                     append(itemStack.hoverName.string)
                     append(": ")
                     append(price.shorten()) {
-                        this.color = TextColor.GOLD
+                        this.color = BETTER_GOLD
                     }
                 }
             }
@@ -63,7 +65,7 @@ object SourceToWidget {
                     append(itemStack.hoverName.string)
                     append(": ")
                     append(price.shorten()) {
-                        this.color = TextColor.GOLD
+                        this.color = BETTER_GOLD
                     }
                     append(" ($amount/$limit)") {
                         this.color = TextColor.DARK_GRAY
@@ -78,7 +80,7 @@ object SourceToWidget {
                         append(RepoItemsAPI.getItemName(this@asWidget.reforge))
                         append(": ")
                         append(this@asWidget.price.toFormattedString()) {
-                            this.color = TextColor.GOLD
+                            this.color = BETTER_GOLD
                         }
                     }
                     val applyCost = this@asWidget.applyCost
@@ -87,7 +89,7 @@ object SourceToWidget {
                             color = TextColor.DARK_GRAY
                             append(" Apply Cost: ")
                             append(applyCost.shorten()) {
-                                this.color = TextColor.GOLD
+                                this.color = BETTER_GOLD
                             }
                         }
                     }
@@ -100,9 +102,9 @@ object SourceToWidget {
                     when (cost) {
                         is CoinCost -> text {
                             color = TextColor.DARK_GRAY
-                            append("Coins") { this.color = TextColor.GOLD }
+                            append("Coins") { this.color = BETTER_GOLD }
                             append(": ")
-                            append(cost.amount.shorten()) { this.color = TextColor.GOLD }
+                            append(cost.amount.shorten()) { this.color = BETTER_GOLD }
                         }
 
                         is EssenceCost -> text {
@@ -111,7 +113,7 @@ object SourceToWidget {
                             append(RepoItemsAPI.getItem(cost.essenceType.bazaarId ?: "").hoverName)
                             append(": ")
                             append(BazaarAPI.getProduct(cost.essenceType.bazaarId)?.sellPrice?.times(cost.amount)?.shorten() ?: "0") {
-                                this.color = TextColor.GOLD
+                                this.color = BETTER_GOLD
                             }
                         }
 
@@ -120,7 +122,7 @@ object SourceToWidget {
                             append(RepoItemsAPI.getItem(cost.itemId).hoverName)
                             append(": ")
                             append(price.shorten()) {
-                                this.color = TextColor.GOLD
+                                this.color = BETTER_GOLD
                             }
                         }
                     }
@@ -132,7 +134,7 @@ object SourceToWidget {
                 append(itemStack.hoverName.string)
                 append(": ")
                 append(price.shorten()) {
-                    this.color = TextColor.GOLD
+                    this.color = BETTER_GOLD
                 }
             }
 
@@ -175,7 +177,7 @@ object SourceToWidget {
                 ClickToExpandWidget(
                     text("${filtered.size} ${source.name.toTitleCase()}: ") {
                         this.color = TextColor.DARK_GRAY
-                        append(price.shorten()) { this.color = TextColor.GOLD }
+                        append(price.shorten()) { this.color = BETTER_GOLD }
                     },
                     LayoutFactory.vertical {
                         filtered.forEach {
