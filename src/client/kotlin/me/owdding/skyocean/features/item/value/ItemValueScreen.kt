@@ -1,9 +1,7 @@
 package me.owdding.skyocean.features.item.value
 
 import com.mojang.blaze3d.platform.InputConstants
-import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
-import earth.terrarium.olympus.client.ui.UIIcons
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LEFT
@@ -13,13 +11,10 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
-import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.features.item.value.SourceToWidget.asWidget
 import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.SkyOceanScreen
-import me.owdding.skyocean.utils.asWidget
-import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.layouts.LayoutSettings
@@ -33,7 +28,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import kotlin.math.max
 
 class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
 
@@ -128,7 +122,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
 
     @Module
     companion object {
-        val ITEM_VALUE_KEY = SkyOceanKeybind("skyocean.keybind.item_value", InputConstants.KEY_J)
+        val ITEM_VALUE_KEY = SkyOceanKeybind("skyocean.item_value.keybind", InputConstants.KEY_J)
 
         @Subscription
         fun onKeypress(event: ScreenKeyReleasedEvent) {
@@ -136,52 +130,5 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
             val item = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty } ?: return
             McClient.setScreenAsync(ItemValueScreen(item))
         }
-    }
-}
-
-class ClickToExpandWidget(title: LayoutElement, body: LayoutElement, val callback: () -> Unit, val bodyOffset: Int = 7) : BaseParentWidget() {
-    val title = LayoutFactory.horizontal(alignment = MIDDLE) {
-        display(
-            Displays.supplied {
-                val chevron = if (expanded) UIIcons.CHEVRON_DOWN else SkyOcean.id("chevron_right")
-                background(chevron, Displays.empty(10, 10), TextColor.DARK_GRAY)
-            },
-        )
-        spacer(2)
-        widget(title)
-    }.asWidget()
-    val body = body.asWidget()
-    var expanded = false
-
-    init {
-        this.addRenderableWidget(this.title)
-        this.addRenderableWidget(this.body)
-    }
-
-    override fun getWidth() = if (expanded) max(body.width + bodyOffset, title.width) else title.width
-    override fun getHeight() = title.height + if (expanded) body.height else 0
-
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if ((title.isMouseOver(mouseX, mouseY) || body.isMouseOver(mouseX, mouseY)) && button == 0) {
-            expanded = !expanded
-            title.isFocused = expanded
-            body.visible = expanded
-            body.isFocused = expanded
-            callback()
-            return true
-        }
-
-        return super.mouseClicked(mouseX, mouseY, button)
-    }
-
-    override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        title.setPosition(this.x, this.y)
-        title.render(graphics, mouseX, mouseY, partialTicks)
-        if (expanded) {
-            body.setPosition(this.x + bodyOffset, this.y + title.height)
-            body.render(graphics, mouseX, mouseY, partialTicks)
-        }
-
-        super.renderWidget(graphics, mouseX, mouseY, partialTicks)
     }
 }

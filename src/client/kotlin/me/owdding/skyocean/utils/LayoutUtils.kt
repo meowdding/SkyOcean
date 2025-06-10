@@ -88,12 +88,6 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
     }
 }
 
-fun LayoutElement.asWidget(): AbstractWidget = when (this) {
-    is AbstractWidget -> this
-    is Layout -> LayoutWidget(this).withStretchToContentSize()
-    else -> throw IllegalArgumentException("Cant convert $this into a widget")
-}
-
 fun List<List<LayoutElement>>.asTable(spacing: Int = 0): Layout {
     return LayoutFactory.vertical(spacing) {
         this@asTable.map {

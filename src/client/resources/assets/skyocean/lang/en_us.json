@@ -258,7 +258,9 @@
     "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>"
   },
   "item_search": {
-    "keybind": "Item Search",
-    "item_value": "Item Value"
+    "keybind": "Item Search"
+  },
+  "item_value": {
+    "keybind": "Item Value"
   }
 }
