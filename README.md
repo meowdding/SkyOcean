@@ -11,7 +11,7 @@
 
 
 SkyOcean is a mod that aims to improve the playing experience while staying true to the skyblock style, meaning that we aim to integrate with the base game in a
-seamless way
+seamless way.
 
 ## Installation Guide
 
