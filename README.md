@@ -11,7 +11,7 @@
 
 
 SkyOcean is a mod that aims to improve the playing experience while staying true to the skyblock style, meaning that we aim to integrate with the base game in a
-seamless way
+seamless way.
 
 ## Installation Guide
 
@@ -25,7 +25,7 @@ seamless way
 
 - Item Value Screen
     - When hovering over an item in any inventory, you can press `J` to open the item value screen.
-    - This screens shows a breakdown of item value sources by category, such as item stars, recombs, and more.
+    - This screen shows a breakdown of item value sources by category, such as item stars, recombs, and more.
 - Item Search Screen
     - Press `o` or run `/skyocean search` to open the item search screen.
     - Search through all your enderchest and storage pages, vault, island chests, ... to find items.
@@ -63,7 +63,7 @@ seamless way
 - Hook Text Scale
     - Change the scale of the text that appears when you're about to hook a fish.
 - Lava Replacement
-    - Replace lava visually with water in the Crimson Isle.
+    - Visually replace lava with water in the Crimson Isle.
 - Bobber Fix
     - Fixes fishing bobbers rubberbanding when fishing.
 - Hotspot Highlight
@@ -76,7 +76,7 @@ seamless way
 <summary>Garden Config</summary>
 
 - Pest Bait Type
-    - While in a Trap inventory, view that bait type attracts what pests.
+    - While in a Trap inventory, view what bait type attracts what pests.
 - Desk Pest Highlight
     - In the "Configure Plots" screen, highlight what plots have pests on them.
 
