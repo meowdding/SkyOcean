@@ -28,7 +28,7 @@ seamless way.
     - This screen shows a breakdown of item value sources by category, such as item stars, recombs, and more.
 - Item Search Screen
     - Press `o` or run `/skyocean search` to open the item search screen.
-    - Search through all your enderchest and storage pages, vault, island chests, ... to find items.
+    - Allowing you to search through all your ender chest pages, storage pages, vault, island chests, etc.
 
 </details>
 
