@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.item.value
 
+import com.mojang.blaze3d.platform.InputConstants
 import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import earth.terrarium.olympus.client.ui.UIIcons
@@ -23,7 +24,6 @@ import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.layouts.LayoutSettings
 import net.minecraft.world.item.ItemStack
-import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
@@ -57,13 +57,17 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
             vertical {
                 vertical(alignment = LEFT) {
                     LayoutFactory.horizontal(alignment = MIDDLE) {
-                        spacer(2, 24)
+                        val padding = 2
+                        val icon = 20
+                        val spacing = 5
+
+                        spacer(padding, 24)
                         background(
                             olympus("textbox/normal"),
                             Displays.item(item, showTooltip = true).withPadding(2),
                         ).asWidget().add()
-                        spacer(5)
-                        val titleWidth = width - 2 - 20 - 5 - 2 // 2 for padding left, 20 for icon, 5 for spacing, 2 for padding right
+                        spacer(spacing)
+                        val titleWidth = width - padding - icon - spacing - padding
                         display(
                             Displays.fixedWidth(
                                 DisplayFactory.horizontal(5) {
@@ -124,7 +128,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
 
     @Module
     companion object {
-        val ITEM_VALUE_KEY = SkyOceanKeybind("skyocean.keybind.item_value", GLFW.GLFW_KEY_J)
+        val ITEM_VALUE_KEY = SkyOceanKeybind("skyocean.keybind.item_value", InputConstants.KEY_J)
 
         @Subscription
         fun onKeypress(event: ScreenKeyReleasedEvent) {

@@ -15,6 +15,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.RepoRunesAPI
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.CoinCost
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.EssenceCost
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemCost
+import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.BazaarAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -100,20 +101,22 @@ object SourceToWidget {
                             color = TextColor.DARK_GRAY
                             append("Coins") { this.color = TextColor.GOLD }
                             append(": ")
-                            append(cost.amount.toFormattedString()) { this.color = TextColor.GOLD }
+                            append(cost.amount.shorten()) { this.color = TextColor.GOLD }
                         }
 
                         is EssenceCost -> text {
                             this.color = TextColor.DARK_GRAY
                             append("${cost.amount.toFormattedString()}x ")
-                            append(RepoItemsAPI.getItem(cost.essenceType.bazaarId ?: "").hoverName.string)
+                            append(RepoItemsAPI.getItem(cost.essenceType.bazaarId ?: "").hoverName)
                             append(": ")
-                            append(cost.amount.toFormattedString()) { this.color = TextColor.GOLD }
+                            append(BazaarAPI.getProduct(cost.essenceType.bazaarId)?.sellPrice?.times(cost.amount)?.shorten() ?: "0") {
+                                this.color = TextColor.GOLD
+                            }
                         }
 
                         is ItemCost -> text {
                             color = TextColor.DARK_GRAY
-                            append(RepoItemsAPI.getItem(cost.itemId).hoverName.string)
+                            append(RepoItemsAPI.getItem(cost.itemId).hoverName)
                             append(": ")
                             append(price.shorten()) {
                                 this.color = TextColor.GOLD
