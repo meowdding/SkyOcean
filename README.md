@@ -36,7 +36,7 @@ seamless way
 <summary>Chat Config</summary>
 
 - Profile In Chat
-    - Adds a bingo/ironman/stranded icon next to a players chat message.
+    - Adds a bingo/ironman/stranded icon next to a player's chat message.
 - Piggy Bank Repair Helper
     - When you die and the piggy bank breaks, you can click on the chat message to get 8 Enchanted Pork from your sacks.
 - Sack Notification
