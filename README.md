@@ -63,7 +63,7 @@ seamless way.
 - Hook Text Scale
     - Change the scale of the text that appears when you're about to hook a fish.
 - Lava Replacement
-    - Replace lava visually with water in the Crimson Isle.
+    - Visually replace lava with water in the Crimson Isle.
 - Bobber Fix
     - Fixes fishing bobbers rubberbanding when fishing.
 - Hotspot Highlight
