@@ -5,6 +5,7 @@ import earth.terrarium.olympus.client.components.string.TextWidget
 import me.owdding.lib.builder.LayoutBuilder
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.extensions.shorten
+import me.owdding.lib.layouts.ClickToExpandWidget
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
