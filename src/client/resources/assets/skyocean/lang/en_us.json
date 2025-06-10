@@ -263,5 +263,8 @@
   },
   "item_search": {
     "keybind": "Item Search"
+  },
+  "item_value": {
+    "keybind": "Item Value"
   }
 }
