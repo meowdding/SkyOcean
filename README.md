@@ -76,7 +76,7 @@ seamless way.
 <summary>Garden Config</summary>
 
 - Pest Bait Type
-    - While in a Trap inventory, view that bait type attracts what pests.
+    - While in a Trap inventory, view what bait type attracts what pests.
 - Desk Pest Highlight
     - In the "Configure Plots" screen, highlight what plots have pests on them.
 
