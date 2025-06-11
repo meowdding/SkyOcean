@@ -20,6 +20,8 @@ internal object ChatUtils {
 
     val prefix = TagParser.QUICK_TEXT_SAFE.parseText("<gray>[<gr $gradient>SkyOcean</gr>]</gray> ", ParserContext.of()).copy().withoutShadow()
 
+    const val BETTER_GOLD = 0xfc6f03
+
     fun asSkyOceanColor(text: String) = TagParser.QUICK_TEXT_SAFE.parseText("<gr $gradient>$text</gr>", ParserContext.of()).copy().withoutShadow()
 
     fun MutableComponent.withoutShadow(): MutableComponent = this.apply {

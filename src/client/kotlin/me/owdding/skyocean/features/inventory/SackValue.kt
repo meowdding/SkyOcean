@@ -10,6 +10,7 @@ import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
 import me.owdding.skyocean.utils.ContainerBypass
 import me.owdding.skyocean.utils.Utils.unaryMinus
 import net.minecraft.client.gui.GuiGraphics
@@ -35,7 +36,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @Module
 object SackValue {
 
-    private val gold = 0xfc6f03
     private val regex = ".* Sack".toRegex()
     private var oldWidget: AbstractWidget? = null
 
@@ -47,11 +47,20 @@ object SackValue {
         val screen = event.screen
         val height = screen.containerHeight
 
+        val idsInInventory = screen.menu.slots.filter { it.container !is Inventory }.mapNotNull { it.item.getSkyBlockId() }.toSet()
+
+        val ids = when (event.title) {
+            "Runes Sack" -> emptyList()
+            "Gemstones Sack" -> idsInInventory.flatMap { id -> listOf("ROUGH", "FLAWED", "FINE").map { id.replace("ROUGH", it) } }
+            else -> idsInInventory
+        }.takeUnless { it.isEmpty() } ?: return
+
         val display = BackgroundWidget(
             SkyOcean.id("blank"),
             LayoutFactory.vertical {
-                val ids = screen.menu.slots.filter { it.container !is Inventory }.mapNotNull { it.item.getSkyBlockId() }
-                val sackEntries = SacksAPI.sackItems.filter { it.key in ids }
+                val sackEntries = SacksAPI.sackItems.filter { it.key in ids }.map {
+                    SackEntry(it.key, it.value, BazaarAPI.getProduct(it.key)?.sellPrice?.times(it.value) ?: 0.0)
+                }.sortedByDescending { it.price }
 
                 val title = LayoutFactory.horizontal {
                     string(ChatUtils.ICON_SPACE_COMPONENT)
@@ -60,7 +69,7 @@ object SackValue {
                 widget(title)
 
                 LayoutFactory.vertical {
-                    sackEntries.forEach { (item, amount) ->
+                    sackEntries.forEach { (item, amount, price) ->
                         horizontal(alignment = MIDDLE) {
                             display(Displays.item(RepoItemsAPI.getItem(item)))
                             textDisplay(" - ${amount.shorten()}") {
@@ -68,8 +77,8 @@ object SackValue {
                                 append(" (") {
                                     color = TextColor.DARK_GRAY
                                 }
-                                append(BazaarAPI.getProduct(item)?.sellPrice?.shorten() ?: "0") {
-                                    color = gold
+                                append(price.shorten()) {
+                                    color = BETTER_GOLD
                                 }
                                 append(")") {
                                     color = TextColor.DARK_GRAY
@@ -88,6 +97,8 @@ object SackValue {
         oldWidget = display
         event.screen.addRenderableWidget(display)
     }
+
+    private data class SackEntry(val item: String, val amount: Int, val price: Double)
 }
 
 class BackgroundWidget(val background: ResourceLocation, widget: LayoutElement, val padding: Int = 0) : BaseParentWidget(), ContainerBypass {
