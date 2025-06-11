@@ -29,7 +29,6 @@ import kotlin.math.roundToInt
 import kotlin.reflect.jvm.javaType
 import kotlin.reflect.typeOf
 
-// TODO: surely better name maybe?
 object Utils {
     infix fun Int.exclusiveInclusive(other: Int) = (this + 1)..other
     infix fun Int.exclusiveExclusive(other: Int) = (this + 1)..(other - 1)
