@@ -9,13 +9,16 @@ import me.owdding.skyocean.utils.Utils.writeJson
 import net.fabricmc.loader.api.FabricLoader
 import org.apache.commons.io.FileUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
+import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
+import java.util.concurrent.CompletableFuture
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.relativeTo
@@ -29,11 +32,24 @@ internal class ProfileStorage<T : Any>(
 
     @Module
     companion object {
+        val requiresSave = mutableSetOf<ProfileStorage<*>>()
         var currentProfile: String? = null
 
         @Subscription
         fun onProfileSwitch(event: ProfileChangeEvent) {
             currentProfile = event.name
+        }
+
+        @Subscription
+        @TimePassed("30s")
+        private fun TickEvent.tick() {
+            val toSave = requiresSave.toTypedArray()
+            requiresSave.clear()
+            CompletableFuture.supplyAsync {
+                toSave.forEach {
+                    it.saveToSystem()
+                }
+            }
         }
 
         val defaultPath: Path = FabricLoader.getInstance().configDir.resolve("skyocean/data")
@@ -57,8 +73,9 @@ internal class ProfileStorage<T : Any>(
         return if (this::data.isInitialized) data else null
     }
 
-    // todo add debounce time
-    fun save() = saveToSystem()
+    fun save() {
+        requiresSave.add(this)
+    }
 
     fun load() {
         if (!hasProfile()) {
@@ -92,6 +109,7 @@ internal class ProfileStorage<T : Any>(
     }
 
     private fun saveToSystem() {
+        SkyOcean.debug("Saving {}", lastPath)
         if (!this::data.isInitialized) return
         try {
             val version = this.version
