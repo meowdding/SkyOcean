@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.utils.Utils
 import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
@@ -25,7 +26,10 @@ object ConfigPatches {
     fun loadPatches(): Map<Int, UnaryOperator<JsonObject>> {
         val orElseThrow = SkyOcean.SELF.findPath("repo/patches").orElseThrow()
         val patches = orElseThrow.walk().map {
-            it.nameWithoutExtension.filter { c -> c.isDigit() }.toInt() to it.readText().readJson<JsonObject>().toDataOrThrow(CODEC)
+            it.nameWithoutExtension.filter { c -> c.isDigit() }.toInt() to Utils.applyPatch(
+                it.readText().readJson<JsonObject>(),
+                "patches/${it.nameWithoutExtension}",
+            ).toDataOrThrow(CODEC)
         }.sortedBy { it.first }.toMap()
         return patches
     }
