@@ -10,6 +10,7 @@ import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.ContainerBypass
 import me.owdding.skyocean.utils.Utils.unaryMinus
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -89,7 +90,7 @@ object SackValue {
     }
 }
 
-class BackgroundWidget(val background: ResourceLocation, widget: LayoutElement, val padding: Int = 0) : BaseParentWidget() {
+class BackgroundWidget(val background: ResourceLocation, widget: LayoutElement, val padding: Int = 0) : BaseParentWidget(), ContainerBypass {
     val body = widget.asWidget()
 
     init {
@@ -103,7 +104,6 @@ class BackgroundWidget(val background: ResourceLocation, widget: LayoutElement, 
         graphics.blitSprite(RenderType::guiTextured, background, this.x, this.y, body.width + padding * 2, body.height + padding * 2)
 
         body.setPosition(this.x + padding, this.y + padding)
-        //body.render(graphics, mouseX, mouseY, partialTicks)
 
         super.renderWidget(graphics, mouseX, mouseY, partialTicks)
     }
