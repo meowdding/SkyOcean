@@ -4,6 +4,7 @@ import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
+import me.owdding.lib.compat.REIRenderOverlayEvent
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.asWidget
@@ -21,6 +22,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
 import tech.thatgravyboat.skyblockapi.api.area.hub.BazaarAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
@@ -38,6 +40,18 @@ object SackValue {
 
     private val regex = ".* Sack".toRegex()
     private var oldWidget: AbstractWidget? = null
+
+    @Subscription
+    fun reiBeingAStupidMod(event: REIRenderOverlayEvent) {
+        with(oldWidget ?: return) {
+            event.register(x, y, width, height)
+        }
+    }
+
+    @Subscription
+    fun onContainerClose(event: ContainerCloseEvent) {
+        oldWidget = null
+    }
 
     @Subscription(priority = 1)
     fun onInvChange(event: InventoryChangeEvent) {
