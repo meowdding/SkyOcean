@@ -6,6 +6,7 @@ import me.owdding.lib.builder.LayoutBuilder
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ClickToExpandWidget
+import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
@@ -139,6 +140,14 @@ object SourceToWidget {
             }
 
             is ItemStarEntry -> LayoutFactory.vertical {
+                fun addSection(header: String, body: Layout) {
+                    text(header)
+                    horizontal {
+                        spacer(5)
+                        body.add()
+                    }
+                }
+
                 if (conversionCost != null) {
                     val conversion = LayoutFactory.horizontal {
                         spacer(5)
@@ -147,9 +156,11 @@ object SourceToWidget {
                     if (stars.isEmpty()) {
                         conversion.add()
                     } else {
-                        ClickToExpandWidget(SourceToWidget.text("Conversion Cost:"), conversion, callback).add()
+                        addSection("Conversion Cost:", conversion)
                     }
                 }
+
+                if (stars.isEmpty()) return@vertical
 
                 val stars = LayoutFactory.vertical {
                     stars.sortedByDescending { it.price }.forEach { it.asWidget(callback).add() }
@@ -157,7 +168,7 @@ object SourceToWidget {
                 if (conversionCost == null) {
                     stars.add()
                 } else {
-                    ClickToExpandWidget(SourceToWidget.text("Stars:"), stars, callback).add()
+                    addSection("Stars:", stars)
                 }
             }
 
