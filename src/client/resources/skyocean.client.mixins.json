@@ -8,8 +8,11 @@
   ],
   "client": [
     "BlockModelShaperMixin",
+    "CapeLayerMixin",
     "EntityRendererMixin",
     "EntityRenderStateMixin",
-    "FrameLayoutAccessor"
+    "FrameLayoutAccessor",
+    "PlayerRendererMixin",
+    "PlayerRenderStateMixin"
   ]
 }
