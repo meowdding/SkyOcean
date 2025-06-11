@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.serialization.Codec
 import kotlinx.coroutines.runBlocking
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.core.BlockPos
@@ -14,6 +15,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector3dc
+import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
@@ -24,8 +26,9 @@ import java.nio.file.StandardOpenOption
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.math.roundToInt
+import kotlin.reflect.jvm.javaType
+import kotlin.reflect.typeOf
 
-// TODO: surely better name maybe?
 object Utils {
     infix fun Int.exclusiveInclusive(other: Int) = (this + 1)..other
     infix fun Int.exclusiveExclusive(other: Int) = (this + 1)..(other - 1)
@@ -70,10 +73,23 @@ object Utils {
         }
     }
 
-
-    inline fun <reified T : Any> loadFromRepo(file: String) = runBlocking {
+    fun applyPatch(json: JsonElement, file: String): JsonElement {
         try {
-            SkyOcean.SELF.findPath("repo/$file.json").orElseThrow()?.let(Files::readString)?.readJson<T>() ?: return@runBlocking null
+            repoPatcher?.patch(json, file)
+        } catch (e: Exception) {
+            SkyOcean.error("Failed to apply patches for file $file", e)
+        }
+        return json
+    }
+
+    inline fun <reified T : Any> loadFromRepo(file: String): T? = runBlocking {
+        try {
+            val json = SkyOcean.SELF.findPath("repo/$file.json").orElseThrow()?.let(Files::readString)?.readJson<JsonElement>() ?: return@runBlocking null
+            applyPatch(json, file)
+            if (T::class == JsonElement::class) {
+                return@runBlocking json as T
+            }
+            return@runBlocking Json.gson.fromJson(json, typeOf<T>().javaType)
         } catch (e: Exception) {
             SkyOcean.error("Failed to load $file from repo", e)
             null
