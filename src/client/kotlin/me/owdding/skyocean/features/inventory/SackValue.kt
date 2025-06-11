@@ -59,7 +59,6 @@ object SackValue {
         if (event.isSkyBlockFiller || event.isInBottomRow) return
 
         val screen = event.screen
-        val height = screen.containerHeight
 
         val idsInInventory = screen.menu.slots.filter { it.container !is Inventory }.mapNotNull { it.item.getSkyBlockId() }.toSet()
 
@@ -101,7 +100,7 @@ object SackValue {
                         }
                     }
                 }.let {
-                    widget(it.asScrollable(it.width + 10, height - 10 - title.height))
+                    widget(it.asScrollable(it.width + 10, screen.containerHeight - 10 - title.height))
                 }
             },
             padding = 5,
