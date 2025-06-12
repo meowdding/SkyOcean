@@ -109,8 +109,8 @@ internal class ProfileStorage<T : Any>(
     }
 
     private fun saveToSystem() {
-        SkyOcean.debug("Saving {}", lastPath)
         if (!this::data.isInitialized) return
+        SkyOcean.debug("Saving {}", lastPath)
         try {
             val version = this.version
             val codec = this.codec(version)
