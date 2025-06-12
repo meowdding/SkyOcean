@@ -1,24 +1,18 @@
 package me.owdding.skyocean.features.inventory
 
-import earth.terrarium.olympus.client.components.base.BaseParentWidget
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.compat.REIRenderOverlayEvent
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.shorten
-import me.owdding.lib.layouts.asWidget
+import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
-import me.owdding.skyocean.utils.ContainerBypass
 import me.owdding.skyocean.utils.Utils.unaryMinus
-import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
-import net.minecraft.client.gui.layouts.LayoutElement
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
 import tech.thatgravyboat.skyblockapi.api.area.hub.BazaarAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -112,23 +106,4 @@ object SackValue {
     }
 
     private data class SackEntry(val item: String, val amount: Int, val price: Double)
-}
-
-class BackgroundWidget(val background: ResourceLocation, widget: LayoutElement, val padding: Int = 0) : BaseParentWidget(), ContainerBypass {
-    val body = widget.asWidget()
-
-    init {
-        this.addRenderableWidget(this.body)
-    }
-
-    override fun getWidth() = body.width + padding * 2
-    override fun getHeight() = body.height + padding * 2
-
-    override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        graphics.blitSprite(RenderType::guiTextured, background, this.x, this.y, body.width + padding * 2, body.height + padding * 2)
-
-        body.setPosition(this.x + padding, this.y + padding)
-
-        super.renderWidget(graphics, mouseX, mouseY, partialTicks)
-    }
 }

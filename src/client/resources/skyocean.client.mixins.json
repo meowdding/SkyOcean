@@ -7,7 +7,6 @@
     "EntityMixin"
   ],
   "client": [
-    "AbstractContainerScreenMixin",
     "BlockModelShaperMixin",
     "EntityRendererMixin",
     "EntityRenderStateMixin",
