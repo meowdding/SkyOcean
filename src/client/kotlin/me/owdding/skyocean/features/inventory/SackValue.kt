@@ -14,12 +14,12 @@ import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
 import me.owdding.skyocean.utils.Utils.unaryMinus
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.world.entity.player.Inventory
-import tech.thatgravyboat.skyblockapi.api.area.hub.BazaarAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.Pricing
 import tech.thatgravyboat.skyblockapi.utils.extentions.containerHeight
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
@@ -65,7 +65,7 @@ object SackValue {
             SkyOcean.id("blank"),
             LayoutFactory.vertical {
                 val sackEntries = SacksAPI.sackItems.filter { it.key in ids }.map {
-                    SackEntry(it.key, it.value, BazaarAPI.getProduct(it.key)?.sellPrice?.times(it.value) ?: 0.0)
+                    SackEntry(it.key, it.value, Pricing.getPrice(it.key).times(it.value.toDouble()))
                 }.sortedByDescending { it.price }
 
                 val title = LayoutFactory.horizontal {
