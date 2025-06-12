@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.Inventory
 import tech.thatgravyboat.skyblockapi.api.area.hub.BazaarAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.containerHeight
@@ -48,9 +48,8 @@ object SackValue {
     }
 
     @Subscription(priority = 1)
-    fun onInvChange(event: InventoryChangeEvent) {
+    fun onInvChange(event: ContainerInitializedEvent) {
         if (!regex.matches(event.screen.title.stripped)) return
-        if (event.isSkyBlockFiller || event.isInBottomRow) return
 
         val screen = event.screen
 
