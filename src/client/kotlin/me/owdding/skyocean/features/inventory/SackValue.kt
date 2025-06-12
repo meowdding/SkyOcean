@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.inventory
 
+import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
@@ -13,10 +14,12 @@ import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
 import me.owdding.skyocean.utils.Utils.unaryMinus
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.world.entity.player.Inventory
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.Pricing
@@ -33,6 +36,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object SackValue {
 
     private val regex = ".* Sack".toRegex()
+    private var oldList: LayoutWidget<*>? = null
     private var oldWidget: AbstractWidget? = null
 
     @Subscription
@@ -45,6 +49,18 @@ object SackValue {
     @Subscription
     fun onContainerClose(event: ContainerCloseEvent) {
         oldWidget = null
+        oldList = null
+    }
+
+    // Used so that when Hypixel resends the entire screen we can
+    // show the list before the items are resent so it doesn't
+    // fall in and out.
+    @Subscription
+    fun onScreenInit(event: ScreenInitializedEvent) {
+        if (!regex.matches(event.screen.title.stripped)) return
+        val widget = this.oldWidget ?: return
+
+        event.screen.addWidget(widget)
     }
 
     @Subscription(priority = 1)
@@ -93,15 +109,22 @@ object SackValue {
                         }
                     }
                 }.let {
-                    widget(it.asScrollable(it.width + 10, screen.containerHeight - 10 - title.height))
+                    widget(it.asScrollable(it.width + 10, screen.containerHeight - 10 - title.height, {
+                        this.withScroll(oldList?.xScroll ?: 0, oldList?.yScroll ?: 0)
+                        oldList = this
+                    }))
                 }
             },
             padding = 5,
         ).apply { this.setPosition(screen.right + 5, screen.top) }
 
-        oldWidget?.let { screen.removeWidget(it) }
-        oldWidget = display
-        event.screen.addRenderableWidget(display)
+        event.screen.addWidget(display)
+    }
+
+    private fun Screen.addWidget(widget: AbstractWidget) {
+        oldWidget?.let { this.removeWidget(it) }
+        oldWidget = widget
+        this.addRenderableWidget(widget)
     }
 
     private data class SackEntry(val item: String, val amount: Int, val price: Double)
