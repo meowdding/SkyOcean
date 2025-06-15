@@ -91,7 +91,7 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
 
     override val source = ItemSources.BUNDLE
 
-    override fun open() = McClient.tell {
+    override fun open() = McClient.runNextTick {
         ItemHighlighter.addChests(chests)
     }
 }
