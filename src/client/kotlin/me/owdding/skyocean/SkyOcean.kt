@@ -67,7 +67,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
             this.hover = Text.of(link).withColor(TextColor.GRAY)
         }
 
-        McClient.tell {
+        McClient.runNextTick {
             Text.of().send()
             Text.join(
                 "New version found! (",
@@ -85,7 +85,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("skyocean") {
             this.callback {
-                McClient.tell {
+                McClient.runNextTick {
                     McClient.setScreen(ResourcefulConfigScreen.getFactory("skyocean").apply(null))
                 }
             }

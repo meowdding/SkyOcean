@@ -36,7 +36,7 @@ object ItemHighlighter {
     private var future: Job? = null
     private var chests: MutableList<BlockPos> = CopyOnWriteArrayList()
 
-    fun setHighlight(filter: ItemFilter?) = McClient.tell {
+    fun setHighlight(filter: ItemFilter?) = McClient.runNextTick {
         allItems.forEach { it.replaceVisually(null) }
         currentSearch = filter
         chests.clear()
@@ -126,7 +126,7 @@ object ItemHighlighter {
     }
 
     @Subscription
-    fun RenderWorldEvent.AfterTranslucent.renderWorld() {
+    private fun RenderWorldEvent.AfterTranslucent.renderWorld() {
         atCamera {
             chests.forEach { block ->
                 renderBox(block, ARGB.color(125, Color.RAINBOW.value).toUInt())

@@ -13,7 +13,6 @@ import me.owdding.lib.displays.*
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.extensions.rightPad
 import me.owdding.lib.extensions.shorten
-import me.owdding.skyocean.SkyOcean.olympus
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.item.TrackedItem
 import me.owdding.skyocean.features.item.search.item.TrackedItemBundle
@@ -132,7 +131,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                                 factory.withCallback {
                                     StateUtils.booleanToggle(ascending).run()
                                     refreshSort()
-                                    McClient.tell {
+                                    McClient.runNextTick {
                                         // this is done because minecraft keeps things focused when they are clicked once,
                                         // since that in our case changes the texture we manually remove the focus again.
                                         factory.isFocused = false

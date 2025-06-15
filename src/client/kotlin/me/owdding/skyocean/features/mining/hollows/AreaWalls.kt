@@ -34,7 +34,7 @@ object AreaWalls {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun RenderWorldEvent.AfterTranslucent.onAreaWallsRender() {
+    private fun RenderWorldEvent.AfterTranslucent.onRender() {
         if (!MiningConfig.chAreaWalls) return
 
         atCamera {

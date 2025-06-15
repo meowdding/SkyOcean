@@ -30,7 +30,7 @@ data class ChestItemContext(
         add("Click to highlight chest!") { this.color = TextColor.YELLOW }
     }
 
-    override fun open() = McClient.tell {
+    override fun open() = McClient.runNextTick {
         ItemHighlighter.addChest(chestPos)
         secondPos?.let(ItemHighlighter::addChest)
     }
