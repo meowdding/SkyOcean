@@ -24,7 +24,7 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
 
     init {
         SkyBlockAPI.eventBus.register<REIRenderOverlayEvent> { reiBeingAStupidMod(it) }
-        SkyBlockAPI.eventBus.register<ContainerCloseEvent> { onContainerClose(it) }
+        SkyBlockAPI.eventBus.register<ContainerCloseEvent> { onContainerClose() }
         SkyBlockAPI.eventBus.register<ScreenInitializedEvent> { onScreenInit(it) }
         SkyBlockAPI.eventBus.register<ContainerInitializedEvent>(priority = Subscription.LOW) { onInvChange(it) }
     }
@@ -63,7 +63,7 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
         }
     }
 
-    private fun onContainerClose(event: ContainerCloseEvent) {
+    private fun onContainerClose() {
         oldWidget = null
         oldList = null
     }

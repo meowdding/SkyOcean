@@ -29,6 +29,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @Module
 object SackValue : InventorySideGui(".* Sack") {
 
+    private val gemstoneLevel = listOf("ROUGH", "FLAWED", "FINE")
+
     override val enabled get() = SackValueConfig.enabled
 
     override fun ContainerInitializedEvent.getWidget(): AbstractWidget? {
@@ -36,7 +38,7 @@ object SackValue : InventorySideGui(".* Sack") {
 
         val ids = when (title) {
             "Runes Sack" -> emptyList()
-            "Gemstones Sack" -> idsInInventory.flatMap { id -> listOf("ROUGH", "FLAWED", "FINE").map { id.replace("ROUGH", it) } }
+            "Gemstones Sack" -> idsInInventory.flatMap { id -> gemstoneLevel.map { id.replace("ROUGH", it) } }
             else -> idsInInventory
         }.ifEmpty { return null }
 
