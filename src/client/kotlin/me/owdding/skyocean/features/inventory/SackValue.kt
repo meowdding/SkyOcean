@@ -32,7 +32,7 @@ object SackValue : InventorySideGui(".* Sack") {
     override val enabled get() = SackValueConfig.enabled
 
     override fun ContainerInitializedEvent.getWidget(): AbstractWidget? {
-        val idsInInventory = screen.menu.slots.filter { it.container !is Inventory }.mapNotNull { it.item.getSkyBlockId() }.toSet()
+        val idsInInventory = screen.menu.slots.filter { it.container !is Inventory }.mapNotNullTo(mutableSetOf()) { it.item.getSkyBlockId() }
 
         val ids = when (title) {
             "Runes Sack" -> emptyList()
