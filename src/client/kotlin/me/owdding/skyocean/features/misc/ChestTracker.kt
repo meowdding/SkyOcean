@@ -69,7 +69,7 @@ object ChestTracker {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.PRIVATE_ISLAND)
-    fun BlockChangeEvent.onBlockBreak() {
+    private fun BlockChangeEvent.onBlockBreak() {
         if (McLevel[pos] in BlockTagKey.CHESTS && state !in BlockTagKey.CHESTS) {
             IslandChestStorage.removeBlock(pos)
         }
@@ -78,7 +78,7 @@ object ChestTracker {
     @Subscription
     @MustBeContainer
     @OnlyIn(SkyBlockIsland.PRIVATE_ISLAND)
-    fun InventoryChangeEvent.onInventoryChange() {
+    private fun InventoryChangeEvent.onInventoryChange() {
         val mutable = this.titleComponent as? MutableComponent
         val contents = mutable?.contents as? TranslatableContents
         if (contents?.key?.startsWith("container.chest") != true) return

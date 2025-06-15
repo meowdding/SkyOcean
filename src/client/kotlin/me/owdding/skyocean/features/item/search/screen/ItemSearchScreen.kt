@@ -13,7 +13,6 @@ import me.owdding.lib.displays.*
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.extensions.rightPad
 import me.owdding.lib.extensions.shorten
-import me.owdding.skyocean.SkyOcean.olympus
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.item.TrackedItem
 import me.owdding.skyocean.features.item.search.item.TrackedItemBundle
@@ -30,10 +29,7 @@ import net.minecraft.client.renderer.RenderType
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
-import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
-import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
-import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
+import tech.thatgravyboat.skyblockapi.utils.extentions.*
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -132,7 +128,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                                 factory.withCallback {
                                     StateUtils.booleanToggle(ascending).run()
                                     refreshSort()
-                                    McClient.tell {
+                                    McClient.runNextTick {
                                         // this is done because minecraft keeps things focused when they are clicked once,
                                         // since that in our case changes the texture we manually remove the focus again.
                                         factory.isFocused = false
@@ -204,7 +200,8 @@ object ItemSearchScreen : SkyOceanScreen() {
 
     fun matches(itemStack: ItemStack): Boolean {
         val search = search ?: return true
-        return itemStack.cleanName.contains(search, true)
+        if (itemStack.cleanName.contains(search, true)) return true
+        return itemStack.getRawLore().any { it.contains(search, true) }
     }
 
     fun buildItems(width: Int, height: Int): Layout {

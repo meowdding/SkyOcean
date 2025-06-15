@@ -19,7 +19,7 @@ object PiggyBankRepairHelper {
         if (!ChatConfig.piggyRepairHelper) return
         if (!regex.matches(event.text)) return
 
-        McClient.tell {
+        McClient.runNextTick {
             Text.of("Click here get 8 Pork from your sacks.") {
                 command = "/gfs ENCHANTED_PORK 8"
             }.sendWithPrefix()
