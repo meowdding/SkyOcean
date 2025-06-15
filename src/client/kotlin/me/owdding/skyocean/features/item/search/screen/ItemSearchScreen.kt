@@ -200,9 +200,8 @@ object ItemSearchScreen : SkyOceanScreen() {
 
     fun matches(itemStack: ItemStack): Boolean {
         val search = search ?: return true
-        val matchesName = itemStack.cleanName.contains(search, true)
-        val matchesLore = itemStack.getRawLore().any { it.contains(search, true) }
-        return matchesName || matchesLore
+        if (itemStack.cleanName.contains(search, true)) return true
+        return itemStack.getRawLore().any { it.contains(search, true) }
     }
 
     fun buildItems(width: Int, height: Int): Layout {
