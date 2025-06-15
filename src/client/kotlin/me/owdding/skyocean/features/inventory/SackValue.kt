@@ -59,6 +59,7 @@ object SackValue {
     // fall in and out.
     @Subscription
     fun onScreenInit(event: ScreenInitializedEvent) {
+        if (!SackValueConfig.enabled) return
         if (!regex.matches(event.screen.title.stripped)) return
         val widget = this.oldWidget ?: return
 
@@ -67,6 +68,7 @@ object SackValue {
 
     @Subscription(priority = Subscription.LOW)
     private fun ContainerInitializedEvent.onInvChange() {
+        if (!SackValueConfig.enabled) return
         if (!regex.matches(screen.title.stripped)) return
 
         val idsInInventory = screen.menu.slots.filter { it.container !is Inventory }.mapNotNull { it.item.getSkyBlockId() }.toSet()
