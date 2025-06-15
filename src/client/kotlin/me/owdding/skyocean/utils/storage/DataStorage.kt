@@ -6,10 +6,10 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.Utils.readJson
 import me.owdding.skyocean.utils.Utils.writeJson
-import net.fabricmc.loader.api.FabricLoader
 import org.apache.commons.io.FileUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
@@ -48,7 +48,7 @@ internal class DataStorage<T : Any>(
                 }
             }
         }
-        val defaultPath: Path = FabricLoader.getInstance().configDir.resolve("skyocean/data")
+        val defaultPath: Path = McClient.config.resolve("skyocean/data")
     }
 
     private val path: Path = defaultPath.resolve("$fileName.json")
