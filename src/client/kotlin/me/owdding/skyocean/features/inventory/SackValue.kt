@@ -38,7 +38,7 @@ object SackValue : InventorySideGui(".* Sack") {
             "Runes Sack" -> emptyList()
             "Gemstones Sack" -> idsInInventory.flatMap { id -> listOf("ROUGH", "FLAWED", "FINE").map { id.replace("ROUGH", it) } }
             else -> idsInInventory
-        }.takeUnless { it.isEmpty() } ?: return null
+        }.ifEmpty { return null }
 
         return BackgroundWidget(
             SkyOcean.id("blank"),
