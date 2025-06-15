@@ -9,6 +9,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.features.garden.SackValueConfig
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
@@ -22,6 +23,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEven
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.Pricing
 import tech.thatgravyboat.skyblockapi.utils.extentions.containerHeight
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
@@ -63,15 +65,13 @@ object SackValue {
         event.screen.addWidget(widget)
     }
 
-    @Subscription(priority = 1)
-    fun onInvChange(event: ContainerInitializedEvent) {
-        if (!regex.matches(event.screen.title.stripped)) return
-
-        val screen = event.screen
+    @Subscription(priority = Subscription.LOW)
+    private fun ContainerInitializedEvent.onInvChange() {
+        if (!regex.matches(screen.title.stripped)) return
 
         val idsInInventory = screen.menu.slots.filter { it.container !is Inventory }.mapNotNull { it.item.getSkyBlockId() }.toSet()
 
-        val ids = when (event.title) {
+        val ids = when (title) {
             "Runes Sack" -> emptyList()
             "Gemstones Sack" -> idsInInventory.flatMap { id -> listOf("ROUGH", "FLAWED", "FINE").map { id.replace("ROUGH", it) } }
             else -> idsInInventory
@@ -81,12 +81,14 @@ object SackValue {
             SkyOcean.id("blank"),
             LayoutFactory.vertical {
                 val sackEntries = SacksAPI.sackItems.filter { it.key in ids }.map {
-                    SackEntry(it.key, it.value, Pricing.getPrice(it.key).times(it.value.toDouble()))
+                    SackEntry(it.key, it.value)
                 }.sortedByDescending { it.price }
 
                 val title = LayoutFactory.horizontal {
                     string(ChatUtils.ICON_SPACE_COMPONENT)
                     string(-"inventory.sack_value")
+                    string(" - ")
+                    string(-SackValueConfig.priceSource.translationKey)
                 }
                 widget(title)
 
@@ -118,7 +120,7 @@ object SackValue {
             padding = 5,
         ).apply { this.setPosition(screen.right + 5, screen.top) }
 
-        event.screen.addWidget(display)
+        screen.addWidget(display)
     }
 
     private fun Screen.addWidget(widget: AbstractWidget) {
@@ -127,5 +129,12 @@ object SackValue {
         this.addRenderableWidget(widget)
     }
 
-    private data class SackEntry(val item: String, val amount: Int, val price: Double)
+    private data class SackEntry(val item: String, val amount: Int) {
+        val price = when (SackValueConfig.priceSource) {
+            SackValueConfig.PriceSource.BAZAAR -> Pricing.getPrice(item)
+            SackValueConfig.PriceSource.NPC -> (ItemData.getNpcPrice(item) ?: 0).toLong()
+        }.times(amount.toDouble()).toLong()
+
+        operator fun component3() = price
+    }
 }
