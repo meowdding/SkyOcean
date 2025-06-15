@@ -1,4 +1,4 @@
-package me.owdding.skyocean.config.features.garden
+package me.owdding.skyocean.config.features.inventory
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt

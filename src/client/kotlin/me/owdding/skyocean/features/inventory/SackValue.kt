@@ -9,7 +9,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.config.features.garden.SackValueConfig
+import me.owdding.skyocean.config.features.inventory.SackValueConfig
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
