@@ -16,7 +16,7 @@ object SendCoords {
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("sendcoords") {
             val (x, y, z) = McPlayer.self?.blockPosition() ?: return@registerWithCallback
-            McClient.self.player?.connection?.sendChat("x: $x y: $y z: $z")
+            McClient.self.player?.connection?.sendChat("x: $x, y: $y, z: $z")
         }
     }
 }
