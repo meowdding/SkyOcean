@@ -8,6 +8,6 @@ object InventoryConfig : CategoryKt("inventory") {
     override val name = Translated("skyocean.config.inventory")
 
     init {
-        obj("sack_value", SackValueConfig) { this.translation = "skyocean.config.inventory.sack_value" }
+        obj("sackValue", SackValueConfig) { this.translation = "skyocean.config.inventory.sack_value" }
     }
 }
