@@ -45,7 +45,7 @@ internal class ProfileStorage<T : Any>(
         fun onTick() {
             val toSave = requiresSave.toTypedArray()
             requiresSave.clear()
-            CompletableFuture.supplyAsync {
+            CompletableFuture.runAsync {
                 toSave.forEach {
                     it.saveToSystem()
                 }
