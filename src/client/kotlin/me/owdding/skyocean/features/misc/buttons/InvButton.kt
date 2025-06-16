@@ -3,8 +3,9 @@ package me.owdding.skyocean.features.misc.buttons
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext
 import earth.terrarium.olympus.client.components.buttons.Button
+import me.owdding.skyocean.config.features.misc.ButtonConfig
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
@@ -14,14 +15,14 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import kotlin.jvm.optionals.getOrNull
 
-class InvButton(val item: String, val index: Int, val bottom: Boolean, val screen: AbstractContainerScreen<*>, val title: String) : Button() {
+class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean, val screen: Screen, val index: Int) : Button() {
     var highlight = false
     fun renderButtons(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
         graphics.pushPop {
             val sprite = if (bottom) {
-                SELECTED_BOTTOM_TABS[index]
+                SELECTED_BOTTOM_TABS[rowIndex]
             } else {
-                SELECTED_TOP_TABS[index]
+                SELECTED_TOP_TABS[rowIndex]
             }
             renderPrevious(graphics, mouseX, mouseY, partialTicks, sprite)
             val itemX = this@InvButton.width / 2 - 8 + this@InvButton.x
@@ -30,16 +31,16 @@ class InvButton(val item: String, val index: Int, val bottom: Boolean, val scree
             } else {
                 this@InvButton.width / 2 - 8 + this@InvButton.y
             }
-            val stack = if (item.contains(":")) {
-                BuiltInRegistries.ITEM.get(ResourceLocation.bySeparator(item, ':'))?.getOrNull()?.value()?.defaultInstance ?: Items.BARRIER.defaultInstance
+            val stack = if (button.item.contains(":")) {
+                BuiltInRegistries.ITEM.get(ResourceLocation.bySeparator(button.item, ':'))?.getOrNull()?.value()?.defaultInstance ?: Items.BARRIER.defaultInstance
             } else {
-                RepoItemsAPI.getItem(item)
+                RepoItemsAPI.getItem(button.item)
             }
             graphics.renderItem(stack, itemX, itemY)
         }
     }
     override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        this.highlight = screen.title.stripped.contains(Regex(title))
+        this.highlight = screen.title.stripped.contains(Regex(button.title)) || (screen is ButtonConfigScreen && screen.selectedButtonIndex == this.index)
         return
     }
 

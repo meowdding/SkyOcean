@@ -51,9 +51,9 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     }
 
     val configurator = Configurator("skyocean")
+    val config = Config.register(configurator)
 
     override fun onInitializeClient() {
-        Config.register(configurator)
         RepoAPI.setup(RepoVersion.V1_21_5)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
         SkyOceanModules.init { SkyBlockAPI.eventBus.register(it) }

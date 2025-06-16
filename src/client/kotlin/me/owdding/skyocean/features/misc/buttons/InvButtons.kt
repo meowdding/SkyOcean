@@ -2,13 +2,14 @@ package me.owdding.skyocean.features.misc.buttons
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.Buttons
+import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import net.fabricmc.fabric.api.client.screen.v1.Screens
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderScreenBackgroundEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderScreenForegroundEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.containerHeight
 import tech.thatgravyboat.skyblockapi.utils.extentions.containerWidth
@@ -18,11 +19,10 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Module
 object InvButtons {
-
     @Subscription
-    @OnlyOnSkyBlock
     fun onScreen(event: ScreenInitializedEvent) {
         if (event.screen !is AbstractContainerScreen<*>) return
+        if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
         val screen = event.screen as AbstractContainerScreen<*>
 
         val buttonOffset = 4
@@ -40,11 +40,15 @@ object InvButtons {
 
                 val button = Buttons.buttons[x + y * 7]
                 event.widgets.add(
-                    InvButton(button.item, x, y == 1, screen, button.title)
+                    InvButton(button, x, y == 1, screen, x + y * 7)
                         .withSize(26, buttonHeight)
                         .withCallback {
-                            val command = button.command.replace("/", "")
-                            McClient.connection?.sendCommand(command)
+                            if (screen is ButtonConfigScreen) {
+                                screen.refresh(x + y * 7)
+                            } else {
+                                val command = button.command.replace("/", "")
+                                McClient.connection?.sendCommand(command)
+                            }
                         }
                         .withTooltip(Text.of(button.tooltip.takeIf { it.isNotEmpty() } ?: button.command))
                         .withPosition(posX, posY)
@@ -54,9 +58,9 @@ object InvButtons {
     }
 
     @Subscription
-    @OnlyOnSkyBlock
     fun onScreenBackground(event: RenderScreenBackgroundEvent) {
         if (event.screen !is AbstractContainerScreen<*>) return
+        if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && !it.isHovered && !it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
@@ -65,13 +69,20 @@ object InvButtons {
     }
 
     @Subscription
-    @OnlyOnSkyBlock
     fun onScreenForeground(event: RenderScreenForegroundEvent) {
         if (event.screen !is AbstractContainerScreen<*>) return
+        if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && (it.isHovered || it.highlight)) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
             }
+        }
+    }
+
+    @Subscription
+    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+        event.registerWithCallback("buttons") {
+            McClient.setScreenAsync(ButtonConfigScreen(null))
         }
     }
 }
