@@ -11,9 +11,13 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.misc.ButtonConfig
 import me.owdding.skyocean.config.features.misc.Buttons
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.Renderable
+import net.minecraft.client.gui.components.events.GuiEventListener
+import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.navigation.ScreenPosition
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent
 import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.Slot
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -117,6 +121,8 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
         column.withChildren(textWidget, itemWidget, commandWidget, titleWidget, tooltipWidget)
         column.arrangeElements()
         column.visitWidgets(::addRenderableWidget)
+
+        if (recipeBookComponent.isVisible) recipeBookComponent.toggleVisibility()
     }
 
     override fun rebuildWidgets() {
