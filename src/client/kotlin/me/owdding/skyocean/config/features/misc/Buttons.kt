@@ -34,6 +34,8 @@ class ButtonConfig(tooltip: String, itemName: String, command: String, title: St
 
     constructor(itemName: String, command: String, title: String) : this("", itemName, command, title)
 
+    val regex = Regex(title)
+
     var item by string(itemName)
     var command by string(command)
     var title by string(title)
