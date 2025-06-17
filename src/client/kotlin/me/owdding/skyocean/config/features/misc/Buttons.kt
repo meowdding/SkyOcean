@@ -32,10 +32,21 @@ object Buttons : CategoryKt("buttons") {
 
 class ButtonConfig(itemName: String, command: String, @Language("RegExp") title: String, tooltip: String = "") : ObjectKt() {
 
-    val regex = Regex(title)
+    private var oldTitle = title
+    private var staticRegex: Regex? = null
+    val regex: Regex
+        get() = run {
+            if (staticRegex == null) {
+                staticRegex = Regex(title)
+            } else {
+                if (oldTitle != title) staticRegex = Regex(title)
+            }
+            staticRegex ?: Regex(title)
+        }
 
     var item by string(itemName)
     var command by string(command)
     var title by string(title)
-    var tooltip by string(tooltip) }
+    var tooltip by string(tooltip)
+}
 
