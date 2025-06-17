@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.misc.buttons
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.Buttons
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import net.fabricmc.fabric.api.client.screen.v1.Screens
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -23,6 +24,7 @@ object InvButtons {
     fun onScreen(event: ScreenInitializedEvent) {
         if (event.screen !is AbstractContainerScreen<*>) return
         if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
+        if (!MiscConfig.inventoryButtons && event.screen !is ButtonConfigScreen) return
         val screen = event.screen as AbstractContainerScreen<*>
 
         val buttonOffset = 8
@@ -61,6 +63,7 @@ object InvButtons {
     fun onScreenBackground(event: RenderScreenBackgroundEvent) {
         if (event.screen !is AbstractContainerScreen<*>) return
         if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
+        if (!MiscConfig.inventoryButtons && event.screen !is ButtonConfigScreen) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && !it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
@@ -72,6 +75,7 @@ object InvButtons {
     fun onScreenForeground(event: RenderScreenForegroundEvent) {
         if (event.screen !is AbstractContainerScreen<*>) return
         if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
+        if (!MiscConfig.inventoryButtons && event.screen !is ButtonConfigScreen) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
