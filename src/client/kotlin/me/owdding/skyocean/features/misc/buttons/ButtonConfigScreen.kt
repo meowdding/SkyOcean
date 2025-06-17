@@ -37,7 +37,7 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
     val tooltipWidget: TextBox =  Widgets.textInput(tooltipState)
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean = false
-    override fun slotClicked(slot: Slot, slotId: Int, mouseButton: Int, type: ClickType) {}
+    @Suppress("WRONG_NULLABILITY_FOR_JAVA_OVERRIDE") override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, type: ClickType) {}
     override fun renderSlots(guiGraphics: GuiGraphics) {}
     override fun onRecipeBookButtonClick() {}
     // Crazy workaround, why the fuck is the whole inventory tied to the recipe book holy shit

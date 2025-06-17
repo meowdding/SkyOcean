@@ -25,8 +25,8 @@ object InvButtons {
         if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
         val screen = event.screen as AbstractContainerScreen<*>
 
-        val buttonOffset = 4
-        val buttonHeight = 28
+        val buttonOffset = 8
+        val buttonHeight = 32
 
         for (y in 0 until 2) {
             for (x in 0 until 7) {
@@ -34,13 +34,13 @@ object InvButtons {
                 val yOffset = if (y == 0) {
                     -buttonHeight + buttonOffset
                 } else {
-                    -buttonOffset
+                    -buttonOffset - 1
                 }
                 val posY = (y * screen.containerHeight) + screen.top + yOffset
 
                 val button = Buttons.buttons[x + y * 7]
                 event.widgets.add(
-                    InvButton(button, x, y == 1, screen, x + y * 7)
+                    InvButton(button, x, y == 1, screen, x + y * 7, posX, posY, 26, buttonHeight)
                         .withSize(26, buttonHeight)
                         .withCallback {
                             if (screen is ButtonConfigScreen) {
@@ -62,7 +62,7 @@ object InvButtons {
         if (event.screen !is AbstractContainerScreen<*>) return
         if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
         Screens.getButtons(event.screen).forEach {
-            if (it is InvButton && !it.isHovered && !it.highlight) {
+            if (it is InvButton && !it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
             }
         }
@@ -73,7 +73,7 @@ object InvButtons {
         if (event.screen !is AbstractContainerScreen<*>) return
         if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
         Screens.getButtons(event.screen).forEach {
-            if (it is InvButton && (it.isHovered || it.highlight)) {
+            if (it is InvButton && it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
             }
         }

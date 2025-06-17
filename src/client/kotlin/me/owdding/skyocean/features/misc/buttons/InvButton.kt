@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.buttons
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext
 import earth.terrarium.olympus.client.components.buttons.Button
+import earth.terrarium.olympus.client.components.buttons.ButtonShapes
 import me.owdding.skyocean.config.features.misc.ButtonConfig
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -15,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import kotlin.jvm.optionals.getOrNull
 
-class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean, val screen: Screen, val index: Int) : Button() {
+class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean, val screen: Screen, val index: Int, val baseX: Int, val baseY: Int, val baseWidth: Int, val baseHeight: Int) : Button() {
     var highlight = false
     fun renderButtons(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
         graphics.pushPop {
@@ -25,11 +26,11 @@ class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean
                 SELECTED_TOP_TABS[rowIndex]
             }
             renderPrevious(graphics, mouseX, mouseY, partialTicks, sprite)
-            val itemX = this@InvButton.width / 2 - 8 + this@InvButton.x
+            val itemX = baseWidth / 2 - 8 + this@InvButton.x
             val itemY = if (bottom) {
-                this@InvButton.height  + this@InvButton.y - (this@InvButton.width / 2) - 8
+                baseHeight  + this@InvButton.y - (baseWidth / 2) - 8
             } else {
-                this@InvButton.width / 2 - 8 + this@InvButton.y
+                baseWidth / 2 - 8 + this@InvButton.y
             }
             val stack = if (button.item.contains(":")) {
                 BuiltInRegistries.ITEM.get(ResourceLocation.bySeparator(button.item, ':'))?.getOrNull()?.value()?.defaultInstance ?: Items.BARRIER.defaultInstance
@@ -40,7 +41,21 @@ class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean
         }
     }
     override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        this.highlight = screen.title.stripped.contains(Regex(button.title)) || (screen is ButtonConfigScreen && screen.selectedButtonIndex == this.index)
+        this.highlight = screen.title.stripped.matches(Regex(button.title)) || (screen is ButtonConfigScreen && screen.selectedButtonIndex == this.index)
+        val modifier = if (bottom) 4 else -4
+        if (this.isHoveredOrFocused || this.highlight) {
+            this.setPosition(baseX, baseY + modifier)
+            this.withShape { x, y, width, height -> x >= 0 && x < width && y >= 0 && y < height }
+        } else {
+            this.setPosition(baseX, baseY)
+            this.withShape { x, y, width, height ->
+                if (bottom) {
+                    return@withShape x >= 0 && x < width && y >= 4 && y < height
+                } else {
+                    return@withShape x >= 0 && x < width && y >= 0 && y < (height - 4)
+                }
+            }
+        }
         return
     }
 
@@ -48,18 +63,9 @@ class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean
         graphics.blitSprite(
             RenderType::guiOpaqueTexturedBackground,
             sprite,
-            26, 32,
-            0, 0,
             this.x, this.y,
-            getWidth(), getHeight() - 4
-        )
-        graphics.blitSprite(
-            RenderType::guiOpaqueTexturedBackground,
-            sprite,
-            26, 32,
-            0, 32-4,
-            this.x, this.y + getHeight() - 4,
-            getWidth(), 4
+            baseWidth, baseHeight,
+            -1
         )
 
         WidgetRenderer.empty<Button>().render(graphics, WidgetRendererContext(this, mouseX, mouseY), partialTick)
