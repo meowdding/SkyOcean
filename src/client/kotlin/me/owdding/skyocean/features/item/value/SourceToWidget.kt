@@ -6,6 +6,7 @@ import me.owdding.lib.builder.LayoutBuilder
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ClickToExpandWidget
+import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.network.chat.Component
@@ -26,8 +27,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object SourceToWidget {
-
-    const val BETTER_GOLD = 0xfc6f03
     
     private fun text(string: String, init: MutableComponent.() -> Unit = {}) = text(Text.of(string, init))
     private fun text(init: MutableComponent.() -> Unit) = text(Text.of(init))
