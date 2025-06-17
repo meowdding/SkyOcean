@@ -1,9 +1,8 @@
 package me.owdding.skyocean.features.misc.buttons
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
-import me.owdding.skyocean.config.features.misc.Buttons
+import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.utils.ChatUtils
 import net.fabricmc.fabric.api.client.screen.v1.Screens

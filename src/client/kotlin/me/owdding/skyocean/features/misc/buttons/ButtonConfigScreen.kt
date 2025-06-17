@@ -8,22 +8,16 @@ import earth.terrarium.olympus.client.layouts.Layouts
 import earth.terrarium.olympus.client.utils.State
 import me.owdding.lib.layouts.setPos
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.config.features.misc.ButtonConfig
-import me.owdding.skyocean.config.features.misc.Buttons
+import me.owdding.skyocean.config.features.inventory.ButtonConfig
+import me.owdding.skyocean.config.features.inventory.Buttons
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.Renderable
-import net.minecraft.client.gui.components.events.GuiEventListener
-import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.navigation.ScreenPosition
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
-import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent
 import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.Slot
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.left
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
 

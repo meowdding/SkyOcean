@@ -16,8 +16,8 @@ object InventoryConfig : CategoryKt("inventory") {
 
     init {
         separator {
-            title = "skyocean.config.misc.inventoryButtons"
-            description = "skyocean.config.misc.inventoryButtons.desc"
+            title = "skyocean.config.inventory.inventoryButtons"
+            description = "skyocean.config.inventory.inventoryButtons.desc"
         }
     }
 

@@ -1,4 +1,4 @@
-package me.owdding.skyocean.config.features.misc
+package me.owdding.skyocean.config.features.inventory
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
@@ -8,8 +8,6 @@ import org.intellij.lang.annotations.Language
 @ConfigCategory
 object Buttons : CategoryKt("buttons") {
     override val hidden: Boolean = true
-
-    override val name = Translated("config.titanomachy.buttons.title")
 
     val button0: ButtonConfig = obj("button0", ButtonConfig("minecraft:diamond_sword", "Skills", "^Your Skills$"))
     val button1: ButtonConfig = obj("button1", ButtonConfig("minecraft:painting", "Collections",  "^Collections$"))

@@ -4,7 +4,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext
 import earth.terrarium.olympus.client.components.buttons.Button
 import me.owdding.skyocean.SkyOcean.minecraft
-import me.owdding.skyocean.config.features.misc.ButtonConfig
+import me.owdding.skyocean.config.features.inventory.ButtonConfig
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.RenderType
