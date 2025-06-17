@@ -32,6 +32,8 @@ object Buttons : CategoryKt("buttons") {
 
 class ButtonConfig(itemName: String, command: String, @Language("RegExp") title: String, tooltip: String = "") : ObjectKt() {
 
+    val regex = Regex(title)
+
     var item by string(itemName)
     var command by string(command)
     var title by string(title)
