@@ -1,8 +1,8 @@
 package me.owdding.skyocean.features.misc.buttons
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.config.features.misc.Buttons
-import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import net.fabricmc.fabric.api.client.screen.v1.Screens
 import net.minecraft.client.gui.screens.Screen
@@ -85,5 +85,6 @@ object InvButtons {
         }
     }
 
-    private fun condition(screen: Screen): Boolean = screen !is AbstractContainerScreen<*> || ((!LocationAPI.isOnSkyBlock || !MiscConfig.inventoryButtons) && screen !is ButtonConfigScreen)
+    private fun condition(screen: Screen): Boolean =
+        screen !is AbstractContainerScreen<*> || ((!LocationAPI.isOnSkyBlock || !InventoryConfig.inventoryButtons) && screen !is ButtonConfigScreen)
 }

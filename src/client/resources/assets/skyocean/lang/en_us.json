@@ -145,6 +145,21 @@
           "bazaar": "BZ",
           "npc": "NPC"
         }
+      },
+      "inventoryButtons": {
+        "@value": "Inventory Buttons",
+        "desc": "Settings to configure and change inventory buttons.",
+        "enabled": {
+          "@value": "Inventory Buttons",
+          "desc": "Whether to show the Inventory Buttons."
+        },
+        "edit": {
+          "@value": "Edit Buttons",
+          "desc": [
+            "Configure Buttons in a separate UI.",
+            "<italic>Also accessible through /skyocean buttons</italic>"
+          ]
+        }
       }
     },
     "chat": {
@@ -219,25 +234,6 @@
         "others": {
           "@value": "Others",
           "desc": "Only applies to other players."
-        }
-      },
-      "inventoryButtons": {
-        "@value": "Inventory Buttons",
-        "desc": [
-          "Settings to configure and change inventory buttons."
-        ],
-        "enabled": {
-          "@value": "Inventory Buttons",
-          "desc": [
-            "Whether to show the Inventory Buttons."
-          ]
-        },
-        "edit": {
-          "@value": "Edit Buttons",
-          "desc": [
-            "Configure Buttons in a separate UI.",
-            "<italic>Also accessible through /skyocean buttons</italic>"
-          ]
         }
       }
     },

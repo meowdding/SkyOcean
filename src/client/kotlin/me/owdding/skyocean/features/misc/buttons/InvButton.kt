@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.buttons
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext
 import earth.terrarium.olympus.client.components.buttons.Button
+import me.owdding.skyocean.SkyOcean.minecraft
 import me.owdding.skyocean.config.features.misc.ButtonConfig
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -72,43 +73,23 @@ class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean
     }
 
     companion object {
-        val UNSELECTED_TOP_TABS = arrayOf<ResourceLocation>(
-            mcrl("container/creative_inventory/tab_top_unselected_1"),
-            mcrl("container/creative_inventory/tab_top_unselected_2"),
-            mcrl("container/creative_inventory/tab_top_unselected_3"),
-            mcrl("container/creative_inventory/tab_top_unselected_4"),
-            mcrl("container/creative_inventory/tab_top_unselected_5"),
-            mcrl("container/creative_inventory/tab_top_unselected_6"),
-            mcrl("container/creative_inventory/tab_top_unselected_7"),
-        )
         val SELECTED_TOP_TABS = arrayOf<ResourceLocation>(
-            mcrl("container/creative_inventory/tab_top_selected_1"),
-            mcrl("container/creative_inventory/tab_top_selected_2"),
-            mcrl("container/creative_inventory/tab_top_selected_3"),
-            mcrl("container/creative_inventory/tab_top_selected_4"),
-            mcrl("container/creative_inventory/tab_top_selected_5"),
-            mcrl("container/creative_inventory/tab_top_selected_6"),
-            mcrl("container/creative_inventory/tab_top_selected_7"),
-        )
-        val UNSELECTED_BOTTOM_TABS = arrayOf<ResourceLocation>(
-            mcrl("container/creative_inventory/tab_bottom_unselected_1"),
-            mcrl("container/creative_inventory/tab_bottom_unselected_2"),
-            mcrl("container/creative_inventory/tab_bottom_unselected_3"),
-            mcrl("container/creative_inventory/tab_bottom_unselected_4"),
-            mcrl("container/creative_inventory/tab_bottom_unselected_5"),
-            mcrl("container/creative_inventory/tab_bottom_unselected_6"),
-            mcrl("container/creative_inventory/tab_bottom_unselected_7"),
+            minecraft("container/creative_inventory/tab_top_selected_1"),
+            minecraft("container/creative_inventory/tab_top_selected_2"),
+            minecraft("container/creative_inventory/tab_top_selected_3"),
+            minecraft("container/creative_inventory/tab_top_selected_4"),
+            minecraft("container/creative_inventory/tab_top_selected_5"),
+            minecraft("container/creative_inventory/tab_top_selected_6"),
+            minecraft("container/creative_inventory/tab_top_selected_7"),
         )
         val SELECTED_BOTTOM_TABS = arrayOf<ResourceLocation>(
-            mcrl("container/creative_inventory/tab_bottom_selected_1"),
-            mcrl("container/creative_inventory/tab_bottom_selected_2"),
-            mcrl("container/creative_inventory/tab_bottom_selected_3"),
-            mcrl("container/creative_inventory/tab_bottom_selected_4"),
-            mcrl("container/creative_inventory/tab_bottom_selected_5"),
-            mcrl("container/creative_inventory/tab_bottom_selected_6"),
-            mcrl("container/creative_inventory/tab_bottom_selected_7"),
+            minecraft("container/creative_inventory/tab_bottom_selected_1"),
+            minecraft("container/creative_inventory/tab_bottom_selected_2"),
+            minecraft("container/creative_inventory/tab_bottom_selected_3"),
+            minecraft("container/creative_inventory/tab_bottom_selected_4"),
+            minecraft("container/creative_inventory/tab_bottom_selected_5"),
+            minecraft("container/creative_inventory/tab_bottom_selected_6"),
+            minecraft("container/creative_inventory/tab_bottom_selected_7"),
         )
     }
 }
-
-private fun mcrl(location: String): ResourceLocation = ResourceLocation.withDefaultNamespace(location)
