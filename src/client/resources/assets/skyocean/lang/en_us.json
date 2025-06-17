@@ -133,6 +133,20 @@
         "desc": "Highlights the correct block for the puzzler."
       }
     },
+    "inventory": {
+      "@value": "Inventory",
+      "sack_value": {
+        "@value": "Sack Value",
+        "desc": "Shows the value of all items in your sacks.",
+        "edit": "Edit Sack Value",
+        "price_source": {
+          "@value": "Price Source",
+          "desc": "The source to use for the price of items in sacks.",
+          "bazaar": "BZ",
+          "npc": "NPC"
+        }
+      }
+    },
     "chat": {
       "@value": "Chat",
       "profile_in_chat": {
@@ -260,6 +274,9 @@
   },
   "garden": {
     "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>"
+  },
+  "inventory": {
+    "sack_value": "<dark_gray>Sack Value</dark_gray>"
   },
   "item_search": {
     "keybind": "Item Search"
