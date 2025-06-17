@@ -3,7 +3,6 @@ package me.owdding.skyocean.features.misc.buttons
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext
 import earth.terrarium.olympus.client.components.buttons.Button
-import earth.terrarium.olympus.client.components.buttons.ButtonShapes
 import me.owdding.skyocean.config.features.misc.ButtonConfig
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -41,7 +40,8 @@ class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean
         }
     }
     override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        this.highlight = screen.title.stripped.matches(Regex(button.title)) || (screen is ButtonConfigScreen && screen.selectedButtonIndex == this.index)
+        this.isHovered = graphics.containsPointInScissor(mouseX, mouseY) && isMouseOver(mouseX.toDouble(), mouseY.toDouble())
+        this.highlight = screen.title.stripped.trim().matches(Regex(button.title)) || (screen is ButtonConfigScreen && screen.selectedButtonIndex == this.index)
         val modifier = if (bottom) 4 else -4
         if (this.isHoveredOrFocused || this.highlight) {
             this.setPosition(baseX, baseY + modifier)
@@ -65,7 +65,7 @@ class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean
             sprite,
             this.x, this.y,
             baseWidth, baseHeight,
-            -1
+            -1,
         )
 
         WidgetRenderer.empty<Button>().render(graphics, WidgetRendererContext(this, mouseX, mouseY), partialTick)

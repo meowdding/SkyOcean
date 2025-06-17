@@ -13,10 +13,10 @@ object Buttons : CategoryKt("buttons") {
 
     val button0: ButtonConfig = obj("button0", ButtonConfig("minecraft:diamond_sword", "Skills", "^Your Skills$"))
     val button1: ButtonConfig = obj("button1", ButtonConfig("minecraft:painting", "Collections",  "^Collections$"))
-    val button2: ButtonConfig = obj("button2", ButtonConfig("minecraft:bone", "Pets", "^Pets(\\([0-9]\\/[0-9]\\))?"))
-    val button3: ButtonConfig = obj("butto3", ButtonConfig("ARMOR_OF_YOG_CHESTPLATE", "Wardrobe", "^Wardrobe(\\([0-9]\\/[0-9]\\))?"))
+    val button2: ButtonConfig = obj("button2", ButtonConfig("minecraft:bone", "Pets", "Pets(?: \\(\\d+\\/\\d+\\))?"))
+    val button3: ButtonConfig = obj("butto3", ButtonConfig("ARMOR_OF_YOG_CHESTPLATE", "Wardrobe", "^Wardrobe(?: \\(\\d+\\/\\d+\\))?"))
     val button4: ButtonConfig = obj("button4", ButtonConfig("minecraft:bundle", "Sacks", "^Sack of Sacks$"))
-    val button5: ButtonConfig = obj("button5", ButtonConfig("RUNEBOOK", "Accessories", "^Accessory Bag(\\([0-9]\\/[0-9]\\))?"))
+    val button5: ButtonConfig = obj("button5", ButtonConfig("RUNEBOOK", "Accessories", "^Accessory Bag(?: \\(\\d+\\/\\d+\\))?"))
     val button6: ButtonConfig = obj("button6", ButtonConfig("minecraft:ender_chest", "Storage", "^Storage$"))
     val button7: ButtonConfig = obj("button7", ButtonConfig("Island", "minecraft:grass_block", "warp island", "a^"))
     val button8: ButtonConfig = obj("button8", ButtonConfig("HUB_PORTAL", "Hub", "a^"))
