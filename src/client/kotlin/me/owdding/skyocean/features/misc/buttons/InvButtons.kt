@@ -5,6 +5,7 @@ import me.owdding.skyocean.config.features.misc.Buttons
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import net.fabricmc.fabric.api.client.screen.v1.Screens
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderScreenBackgroundEvent
@@ -22,9 +23,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 object InvButtons {
     @Subscription
     fun onScreen(event: ScreenInitializedEvent) {
-        if (event.screen !is AbstractContainerScreen<*>) return
-        if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
-        if (!MiscConfig.inventoryButtons && event.screen !is ButtonConfigScreen) return
+        if (condition(event.screen)) return
         val screen = event.screen as AbstractContainerScreen<*>
 
         val buttonOffset = 8
@@ -61,9 +60,7 @@ object InvButtons {
 
     @Subscription
     fun onScreenBackground(event: RenderScreenBackgroundEvent) {
-        if (event.screen !is AbstractContainerScreen<*>) return
-        if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
-        if (!MiscConfig.inventoryButtons && event.screen !is ButtonConfigScreen) return
+        if (condition(event.screen)) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && !it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
@@ -73,9 +70,7 @@ object InvButtons {
 
     @Subscription
     fun onScreenForeground(event: RenderScreenForegroundEvent) {
-        if (event.screen !is AbstractContainerScreen<*>) return
-        if (!LocationAPI.isOnSkyBlock && event.screen !is ButtonConfigScreen) return
-        if (!MiscConfig.inventoryButtons && event.screen !is ButtonConfigScreen) return
+        if (condition(event.screen)) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
@@ -89,4 +84,6 @@ object InvButtons {
             McClient.setScreenAsync(ButtonConfigScreen(null))
         }
     }
+
+    private fun condition(screen: Screen): Boolean = screen !is AbstractContainerScreen<*> || ((!LocationAPI.isOnSkyBlock || !MiscConfig.inventoryButtons) && screen !is ButtonConfigScreen)
 }
