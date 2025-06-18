@@ -56,12 +56,10 @@ object LoreModifiers {
     }.toList()
 
     @Subscription
-    private fun ItemTooltipEvent.onLore() {
-        this.tooltip.firstOrNull() ?: return
+    private fun ItemTooltipEvent.onLore() = tooltip.takeUnless { it.isEmpty() }?.let {
         val modified = modifiers.filter { it.isEnabled && it.appliesTo(this.item) && it.modify(item, this.tooltip) }
 
-        if (modified.isEmpty()) return
-        if (tooltip.isEmpty()) return
+        if (modified.isEmpty()) return null
 
         this.tooltip.addFirst(Text.join(ChatUtils.ICON_SPACE_COMPONENT, this.tooltip.removeFirst()))
         if (Screen.hasShiftDown()) {
