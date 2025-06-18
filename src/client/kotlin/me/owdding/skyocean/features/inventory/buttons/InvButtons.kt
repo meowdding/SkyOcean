@@ -86,7 +86,7 @@ object InvButtons {
             if (InventoryConfig.inventoryButtons) {
                 McClient.setScreenAsync(ButtonConfigScreen(null))
             } else {
-                Text.of("First Enable Inventory Buttons in the Config").withColor(0xf38ba8).sendWithPrefix()
+                Text.of("Enable inventory buttons in the Config first!").withColor(0xf38ba8).sendWithPrefix()
             }
         }
     }
