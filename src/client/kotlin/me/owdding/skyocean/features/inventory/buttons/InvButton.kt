@@ -84,15 +84,7 @@ class InvButton(
     }
 
     companion object {
-        val SELECTED_TOP_TABS = arrayOf<ResourceLocation>(
-            minecraft("container/creative_inventory/tab_top_selected_1"),
-            minecraft("container/creative_inventory/tab_top_selected_2"),
-            minecraft("container/creative_inventory/tab_top_selected_3"),
-            minecraft("container/creative_inventory/tab_top_selected_4"),
-            minecraft("container/creative_inventory/tab_top_selected_5"),
-            minecraft("container/creative_inventory/tab_top_selected_6"),
-            minecraft("container/creative_inventory/tab_top_selected_7"),
-        )
+        val SELECTED_TOP_TABS = Array(7) { minecraft("container/creative_inventory/tab_top_selected_${it + 1}")}
         val SELECTED_BOTTOM_TABS = Array(7) { minecraft("container/creative_inventory/tab_bottom_selected_${it + 1}")}
     }
 }
