@@ -10,46 +10,30 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.getApiId
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
-import java.nio.file.Path
-import java.util.function.Consumer
+import kotlin.jvm.optionals.getOrNull
 
 @GenerateCodec
 data class SkyblockTagFile(
     val values: List<String>,
-    val replace: Boolean = false,
 )
 
 interface SkyblockTagKey<T> {
 
-    val tag: List<String>
-    fun load() = load(toPath(location)).map { it.lowercase() }
+    val tag: Set<String>
+    fun load(): Set<String> = load(toPath(location)).mapTo(HashSet()) { it.lowercase() }
 
     fun toPath(resourceLocation: ResourceLocation) = "data/${resourceLocation.namespace}/tags/skyblock/${resourceLocation.path}.json"
 
     companion object {
-        private fun getResourcePaths(path: String): HashSet<Path> {
-            val out = HashSet<Path>()
+        private fun getResourcePaths(path: String) = FabricLoader.getInstance().allMods.mapNotNull { mod -> mod.findPath(path).getOrNull() }
 
-            for (mod in FabricLoader.getInstance().allMods) {
-                mod.findPath(path).ifPresent(Consumer { e: Path? -> out.add(e!!) })
+        fun load(path: String): List<String> = getResourcePaths(path).flatMap { it ->
+            val file = it.readAsJson().toData(SkyOceanCodecs.SkyblockTagFileCodec.codec()) ?: run {
+                SkyOcean.error("Failed to load tag file $path")
+                return@flatMap emptyList<String>()
             }
 
-            return out
-        }
-
-        fun load(path: String): List<String> {
-            val list = mutableListOf<String>()
-
-            getResourcePaths(path).forEach { it ->
-                val file = it.readAsJson().toData(SkyOceanCodecs.SkyblockTagFileCodec.codec()) ?: run {
-                    SkyOcean.error("Failed to load tag file $path")
-                    return@forEach
-                }
-                if (file.replace) list.clear()
-                list.addAll(file.values)
-            }
-
-            return list
+            file.values
         }
 
     }

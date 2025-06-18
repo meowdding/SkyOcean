@@ -4,6 +4,7 @@ import me.owdding.skyocean.config.features.lorecleanup.LoreCleanupConfig
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.tags.SkyblockItemTagKey
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
@@ -25,52 +26,33 @@ object DrillLoreModifier : AbstractLoreModifier() {
         val engine = item.getData(DataTypes.ENGINE)
         val upgradeModule = item.getData(DataTypes.UPGRADE_MODULE)
 
-        fun skipTillNextSpace() {
-            while (index + 1 < original.size && peek().stripped.trim().isNotEmpty()) {
-                read()
+        fun MutableComponent.addOrNotInstalled(id: String?) {
+            if (id != null) {
+                append(RepoItemsAPI.getItemName(id))
+            } else {
+                append("Not Installed") { this.color = TextColor.RED }
             }
-            if (index + 1 < original.size) read()
         }
 
         addUntil { it.stripped.contains("Tank") }
-        if (fuelTank != null) {
-            add {
-                append("Fuel Tank: ") { this.color = TextColor.GRAY }
-                append(RepoItemsAPI.getItemName(fuelTank))
-            }
-        } else {
-            add {
-                append("Fuel Tank: ") { this.color = TextColor.GRAY }
-                append("Not Installed") { this.color = TextColor.RED }
-            }
-        }
-        skipTillNextSpace()
 
-        if (engine != null) {
-            add {
-                append("Drill Engine: ") { this.color = TextColor.GRAY }
-                append(RepoItemsAPI.getItemName(engine))
-            }
-        } else {
-            add {
-                append("Drill Engine: ") { this.color = TextColor.GRAY }
-                append("Not Installed") { this.color = TextColor.RED }
-            }
+        add {
+            append("Fuel Tank: ") { this.color = TextColor.GRAY }
+            addOrNotInstalled(fuelTank)
         }
-        skipTillNextSpace()
+        addAllTillSpace()
 
-        if (upgradeModule != null) {
-            add {
-                append("Upgrade Module: ") { this.color = TextColor.GRAY }
-                append(RepoItemsAPI.getItemName(upgradeModule))
-            }
-        } else {
-            add {
-                append("Upgrade Module: ") { this.color = TextColor.GRAY }
-                append("Not Installed") { this.color = TextColor.RED }
-            }
+        add {
+            append("Drill Engine: ") { this.color = TextColor.GRAY }
+            addOrNotInstalled(engine)
         }
-        skipTillNextSpace()
+        addAllTillSpace()
+
+        add {
+            append("Upgrade Module: ") { this.color = TextColor.GRAY }
+            addOrNotInstalled(upgradeModule)
+        }
+        addAllTillSpace()
         space()
 
         true

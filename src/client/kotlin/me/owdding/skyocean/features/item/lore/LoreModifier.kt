@@ -15,6 +15,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ItemTooltipEvent
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.reflect.full.findAnnotation
 
@@ -27,7 +28,7 @@ abstract class AbstractLoreModifier {
     /** Return true if modified */
     abstract fun modify(item: ItemStack, list: MutableList<Component>): Boolean
 
-    fun withMerger(original: MutableList<Component>, init: ListMerger<Component>.() -> Boolean): Boolean {
+    protected fun withMerger(original: MutableList<Component>, init: ListMerger<Component>.() -> Boolean): Boolean {
         val merger = ListMerger(original)
         val modified = merger.init()
         merger.addRemaining()
@@ -36,8 +37,16 @@ abstract class AbstractLoreModifier {
         return modified
     }
 
-    fun ListMerger<Component>.space() = add(CommonComponents.EMPTY)
-    fun ListMerger<Component>.add(init: MutableComponent.() -> Unit) = add(Text.of(init))
+
+    protected fun ListMerger<Component>.addAllTillSpace() {
+        while (index + 1 < original.size && peek().stripped.isNotBlank()) {
+            read()
+        }
+        if (index + 1 < original.size) read()
+    }
+
+    protected fun ListMerger<Component>.space() = add(CommonComponents.EMPTY)
+    protected fun ListMerger<Component>.add(init: MutableComponent.() -> Unit) = add(Text.of(init))
 }
 
 @Module
@@ -49,30 +58,29 @@ object LoreModifiers {
     @Subscription
     private fun ItemTooltipEvent.onLore() {
         this.tooltip.firstOrNull() ?: return
-        val modified = modifiers.filter { it.isEnabled }.filter { it.appliesTo(this.item) }.filter {
-            it.modify(item, this.tooltip)
-        }
-        if (modified.isNotEmpty()) {
-            if (this.tooltip.isEmpty()) return
-            this.tooltip.addFirst(Text.join(ChatUtils.ICON_SPACE_COMPONENT, this.tooltip.removeFirst()))
-            if (Screen.hasShiftDown()) {
-                this.tooltip.addAll(
-                    TooltipBuilder().apply {
-                        space()
-                        add("Lore modifiers active on item:") {
-                            this.color = ChatUtils.DARK_OCEAN_BLUE
+        val modified = modifiers.filter { it.isEnabled && it.appliesTo(this.item) && it.modify(item, this.tooltip) }
+
+        if (modified.isEmpty()) return
+        if (tooltip.isEmpty()) return
+
+        this.tooltip.addFirst(Text.join(ChatUtils.ICON_SPACE_COMPONENT, this.tooltip.removeFirst()))
+        if (Screen.hasShiftDown()) {
+            this.tooltip.addAll(
+                TooltipBuilder().apply {
+                    space()
+                    add("Lore modifiers active on item:") {
+                        this.color = ChatUtils.DARK_OCEAN_BLUE
+                    }
+                    modified.forEach {
+                        add {
+                            append("- ")
+                            append(it.displayName)
+                            this.color = TextColor.GRAY
                         }
-                        modified.forEach {
-                            add {
-                                append("- ")
-                                append(it.displayName)
-                                this.color = TextColor.GRAY
-                            }
-                        }
-                        space()
-                    }.lines(),
-                )
-            }
+                    }
+                    space()
+                }.lines(),
+            )
         }
     }
 }
