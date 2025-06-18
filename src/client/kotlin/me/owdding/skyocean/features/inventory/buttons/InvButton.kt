@@ -42,12 +42,9 @@ class InvButton(
             } else {
                 baseWidth / 2 - 8 + this@InvButton.y
             }
-            val stack = if (button.item.contains(":")) {
-                BuiltInRegistries.ITEM.get(
-                    ResourceLocation.bySeparator(button.item, ':'))?.getOrNull()?.value()?.defaultInstance ?: Items.BARRIER.defaultInstance
-            } else {
-                RepoItemsAPI.getItem(button.item)
-            }
+            val stack = BuiltInRegistries.ITEM.get(ResourceLocation.bySeparator(button.item, ':'))?.getOrNull()?.value()?.defaultInstance
+                ?: RepoItemsAPI.getItem(button.item)
+                ?: Items.BARRIER.defaultInstance
             graphics.renderItem(stack, itemX, itemY)
         }
     }

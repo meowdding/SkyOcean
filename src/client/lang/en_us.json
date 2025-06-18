@@ -146,7 +146,7 @@
           "npc": "NPC"
         }
       },
-      "inventoryButtons": {
+      "inventory_buttons": {
         "@value": "Inventory Buttons",
         "desc": "Settings to configure and change inventory buttons.",
         "enabled": {
@@ -314,7 +314,15 @@
     "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>"
   },
   "inventory": {
-    "sack_value": "<dark_gray>Sack Value</dark_gray>"
+    "sack_value": "<dark_gray>Sack Value</dark_gray>",
+    "buttons": {
+      "configuration": "Button Configuration",
+      "item": "Item ID / Skyblock ID",
+      "command": "Command",
+      "screen_title": "Screen Title",
+      "tooltip": "Button Tooltip",
+      "select_button": "Select Button to Edit"
+    }
   },
   "item_search": {
     "keybind": "Item Search"

@@ -18,7 +18,7 @@ object Buttons : CategoryKt("buttons") {
     val button6: ButtonConfig = obj("button6", ButtonConfig("minecraft:ender_chest", "Storage", "Storage"))
     val button7: ButtonConfig = obj("button7", ButtonConfig("minecraft:grass_block", "warp island", "a^", "Island"))
     val button8: ButtonConfig = obj("button8", ButtonConfig("HUB_PORTAL", "Hub", "a^"))
-    val button9: ButtonConfig = obj("button9", ButtonConfig("minecraft:skeleton_skull", "Dungeons", "a^"))
+    val button9: ButtonConfig = obj("button9", ButtonConfig("minecraft:skeleton_skull", "warp dh", "a^", "Dungeon Hub"))
     val button10: ButtonConfig = obj("button10", ButtonConfig("SMOOTH_CHOCOLATE_BAR", "ChocolateFactory", "Chocolate Factory", "Chocolate Factory"))
     val button11: ButtonConfig = obj("button11", ButtonConfig("ESSENCE_GOLD", "Bazaar", "(?:Special )?Bazaar"))
     val button12: ButtonConfig = obj("button12", ButtonConfig("ESSENCE_DIAMOND", "Auction", "(?:Co-op )?Auction House"))

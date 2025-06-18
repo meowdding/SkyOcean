@@ -16,20 +16,20 @@ object InventoryConfig : CategoryKt("inventory") {
 
     init {
         separator {
-            title = "skyocean.config.inventory.inventoryButtons"
-            description = "skyocean.config.inventory.inventoryButtons.desc"
+            title = "skyocean.config.inventory.inventory_buttons"
+            description = "skyocean.config.inventory.inventory_buttons.desc"
         }
     }
 
     var inventoryButtons by boolean(false) {
-        translation = "skyocean.config.inventory.inventoryButtons.enabled"
+        translation = "skyocean.config.inventory.inventory_buttons.enabled"
     }
 
     init {
         button {
-            title = "skyocean.config.inventory.inventoryButtons.edit"
+            title = "skyocean.config.inventory.inventory_buttons.edit"
             text = "Open"
-            description = "skyocean.config.inventory.inventoryButtons.edit.desc"
+            description = "skyocean.config.inventory.inventory_buttons.edit.desc"
             onClick {
                 McClient.setScreen(McScreen.self?.let { ButtonConfigScreen(it) })
             }
