@@ -7,13 +7,11 @@ import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.displays.DisplayWidget
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.withPadding
-import me.owdding.lib.layouts.BackgroundWidget
-import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.garden.GardenConfig
 import me.owdding.skyocean.helpers.InventorySideGui
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.unaryMinus
-import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.layouts.Layout
 import tech.thatgravyboat.skyblockapi.api.area.farming.garden.pests.Pest
 import tech.thatgravyboat.skyblockapi.api.area.farming.garden.pests.Spray
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
@@ -28,33 +26,29 @@ object PestBaitType : InventorySideGui("(?:Pest|Mouse) Trap") {
 
     override val enabled: Boolean get() = GardenConfig.pestBaitType && SkyBlockIsland.GARDEN.inIsland()
 
-    override fun ContainerInitializedEvent.getWidget(): AbstractWidget? = BackgroundWidget(
-        SkyOcean.id("blank"),
-        LayoutFactory.vertical {
-            horizontal {
-                string(ChatUtils.ICON_SPACE_COMPONENT)
-                string(-"garden.pest_bait_type")
-            }
+    override fun ContainerInitializedEvent.getLayout(): Layout? = LayoutFactory.vertical {
+        horizontal {
+            string(ChatUtils.ICON_SPACE_COMPONENT)
+            string(-"garden.pest_bait_type")
+        }
 
-            Spray.entries.forEach { spray ->
-                val pests = Pest.getPests(spray)
+        Spray.entries.forEach { spray ->
+            val pests = Pest.getPests(spray)
 
-                horizontal(alignment = MIDDLE) {
-                    display(Displays.item(spray.itemStack))
-                    textDisplay(": ${pests.joinToString(", ") { it.toFormattedName() }}") {
-                        color = TextColor.DARK_GRAY
-                    }
+            horizontal(alignment = MIDDLE) {
+                display(Displays.item(spray.itemStack))
+                textDisplay(": ${pests.joinToString(", ") { it.toFormattedName() }}") {
+                    color = TextColor.DARK_GRAY
                 }
             }
+        }
 
-            val buttonDisplay = Displays.component(-"garden.open_sack").withPadding(2)
-            val sacksButton = Button().apply {
-                withRenderer(DisplayWidget.displayRenderer(buttonDisplay))
-                setSize(buttonDisplay.getWidth(), buttonDisplay.getHeight())
-                withCallback { McClient.sendCommand("/sacks") }
-            }
-            widget(sacksButton)
-        },
-        padding = 5,
-    )
+        val buttonDisplay = Displays.component(-"garden.open_sack").withPadding(2)
+        val sacksButton = Button().apply {
+            withRenderer(DisplayWidget.displayRenderer(buttonDisplay))
+            setSize(buttonDisplay.getWidth(), buttonDisplay.getHeight())
+            withCallback { McClient.sendCommand("/sacks") }
+        }
+        widget(sacksButton)
+    }
 }
