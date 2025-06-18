@@ -7,6 +7,12 @@
     "EntityMixin"
   ],
   "client": [
-    "BlockModelShaperMixin"
+    "BlockModelShaperMixin",
+    "CapeLayerMixin",
+    "EntityRendererMixin",
+    "EntityRenderStateMixin",
+    "FrameLayoutAccessor",
+    "PlayerRendererMixin",
+    "PlayerRenderStateMixin"
   ]
 }

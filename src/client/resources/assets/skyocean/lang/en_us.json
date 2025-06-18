@@ -4,16 +4,20 @@
     "allowReferences": true,
     "allowTags": true,
     "objectAsKeys": true,
-    "prefix": "skyocean"
+    "prefix": "skyocean",
+    "@references": {
+      "transparency": "Values range from 0-100%, 100% means it is fully visible."
+    }
   },
+  "@value": "SkyOcean",
   "config": {
     "main": {
       "modifications": {
         "@value": "Visual Changes",
         "desc": [
-          "The mod may change the appearance of an item, by for example manipulating it's tooltip.",
+          "The mod may change the appearance of an item (or other visual components), by for example manipulating it's tooltip.",
           "",
-          "If such a modification is present the item name will be prefixed with a <color #355AA0>\uD83C\uDF0A</color> this is done to help identify the origin of any changes and therefore can't be disabled."
+          "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix, this is done to help identify the origin of any changes and therefore can't be disabled."
         ]
       },
       "debug": {
@@ -123,6 +127,24 @@
           "@value": "Area Walls",
           "desc": "Adds walls between the areas in the crystal hollows."
         }
+      },
+      "puzzler": {
+        "@value": "Puzzler Solver",
+        "desc": "Highlights the correct block for the puzzler."
+      }
+    },
+    "inventory": {
+      "@value": "Inventory",
+      "sack_value": {
+        "@value": "Sack Value",
+        "desc": "Shows the value of all items in your sacks.",
+        "edit": "Edit Sack Value",
+        "price_source": {
+          "@value": "Price Source",
+          "desc": "The source to use for the price of items in sacks.",
+          "bazaar": "BZ",
+          "npc": "NPC"
+        }
       }
     },
     "chat": {
@@ -130,6 +152,10 @@
       "profile_in_chat": {
         "@value": "Profile in Chat",
         "desc": "Show the profile icon in chat messages."
+      },
+      "piggy_repair_helper": {
+        "@value": "Piggy Repair Helper",
+        "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."
       },
       "sack_notification": {
         "@value": "Sack Notification",
@@ -140,12 +166,122 @@
         "desc": "The items to show notifications for."
       }
     },
+    "garden": {
+      "@value": "Garden",
+      "pest_bait_type": {
+        "@value": "Pest Bait Type",
+        "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
+      },
+      "desk_pest_highlight": {
+        "@value": "Desk Pest Highlight",
+        "desc": "Highlights on what Plot how many pests are on in the 'Configure Plots' menu."
+      }
+    },
     "misc": {
       "@value": "Miscellaneous",
       "ministerInCalendar": {
         "@value": "Minister in Calendar",
         "desc": "Adds a current minister next to the mayor in the calendar."
+      },
+      "anvilHelper": {
+        "@value": "Anvil helper",
+        "desc": "Highlights books that have the same enchantment as the ones in the anvil."
+      },
+      "previousServer": {
+        "@value": "Previous Server",
+        "desc": "Sends a chat message when you join a server you were previously in."
+      },
+      "previousServerTime": {
+        "@value": "Previous Server Time",
+        "desc": "The time a server is cached and shows up as previously joined."
+      },
+      "hideLightning": {
+        "@value": "Hide Lightning",
+        "desc": "Hides lightning bolts and sky flash effect."
+      },
+      "showHiddenPetCandy": {
+        "@value": "Show Hidden Pet Candy",
+        "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
+      },
+      "transparentArmor": {
+        "@value": "Transparent Armour",
+        "desc": [
+          "Settings to change the appearance of armours on either yourself or others.",
+          {
+            "@id": "transparency"
+          },
+          "<italic>Does not apply to npcs.</italic>"
+        ],
+        "self": {
+          "@value": "Self",
+          "desc": "Only applies to your armour."
+        },
+        "others": {
+          "@value": "Others",
+          "desc": "Only applies to other players."
+        }
+      }
+    },
+    "fishing": {
+      "@value": "Fishing",
+      "trophy_numbers": {
+        "@value": "Trophy Numbers",
+        "desc": "Displays the amount of trophy fishes you caught upon catching one."
+      },
+      "hook_text_scale": {
+        "@value": "Hook Text Scale",
+        "desc": "Changes the scale of the text above your fishing hook/bobber."
+      },
+      "lava_replacement": {
+        "@value": "Lava Replacement",
+        "desc": "Replaces the lava texture with the water texture while in the Crimson Isle."
+      },
+      "bobber_fix": {
+        "@value": "Bobber Fix",
+        "desc": "Fixes bobbers rubberbanding when fishing."
+      },
+      "hotspot": {
+        "@value": "Hotspot Highlight",
+        "desc": "All settings for the hotspot highlight.",
+        "circle_surface": {
+          "@value": "Surface",
+          "desc": "Render a \"solid\" circle instead of the particle outline."
+        },
+        "surface_transparency": {
+          "@value": "Surface Transparency",
+          "desc": [
+            "Changes the transparency of the surface.",
+            {
+              "@id": "transparency"
+            }
+          ]
+        },
+        "circle_outline": {
+          "@value": "Outline",
+          "desc": "Render a \"solid\" outline instead of the particle outline."
+        },
+        "outline_transparency": {
+          "@value": "Surface Transparency",
+          "desc": [
+            "Changes the transparency of the outline.",
+            {
+              "@id": "transparency"
+            }
+          ]
+        }
       }
     }
+  },
+  "garden": {
+    "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>"
+  },
+  "inventory": {
+    "sack_value": "<dark_gray>Sack Value</dark_gray>"
+  },
+  "item_search": {
+    "keybind": "Item Search"
+  },
+  "item_value": {
+    "keybind": "Item Value"
   }
 }

@@ -32,13 +32,13 @@ object MineshaftAnnouncement {
     @Subscription
     fun onShaftEnter(event: MineshaftEnteredEvent) {
         foundShaftType = true
-        McClient.tell { trySend() }
+        McClient.runNextTick { trySend() }
     }
 
     @Subscription
     fun onCorpseSpawn(event: CorpseSpawnEvent) {
         foundCorpse = true
-        McClient.tell { trySend() }
+        McClient.runNextTick { trySend() }
     }
 
     private fun trySend() {

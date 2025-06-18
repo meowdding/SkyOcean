@@ -1,7 +1,9 @@
 package me.owdding.skyocean.config.features.mining
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.skyocean.config.ConfigCategory
 
+@ConfigCategory
 object MiningConfig : CategoryKt("mining") {
     init {
         category(MineshaftConfig)
@@ -32,5 +34,9 @@ object MiningConfig : CategoryKt("mining") {
 
     var chAreaWalls by boolean(false) {
         translation = "skyocean.config.mining.ch.area_walls"
+    }
+
+    var puzzlerSolver by boolean(true) {
+        translation = "skyocean.config.mining.puzzler"
     }
 }

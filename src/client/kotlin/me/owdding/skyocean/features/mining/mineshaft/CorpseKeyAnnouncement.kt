@@ -10,8 +10,8 @@ import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.location.mineshaft.CorpseSpawnEvent
-import tech.thatgravyboat.skyblockapi.api.profile.sacks.SacksAPI
-import tech.thatgravyboat.skyblockapi.api.profile.storage.StorageAPI
+import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
+import tech.thatgravyboat.skyblockapi.api.profile.items.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Module

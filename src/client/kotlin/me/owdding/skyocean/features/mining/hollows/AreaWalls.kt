@@ -4,15 +4,14 @@ import com.teamresourceful.resourcefullib.common.color.Color
 import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
-import me.owdding.skyocean.events.RenderWorldEvent
-import me.owdding.skyocean.utils.Utils.atCamera
 import me.owdding.skyocean.utils.boundingboxes.CrystalHollowsBB
-import me.owdding.skyocean.utils.rendering.RenderUtils
+import me.owdding.skyocean.utils.rendering.RenderUtils.renderPlane
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.levelgen.structure.BoundingBox
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
+import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 
@@ -35,73 +34,72 @@ object AreaWalls {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onRender(event: RenderWorldEvent) {
+    private fun RenderWorldEvent.AfterTranslucent.onRender() {
         if (!MiningConfig.chAreaWalls) return
 
-        event.pose.atCamera {
-            val blockPosition = event.camera.blockPosition
+        atCamera {
+            val blockPosition = camera.blockPosition
             when (blockPosition) {
-                in Area.NUCLEUS -> renderNucleus(event)
-                in Area.MAGMA_FIELDS -> renderMagmaFields(event)
+                in Area.NUCLEUS -> renderNucleus()
+                in Area.MAGMA_FIELDS -> renderMagmaFields()
                 in Area.MITHRIL -> {
-                    renderOutsideShape(event, Area.NUCLEUS, Direction.NORTH)
-                    renderOutsideShape(event, Area.NUCLEUS, Direction.EAST)
-                    renderOutsideShape(event, Area.PRECURSOR, Direction.NORTH)
-                    renderOutsideShape(event, Area.JUNGLE, Direction.EAST)
-                    renderMagmaFieldsTop(event)
+                    renderOutsideShape(Area.NUCLEUS, Direction.NORTH)
+                    renderOutsideShape(Area.NUCLEUS, Direction.EAST)
+                    renderOutsideShape(Area.PRECURSOR, Direction.NORTH)
+                    renderOutsideShape(Area.JUNGLE, Direction.EAST)
+                    renderMagmaFieldsTop()
                 }
 
                 in Area.GOBLIN -> {
-                    renderOutsideShape(event, Area.NUCLEUS, Direction.WEST)
-                    renderOutsideShape(event, Area.NUCLEUS, Direction.SOUTH)
-                    renderOutsideShape(event, Area.PRECURSOR, Direction.WEST)
-                    renderOutsideShape(event, Area.JUNGLE, Direction.SOUTH)
-                    renderMagmaFieldsTop(event)
+                    renderOutsideShape(Area.NUCLEUS, Direction.WEST)
+                    renderOutsideShape(Area.NUCLEUS, Direction.SOUTH)
+                    renderOutsideShape(Area.PRECURSOR, Direction.WEST)
+                    renderOutsideShape(Area.JUNGLE, Direction.SOUTH)
+                    renderMagmaFieldsTop()
                 }
 
                 in Area.PRECURSOR -> {
-                    renderOutsideShape(event, Area.NUCLEUS, Direction.SOUTH)
-                    renderOutsideShape(event, Area.NUCLEUS, Direction.EAST)
-                    renderOutsideShape(event, Area.MITHRIL, Direction.SOUTH)
-                    renderOutsideShape(event, Area.GOBLIN, Direction.EAST)
-                    renderMagmaFieldsTop(event)
+                    renderOutsideShape(Area.NUCLEUS, Direction.SOUTH)
+                    renderOutsideShape(Area.NUCLEUS, Direction.EAST)
+                    renderOutsideShape(Area.MITHRIL, Direction.SOUTH)
+                    renderOutsideShape(Area.GOBLIN, Direction.EAST)
+                    renderMagmaFieldsTop()
                 }
 
                 in Area.JUNGLE -> {
-                    renderOutsideShape(event, Area.NUCLEUS, Direction.WEST)
-                    renderOutsideShape(event, Area.NUCLEUS, Direction.NORTH)
-                    renderOutsideShape(event, Area.MITHRIL, Direction.WEST)
-                    renderOutsideShape(event, Area.GOBLIN, Direction.NORTH)
-                    renderMagmaFieldsTop(event)
+                    renderOutsideShape(Area.NUCLEUS, Direction.WEST)
+                    renderOutsideShape(Area.NUCLEUS, Direction.NORTH)
+                    renderOutsideShape(Area.MITHRIL, Direction.WEST)
+                    renderOutsideShape(Area.GOBLIN, Direction.NORTH)
+                    renderMagmaFieldsTop()
                 }
             }
         }
     }
 
-    private fun renderOutsideShape(event: RenderWorldEvent, area: Area, direction: Direction) = renderOutsideBox(event, area, skipIf = { it != direction })
+    private fun RenderWorldEvent.renderOutsideShape(area: Area, direction: Direction) = renderOutsideBox(area, skipIf = { it != direction })
 
-    private fun renderMagmaFields(event: RenderWorldEvent) {
-        event.pose.translated(0, -0.01, 0) {
-            renderOutsideShape(event, Area.NUCLEUS, Direction.DOWN)
+    private fun RenderWorldEvent.renderMagmaFields() {
+        poseStack.translated(0, -0.01, 0) {
+            renderOutsideShape(Area.NUCLEUS, Direction.DOWN)
         }
-        renderOutsideShape(event, Area.MITHRIL, Direction.DOWN)
-        renderOutsideShape(event, Area.PRECURSOR, Direction.DOWN)
-        renderOutsideShape(event, Area.GOBLIN, Direction.DOWN)
-        renderOutsideShape(event, Area.JUNGLE, Direction.DOWN)
+        renderOutsideShape(Area.MITHRIL, Direction.DOWN)
+        renderOutsideShape(Area.PRECURSOR, Direction.DOWN)
+        renderOutsideShape(Area.GOBLIN, Direction.DOWN)
+        renderOutsideShape(Area.JUNGLE, Direction.DOWN)
     }
 
-    private fun renderMagmaFieldsTop(event: RenderWorldEvent) {
+    private fun RenderWorldEvent.renderMagmaFieldsTop() {
         val (color, box) = Area.MAGMA_FIELDS
-        RenderUtils.renderPlane(event, Direction.UP, box.minX(), box.minZ(), box.maxX(), box.maxZ(), box.maxY() + 1, color.value)
+        renderPlane(Direction.UP, box.minX(), box.minZ(), box.maxX(), box.maxZ(), box.maxY() + 1, color.value)
     }
 
-    private fun renderNucleus(event: RenderWorldEvent) {
-        renderInsideBox(event, Area.NUCLEUS, listOf(Direction.UP))
-        renderMagmaFieldsTop(event)
+    private fun RenderWorldEvent.renderNucleus() {
+        renderInsideBox(Area.NUCLEUS, listOf(Direction.UP))
+        renderMagmaFieldsTop()
     }
 
-    private fun renderInsideBox(
-        event: RenderWorldEvent,
+    private fun RenderWorldEvent.renderInsideBox(
         area: Area,
         sides: List<Direction> = listOf(),
         skipIf: (Direction) -> Boolean = { sides.contains(it) },
@@ -109,27 +107,26 @@ object AreaWalls {
         val (color, box) = area
         val colorValue = color.value
         if (!skipIf(Direction.DOWN)) {
-            RenderUtils.renderPlane(event, Direction.DOWN, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.maxY() + 1, colorValue)
+            renderPlane(Direction.DOWN, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.maxY() + 1, colorValue)
         }
         if (!skipIf(Direction.UP)) {
-            RenderUtils.renderPlane(event, Direction.UP, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.minY(), colorValue)
+            renderPlane(Direction.UP, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.minY(), colorValue)
         }
         if (!skipIf(Direction.NORTH)) {
-            RenderUtils.renderPlane(event, Direction.NORTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.maxZ() + 1, colorValue)
+            renderPlane(Direction.NORTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.maxZ() + 1, colorValue)
         }
         if (!skipIf(Direction.SOUTH)) {
-            RenderUtils.renderPlane(event, Direction.SOUTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.minZ(), colorValue)
+            renderPlane(Direction.SOUTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.minZ(), colorValue)
         }
         if (!skipIf(Direction.EAST)) {
-            RenderUtils.renderPlane(event, Direction.EAST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.minX(), colorValue)
+            renderPlane(Direction.EAST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.minX(), colorValue)
         }
         if (!skipIf(Direction.WEST)) {
-            RenderUtils.renderPlane(event, Direction.WEST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.maxX() + 1, colorValue)
+            renderPlane(Direction.WEST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.maxX() + 1, colorValue)
         }
     }
 
-    private fun renderOutsideBox(
-        event: RenderWorldEvent,
+    private fun RenderWorldEvent.renderOutsideBox(
         area: Area,
         sides: List<Direction> = listOf(),
         skipIf: (Direction) -> Boolean = { sides.contains(it) },
@@ -137,22 +134,22 @@ object AreaWalls {
         val (color, box) = area
         val colorValue = color.value
         if (!skipIf(Direction.DOWN)) {
-            RenderUtils.renderPlane(event, Direction.DOWN, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.minY(), colorValue)
+            renderPlane(Direction.DOWN, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.minY(), colorValue)
         }
         if (!skipIf(Direction.UP)) {
-            RenderUtils.renderPlane(event, Direction.UP, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.maxY() + 1, colorValue)
+            renderPlane(Direction.UP, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.maxY() + 1, colorValue)
         }
         if (!skipIf(Direction.NORTH)) {
-            RenderUtils.renderPlane(event, Direction.NORTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.minZ(), colorValue)
+            renderPlane(Direction.NORTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.minZ(), colorValue)
         }
         if (!skipIf(Direction.SOUTH)) {
-            RenderUtils.renderPlane(event, Direction.SOUTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.maxZ() + 1, colorValue)
+            renderPlane(Direction.SOUTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.maxZ() + 1, colorValue)
         }
         if (!skipIf(Direction.EAST)) {
-            RenderUtils.renderPlane(event, Direction.EAST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.maxX() + 1, colorValue)
+            renderPlane(Direction.EAST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.maxX() + 1, colorValue)
         }
         if (!skipIf(Direction.WEST)) {
-            RenderUtils.renderPlane(event, Direction.WEST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.minX(), colorValue)
+            renderPlane(Direction.WEST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.minX(), colorValue)
         }
     }
 }
