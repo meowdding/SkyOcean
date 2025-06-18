@@ -40,27 +40,27 @@ internal class ProfileStorage<T : Any>(
             currentProfile = event.name
         }
 
-        @Subscription
+        @Subscription(TickEvent::class)
         @TimePassed("30s")
-        private fun TickEvent.tick() {
+        fun onTick() {
             val toSave = requiresSave.toTypedArray()
             requiresSave.clear()
-            CompletableFuture.supplyAsync {
+            CompletableFuture.runAsync {
                 toSave.forEach {
                     it.saveToSystem()
                 }
             }
         }
 
-        val defaultPath: Path = FabricLoader.getInstance().configDir.resolve("skyocean/data")
+        inline val defaultPath: Path get() = DataStorage.defaultPath
         private fun hasProfile() = currentProfile != null
     }
 
     private fun isCurrentlyActive() = lastProfile != null && hasProfile() && currentProfile == lastProfile
 
-    lateinit var data: T
-    lateinit var lastPath: Path
-    var lastProfile: String? = null
+    private lateinit var data: T
+    private lateinit var lastPath: Path
+    private var lastProfile: String? = null
 
     fun get(): T? {
         if (isCurrentlyActive()) {

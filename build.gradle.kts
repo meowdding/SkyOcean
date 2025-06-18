@@ -78,6 +78,12 @@ tasks.getByName("sourcesJar").apply {
     dependsOn(tasks.getByName("runDatagen"))
 }
 
+tasks.getByName<ProcessResources>("processClientResources") {
+    with(copySpec {
+        from("src/client/lang").include("*.json").into("assets/skyocean/lang")
+    })
+}
+
 repositories {
     maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
     maven(url = "https://repo.hypixel.net/repository/Hypixel/")
