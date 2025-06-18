@@ -93,14 +93,6 @@ class InvButton(
             minecraft("container/creative_inventory/tab_top_selected_6"),
             minecraft("container/creative_inventory/tab_top_selected_7"),
         )
-        val SELECTED_BOTTOM_TABS = arrayOf<ResourceLocation>(
-            minecraft("container/creative_inventory/tab_bottom_selected_1"),
-            minecraft("container/creative_inventory/tab_bottom_selected_2"),
-            minecraft("container/creative_inventory/tab_bottom_selected_3"),
-            minecraft("container/creative_inventory/tab_bottom_selected_4"),
-            minecraft("container/creative_inventory/tab_bottom_selected_5"),
-            minecraft("container/creative_inventory/tab_bottom_selected_6"),
-            minecraft("container/creative_inventory/tab_bottom_selected_7"),
-        )
+        val SELECTED_BOTTOM_TABS = Array(7) { minecraft("container/creative_inventory/tab_bottom_selected_${it + 1}")}
     }
 }
