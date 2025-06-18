@@ -59,9 +59,9 @@ class InvButton(
             this.setPosition(baseX, baseY)
             this.withShape { x, y, width, height ->
                 if (bottom) {
-                    return@withShape x in 0..<width && y in 4..<height
+                    x in 0.0..< width.toDouble() && y in 4.0..< height.toDouble()
                 } else {
-                    return@withShape x in 0..<width && y in 0..<(height-4)
+                    x in 0.0..< width.toDouble() && y in 0.0..< (height - 4.0)
                 }
             }
         }
