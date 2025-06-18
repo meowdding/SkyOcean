@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.misc.buttons
+package me.owdding.skyocean.features.inventory.buttons
 
 import com.teamresourceful.resourcefullib.common.color.Color
 import earth.terrarium.olympus.client.components.Widgets
@@ -41,7 +41,7 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
     override fun renderSlots(guiGraphics: GuiGraphics) {}
     override fun onRecipeBookButtonClick() {}
     // Crazy workaround, why the fuck is the whole inventory tied to the recipe book holy shit
-    override fun getRecipeBookButtonPosition(): ScreenPosition? = ScreenPosition(1000, 1000)
+    override fun getRecipeBookButtonPosition(): ScreenPosition = ScreenPosition(1000, 1000)
     override fun showsActiveEffects(): Boolean = false
 
     override fun renderTooltip(guiGraphics: GuiGraphics, x: Int, y: Int) {}

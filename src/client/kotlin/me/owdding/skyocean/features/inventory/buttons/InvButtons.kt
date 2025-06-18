@@ -1,10 +1,11 @@
-package me.owdding.skyocean.features.misc.buttons
+package me.owdding.skyocean.features.inventory.buttons
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.fabricmc.fabric.api.client.screen.v1.Screens
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -24,7 +25,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 object InvButtons {
     @Subscription
     fun onScreen(event: ScreenInitializedEvent) {
-        if (condition(event.screen)) return
+        if (showButtons(event.screen)) return
         val screen = event.screen as AbstractContainerScreen<*>
 
         val buttonOffset = 8
@@ -61,7 +62,7 @@ object InvButtons {
 
     @Subscription
     fun onScreenBackground(event: RenderScreenBackgroundEvent) {
-        if (condition(event.screen)) return
+        if (showButtons(event.screen)) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && !it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
@@ -71,7 +72,7 @@ object InvButtons {
 
     @Subscription
     fun onScreenForeground(event: RenderScreenForegroundEvent) {
-        if (condition(event.screen)) return
+        if (showButtons(event.screen)) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
@@ -85,12 +86,12 @@ object InvButtons {
             if (InventoryConfig.inventoryButtons) {
                 McClient.setScreenAsync(ButtonConfigScreen(null))
             } else {
-                ChatUtils.chat(Text.of("First Enable Inventory Buttons in the Config").withColor(0xf38ba8))
+                Text.of("First Enable Inventory Buttons in the Config").withColor(0xf38ba8).sendWithPrefix()
             }
         }
     }
 
-    private fun condition(screen: Screen): Boolean {
+    private fun showButtons(screen: Screen): Boolean {
         return screen !is AbstractContainerScreen<*> ||
             !InventoryConfig.inventoryButtons ||
             (!LocationAPI.isOnSkyBlock && screen !is ButtonConfigScreen)

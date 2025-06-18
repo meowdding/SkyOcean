@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.misc.buttons
+package me.owdding.skyocean.features.inventory.buttons
 
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext
@@ -16,7 +16,17 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import kotlin.jvm.optionals.getOrNull
 
-class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean, val screen: Screen, val index: Int, val baseX: Int, val baseY: Int, val baseWidth: Int, val baseHeight: Int) : Button() {
+class InvButton(
+    val button: ButtonConfig,
+    val rowIndex: Int,
+    val bottom: Boolean,
+    val screen: Screen,
+    val index: Int,
+    val baseX: Int,
+    val baseY: Int,
+    val baseWidth: Int,
+    val baseHeight: Int
+) : Button() {
     var highlight = false
     fun renderButtons(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
         graphics.pushPop {
@@ -33,7 +43,8 @@ class InvButton(val button: ButtonConfig, val rowIndex: Int, val bottom: Boolean
                 baseWidth / 2 - 8 + this@InvButton.y
             }
             val stack = if (button.item.contains(":")) {
-                BuiltInRegistries.ITEM.get(ResourceLocation.bySeparator(button.item, ':'))?.getOrNull()?.value()?.defaultInstance ?: Items.BARRIER.defaultInstance
+                BuiltInRegistries.ITEM.get(
+                    ResourceLocation.bySeparator(button.item, ':'))?.getOrNull()?.value()?.defaultInstance ?: Items.BARRIER.defaultInstance
             } else {
                 RepoItemsAPI.getItem(button.item)
             }
