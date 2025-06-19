@@ -32,14 +32,15 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
         SkyBlockAPI.eventBus.register<ContainerInitializedEvent>(priority = Subscription.LOW) { onInvChange(it) }
     }
 
-    abstract fun ContainerInitializedEvent.getLayout(): Layout?
+    protected abstract fun ContainerInitializedEvent.getLayout(): Layout?
 
     private fun onInvChange(event: ContainerInitializedEvent) {
         if (!enabled) return
         if (!regex.matches(event.screen.title.stripped)) return
         val screen = event.screen
 
-        val widget = event.getLayout()?.let { BackgroundWidget(SkyOcean.id("blank"), it, 5).apply { this.setPosition(screen.right + 5, screen.top) } } ?: return
+        val layout = event.getLayout() ?: return
+        val widget = BackgroundWidget(SkyOcean.id("blank"), layout, 5).apply { this.setPosition(screen.right + 5, screen.top) }
         screen.addWidget(widget)
     }
 

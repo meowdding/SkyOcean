@@ -32,6 +32,7 @@ object SackValue : InventorySideGui(".* Sack") {
     override val enabled get() = SackValueConfig.enabled
 
     override fun ContainerInitializedEvent.getLayout(): Layout? {
+        // todo: empa museum api only gui slots
         val idsInInventory = screen.menu.slots.filter { it.container !is Inventory }.mapNotNullTo(mutableSetOf()) { it.item.getSkyBlockId() }
 
         val ids = when (title) {

@@ -17,7 +17,6 @@ import tech.thatgravyboat.skyblockapi.api.area.farming.garden.pests.Spray
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -26,7 +25,7 @@ object PestBaitType : InventorySideGui("(?:Pest|Mouse) Trap") {
 
     override val enabled: Boolean get() = GardenConfig.pestBaitType && SkyBlockIsland.GARDEN.inIsland()
 
-    override fun ContainerInitializedEvent.getLayout(): Layout? = LayoutFactory.vertical {
+    override fun ContainerInitializedEvent.getLayout(): Layout = LayoutFactory.vertical {
         horizontal {
             string(ChatUtils.ICON_SPACE_COMPONENT)
             string(-"garden.pest_bait_type")
@@ -37,7 +36,7 @@ object PestBaitType : InventorySideGui("(?:Pest|Mouse) Trap") {
 
             horizontal(alignment = MIDDLE) {
                 display(Displays.item(spray.itemStack))
-                textDisplay(": ${pests.joinToString(", ") { it.toFormattedName() }}") {
+                textDisplay(": ${pests.joinToString(", ") { it.displayName }}") {
                     color = TextColor.DARK_GRAY
                 }
             }
