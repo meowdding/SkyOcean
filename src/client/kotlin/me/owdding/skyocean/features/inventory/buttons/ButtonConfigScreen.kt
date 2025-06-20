@@ -54,6 +54,11 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
         tooltipWidget.resetCursor()
         if (selectedButtonIndex == -1) {
             this.selectedButtonIndex = selectedButtonIndex
+            textWidget.active = false
+            itemWidget.active = false
+            commandWidget.active = false
+            titleWidget.active = false
+            tooltipWidget.active = false
             itemState.set("")
             commandState.set("")
             titleState.set("")
