@@ -42,8 +42,9 @@ class InvButton(
             } else {
                 baseWidth / 2 - 8 + this@InvButton.y
             }
-            val stack = BuiltInRegistries.ITEM.get(ResourceLocation.bySeparator(button.item.lowercase(), ':'))?.getOrNull()?.value()?.defaultInstance
-                ?: RepoItemsAPI.getItem(button.item.uppercase())
+            val stack = ResourceLocation.tryParse(button.item.lowercase())?.let {
+                BuiltInRegistries.ITEM.get(it)?.getOrNull()?.value()?.defaultInstance
+            } ?: RepoItemsAPI.getItem(button.item.uppercase())
             graphics.renderItem(stack, itemX, itemY)
         }
     }

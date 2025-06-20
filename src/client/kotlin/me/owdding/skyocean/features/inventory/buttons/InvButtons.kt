@@ -26,7 +26,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 object InvButtons {
     @Subscription
     fun onScreen(event: ScreenInitializedEvent) {
-        if (showButtons(event.screen)) return
+        if (shouldShowButtons(event.screen)) return
         val screen = event.screen as AbstractContainerScreen<*>
 
         val buttonOffset = 8
@@ -63,7 +63,7 @@ object InvButtons {
 
     @Subscription
     fun onScreenBackground(event: RenderScreenBackgroundEvent) {
-        if (showButtons(event.screen)) return
+        if (shouldShowButtons(event.screen)) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && !it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
@@ -73,7 +73,7 @@ object InvButtons {
 
     @Subscription
     fun onScreenForeground(event: RenderScreenForegroundEvent) {
-        if (showButtons(event.screen)) return
+        if (shouldShowButtons(event.screen)) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
@@ -92,7 +92,7 @@ object InvButtons {
         }
     }
 
-    private fun showButtons(screen: Screen): Boolean {
+    private fun shouldShowButtons(screen: Screen): Boolean {
         return screen !is AbstractContainerScreen<*> ||
             !InventoryConfig.inventoryButtons ||
             (!LocationAPI.isOnSkyBlock && screen !is ButtonConfigScreen)

@@ -58,7 +58,9 @@ class ButtonConfig(itemName: String, command: String, @Language("RegExp") title:
     var item by string(itemName)
     var command by string(command)
     var title by observable(string(title)) { _, new ->
-        this.regex = Regex(new)
+        runCatching {
+            this.regex = Regex(new)
+        }
     }
     var tooltip by string(tooltip)
 }
