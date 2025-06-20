@@ -9,6 +9,7 @@ import me.owdding.lib.layouts.setPos
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.config.features.inventory.ButtonConfig
 import me.owdding.skyocean.config.features.inventory.Buttons
+import me.owdding.skyocean.utils.Utils.resetCursor
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.navigation.ScreenPosition
@@ -47,14 +48,10 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
     override fun renderTooltip(guiGraphics: GuiGraphics, x: Int, y: Int) {}
 
     fun refresh(selectedButtonIndex: Int) {
-        itemWidget.setCursorPosition(0)
-        commandWidget.setCursorPosition(0)
-        titleWidget.setCursorPosition(0)
-        tooltipWidget.setCursorPosition(0)
-        itemWidget.setHighlightPos(0)
-        commandWidget.setHighlightPos(0)
-        titleWidget.setHighlightPos(0)
-        tooltipWidget.setHighlightPos(0)
+        itemWidget.resetCursor()
+        commandWidget.resetCursor()
+        titleWidget.resetCursor()
+        tooltipWidget.resetCursor()
         if (selectedButtonIndex == -1) {
             this.selectedButtonIndex = selectedButtonIndex
             itemState.set("")

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.serialization.Codec
+import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.repoPatcher
@@ -115,4 +116,9 @@ object Utils {
     }
 
     val ItemLike.id get() = BuiltInRegistries.ITEM.getKey(this.asItem())
+
+    fun TextBox.resetCursor() {
+        this.setCursorPosition(0)
+        this.setHighlightPos(0)
+    }
 }
