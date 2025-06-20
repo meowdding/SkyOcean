@@ -10,7 +10,6 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -25,7 +24,7 @@ class InvButton(
     val baseX: Int,
     val baseY: Int,
     val baseWidth: Int,
-    val baseHeight: Int
+    val baseHeight: Int,
 ) : Button() {
     var highlight = false
     fun renderButtons(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -38,16 +37,16 @@ class InvButton(
             renderPrevious(graphics, mouseX, mouseY, partialTicks, sprite)
             val itemX = baseWidth / 2 - 8 + this@InvButton.x
             val itemY = if (bottom) {
-                baseHeight  + this@InvButton.y - (baseWidth / 2) - 8
+                baseHeight + this@InvButton.y - (baseWidth / 2) - 8
             } else {
                 baseWidth / 2 - 8 + this@InvButton.y
             }
             val stack = BuiltInRegistries.ITEM.get(ResourceLocation.bySeparator(button.item.lowercase(), ':'))?.getOrNull()?.value()?.defaultInstance
                 ?: RepoItemsAPI.getItem(button.item.uppercase())
-                ?: Items.BARRIER.defaultInstance
             graphics.renderItem(stack, itemX, itemY)
         }
     }
+
     override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         this.isHovered = graphics.containsPointInScissor(mouseX, mouseY) && isMouseOver(mouseX.toDouble(), mouseY.toDouble())
         this.highlight = screen.title.stripped.trim().matches(button.regex) || (screen is ButtonConfigScreen && screen.selectedButtonIndex == this.index)
@@ -59,9 +58,9 @@ class InvButton(
             this.setPosition(baseX, baseY)
             this.withShape { x, y, width, height ->
                 if (bottom) {
-                    x in 0.0..< width.toDouble() && y in 4.0..< height.toDouble()
+                    x in 0.0..<width.toDouble() && y in 4.0..<height.toDouble()
                 } else {
-                    x in 0.0..< width.toDouble() && y in 0.0..< (height - 4.0)
+                    x in 0.0..<width.toDouble() && y in 0.0..<(height - 4.0)
                 }
             }
         }
@@ -81,7 +80,7 @@ class InvButton(
     }
 
     companion object {
-        val SELECTED_TOP_TABS = Array(7) { minecraft("container/creative_inventory/tab_top_selected_${it + 1}")}
-        val SELECTED_BOTTOM_TABS = Array(7) { minecraft("container/creative_inventory/tab_bottom_selected_${it + 1}")}
+        val SELECTED_TOP_TABS = Array(7) { minecraft("container/creative_inventory/tab_top_selected_${it + 1}") }
+        val SELECTED_BOTTOM_TABS = Array(7) { minecraft("container/creative_inventory/tab_bottom_selected_${it + 1}") }
     }
 }

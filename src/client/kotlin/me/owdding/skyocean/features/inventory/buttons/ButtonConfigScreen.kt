@@ -1,15 +1,15 @@
 package me.owdding.skyocean.features.inventory.buttons
 
-import com.teamresourceful.resourcefullib.common.color.Color
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.string.TextWidget
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import earth.terrarium.olympus.client.layouts.Layouts
 import earth.terrarium.olympus.client.utils.State
 import me.owdding.lib.layouts.setPos
-import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.config.features.inventory.ButtonConfig
 import me.owdding.skyocean.config.features.inventory.Buttons
+import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.navigation.ScreenPosition
 import net.minecraft.client.gui.screens.Screen
@@ -20,14 +20,13 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.left
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer.self) {
 
     var selectedButtonIndex = -1
     private var selectedButton: ButtonConfig? = null
 
-    val textWidget: TextWidget = Widgets.text(Text.translatable("skyocean.inventory.buttons.configuration")).withColor(Color.DEFAULT)
+    val textWidget: TextWidget = Widgets.text(+"skyocean.inventory.buttons.configuration")
     val itemState: State<String> = State.of("")
     val itemWidget: TextBox = Widgets.textInput(itemState)
     val commandState: State<String> = State.of("")
@@ -48,6 +47,14 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
     override fun renderTooltip(guiGraphics: GuiGraphics, x: Int, y: Int) {}
 
     fun refresh(selectedButtonIndex: Int) {
+        itemWidget.setCursorPosition(0)
+        commandWidget.setCursorPosition(0)
+        titleWidget.setCursorPosition(0)
+        tooltipWidget.setCursorPosition(0)
+        itemWidget.setHighlightPos(0)
+        commandWidget.setHighlightPos(0)
+        titleWidget.setHighlightPos(0)
+        tooltipWidget.setHighlightPos(0)
         if (selectedButtonIndex == -1) {
             this.selectedButtonIndex = selectedButtonIndex
             itemState.set("")
@@ -73,7 +80,11 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
 
     override fun onClose() {
         if (itemWidget.isHovered || commandWidget.isHovered || titleWidget.isHovered || tooltipWidget.isHovered) return
-        SkyOcean.config.save()
+        if (selectedButtonIndex != -1) {
+            refresh(-1)
+            return
+        }
+        Config.save()
         McClient.setScreen(previousScreen)
     }
 
@@ -88,34 +99,34 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
         textWidget.active = false
 
         itemWidget.withSize(width, height)
-        itemWidget.withPlaceholder(Text.translatable("skyocean.inventory.buttons.item").string)
+        itemWidget.withPlaceholder((+"skyocean.inventory.buttons.item").string)
         itemWidget.active = false
         itemWidget.withEnterCallback {
             selectedButton?.item = it
         }
 
         commandWidget.withSize(width, height)
-        commandWidget.withPlaceholder(Text.translatable("skyocean.inventory.buttons.command").string)
+        commandWidget.withPlaceholder((+"skyocean.inventory.buttons.command").string)
         commandWidget.active = false
         commandWidget.withEnterCallback {
             selectedButton?.command = it
         }
 
         titleWidget.withSize(width, height)
-        titleWidget.withPlaceholder(Text.translatable("skyocean.inventory.buttons.screen_title").string)
+        titleWidget.withPlaceholder((+"skyocean.inventory.buttons.screen_title").string)
         titleWidget.active = false
         titleWidget.withEnterCallback {
             selectedButton?.title = it
         }
 
         tooltipWidget.withSize(width, height)
-        tooltipWidget.withPlaceholder(Text.translatable("skyocean.inventory.buttons.tooltip").string)
+        tooltipWidget.withPlaceholder((+"skyocean.inventory.buttons.tooltip").string)
         tooltipWidget.active = false
         tooltipWidget.withEnterCallback {
             selectedButton?.tooltip = it
         }
 
-        val guide = Widgets.text(Text.translatable("skyocean.inventory.buttons.select_button")).withColor(Color(0xcff8ff))
+        val guide = Widgets.text((+"skyocean.inventory.buttons.select_button"))
         guide.setSize(width, height)
 
         column.withChildren(textWidget, itemWidget, commandWidget, titleWidget, tooltipWidget, guide)

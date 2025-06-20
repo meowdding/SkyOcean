@@ -1,11 +1,12 @@
 package me.owdding.skyocean.features.inventory.buttons
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.config.features.inventory.Buttons
+import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
-import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.OceanColors
+import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.fabricmc.fabric.api.client.screen.v1.Screens
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -54,7 +55,7 @@ object InvButtons {
                             }
                         }
                         .withTooltip(Text.of(button.tooltip.takeIf { it.isNotEmpty() } ?: button.command))
-                        .withPosition(posX, posY)
+                        .withPosition(posX, posY),
                 )
             }
         }
@@ -86,7 +87,7 @@ object InvButtons {
             if (InventoryConfig.inventoryButtons) {
                 McClient.setScreenAsync(ButtonConfigScreen(null))
             } else {
-                Text.of("Enable inventory buttons in the Config first!").withColor(0xf38ba8).sendWithPrefix()
+                (+"skyocean.inventory.buttons.enable_first").withColor(OceanColors.WARNING).sendWithPrefix()
             }
         }
     }

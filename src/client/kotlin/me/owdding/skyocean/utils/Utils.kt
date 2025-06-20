@@ -10,10 +10,12 @@ import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
@@ -112,4 +114,5 @@ object Utils {
         return loadFromRepo<JsonElement>(file).toDataOrThrow(codec)
     }
 
+    val ItemLike.id get() = BuiltInRegistries.ITEM.getKey(this.asItem())
 }

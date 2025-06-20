@@ -157,7 +157,7 @@
           "@value": "Edit Buttons",
           "desc": [
             "Configure Buttons in a separate UI.",
-            "<italic>Also accessible through /skyocean buttons</italic>"
+            "<italic>Also accessible through <gray>/skyocean buttons</gray></italic>"
           ]
         }
       }
@@ -316,12 +316,13 @@
   "inventory": {
     "sack_value": "<dark_gray>Sack Value</dark_gray>",
     "buttons": {
-      "configuration": "Button Configuration",
+      "configuration": "<white>Button Configuration",
       "item": "Item ID / Skyblock ID",
       "command": "Command",
       "screen_title": "Screen Title",
       "tooltip": "Button Tooltip",
-      "select_button": "Select Button to Edit"
+      "select_button": "<color #cff8ff>Select Button to Edit",
+      "enable_first": "Enable inventory buttons in the Config first!"
     }
   },
   "item_search": {
