@@ -27,6 +27,7 @@ class InvButton(
     val baseHeight: Int,
 ) : Button() {
     var highlight = false
+
     fun renderButtons(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
         graphics.pushPop {
             val sprite = if (bottom) {
@@ -50,6 +51,7 @@ class InvButton(
     override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         this.isHovered = graphics.containsPointInScissor(mouseX, mouseY) && isMouseOver(mouseX.toDouble(), mouseY.toDouble())
         this.highlight = screen.title.stripped.trim().matches(button.regex) || (screen is ButtonConfigScreen && screen.selectedButtonIndex == this.index)
+
         val modifier = if (bottom) 4 else -4
         if (this.isHoveredOrFocused || this.highlight) {
             this.setPosition(baseX, baseY + modifier)

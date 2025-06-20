@@ -12,6 +12,7 @@ import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.utils.Utils.resetCursor
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.navigation.ScreenPosition
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
@@ -52,8 +53,12 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
         commandWidget.resetCursor()
         titleWidget.resetCursor()
         tooltipWidget.resetCursor()
+        this.children().filterIsInstance<AbstractWidget>().forEach {
+            it.isFocused = false
+        }
         if (selectedButtonIndex == -1) {
             this.selectedButtonIndex = selectedButtonIndex
+            this.selectedButton = null
             textWidget.active = false
             itemWidget.active = false
             commandWidget.active = false

@@ -38,7 +38,7 @@ object InvButtons {
                 val yOffset = if (y == 0) {
                     -buttonHeight + buttonOffset
                 } else {
-                    -buttonOffset - 1
+                    -buttonOffset - if (screen is ButtonConfigScreen) 0 else 1
                 }
                 val posY = (y * screen.containerHeight) + screen.top + yOffset
 
