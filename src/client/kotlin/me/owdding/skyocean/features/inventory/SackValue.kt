@@ -5,15 +5,13 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.shorten
-import me.owdding.lib.layouts.BackgroundWidget
-import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.inventory.SackValueConfig
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.helpers.InventorySideGui
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
 import me.owdding.skyocean.utils.Utils.unaryMinus
-import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.world.entity.player.Inventory
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
@@ -33,7 +31,8 @@ object SackValue : InventorySideGui(".* Sack") {
 
     override val enabled get() = SackValueConfig.enabled
 
-    override fun ContainerInitializedEvent.getWidget(): AbstractWidget? {
+    override fun ContainerInitializedEvent.getLayout(): Layout? {
+        // todo: empa museum api only gui slots
         val idsInInventory = screen.menu.slots.filter { it.container !is Inventory }.mapNotNullTo(mutableSetOf()) { it.item.getSkyBlockId() }
 
         val ids = when (title) {
@@ -42,53 +41,49 @@ object SackValue : InventorySideGui(".* Sack") {
             else -> idsInInventory
         }.ifEmpty { return null }
 
-        return BackgroundWidget(
-            SkyOcean.id("blank"),
+        return LayoutFactory.vertical {
+            val sackEntries = SacksAPI.sackItems.filter { it.key in ids }.map {
+                SackEntry(it.key, it.value)
+            }.sortedByDescending { it.price }
+
+            val title = LayoutFactory.horizontal {
+                string(ChatUtils.ICON_SPACE_COMPONENT)
+                string(-"inventory.sack_value")
+                string(" - ")
+                string(-SackValueConfig.priceSource.translationKey)
+            }
+            widget(title)
+
             LayoutFactory.vertical {
-                val sackEntries = SacksAPI.sackItems.filter { it.key in ids }.map {
-                    SackEntry(it.key, it.value)
-                }.sortedByDescending { it.price }
-
-                val title = LayoutFactory.horizontal {
-                    string(ChatUtils.ICON_SPACE_COMPONENT)
-                    string(-"inventory.sack_value")
-                    string(" - ")
-                    string(-SackValueConfig.priceSource.translationKey)
-                }
-                widget(title)
-
-                LayoutFactory.vertical {
-                    sackEntries.forEach { (item, amount, price) ->
-                        horizontal(alignment = MIDDLE) {
-                            display(Displays.item(RepoItemsAPI.getItem(item)))
-                            textDisplay(" - ${amount.shorten()}") {
+                sackEntries.forEach { (item, amount, price) ->
+                    horizontal(alignment = MIDDLE) {
+                        display(Displays.item(RepoItemsAPI.getItem(item)))
+                        textDisplay(" - ${amount.shorten()}") {
+                            color = TextColor.DARK_GRAY
+                            append(" (") {
                                 color = TextColor.DARK_GRAY
-                                append(" (") {
-                                    color = TextColor.DARK_GRAY
-                                }
-                                append(price.shorten()) {
-                                    color = BETTER_GOLD
-                                }
-                                append(")") {
-                                    color = TextColor.DARK_GRAY
-                                }
+                            }
+                            append(price.shorten()) {
+                                color = BETTER_GOLD
+                            }
+                            append(")") {
+                                color = TextColor.DARK_GRAY
                             }
                         }
                     }
-                }.let {
-                    widget(
-                        it.asScrollable(
-                            it.width + 10, screen.containerHeight - 10 - title.height,
-                            {
-                                this.withScroll(oldList?.xScroll ?: 0, oldList?.yScroll ?: 0)
-                                oldList = this
-                            },
-                        ),
-                    )
                 }
-            },
-            padding = 5,
-        )
+            }.let {
+                widget(
+                    it.asScrollable(
+                        it.width + 10, screen.containerHeight - 10 - title.height,
+                        {
+                            this.withScroll(oldList?.xScroll ?: 0, oldList?.yScroll ?: 0)
+                            oldList = this
+                        },
+                    ),
+                )
+            }
+        }
     }
 
     private data class SackEntry(val item: String, val amount: Int) {
