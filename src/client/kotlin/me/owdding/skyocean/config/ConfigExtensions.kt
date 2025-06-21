@@ -2,6 +2,9 @@ package me.owdding.skyocean.config
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import com.teamresourceful.resourcefulconfigkt.api.Entry
+import com.teamresourceful.resourcefulconfigkt.api.builders.ButtonBuilder
+import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
+import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.TypeBuilder
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
@@ -10,4 +13,24 @@ fun <T, B : TypeBuilder> CategoryKt.observable(entry: Entry<T, B>, onChange: () 
 
 fun CategoryKt.requiresChunkRebuild(entry: Entry<Boolean, *>) = observable(entry) {
     McClient.self.levelRenderer?.allChanged()
+}
+
+var ButtonBuilder.translation: String
+    get() = ""
+    set(value) {
+        this.title = value
+        this.description = "$value.desc"
+    }
+
+var SeparatorBuilder.translation: String
+    get() = ""
+    set(value) {
+        this.title = value
+        this.description = "$value.desc"
+    }
+
+fun CategoryBuilder.separator(key: String) {
+    separator {
+        this.translation = key
+    }
 }
