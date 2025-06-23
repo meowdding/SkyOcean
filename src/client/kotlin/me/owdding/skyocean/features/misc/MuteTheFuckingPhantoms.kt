@@ -1,0 +1,30 @@
+package me.owdding.skyocean.features.misc
+
+import me.owdding.ktmodules.Module
+import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.events.SoundPlayedEvent
+import net.minecraft.sounds.SoundEvents
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+
+@Module
+object MuteTheFuckingPhantoms {
+
+    val phantom = listOf(
+        SoundEvents.PHANTOM_AMBIENT,
+        SoundEvents.PHANTOM_BITE,
+        SoundEvents.PHANTOM_DEATH,
+        SoundEvents.PHANTOM_FLAP,
+        SoundEvents.PHANTOM_HURT,
+        SoundEvents.PHANTOM_SWOOP
+    )
+
+    @Subscription
+    fun onSound(event: SoundPlayedEvent) {
+        if (!MiscConfig.muteThePhantoms) return
+
+        if (event.sound in phantom) {
+            event.cancel()
+        }
+    }
+
+}

@@ -9,6 +9,7 @@
   "client": [
     "BlockModelShaperMixin",
     "CapeLayerMixin",
+    "ClientPacketListenerMixin",
     "EntityRendererMixin",
     "EntityRenderStateMixin",
     "FrameLayoutAccessor",

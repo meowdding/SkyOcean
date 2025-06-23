@@ -179,6 +179,10 @@
     },
     "misc": {
       "@value": "Miscellaneous",
+      "muteThePhantoms": {
+        "@value": "Mute the Phantoms",
+        "desc": "Mutes all phantoms making them not induce ear pain."
+      },
       "ministerInCalendar": {
         "@value": "Minister in Calendar",
         "desc": "Adds a current minister next to the mayor in the calendar."
