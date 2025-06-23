@@ -5,6 +5,7 @@ import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.events.SoundPlayedEvent
 import net.minecraft.sounds.SoundEvents
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 
 @Module
 object MuteTheFuckingPhantoms {
@@ -15,10 +16,11 @@ object MuteTheFuckingPhantoms {
         SoundEvents.PHANTOM_DEATH,
         SoundEvents.PHANTOM_FLAP,
         SoundEvents.PHANTOM_HURT,
-        SoundEvents.PHANTOM_SWOOP
+        SoundEvents.PHANTOM_SWOOP,
     )
 
     @Subscription
+    @OnlyOnSkyBlock
     fun onSound(event: SoundPlayedEvent) {
         if (!MiscConfig.muteThePhantoms) return
 

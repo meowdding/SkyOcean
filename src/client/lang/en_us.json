@@ -181,7 +181,8 @@
       "@value": "Miscellaneous",
       "muteThePhantoms": {
         "@value": "Mute the Phantoms",
-        "desc": "Mutes all phantoms making them not induce ear pain."
+        "desc": "Mutes all phantoms making them not induce ear pain.",
+        "warning": "<yellow>SkyOcean mutes the phantom sounds by default, if you wish to change this open the config and search for <gold>Mute the Phantoms</gold>!"
       },
       "ministerInCalendar": {
         "@value": "Minister in Calendar",
