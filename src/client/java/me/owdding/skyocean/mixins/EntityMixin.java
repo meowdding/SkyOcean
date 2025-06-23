@@ -13,18 +13,20 @@ public class EntityMixin implements EntityAccessor {
 
     @Unique private boolean ocean$glowing = false;
     @Unique private int ocean$glowingColor = 0;
+    @Unique
+    private long ocean$glowTime = -1;
     @Unique private float ocean$nameTagScale = 1f;
 
     @Inject(method = "getTeamColor", at = @At("HEAD"), cancellable = true)
     public void getTeamColor(CallbackInfoReturnable<Integer> cir) {
-        if (ocean$glowing) {
+        if (hasCustomGlow()) {
             cir.setReturnValue(ocean$glowingColor);
         }
     }
 
     @Inject(method = "isCurrentlyGlowing", at = @At("HEAD"), cancellable = true)
     public void isGlowing(CallbackInfoReturnable<Boolean> cir) {
-        if (ocean$glowing) {
+        if (hasCustomGlow()) {
             cir.setReturnValue(true);
         }
     }
@@ -47,5 +49,21 @@ public class EntityMixin implements EntityAccessor {
     @Override
     public void ocean$setNameTagScale(float scale) {
         this.ocean$nameTagScale = scale;
+    }
+
+    @Override
+    public void ocean$glowTime(long time) {
+        this.ocean$glowTime = System.currentTimeMillis() + time;
+        this.ocean$glowing = false;
+    }
+
+    @Unique
+    private boolean hasCustomGlow() {
+        if (this.ocean$glowTime > System.currentTimeMillis()) {
+            return true;
+        }
+
+        this.ocean$glowTime = -1;
+        return this.ocean$glowing;
     }
 }
