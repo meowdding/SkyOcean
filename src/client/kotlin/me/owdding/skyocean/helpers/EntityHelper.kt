@@ -4,7 +4,6 @@ import net.minecraft.world.entity.Entity
 import kotlin.time.Duration
 
 internal interface EntityRenderStateAccessor {
-
     fun `ocean$getNameTagScale`(): Float
     fun `ocean$setNameTagScale`(scale: Float)
 }
