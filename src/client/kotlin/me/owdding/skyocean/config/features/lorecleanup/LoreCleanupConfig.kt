@@ -22,8 +22,4 @@ object LoreCleanupConfig : CategoryKt("loreCleanup") {
         this.translation = "skyocean.config.lore_modifiers.dungeon_quality"
     }
 
-    var dungeonQualityHighlight by boolean(false) {
-        this.translation = "skyocean.config.lore_modifiers.dungeon_quality.highlight_perfect"
-    }
-
 }

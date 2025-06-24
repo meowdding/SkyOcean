@@ -295,11 +295,7 @@
       },
       "dungeon_quality": {
         "@value": "Dungeon Quality",
-        "desc": "Adds the dungeon quality to the lore.",
-        "highlight_perfect": {
-          "@value": "Highlight perfect items.",
-          "desc": "Highlights the dungeon quality line for items with a 50/50 score."
-        }
+        "desc": "Adds the dungeon quality to the lore."
       }
     }
   },
