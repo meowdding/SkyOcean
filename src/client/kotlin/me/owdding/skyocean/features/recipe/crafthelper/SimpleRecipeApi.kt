@@ -2,17 +2,16 @@ package me.owdding.skyocean.features.recipe.crafthelper
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.brigadier.suggestion.SuggestionProvider
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.commands.SkyOceanSuggestionProvider
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.recipe.crafthelper.visitors.RecipeVisitor
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.RequireRepoModule
+import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils.getArgument
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
-import net.minecraft.commands.SharedSuggestionProvider
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -35,7 +34,7 @@ val illegalIngredients = listOf(
     "SLIME_BLOCK",
 )
 
-@RequireRepoModule
+@LateInitModule
 object SimpleRecipeApi {
 
     internal val supportedTypes = arrayOf(Recipe.Type.FORGE, Recipe.Type.CRAFTING)
@@ -107,7 +106,7 @@ object SimpleRecipeApi {
                         }
                         rawMaterial.addOrPut(recipeNode.ingredient.serialize(), recipeNode.ingredient)
                     }
-                    rawMaterial.forEach { (key, value) ->
+                    rawMaterial.forEach { (_, value) ->
                         Text.of("${value.serialize()}: ${value.amount.toFormattedString()}").sendWithPrefix()
                     }
                 }
@@ -118,7 +117,7 @@ object SimpleRecipeApi {
     fun <K> MutableMap<K, Ingredient>.addOrPut(key: K, ingredient: Ingredient): Ingredient = merge(key, ingredient) { a, b -> a + b }!!
 }
 
-private object IdSuggestions : SuggestionProvider<FabricClientCommandSource> {
+private object IdSuggestions : SkyOceanSuggestionProvider {
     override fun getSuggestions(
         context: CommandContext<FabricClientCommandSource?>,
         builder: SuggestionsBuilder,
@@ -129,13 +128,5 @@ private object IdSuggestions : SuggestionProvider<FabricClientCommandSource> {
             }
         }
         return builder.buildFuture()
-    }
-
-    private fun suggest(builder: SuggestionsBuilder, name: String) {
-        val validChars = listOf(' ', '_', '-')
-        val filtered = name.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()
-        if (SharedSuggestionProvider.matchesSubStr(builder.remaining.lowercase(), filtered.lowercase())) {
-            builder.suggest(filtered)
-        }
     }
 }

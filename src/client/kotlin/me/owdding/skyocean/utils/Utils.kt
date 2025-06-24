@@ -115,7 +115,7 @@ object Utils {
 
 }
 
-@AutoCollect("RepoModules")
+@AutoCollect("LateInitModules")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
-annotation class RequireRepoModule
+annotation class LateInitModule

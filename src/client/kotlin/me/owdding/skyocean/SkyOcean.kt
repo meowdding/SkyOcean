@@ -22,6 +22,7 @@ import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.RepoVersion
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -51,7 +52,14 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         repoPatcher = patch
     }
 
-    private var postInit = false
+    private var firstLoad = true
+
+    @Subscription(event = [ServerChangeEvent::class])
+    fun onJoinHypixel() {
+        if (!firstLoad) return
+        firstLoad = false
+    }
+
     val configurator = Configurator("skyocean")
 
     override fun onInitializeClient() {

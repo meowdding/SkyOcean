@@ -24,12 +24,6 @@ class RegisterSkyOceanCommandEvent(private val dispatcher: CommandDispatcher<Fab
             .let(dispatcher::register)
     }
 
-    fun registerWithCallback(command: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
-        ClientCommandManager.literal("skyocean")
-            ?.apply { LiteralCommandBuilder(this).then(command) { callback(callback) } }
-            ?.let(dispatcher::register)
-    }
-
     fun register(command: String, builder: LiteralCommandBuilder.() -> Unit) {
         ClientCommandManager.literal("skyocean")
             ?.apply { LiteralCommandBuilder(this).then(command, action = builder) }
