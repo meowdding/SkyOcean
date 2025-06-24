@@ -21,14 +21,14 @@ object DungeonQualityLoreModifier : AbstractLoreModifier() {
 
     override fun appliesTo(item: ItemStack) = item.getData(DataTypes.DUNGEON_QUALITY) != null
 
-    override fun modify(item: ItemStack, list: MutableList<Component>): Boolean {
+    override fun modify(item: ItemStack, list: MutableList<Component>) = withMerger(list) {
         val quality = item.getData(DataTypes.DUNGEON_QUALITY) ?: 0
         val tier = item.getData(DataTypes.DUNGEON_TIER) ?: 0
         val qualityColor = if (quality >= MAX_DUNGEON_QUALITY) TextColor.RED else TextColor.PINK
         val tierColor = if (tier >= MAX_DUNGEON_TIER) TextColor.RED else TextColor.PINK
 
-        list.add(
-            1,
+        copy()
+        add(
             Text.of {
                 this.color = TextColor.GRAY
                 append("Item Quality: ")
@@ -37,8 +37,7 @@ object DungeonQualityLoreModifier : AbstractLoreModifier() {
                 append(MAX_DUNGEON_QUALITY) { this.color = qualityColor }
             },
         )
-        list.add(
-            2,
+        add(
             Text.of {
                 this.color = TextColor.GRAY
                 append("Tier: ")
@@ -47,6 +46,6 @@ object DungeonQualityLoreModifier : AbstractLoreModifier() {
                 append(MAX_DUNGEON_TIER) { this.color = tierColor }
             },
         )
-        return true
+        true
     }
 }
