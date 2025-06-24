@@ -7,6 +7,7 @@ import me.owdding.lib.compat.RemoteConfig
 import me.owdding.lib.utils.DataPatcher
 import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.helpers.fakeblocks.FakeBlocks
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
@@ -58,6 +59,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     fun onJoinHypixel() {
         if (!firstLoad) return
         firstLoad = false
+        SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
     }
 
     val configurator = Configurator("skyocean")
