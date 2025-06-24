@@ -4,12 +4,12 @@
 # Minecraft
 minecraft = "1.21.5"
 loom = "1.10-SNAPSHOT"
-loader = "0.16.10"
 parchmentmc = "2025.04.19@zip"
 
 # Dependencies
-fabric = "0.119.5+1.21.5"
-fabrickotlin = "1.13.0+kotlin.2.1.0"
+fabric-loader = "0.16.10"
+fabric-api = "0.119.5+1.21.5"
+fabric-language-kotlin = "1.13.0+kotlin.2.1.0"
 skyblockapi = "1.0.0-beta.132"
 hypixelapi = "1.0.1+build.1+mc1.21"
 rconfig = "3.5.9"
@@ -36,9 +36,9 @@ modmenu = "14.0.0-rc.2"
 [libraries]
 
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
-loader = { module = "net.fabricmc:fabric-loader", version.ref = "loader" }
-fabric = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric" }
-fabrickotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabrickotlin" }
+loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+fabrickotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
 # Libs with mc version in artifact id

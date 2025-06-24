@@ -29,11 +29,16 @@
   "accessWidener": "skyocean.accesswidener",
   "depends": {
     "fabric": "*",
-    "minecraft": "1.21.5",
-    "skyblock-api": ">=1.0.0-beta.132",
-    "resourcefulconfigkt": ">=3.5.12",
-    "fabric-language-kotlin": ">=1.12.3",
-    "meowdding-lib": ">=1.0.43"
+    "minecraft": "${minecraft}",
+    "fabricloader": ">=${fabricLoader}",
+    "fabric-language-kotlin": ">=${fabricLanguageKotlin}",
+    "resourcefulconfigkt": ">=${resourcefulconfigkt}",
+    "resourcefulconfig": ">=${resourcefulconfig}",
+    "meowdding-lib": ">=${meowddingLib}",
+    "skyblock-api": ">=${skyblockApi}",
+    "resourcefullib": ">=${resourcefullib}",
+    "olympus": ">=${olympus}",
+    "placeholder-api": ">=${placeholderApi}"
   },
   "icon": "assets/skyocean/skyocean.png"
 }
