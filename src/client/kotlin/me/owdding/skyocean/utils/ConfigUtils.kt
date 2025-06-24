@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulconfigkt.api.TransformedEntry
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.NumberBuilder
 
-fun EntriesBuilder.transparency(value: Int, builder: NumberBuilder<Int>.() -> Unit = {}): TransformedEntry<Int, NumberBuilder<Int>, Int> {
+fun EntriesBuilder.transparency(value: Int, builder: NumberBuilder<Int>.() -> Unit = {}): TransformedEntry<Int, Int> {
     return transform(
         int(value) {
             slider = true
