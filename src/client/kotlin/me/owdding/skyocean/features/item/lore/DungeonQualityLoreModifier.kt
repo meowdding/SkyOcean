@@ -16,7 +16,7 @@ private const val MAX_DUNGEON_QUALITY = 50
 
 @LoreModifier
 object DungeonQualityLoreModifier : AbstractLoreModifier() {
-    override val displayName: Component = +"skyocean.config.lore_cleanup.dungeon_quality"
+    override val displayName: Component = +"skyocean.config.lore_modifiers.dungeon_quality"
     override val isEnabled: Boolean get() = LoreCleanupConfig.dungeonQuality
 
     override fun appliesTo(item: ItemStack) = item.getData(DataTypes.DUNGEON_QUALITY) != null

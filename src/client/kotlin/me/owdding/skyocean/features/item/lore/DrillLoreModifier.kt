@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @LoreModifier
 object DrillLoreModifier : AbstractLoreModifier() {
-    override val displayName: Component = +"skyocean.config.lore_cleanup.drill_modifications"
+    override val displayName: Component = +"skyocean.config.lore_modifiers.drill_modifications"
     override val isEnabled: Boolean get() = LoreCleanupConfig.enableDrillCleanup
 
     override fun appliesTo(item: ItemStack) = item in SkyblockItemTagKey.DRILLS
