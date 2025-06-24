@@ -303,7 +303,7 @@
         "desc": "Adds the dungeon quality to the lore."
       },
       "storage_preview": {
-        "@value": "Enable Storage Preview",
+        "@value": "Storage Preview",
         "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
       }
     }
