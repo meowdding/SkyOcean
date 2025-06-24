@@ -30,6 +30,7 @@
   "depends": {
     "fabric": "*",
     "minecraft": "1.21.5",
+    "skyblock-api": ">=1.0.0-beta.132",
     "resourcefulconfigkt": ">=3.5.12"
   },
   "icon": "assets/skyocean/skyocean.png"
