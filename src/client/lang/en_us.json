@@ -301,6 +301,10 @@
       "dungeon_quality": {
         "@value": "Dungeon Quality",
         "desc": "Adds the dungeon quality to the lore."
+      },
+      "storage_preview": {
+        "@value": "Storage Preview",
+        "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
       }
     }
   },
