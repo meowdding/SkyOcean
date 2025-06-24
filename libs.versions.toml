@@ -29,7 +29,6 @@ ksp = "2.1.20-2.0.0"
 repo = "1.0.7"
 resources = "1.0.6"
 
-
 # Dev Dependencies
 devauth = "1.2.1"
 modmenu = "14.0.0-rc.2"

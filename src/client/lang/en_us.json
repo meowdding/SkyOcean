@@ -276,8 +276,8 @@
         }
       }
     },
-    "lore_cleanup": {
-      "@value": "Lore Cleanup",
+    "lore_modifiers": {
+      "@value": "Lore Modifiers",
       "modifications": {
         "@value": "Lore Modifications",
         "desc": [
@@ -297,6 +297,10 @@
           "§aOn:",
           "<gray>Fuel Tank: <red>Not Installed"
         ]
+      },
+      "dungeon_quality": {
+        "@value": "Dungeon Quality",
+        "desc": "Adds the dungeon quality to the lore."
       }
     }
   },
