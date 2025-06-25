@@ -6,13 +6,16 @@ import me.owdding.lib.extensions.ListMerger
 import me.owdding.skyocean.generated.SkyOceanLoreModifiers
 import me.owdding.skyocean.utils.ChatUtils
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.minecraft.ui.GatherItemTooltipComponentsEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ItemTooltipEvent
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
+import tech.thatgravyboat.skyblockapi.utils.extentions.peek
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -37,6 +40,15 @@ abstract class AbstractLoreModifier {
         return modified
     }
 
+    protected fun withComponentMerger(original: MutableList<ClientTooltipComponent>, init: ListMerger<ClientTooltipComponent>.() -> Unit) {
+        val merger = ListMerger(original)
+        merger.init()
+        merger.addRemaining()
+        original.clear()
+        original.addAll(merger.destination)
+    }
+
+    open fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>) {}
 
     protected fun ListMerger<Component>.addAllTillSpace() {
         while (index + 1 < original.size && peek().stripped.isNotBlank()) {
@@ -80,6 +92,11 @@ object LoreModifiers {
                 }.lines(),
             )
         }
+    }
+
+    @Subscription
+    private fun GatherItemTooltipComponentsEvent.onComponents() = components.takeUnless { it.isEmpty() }?.let {
+        modifiers.filter { it.isEnabled && it.appliesTo(this.item) }.peek { it.appendComponents(item, this.components) }
     }
 }
 

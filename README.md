@@ -33,6 +33,16 @@ seamless way.
 </details>
 
 <details>
+<summary>Commands</summary>
+
+- /skyocean calc \<equation> - performs a mathematical equation and prints the result
+- /skyocean sendcoords - sends the current coordinates in all chat
+- /skyocean search - opens the item search screen
+
+</details>
+
+
+<details>
 <summary>Chat Config</summary>
 
 - Profile In Chat
@@ -109,6 +119,7 @@ seamless way.
 <details>
 <summary>Misc Config</summary>
 
+- Mute the phantoms
 - Minister in Calendar
 - Previous server notifications
 - Anvil helper
@@ -117,5 +128,21 @@ seamless way.
     - Readds pet candy that Hypixel hides for pets that are level 100.
 - Transparent armour
     - On yourself and others, configurable transparency.
+
+</details>
+
+<details>
+<summary>Inventory Config</summary>
+
+- Sack Value Breakdown
+
+</details>
+
+<details>
+<summary>Lore Modifiers</summary>
+
+- Compact drill modifiers
+- Storage preview
+- Dungeon quality
 
 </details>

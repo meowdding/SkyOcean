@@ -32,7 +32,7 @@ internal object ChatUtils {
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))
     fun chat(text: Component) = Text.join(prefix, text).withoutShadow().send()
 
-    fun MutableComponent.sendWithPrefix() = chat(this)
+    fun Component.sendWithPrefix() = chat(this)
 }
 
 object OceanColors {
