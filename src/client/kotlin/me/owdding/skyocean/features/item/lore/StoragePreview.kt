@@ -37,9 +37,9 @@ object StoragePreview : AbstractLoreModifier() {
         }
 
         val pages = if (enderChest) StorageAPI.enderchests else StorageAPI.backpacks
-        this.storageInstance = pages.getOrNull(page - 1) ?: return false
+        this.storageInstance = pages.find { it.index == page - 1 }
 
-        return true
+        return this.storageInstance != null
     }
 
     override fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>) {
