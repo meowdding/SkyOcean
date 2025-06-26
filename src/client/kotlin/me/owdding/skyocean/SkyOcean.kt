@@ -85,10 +85,12 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     @Subscription
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("skyocean") {
-            this.callback {
-                McClient.runNextTick {
-                    McClient.setScreen(ResourcefulConfigScreen.getFactory("skyocean").apply(null))
-                }
+            thenCallback("version") {
+                Text.of("Version: $VERSION").withColor(TextColor.GRAY).sendWithPrefix()
+            }
+
+            callback {
+                McClient.setScreenAsync { ResourcefulConfigScreen.getFactory("skyocean").apply(null) }
             }
         }
     }
