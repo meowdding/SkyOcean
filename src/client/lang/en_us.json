@@ -311,7 +311,7 @@
       },
       "shulkerOverwrite": {
         "@value": "Retexture shulker",
-        "desc": "Recolors the shulkers on <dark_green>galatea</dark_green> to make them more visible."
+        "desc": "Recolors the shulkers to make them more visible."
       }
     }
   },
