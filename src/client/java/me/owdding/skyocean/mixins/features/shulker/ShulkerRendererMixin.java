@@ -1,6 +1,6 @@
 package me.owdding.skyocean.mixins.features.shulker;
 
-import me.owdding.skyocean.config.features.misc.MiscConfig;
+import me.owdding.skyocean.config.features.galatea.GalateaConfig;
 import net.minecraft.client.renderer.entity.ShulkerRenderer;
 import net.minecraft.client.renderer.entity.state.ShulkerRenderState;
 import net.minecraft.world.entity.monster.Shulker;
@@ -18,10 +18,10 @@ public class ShulkerRendererMixin {
         if (!SkyBlockIsland.GALATEA.inIsland()) {
             return;
         }
-        if (MiscConfig.INSTANCE.getShulkerOverwrite() == shulker.getColor()) {
+        if (GalateaConfig.INSTANCE.getShulkerOverwrite() == shulker.getColor()) {
             return;
         }
-        shulkerRenderState.color = MiscConfig.INSTANCE.getShulkerOverwrite();
+        shulkerRenderState.color = GalateaConfig.INSTANCE.getShulkerOverwrite();
     }
 
 }
