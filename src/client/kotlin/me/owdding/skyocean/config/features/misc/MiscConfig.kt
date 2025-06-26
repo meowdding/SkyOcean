@@ -8,7 +8,6 @@ import me.owdding.skyocean.utils.transparency
 object MiscConfig : CategoryKt("misc") {
     override val name get() = Translated("skyocean.config.misc")
 
-
     var ministerInCalendar by boolean(true) {
         translation = "skyocean.config.misc.ministerInCalendar"
     }
