@@ -82,6 +82,12 @@ class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal
         return this
     }
 
+    fun thenCallback(vararg name: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
+        then(*name) {
+            callback(callback)
+        }
+    }
+
     fun <T> then(
         name: String,
         argument: ArgumentType<T>,

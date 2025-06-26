@@ -17,8 +17,8 @@ import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.CompletableFuture
 
@@ -77,7 +77,6 @@ object SimpleRecipeApi {
         if (inputs.size == itemInputs.size && itemInputs.size == 1 && illegalIngredients.containsAll(itemInputs)) {
             return true
         }
-        Text.of { }.stripped
 
         return illegalIngredients.contains(RecipeVisitor.getOutput(recipe)?.skyblockId)
     }
@@ -85,6 +84,32 @@ object SimpleRecipeApi {
     @Subscription
     fun debug(event: RegisterSkyOceanCommandEvent) {
         event.registerDev("test recipeDebug") {
+            then("pretty") {
+                then("recipe", StringArgumentType.greedyString(), IdSuggestions) {
+                    callback {
+                        val arg = this.getArgument<String>("recipe") ?: run {
+                            Text.of("null :(") { this.color = TextColor.RED }
+                            return@callback
+                        }
+                        val recipe = getBestRecipe(arg) ?: run {
+                            Text.of("No recipe found for $arg!") { this.color = TextColor.RED }
+                            return@callback
+                        }
+                        val output = RecipeVisitor.getOutput(recipe) ?: run {
+                            Text.of("Recipe output is null!") { this.color = TextColor.RED }
+                            return@callback
+                        }
+                        RecipeTree(output).visit(false) { recipeNode, depth, children ->
+                            Text.of {
+                                append(" ".repeat(depth))
+                                append(recipeNode.ingredient.serialize())
+                                append(" x${recipeNode.ingredient.amount}")
+                            }.send()
+                        }
+                    }
+                }
+            }
+
             then("recipe", StringArgumentType.greedyString(), IdSuggestions) {
                 callback {
                     val arg = this.getArgument<String>("recipe") ?: run {
