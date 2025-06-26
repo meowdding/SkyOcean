@@ -184,6 +184,10 @@
         "desc": "Mutes all phantoms making them not induce ear pain.",
         "warning": "<yellow>SkyOcean mutes the phantom sounds by default, if you wish to change this open the config and search for <gold>Mute the Phantoms</gold>!"
       },
+      "shulkerOverwrite": {
+        "@value": "Retexture shulker",
+        "desc": "Recolors the shulkers on <dark_green>galatea</dark_green> to make them more visible."
+      },
       "ministerInCalendar": {
         "@value": "Minister in Calendar",
         "desc": "Adds a current minister next to the mayor in the calendar."
