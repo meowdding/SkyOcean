@@ -1,7 +1,7 @@
 package me.owdding.skyocean.features.misc
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.config.features.galatea.GalateaConfig
 import net.minecraft.sounds.SoundEvents
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
@@ -22,7 +22,7 @@ object MuteTheFuckingPhantoms {
     @Subscription
     @OnlyOnSkyBlock
     fun onSound(event: SoundPlayedEvent) {
-        if (!MiscConfig.muteThePhantoms) return
+        if (!GalateaConfig.muteThePhantoms) return
 
         if (event.sound in phantom) {
             event.cancel()

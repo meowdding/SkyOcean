@@ -2,23 +2,12 @@ package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.ConfigCategory
-import me.owdding.skyocean.config.defaultEnabledMessage
-import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.transparency
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 @ConfigCategory
 object MiscConfig : CategoryKt("misc") {
     override val name get() = Translated("skyocean.config.misc")
 
-    var muteThePhantoms by defaultEnabledMessage(
-        boolean(true) {
-            translation = "skyocean.config.misc.muteThePhantoms"
-        },
-        { +"skyocean.config.misc.muteThePhantoms.warning" },
-        "mute_the_fucking_phantoms",
-        predicate = { SkyBlockIsland.GALATEA.inIsland() },
-    )
 
     var ministerInCalendar by boolean(true) {
         translation = "skyocean.config.misc.ministerInCalendar"
