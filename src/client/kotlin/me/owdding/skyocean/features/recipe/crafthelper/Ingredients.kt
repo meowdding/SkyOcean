@@ -36,7 +36,8 @@ data class ItemIngredient(override val skyblockId: String, override val amount: 
 
 }
 
-data class PetIngredient(override val skyblockId: String, val tier: String, override val amount: Int = 1) : ItemLikeIngredient {
+data class PetIngredient(override val skyblockId: String, val tier: String, override val amount: Int = 1) :
+    ItemLikeIngredient {
 
     val rarity = runCatching { SkyBlockRarity.valueOf(tier) }.getOrElse { _ -> SkyBlockRarity.COMMON }
 
@@ -57,6 +58,16 @@ fun Ingredient.serialize(): String = when (this) {
     is CoinIngredient -> "ocean:coins"
     else -> throw UnsupportedOperationException("Can't serialize $this")
 }
+
+fun Ingredient.serializeWithAmount(): String = when (this) {
+    is ItemLikeIngredient -> "${this.skyblockId}:${this.amount}"
+    is CoinIngredient -> "ocean:coins:${this.amount}"
+    else -> throw UnsupportedOperationException("Can't serialize $this")
+}
+
+fun Iterable<Ingredient>.mergeSameTypes(): Iterable<Ingredient> = this.groupBy { it.serialize() }
+    .mapValues { (_, ingredient) -> ingredient.first().withAmount(ingredient.sumOf { it.amount }) }
+    .values
 
 fun CraftingIngredient.toSkyOceanIngredient(): Ingredient? {
     return when (this) {

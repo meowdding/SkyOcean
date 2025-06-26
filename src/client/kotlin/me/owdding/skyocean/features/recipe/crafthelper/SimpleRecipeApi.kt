@@ -48,7 +48,13 @@ object SimpleRecipeApi {
         recipes.removeIf {
             isBlacklisted(it).apply {
                 if (this) {
-                    SkyOcean.debug("Removing ${RecipeVisitor.getOutput(it)?.skyblockId} with ${RecipeVisitor.getInputs(it).size} ingredients")
+                    SkyOcean.debug(
+                        "Removing ${RecipeVisitor.getOutput(it)?.skyblockId} with ${
+                            RecipeVisitor.getInputs(
+                                it
+                            ).size
+                        } ingredients"
+                    )
                 }
             }
         }
@@ -61,6 +67,9 @@ object SimpleRecipeApi {
     }
 
     fun hasRecipe(id: String) = idToRecipes.containsKey(id)
+
+    fun getBestRecipe(ingredient: Ingredient) =
+        (ingredient as? ItemLikeIngredient)?.skyblockId?.takeIf(::hasRecipe)?.let { getBestRecipe(it) }
 
     fun getBestRecipe(id: String): Recipe<*>? {
         assert(hasRecipe(id)) { "Item has no recipe" }
@@ -99,11 +108,21 @@ object SimpleRecipeApi {
                             Text.of("Recipe output is null!") { this.color = TextColor.RED }
                             return@callback
                         }
-                        RecipeTree(output).visit(false) { recipeNode, depth, children ->
+                        ContextAwareRecipeTree(recipe, output, 3).visit { node, depth ->
                             Text.of {
                                 append(" ".repeat(depth))
-                                append(recipeNode.ingredient.serialize())
-                                append(" x${recipeNode.ingredient.amount}")
+                                when (node) {
+                                    is ContextAwareRecipeTree -> append(
+                                        node.output.withAmount(node.amount).serializeWithAmount()
+                                    )
+
+                                    is RecipeNode -> {
+                                        append(node.output.withAmount(node.requiredAmount).serializeWithAmount())
+                                        append(" (${node.requiredCrafts})")
+                                    }
+
+                                    is LeafNode -> append("L: ${node.output.serializeWithAmount()}")
+                                }
                             }.send()
                         }
                     }
@@ -139,7 +158,8 @@ object SimpleRecipeApi {
         }
     }
 
-    fun <K> MutableMap<K, Ingredient>.addOrPut(key: K, ingredient: Ingredient): Ingredient = merge(key, ingredient) { a, b -> a + b }!!
+    fun <K> MutableMap<K, Ingredient>.addOrPut(key: K, ingredient: Ingredient): Ingredient =
+        merge(key, ingredient) { a, b -> a + b }!!
 }
 
 private object IdSuggestions : SkyOceanSuggestionProvider {

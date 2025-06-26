@@ -32,6 +32,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.url
 import java.net.URI
+import java.util.concurrent.CompletableFuture
 
 @Module
 object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOcean") {
@@ -59,7 +60,6 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     fun onJoinHypixel() {
         if (!firstLoad) return
         firstLoad = false
-        SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
     }
 
     val configurator = Configurator("skyocean")
@@ -71,6 +71,11 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         SkyOceanModules.init { SkyBlockAPI.eventBus.register(it) }
 
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
+        CompletableFuture.runAsync {
+            while (!RepoAPI.isInitialized()) {
+            }
+            SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
+        }
     }
 
     fun sendUpdateMessage(link: String, current: String, new: String) {
