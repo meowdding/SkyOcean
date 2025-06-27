@@ -9,7 +9,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.*
 import me.owdding.skyocean.features.recipe.crafthelper.SimpleRecipeApi.getBestRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
-import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
+import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
 import me.owdding.skyocean.features.recipe.crafthelper.visitors.RecipeVisitor
 import me.owdding.skyocean.utils.LateInitModule
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -40,7 +40,7 @@ object Meow {
                 }
 
                 val tree = ContextAwareRecipeTree(recipe, output, 3)
-                RawFormatter.format(tree, tracker, WidgetBuilder {}, ::widget)
+                TreeFormatter.format(tree, tracker, WidgetBuilder {}, ::widget)
 
             }.asWidget(),
         )

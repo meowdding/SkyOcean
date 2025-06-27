@@ -10,6 +10,7 @@ interface ChildlessNode : StandardRecipeNode {
 }
 
 interface NodeWithChildren : StandardRecipeNode {
+    override val amountPerCraft: Int
     val nodes: MutableList<StandardRecipeNode>
     override val recipe: Recipe<*>
 
@@ -28,6 +29,8 @@ interface NodeWithChildren : StandardRecipeNode {
 interface StandardRecipeNode {
     val outputWithAmount: Ingredient
     val output: Ingredient
+    val amountPerCraft: Int
+        get() = 1
     val recipe: Recipe<*>?
         get() = null
 
@@ -71,6 +74,7 @@ data class RecipeNode(
     override val output: Ingredient,
     val context: RecipeRemainder,
 ) : NodeWithChildren {
+    override val amountPerCraft: Int = RecipeVisitor.getOutput(recipe)?.amount ?: 1
     override val nodes: MutableList<StandardRecipeNode> = mutableListOf()
     override val outputWithAmount: Ingredient by lazy { output.withAmount(requiredAmount) }
 
@@ -82,6 +86,7 @@ data class RecipeNode(
 
 class ContextAwareRecipeTree(override val recipe: Recipe<*>, override val output: ItemLikeIngredient, val amount: Int) :
     NodeWithChildren {
+    override val amountPerCraft: Int = RecipeVisitor.getOutput(recipe)?.amount ?: 1
     override val nodes: MutableList<StandardRecipeNode> = mutableListOf()
 
     val context = RecipeRemainder()

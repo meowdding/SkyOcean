@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.views
 
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.constants.MinecraftColors
+import me.owdding.lib.extensions.floor
 import me.owdding.skyocean.features.recipe.crafthelper.*
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
@@ -49,7 +50,6 @@ fun interface RecipeView {
 }
 
 data class CraftHelperState(
-    val prefix: String,
     val ingredient: Ingredient,
     val itemTracker: ItemTracker,
     var path: String,
@@ -66,26 +66,27 @@ data class CraftHelperState(
     var parent: CraftHelperState? = null,
     var childStates: MutableList<CraftHelperState> = mutableListOf(),
 ) {
-    fun isDone(): Boolean = (amount + amountCarryOver) == required
+    fun isDone(): Boolean = (amount + amountCarryOver + amountThroughParents) >= required
 
     fun collect(): List<CraftHelperState> = buildList {
         add(this@CraftHelperState)
         childStates.filterNot { it == this@CraftHelperState }.forEach { addAll(it.collect()) }
     }
 
+    fun totalAmount() = amount + amountCarryOver + amountThroughParents
+
 }
 
 data class CraftHelperContext(
-    val prefix: String,
     val path: String,
     val tracker: ItemTracker,
     val node: StandardRecipeNode,
     val ingredient: Ingredient,
-    val state: CraftHelperState = CraftHelperState(prefix, ingredient, tracker, path, usedItems = mutableListOf(), childStates = mutableListOf()),
+    val state: CraftHelperState = CraftHelperState(ingredient, tracker, path, usedItems = mutableListOf(), childStates = mutableListOf()),
     val parent: CraftHelperContext? = null,
 ) {
     companion object {
-        fun create(recipe: ContextAwareRecipeTree, tracker: ItemTracker) = CraftHelperContext("", "root", tracker, recipe, recipe.outputWithAmount)
+        fun create(recipe: ContextAwareRecipeTree, tracker: ItemTracker) = CraftHelperContext("root", tracker, recipe, recipe.outputWithAmount)
     }
 
     fun push(node: StandardRecipeNode): CraftHelperContext = CraftHelperContext(
@@ -93,7 +94,6 @@ data class CraftHelperContext(
         ingredient = node.outputWithAmount,
         path = path + node.output.serialize(),
         tracker = tracker,
-        prefix = prefix,
         parent = this,
     )
 
@@ -119,10 +119,9 @@ data class CraftHelperContext(
     fun amountThroughParents(): Int {
         val parent = parent ?: return 0
 
+        val amount = getRequired() * ((parent.toState().totalAmount() / parent.getRequired().toFloat()).floor())
 
-        val amount = parent.toState().amount * (node.output.amount / parent.node.output.amount)
-
-        return amount.coerceAtMost(getRequired())
+        return amount.coerceIn(0..getRequired())
     }
 
     fun getCarryOver() = (node as? RecipeNode)?.carriedOver ?: 0
