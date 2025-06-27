@@ -17,7 +17,6 @@ import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.CompletableFuture
@@ -108,23 +107,7 @@ object SimpleRecipeApi {
                             Text.of("Recipe output is null!") { this.color = TextColor.RED }
                             return@callback
                         }
-                        ContextAwareRecipeTree(recipe, output, 3).visit { node, depth ->
-                            Text.of {
-                                append(" ".repeat(depth))
-                                when (node) {
-                                    is ContextAwareRecipeTree -> append(
-                                        node.output.withAmount(node.amount).serializeWithAmount()
-                                    )
 
-                                    is RecipeNode -> {
-                                        append(node.output.withAmount(node.requiredAmount).serializeWithAmount())
-                                        append(" (${node.requiredCrafts})")
-                                    }
-
-                                    is LeafNode -> append("L: ${node.output.serializeWithAmount()}")
-                                }
-                            }.send()
-                        }
                     }
                 }
             }
