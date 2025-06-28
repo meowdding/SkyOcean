@@ -1,6 +1,9 @@
 package me.owdding.skyocean.features.inventory.buttons
 
+import com.teamresourceful.resourcefullib.common.color.Color
 import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.components.buttons.Button
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.components.string.TextWidget
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import earth.terrarium.olympus.client.layouts.Layouts
@@ -22,6 +25,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.left
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer.self) {
 
@@ -37,6 +41,10 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
     val titleWidget: TextBox = Widgets.textInput(titleState)
     val tooltipState: State<String> = State.of("")
     val tooltipWidget: TextBox =  Widgets.textInput(tooltipState)
+    val disableRenderer = WidgetRenderers.text<Button>(+"skyocean.inventory.buttons.disable").withColor(Color(0xFF0000))
+    val enableRenderer = WidgetRenderers.text<Button>(+"skyocean.inventory.buttons.enable").withColor(Color(0x00FF00))
+    val disableButton: Button = Widgets.button().withRenderer(disableRenderer)
+    val resetButton: Button = Widgets.button().withRenderer(WidgetRenderers.text(+"skyocean.inventory.buttons.reset"))
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean = false
     @Suppress("WRONG_NULLABILITY_FOR_JAVA_OVERRIDE") override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, type: ClickType) {}
@@ -64,10 +72,13 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
             commandWidget.active = false
             titleWidget.active = false
             tooltipWidget.active = false
+            disableButton.active = false
+            resetButton.active = false
             itemState.set("")
             commandState.set("")
             titleState.set("")
             tooltipState.set("")
+            disableButton.withRenderer(disableRenderer)
             return
         }
         textWidget.active = true
@@ -75,9 +86,13 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
         commandWidget.active = true
         titleWidget.active = true
         tooltipWidget.active = true
+        disableButton.active = true
+        resetButton.active = true
 
         this.selectedButtonIndex = selectedButtonIndex
         this.selectedButton = Buttons.buttons[selectedButtonIndex]
+
+        disableButton.withRenderer(if (selectedButton!!.disabled) enableRenderer else disableRenderer)
 
         itemState.set(selectedButton?.item)
         commandState.set(selectedButton?.command)
@@ -133,10 +148,26 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
             selectedButton?.tooltip = it
         }
 
+        disableButton.withSize(width, height)
+        disableButton.active = false
+        disableButton.withCallback {
+            if (selectedButton != null) {
+                selectedButton!!.disabled = !selectedButton!!.disabled
+                disableButton.withRenderer(if (selectedButton!!.disabled) enableRenderer else disableRenderer)
+            }
+        }
+
+        resetButton.withSize(width, height)
+        resetButton.active = false
+        resetButton.withCallback {
+            selectedButton?.reset()
+            refresh(selectedButtonIndex)
+        }
+
         val guide = Widgets.text((+"skyocean.inventory.buttons.select_button"))
         guide.setSize(width, height)
 
-        column.withChildren(textWidget, itemWidget, commandWidget, titleWidget, tooltipWidget, guide)
+        column.withChildren(textWidget, itemWidget, commandWidget, titleWidget, tooltipWidget, disableButton, resetButton, guide)
         column.arrangeElements()
         column.visitWidgets(::addRenderableWidget)
 

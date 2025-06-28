@@ -343,7 +343,10 @@
       "screen_title": "Screen Title",
       "tooltip": "Button Tooltip",
       "select_button": "<color #cff8ff>Select Button to Edit",
-      "enable_first": "Enable inventory buttons in the Config first!"
+      "enable_first": "Enable inventory buttons in the Config first!",
+      "disable": "Disable",
+      "enable": "Enable",
+      "reset": "Reset"
     }
   },
   "item_search": {

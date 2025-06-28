@@ -47,21 +47,31 @@ object Buttons : CategoryKt("buttons") {
 
 }
 
-class ButtonConfig(itemName: String, command: String, @Language("RegExp") title: String, tooltip: String = "") : ObjectKt() {
+class ButtonConfig(val itemName: String, val commandName: String, @Language("RegExp") val titleName: String, val tooltipName: String = "") : ObjectKt() {
 
     constructor(itemLike: ItemLike, command: String, @Language("RegExp") title: String, tooltip: String = "") :
         this(itemLike.id.toString(), command, title, tooltip)
 
-    var regex = Regex(title)
+    var regex = Regex(titleName)
         private set
 
     var item by string(itemName)
-    var command by string(command)
-    var title by observable(string(title)) { _, new ->
+    var command by string(commandName)
+    var title by observable(string(titleName)) { _, new ->
         runCatching {
             this.regex = Regex(new)
         }
     }
-    var tooltip by string(tooltip)
+    var tooltip by string(tooltipName)
+    var disabled by boolean(false)
+
+    fun reset() {
+        regex = Regex(titleName)
+        item = itemName
+        command = commandName
+        title = titleName
+        tooltip = tooltipName
+        disabled = false
+    }
 }
 
