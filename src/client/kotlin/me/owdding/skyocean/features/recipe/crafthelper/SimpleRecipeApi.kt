@@ -1,17 +1,13 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
 import com.mojang.brigadier.arguments.StringArgumentType
-import com.mojang.brigadier.context.CommandContext
-import com.mojang.brigadier.suggestion.Suggestions
-import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.commands.SkyOceanSuggestionProvider
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.recipe.crafthelper.visitors.RecipeVisitor
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils.getArgument
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
+import me.owdding.skyocean.utils.suggestions.RecipeIdSuggestionProvider
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -19,7 +15,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import java.util.concurrent.CompletableFuture
 
 val illegalIngredients = listOf(
     "DIAMOND_BLOCK",
@@ -93,7 +88,7 @@ object SimpleRecipeApi {
     fun debug(event: RegisterSkyOceanCommandEvent) {
         event.registerDev("test recipeDebug") {
             then("pretty") {
-                then("recipe", StringArgumentType.greedyString(), IdSuggestions) {
+                then("recipe", StringArgumentType.greedyString(), RecipeIdSuggestionProvider) {
                     callback {
                         val arg = this.getArgument<String>("recipe") ?: run {
                             Text.of("null :(") { this.color = TextColor.RED }
@@ -112,7 +107,7 @@ object SimpleRecipeApi {
                 }
             }
 
-            then("recipe", StringArgumentType.greedyString(), IdSuggestions) {
+            then("recipe", StringArgumentType.greedyString(), RecipeIdSuggestionProvider) {
                 callback {
                     val arg = this.getArgument<String>("recipe") ?: run {
                         Text.of("null :(") { this.color = TextColor.RED }
@@ -145,16 +140,3 @@ object SimpleRecipeApi {
         merge(key, ingredient) { a, b -> a + b }!!
 }
 
-private object IdSuggestions : SkyOceanSuggestionProvider {
-    override fun getSuggestions(
-        context: CommandContext<FabricClientCommandSource?>,
-        builder: SuggestionsBuilder,
-    ): CompletableFuture<Suggestions?>? {
-        SimpleRecipeApi.recipes.forEach { recipe ->
-            RecipeVisitor.getOutput(recipe)?.let {
-                suggest(builder, it.skyblockId)
-            }
-        }
-        return builder.buildFuture()
-    }
-}

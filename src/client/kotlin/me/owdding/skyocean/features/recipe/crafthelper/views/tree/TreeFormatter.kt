@@ -6,8 +6,8 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeView
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import net.minecraft.client.gui.components.AbstractWidget
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 
 object TreeFormatter : RecipeView {
     fun format(
@@ -33,9 +33,9 @@ object TreeFormatter : RecipeView {
             widget.text(
                 Text.of {
                     append(prefix)
-                    append(available)
+                    append(available.toFormattedString())
                     append("/")
-                    append(needed)
+                    append(needed.toFormattedString())
 
                     append(" ")
                     append(name)
