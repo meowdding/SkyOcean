@@ -145,6 +145,21 @@
           "bazaar": "BZ",
           "npc": "NPC"
         }
+      },
+      "inventory_buttons": {
+        "@value": "Inventory Buttons",
+        "desc": "Settings to configure and change inventory buttons.",
+        "enabled": {
+          "@value": "Inventory Buttons",
+          "desc": "Whether to show the Inventory Buttons."
+        },
+        "edit": {
+          "@value": "Edit Buttons",
+          "desc": [
+            "Configure Buttons in a separate UI.",
+            "<italic>Also accessible through <gray>/skyocean buttons</gray></italic>"
+          ]
+        }
       }
     },
     "chat": {
@@ -320,7 +335,19 @@
     "open_sack": "<dark_gray>Open Sack</dark_gray>"
   },
   "inventory": {
-    "sack_value": "<dark_gray>Sack Value</dark_gray>"
+    "sack_value": "<dark_gray>Sack Value</dark_gray>",
+    "buttons": {
+      "configuration": "<white>Button Configuration",
+      "item": "Item ID / Skyblock ID",
+      "command": "Command",
+      "screen_title": "Screen Title",
+      "tooltip": "Button Tooltip",
+      "select_button": "<color #cff8ff>Select Button to Edit",
+      "enable_first": "Enable inventory buttons in the Config first!",
+      "disable": "Disable",
+      "enable": "Enable",
+      "reset": "Reset"
+    }
   },
   "item_search": {
     "keybind": "Item Search"
