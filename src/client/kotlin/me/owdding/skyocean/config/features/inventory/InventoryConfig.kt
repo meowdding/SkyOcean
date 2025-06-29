@@ -19,7 +19,7 @@ object InventoryConfig : CategoryKt("inventory") {
     }
 
     var inventoryButtons by boolean(false) {
-        "skyocean.config.inventory.inventory_buttons.enabled"
+        translation = "skyocean.config.inventory.inventory_buttons.enabled"
     }
 
     init {
