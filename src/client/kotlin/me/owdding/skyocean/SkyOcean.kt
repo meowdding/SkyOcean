@@ -3,6 +3,7 @@ package me.owdding.skyocean
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import me.owdding.ktmodules.Module
+import me.owdding.lib.compat.RemoteConfig
 import me.owdding.lib.utils.DataPatcher
 import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.skyocean.config.Config
@@ -53,7 +54,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     val configurator = Configurator("skyocean")
 
     override fun onInitializeClient() {
-        Config.register(configurator)
+        RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
         RepoAPI.setup(RepoVersion.V1_21_5)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
         SkyOceanModules.init { SkyBlockAPI.eventBus.register(it) }
@@ -84,10 +85,12 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     @Subscription
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("skyocean") {
-            this.callback {
-                McClient.runNextTick {
-                    McClient.setScreen(ResourcefulConfigScreen.getFactory("skyocean").apply(null))
-                }
+            thenCallback("version") {
+                Text.of("Version: $VERSION").withColor(TextColor.GRAY).sendWithPrefix()
+            }
+
+            callback {
+                McClient.setScreenAsync { ResourcefulConfigScreen.getFactory("skyocean").apply(null) }
             }
         }
     }

@@ -78,6 +78,12 @@ tasks.getByName("sourcesJar").apply {
     dependsOn(tasks.getByName("runDatagen"))
 }
 
+tasks.getByName<ProcessResources>("processClientResources") {
+    with(copySpec {
+        from("src/client/lang").include("*.json").into("assets/skyocean/lang")
+    })
+}
+
 repositories {
     maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
     maven(url = "https://repo.hypixel.net/repository/Hypixel/")
@@ -124,7 +130,19 @@ tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
     filesMatching(listOf("fabric.mod.json")) {
-        expand("version" to project.version)
+        expand(
+            "version" to project.version,
+            "minecraft" to libs.versions.minecraft.get(),
+            "fabricLoader" to libs.versions.fabric.loader.get(),
+            "fabricLanguageKotlin" to libs.versions.fabric.language.kotlin.get(),
+            "meowddingLib" to libs.versions.meowdding.lib.get(),
+            "resourcefullib" to libs.versions.rlib.get(),
+            "skyblockApi" to libs.versions.skyblockapi.get(),
+            "olympus" to libs.versions.olympus.get(),
+            "placeholderApi" to libs.versions.placeholders.get(),
+            "resourcefulconfigkt" to libs.versions.rconfigkt.get(),
+            "resourcefulconfig" to libs.versions.rconfig.get(),
+        )
     }
 }
 

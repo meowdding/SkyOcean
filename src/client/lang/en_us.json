@@ -270,10 +270,54 @@
           ]
         }
       }
+    },
+    "lore_modifiers": {
+      "@value": "Lore Modifiers",
+      "modifications": {
+        "@value": "Lore Modifications",
+        "desc": [
+          "All items that have any modification present in the lore are prefixed with <color #355AA0>\uD83C\uDF0A</color>",
+          "To list all modifications that are present press <gray>shift</gray>."
+        ]
+      },
+      "drill_modifications": {
+        "@value": "Compact drill modifications",
+        "desc": [
+          "Compacts the installed upgrade parts into one line each.",
+          "",
+          "§cOff:",
+          "<gray>Fuel Tank: <red>Not Installed",
+          "<gray>Increases fuel capacity with part installed.",
+          "",
+          "§aOn:",
+          "<gray>Fuel Tank: <red>Not Installed"
+        ]
+      },
+      "dungeon_quality": {
+        "@value": "Dungeon Quality",
+        "desc": "Adds the dungeon quality to the lore."
+      },
+      "storage_preview": {
+        "@value": "Storage Preview",
+        "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
+      }
+    },
+    "galatea": {
+      "@value": "Galatea",
+      "muteThePhantoms": {
+        "@value": "Mute the Phantoms",
+        "desc": "Mutes all phantoms making them not induce ear pain.",
+        "warning": "<yellow>SkyOcean mutes the phantom sounds by default, if you wish to change this open the config and search for <gold>Mute the Phantoms</gold>!"
+      },
+      "shulkerOverwrite": {
+        "@value": "Retexture shulker",
+        "desc": "Recolors the shulkers to make them more visible."
+      }
     }
   },
   "garden": {
-    "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>"
+    "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>",
+    "open_sack": "<dark_gray>Open Sack</dark_gray>"
   },
   "inventory": {
     "sack_value": "<dark_gray>Sack Value</dark_gray>"
