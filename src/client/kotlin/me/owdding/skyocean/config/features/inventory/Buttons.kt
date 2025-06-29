@@ -47,7 +47,12 @@ object Buttons : CategoryKt("buttons") {
 
 }
 
-class ButtonConfig(val itemName: String, val commandName: String, @Language("RegExp") val titleName: String, val tooltipName: String = "") : ObjectKt() {
+class ButtonConfig(
+    private val itemName: String,
+    private val commandName: String,
+    @Language("RegExp") private val titleName: String,
+    private val tooltipName: String = ""
+) : ObjectKt() {
 
     constructor(itemLike: ItemLike, command: String, @Language("RegExp") title: String, tooltip: String = "") :
         this(itemLike.id.toString(), command, title, tooltip)

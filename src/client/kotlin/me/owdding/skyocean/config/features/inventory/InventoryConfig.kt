@@ -15,7 +15,7 @@ object InventoryConfig : CategoryKt("inventory") {
     }
 
     init {
-        separator { "skyocean.config.inventory.inventory_buttons" }
+        separator { title = "skyocean.config.inventory.inventory_buttons" }
     }
 
     var inventoryButtons by boolean(false) {
@@ -24,8 +24,9 @@ object InventoryConfig : CategoryKt("inventory") {
 
     init {
         button {
-            translation = "skyocean.config.inventory.inventory_buttons.edit"
+            title = "skyocean.config.inventory.inventory_buttons.edit"
             text = "Open"
+            description = "skyocean.config.inventory.inventory_buttons.edit.desc"
             onClick {
                 McClient.setScreen(McScreen.self?.let { ButtonConfigScreen(it) })
             }

@@ -25,7 +25,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.left
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer.self) {
 
