@@ -35,7 +35,7 @@ interface StandardRecipeNode {
         get() = null
 
     fun evaluateChildren(amount: Int, context: RecipeRemainder) {
-        if (this !is NodeWithChildren || this is ContextAwareRecipeTree) return
+        if (this !is NodeWithChildren) return
 
         RecipeVisitor.getInputs(recipe).mergeSameTypes().forEach {
             val recipe = SimpleRecipeApi.getBestRecipe(it)
