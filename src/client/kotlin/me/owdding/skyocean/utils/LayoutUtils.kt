@@ -50,7 +50,10 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
 
     fun Layout.asScrollable(width: Int, height: Int, init: LayoutWidget<FrameLayout>.() -> Unit = {}, allwaysShowScrollBar: Boolean = false): Layout {
         this.arrangeElements()
-        val widget = LayoutWidget(this).also { it.visible = true }.withStretchToContentSize()
+        val widget = LayoutWidget(this).apply {
+            visible = true
+            withAutoFocus(false)
+        }.withStretchToContentSize()
 
         return LayoutFactory.frame(width, height) {
             widget(widget.asScrollable(width, height, init, allwaysShowScrollBar))
@@ -64,7 +67,10 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         allwaysShowScrollBar: Boolean = false,
     ): LayoutWidget<FrameLayout> {
         this.arrangeElements()
-        val widget = LayoutWidget(this).also { it.visible = true }.withStretchToContentSize()
+        val widget = LayoutWidget(this).apply {
+            visible = true
+            withAutoFocus(false)
+        }.withStretchToContentSize()
 
         return widget.asScrollable(width, height, init, allwaysShowScrollBar)
     }
@@ -81,7 +87,9 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
                 .withContents { contents ->
                     contents.setMinWidth(width - 10)
                     contents.addChild(this, LayoutSettings.defaults().alignHorizontallyCenter())
-                }.init()
+                }
+                .withAutoFocus(false)
+                .init()
         }
 
         return scrollable
