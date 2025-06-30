@@ -242,14 +242,18 @@ object MetalDetectorSolver {
     fun onRender(event: RenderWorldEvent.AfterEntities) {
         if (LocationAPI.area != SkyBlockAreas.MINES_OF_DIVAN) return
         possibleChests.forEach { chest ->
-            event.renderBox(chest.pos.toBlockPos(), 0xFF0000u)
+            event.atCamera {
+                event.renderBox(chest.pos.toBlockPos(), 0xFFFF0000u)
+            }
             chest.render(event.poseStack, event.camera, event.buffer)
-            event.renderLineFromCursor(chest.pos.add(0.5, 0.5, 0.5), 0xFF0000, 0.3F)
+            event.renderLineFromCursor(chest.pos.add(0.5, 0.5, 0.5), 0xFFFF0000u, 0.3F)
         }
         foundChest.takeIf { it != null }?.let { chest ->
-            event.renderBox(chest.pos.toBlockPos(), 0xFFFF00u)
+            event.atCamera {
+                event.renderBox(chest.pos.toBlockPos(), 0xFFFFFF00u)
+            }
             chest.render(event.poseStack, event.camera, event.buffer)
-            event.renderLineFromCursor(chest.pos.add(0.5, 0.5, 0.5), 0xFFFF00, 1.0F)
+            event.renderLineFromCursor(chest.pos.add(0.5, 0.5, 0.5), 0xFFFFFF00u, 1.0F)
         }
     }
 

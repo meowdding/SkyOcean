@@ -195,7 +195,7 @@ object RenderUtils {
         }
     }
 
-    fun RenderWorldEvent.renderLineFromCursor(pos: Vec3, color: Int, width: Float) {
+    fun RenderWorldEvent.renderLineFromCursor(pos: Vec3, color: UInt, width: Float) {
         val cameraPos: Vec3 = camera.position
 
         this.poseStack.pushPop {
@@ -217,12 +217,12 @@ object RenderUtils {
             val normal: Vector3f = pos.toVector3f().sub(cameraPoint.x.toFloat(), cameraPoint.y.toFloat(), cameraPoint.z.toFloat()).normalize()
             buffer
                 .addVertex(entry, cameraPoint.x.toFloat(), cameraPoint.y.toFloat(), cameraPoint.z.toFloat())
-                .setColor(color)
+                .setColor(color.toInt())
                 .setNormal(entry, normal)
 
             buffer
                 .addVertex(entry, pos.x.toFloat(), pos.y.toFloat(), pos.z.toFloat())
-                .setColor(color)
+                .setColor(color.toInt())
                 .setNormal(entry, normal)
         }
 
