@@ -1,5 +1,6 @@
 package me.owdding.skyocean.utils.rendering
 
+import com.mojang.blaze3d.systems.RenderSystem
 import me.owdding.skyocean.utils.rendering.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
@@ -12,6 +13,8 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ARGB
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
+import org.lwjgl.opengl.GL11
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
@@ -190,5 +193,40 @@ object RenderUtils {
                 buffer.addVertex(poseStack.last().pose(), x2.toFloat(), 0f, y2.toFloat()).setColor(color)
             }
         }
+    }
+
+    fun RenderWorldEvent.renderLineFromCursor(pos: Vec3, color: Int, width: Float) {
+        val cameraPos: Vec3 = camera.position
+
+        this.poseStack.pushPop {
+            translate(-cameraPos.x, -cameraPos.y, -cameraPos.z)
+
+            val entry = this.last()
+
+            GL11.glEnable(GL11.GL_LINE_SMOOTH)
+            GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST)
+
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+            RenderSystem.lineWidth(width)
+
+            // Start drawing the line from a point slightly in front of the camera
+            val cameraPoint: Vec3 = cameraPos.add(Vec3.directionFromRotation(camera.xRot, camera.yRot))
+
+            val buffer = buffer.getBuffer(RenderType.lineStrip())
+
+            val normal: Vector3f = pos.toVector3f().sub(cameraPoint.x.toFloat(), cameraPoint.y.toFloat(), cameraPoint.z.toFloat()).normalize()
+            buffer
+                .addVertex(entry, cameraPoint.x.toFloat(), cameraPoint.y.toFloat(), cameraPoint.z.toFloat())
+                .setColor(color)
+                .setNormal(entry, normal)
+
+            buffer
+                .addVertex(entry, pos.x.toFloat(), pos.y.toFloat(), pos.z.toFloat())
+                .setColor(color)
+                .setNormal(entry, normal)
+        }
+
+        GL11.glDisable(GL11.GL_LINE_SMOOTH)
+        RenderSystem.lineWidth(1f)
     }
 }
