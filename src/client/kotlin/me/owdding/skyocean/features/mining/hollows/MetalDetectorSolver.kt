@@ -28,8 +28,10 @@ import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockAreas
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import java.awt.Color
 
 @Suppress("unused")
@@ -105,6 +107,8 @@ object MetalDetectorSolver {
     var noChestFoundCounter = 0
     var previousCurrentChests = -1
 
+    var distanceOnFind = -1.0
+
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     @TimePassed("1s")
@@ -134,7 +138,7 @@ object MetalDetectorSolver {
             val dist = distance ?: return@forEach
 
             val distToLower = pos.distanceTo(loc.pos.toBlockPos().toVec3Lower())
-            if (distToLower in dist-1.0..dist+1.0) {
+            if (distToLower in dist-0.25..dist+0.25) {
                 chests.add(loc)
                 SkyOcean.info("Found chest at {} {} {} with distance {}", loc.pos.x, loc.pos.y, loc.pos.z, distToLower)
             }
@@ -175,14 +179,16 @@ object MetalDetectorSolver {
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onActionBar(event: ActionBarReceivedEvent.Pre) {
+        if (distance != -1.0) {
+            if (getDistance(event.text) != distanceOnFind) {
+                distanceOnFind = -1.0
+                cooldown = System.currentTimeMillis() - 10000
+            }
+        }
         if (searchCheck()) {
-            val split = event.text.split("     ")
-            for (widget in split) {
-                if (widget.matches(treasureRegex)) {
-                    treasureRegex.matchEntire(widget)?.let {
-                        distance = it.groupValues[1].toDouble()
-                    }
-                }
+            val distance = getDistance(event.text)
+            if (distance != -1.0) {
+                this.distance = distance
             }
         }
     }
@@ -226,6 +232,9 @@ object MetalDetectorSolver {
         if (event.text.startsWith("You found") && event.text.endsWith("with your Metal Detector!")) {
             reset()
             cooldown = System.currentTimeMillis() + 2500
+            McClient.self.gui.overlayMessageString?.stripped?.let { message ->
+                distanceOnFind = getDistance(message)
+            }
         }
     }
 
@@ -265,5 +274,17 @@ object MetalDetectorSolver {
             playerPos.y + McPlayer.self!!.eyeHeight,
             playerPos.z,
         )
+    }
+
+    fun getDistance(actionBar: String): Double {
+        val split = actionBar.split("     ")
+        for (widget in split) {
+            if (widget.matches(treasureRegex)) {
+                treasureRegex.matchEntire(widget)?.let {
+                    return it.groupValues[1].toDouble()
+                }
+            }
+        }
+        return -1.0
     }
 }
