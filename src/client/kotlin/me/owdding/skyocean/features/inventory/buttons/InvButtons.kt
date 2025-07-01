@@ -51,8 +51,7 @@ object InvButtons {
                             if (screen is ButtonConfigScreen) {
                                 screen.refresh(x + y * 7)
                             } else {
-                                val command = button.command.replace("/", "")
-                                McClient.connection?.sendCommand(command)
+                                McClient.sendClientCommand(button.command)
                             }
                         }
                         .withTooltip(Text.of(button.tooltip.takeIf { it.isNotEmpty() } ?: button.command))
