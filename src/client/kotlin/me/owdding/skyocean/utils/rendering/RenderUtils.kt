@@ -16,7 +16,9 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 import org.lwjgl.opengl.GL11
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.awt.Color
@@ -196,7 +198,7 @@ object RenderUtils {
     }
 
     fun RenderWorldEvent.renderLineFromCursor(pos: Vec3, color: UInt, width: Float) {
-        val cameraPos: Vec3 = camera.position
+        val cameraPos: Vec3 = McPlayer.self!!.eyePosition
 
         this.poseStack.pushPop {
             translate(-cameraPos.x, -cameraPos.y, -cameraPos.z)

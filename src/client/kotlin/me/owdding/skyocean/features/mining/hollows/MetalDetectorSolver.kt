@@ -2,19 +2,24 @@ package me.owdding.skyocean.features.mining.hollows
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
+import me.owdding.skyocean.features.item.lore.LoreModifier
 import me.owdding.skyocean.features.mining.hollows.MetalDetectorSolver.moveDownMessage
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.StaticMessageWithCooldown
+import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.Waypoint
 import me.owdding.skyocean.utils.rendering.RenderUtils
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderBox
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderLineFromCursor
 import me.owdding.skyocean.utils.toBlockPos
-import me.owdding.skyocean.utils.toVec3Lower
+import me.owdding.skyocean.utils.toVec3LowerUpperY
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
+import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.decoration.ArmorStand
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
@@ -25,7 +30,9 @@ import tech.thatgravyboat.skyblockapi.api.events.chat.ActionBarReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.NameChangedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
+import tech.thatgravyboat.skyblockapi.api.events.level.RightClickEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.ItemTooltipEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockAreas
@@ -33,7 +40,11 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.awt.Color
 import kotlin.time.Duration.Companion.seconds
 
@@ -121,7 +132,7 @@ object MetalDetectorSolver {
             if (currentPos.y > center!!.y - 2) {
                 moveDownMessage.send()
             } else if (hasntBeenMoving) {
-                check(getPlayerPosAdjustedForEyeHeight(currentPos))
+                check(currentPos)
             }
         } else if (moveCloseToKeeperWarning) {
             moveCloseToKeeperWarning = false
@@ -137,8 +148,8 @@ object MetalDetectorSolver {
         (possibleChests.takeIf { it.isNotEmpty() } ?: locations).forEach { loc ->
             val dist = distance ?: return@forEach
 
-            val distToLower = pos.distanceTo(loc.pos.toBlockPos().toVec3Lower())
-            if (distToLower in dist-0.25..dist+0.25) {
+            val distToLower = pos.distanceTo(loc.pos.toBlockPos().toVec3LowerUpperY())
+            if (distToLower in dist-0.1..dist+0.1) {
                 chests.add(loc)
             }
         }
@@ -205,7 +216,7 @@ object MetalDetectorSolver {
                     offsets.forEach { location ->
                         locations.add(Waypoint(
                             Text.of("Treasure"),
-                            BlockPos(location.x + newPos.x, location.y + newPos.y, location.z + newPos.z).toVec3Lower(),
+                            BlockPos(location.x + newPos.x, location.y + newPos.y, location.z + newPos.z).toVec3LowerUpperY(),
                             0.8F,
                             true,
                             box = true
@@ -220,6 +231,8 @@ object MetalDetectorSolver {
     fun onServerChange(event: ServerChangeEvent) {
         center = null
         locations.clear()
+        moveCloseToKeeperWarning = true
+        distanceOnFind = -1.0
         reset()
     }
 
@@ -241,8 +254,6 @@ object MetalDetectorSolver {
         possibleChests.clear()
         foundChest = null
         previousCurrentChests = -1
-        moveCloseToKeeperWarning = true
-        distanceOnFind = -1.0
     }
 
     @Subscription
@@ -251,17 +262,17 @@ object MetalDetectorSolver {
         if (LocationAPI.area != SkyBlockAreas.MINES_OF_DIVAN) return
         possibleChests.forEach { chest ->
             event.atCamera {
-                event.renderBox(chest.pos.toBlockPos(), 0xFF808080u)
+                event.renderBox(chest.pos.toBlockPos().below(), 0xFF808080u)
             }
             chest.render(event.poseStack, event.camera, event.buffer)
-            event.renderLineFromCursor(chest.pos.add(0.5, 0.5, 0.5), 0xFF808080u, 0.3F)
+            event.renderLineFromCursor(chest.pos.add(0.5, -1.5, 0.5), 0xFF808080u, 0.3F)
         }
         foundChest.takeIf { it != null }?.let { chest ->
             event.atCamera {
-                event.renderBox(chest.pos.toBlockPos(), 0xFFFFFF00u)
+                event.renderBox(chest.pos.toBlockPos().below(), 0xFFFFFF00u)
             }
             chest.render(event.poseStack, event.camera, event.buffer)
-            event.renderLineFromCursor(chest.pos.add(0.5, 0.5, 0.5), 0xFFFFFF00u, 1.0F)
+            event.renderLineFromCursor(chest.pos.add(0.5, -1.5, 0.5), 0xFFFFFF00u, 1.0F)
         }
     }
 
@@ -315,4 +326,45 @@ object MetalDetectorSolver {
     }
 
     class PosAndTime(val time: Long, val pos: Vec3)
+
+    @Subscription
+    fun onRightClick(event: RightClickEvent) {
+        if (event.stack.getData(DataTypes.ID) == "DWARVEN_METAL_DETECTOR" && McPlayer.self!!.isCrouching) {
+            Text.of("Resetting Metal Detector Solver").sendWithPrefix()
+            reset()
+        }
+    }
+
+    @LoreModifier
+    object MetalDetectorLoreModifier : AbstractLoreModifier() {
+        override val displayName: Component = +"skyocean.config.lore_modifiers.metal_detector_lore"
+        override val isEnabled: Boolean get() = true
+
+        override fun appliesTo(item: ItemStack): Boolean = item.getData(DataTypes.ID) == "DWARVEN_METAL_DETECTOR"
+
+        override fun modify(
+            item: ItemStack,
+            list: MutableList<Component>,
+        ): Boolean = withMerger(list) {
+            addUntil { it.stripped == "SPECIAL" }
+            add(
+                Text.of {
+                    append("Ability: Solver Reset ").withColor(TextColor.ORANGE)
+                    append("SNEAK RIGHT CLICK") {
+                        this.color = TextColor.YELLOW
+                        this.bold = true
+                    }
+                }
+            )
+            add(
+                Text.of {
+                    this.color = TextColor.GRAY
+                    append("Reset the solver if it breaks.")
+                }
+            )
+            space()
+            true
+        }
+
+    }
 }
