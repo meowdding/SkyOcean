@@ -2,12 +2,17 @@ package me.owdding.skyocean.utils
 
 import eu.pb4.placeholders.api.ParserContext
 import eu.pb4.placeholders.api.parsers.TagParser
+import kotlinx.datetime.Instant
+import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
+import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.time.since
+import kotlin.time.Duration
 
 internal object ChatUtils {
     private const val gradient = "#87CEEB #7FFFD4"
@@ -33,4 +38,28 @@ internal object ChatUtils {
     fun chat(text: Component) = Text.join(prefix, text).withoutShadow().send()
 
     fun Component.sendWithPrefix() = chat(this)
+}
+
+data class StaticMessageWithCooldown(val duration: Duration, val message: Component) {
+    fun send() {
+        if (lastSend.since() < duration) return
+        message.sendWithPrefix()
+        lastSend = currentInstant()
+    }
+
+    companion object {
+        var lastSend: Instant = Instant.DISTANT_PAST
+    }
+}
+
+data class DynamicMessageCooldown(val duration: Duration) {
+    fun send(message: Component) {
+        if (lastSend.since() < duration) return
+        message.sendWithPrefix()
+        lastSend = currentInstant()
+    }
+
+    companion object {
+        var lastSend: Instant = Instant.DISTANT_PAST
+    }
 }

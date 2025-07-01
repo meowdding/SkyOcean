@@ -2,8 +2,10 @@ package me.owdding.skyocean.features.mining.hollows
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.features.mining.hollows.MetalDetectorSolver.moveDownMessage
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.StaticMessageWithCooldown
 import me.owdding.skyocean.utils.Waypoint
 import me.owdding.skyocean.utils.rendering.RenderUtils
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderBox
@@ -33,6 +35,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import java.awt.Color
+import kotlin.time.Duration.Companion.seconds
 
 @Suppress("unused")
 @Module
@@ -89,7 +92,6 @@ object MetalDetectorSolver {
         Vec3i(24, -22, 27)
     )
 
-
     var foundChest: Waypoint? = null
     // Gets populated once per lobby
     val locations = arrayListOf<Waypoint>()
@@ -99,8 +101,6 @@ object MetalDetectorSolver {
     var distance: Double? = null
     var center: BlockPos? = null
 
-    var oldPos: Vec3 = Vec3.ZERO
-
     var cooldown = System.currentTimeMillis()
 
     var noChestFoundCounter = 0
@@ -108,29 +108,30 @@ object MetalDetectorSolver {
 
     var distanceOnFind = -1.0
 
+    val moveDownMessage = StaticMessageWithCooldown(5.seconds, Text.of("Please move further down to correctly detect treasure."))
+    var moveCloseToKeeperWarning = true
+    val resetMessage = StaticMessageWithCooldown(4.seconds, Text.of("Move around some more!"))
+
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    @TimePassed("1s")
     fun eachSecond(event: TickEvent) {
         val currentPos = McPlayer.position?: return
         if (!searchCheck()) return
         if (center != null) {
             if (currentPos.y > center!!.y - 2) {
-                Text.of("Please move further down to correctly detect treasure.").sendWithPrefix()
-            }
-            if (oldPos == currentPos) {
+                moveDownMessage.send()
+            } else if (hasntBeenMoving) {
                 check(getPlayerPosAdjustedForEyeHeight(currentPos))
             }
-        } else {
+        } else if (moveCloseToKeeperWarning) {
+            moveCloseToKeeperWarning = false
             Text.of("Move close to a keeper to get proper locations").sendWithPrefix()
         }
-        oldPos = currentPos
     }
 
     private fun check(pos: Vec3) {
-        SkyOcean.info("Checking ${pos.x}, ${pos.y}, ${pos.z} with distance of ${distance ?: 0.0}")
         if (distance == null) {
-            Text.of("Move around some more!").sendWithPrefix()
+            resetMessage.send()
         }
         val chests = arrayListOf<Waypoint>()
         (possibleChests.takeIf { it.isNotEmpty() } ?: locations).forEach { loc ->
@@ -139,17 +140,15 @@ object MetalDetectorSolver {
             val distToLower = pos.distanceTo(loc.pos.toBlockPos().toVec3Lower())
             if (distToLower in dist-0.25..dist+0.25) {
                 chests.add(loc)
-                SkyOcean.info("Found chest at {} {} {} with distance {}", loc.pos.x, loc.pos.y, loc.pos.z, distToLower)
             }
         }
         if (chests.size == 1) {
             // when only one chest is found
             foundChest = chests.first()
             possibleChests.clear()
-            Text.of("Chest found at ${chests[0].pos.x}, ${chests[0].pos.y}, ${chests[0].pos.z}").sendWithPrefix()
+            Text.of("Chest found at §a${chests[0].pos.x.toInt()}§f, §a${chests[0].pos.y.toInt()}§f, §a${chests[0].pos.z.toInt()}").sendWithPrefix()
         } else if (chests.isEmpty()) {
             // when no chest is found
-            SkyOcean.info("No chests found")
             noChestFoundCounter++
         } else {
             // when few chests are found
@@ -165,12 +164,12 @@ object MetalDetectorSolver {
                 possibleChests.addAll(chests)
             }
             if (possibleChests.size != previousCurrentChests) {
-                Text.of("Found ${possibleChests.size} chests, Keep moving around!").sendWithPrefix()
+                Text.of("Found §c${possibleChests.size}§f chests, Keep moving around!").sendWithPrefix()
             }
             previousCurrentChests = possibleChests.size
         }
         if (noChestFoundCounter > 2) {
-            Text.of("No chests found, resetting").sendWithPrefix()
+            resetMessage.send()
             reset()
         }
     }
@@ -220,7 +219,6 @@ object MetalDetectorSolver {
     @Subscription
     fun onServerChange(event: ServerChangeEvent) {
         center = null
-        oldPos = Vec3.ZERO
         locations.clear()
         reset()
     }
@@ -243,6 +241,8 @@ object MetalDetectorSolver {
         possibleChests.clear()
         foundChest = null
         previousCurrentChests = -1
+        moveCloseToKeeperWarning = true
+        distanceOnFind = -1.0
     }
 
     @Subscription
@@ -251,10 +251,10 @@ object MetalDetectorSolver {
         if (LocationAPI.area != SkyBlockAreas.MINES_OF_DIVAN) return
         possibleChests.forEach { chest ->
             event.atCamera {
-                event.renderBox(chest.pos.toBlockPos(), 0xFFFF0000u)
+                event.renderBox(chest.pos.toBlockPos(), 0xFF808080u)
             }
             chest.render(event.poseStack, event.camera, event.buffer)
-            event.renderLineFromCursor(chest.pos.add(0.5, 0.5, 0.5), 0xFFFF0000u, 0.3F)
+            event.renderLineFromCursor(chest.pos.add(0.5, 0.5, 0.5), 0xFF808080u, 0.3F)
         }
         foundChest.takeIf { it != null }?.let { chest ->
             event.atCamera {
@@ -286,4 +286,33 @@ object MetalDetectorSolver {
         }
         return -1.0
     }
+
+    /* Coordinate Tracking */
+    var checkingFromPos: PosAndTime? = null
+    var hasntBeenMoving = false
+
+    @Subscription
+    @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
+    fun onTick(event: TickEvent) {
+        val delta = McPlayer.self?.deltaMovement ?: return
+        if (delta.x == 0.0 && delta.z == 0.0 && McPlayer.self!!.onGround()) {
+            if (checkingFromPos == null) {
+                checkingFromPos = PosAndTime(System.currentTimeMillis(), McPlayer.self!!.position())
+            } else {
+                if (System.currentTimeMillis() > checkingFromPos!!.time + 1000) {
+                    if (checkingFromPos!!.pos == McPlayer.self!!.position()) {
+                        hasntBeenMoving = true
+                    } else {
+                        checkingFromPos = null
+                        hasntBeenMoving = false
+                    }
+                }
+            }
+        } else {
+            checkingFromPos = null
+            hasntBeenMoving = false
+        }
+    }
+
+    class PosAndTime(val time: Long, val pos: Vec3)
 }
