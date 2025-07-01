@@ -41,25 +41,21 @@ internal object ChatUtils {
 }
 
 data class StaticMessageWithCooldown(val duration: Duration, val message: Component) {
+    var lastSend: Instant = Instant.DISTANT_PAST
+
     fun send() {
         if (lastSend.since() < duration) return
         message.sendWithPrefix()
         lastSend = currentInstant()
     }
-
-    companion object {
-        var lastSend: Instant = Instant.DISTANT_PAST
-    }
 }
 
 data class DynamicMessageCooldown(val duration: Duration) {
+    var lastSend: Instant = Instant.DISTANT_PAST
+
     fun send(message: Component) {
         if (lastSend.since() < duration) return
         message.sendWithPrefix()
         lastSend = currentInstant()
-    }
-
-    companion object {
-        var lastSend: Instant = Instant.DISTANT_PAST
     }
 }
