@@ -71,7 +71,6 @@ class ButtonConfig(
     var disabled by boolean(false)
 
     fun reset() {
-        regex = Regex(titleName)
         item = itemName
         command = commandName
         title = titleName
