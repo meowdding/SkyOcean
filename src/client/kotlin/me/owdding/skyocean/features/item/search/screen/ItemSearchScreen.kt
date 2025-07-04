@@ -1,8 +1,12 @@
 package me.owdding.skyocean.features.item.search.screen
 
 import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
+import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.ui.UIIcons
+import earth.terrarium.olympus.client.ui.context.ContextMenu
 import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.StateUtils
 import me.owdding.lib.builder.LEFT
@@ -19,8 +23,9 @@ import me.owdding.skyocean.features.item.search.item.TrackedItemBundle
 import me.owdding.skyocean.features.item.search.matcher.ItemMatcher
 import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.item.search.soures.ItemSources
+import me.owdding.skyocean.features.item.search.soures.SackItemContext
 import me.owdding.skyocean.utils.SkyOceanScreen
-import me.owdding.skyocean.utils.asTable
+import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -39,6 +44,7 @@ object ItemSearchScreen : SkyOceanScreen() {
     val dropdownState: DropdownState<SortModes> = DropdownState.of(SortModes.AMOUNT)
     val ascending: ListenableState<Boolean> = ListenableState.of(true)
     var search: String? = null
+    var category: SearchCategory = SearchCategory.ALL
     val currentWidgets = mutableListOf<AbstractWidget>()
 
     val widgetWidth get() = (width / 3).coerceAtLeast(100) + 50
@@ -140,7 +146,15 @@ object ItemSearchScreen : SkyOceanScreen() {
                                     } else {
                                         UIIcons.CHEVRON_DOWN
                                     }
-                                    graphics.blitSprite(RenderType::guiTextured, texture, widget.x + 5, widget.y + 5, 10, 10, ARGB.opaque(TextColor.DARK_GRAY))
+                                    graphics.blitSprite(
+                                        RenderType::guiTextured,
+                                        texture,
+                                        widget.x + 5,
+                                        widget.y + 5,
+                                        10,
+                                        10,
+                                        ARGB.opaque(TextColor.DARK_GRAY),
+                                    )
                                 }
                                 factory.withSize(20)
                             }.add {
@@ -163,7 +177,44 @@ object ItemSearchScreen : SkyOceanScreen() {
                 spacer(height = 2)
                 spacer(width = 4, height - 26)
             }
-        }.center().applyLayout()
+        }.center().let {
+            it.applyLayout()
+
+            LayoutFactory.vertical {
+                SearchCategory.entries.forEach { category ->
+                    val button = Button().apply {
+                        val display = Displays.item(category.icon, 16, 16).withPadding(2)
+
+                        val selected = WidgetRenderers.sprite<Button>(UIConstants.PRIMARY_BUTTON)
+                        val normal = WidgetRenderers.sprite<Button>(UIConstants.BUTTON)
+
+                        // TODO: dont make this so awful
+                        withRenderer(
+                            WidgetRenderers.layered(
+                                { graphics, widget, ticks ->
+                                    (if (this@ItemSearchScreen.category == category) selected else normal)
+                                        .render(graphics, widget, ticks)
+                                },
+                                DisplayWidget.displayRenderer(display),
+                            ),
+                        )
+                        withTooltip(Text.of(category.toFormattedName()))
+                        setSize(20, 20)
+                        withTexture(null)
+                        withCallback {
+                            this@ItemSearchScreen.category = category
+                            rebuildItems()
+                            addItems()
+                        }
+                    }
+                    widget(button)
+                }
+            }.apply {
+                setPosition(it.x - 20, it.y + 26)
+                applyLayout()
+            }
+
+        }
         addItems()
     }
 
@@ -207,8 +258,9 @@ object ItemSearchScreen : SkyOceanScreen() {
     fun buildItems(width: Int, height: Int): Layout {
         val columns = (width - 5) / 20
         val rows = (height - 5) / 20
+
         val items = this.items.filter { (itemStack) -> matches(itemStack) }.map { (itemStack, context, price) ->
-            Displays.item(
+            val item = Displays.item(
                 itemStack,
                 showStackSize = false,
                 customStackText = if (itemStack.count > 1) itemStack.count.shorten(0) else null,
@@ -235,16 +287,49 @@ object ItemSearchScreen : SkyOceanScreen() {
                     else -> {}
                 }
                 context.collectLines().forEach(::add)
-            }.withPadding(2).asButton { button ->
-                ItemHighlighter.setHighlight(ReferenceItemFilter(itemStack))
-                context.open()
-                McClient.setScreen(null)
+            }.withPadding(2)
+
+            if (context is SackItemContext) {
+                item.asButton(
+                    { button ->
+                        ItemHighlighter.setHighlight(ReferenceItemFilter(itemStack))
+                        context.open()
+                        McClient.setScreen(null)
+                    },
+                    {
+                        ContextMenu.open { menu ->
+                            menu.withAutoCloseOff()
+                            menu.add { Widgets.text("Get From Sacks") }
+                            menu.add {
+                                val state = ListenableState.of("")
+                                Widgets.textInput(state) {
+                                    it.withSize(50, 20)
+                                    it.withEnterCallback {
+                                        McClient.sendCommand("/gfs ${itemStack.getSkyBlockId()} ${state.get()}")
+                                        menu.onClose()
+                                    }
+                                }
+                            }
+                        }
+                    },
+                )
+            } else {
+                item.asButtonLeft { button ->
+                    ItemHighlighter.setHighlight(ReferenceItemFilter(itemStack))
+                    context.open()
+                    McClient.setScreen(null)
+                }
             }
         }.rightPad(columns * rows, Displays.empty(20, 20).asWidget()).chunked(columns)
+
         return LayoutFactory.frame {
-            items.asTable().add { alignVerticallyMiddle() }
+            items.asWidgetTable().add { alignVerticallyMiddle() }
             display(
-                ExtraDisplays.inventoryBackground(columns, items.size, Displays.empty(columns * 20, items.size * 20).withPadding(2))
+                ExtraDisplays.inventoryBackground(
+                    columns,
+                    items.size,
+                    Displays.empty(columns * 20, items.size * 20).withPadding(2),
+                )
                     .withPadding(top = 5, bottom = 5),
             )
         }
