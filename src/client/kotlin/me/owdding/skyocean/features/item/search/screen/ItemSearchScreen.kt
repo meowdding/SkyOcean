@@ -3,6 +3,8 @@ package me.owdding.skyocean.features.item.search.screen
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
+import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.StateUtils
@@ -142,7 +144,15 @@ object ItemSearchScreen : SkyOceanScreen() {
                                     } else {
                                         UIIcons.CHEVRON_DOWN
                                     }
-                                    graphics.blitSprite(RenderType::guiTextured, texture, widget.x + 5, widget.y + 5, 10, 10, ARGB.opaque(TextColor.DARK_GRAY))
+                                    graphics.blitSprite(
+                                        RenderType::guiTextured,
+                                        texture,
+                                        widget.x + 5,
+                                        widget.y + 5,
+                                        10,
+                                        10,
+                                        ARGB.opaque(TextColor.DARK_GRAY)
+                                    )
                                 }
                                 factory.withSize(20)
                             }.add {
@@ -169,12 +179,28 @@ object ItemSearchScreen : SkyOceanScreen() {
             it.applyLayout()
 
             LayoutFactory.vertical {
-                SearchCategory.entries.forEach {
+                SearchCategory.entries.forEach { category ->
                     val button = Button().apply {
-                        withRenderer(DisplayWidget.displayRenderer(Displays.item(it.icon, 20, 20)))
+                        val display = Displays.item(category.icon, 16, 16).withPadding(2)
+
+                        val selected = WidgetRenderers.sprite<Button>(UIConstants.PRIMARY_BUTTON)
+                        val normal = WidgetRenderers.sprite<Button>(UIConstants.BUTTON)
+
+                        // TODO: dont make this so awful
+                        withRenderer(
+                            WidgetRenderers.layered(
+                                { graphics, widget, ticks ->
+                                    (if (this@ItemSearchScreen.category == category) selected else normal)
+                                        .render(graphics, widget, ticks)
+                                },
+                                DisplayWidget.displayRenderer(display)
+                            )
+                        )
+                        withTooltip(Text.of(category.toFormattedName()))
                         setSize(20, 20)
+                        withTexture(null)
                         withCallback {
-                            category = it
+                            this@ItemSearchScreen.category = category
                             rebuildItems()
                             addItems()
                         }
@@ -182,7 +208,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                     widget(button)
                 }
             }.apply {
-                setPosition(it.x - 20, it.y)
+                setPosition(it.x - 20, it.y + 26)
                 applyLayout()
             }
 
@@ -267,7 +293,11 @@ object ItemSearchScreen : SkyOceanScreen() {
         return LayoutFactory.frame {
             items.asTable().add { alignVerticallyMiddle() }
             display(
-                ExtraDisplays.inventoryBackground(columns, items.size, Displays.empty(columns * 20, items.size * 20).withPadding(2))
+                ExtraDisplays.inventoryBackground(
+                    columns,
+                    items.size,
+                    Displays.empty(columns * 20, items.size * 20).withPadding(2)
+                )
                     .withPadding(top = 5, bottom = 5),
             )
         }
