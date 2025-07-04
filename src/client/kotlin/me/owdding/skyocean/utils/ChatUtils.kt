@@ -14,7 +14,7 @@ internal object ChatUtils {
 
     const val ICON = "\uD83C\uDF0A"
     const val ICON_WITH_SPACE = "$ICON "
-    const val DARK_OCEAN_BLUE = 0x355AA0
+    const val DARK_OCEAN_BLUE = OceanColors.DARK_CYAN_BLUE
     val ICON_COMPONENT = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
     val ICON_SPACE_COMPONENT = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
 
@@ -33,4 +33,11 @@ internal object ChatUtils {
     fun chat(text: Component) = Text.join(prefix, text).withoutShadow().send()
 
     fun Component.sendWithPrefix() = chat(this)
+}
+
+object OceanColors {
+    const val PINK = 0xf38ba8
+    const val WARNING = PINK
+    const val DARK_CYAN_BLUE = 0x355AA0
+    const val LIGHT_GRAYISH_CYAN = 0xcff8ff
 }
