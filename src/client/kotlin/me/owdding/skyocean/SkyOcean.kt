@@ -7,6 +7,7 @@ import me.owdding.lib.compat.RemoteConfig
 import me.owdding.lib.utils.DataPatcher
 import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.helpers.fakeblocks.FakeBlocks
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
@@ -30,6 +31,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.url
 import java.net.URI
+import java.util.concurrent.CompletableFuture
 
 @Module
 object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOcean") {
@@ -61,6 +63,11 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         SkyOceanModules.init { SkyBlockAPI.eventBus.register(it) }
 
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
+        CompletableFuture.runAsync {
+            while (!RepoAPI.isInitialized()) {
+            }
+            SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
+        }
     }
 
     fun sendUpdateMessage(link: String, current: String, new: String) {
@@ -98,6 +105,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
 
 
     fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
+    fun minecraft(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("minecraft", path)
     fun olympus(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("olympus", path)
     fun minecraft(path: String): ResourceLocation = ResourceLocation.withDefaultNamespace(path)
 }
