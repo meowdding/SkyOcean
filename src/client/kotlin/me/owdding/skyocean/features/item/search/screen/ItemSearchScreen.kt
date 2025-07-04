@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.item.search.screen
 
 import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
 import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.utils.ListenableState
@@ -39,6 +40,7 @@ object ItemSearchScreen : SkyOceanScreen() {
     val dropdownState: DropdownState<SortModes> = DropdownState.of(SortModes.AMOUNT)
     val ascending: ListenableState<Boolean> = ListenableState.of(true)
     var search: String? = null
+    var category: SearchCategory = SearchCategory.ALL
     val currentWidgets = mutableListOf<AbstractWidget>()
 
     val widgetWidth get() = (width / 3).coerceAtLeast(100) + 50
@@ -163,7 +165,28 @@ object ItemSearchScreen : SkyOceanScreen() {
                 spacer(height = 2)
                 spacer(width = 4, height - 26)
             }
-        }.center().applyLayout()
+        }.center().let {
+            it.applyLayout()
+
+            LayoutFactory.vertical {
+                SearchCategory.entries.forEach {
+                    val button = Button().apply {
+                        withRenderer(DisplayWidget.displayRenderer(Displays.item(it.icon, 20, 20)))
+                        setSize(20, 20)
+                        withCallback {
+                            category = it
+                            rebuildItems()
+                            addItems()
+                        }
+                    }
+                    widget(button)
+                }
+            }.apply {
+                setPosition(it.x - 20, it.y)
+                applyLayout()
+            }
+
+        }
         addItems()
     }
 
