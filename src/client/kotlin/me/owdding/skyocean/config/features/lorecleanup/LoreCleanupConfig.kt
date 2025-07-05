@@ -18,12 +18,15 @@ object LoreCleanupConfig : CategoryKt("loreCleanup") {
         this.translation = "skyocean.config.lore_modifiers.drill_modifications"
     }
 
-    var enableStoragePreview by boolean(false) {
-        this.translation = "skyocean.config.lore_modifiers.storage_preview"
-    }
-
     var dungeonQuality by boolean(false) {
         this.translation = "skyocean.config.lore_modifiers.dungeon_quality"
     }
 
+    var compactLevelBars by boolean(false) {
+        this.translation = "skyocean.config.lore_modifiers.compact_level_bars"
+    }
+
+    var enableStoragePreview by boolean(false) {
+        this.translation = "skyocean.config.lore_modifiers.storage_preview"
+    }
 }

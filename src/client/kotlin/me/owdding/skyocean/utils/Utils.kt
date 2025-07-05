@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.serialization.Codec
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
+import me.owdding.lib.extensions.ListMerger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.generated.SkyOceanCodecs
@@ -51,7 +52,13 @@ object Utils {
 
     /** Translatable Component **without** shadow */
     operator fun String.unaryMinus(): MutableComponent = unaryPlus().withoutShadow()
+    operator fun String.not(): MutableComponent = Component.literal(this)
+
     operator fun BlockPos.plus(vec: BlockPos): BlockPos = this.offset(vec.x, vec.y, vec.z)
+
+    fun <T> ListMerger<T>.hasNext(predicate: (T) -> Boolean): Boolean = this.original.subList(index, original.size).any(predicate)
+    fun <T> ListMerger<T>.canRead(): Boolean = index < original.size
+    fun <T> ListMerger<T>.readSafe(): T? = if (canRead()) read() else null
 
     fun Path.readAsJson(): JsonElement = JsonParser.parseString(this.readText())
     fun <T : JsonElement> Path.readJson(): T = this.readAsJson() as T
