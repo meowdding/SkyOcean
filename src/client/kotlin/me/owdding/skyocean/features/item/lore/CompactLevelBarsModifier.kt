@@ -1,9 +1,6 @@
 package me.owdding.skyocean.features.item.lore
 
 import me.owdding.skyocean.config.features.lorecleanup.LoreCleanupConfig
-import me.owdding.skyocean.utils.Utils.canRead
-import me.owdding.skyocean.utils.Utils.hasNext
-import me.owdding.skyocean.utils.Utils.readSafe
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
@@ -20,7 +17,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object CompactLevelBarsModifier : AbstractLoreModifier() {
     override val displayName: Component = +"skyocean.config.lore_modifiers.compact_level_bars"
     override val isEnabled: Boolean get() = LoreCleanupConfig.compactLevelBars
-    val list = listOf(
+    private val list = setOf(
         "Ways to Level Up",
         "Skill Related Tasks",
     )

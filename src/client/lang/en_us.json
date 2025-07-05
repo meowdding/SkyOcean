@@ -426,7 +426,7 @@
         "desc": [
           "Compacts the bars in the skyblock levels menu into one line, making them fit on smaller screens.",
           "",
-          "Example: <green><hover '<dark_aqua>Dungeon Tasks</dark_aqua>",
+          "Example: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <dark_aqua>Dungeon Tasks</dark_aqua>",
           "<dark_gray>3 Tasks</dark_gray>",
           "",
           "<gray>All Dungeon related XP Tasks</gray>",
