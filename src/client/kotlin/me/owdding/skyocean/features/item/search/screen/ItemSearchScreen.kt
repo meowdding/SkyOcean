@@ -190,7 +190,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                     spacer(width = 4, height - 26)
                     vertical(alignment = MIDDLE) {
                         buildItems(width - 10, height - 26)
-                            .asScrollable(width - 5, height = height - 29, allwaysShowScrollBar = true)
+                            .asScrollable(width - 5, height = height - 29, alwaysShowScrollBar = true)
                             .add()
                     }
                 }
