@@ -19,6 +19,7 @@ import me.owdding.lib.extensions.rightPad
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
+import me.owdding.skyocean.features.item.search.item.BundledItemContext
 import me.owdding.skyocean.features.item.search.item.TrackedItem
 import me.owdding.skyocean.features.item.search.item.TrackedItemBundle
 import me.owdding.skyocean.features.item.search.matcher.ItemMatcher
@@ -243,7 +244,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                     spacer(width = 4, height - 26)
                     vertical(alignment = MIDDLE) {
                         buildItems(width - 10, height - 26)
-                            .asScrollable(width - 5, height = height - 29, allwaysShowScrollBar = true)
+                            .asScrollable(width - 5, height = height - 29, alwaysShowScrollBar = true)
                             .add()
                     }
                 }
@@ -297,7 +298,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                 McClient.setScreen(null)
             }
 
-            if (context is SackItemContext) {
+            if (context is SackItemContext || (context is BundledItemContext && context.map.containsKey(ItemSources.SACKS))) {
                 item.asButton(leftAction) {
                     ContextMenu.open { menu ->
                         menu.withAutoCloseOff()
