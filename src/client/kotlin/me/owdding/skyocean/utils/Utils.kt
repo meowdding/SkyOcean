@@ -51,6 +51,8 @@ object Utils {
 
     /** Translatable Component **without** shadow */
     operator fun String.unaryMinus(): MutableComponent = unaryPlus().withoutShadow()
+    operator fun String.not(): MutableComponent = Component.literal(this)
+
     operator fun BlockPos.plus(vec: BlockPos): BlockPos = this.offset(vec.x, vec.y, vec.z)
 
     fun Path.readAsJson(): JsonElement = JsonParser.parseString(this.readText())

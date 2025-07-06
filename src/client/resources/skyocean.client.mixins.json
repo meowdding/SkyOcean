@@ -8,7 +8,6 @@
   ],
   "client": [
     "BlockModelShaperMixin",
-    "CapeLayerMixin",
     "EntityRendererMixin",
     "EntityRenderStateMixin",
     "FrameLayoutAccessor",
