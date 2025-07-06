@@ -23,7 +23,7 @@ class InventoryTooltipComponent(
     val display = ExtraDisplays.inventoryBackground(
         columns,
         rows,
-        items.map { Displays.item(it).withPadding(2) }.chunked(columns).map { it.toRow() }.toColumn().withPadding(2),
+        items.map { Displays.item(it, showStackSize = true).withPadding(2) }.chunked(columns).map { it.toRow() }.toColumn().withPadding(2),
     )
 
     override fun getHeight(font: Font) = height

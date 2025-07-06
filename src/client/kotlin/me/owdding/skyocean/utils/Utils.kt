@@ -4,6 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.serialization.Codec
+import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.skyocean.SkyOcean
@@ -11,10 +12,12 @@ import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
@@ -49,6 +52,8 @@ object Utils {
 
     /** Translatable Component **without** shadow */
     operator fun String.unaryMinus(): MutableComponent = unaryPlus().withoutShadow()
+    operator fun String.not(): MutableComponent = Component.literal(this)
+
     operator fun BlockPos.plus(vec: BlockPos): BlockPos = this.offset(vec.x, vec.y, vec.z)
 
     fun Path.readAsJson(): JsonElement = JsonParser.parseString(this.readText())
@@ -113,6 +118,12 @@ object Utils {
         return loadFromRepo<JsonElement>(file).toDataOrThrow(codec)
     }
 
+    val ItemLike.id get() = BuiltInRegistries.ITEM.getKey(this.asItem())
+
+    fun TextBox.resetCursor() {
+        this.setCursorPosition(0)
+        this.setHighlightPos(0)
+    }
 }
 
 @AutoCollect("LateInitModules")

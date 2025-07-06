@@ -54,6 +54,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     }
 
     val configurator = Configurator("skyocean")
+    val config = Config.register(configurator)
 
     override fun onInitializeClient() {
         RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
@@ -92,10 +93,12 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     @Subscription
     fun onCommand(event: RegisterCommandsEvent) {
         event.register("skyocean") {
-            this.callback {
-                McClient.runNextTick {
-                    McClient.setScreen(ResourcefulConfigScreen.getFactory("skyocean").apply(null))
-                }
+            thenCallback("version") {
+                Text.of("Version: $VERSION").withColor(TextColor.GRAY).sendWithPrefix()
+            }
+
+            callback {
+                McClient.setScreenAsync { ResourcefulConfigScreen.getFactory("skyocean").apply(null) }
             }
         }
     }
@@ -104,4 +107,5 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
     fun minecraft(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("minecraft", path)
     fun olympus(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("olympus", path)
+    fun minecraft(path: String): ResourceLocation = ResourceLocation.withDefaultNamespace(path)
 }
