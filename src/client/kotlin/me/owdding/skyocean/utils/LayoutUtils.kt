@@ -84,6 +84,7 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         val scrollable = Widgets.frame { frame ->
             frame.withScrollableY(TriState.of(alwaysShowScrollBar.takeIf { it }))
                 .withSize(width, this.height.coerceAtMost(height))
+                .withAutoFocus(false)
                 .withContents { contents ->
                     contents.setMinWidth(width - 10)
                     contents.addChild(this, LayoutSettings.defaults().alignHorizontallyCenter())
@@ -96,9 +97,9 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
     }
 }
 
-fun List<List<LayoutElement>>.asTable(spacing: Int = 0): Layout {
+fun List<List<LayoutElement>>.asWidgetTable(spacing: Int = 0): Layout {
     return LayoutFactory.vertical(spacing) {
-        this@asTable.map {
+        this@asWidgetTable.map {
             LayoutFactory.horizontal(spacing) {
                 it.forEach(::widget)
             }
