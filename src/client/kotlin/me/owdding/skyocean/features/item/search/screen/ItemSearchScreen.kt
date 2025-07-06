@@ -17,6 +17,7 @@ import me.owdding.lib.displays.*
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.extensions.rightPad
 import me.owdding.lib.extensions.shorten
+import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.item.TrackedItem
 import me.owdding.skyocean.features.item.search.item.TrackedItemBundle
@@ -34,6 +35,7 @@ import net.minecraft.client.renderer.RenderType
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.extentions.*
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -262,7 +264,6 @@ object ItemSearchScreen : SkyOceanScreen() {
         val items = this.items.filter { (itemStack) -> matches(itemStack) }.map { (itemStack, context, price) ->
             val item = Displays.item(
                 itemStack,
-                showStackSize = false,
                 customStackText = if (itemStack.count > 1) itemStack.count.shorten(0) else null,
             ).withTooltip {
                 add(itemStack.hoverName)
@@ -289,36 +290,33 @@ object ItemSearchScreen : SkyOceanScreen() {
                 context.collectLines().forEach(::add)
             }.withPadding(2)
 
+
+            val leftAction = { button: Button ->
+                ItemHighlighter.setHighlight(ReferenceItemFilter(itemStack))
+                context.open()
+                McClient.setScreen(null)
+            }
+
             if (context is SackItemContext) {
-                item.asButton(
-                    { button ->
-                        ItemHighlighter.setHighlight(ReferenceItemFilter(itemStack))
-                        context.open()
-                        McClient.setScreen(null)
-                    },
-                    {
-                        ContextMenu.open { menu ->
-                            menu.withAutoCloseOff()
-                            menu.add { Widgets.text("Get From Sacks") }
-                            menu.add {
-                                val state = ListenableState.of("")
-                                Widgets.textInput(state) {
-                                    it.withSize(50, 20)
-                                    it.withEnterCallback {
-                                        McClient.sendCommand("/gfs ${itemStack.getSkyBlockId()} ${state.get()}")
-                                        menu.onClose()
-                                    }
+                item.asButton(leftAction) {
+                    ContextMenu.open { menu ->
+                        menu.withAutoCloseOff()
+                        val title = "Get From Sacks"
+                        menu.add { Widgets.text(title).withPadding(3) }
+                        menu.add {
+                            val state = ListenableState.of("")
+                            Widgets.textInput(state) {
+                                it.withSize(McFont.width(title), 20)
+                                it.withEnterCallback {
+                                    McClient.sendCommand("/gfs ${itemStack.getSkyBlockId()} ${state.get().parseFormattedLong()}")
+                                    menu.onClose()
                                 }
-                            }
+                            }.withPadding(3)
                         }
-                    },
-                )
-            } else {
-                item.asButtonLeft { button ->
-                    ItemHighlighter.setHighlight(ReferenceItemFilter(itemStack))
-                    context.open()
-                    McClient.setScreen(null)
+                    }
                 }
+            } else {
+                item.asButtonLeft(leftAction)
             }
         }.rightPad(columns * rows, Displays.empty(20, 20).asWidget()).chunked(columns)
 
