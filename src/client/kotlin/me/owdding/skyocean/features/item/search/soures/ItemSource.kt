@@ -10,8 +10,7 @@ interface ItemSource {
     fun getAll(): List<SimpleTrackedItem>
     val type: ItemSources
 
-    fun createFromIdAndAmount(id: String, amount: Int): ItemStack? =
-        RepoItemsAPI.getItemOrNull(id)?.copyWithCount(amount)
+    fun createFromIdAndAmount(id: String, amount: Int): ItemStack? = RepoItemsAPI.getItemOrNull(id)?.copyWithCount(amount)
 
 }
 
@@ -37,11 +36,9 @@ enum class ItemSources(val itemSource: ItemSource?) {
 
     companion object {
         fun getAllItems(): Iterable<SimpleTrackedItem> {
-            val entries = entries
-                .filter { ItemSearchScreen.category.source == null || it.itemSource == ItemSearchScreen.category.source }
+            val entries = entries.filter { ItemSearchScreen.category.source == null || it.itemSource == ItemSearchScreen.category.source }
 
-            return entries.mapNotNull { it.itemSource?.getAll() }.flatten()
-                .filterNot { (itemStack, _) -> itemStack.isEmpty }
+            return entries.mapNotNull { it.itemSource?.getAll() }.flatten().filterNot { (itemStack, _) -> itemStack.isEmpty }
         }
     }
 }
