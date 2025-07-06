@@ -48,7 +48,7 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         }
     }
 
-    fun Layout.asScrollable(width: Int, height: Int, init: LayoutWidget<FrameLayout>.() -> Unit = {}, allwaysShowScrollBar: Boolean = false): Layout {
+    fun Layout.asScrollable(width: Int, height: Int, init: LayoutWidget<FrameLayout>.() -> Unit = {}, alwaysShowScrollBar: Boolean = false): Layout {
         this.arrangeElements()
         val widget = LayoutWidget(this).also {
             it.visible = true
@@ -56,7 +56,7 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         }.withStretchToContentSize()
 
         return LayoutFactory.frame(width, height) {
-            widget(widget.asScrollable(width, height, init, allwaysShowScrollBar))
+            widget(widget.asScrollable(width, height, init, alwaysShowScrollBar))
         }
     }
 
@@ -64,7 +64,7 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         width: Int,
         height: Int,
         init: LayoutWidget<FrameLayout>.() -> Unit = {},
-        allwaysShowScrollBar: Boolean = false,
+        alwaysShowScrollBar: Boolean = false,
     ): LayoutWidget<FrameLayout> {
         this.arrangeElements()
         val widget = LayoutWidget(this).also {
@@ -72,17 +72,17 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
             it.withAutoFocus(false)
         }.withStretchToContentSize()
 
-        return widget.asScrollable(width, height, init, allwaysShowScrollBar)
+        return widget.asScrollable(width, height, init, alwaysShowScrollBar)
     }
 
     fun AbstractWidget.asScrollable(
         width: Int,
         height: Int,
         init: LayoutWidget<FrameLayout>.() -> Unit = {},
-        allwaysShowScrollBar: Boolean = false,
+        alwaysShowScrollBar: Boolean = false,
     ): LayoutWidget<FrameLayout> {
         val scrollable = Widgets.frame { frame ->
-            frame.withScrollableY(TriState.of(allwaysShowScrollBar.takeIf { it }))
+            frame.withScrollableY(TriState.of(alwaysShowScrollBar.takeIf { it }))
                 .withSize(width, this.height.coerceAtMost(height))
                 .withAutoFocus(false)
                 .withContents { contents ->
