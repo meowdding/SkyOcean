@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.item.search.soures
 
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
+import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 
@@ -34,7 +35,10 @@ enum class ItemSources(val itemSource: ItemSource?) {
     }
 
     companion object {
-        fun getAllItems(): Iterable<SimpleTrackedItem> =
-            entries.mapNotNull { it.itemSource?.getAll() }.flatten().filterNot { (itemStack, _) -> itemStack.isEmpty }
+        fun getAllItems(): Iterable<SimpleTrackedItem> {
+            val entries = entries.filter { ItemSearchScreen.category.source == null || it.itemSource == ItemSearchScreen.category.source }
+
+            return entries.mapNotNull { it.itemSource?.getAll() }.flatten().filterNot { (itemStack, _) -> itemStack.isEmpty }
+        }
     }
 }
