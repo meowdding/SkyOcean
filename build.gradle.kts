@@ -120,6 +120,7 @@ dependencies {
 
     modRuntimeOnly(libs.devauth)
     modRuntimeOnly(libs.modmenu)
+    modRuntimeOnly(libs.meowdding.dev.utils)
 }
 
 tasks.jar {
