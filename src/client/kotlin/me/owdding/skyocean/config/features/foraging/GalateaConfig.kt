@@ -7,19 +7,19 @@ import net.minecraft.world.item.DyeColor
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 object GalateaConfig : CategoryKt("galatea") {
-    override val name get() = Translated("skyocean.config.galatea")
+    override val name get() = Translated("skyocean.config.foraging.galatea")
 
     var muteThePhantoms by defaultEnabledMessage(
         boolean(true) {
-            translation = "skyocean.config.galatea.muteThePhantoms"
+            translation = "skyocean.config.foraging.galatea.muteThePhantoms"
         },
-        { +"skyocean.config.galatea.muteThePhantoms.warning" },
+        { +"skyocean.config.foraging.galatea.muteThePhantoms.warning" },
         "mute_the_fucking_phantoms",
         predicate = { SkyBlockIsland.GALATEA.inIsland() },
     )
 
     var shulkerOverwrite by enum<DyeColor>(DyeColor.GREEN) {
-        translation = "skyocean.config.galatea.shulkerOverwrite"
+        translation = "skyocean.config.foraging.galatea.shulkerOverwrite"
     }
 
 }
