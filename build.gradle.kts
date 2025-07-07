@@ -1,3 +1,4 @@
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.internal.artifacts.dependencies.DefaultMinimalDependency
@@ -183,17 +184,25 @@ compactingResources {
 }
 
 repo {
+    val predicate: (JsonElement) -> Boolean = {
+        when (it) {
+            is JsonObject -> it.size() > 1
+            else -> true
+        }
+    }
     hotm {
         excludeAllExcept {
             name()
             cost()
         }
-        withPredicate {
-            when (it) {
-                is JsonObject -> it.size() > 1
-                else -> true
-            }
+        withPredicate(predicate)
+    }
+    hotf {
+        excludeAllExcept {
+            name()
+            cost()
         }
+        withPredicate(predicate)
     }
     sacks { includeAll() }
 }

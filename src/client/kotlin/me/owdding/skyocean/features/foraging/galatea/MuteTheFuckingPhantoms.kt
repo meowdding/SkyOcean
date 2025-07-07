@@ -1,7 +1,7 @@
-package me.owdding.skyocean.features.misc
+package me.owdding.skyocean.features.foraging.galatea
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.config.features.galatea.GalateaConfig
+import me.owdding.skyocean.config.features.foraging.GalateaConfig
 import net.minecraft.sounds.SoundEvents
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock

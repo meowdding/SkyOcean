@@ -1,13 +1,11 @@
-package me.owdding.skyocean.config.features.galatea
+package me.owdding.skyocean.config.features.foraging
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
-import me.owdding.skyocean.config.ConfigCategory
 import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.world.item.DyeColor
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
-@ConfigCategory
 object GalateaConfig : CategoryKt("galatea") {
     override val name get() = Translated("skyocean.config.galatea")
 

@@ -1,6 +1,6 @@
 package me.owdding.skyocean.mixins.features.shulker;
 
-import me.owdding.skyocean.config.features.galatea.GalateaConfig;
+import me.owdding.skyocean.config.features.foraging.GalateaConfig;
 import net.minecraft.client.renderer.entity.ShulkerRenderer;
 import net.minecraft.client.renderer.entity.state.ShulkerRenderState;
 import net.minecraft.world.entity.monster.Shulker;
