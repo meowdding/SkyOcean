@@ -11,8 +11,8 @@ plugins {
     alias(libs.plugins.loom)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin)
-    alias(libs.plugins.repo)
-    alias(libs.plugins.resources)
+    alias(libs.plugins.meowdding.repo)
+    alias(libs.plugins.meowdding.resources)
 }
 
 base {

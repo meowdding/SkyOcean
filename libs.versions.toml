@@ -19,16 +19,17 @@ rlib = "3.5.0"
 placeholders = "2.6.1+1.21.5"
 keval = "1.1.1"
 repolib = "1.5.1"
+
 meowdding-lib = "1.0.53"
-meowdding-dev-utils = "1.0.5"
+meowdding-dev-utils = "1.0.6"
 meowdding-ktmodules = "1.0.5"
 meowdding-ktcodecs = "1.0.23"
+meowdding-repo = "1.0.12"
+meowdding-resources = "1.0.6"
 
 # Keep kt version in sync with first segment of ksp version
 kotlin = "2.1.20"
 ksp = "2.1.20-2.0.0"
-repo = "1.0.11"
-resources = "1.0.6"
 
 # Dev Dependencies
 devauth = "1.2.1"
@@ -77,5 +78,5 @@ libs = ["rlib", "olympus", "placeholders"]
 loom = { id = "fabric-loom", version.ref = "loom" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-resources = { id = "me.owdding.resources", version.ref="resources" }
-repo = { id = "me.owdding.repo", version.ref = "repo" }
+meowdding-resources = { id = "me.owdding.resources", version.ref = "meowdding-resources" }
+meowdding-repo = { id = "me.owdding.repo", version.ref = "meowdding-repo" }
