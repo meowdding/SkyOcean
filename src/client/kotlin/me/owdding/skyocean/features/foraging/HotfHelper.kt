@@ -18,6 +18,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -40,7 +41,7 @@ object HotfHelper {
         if (event.item !in ItemModelTagKey.HOTM_PERK_ITEMS) return
         val perkByName = HotfData.perkByName(event.item.cleanName) ?: return
         val tooltipLines = event.item.getLore()
-        val isLocked = event.item.item == Items.COAL
+        val isLocked = event.item.getItemModel() == Items.PALE_OAK_BUTTON
         val level = tooltipLines.firstOrNull()?.stripped?.substringBefore("/")?.filter { c -> c.isDigit() }?.toInt() ?: 1
         if (isLocked && !ForagingConfig.hotfTotalProgress) {
             return
