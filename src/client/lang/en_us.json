@@ -255,6 +255,10 @@
         "@value": "Bobber Fix",
         "desc": "Fixes bobbers rubberbanding when fishing."
       },
+      "hide_other_bobbers": {
+        "@value": "Hide Other Bobbers",
+        "desc": "Hides other players' bobbers, making it easier to see your own."
+      },
       "hotspot": {
         "@value": "Hotspot Highlight",
         "desc": "All settings for the hotspot highlight.",
