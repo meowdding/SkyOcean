@@ -1,3 +1,4 @@
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.internal.artifacts.dependencies.DefaultMinimalDependency
@@ -10,8 +11,8 @@ plugins {
     alias(libs.plugins.loom)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin)
-    alias(libs.plugins.repo)
-    alias(libs.plugins.resources)
+    alias(libs.plugins.meowdding.repo)
+    alias(libs.plugins.meowdding.resources)
 }
 
 base {
@@ -183,17 +184,25 @@ compactingResources {
 }
 
 repo {
+    val predicate: (JsonElement) -> Boolean = {
+        when (it) {
+            is JsonObject -> it.size() > 1
+            else -> true
+        }
+    }
     hotm {
         excludeAllExcept {
             name()
             cost()
         }
-        withPredicate {
-            when (it) {
-                is JsonObject -> it.size() > 1
-                else -> true
-            }
+        withPredicate(predicate)
+    }
+    hotf {
+        excludeAllExcept {
+            name()
+            cost()
         }
+        withPredicate(predicate)
     }
     sacks { includeAll() }
 }

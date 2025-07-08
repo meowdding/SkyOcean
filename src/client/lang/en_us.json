@@ -467,16 +467,37 @@
         "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
       }
     },
-    "galatea": {
-      "@value": "Galatea",
-      "muteThePhantoms": {
-        "@value": "Mute the Phantoms",
-        "desc": "Mutes all phantoms making them not induce ear pain.",
-        "warning": "<yellow>SkyOcean mutes the phantom sounds by default, if you wish to change this open the config and search for <gold>Mute the Phantoms</gold>!"
+    "foraging": {
+      "@value": "Foraging",
+      "hotf": {
+        "shiftCost": {
+          "@value": "Show shift click cost",
+          "desc": "Shows the amount of powder that will be consumed on shift click."
+        },
+        "totalProgress": {
+          "@value": "Show total progress",
+          "desc": "Shows your total progress to maxing a perk."
+        },
+        "stackSize": {
+          "@value": "Show level as amount",
+          "desc": "Shows the perk level as item stack count."
+        },
+        "totalLeft": {
+          "@value": "Show total amount left",
+          "desc": "Displays the total amount that is still required to max a perk."
+        }
       },
-      "shulkerOverwrite": {
-        "@value": "Retexture shulker",
-        "desc": "Recolors the shulkers to make them more visible."
+      "galatea": {
+        "@value": "Galatea",
+        "muteThePhantoms": {
+          "@value": "Mute the Phantoms",
+          "desc": "Mutes all phantoms making them not induce ear pain.",
+          "warning": "<yellow>SkyOcean mutes the phantom sounds by default, if you wish to change this open the config and search for <gold>Mute the Phantoms</gold>!"
+        },
+        "shulkerOverwrite": {
+          "@value": "Retexture shulker",
+          "desc": "Recolors the shulkers to make them more visible."
+        }
       }
     }
   },
