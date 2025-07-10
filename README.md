@@ -117,9 +117,13 @@ seamless way.
 </details>
 
 <details>
-<summary>Inventory Buttons</summary>
+<summary>Inventory</summary>
 
-TODO
+- Sack Value
+    - View what item is worth how much in each sack.
+    - Choose between Bazaar or NPC prices.
+- Inventory Buttons
+    - Customizable buttons at the top and bottom of your inventory, like the creative inventory tabs.
 
 </details>
 
