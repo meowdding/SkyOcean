@@ -3,16 +3,14 @@ package me.owdding.skyocean.features.recipe.crafthelper.display
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
-import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays
-import me.owdding.lib.displays.toRow
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
-import me.owdding.skyocean.features.recipe.crafthelper.*
+import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.SimpleRecipeApi.getBestRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
@@ -80,11 +78,15 @@ object CraftHelperDisplay {
                 string(output.itemName)
             }
 
+            var lines = 0
             LayoutFactory.vertical {
                 val tree = ContextAwareRecipeTree(recipe, output, amount)
-                TreeFormatter.format(tree, tracker, WidgetBuilder {}, ::widget)
+                TreeFormatter.format(tree, tracker, WidgetBuilder {}) {
+                    lines++
+                    widget(it)
+                }
             }.let {
-                widget(it.asScrollable(it.width + 10, McFont.height * 15))
+                widget(it.asScrollable(it.width + 10, McFont.height * 20.coerceAtMost(lines)))
             }
         }.asWidget().let {
             val background = BackgroundWidget(SkyOcean.minecraft("tooltip/background"), SkyOcean.minecraft("tooltip/frame"), widget = it, padding = 14)
@@ -92,49 +94,4 @@ object CraftHelperDisplay {
             background.visitWidgets { event.screen.addRenderableWidget(background) }
         }
     }
-
-    fun StandardRecipeNode.format(tracker: ItemTracker): Display = when (this) {
-        is RecipeNode -> {
-            buildList {
-                if (carriedOver >= 1) {
-                    add(Displays.text("$carriedOver + "))
-                }
-
-                add(Displays.text(tracker.takeN(output, requiredAmount).sumOf { it.amount }.toString()))
-                add(Displays.text("/$totalRequired "))
-                if (output is ItemLikeIngredient) {
-                    add(Displays.text(output.itemName))
-                } else {
-                    add(Displays.text(output.serialize()))
-                }
-
-                add(Displays.empty())
-            }.toRow()
-        }
-
-        is LeafNode -> {
-            buildList {
-                val totalRequired = output.amount
-
-                val amount = when (output) {
-                    is ItemLikeIngredient -> tracker.takeN(output, output.amount).sumOf { it.amount }
-                    is CoinIngredient -> tracker.takeCoins(output.amount)
-                    else -> 0
-                }
-
-                add(Displays.text(amount.toString()))
-                add(Displays.text("/$totalRequired "))
-                if (output is ItemLikeIngredient) {
-                    add(Displays.text(output.itemName))
-                } else {
-                    add(Displays.text(output.serialize()))
-                }
-
-            }.toRow()
-        }
-
-        is ContextAwareRecipeTree -> Displays.text(output.serializeWithAmount())
-        else -> Displays.empty()
-    }
-
 }

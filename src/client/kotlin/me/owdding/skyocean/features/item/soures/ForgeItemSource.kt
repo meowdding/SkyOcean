@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.item.search.soures
+package me.owdding.skyocean.features.item.soures
 
 import kotlinx.datetime.Instant
 import me.owdding.skyocean.SkyOcean

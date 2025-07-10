@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.item.search
 
-import me.owdding.skyocean.features.item.search.soures.ItemSources
+import me.owdding.skyocean.features.item.soures.ItemSources
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.profile.effects.EffectsAPI

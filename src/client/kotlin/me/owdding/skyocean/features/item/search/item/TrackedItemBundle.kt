@@ -2,7 +2,7 @@ package me.owdding.skyocean.features.item.search.item
 
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
-import me.owdding.skyocean.features.item.search.soures.*
+import me.owdding.skyocean.features.item.soures.*
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.item.ItemStack
