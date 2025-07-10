@@ -91,7 +91,7 @@ seamless way.
 - Hotf
     - Show level as amount
     - Show total progress
-    - Show shift click cost
+  - Show shift-click cost
     - Show total amount left
 
 </details>
@@ -102,7 +102,7 @@ seamless way.
 - Mute the Phantoms
     - Mutes all Phantom sounds, making your ears not bleed to death.
 - Shulker Overwrite
-    - Allows you to overwrite the Shulkers color with a custom one.
+    - Allows you to overwrite the Shulker's color with a custom one.
 
 </details>
 
@@ -117,7 +117,7 @@ seamless way.
 </details>
 
 <details>
-<summary>Inventory</summary>
+<summary>Inventory Config</summary>
 
 - Sack Value
     - View what item is worth how much in each sack.
@@ -128,7 +128,7 @@ seamless way.
 </details>
 
 <details>
-<summary>Lore Modifier</summary>
+<summary>Lore Modifier Config</summary>
 
 - Drill Lore
     - Removes the Abilities of each drill component, keeping just the component's name.
@@ -149,7 +149,7 @@ seamless way.
 - Hotm
     - Show level as amount
     - Show total progress
-    - Show shift click cost
+  - Show shift-click cost
     - Show total amount left
 - Mineshaft
     - Announce mineshaft enter
