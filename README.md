@@ -29,6 +29,7 @@ seamless way.
 - Item Search Screen
     - Press `o` or run `/skyocean search` to open the item search screen.
     - Allowing you to search through all your ender chest pages, storage pages, vault, island chests, etc.
+  - Using Right Click on any sack item will open an input to get that item from the sack.
 
 </details>
 
@@ -76,9 +77,32 @@ seamless way.
     - Visually replace lava with water in the Crimson Isle.
 - Bobber Fix
     - Fixes fishing bobbers rubberbanding when fishing.
+- Hide other Bobbers
+    - Hides other players' fishing bobbers, so you can see your own bobber more clearly.
 - Hotspot Highlight
     - Highlights hotspots with a color fitting to their type.
     - Renders a circle around the hotspot and fills it with the color.
+
+</details>
+
+<details>
+<summary>Foraging Config</summary>
+
+- Hotf
+    - Show level as amount
+    - Show total progress
+    - Show shift click cost
+    - Show total amount left
+
+</details>
+
+<details>
+<summary>Galatea Config</summary>
+
+- Mute the Phantoms
+    - Mutes all Phantom sounds, making your ears not bleed to death.
+- Shulker Overwrite
+    - Allows you to overwrite the Shulkers color with a custom one.
 
 </details>
 
@@ -89,6 +113,27 @@ seamless way.
     - While in a Trap inventory, view what bait type attracts what pests.
 - Desk Pest Highlight
     - In the "Configure Plots" screen, highlight what plots have pests on them.
+
+</details>
+
+<details>
+<summary>Inventory Buttons</summary>
+
+TODO
+
+</details>
+
+<details>
+<summary>Lore Modifier</summary>
+
+- Drill Lore
+    - Removes the Abilities of each drill component, keeping just the component's name.
+- Dungeon Quality
+    - Adds the Dungeon Quality to the lore of dungeon items.
+- Compact Level Bar
+    - Compacts the bars in the skyblock levels menu into one line, making them fit on smaller screens.
+- Storage Preview
+    - Previews the contents of your backpacks and ender chest in the tooltip.
 
 </details>
 
