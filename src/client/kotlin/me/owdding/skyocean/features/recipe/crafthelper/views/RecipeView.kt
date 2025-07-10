@@ -66,7 +66,7 @@ data class CraftHelperState(
     var parent: CraftHelperState? = null,
     var childStates: MutableList<CraftHelperState> = mutableListOf(),
 ) {
-    fun isDone(): Boolean = (amount + amountCarryOver + amountThroughParents) >= required
+    fun isDone(): Boolean = (amount + amountCarryOver) >= (required)
 
     fun collect(): List<CraftHelperState> = buildList {
         add(this@CraftHelperState)
@@ -119,7 +119,7 @@ data class CraftHelperContext(
     fun amountThroughParents(): Int {
         val parent = parent ?: return 0
 
-        val amount = getRequired() * ((parent.toState().totalAmount() / parent.getRequired().toFloat()).floor())
+        val amount = (getRequired() * (parent.toState().totalAmount() / parent.getRequired().toFloat())).floor()
 
         return amount.coerceIn(0..getRequired())
     }
@@ -134,7 +134,7 @@ data class CraftHelperContext(
 
         val list: MutableList<TrackedItem> = mutableListOf()
         when (ingredient) {
-            is CoinIngredient -> amount = tracker.takeCoins(ingredient.amount - amount)
+            is CoinIngredient -> amount += tracker.takeCoins(ingredient.amount - amount)
             is ItemLikeIngredient -> list.addAll(tracker.takeN(ingredient, getRequired() - amount))
         }
         amount += list.sumOf { it.amount }

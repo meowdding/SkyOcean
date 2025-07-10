@@ -43,14 +43,14 @@ object CraftHelperDisplay {
         event.register("recipe") {
             thenCallback("clear") {
                 currentRecipe = null
-                amount = 1
+                amount = 10
                 Text.of("Cleared current recipe!").sendWithPrefix()
             }
             then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
                 callback {
                     val input = this.getArgument("recipe", String::class.java)
                     currentRecipe = RepoItemsAPI.getItemIdByName(input) ?: input
-                    amount = 1
+                    amount = 10
                     Text.of("Set current recipe to $currentRecipe!").sendWithPrefix()
                 }
             }

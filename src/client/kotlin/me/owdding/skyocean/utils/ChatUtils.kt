@@ -13,6 +13,12 @@ internal object ChatUtils {
     private const val gradient = "#87CEEB #7FFFD4"
 
     const val ICON = "\uD83C\uDF0A"
+    const val CHECKMARK = "\u2714"
+    const val CROSS = "\u274C"
+    const val WARNING = "\u26A0"
+    const val HOLLOW_FLAG = "\u2690"
+    const val FILLED_FLAG = "\u2691"
+
     const val ICON_WITH_SPACE = "$ICON "
     const val DARK_OCEAN_BLUE = OceanColors.DARK_CYAN_BLUE
     val ICON_COMPONENT = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
