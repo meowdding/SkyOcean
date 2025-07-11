@@ -93,16 +93,10 @@ seamless way.
     - Show total progress
   - Show shift-click cost
     - Show total amount left
-
-</details>
-
-<details>
-<summary>Galatea Config</summary>
-
-- Mute the Phantoms
-    - Mutes all Phantom sounds, making your ears not bleed to death.
-- Shulker Overwrite
-    - Allows you to overwrite the Shulker's color with a custom one.
+- Galatea
+    - Mute the Phantoms
+    - Shulker Overwrite
+        - Allows you to overwrite the Shulker's color with a custom one.
 
 </details>
 
