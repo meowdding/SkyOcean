@@ -48,7 +48,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
  * - moveable
  * - crystals for prefect gemstones
  * - clickable lines for recipe
- * - forge 0 seconds = done
  */
 @LateInitModule
 object CraftHelperDisplay {

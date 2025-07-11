@@ -23,6 +23,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.time.until
+import kotlin.time.Duration.Companion.seconds
 
 object TreeFormatter : RecipeView {
     fun format(
@@ -138,7 +139,10 @@ object TreeFormatter : RecipeView {
                     if (sources.containsKey(ItemSources.FORGE)) {
                         addUsedSources()
                         sources.getValue(ItemSources.FORGE).map { it.context }.filterIsInstance<ForgeItemContext>().forEach { context ->
-                            add(!"${Icons.FORGE} Forge Slot: ${context.slot} - ${context.finishTime.until().toReadableTime()}")
+                            val time = context.finishTime.until()
+                            val timeDisplay = if (time <= 0.seconds) "Done" else time.toReadableTime()
+
+                            add(!"${Icons.FORGE} Forge Slot: ${context.slot} - $timeDisplay")
                         }
                     }
                 }.takeUnless { it.isEmpty() }?.let {
