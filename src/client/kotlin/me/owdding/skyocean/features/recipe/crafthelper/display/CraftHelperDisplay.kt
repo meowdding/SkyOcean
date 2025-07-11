@@ -42,6 +42,14 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
+/**
+ * TODO
+ * - close hover effect
+ * - moveable
+ * - crystals for prefect gemstones
+ * - clickable lines for recipe
+ * - forge 0 seconds = done
+ */
 @LateInitModule
 object CraftHelperDisplay {
 

@@ -10,10 +10,9 @@ object CraftHelperStorage {
         0,
         { CraftHelperData(null) },
         "craft_helper",
-        {
-            SkyOceanCodecs.CraftHelperDataCodec.codec()
-        },
-    )
+    ) {
+        SkyOceanCodecs.CraftHelperDataCodec.codec()
+    }
 
     fun setSelected(item: String?) {
         data?.item = item
