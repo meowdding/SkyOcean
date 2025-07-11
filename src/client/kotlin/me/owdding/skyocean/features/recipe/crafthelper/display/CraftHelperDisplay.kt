@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.displays.Displays
+import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.asWidget
@@ -11,17 +12,22 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperStorage
+import me.owdding.skyocean.features.recipe.crafthelper.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.SimpleRecipeApi.getBestRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
 import me.owdding.skyocean.features.recipe.crafthelper.visitors.RecipeVisitor
+import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.suggestions.CombinedSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeIdSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeNameSuggestionProvider
+import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
@@ -35,23 +41,32 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @LateInitModule
 object CraftHelperDisplay {
 
-    var currentRecipe: String? = null
-    var amount: Int = 1
+    val data get() = CraftHelperStorage.data
 
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("recipe") {
             thenCallback("clear") {
-                currentRecipe = null
-                amount = 10
+                data?.item = null
+                data?.amount = 1
+                CraftHelperStorage.save()
                 Text.of("Cleared current recipe!").sendWithPrefix()
             }
             then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
                 callback {
                     val input = this.getArgument("recipe", String::class.java)
-                    currentRecipe = RepoItemsAPI.getItemIdByName(input) ?: input
-                    amount = 10
-                    Text.of("Set current recipe to $currentRecipe!").sendWithPrefix()
+                    data?.item = RepoItemsAPI.getItemIdByName(input) ?: input
+                    data?.amount = 1
+                    CraftHelperStorage.save()
+                    Text.of("Set current recipe to ") {
+                        val item = data?.item
+                        if (item == null) {
+                            append("unknown")
+                        } else {
+                            append(RepoItemsAPI.getItemName(item))
+                        }
+                        append("!")
+                    }.sendWithPrefix()
                 }
             }
         }
@@ -60,7 +75,7 @@ object CraftHelperDisplay {
     @Subscription
     fun onScreenInit(event: ScreenInitializedEvent) {
         if (event.screen !is AbstractContainerScreen<*>) return
-        val currentRecipe = currentRecipe ?: return
+        val currentRecipe = data?.item ?: return
 
         val recipe = getBestRecipe(currentRecipe) ?: run {
             Text.of("No recipe found for $currentRecipe!") { this.color = TextColor.RED }.sendWithPrefix()
@@ -71,27 +86,69 @@ object CraftHelperDisplay {
             return
         }
 
-        val tracker = ItemTracker()
-        LayoutFactory.vertical(2) {
-            horizontal(5, MIDDLE) {
-                display(ExtraDisplays.inventoryBackground(1, 1, Displays.item(output.item, showTooltip = true).withPadding(2)))
-                string(output.itemName)
+        val layout = LayoutFactory.empty() as FrameLayout
+        lateinit var callback: () -> Unit
+        callback = {
+            layout.visitWidgets {
+                event.widgets.remove(it)
             }
+            (layout as? FrameLayoutAccessor)?.children()?.clear()
+            val tree = ContextAwareRecipeTree(recipe, output, data?.amount?.coerceAtLeast(1) ?: 1)
+            layout.addChild(createThingy(tree, output) { callback })
+            layout.arrangeElements()
+            layout.setPosition(10, (McScreen.self?.height?.div(2) ?: 0) - (layout.height / 2))
+            layout.visitWidgets { event.widgets.add(it) }
+            CraftHelperStorage.save()
+        }
+        callback()
+    }
 
+    fun createThingy(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> (() -> Unit)): AbstractWidget {
+        val tracker = ItemTracker()
+        val callback = callback()
+
+        return LayoutFactory.vertical(2) {
+            var maxLine = 0
             var lines = 0
-            LayoutFactory.vertical {
-                val tree = ContextAwareRecipeTree(recipe, output, amount)
-                TreeFormatter.format(tree, tracker, WidgetBuilder {}) {
+            val body = LayoutFactory.vertical {
+                TreeFormatter.format(tree, tracker, WidgetBuilder(callback)) {
                     lines++
+                    maxLine = maxOf(maxLine, it.width + 10)
                     widget(it)
                 }
-            }.let {
+            }
+
+            horizontal(5, MIDDLE) {
+                val item = ExtraDisplays.inventoryBackground(1, 1, Displays.item(output.item, showTooltip = true).withPadding(2))
+                display(item)
+                vertical(alignment = MIDDLE) {
+                    spacer(maxLine - item.getWidth())
+                    string(output.itemName)
+                    horizontal {
+                        widget(
+                            Displays.text("-").asButtonLeft {
+                                data?.amount -= 1
+                                callback()
+                            },
+                        )
+                        string(" ${data?.amount ?: 1} ")
+                        widget(
+                            Displays.text("+").asButtonLeft {
+                                data?.amount += 1
+                                callback()
+                            },
+                        )
+                    }
+                }
+            }
+
+            body.let {
                 widget(it.asScrollable(it.width + 10, McFont.height * 20.coerceAtMost(lines)))
             }
         }.asWidget().let {
             val background = BackgroundWidget(SkyOcean.minecraft("tooltip/background"), SkyOcean.minecraft("tooltip/frame"), widget = it, padding = 14)
             background.setPosition(10, (McScreen.self?.height?.div(2) ?: 0) - (it.height / 2))
-            background.visitWidgets { event.screen.addRenderableWidget(background) }
+            background
         }
     }
 }

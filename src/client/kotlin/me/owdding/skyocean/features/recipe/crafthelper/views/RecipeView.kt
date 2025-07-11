@@ -3,9 +3,11 @@ package me.owdding.skyocean.features.recipe.crafthelper.views
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.extensions.floor
+import me.owdding.skyocean.features.item.soures.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.*
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
+import me.owdding.skyocean.utils.Icons
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
@@ -156,4 +158,14 @@ class WidgetBuilder(val refreshCallback: () -> Unit) {
     }
 
     fun text(text: Component): AbstractWidget = Widgets.text(text).withColor(MinecraftColors.WHITE)
+
+    fun getIcons(sources: List<ItemSources>): Component = Text.of {
+        if (ItemSources.WARDROBE in sources) append(Icons.WARDROBE)
+        if (ItemSources.VAULT in sources) append(Icons.VAULT)
+        if (ItemSources.ACCESSORY_BAG in sources) append(Icons.ACCESSORIES)
+        if (ItemSources.FORGE in sources) append(Icons.FORGE)
+        if (ItemSources.CHEST in sources) append(Icons.CHESTS)
+    }
+
+    fun reload() = refreshCallback()
 }

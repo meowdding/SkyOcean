@@ -5,7 +5,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeView
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
-import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.Icons
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.util.ARGB
@@ -48,18 +48,18 @@ object TreeFormatter : RecipeView {
                     append("") {
                         when {
                             state.isDone() -> {
-                                append(ChatUtils.CHECKMARK)
+                                append(Icons.CHECKMARK)
                                 this.color = TextColor.GREEN
                                 this.bold = true
                             }
 
                             state.childrenDone -> {
-                                append(ChatUtils.WARNING)
+                                append(Icons.WARNING)
                                 this.color = TextColor.YELLOW
                             }
 
                             else -> {
-                                append(ChatUtils.CROSS)
+                                append(Icons.CROSS)
                                 this.color = TextColor.RED
                                 this.bold = true
                             }
@@ -77,6 +77,8 @@ object TreeFormatter : RecipeView {
 
                     append(" ")
                     append(name)
+                    append(" ")
+                    append(widget.getIcons(state.usedItems.map { it.source }))
                 },
             ).apply {
                 if (state.usedItems.isEmpty()) return@apply
@@ -84,9 +86,9 @@ object TreeFormatter : RecipeView {
                 this.tooltip = Tooltip.create(
                     Text.of {
                         state.usedItems.forEach {
-                            append("${it.source} ${it.amount}\n")
+                            append("${it.source} ${it.amount.toFormattedString()}\n")
                         }
-                        append("Through parents: ${state.amountThroughParents}")
+                        append("Through parents: ${state.amountThroughParents.toFormattedString()}")
                     },
                 )
             },
