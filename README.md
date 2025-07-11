@@ -88,7 +88,7 @@ seamless way.
 <details>
 <summary>Foraging Config</summary>
 
-- Hotf
+- HOTF
     - Show level as amount
     - Show total progress
   - Show shift-click cost
