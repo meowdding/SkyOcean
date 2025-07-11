@@ -47,7 +47,7 @@ object TreeFormatter : RecipeView {
         val available = state.amount + parentAmount
 
         val name = widget.name(state.ingredient)
-        if (state.amountThroughParents == needed && MiscConfig.craftHelperHideCompleted) {
+        if (state.required == 0 && MiscConfig.craftHelperHideCompleted) {
             return
         }
 
