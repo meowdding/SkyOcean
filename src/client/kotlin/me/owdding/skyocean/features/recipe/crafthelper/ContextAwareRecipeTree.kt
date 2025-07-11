@@ -99,8 +99,7 @@ class ContextAwareRecipeTree(override val recipe: Recipe<*>, override val output
 }
 
 @JvmInline
-value class RecipeRemainder(val map: MutableMap<String, Int> = mutableMapOf()) :
-    MutableMap<String, Int> by map {
+value class RecipeRemainder(val map: MutableMap<String, Int> = mutableMapOf()) : MutableMap<String, Int> by map {
 
     operator fun get(ingredient: Ingredient): Int = this[ingredient.serialize()] ?: 0
     operator fun set(ingredient: Ingredient, value: Int) {
