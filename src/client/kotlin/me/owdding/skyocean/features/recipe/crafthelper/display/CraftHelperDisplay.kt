@@ -183,8 +183,8 @@ object CraftHelperDisplay {
                                 callback(true)
                             }.withTooltip(
                                 Text.multiline(
-                                    "Click to increase by §a1",
-                                    "Shift + Click to increase by §a10",
+                                    "§eClick§r to increase by §a1",
+                                    "§eShift + Click§r to increase by §a10",
                                 ).apply { this.color = TextColor.GRAY },
                             ).withoutTooltipDelay(),
                         )

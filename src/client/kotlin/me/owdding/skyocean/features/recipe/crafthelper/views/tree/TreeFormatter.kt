@@ -1,13 +1,19 @@
 package me.owdding.skyocean.features.recipe.crafthelper.views.tree
 
+import me.owdding.lib.extensions.toReadableTime
+import me.owdding.skyocean.features.item.soures.ForgeItemContext
+import me.owdding.skyocean.features.item.soures.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeView
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.utils.Icons
+import me.owdding.skyocean.utils.Utils.not
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Tooltip
+import net.minecraft.network.chat.CommonComponents
+import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -15,8 +21,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.toJavaDuration
+import tech.thatgravyboat.skyblockapi.utils.time.until
 
 object TreeFormatter : RecipeView {
     fun format(
@@ -81,16 +86,63 @@ object TreeFormatter : RecipeView {
                     append(widget.getIcons(state.usedItems.map { it.source }))
                 },
             ).apply {
-                if (state.usedItems.isEmpty()) return@apply
-                this.setTooltipDelay(0.seconds.toJavaDuration())
-                this.tooltip = Tooltip.create(
-                    Text.of {
-                        state.usedItems.forEach {
-                            append("${it.source} ${it.amount.toFormattedString()}\n")
+                buildList<Component> {
+
+                    val sources = state.usedItems.groupBy { it.source }
+
+                    var isFirst = true
+                    fun addUsedSources() {
+                        if (!isFirst) return
+                        isFirst = false
+                        add(!"Used Item Sources:")
+                        add(CommonComponents.EMPTY)
+                    }
+
+                    fun addSimple(source: ItemSources, name: String) {
+                        if (!sources.containsKey(source)) return
+                        addUsedSources()
+                        if (state.amountCarryOver != 0 || state.amountThroughParents != 0) {
+                            add(CommonComponents.EMPTY)
                         }
-                        append("Through parents: ${state.amountThroughParents.toFormattedString()}")
-                    },
-                )
+                        add(
+                            Text.of(name) {
+                                append(": ")
+                                append(sources.getValue(source).sumOf { it.amount }.toFormattedString())
+                            },
+                        )
+                    }
+
+                    if (state.amountThroughParents != 0) {
+                        addUsedSources()
+                        add(!"Amount through parents: ${state.amountThroughParents.toFormattedString()}")
+                    }
+                    if (state.amountCarryOver != 0) {
+                        addUsedSources()
+                        add(!"Carry over from previous recipe: ${state.amountCarryOver.toFormattedString()}")
+                    }
+
+                    addSimple(ItemSources.INVENTORY, "Inventory")
+                    addSimple(ItemSources.SACKS, "Sacks")
+                    addSimple(ItemSources.STORAGE, "Storage")
+                    addSimple(ItemSources.WARDROBE, "${Icons.WARDROBE} Wardrobe")
+                    addSimple(ItemSources.CHEST, "${Icons.CHESTS} Chest")
+                    addSimple(ItemSources.ACCESSORY_BAG, "${Icons.ACCESSORIES} Accessory Bag")
+                    addSimple(ItemSources.VAULT, "${Icons.VAULT} Vault")
+
+
+                    if (sources.containsKey(ItemSources.FORGE)) {
+                        addUsedSources()
+                        sources.getValue(ItemSources.FORGE).map { it.context }.filterIsInstance<ForgeItemContext>().forEach { context ->
+                            add(!"${Icons.FORGE} Forge Slot: ${context.slot} - ${context.finishTime.until().toReadableTime()}")
+                        }
+                    }
+                }.takeUnless { it.isEmpty() }?.let {
+                    this.tooltip = Tooltip.create(
+                        Text.multiline(it) {
+                            this.color = TextColor.GRAY
+                        },
+                    )
+                }
             },
         )
 
