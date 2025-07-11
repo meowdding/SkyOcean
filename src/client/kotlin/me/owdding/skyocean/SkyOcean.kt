@@ -65,7 +65,8 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
     }
 
-    fun RepoStatusEvent.onRepoReady() {
+    @Subscription
+    private fun RepoStatusEvent.onRepoReady() {
         SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
     }
 
