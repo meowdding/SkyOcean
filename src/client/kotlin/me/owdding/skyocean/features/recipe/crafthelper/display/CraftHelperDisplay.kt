@@ -11,6 +11,7 @@ import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
+import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.crafthelper.ItemLikeIngredient
@@ -28,6 +29,7 @@ import me.owdding.skyocean.utils.suggestions.RecipeIdSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeNameSuggestionProvider
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
@@ -87,8 +89,8 @@ object CraftHelperDisplay {
         }
 
         val layout = LayoutFactory.empty() as FrameLayout
-        lateinit var callback: () -> Unit
-        callback = {
+        lateinit var callback: (save: Boolean) -> Unit
+        callback = { save ->
             layout.visitWidgets {
                 event.widgets.remove(it)
             }
@@ -98,12 +100,12 @@ object CraftHelperDisplay {
             layout.arrangeElements()
             layout.setPosition(10, (McScreen.self?.height?.div(2) ?: 0) - (layout.height / 2))
             layout.visitWidgets { event.widgets.add(it) }
-            CraftHelperStorage.save()
+            if (save) CraftHelperStorage.save()
         }
-        callback()
+        callback(false)
     }
 
-    fun createThingy(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> (() -> Unit)): AbstractWidget {
+    fun createThingy(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
         val tracker = ItemTracker()
         val callback = callback()
 
@@ -111,12 +113,26 @@ object CraftHelperDisplay {
             var maxLine = 0
             var lines = 0
             val body = LayoutFactory.vertical {
-                TreeFormatter.format(tree, tracker, WidgetBuilder(callback)) {
-                    lines++
-                    maxLine = maxOf(maxLine, it.width + 10)
-                    widget(it)
-                }
-            }
+                val list = mutableListOf<AbstractWidget>()
+                runCatching {
+                    TreeFormatter.format(tree, tracker, WidgetBuilder(callback)) {
+                        lines++
+                        maxLine = maxOf(maxLine, it.width + 10)
+                        list.add(it)
+                    }
+                }.onSuccess { list.forEach(::widget) }
+                    .onFailure {
+                        lines = 2
+                        textDisplay {
+                            append("An error occurred while displaying the recipe!")
+                            this.color = TextColor.RED
+                        }
+                        textDisplay {
+                            append("Error: ${it.message}")
+                            this.color = TextColor.RED
+                        }
+                    }
+            }.also { it.visitChildren { child -> maxLine = maxOf(maxLine, child.width + 10) } }
 
             horizontal(5, MIDDLE) {
                 val item = ExtraDisplays.inventoryBackground(1, 1, Displays.item(output.item, showTooltip = true).withPadding(2))
@@ -126,17 +142,51 @@ object CraftHelperDisplay {
                     string(output.itemName)
                     horizontal {
                         widget(
-                            Displays.text("-").asButtonLeft {
-                                data?.amount -= 1
-                                callback()
-                            },
+                            Displays.component(
+                                Text.of {
+                                    append("-")
+                                    this.color = TextColor.RED
+                                },
+                            ).asButtonLeft {
+                                val value = data?.amount ?: 1
+                                val newValue = if (Screen.hasShiftDown()) {
+                                    value - 10
+                                } else {
+                                    value - 1
+                                }
+                                data?.amount = maxOf(1, newValue)
+                                callback(true)
+                            }.withTooltip(
+                                Text.multiline(
+                                    "§eClick§r to decrease by §c1",
+                                    "§eShift + Click§r to decrease by §c10",
+                                ).apply { this.color = TextColor.GRAY },
+                            ).withoutTooltipDelay(),
                         )
-                        string(" ${data?.amount ?: 1} ")
+                        textDisplay(" ${data?.amount ?: 1} ") {
+                            this.color = TextColor.DARK_GRAY
+                        }
                         widget(
-                            Displays.text("+").asButtonLeft {
-                                data?.amount += 1
-                                callback()
-                            },
+                            Displays.component(
+                                Text.of {
+                                    append("+")
+                                    this.color = TextColor.GREEN
+                                },
+                            ).asButtonLeft {
+                                val value = data?.amount ?: 1
+                                val newValue = if (Screen.hasShiftDown()) {
+                                    value + 10
+                                } else {
+                                    value + 1
+                                }
+                                data?.amount = newValue
+                                callback(true)
+                            }.withTooltip(
+                                Text.multiline(
+                                    "Click to increase by §a1",
+                                    "Shift + Click to increase by §a10",
+                                ).apply { this.color = TextColor.GRAY },
+                            ).withoutTooltipDelay(),
                         )
                     }
                 }

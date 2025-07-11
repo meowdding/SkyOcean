@@ -145,7 +145,7 @@ data class CraftHelperContext(
     }
 }
 
-class WidgetBuilder(val refreshCallback: () -> Unit) {
+class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
     fun createLine(state: CraftHelperState): AbstractWidget {
         val widget = Widgets.text(state.ingredient.serializeWithAmount())
         return widget
@@ -160,6 +160,7 @@ class WidgetBuilder(val refreshCallback: () -> Unit) {
     fun text(text: Component): AbstractWidget = Widgets.text(text).withColor(MinecraftColors.WHITE)
 
     fun getIcons(sources: List<ItemSources>): Component = Text.of {
+        this.color = TextColor.GRAY
         if (ItemSources.WARDROBE in sources) append(Icons.WARDROBE)
         if (ItemSources.VAULT in sources) append(Icons.VAULT)
         if (ItemSources.ACCESSORY_BAG in sources) append(Icons.ACCESSORIES)
@@ -167,5 +168,5 @@ class WidgetBuilder(val refreshCallback: () -> Unit) {
         if (ItemSources.CHEST in sources) append(Icons.CHESTS)
     }
 
-    fun reload() = refreshCallback()
+    fun reload() = refreshCallback(false)
 }

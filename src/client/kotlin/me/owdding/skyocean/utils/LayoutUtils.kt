@@ -14,6 +14,8 @@ import net.minecraft.client.gui.layouts.LayoutSettings
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseCursorScreen(title) {
     constructor(title: String) : this(Text.of(title))
@@ -32,6 +34,12 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         val elements = mutableListOf<AbstractWidget>()
         this.visitWidgets(elements::add)
         return elements
+    }
+
+    private val zeroDelay = 0.seconds.toJavaDuration()
+
+    fun <T : AbstractWidget> T.withoutTooltipDelay(): T = apply {
+        this.setTooltipDelay(zeroDelay)
     }
 
     fun LayoutElement.applyAsRenderable() {
