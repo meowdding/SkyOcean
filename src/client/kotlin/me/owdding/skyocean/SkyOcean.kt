@@ -61,12 +61,15 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         RepoAPI.setup(RepoVersion.V1_21_5)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
         SkyOceanModules.init { SkyBlockAPI.eventBus.register(it) }
+        if (RepoAPI.isInitialized()) {
+            onRepoReady(null)
+        }
 
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
     }
 
     @Subscription
-    private fun RepoStatusEvent.onRepoReady() {
+    private fun onRepoReady(event: RepoStatusEvent?) {
         SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
     }
 
