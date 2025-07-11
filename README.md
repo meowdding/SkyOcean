@@ -29,6 +29,7 @@ seamless way.
 - Item Search Screen
     - Press `o` or run `/skyocean search` to open the item search screen.
     - Allowing you to search through all your ender chest pages, storage pages, vault, island chests, etc.
+  - Using Right Click on any sack item will open an input to get that item from the sack.
 
 </details>
 
@@ -76,9 +77,26 @@ seamless way.
     - Visually replace lava with water in the Crimson Isle.
 - Bobber Fix
     - Fixes fishing bobbers rubberbanding when fishing.
+- Hide other Bobbers
+    - Hides other players' fishing bobbers, so you can see your own bobber more clearly.
 - Hotspot Highlight
     - Highlights hotspots with a color fitting to their type.
     - Renders a circle around the hotspot and fills it with the color.
+
+</details>
+
+<details>
+<summary>Foraging Config</summary>
+
+- HOTF
+    - Show level as amount
+    - Show total progress
+  - Show shift-click cost
+    - Show total amount left
+- Galatea
+    - Mute the Phantoms
+    - Shulker Overwrite
+        - Allows you to overwrite the Shulker's color with a custom one.
 
 </details>
 
@@ -93,14 +111,39 @@ seamless way.
 </details>
 
 <details>
+<summary>Inventory Config</summary>
+
+- Sack Value
+    - View what item is worth how much in each sack.
+    - Choose between Bazaar or NPC prices.
+- Inventory Buttons
+    - Customizable buttons at the top and bottom of your inventory, like the creative inventory tabs.
+
+</details>
+
+<details>
+<summary>Lore Modifier Config</summary>
+
+- Drill Lore
+    - Removes the Abilities of each drill component, keeping just the component's name.
+- Dungeon Quality
+    - Adds the Dungeon Quality to the lore of dungeon items.
+- Compact Level Bar
+    - Compacts the bars in the skyblock levels menu into one line, making them fit on smaller screens.
+- Storage Preview
+    - Previews the contents of your backpacks and ender chest in the tooltip.
+
+</details>
+
+<details>
 <summary>Mining Config</summary>
 
 - Modify Commissions
     - Modifies commission items to show the progress you've made.
-- Hotm
+- HOTM
     - Show level as amount
     - Show total progress
-    - Show shift click cost
+  - Show shift-click cost
     - Show total amount left
 - Mineshaft
     - Announce mineshaft enter
@@ -128,21 +171,5 @@ seamless way.
     - Readds pet candy that Hypixel hides for pets that are level 100.
 - Transparent armour
     - On yourself and others, configurable transparency.
-
-</details>
-
-<details>
-<summary>Inventory Config</summary>
-
-- Sack Value Breakdown
-
-</details>
-
-<details>
-<summary>Lore Modifiers</summary>
-
-- Compact drill modifiers
-- Storage preview
-- Dungeon quality
 
 </details>
