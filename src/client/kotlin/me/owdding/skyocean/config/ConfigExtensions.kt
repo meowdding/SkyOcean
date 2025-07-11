@@ -4,7 +4,9 @@ import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import com.teamresourceful.resourcefulconfigkt.api.ConfigDelegateProvider
 import com.teamresourceful.resourcefulconfigkt.api.Entry
 import com.teamresourceful.resourcefulconfigkt.api.RConfigKtEntry
+import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
+import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.TypeBuilder
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
@@ -17,6 +19,15 @@ fun <T, B : TypeBuilder> CategoryKt.observable(entry: Entry<T, B>, onChange: () 
 fun CategoryKt.requiresChunkRebuild(entry: Entry<Boolean, *>) = observable(entry) {
     McClient.self.levelRenderer?.allChanged()
 }
+
+var SeparatorBuilder.translation: String
+    get() = ""
+    set(value) {
+        this.title = value
+        this.description = "$value.desc"
+    }
+
+fun CategoryBuilder.separator(translation: String) = this.separator { this.translation = translation }
 
 fun <T> CategoryKt.defaultEnabledMessage(
     entry: ConfigDelegateProvider<RConfigKtEntry<T>>,

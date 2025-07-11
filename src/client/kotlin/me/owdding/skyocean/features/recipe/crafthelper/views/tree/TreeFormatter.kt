@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.recipe.crafthelper.views.tree
 
 import me.owdding.lib.extensions.toReadableTime
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.item.soures.ForgeItemContext
 import me.owdding.skyocean.features.item.soures.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
@@ -38,11 +39,15 @@ object TreeFormatter : RecipeView {
     ) = append(state, widget, widgetConsumer)
 
     fun append(state: CraftHelperState, widget: WidgetBuilder, widgetConsumer: (AbstractWidget) -> Unit, depth: Int = 0, prefix: String = "") {
-        val needed = state.required + state.amountThroughParents
-        val available = state.amount + state.amountThroughParents
+        val parentAmount = if (MiscConfig.craftHelperParentAmount) {
+            state.amountThroughParents
+        } else 0
+
+        val needed = state.required + parentAmount
+        val available = state.amount + parentAmount
 
         val name = widget.name(state.ingredient)
-        if (state.amountThroughParents == needed) {
+        if (state.amountThroughParents == needed && MiscConfig.craftHelperHideCompleted) {
             return
         }
 

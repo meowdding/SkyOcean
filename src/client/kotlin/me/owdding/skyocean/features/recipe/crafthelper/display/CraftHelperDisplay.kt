@@ -9,6 +9,7 @@ import me.owdding.lib.displays.withPadding
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
@@ -22,6 +23,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
 import me.owdding.skyocean.features.recipe.crafthelper.visitors.RecipeVisitor
 import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.suggestions.CombinedSuggestionProvider
@@ -76,24 +78,33 @@ object CraftHelperDisplay {
 
     @Subscription
     fun onScreenInit(event: ScreenInitializedEvent) {
+        if (!MiscConfig.craftHelperEnabled) return
         if (event.screen !is AbstractContainerScreen<*>) return
-        val currentRecipe = data?.item ?: return
-
-        val recipe = getBestRecipe(currentRecipe) ?: run {
-            Text.of("No recipe found for $currentRecipe!") { this.color = TextColor.RED }.sendWithPrefix()
-            return
-        }
-        val output = RecipeVisitor.getOutput(recipe) ?: run {
-            Text.of("Recipe output is null!") { this.color = TextColor.RED }.sendWithPrefix()
-            return
-        }
 
         val layout = LayoutFactory.empty() as FrameLayout
         lateinit var callback: (save: Boolean) -> Unit
-        callback = { save ->
-            layout.visitWidgets {
-                event.widgets.remove(it)
+
+        fun reset() {
+            layout.visitWidgets { event.widgets.remove(it) }
+        }
+        callback = callback@{ save ->
+            val currentRecipe = data?.item ?: run {
+                reset()
+                return@callback
             }
+
+            val recipe = getBestRecipe(currentRecipe) ?: run {
+                Text.of("No recipe found for $currentRecipe!") { this.color = TextColor.RED }.sendWithPrefix()
+                reset()
+                return@callback
+            }
+            val output = RecipeVisitor.getOutput(recipe) ?: run {
+                Text.of("Recipe output is null!") { this.color = TextColor.RED }.sendWithPrefix()
+                reset()
+                return@callback
+            }
+
+            reset()
             (layout as? FrameLayoutAccessor)?.children()?.clear()
             val tree = ContextAwareRecipeTree(recipe, output, data?.amount?.coerceAtLeast(1) ?: 1)
             layout.addChild(createThingy(tree, output) { callback })
@@ -138,7 +149,7 @@ object CraftHelperDisplay {
                 val item = ExtraDisplays.inventoryBackground(1, 1, Displays.item(output.item, showTooltip = true).withPadding(2))
                 display(item)
                 vertical(alignment = MIDDLE) {
-                    spacer(maxLine - item.getWidth())
+                    spacer(maxLine - item.getWidth() - 10)
                     string(output.itemName)
                     horizontal {
                         widget(
@@ -189,6 +200,15 @@ object CraftHelperDisplay {
                             ).withoutTooltipDelay(),
                         )
                     }
+                }
+                vertical(alignment = MIDDLE) {
+                    widget(
+                        Displays.component(Text.of(Icons.CROSS) { this.color = TextColor.RED }).asButtonLeft {
+                            CraftHelperStorage.setSelected(null)
+                            callback(false)
+                        },
+                    )
+                    string("")
                 }
             }
 

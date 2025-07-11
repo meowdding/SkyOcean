@@ -15,6 +15,12 @@ object CraftHelperStorage {
         },
     )
 
+    fun setSelected(item: String?) {
+        data?.item = item
+        data?.amount = 1
+        save()
+    }
+
     fun save() {
         storage.save()
     }
