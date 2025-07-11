@@ -140,7 +140,7 @@ seamless way.
 
 - Modify Commissions
     - Modifies commission items to show the progress you've made.
-- Hotm
+- HOTM
     - Show level as amount
     - Show total progress
   - Show shift-click cost
