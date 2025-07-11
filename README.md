@@ -173,19 +173,3 @@ seamless way.
     - On yourself and others, configurable transparency.
 
 </details>
-
-<details>
-<summary>Inventory Config</summary>
-
-- Sack Value Breakdown
-
-</details>
-
-<details>
-<summary>Lore Modifiers</summary>
-
-- Compact drill modifiers
-- Storage preview
-- Dungeon quality
-
-</details>
