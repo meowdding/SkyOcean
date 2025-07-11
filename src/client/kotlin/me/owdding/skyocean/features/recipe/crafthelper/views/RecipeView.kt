@@ -11,6 +11,9 @@ import me.owdding.skyocean.utils.Icons
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
+import tech.thatgravyboat.repolib.api.recipes.CraftingRecipe
+import tech.thatgravyboat.repolib.api.recipes.ForgeRecipe
+import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -51,10 +54,26 @@ fun interface RecipeView {
     fun create(state: CraftHelperState, widget: WidgetBuilder, widgetConsumer: (AbstractWidget) -> Unit)
 }
 
+enum class RecipeType(val command: String) {
+    CRAFTING("viewrecipe"),
+    FORGE("viewforgerecipe"),
+    UNKNOWN(""),
+    ;
+
+    companion object {
+        fun fromRecipe(recipe: Recipe<*>?) = when (recipe) {
+            is ForgeRecipe -> FORGE
+            is CraftingRecipe -> CRAFTING
+            else -> UNKNOWN
+        }
+    }
+}
+
 data class CraftHelperState(
     val ingredient: Ingredient,
     val itemTracker: ItemTracker,
     var path: String,
+    val recipeType: RecipeType,
     var usedItems: MutableList<TrackedItem> = mutableListOf(),
     var childrenDone: Boolean = true,
     var canSupercraft: Boolean = false,
@@ -84,7 +103,14 @@ data class CraftHelperContext(
     val tracker: ItemTracker,
     val node: StandardRecipeNode,
     val ingredient: Ingredient,
-    val state: CraftHelperState = CraftHelperState(ingredient, tracker, path, usedItems = mutableListOf(), childStates = mutableListOf()),
+    val state: CraftHelperState = CraftHelperState(
+        ingredient,
+        tracker,
+        path,
+        usedItems = mutableListOf(),
+        childStates = mutableListOf(),
+        recipeType = RecipeType.fromRecipe(node.recipe),
+    ),
     val parent: CraftHelperContext? = null,
 ) {
     companion object {

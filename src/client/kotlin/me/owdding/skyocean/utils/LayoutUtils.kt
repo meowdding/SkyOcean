@@ -36,7 +36,7 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         return elements
     }
 
-    private val zeroDelay = 0.seconds.toJavaDuration()
+    private val zeroDelay = (-1).seconds.toJavaDuration()
 
     fun <T : AbstractWidget> T.withoutTooltipDelay(): T = apply {
         this.setTooltipDelay(zeroDelay)

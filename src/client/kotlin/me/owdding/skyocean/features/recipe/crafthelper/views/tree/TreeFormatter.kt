@@ -1,12 +1,19 @@
 package me.owdding.skyocean.features.recipe.crafthelper.views.tree
 
+import earth.terrarium.olympus.client.components.Widgets
+import me.owdding.lib.displays.DisplayWidget
+import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.toReadableTime
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
 import me.owdding.skyocean.features.item.soures.ForgeItemContext
 import me.owdding.skyocean.features.item.soures.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.ItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
+import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeType
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeView
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.utils.Icons
@@ -16,6 +23,7 @@ import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
@@ -52,107 +60,125 @@ object TreeFormatter : RecipeView {
             return
         }
 
-        widgetConsumer(
-            widget.text(
-                Text.of {
-                    append(prefix) { this.color = TextColor.DARK_GRAY }
-                    append("") {
-                        when {
-                            state.isDone() -> {
-                                append(Icons.CHECKMARK)
-                                this.color = TextColor.GREEN
-                                this.bold = true
-                            }
+        val id = (state.ingredient as? ItemIngredient)?.skyblockId
+        val tooltip = buildList<Component> {
+            val sources = state.usedItems.groupBy { it.source }
+            fun addUsedSources() {
+                if (isNotEmpty()) return
+                add(!"Used Item Sources:")
+                add(CommonComponents.EMPTY)
+            }
 
-                            state.childrenDone -> {
-                                append(Icons.WARNING)
-                                this.color = TextColor.YELLOW
-                            }
-
-                            else -> {
-                                append(Icons.CROSS)
-                                this.color = TextColor.RED
-                                this.bold = true
-                            }
-                        }
-                        append(" ")
-                    }
-                    append("") {
-
-                        append(available.toFormattedString())
-                        append("/")
-                        append(needed.toFormattedString())
-
-                        this.color = ARGB.lerp(available.toFloat() / needed.toFloat(), TextColor.RED, TextColor.GREEN)
-                    }
-
-                    append(" ")
-                    append(name)
-                    append(" ")
-                    append(widget.getIcons(state.usedItems.map { it.source }))
-                },
-            ).apply {
-                buildList<Component> {
-
-                    val sources = state.usedItems.groupBy { it.source }
-
-                    var isFirst = true
-                    fun addUsedSources() {
-                        if (!isFirst) return
-                        isFirst = false
-                        add(!"Used Item Sources:")
-                        add(CommonComponents.EMPTY)
-                    }
-
-                    fun addSimple(source: ItemSources, name: String) {
-                        if (!sources.containsKey(source)) return
-                        addUsedSources()
-                        if (state.amountCarryOver != 0 || state.amountThroughParents != 0) {
-                            add(CommonComponents.EMPTY)
-                        }
-                        add(
-                            Text.of(name) {
-                                append(": ")
-                                append(sources.getValue(source).sumOf { it.amount }.toFormattedString())
-                            },
-                        )
-                    }
-
-                    if (state.amountThroughParents != 0) {
-                        addUsedSources()
-                        add(!"Amount through parents: ${state.amountThroughParents.toFormattedString()}")
-                    }
-                    if (state.amountCarryOver != 0) {
-                        addUsedSources()
-                        add(!"Carry over from previous recipe: ${state.amountCarryOver.toFormattedString()}")
-                    }
-
-                    addSimple(ItemSources.INVENTORY, "Inventory")
-                    addSimple(ItemSources.SACKS, "Sacks")
-                    addSimple(ItemSources.STORAGE, "Storage")
-                    addSimple(ItemSources.WARDROBE, "${Icons.WARDROBE} Wardrobe")
-                    addSimple(ItemSources.CHEST, "${Icons.CHESTS} Chest")
-                    addSimple(ItemSources.ACCESSORY_BAG, "${Icons.ACCESSORIES} Accessory Bag")
-                    addSimple(ItemSources.VAULT, "${Icons.VAULT} Vault")
-
-
-                    if (sources.containsKey(ItemSources.FORGE)) {
-                        addUsedSources()
-                        sources.getValue(ItemSources.FORGE).map { it.context }.filterIsInstance<ForgeItemContext>().forEach { context ->
-                            val time = context.finishTime.until()
-                            val timeDisplay = if (time <= 0.seconds) "Done" else time.toReadableTime()
-
-                            add(!"${Icons.FORGE} Forge Slot: ${context.slot} - $timeDisplay")
-                        }
-                    }
-                }.takeUnless { it.isEmpty() }?.let {
-                    this.tooltip = Tooltip.create(
-                        Text.multiline(it) {
-                            this.color = TextColor.GRAY
-                        },
-                    )
+            fun addSimple(source: ItemSources, name: String) {
+                if (!sources.containsKey(source)) return
+                addUsedSources()
+                if (state.amountCarryOver != 0 || state.amountThroughParents != 0) {
+                    add(CommonComponents.EMPTY)
                 }
+                add(
+                    Text.of(name) {
+                        append(": ")
+                        append(sources.getValue(source).sumOf { it.amount }.toFormattedString())
+                    },
+                )
+            }
+
+            if (state.amountThroughParents != 0) {
+                addUsedSources()
+                add(!"Amount through parents: ${state.amountThroughParents.toFormattedString()}")
+            }
+            if (state.amountCarryOver != 0) {
+                addUsedSources()
+                add(!"Carry over from previous recipe: ${state.amountCarryOver.toFormattedString()}")
+            }
+
+            addSimple(ItemSources.INVENTORY, "Inventory")
+            addSimple(ItemSources.SACKS, "Sacks")
+            addSimple(ItemSources.STORAGE, "Storage")
+            addSimple(ItemSources.WARDROBE, "${Icons.WARDROBE} Wardrobe")
+            addSimple(ItemSources.CHEST, "${Icons.CHESTS} Chest")
+            addSimple(ItemSources.ACCESSORY_BAG, "${Icons.ACCESSORIES} Accessory Bag")
+            addSimple(ItemSources.VAULT, "${Icons.VAULT} Vault")
+
+
+            if (sources.containsKey(ItemSources.FORGE)) {
+                addUsedSources()
+                sources.getValue(ItemSources.FORGE).map { it.context }.filterIsInstance<ForgeItemContext>().forEach { context ->
+                    val time = context.finishTime.until()
+                    val timeDisplay = if (time <= 0.seconds) "Done" else time.toReadableTime()
+
+                    add(!"${Icons.FORGE} Forge Slot: ${context.slot} - $timeDisplay")
+                }
+            }
+
+            if (id != null && state.recipeType != RecipeType.UNKNOWN) {
+                if (this.isNotEmpty()) add(CommonComponents.EMPTY)
+                add(!"§eClick to open recipe!")
+            }
+        }.takeUnless { it.isEmpty() }?.toMutableList()?.let {
+
+
+            Tooltip.create(
+                Text.multiline(it) {
+                    this.color = TextColor.GRAY
+                },
+            )
+        }
+
+        val text = Displays.component(
+            Text.of {
+                append(prefix) { this.color = TextColor.DARK_GRAY }
+                append("") {
+                    when {
+                        state.isDone() -> {
+                            append(Icons.CHECKMARK)
+                            this.color = TextColor.GREEN
+                            this.bold = true
+                        }
+
+                        state.childrenDone -> {
+                            append(Icons.WARNING)
+                            this.color = TextColor.YELLOW
+                        }
+
+                        else -> {
+                            append(Icons.CROSS)
+                            this.color = TextColor.RED
+                            this.bold = true
+                        }
+                    }
+                    append(" ")
+                }
+                append("") {
+
+                    append(available.toFormattedString())
+                    append("/")
+                    append(needed.toFormattedString())
+
+                    this.color = ARGB.lerp(available.toFloat() / needed.toFloat(), TextColor.RED, TextColor.GREEN)
+                }
+
+                append(" ")
+                append(name)
+                append(" ")
+                append(widget.getIcons(state.usedItems.map { it.source }))
             },
+        )
+
+        widgetConsumer(
+            Widgets.button {
+                it.withTexture(null)
+                it.withSize(text.getWidth(), text.getHeight())
+                it.withRenderer(DisplayWidget.displayRenderer(text))
+                it.withCallback {
+                    id ?: return@withCallback
+                    when (state.recipeType) {
+                        RecipeType.UNKNOWN -> SkyOcean.debug("Clicked unknown recipe type for $id")
+                        else -> McClient.sendClientCommand("${state.recipeType.command} $id")
+                    }
+                }
+                it.tooltip = tooltip
+            }.withoutTooltipDelay(),
         )
 
         if (state.hasChildren) {

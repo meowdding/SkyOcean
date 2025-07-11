@@ -44,10 +44,10 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 /**
  * TODO
- * - close hover effect
  * - moveable
  * - crystals for prefect gemstones
  * - clickable lines for recipe
+ * - collapse tree sections
  */
 @LateInitModule
 object CraftHelperDisplay {
@@ -213,7 +213,7 @@ object CraftHelperDisplay {
                         Displays.component(Text.of(Icons.CROSS) { this.color = TextColor.RED }).asButtonLeft {
                             CraftHelperStorage.setSelected(null)
                             callback(false)
-                        },
+                        }.withoutTooltipDelay().withTooltip(Text.of("Close") { this.color = TextColor.RED }),
                     )
                     string("")
                 }
