@@ -33,11 +33,10 @@ object ForgeRecipeModifier {
 
         val item = event.inventory[16].item.getSkyBlockId() ?: return
         if (event.item !in ItemTag.GLASS_PANES) {
-            SkyOcean.warn("Failed to place minister item in calendar, item is not a glass pane")
+            SkyOcean.warn("Failed to place craft helper item in forge recipe, item is not a glass pane")
             return
         }
         event.item.replaceVisually {
-            copyFrom(event.item)
             set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT.withHidden(DataComponents.ATTRIBUTE_MODIFIERS, true))
             this.item = Items.DIAMOND_PICKAXE
             name(

@@ -24,6 +24,7 @@ import tech.thatgravyboat.repolib.api.RepoVersion
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
+import tech.thatgravyboat.skyblockapi.api.events.misc.RepoStatusEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -31,7 +32,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.url
 import java.net.URI
-import java.util.concurrent.CompletableFuture
 
 @Module
 object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOcean") {
@@ -63,11 +63,10 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         SkyOceanModules.init { SkyBlockAPI.eventBus.register(it) }
 
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
-        CompletableFuture.runAsync {
-            while (!RepoAPI.isInitialized()) {
-            }
-            SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
-        }
+    }
+
+    fun RepoStatusEvent.onRepoReady() {
+        SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
     }
 
     fun sendUpdateMessage(link: String, current: String, new: String) {

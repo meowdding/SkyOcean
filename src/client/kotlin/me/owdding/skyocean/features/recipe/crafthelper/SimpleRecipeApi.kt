@@ -7,7 +7,7 @@ import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
-val illegalIngredients = listOf(
+private val illegalIngredients = listOf(
     "DIAMOND_BLOCK",
     "IRON_BLOCK",
     "EMERALD_BLOCK",
@@ -34,11 +34,7 @@ object SimpleRecipeApi {
             isBlacklisted(it).apply {
                 if (this) {
                     SkyOcean.debug(
-                        "Removing ${RecipeVisitor.getOutput(it)?.skyblockId} with ${
-                            RecipeVisitor.getInputs(
-                                it,
-                            ).size
-                        } ingredients",
+                        "Removing ${RecipeVisitor.getOutput(it)?.skyblockId} with ${RecipeVisitor.getInputs(it).size} ingredients",
                     )
                 }
             }
@@ -68,11 +64,9 @@ object SimpleRecipeApi {
 
     fun getBestRecipe(id: String): Recipe<*>? {
         assert(hasRecipe(id)) { "Item has no recipe" }
-        runCatching {
-            return idToRecipes[id]!!.firstOrNull()!!
-        }.getOrElse {
-            return null
-        }
+        return runCatching {
+            idToRecipes[id]!!.firstOrNull()!!
+        }.getOrNull()
     }
 
     fun isBlacklisted(recipe: Recipe<*>): Boolean {

@@ -1,4 +1,4 @@
-package me.owdding.skyocean.commands
+package me.owdding.skyocean.utils.suggestions
 
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import com.mojang.brigadier.suggestion.SuggestionsBuilder

@@ -8,12 +8,12 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.InventoryBuilder
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.lib.extensions.withTooltip
-import me.owdding.skyocean.commands.SkyOceanSuggestionProvider
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperStorage
 import me.owdding.skyocean.helpers.ClientSideInventory
 import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.suggestions.SkyOceanSuggestionProvider
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.repolib.api.RepoAPI
