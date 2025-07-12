@@ -100,8 +100,13 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
                 val other = contexts.filterIsInstance<AbstractStorageItemContext>().firstOrNull() // there should only ever be one entry per type
                 val mergedContext: ItemContext = when {
                     other == null -> newContext
-                    newContext is BackpackStorageItemContext && other is BackpackStorageItemContext -> if (newContext.index == other.index) other else StorageItemContext
-                    newContext is EnderChestStorageItemContext && other is EnderChestStorageItemContext -> if (newContext.index == other.index) other else StorageItemContext
+
+                    newContext is BackpackStorageItemContext && other is BackpackStorageItemContext ->
+                        if (newContext.index == other.index) other else StorageItemContext
+
+                    newContext is EnderChestStorageItemContext && other is EnderChestStorageItemContext ->
+                        if (newContext.index == other.index) other else StorageItemContext
+
                     else -> StorageItemContext
                 }
                 other?.let(contexts::remove)
