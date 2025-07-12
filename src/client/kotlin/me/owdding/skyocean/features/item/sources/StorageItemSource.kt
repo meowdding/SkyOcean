@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.item.soures
+package me.owdding.skyocean.features.item.sources
 
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem

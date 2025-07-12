@@ -7,8 +7,8 @@ import me.owdding.lib.extensions.toReadableTime
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
-import me.owdding.skyocean.features.item.soures.ForgeItemContext
-import me.owdding.skyocean.features.item.soures.ItemSources
+import me.owdding.skyocean.features.item.sources.ForgeItemContext
+import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.ItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker

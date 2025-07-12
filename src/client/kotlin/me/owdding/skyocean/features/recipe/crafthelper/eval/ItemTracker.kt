@@ -2,7 +2,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.eval
 
 import me.owdding.lib.extensions.floor
 import me.owdding.skyocean.features.item.search.ItemContext
-import me.owdding.skyocean.features.item.soures.ItemSources
+import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.Ingredient
 import me.owdding.skyocean.features.recipe.crafthelper.serialize
 import tech.thatgravyboat.skyblockapi.api.profile.CurrencyAPI

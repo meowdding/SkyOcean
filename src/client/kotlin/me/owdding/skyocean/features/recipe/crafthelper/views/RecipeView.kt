@@ -3,7 +3,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.views
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.extensions.floor
-import me.owdding.skyocean.features.item.soures.ItemSources
+import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.*
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
