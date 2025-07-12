@@ -16,6 +16,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeType
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeView
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
+import me.owdding.skyocean.utils.ChatUtils.append
 import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.Utils.not
 import net.minecraft.client.gui.components.AbstractWidget
@@ -128,7 +129,7 @@ object TreeFormatter : RecipeView {
         val text = Displays.component(
             Text.of {
                 append(prefix) { this.color = TextColor.DARK_GRAY }
-                append("") {
+                append {
                     when {
                         state.isDone() -> {
                             append(Icons.CHECKMARK)
@@ -149,7 +150,7 @@ object TreeFormatter : RecipeView {
                     }
                     append(" ")
                 }
-                append("") {
+                append {
 
                     append(available.toFormattedString())
                     append("/")

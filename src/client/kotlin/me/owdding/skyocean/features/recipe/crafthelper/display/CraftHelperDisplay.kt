@@ -25,6 +25,7 @@ import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.suggestions.CombinedSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeIdSuggestionProvider
@@ -33,6 +34,7 @@ import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
@@ -70,12 +72,7 @@ object CraftHelperDisplay {
                     data?.amount = 1
                     CraftHelperStorage.save()
                     Text.of("Set current recipe to ") {
-                        val item = data?.item
-                        if (item == null) {
-                            append("unknown")
-                        } else {
-                            append(RepoItemsAPI.getItemName(item))
-                        }
+                        append(data?.item?.let(RepoItemsAPI::getItemOrNull)?.let(ItemStack::getHoverName) ?: !"unknown")
                         append("!")
                     }.sendWithPrefix()
                 }

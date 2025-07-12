@@ -48,6 +48,8 @@ internal object ChatUtils {
         this.siblings.filterIsInstance<MutableComponent>().forEach { it.withoutShadow() }
     }
 
+    fun MutableComponent.append(init: MutableComponent.() -> Unit) = this.append(Text.of(init))
+
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))
     fun chat(text: Component) = Text.join(prefix, text).withoutShadow().send()
 
