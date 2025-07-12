@@ -14,6 +14,8 @@ import net.minecraft.client.gui.layouts.LayoutSettings
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseCursorScreen(title) {
     constructor(title: String) : this(Text.of(title))
@@ -34,6 +36,12 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         return elements
     }
 
+    private val zeroDelay = (-1).seconds.toJavaDuration()
+
+    fun <T : AbstractWidget> T.withoutTooltipDelay(): T = apply {
+        this.setTooltipDelay(zeroDelay)
+    }
+
     fun LayoutElement.applyAsRenderable() {
         this.visitWidgets {
             it.isFocused = true
@@ -48,12 +56,15 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         }
     }
 
-    fun Layout.asScrollable(width: Int, height: Int, init: LayoutWidget<FrameLayout>.() -> Unit = {}, allwaysShowScrollBar: Boolean = false): Layout {
+    fun Layout.asScrollable(width: Int, height: Int, init: LayoutWidget<FrameLayout>.() -> Unit = {}, alwaysShowScrollBar: Boolean = false): Layout {
         this.arrangeElements()
-        val widget = LayoutWidget(this).also { it.visible = true }.withStretchToContentSize()
+        val widget = LayoutWidget(this).apply {
+            visible = true
+            withAutoFocus(false)
+        }.withStretchToContentSize()
 
         return LayoutFactory.frame(width, height) {
-            widget(widget.asScrollable(width, height, init, allwaysShowScrollBar))
+            widget(widget.asScrollable(width, height, init, alwaysShowScrollBar))
         }
     }
 
@@ -61,36 +72,42 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         width: Int,
         height: Int,
         init: LayoutWidget<FrameLayout>.() -> Unit = {},
-        allwaysShowScrollBar: Boolean = false,
+        alwaysShowScrollBar: Boolean = false,
     ): LayoutWidget<FrameLayout> {
         this.arrangeElements()
-        val widget = LayoutWidget(this).also { it.visible = true }.withStretchToContentSize()
+        val widget = LayoutWidget(this).apply {
+            visible = true
+            withAutoFocus(false)
+        }.withStretchToContentSize()
 
-        return widget.asScrollable(width, height, init, allwaysShowScrollBar)
+        return widget.asScrollable(width, height, init, alwaysShowScrollBar)
     }
 
     fun AbstractWidget.asScrollable(
         width: Int,
         height: Int,
         init: LayoutWidget<FrameLayout>.() -> Unit = {},
-        allwaysShowScrollBar: Boolean = false,
+        alwaysShowScrollBar: Boolean = false,
     ): LayoutWidget<FrameLayout> {
         val scrollable = Widgets.frame { frame ->
-            frame.withScrollableY(TriState.of(allwaysShowScrollBar.takeIf { it }))
+            frame.withScrollableY(TriState.of(alwaysShowScrollBar.takeIf { it }))
                 .withSize(width, this.height.coerceAtMost(height))
+                .withAutoFocus(false)
                 .withContents { contents ->
                     contents.setMinWidth(width - 10)
                     contents.addChild(this, LayoutSettings.defaults().alignHorizontallyCenter())
-                }.init()
+                }
+                .withAutoFocus(false)
+                .init()
         }
 
         return scrollable
     }
 }
 
-fun List<List<LayoutElement>>.asTable(spacing: Int = 0): Layout {
+fun List<List<LayoutElement>>.asWidgetTable(spacing: Int = 0): Layout {
     return LayoutFactory.vertical(spacing) {
-        this@asTable.map {
+        this@asWidgetTable.map {
             LayoutFactory.horizontal(spacing) {
                 it.forEach(::widget)
             }

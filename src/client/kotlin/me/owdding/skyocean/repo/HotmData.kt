@@ -8,10 +8,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.exclusiveInclusive
-import net.minecraft.ChatFormatting
-import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Module
 object HotmData {
@@ -53,16 +50,4 @@ object HotmData {
 
     fun perkByName(name: String): HotmPerk? = perks.firstOrNull { it.name == name }
 
-    enum class PowderType(val formatting: ChatFormatting) {
-        MITHRIL(ChatFormatting.DARK_GREEN),
-        GEMSTONE(ChatFormatting.LIGHT_PURPLE),
-        GLACITE(ChatFormatting.AQUA);
-
-        val displayName by lazy {
-            Text.of(name.toTitleCase()) {
-                append(" Powder")
-                this.withStyle(formatting)
-            }
-        }
-    }
 }

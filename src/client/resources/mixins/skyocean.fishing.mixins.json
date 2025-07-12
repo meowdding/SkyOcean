@@ -3,7 +3,8 @@
   "package": "me.owdding.skyocean.mixins.features.fishing",
   "parent": "skyocean.client.mixins.json",
   "client": [
-    "FluidRenderHandlerRegistryImplMixin",
-    "FishingHookMixin"
+    "FishingHookMixin",
+    "FishingHookRendererMixin",
+    "FluidRenderHandlerRegistryImplMixin"
   ]
 }

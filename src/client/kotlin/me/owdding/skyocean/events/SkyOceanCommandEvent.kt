@@ -24,20 +24,26 @@ class RegisterSkyOceanCommandEvent(private val dispatcher: CommandDispatcher<Fab
             .let(dispatcher::register)
     }
 
-    fun registerWithCallback(command: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
-        ClientCommandManager.literal("skyocean")
-            ?.apply { LiteralCommandBuilder(this).then(command) { callback(callback) } }
-            ?.let(dispatcher::register)
-    }
-
     fun register(command: String, builder: LiteralCommandBuilder.() -> Unit) {
         ClientCommandManager.literal("skyocean")
             ?.apply { LiteralCommandBuilder(this).then(command, action = builder) }
             ?.let(dispatcher::register)
     }
 
+    fun registerWithCallback(command: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
+        register(command) {
+            this.callback(callback)
+        }
+    }
+
     fun registerDev(command: LiteralArgumentBuilder<FabricClientCommandSource>) {
         register(ClientCommandManager.literal("dev").then(command))
+    }
+
+    fun registerDevWithCallback(command: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
+        registerDev(command) {
+            this.callback(callback)
+        }
     }
 
     fun registerDev(command: String, builder: LiteralCommandBuilder.() -> Unit) {
@@ -47,6 +53,7 @@ class RegisterSkyOceanCommandEvent(private val dispatcher: CommandDispatcher<Fab
             },
         )
     }
+
 }
 
 class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal constructor(
@@ -73,6 +80,12 @@ class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal
             this.builder.then(builder.builder)
         }
         return this
+    }
+
+    fun thenCallback(vararg name: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
+        then(*name) {
+            callback(callback)
+        }
     }
 
     fun <T> then(

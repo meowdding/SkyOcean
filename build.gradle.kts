@@ -1,3 +1,4 @@
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.internal.artifacts.dependencies.DefaultMinimalDependency
@@ -10,8 +11,8 @@ plugins {
     alias(libs.plugins.loom)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin)
-    alias(libs.plugins.repo)
-    alias(libs.plugins.resources)
+    alias(libs.plugins.meowdding.repo)
+    alias(libs.plugins.meowdding.resources)
 }
 
 base {
@@ -26,6 +27,7 @@ java {
 loom {
     splitEnvironmentSourceSets()
 
+    log4jConfigs.from(project.layout.projectDirectory.file("gradle/log4j.config.xml"))
     accessWidenerPath.set(project.projectDir.resolve("src/main/resources/skyocean.accesswidener"))
 
     runs {
@@ -120,6 +122,7 @@ dependencies {
 
     modRuntimeOnly(libs.devauth)
     modRuntimeOnly(libs.modmenu)
+    modRuntimeOnly(libs.meowdding.dev.utils)
 }
 
 tasks.jar {
@@ -182,17 +185,25 @@ compactingResources {
 }
 
 repo {
+    val predicate: (JsonElement) -> Boolean = {
+        when (it) {
+            is JsonObject -> it.size() > 1
+            else -> true
+        }
+    }
     hotm {
         excludeAllExcept {
             name()
             cost()
         }
-        withPredicate {
-            when (it) {
-                is JsonObject -> it.size() > 1
-                else -> true
-            }
+        withPredicate(predicate)
+    }
+    hotf {
+        excludeAllExcept {
+            name()
+            cost()
         }
+        withPredicate(predicate)
     }
     sacks { includeAll() }
 }
