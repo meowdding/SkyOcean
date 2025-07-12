@@ -7,8 +7,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
-import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -69,11 +69,11 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
     lateinit var item: ItemStack
 
     override fun collectLines() = build {
-        map.entries.sortedBy { it.key.ordinal }.forEach { (key, value) ->
+        map.entries.sortedByDescending { it.key.ordinal }.forEach { (key, value) ->
             add(key.name.toTitleCase()) {
                 append(":")
                 append(CommonComponents.SPACE)
-                append(value)
+                append(value.toFormattedString())
                 this.color = TextColor.GRAY
             }
         }
