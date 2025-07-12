@@ -14,6 +14,8 @@ import net.minecraft.client.gui.layouts.LayoutSettings
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseCursorScreen(title) {
     constructor(title: String) : this(Text.of(title))
@@ -34,6 +36,12 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         return elements
     }
 
+    private val zeroDelay = (-1).seconds.toJavaDuration()
+
+    fun <T : AbstractWidget> T.withoutTooltipDelay(): T = apply {
+        this.setTooltipDelay(zeroDelay)
+    }
+
     fun LayoutElement.applyAsRenderable() {
         this.visitWidgets {
             it.isFocused = true
@@ -50,9 +58,9 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
 
     fun Layout.asScrollable(width: Int, height: Int, init: LayoutWidget<FrameLayout>.() -> Unit = {}, alwaysShowScrollBar: Boolean = false): Layout {
         this.arrangeElements()
-        val widget = LayoutWidget(this).also {
-            it.visible = true
-            it.withAutoFocus(false)
+        val widget = LayoutWidget(this).apply {
+            visible = true
+            withAutoFocus(false)
         }.withStretchToContentSize()
 
         return LayoutFactory.frame(width, height) {
@@ -67,9 +75,9 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         alwaysShowScrollBar: Boolean = false,
     ): LayoutWidget<FrameLayout> {
         this.arrangeElements()
-        val widget = LayoutWidget(this).also {
-            it.visible = true
-            it.withAutoFocus(false)
+        val widget = LayoutWidget(this).apply {
+            visible = true
+            withAutoFocus(false)
         }.withStretchToContentSize()
 
         return widget.asScrollable(width, height, init, alwaysShowScrollBar)
@@ -88,7 +96,9 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
                 .withContents { contents ->
                     contents.setMinWidth(width - 10)
                     contents.addChild(this, LayoutSettings.defaults().alignHorizontallyCenter())
-                }.init()
+                }
+                .withAutoFocus(false)
+                .init()
         }
 
         return scrollable

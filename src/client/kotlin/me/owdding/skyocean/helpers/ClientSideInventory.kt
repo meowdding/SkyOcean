@@ -124,7 +124,7 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
         private val TEXTURE = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png")
     }
 
-    data class Slot(val x: Int, val y: Int, val itemStack: ItemStack? = null, val onClick: (Int) -> Unit = {}) {
+    data class Slot(val x: Int, val y: Int, val itemStack: ItemStack? = null, var onClick: (Int) -> Unit = {}) {
         fun mouseOver(mouseX: Int, mouseY: Int) = mouseX > x && mouseX < x + 18 && mouseY > y && mouseY < y + 18
 
         companion object {

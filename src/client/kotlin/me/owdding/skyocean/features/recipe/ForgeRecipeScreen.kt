@@ -2,17 +2,19 @@ package me.owdding.skyocean.features.recipe
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.brigadier.suggestion.SuggestionProvider
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.InventoryBuilder
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.lib.extensions.withTooltip
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperStorage
 import me.owdding.skyocean.helpers.ClientSideInventory
+import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.suggestions.SkyOceanSuggestionProvider
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
-import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.recipes.Recipe
@@ -26,6 +28,8 @@ import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoPetsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoRecipeAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -70,6 +74,19 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
                 add(index, item)
             }
 
+            if (MiscConfig.craftHelperEnabled) {
+                add(32, Items.DIAMOND_PICKAXE) {
+                    add(
+                        Text.join(ChatUtils.ICON_SPACE_COMPONENT, "Craft Helper") {
+                            this.color = TextColor.GREEN
+                        },
+                    )
+                    add("Set as selected craft helper item!") {
+                        this.color = TextColor.GRAY
+                    }
+                }
+            }
+
             add(14, Items.FURNACE) {
                 add("Forge Recipe") {
                     color = TextColor.GREEN
@@ -103,6 +120,12 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
         }.build()
 
         addItems(items)
+        if (MiscConfig.craftHelperEnabled) {
+            slots[32].onClick = {
+                CraftHelperStorage.setSelected(id)
+                McScreen.self?.onClose()
+            }
+        }
     }
 }
 
@@ -122,7 +145,7 @@ object ForgeRecipeScreenHandler {
     }
 }
 
-object ForgeSuggestionProvider : SuggestionProvider<FabricClientCommandSource> {
+object ForgeSuggestionProvider : SkyOceanSuggestionProvider {
     override fun getSuggestions(
         context: CommandContext<FabricClientCommandSource?>,
         builder: SuggestionsBuilder,
@@ -147,13 +170,5 @@ object ForgeSuggestionProvider : SuggestionProvider<FabricClientCommandSource> {
             }
         }
         return builder.buildFuture()
-    }
-
-    private fun suggest(builder: SuggestionsBuilder, name: String) {
-        val validChars = listOf(' ', '_', '-')
-        val filtered = name.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()
-        if (SharedSuggestionProvider.matchesSubStr(builder.remaining.lowercase(), filtered.lowercase())) {
-            builder.suggest(filtered)
-        }
     }
 }

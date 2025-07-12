@@ -9,10 +9,29 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 
+internal object Icons {
+
+    const val WAVE = "\uD83C\uDF0A"
+
+    const val CHECKMARK = "\u2714"
+    const val CROSS = "\u274C"
+    const val WARNING = "\u26A0"
+    const val HOLLOW_FLAG = "\u2690"
+    const val FILLED_FLAG = "\u2691"
+
+    const val WARDROBE = "\u2602"
+    const val VAULT = "\u00a5"
+    const val ACCESSORIES = "\u16f0"
+    const val FORGE = "\u16dd"
+    const val CHESTS = "\u2302"
+
+}
+
 internal object ChatUtils {
     private const val gradient = "#87CEEB #7FFFD4"
 
-    const val ICON = "\uD83C\uDF0A"
+    const val ICON = Icons.WAVE
+
     const val ICON_WITH_SPACE = "$ICON "
     const val DARK_OCEAN_BLUE = OceanColors.DARK_CYAN_BLUE
     val ICON_COMPONENT = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
@@ -28,6 +47,8 @@ internal object ChatUtils {
         this.shadowColor = null
         this.siblings.filterIsInstance<MutableComponent>().forEach { it.withoutShadow() }
     }
+
+    fun MutableComponent.append(init: MutableComponent.() -> Unit) = this.append(Text.of(init))
 
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))
     fun chat(text: Component) = Text.join(prefix, text).withoutShadow().send()

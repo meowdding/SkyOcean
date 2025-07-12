@@ -1,9 +1,9 @@
 package me.owdding.skyocean.features.item.search.screen
 
-import me.owdding.skyocean.features.item.search.soures.ChestItemSource
-import me.owdding.skyocean.features.item.search.soures.ItemSource
-import me.owdding.skyocean.features.item.search.soures.SacksItemSource
-import me.owdding.skyocean.features.item.search.soures.StorageItemSource
+import me.owdding.skyocean.features.item.sources.ChestItemSource
+import me.owdding.skyocean.features.item.sources.ItemSource
+import me.owdding.skyocean.features.item.sources.SacksItemSource
+import me.owdding.skyocean.features.item.sources.StorageItemSource
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.ItemLike

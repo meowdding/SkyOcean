@@ -218,6 +218,22 @@
         "@value": "Show Hidden Pet Candy",
         "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
       },
+      "crafthelper": {
+        "@value": "Craft Helper",
+        "desc": "Craft helper is a feature that lets you see all the steps in a recipe and how much progress you have made towards completing it.",
+        "enabled": {
+          "@value": "Enable Craft Helper",
+          "desc": "Whether the craft helper is enabled or not, this is the main switch."
+        },
+        "hideCompleted": {
+          "@value": "Hide completed",
+          "desc": "Whether to hide completed parts of the tree or not."
+        },
+        "parentAmount": {
+          "@value": "Add parent amount",
+          "desc": "Includes the amount that is already present through parents."
+        }
+      },
       "transparentArmor": {
         "@value": "Transparent Armour",
         "desc": [

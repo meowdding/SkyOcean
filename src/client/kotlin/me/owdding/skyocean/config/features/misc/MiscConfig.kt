@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.ConfigCategory
+import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.utils.transparency
 
 @ConfigCategory
@@ -33,10 +34,23 @@ object MiscConfig : CategoryKt("misc") {
     }
 
     init {
-        separator {
-            title = "skyocean.config.misc.transparentArmor"
-            description = "skyocean.config.misc.transparentArmor.desc"
-        }
+        separator("skyocean.config.misc.crafthelper")
+    }
+
+    var craftHelperEnabled by boolean(true) {
+        translation = "skyocean.config.misc.crafthelper.enabled"
+    }
+
+    var craftHelperHideCompleted by boolean(true) {
+        translation = "skyocean.config.misc.crafthelper.hideCompleted"
+    }
+
+    var craftHelperParentAmount by boolean(true) {
+        translation = "skyocean.config.misc.crafthelper.parentAmount"
+    }
+
+    init {
+        separator("skyocean.config.misc.transparentArmor")
     }
 
     var transparentArmorSelf by transparency(100) {
