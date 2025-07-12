@@ -24,6 +24,7 @@ enum class ItemSources(val itemSource: ItemSource?) {
     FORGE(ForgeItemSource),
     INVENTORY(InventoryItemSource),
     VAULT(VaultItemSource),
+    MUSEUM(MuseumItemSource)
     ;
     // todo SACK_OF_SACKS(TODO()),
     // todo POTION_BAG(TODO()),
