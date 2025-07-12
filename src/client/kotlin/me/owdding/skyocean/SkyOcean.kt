@@ -7,6 +7,7 @@ import me.owdding.lib.compat.RemoteConfig
 import me.owdding.lib.utils.DataPatcher
 import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.helpers.fakeblocks.FakeBlocks
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
@@ -23,6 +24,7 @@ import tech.thatgravyboat.repolib.api.RepoVersion
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
+import tech.thatgravyboat.skyblockapi.api.events.misc.RepoStatusEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -59,8 +61,16 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
         RepoAPI.setup(RepoVersion.V1_21_5)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
         SkyOceanModules.init { SkyBlockAPI.eventBus.register(it) }
+        if (RepoAPI.isInitialized()) {
+            onRepoReady(null)
+        }
 
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
+    }
+
+    @Subscription
+    private fun onRepoReady(event: RepoStatusEvent?) {
+        SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
     }
 
     fun sendUpdateMessage(link: String, current: String, new: String) {
@@ -98,6 +108,6 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
 
 
     fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
-    fun olympus(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("olympus", path)
     fun minecraft(path: String): ResourceLocation = ResourceLocation.withDefaultNamespace(path)
+    fun olympus(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("olympus", path)
 }
