@@ -7,8 +7,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
-import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -64,19 +64,22 @@ class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
 }
 
 data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMapOf()) : ItemContext {
+    val contexts = mutableListOf<ItemContext>()
     val chests = mutableSetOf<BlockPos>()
     lateinit var item: ItemStack
 
     override fun collectLines() = build {
-        map.entries.sortedBy { it.key.ordinal }.forEach { (key, value) ->
+        map.entries.sortedByDescending { it.key.ordinal }.forEach { (key, value) ->
             add(key.name.toTitleCase()) {
                 append(":")
                 append(CommonComponents.SPACE)
-                append(value)
+                append(value.toFormattedString())
                 this.color = TextColor.GRAY
             }
         }
     }
+
+    private inline fun <reified T> any() = contexts.filterIsInstance<T>().isNotEmpty()
 
     fun add(newItem: TrackedItem) {
         assert(newItem.context.source != ItemSources.BUNDLE)
@@ -84,14 +87,42 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
             this.item = newItem.itemStack
         }
         map.merge(newItem.context.source, newItem.itemStack.count, Int::plus)
-        if (newItem.context is ChestItemContext) {
-            chests.add((newItem.context as ChestItemContext).chestPos)
+        val newContext = newItem.context
+        when {
+            newContext is ChestItemContext -> chests.add(newContext.chestPos)
+
+            newContext is EquipmentItemContext && !any<EquipmentItemContext>() -> contexts.add(EquipmentItemContext)
+            newContext is InventoryItemContext && !any<InventoryItemContext>() -> contexts.add(InventoryItemContext)
+
+            newContext is AbstractStorageItemContext && any<StorageItemContext>() -> {} // skip
+
+            newContext is AbstractStorageItemContext -> {
+                val other = contexts.filterIsInstance<AbstractStorageItemContext>().firstOrNull() // there should only ever be one entry per type
+                val mergedContext: ItemContext = when {
+                    other == null -> newContext
+
+                    newContext is BackpackStorageItemContext && other is BackpackStorageItemContext ->
+                        if (newContext.index == other.index) other else StorageItemContext
+
+                    newContext is EnderChestStorageItemContext && other is EnderChestStorageItemContext ->
+                        if (newContext.index == other.index) other else StorageItemContext
+
+                    else -> StorageItemContext
+                }
+                other?.let(contexts::remove)
+                contexts.add(mergedContext)
+            }
         }
     }
 
     override val source = ItemSources.BUNDLE
 
     override fun open() = McClient.runNextTick {
+        val context = map.entries.sortedByDescending { (_, value) -> value }
+            .firstNotNullOfOrNull { (key, _) -> contexts.filterNot { it is OnPlayerItemContext }.firstOrNull { it.source == key } }
+
+        context?.open()
+
         ItemHighlighter.addChests(chests)
     }
 }

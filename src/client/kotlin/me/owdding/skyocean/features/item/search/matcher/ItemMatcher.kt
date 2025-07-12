@@ -51,8 +51,8 @@ object ItemMatcher {
                     return false
                 }
             }
-        } else if (firstComponent is Component && secondComponent is Component && !firstComponent.stripped.equals(secondComponent.stripped, true)) {
-            return false
+        } else if (firstComponent is Component && secondComponent is Component) {
+            return firstComponent.stripped.equals(secondComponent.stripped, true)
         }
 
         return firstComponent == secondComponent
