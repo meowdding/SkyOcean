@@ -17,6 +17,7 @@ object MuseumItemSource : ItemSource {
     override val type = ItemSources.MUSEUM
 }
 
+// TODO: add highlighting categories and items in museum menu
 data class MuseumItemContext(private val category: MuseumCategory) : ItemContext {
     override fun collectLines(): List<Component> = build {
         add("Museum Category $category") { color = TextColor.GRAY }
