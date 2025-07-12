@@ -10,7 +10,7 @@ import tech.thatgravyboat.repolib.api.recipes.ingredient.CraftingIngredient
 
 object ForgeRecipeVisitor : RecipeVisitor {
     override fun getInputs(recipe: Recipe<*>): List<Ingredient> {
-        if (recipe !is ForgeRecipe) throw RuntimeException()
+        if (recipe !is ForgeRecipe) return emptyList()
 
         return buildList {
             recipe.inputs().mapNotNull(CraftingIngredient::toSkyOceanIngredient).let(::addAll)

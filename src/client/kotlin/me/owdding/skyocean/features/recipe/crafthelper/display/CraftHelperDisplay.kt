@@ -111,7 +111,7 @@ object CraftHelperDisplay {
             reset()
             (layout as? FrameLayoutAccessor)?.children()?.clear()
             val tree = ContextAwareRecipeTree(recipe, output, data?.amount?.coerceAtLeast(1) ?: 1)
-            layout.addChild(createThingy(tree, output) { callback })
+            layout.addChild(visualize(tree, output) { callback })
             layout.arrangeElements()
             layout.setPosition(10, (McScreen.self?.height?.div(2) ?: 0) - (layout.height / 2))
             layout.visitWidgets { event.widgets.add(it) }
@@ -120,7 +120,7 @@ object CraftHelperDisplay {
         callback(false)
     }
 
-    fun createThingy(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
+    private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
         val tracker = ItemTracker()
         val callback = callback()
 
