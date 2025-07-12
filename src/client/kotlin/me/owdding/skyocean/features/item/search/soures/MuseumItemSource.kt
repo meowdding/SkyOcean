@@ -25,5 +25,5 @@ data class MuseumItemContext(private val category: MuseumCategory) : ItemContext
 
     override fun open() = McClient.sendCommand("warp museum")
 
-    override val source get() = ItemSources.MUSEUM
+    override val source = ItemSources.MUSEUM
 }
