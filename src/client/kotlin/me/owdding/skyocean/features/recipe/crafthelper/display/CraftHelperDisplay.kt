@@ -44,13 +44,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
-/**
- * TODO
- * - moveable
- * - crystals for prefect gemstones
- * - clickable lines for recipe
- * - collapse tree sections
- */
 @LateInitModule
 object CraftHelperDisplay {
 
