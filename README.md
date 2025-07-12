@@ -162,6 +162,7 @@ seamless way.
 <details>
 <summary>Misc Config</summary>
 
+- Craft Helper
 - Mute the phantoms
 - Minister in Calendar
 - Previous server notifications
