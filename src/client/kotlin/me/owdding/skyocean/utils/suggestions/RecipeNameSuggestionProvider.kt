@@ -4,7 +4,6 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
-import me.owdding.skyocean.features.recipe.visitors.RecipeVisitor
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import java.util.concurrent.CompletableFuture
@@ -16,7 +15,7 @@ object RecipeNameSuggestionProvider : SkyOceanSuggestionProvider {
         builder: SuggestionsBuilder,
     ): CompletableFuture<Suggestions?>? {
         SimpleRecipeApi.recipes.forEach { recipe ->
-            RecipeVisitor.getOutput(recipe)?.let {
+            recipe.output?.let {
                 suggest(builder, it.itemName.stripped)
             }
         }

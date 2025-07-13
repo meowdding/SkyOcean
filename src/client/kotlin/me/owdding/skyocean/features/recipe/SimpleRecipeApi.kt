@@ -1,11 +1,10 @@
 package me.owdding.skyocean.features.recipe
 
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.features.recipe.visitors.RecipeVisitor
 import me.owdding.skyocean.utils.LateInitModule
 import tech.thatgravyboat.repolib.api.RepoAPI
-import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.repolib.api.recipes.Recipe as RepoApiRecipe
 
 private val illegalIngredients = listOf(
     "DIAMOND_BLOCK",
@@ -22,26 +21,26 @@ private val illegalIngredients = listOf(
 @LateInitModule
 object SimpleRecipeApi {
 
-    internal val supportedTypes = arrayOf(Recipe.Type.FORGE, Recipe.Type.CRAFTING)
-    internal val recipes = mutableListOf<Recipe<*>>()
-    internal val idToRecipes: Map<String, List<Recipe<*>>>
+    internal val supportedTypes = arrayOf(RepoApiRecipe.Type.FORGE to RecipeType.FORGE, RepoApiRecipe.Type.CRAFTING to RecipeType.CRAFTING)
+    internal val recipes = mutableListOf<Recipe>()
+    internal val idToRecipes: Map<String, List<Recipe>>
 
     init {
-        supportedTypes.forEach { recipeType ->
-            recipes += RepoAPI.recipes().getRecipes(recipeType)
+        supportedTypes.forEach { (recipe, type) ->
+            recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe -> RepoApiRecipe(recipe, type) }
         }
         recipes.removeIf {
             isBlacklisted(it).apply {
                 if (this) {
                     SkyOcean.debug(
-                        "Removing ${RecipeVisitor.getOutput(it)?.skyblockId} with ${RecipeVisitor.getInputs(it).size} ingredients",
+                        "Removing ${it.output?.skyblockId} with ${it.inputs.size} ingredients",
                     )
                 }
             }
         }
         SkyOcean.trace("Loaded ${recipes.size} Recipes from repo api")
 
-        idToRecipes = recipes.mapNotNull { recipe -> RecipeVisitor.getOutput(recipe)?.skyblockId?.let { recipe to it } }
+        idToRecipes = recipes.mapNotNull { recipe -> recipe.output?.skyblockId?.let { recipe to it } }
             .groupBy { it.second }
             .mapValues { (k, v) -> v.map { it.first } }
             .filter { (_, v) -> v.isNotEmpty() }
@@ -49,8 +48,8 @@ object SimpleRecipeApi {
         McClient.runNextTick {
             val amount = recipes.flatMap {
                 buildList {
-                    add(RecipeVisitor.getOutput(it))
-                    addAll(RecipeVisitor.getInputs(it))
+                    add(it.output)
+                    addAll(it.inputs)
                 }.filterIsInstance<ItemLikeIngredient>()
             }.onEach { it.itemName }.count()
             SkyOcean.trace("Preloaded $amount items")
@@ -62,21 +61,21 @@ object SimpleRecipeApi {
     fun getBestRecipe(ingredient: Ingredient) =
         (ingredient as? ItemLikeIngredient)?.skyblockId?.takeIf(::hasRecipe)?.let { getBestRecipe(it) }
 
-    fun getBestRecipe(id: String): Recipe<*>? {
+    fun getBestRecipe(id: String): Recipe? {
         assert(hasRecipe(id)) { "Item has no recipe" }
         return runCatching {
             idToRecipes[id]!!.firstOrNull()!!
         }.getOrNull()
     }
 
-    fun isBlacklisted(recipe: Recipe<*>): Boolean {
-        val inputs = RecipeVisitor.getInputs(recipe)
+    fun isBlacklisted(recipe: Recipe): Boolean {
+        val inputs = recipe.inputs
         val itemInputs = inputs.filterIsInstance<ItemLikeIngredient>().map { it.skyblockId }.distinct()
         if (inputs.size == itemInputs.size && itemInputs.size == 1 && illegalIngredients.containsAll(itemInputs)) {
             return true
         }
 
-        return illegalIngredients.contains(RecipeVisitor.getOutput(recipe)?.skyblockId)
+        return illegalIngredients.contains(recipe.output?.skyblockId)
     }
 
     fun <K> MutableMap<K, Ingredient>.addOrPut(key: K, ingredient: Ingredient): Ingredient =

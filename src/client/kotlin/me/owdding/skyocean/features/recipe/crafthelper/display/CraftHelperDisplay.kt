@@ -20,7 +20,6 @@ import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
-import me.owdding.skyocean.features.recipe.visitors.RecipeVisitor
 import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Icons
@@ -95,7 +94,7 @@ object CraftHelperDisplay {
                 reset()
                 return@callback
             }
-            val output = RecipeVisitor.getOutput(recipe) ?: run {
+            val output = recipe.output ?: run {
                 Text.of("Recipe output is null!") { this.color = TextColor.RED }.sendWithPrefix()
                 reset()
                 return@callback
