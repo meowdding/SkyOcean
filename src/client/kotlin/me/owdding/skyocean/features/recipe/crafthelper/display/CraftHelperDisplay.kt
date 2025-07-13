@@ -146,7 +146,7 @@ object CraftHelperDisplay {
                 display(item)
                 vertical(alignment = MIDDLE) {
                     spacer(maxLine - item.getWidth() - 10)
-                    string(output.itemName)
+                    display(Displays.component(output.itemName))
                     horizontal {
                         widget(
                             Displays.component(
@@ -170,7 +170,7 @@ object CraftHelperDisplay {
                                 ).apply { this.color = TextColor.GRAY },
                             ).withoutTooltipDelay(),
                         )
-                        textDisplay(" ${data?.amount ?: 1} ") {
+                        textDisplay(" ${data?.amount ?: 1} ", shadow = true) {
                             this.color = TextColor.DARK_GRAY
                         }
                         widget(
