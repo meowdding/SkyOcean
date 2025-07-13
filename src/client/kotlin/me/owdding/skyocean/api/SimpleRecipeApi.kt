@@ -1,9 +1,14 @@
-package me.owdding.skyocean.features.recipe
+package me.owdding.skyocean.api
 
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.features.recipe.Ingredient
+import me.owdding.skyocean.features.recipe.ItemLikeIngredient
+import me.owdding.skyocean.features.recipe.Recipe
+import me.owdding.skyocean.features.recipe.RecipeType
 import me.owdding.skyocean.utils.LateInitModule
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import me.owdding.skyocean.features.recipe.RepoApiRecipe as RepoApiRecipeWrapper
 import tech.thatgravyboat.repolib.api.recipes.Recipe as RepoApiRecipe
 
 private val illegalIngredients = listOf(
@@ -21,13 +26,22 @@ private val illegalIngredients = listOf(
 @LateInitModule
 object SimpleRecipeApi {
 
-    internal val supportedTypes = arrayOf(RepoApiRecipe.Type.FORGE to RecipeType.FORGE, RepoApiRecipe.Type.CRAFTING to RecipeType.CRAFTING)
+    internal val supportedTypes = arrayOf(
+        RepoApiRecipe.Type.FORGE to RecipeType.FORGE,
+        RepoApiRecipe.Type.CRAFTING to RecipeType.CRAFTING
+    )
+
     internal val recipes = mutableListOf<Recipe>()
     internal val idToRecipes: MutableMap<String, List<Recipe>> = mutableMapOf()
 
     init {
         supportedTypes.forEach { (recipe, type) ->
-            recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe -> RepoApiRecipe(recipe, type) }
+            recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe ->
+                RepoApiRecipeWrapper(
+                    recipe,
+                    type
+                )
+            }
         }
         recipes.removeIf {
             isBlacklisted(it).apply {
@@ -48,7 +62,7 @@ object SimpleRecipeApi {
                     add(it.output)
                     addAll(it.inputs)
                 }.filterIsInstance<ItemLikeIngredient>()
-            }.onEach { it.itemName }.count()
+            }.distinct().onEach { it.itemName }.count()
             SkyOcean.trace("Preloaded $amount items")
         }
     }
@@ -58,7 +72,7 @@ object SimpleRecipeApi {
         idToRecipes.putAll(
             recipes.mapNotNull { recipe -> recipe.output?.skyblockId?.let { recipe to it } }
                 .groupBy { it.second }
-                .mapValues { (k, v) -> v.map { it.first } }
+                .mapValues { (_, v) -> v.map { it.first } }
                 .filter { (_, v) -> v.isNotEmpty() },
         )
     }

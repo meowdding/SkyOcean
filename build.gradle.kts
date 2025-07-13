@@ -114,7 +114,14 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.repo) // included in sbapi, exposed through implementation
 
-    includeModImplementationBundle(libs.bundles.sbapi)
+    modImplementation(variantOf(libs.skyblockapi) {
+        classifier("1.21.5-dev")
+    }) {
+        isTransitive = false
+    }
+    include(variantOf(libs.skyblockapi) { classifier("1.21.5") })
+
+    includeModImplementation(libs.hypixelapi)
     includeModImplementationBundle(libs.bundles.rconfig)
     includeModImplementationBundle(libs.bundles.libs)
     includeModImplementationBundle(libs.bundles.meowdding)

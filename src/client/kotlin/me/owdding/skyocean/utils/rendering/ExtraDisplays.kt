@@ -3,7 +3,7 @@ package me.owdding.skyocean.utils.rendering
 import earth.terrarium.olympus.client.utils.Orientation
 import me.owdding.lib.displays.Display
 import net.minecraft.client.gui.GuiGraphics
-import tech.thatgravyboat.skyblockapi.utils.extentions.translated
+import tech.thatgravyboat.skyblockapi.platform.pushPop
 
 object ExtraDisplays {
 
@@ -16,7 +16,8 @@ object ExtraDisplays {
 
             override fun render(graphics: GuiGraphics) {
                 InventoryRenderer.renderMonoInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), size, orientation, color)
-                graphics.translated(0, 0, 2) {
+                graphics.pushPop {
+                    graphics.pose().translate(0.0, 0.0, 2.0)
                     display.render(graphics)
                 }
             }
@@ -37,7 +38,8 @@ object ExtraDisplays {
 
             override fun render(graphics: GuiGraphics) {
                 InventoryRenderer.renderNormalInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), columns, rows, color)
-                graphics.translated(0, 0, 2) {
+                graphics.pushPop {
+                    graphics.pose().translate(0.0, 0.0, 2.0)
                     display.render(graphics)
                 }
             }

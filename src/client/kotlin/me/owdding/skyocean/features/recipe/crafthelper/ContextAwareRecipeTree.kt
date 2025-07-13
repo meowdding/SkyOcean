@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
 import me.owdding.lib.extensions.ceil
+import me.owdding.skyocean.api.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.*
 
 interface ChildlessNode : StandardRecipeNode {

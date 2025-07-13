@@ -12,13 +12,17 @@ import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.core.BlockPos
+import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
+import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
 import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
@@ -124,6 +128,17 @@ object Utils {
         this.setCursorPosition(0)
         this.setHighlightPos(0)
     }
+
+    fun <T> Iterable<T>.firstOrElseLast(predicate: (T) -> Boolean): T {
+        return this.firstOrNull(predicate) ?: this.last()
+    }
+
+    fun compoundTag(init: CompoundTag.() -> Unit) = CompoundTag().apply(init)
+    fun CompoundTag.putCompound(key: String, init: CompoundTag.() -> Unit) = this.put(key, compoundTag(init))
+    fun CompoundTag.toData(): CustomData = CustomData.of(this)
+
+    operator fun <T> ItemBuilder.set(type: DataComponentType<T>, value: T) = this.set(type, value)
+    fun ItemBuilder(item: ItemLike, init: ItemBuilder.() -> Unit) = ItemBuilder().also { it.item = item.asItem() }.apply(init).build()
 }
 
 @AutoCollect("LateInitModules")
