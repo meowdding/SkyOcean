@@ -24,7 +24,7 @@ object AttributeApi {
     fun getAttributeByIdOrNull(id: String) = cache.getOrPut(id) {
         val attribute = RepoAPI.attributes().getAttribute(id)
         if (attribute == null) return@getOrPut ItemStack(Items.BARRIER) {
-            this[DataComponents.ITEM_NAME] = Text.of("Unknown Enchantment: $id")
+            this[DataComponents.ITEM_NAME] = Text.of("Unknown Attribute: $id")
         }
 
         val item = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(attribute.item.lowercase()))
