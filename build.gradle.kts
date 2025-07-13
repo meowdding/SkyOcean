@@ -59,7 +59,7 @@ loom {
     }
 
     afterEvaluate {
-        val mixinPath = configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") }?: return@afterEvaluate
+        val mixinPath = configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") } ?: return@afterEvaluate
         runConfigs {
             "client" {
                 vmArgs.add("-javaagent:${mixinPath.toPath().toAbsolutePath()}")
@@ -116,10 +116,14 @@ dependencies {
 
     modImplementation(variantOf(libs.skyblockapi) {
         classifier("1.21.5-dev")
+        artifactType("jar")
     }) {
         isTransitive = false
     }
-    include(variantOf(libs.skyblockapi) { classifier("1.21.5") })
+    include(variantOf(libs.skyblockapi) {
+        classifier("1.21.5")
+        artifactType("jar")
+    })
 
     includeModImplementation(libs.hypixelapi)
     includeModImplementationBundle(libs.bundles.rconfig)
