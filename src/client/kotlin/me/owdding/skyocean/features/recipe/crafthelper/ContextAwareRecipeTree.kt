@@ -41,11 +41,12 @@ interface StandardRecipeNode {
             val recipe = SimpleRecipeApi.getBestRecipe(it)
             val recipeOutput = recipe?.let { recipe -> RecipeVisitor.getOutput(recipe) }?.amount ?: 1
             val totalRequired = it.amount * amount
-            val requiredAmount = totalRequired - context[it]
-            val carriedOver = context[it]
+            val carriedOver = context[it].coerceAtMost(totalRequired)
+            val requiredAmount = totalRequired - carriedOver
+            val carriedOverOver = context[it] - carriedOver
             val craftsRequired = (requiredAmount / recipeOutput.toFloat()).ceil()
             val remainder = (craftsRequired * recipeOutput - requiredAmount).coerceAtLeast(0)
-            context[it] = remainder
+            context[it] = remainder + carriedOverOver
 
             if (recipe != null) {
                 addChild(RecipeNode(recipe, craftsRequired, requiredAmount, totalRequired, carriedOver, it, context))
