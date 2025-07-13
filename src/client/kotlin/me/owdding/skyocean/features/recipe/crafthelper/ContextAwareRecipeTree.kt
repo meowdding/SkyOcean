@@ -1,7 +1,8 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
 import me.owdding.lib.extensions.ceil
-import me.owdding.skyocean.features.recipe.crafthelper.visitors.RecipeVisitor
+import me.owdding.skyocean.features.recipe.*
+import me.owdding.skyocean.features.recipe.visitors.RecipeVisitor
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 
 interface ChildlessNode : StandardRecipeNode {

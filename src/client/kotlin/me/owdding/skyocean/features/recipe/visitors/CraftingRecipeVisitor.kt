@@ -1,8 +1,8 @@
-package me.owdding.skyocean.features.recipe.crafthelper.visitors
+package me.owdding.skyocean.features.recipe.visitors
 
-import me.owdding.skyocean.features.recipe.crafthelper.Ingredient
-import me.owdding.skyocean.features.recipe.crafthelper.ItemLikeIngredient
-import me.owdding.skyocean.features.recipe.crafthelper.toSkyOceanIngredient
+import me.owdding.skyocean.features.recipe.Ingredient
+import me.owdding.skyocean.features.recipe.ItemLikeIngredient
+import me.owdding.skyocean.features.recipe.toSkyOceanIngredient
 import tech.thatgravyboat.repolib.api.recipes.CraftingRecipe
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.repolib.api.recipes.ingredient.CraftingIngredient

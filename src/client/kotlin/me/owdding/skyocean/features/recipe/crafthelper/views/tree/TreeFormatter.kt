@@ -9,8 +9,8 @@ import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
 import me.owdding.skyocean.features.item.sources.ForgeItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
+import me.owdding.skyocean.features.recipe.ItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
-import me.owdding.skyocean.features.recipe.crafthelper.ItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeType

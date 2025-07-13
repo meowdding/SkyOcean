@@ -1,7 +1,7 @@
-package me.owdding.skyocean.features.recipe.crafthelper
+package me.owdding.skyocean.features.recipe
 
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.features.recipe.crafthelper.visitors.RecipeVisitor
+import me.owdding.skyocean.features.recipe.visitors.RecipeVisitor
 import me.owdding.skyocean.utils.LateInitModule
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.recipes.Recipe

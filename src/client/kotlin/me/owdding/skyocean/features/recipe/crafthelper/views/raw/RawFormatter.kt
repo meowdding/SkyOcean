@@ -2,10 +2,10 @@ package me.owdding.skyocean.features.recipe.crafthelper.views.raw
 
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
-import me.owdding.skyocean.features.recipe.crafthelper.serialize
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeView
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
+import me.owdding.skyocean.features.recipe.serialize
 import net.minecraft.client.gui.components.AbstractWidget
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append

@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.recipe.crafthelper
+package me.owdding.skyocean.features.recipe
 
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
