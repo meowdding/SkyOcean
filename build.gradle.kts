@@ -35,6 +35,7 @@ loom {
             programArg("--quickPlayMultiplayer=hypixel.net")
             vmArg("-Ddevauth.enabled=true")
             vmArg("-Dskyblockapi.debug=true")
+            vmArg("-Dskyocean.recipepath=${sourceSets["client"].resources.srcDirs.first().toPath().toAbsolutePath()}")
         }
         create("clientSinglePlayer") {
             client()

@@ -148,7 +148,7 @@ data class CraftHelperContext(
 
         val list: MutableList<TrackedItem> = mutableListOf()
         when (ingredient) {
-            is CoinIngredient -> amount += tracker.takeCoins(ingredient.amount - amount)
+            is CurrencyIngredient -> amount += tracker.takeCurrency(ingredient.amount - amount, ingredient.currency)
             is ItemLikeIngredient -> list.addAll(tracker.takeN(ingredient, getRequired() - amount))
         }
         amount += list.sumOf { it.amount }
@@ -164,7 +164,7 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
     }
 
     fun name(ingredient: Ingredient): Component = when (ingredient) {
-        is CoinIngredient -> Text.of("Coins") { this.color = TextColor.GOLD }
+        is CurrencyIngredient -> ingredient.displayName
         is ItemLikeIngredient -> ingredient.itemName
         else -> CommonComponents.EMPTY
     }

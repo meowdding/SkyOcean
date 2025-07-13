@@ -3,8 +3,12 @@ package me.owdding.skyocean.features.recipe.crafthelper.eval
 import me.owdding.lib.extensions.floor
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
+import me.owdding.skyocean.features.recipe.CurrencyType
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.serialize
+import tech.thatgravyboat.skyblockapi.api.area.farming.TrapperAPI
+import tech.thatgravyboat.skyblockapi.api.area.hub.FarmhouseAPI
+import tech.thatgravyboat.skyblockapi.api.area.rift.RiftAPI
 import tech.thatgravyboat.skyblockapi.api.profile.CurrencyAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import kotlin.math.min
@@ -12,7 +16,19 @@ import kotlin.math.min
 data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries) {
     constructor(vararg sources: ItemSources) : this(sources.toList())
 
-    var coins = (CurrencyAPI.bank + CurrencyAPI.purse).floor()
+    val currencies = mutableMapOf<CurrencyType, Number>(
+        CurrencyType.COIN to (CurrencyAPI.bank + CurrencyAPI.purse).floor(),
+        CurrencyType.BIT to CurrencyAPI.bits,
+        CurrencyType.COPPER to CurrencyAPI.copper,
+        CurrencyType.FOSSIL_DUST to 0,
+        CurrencyType.BRONZE_MEDAL to FarmhouseAPI.bronzeMedals,
+        CurrencyType.SILVER_MEDAL to FarmhouseAPI.silverMedals,
+        CurrencyType.GOLD_MEDAL to FarmhouseAPI.goldMedals,
+        CurrencyType.MOTE to RiftAPI.motes,
+        CurrencyType.NORTH_STAR to CurrencyAPI.northStars,
+        CurrencyType.PELT to TrapperAPI.pelts,
+        CurrencyType.GEM to CurrencyAPI.gems,
+    ).mapValues { (_, number) -> number.toInt() }.toMutableMap()
 
     val items = sources.mapNotNull { source -> source.itemSource?.getAll() }.flatten()
         .mapNotNull { item -> item.itemStack.getSkyBlockId()?.let { TrackedItem(it, item.itemStack.count, item.context, item.context.source) } }
@@ -27,11 +43,13 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         else -> 3
     }
 
-    fun takeCoins(amount: Int): Int {
-        val min = min(amount, coins)
-        coins -= min
+    fun takeCurrency(amount: Int, currency: CurrencyType): Int {
+        val amountPresent = currencies.getOrDefault(currency, 0)
+        val min = min(amount, amountPresent)
+        currencies[currency] = amountPresent - min
         return min
     }
+
 
     fun takeN(ingredient: Ingredient, amount: Int = ingredient.amount): List<TrackedItem> {
         val items = items[ingredient.serialize()] ?: return emptyList()

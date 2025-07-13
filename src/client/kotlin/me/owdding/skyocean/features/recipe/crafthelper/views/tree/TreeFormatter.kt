@@ -174,6 +174,7 @@ object TreeFormatter : RecipeView {
                 it.withCallback {
                     id ?: return@withCallback
                     when (state.recipeType) {
+                        RecipeType.CUSTOM -> SkyOcean.debug("Custom recipes dont support click actions!")
                         RecipeType.UNKNOWN -> SkyOcean.debug("Clicked unknown recipe type for $id")
                         else -> McClient.sendClientCommand("${state.recipeType.command} $id")
                     }

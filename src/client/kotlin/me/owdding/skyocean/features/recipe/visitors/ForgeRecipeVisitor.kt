@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.recipe.visitors
 
-import me.owdding.skyocean.features.recipe.CoinIngredient
+import me.owdding.skyocean.features.recipe.CurrencyIngredient
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.toSkyOceanIngredient
@@ -14,7 +14,7 @@ object ForgeRecipeVisitor : RecipeVisitor {
 
         return buildList {
             recipe.inputs().mapNotNull(CraftingIngredient::toSkyOceanIngredient).let(::addAll)
-            if (recipe.coins > 0) add(CoinIngredient(recipe.coins))
+            if (recipe.coins > 0) add(CurrencyIngredient.coins(recipe.coins))
         }
     }
 

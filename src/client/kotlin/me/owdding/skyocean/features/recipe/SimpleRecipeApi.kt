@@ -23,7 +23,7 @@ object SimpleRecipeApi {
 
     internal val supportedTypes = arrayOf(RepoApiRecipe.Type.FORGE to RecipeType.FORGE, RepoApiRecipe.Type.CRAFTING to RecipeType.CRAFTING)
     internal val recipes = mutableListOf<Recipe>()
-    internal val idToRecipes: Map<String, List<Recipe>>
+    internal val idToRecipes: MutableMap<String, List<Recipe>> = mutableMapOf()
 
     init {
         supportedTypes.forEach { (recipe, type) ->
@@ -40,10 +40,7 @@ object SimpleRecipeApi {
         }
         SkyOcean.trace("Loaded ${recipes.size} Recipes from repo api")
 
-        idToRecipes = recipes.mapNotNull { recipe -> recipe.output?.skyblockId?.let { recipe to it } }
-            .groupBy { it.second }
-            .mapValues { (k, v) -> v.map { it.first } }
-            .filter { (_, v) -> v.isNotEmpty() }
+        rebuildRecipes()
 
         McClient.runNextTick {
             val amount = recipes.flatMap {
@@ -54,6 +51,16 @@ object SimpleRecipeApi {
             }.onEach { it.itemName }.count()
             SkyOcean.trace("Preloaded $amount items")
         }
+    }
+
+    fun rebuildRecipes() {
+        idToRecipes.clear()
+        idToRecipes.putAll(
+            recipes.mapNotNull { recipe -> recipe.output?.skyblockId?.let { recipe to it } }
+                .groupBy { it.second }
+                .mapValues { (k, v) -> v.map { it.first } }
+                .filter { (_, v) -> v.isNotEmpty() },
+        )
     }
 
     fun hasRecipe(id: String) = idToRecipes.containsKey(id)
