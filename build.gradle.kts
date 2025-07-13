@@ -1,3 +1,4 @@
+
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
@@ -114,12 +115,8 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.repo) // included in sbapi, exposed through implementation
 
-    modImplementation(variantOf(libs.skyblockapi) {
-        classifier("1.21.5-dev")
-    })
-    include(variantOf(libs.skyblockapi) {
-        classifier("1.21.5")
-    })
+    modImplementation("tech.thatgravyboat:skyblock-api:1.0.0-beta.140-multiversion+build.2:1.21.5@jar")
+    include("tech.thatgravyboat:skyblock-api:1.0.0-beta.140-multiversion+build.2:1.21.5@jar")
 
     includeModImplementation(libs.hypixelapi)
     includeModImplementationBundle(libs.bundles.rconfig)
