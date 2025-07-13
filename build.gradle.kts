@@ -116,13 +116,9 @@ dependencies {
 
     modImplementation(variantOf(libs.skyblockapi) {
         classifier("1.21.5-dev")
-        artifactType("jar")
-    }) {
-        isTransitive = false
-    }
+    })
     include(variantOf(libs.skyblockapi) {
         classifier("1.21.5")
-        artifactType("jar")
     })
 
     includeModImplementation(libs.hypixelapi)
