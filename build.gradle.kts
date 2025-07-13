@@ -115,8 +115,12 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.repo) // included in sbapi, exposed through implementation
 
-    modImplementation("tech.thatgravyboat:skyblock-api:1.0.0-beta.140-multiversion+build.2:1.21.5@jar")
-    include("tech.thatgravyboat:skyblock-api:1.0.0-beta.140-multiversion+build.2:1.21.5@jar")
+    modImplementation(libs.skyblockapi.get().toString() + ":1.21.5-dev")
+    include(libs.skyblockapi) {
+        capabilities {
+            requireFeature("1.21.5")
+        }
+    }
 
     includeModImplementation(libs.hypixelapi)
     includeModImplementationBundle(libs.bundles.rconfig)
