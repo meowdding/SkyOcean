@@ -13,9 +13,13 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.ItemLore
 import tech.thatgravyboat.repolib.api.RepoAPI
+import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.utils.extentions.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.ItemUtils
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 
 object AttributeApi {
 
@@ -35,10 +39,17 @@ object AttributeApi {
             if (attribute.texture != null) {
                 copyFrom(ItemUtils.createSkull(attribute.texture!!))
             }
-            this[DataComponents.ITEM_NAME] = !attribute.name
+            this[DataComponents.ITEM_NAME] = !attribute.shardName
+            this[DataComponents.CUSTOM_NAME] = Text.of(attribute.shardName) {
+                this.italic = false
+                runCatching {
+                    this.color = SkyBlockRarity.valueOf(attribute.rarity).color
+                }
+            }
 
             val rawLore = attribute.lore
-            val lore = rawLore.map { !it }
+            val lore = rawLore.map { !it }.toMutableList()
+                .also { it.addFirst(Text.of(attribute.name) { this.color = TextColor.GOLD }) }.toList()
 
             this[DataComponents.LORE] = ItemLore(lore, lore)
             this[DataComponents.CUSTOM_DATA] = compoundTag {
