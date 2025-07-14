@@ -25,6 +25,7 @@ value class SkyOceanItemId private constructor(val id: String) {
         const val RUNE = "rune:"
         const val ATTRIBUTE = "attribute:"
         const val ENCHANTMENT = "enchantment:"
+        const val UNSAFE = "unsafe:"
         const val UNKNOWN = "ocean:unknown"
         private val petRegex = Regex("\\[?lvl \\d+]? (.*)")
 
@@ -51,7 +52,7 @@ value class SkyOceanItemId private constructor(val id: String) {
         }
 
         fun unknownType(input: String): SkyOceanItemId? {
-            val unsafeId = SkyOceanItemId(input.lowercase())
+            val unsafeId = unsafe(input.lowercase())
 
             fun <T> safe(init: () -> T): T? {
                 return runCatching { init() }.getOrNull()
@@ -66,7 +67,7 @@ value class SkyOceanItemId private constructor(val id: String) {
             return null
         }
 
-        fun unsafe(id: String) = SkyOceanItemId(id)
+        fun unsafe(id: String) = SkyOceanItemId("$UNSAFE$id")
 
         @IncludedCodec
         val CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap(::SkyOceanItemId, SkyOceanItemId::id)
@@ -80,7 +81,10 @@ value class SkyOceanItemId private constructor(val id: String) {
     val isRune: Boolean get() = id.startsWith(RUNE)
     val isEnchantment: Boolean get() = id.startsWith(ENCHANTMENT)
     val isAttribute: Boolean get() = id.startsWith(ATTRIBUTE)
+    val isUnsafe: Boolean get() = id.startsWith(UNSAFE)
     val cleanId: String get() = id.substringAfter(":")
+
+    fun trySafe(consumer: (String) -> SkyOceanItemId): SkyOceanItemId = if (isUnsafe) consumer(cleanId) else this
 
     fun toItem(): ItemStack = when {
 

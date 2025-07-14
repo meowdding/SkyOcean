@@ -1,6 +1,6 @@
 {
   "output": {
-    "id": "pet:hermit_crab",
+    "id": "pet:hermit_crab:common",
     "amount": 1,
     "type": "ITEM"
   },

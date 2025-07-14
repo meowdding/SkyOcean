@@ -8,9 +8,14 @@ import me.owdding.skyocean.api.SkyOceanItemId.Companion.ITEM
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.PET
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.RUNE
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.UNKNOWN
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.attribute
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.enchantment
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.item
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.pet
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.rune
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils.ItemBuilder
-import me.owdding.skyocean.utils.Utils.sanatizeForCommandInput
+import me.owdding.skyocean.utils.Utils.sanitizeForCommandInput
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.repolib.api.RepoAPI
@@ -33,39 +38,39 @@ object SimpleItemApi {
 
     init {
         val start = currentInstant()
-        RepoAPI.pets().pets().entries.associate { (id, data) -> data.name to SkyOceanItemId.pet(id) }
+        RepoAPI.pets().pets().entries.associate { (id, data) -> data.name to pet(id) }
             .let(nameCache::putAll)
 
         RepoAPI.runes().runes().entries.flatMap { (id, data) ->
             data.map { rune ->
-                rune.name.stripColor() to SkyOceanItemId.rune("$id:${rune.tier}")
+                rune.name.stripColor() to rune("$id:${rune.tier}")
             }
         }.toMap().let(nameCache::putAll)
 
         RepoAPI.enchantments().enchantments().flatMap { (id, enchantments) ->
             enchantments.levels.map { (level, enchantment) ->
-                "${enchantments.name} ${enchantment.literalLevel}" to SkyOceanItemId.enchantment("$id:${enchantment.level}")
+                "${enchantments.name} ${enchantment.literalLevel}" to enchantment("$id:${enchantment.level}")
             }
         }.toMap().let(nameCache::putAll)
 
         RepoAPI.attributes().attributes().flatMap { (id, attribute) ->
             listOf(
-                attribute.name to SkyOceanItemId.attribute(attribute.id),
-                attribute.shardName() to SkyOceanItemId.attribute(attribute.id),
+                attribute.name to attribute(attribute.id),
+                attribute.shardName() to attribute(attribute.id),
             )
         }.toMap().let(nameCache::putAll)
 
         RepoAPI.items().items().entries.mapNotNull { (id, element) ->
             val components =
                 element.getPath("['components'].['minecraft:custom_name'].['text']") ?: return@mapNotNull null
-            components.asString.stripColor() to SkyOceanItemId.item(id)
+            components.asString.stripColor() to item(id)
         }.toMap().let(nameCache::putAll)
 
         val newCache = nameCache.mapKeys { (key) -> key.lowercase().stripColor() }
             .entries.flatMap { (key, value) ->
                 listOf(
                     key to value,
-                    key.sanatizeForCommandInput() to value,
+                    key.sanitizeForCommandInput() to value,
                 )
             }.distinct().toMap()
         nameCache.clear()
@@ -75,7 +80,7 @@ object SimpleItemApi {
 
     fun findIdByName(name: String) = nameCache[name.lowercase().stripColor()]
 
-    fun getItemByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id) {
+    fun getItemByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id.trySafe(::item)) {
         val itemId = id.id.removePrefix(ITEM).uppercase()
 
         if (itemId == UNKNOWN) {
@@ -89,7 +94,7 @@ object SimpleItemApi {
         name("Unknown item: $id")
     }
 
-    fun getPetByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id) {
+    fun getPetByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id.trySafe(::pet)) {
         val petId = id.id.removePrefix(PET).uppercase()
 
         if (petId == UNKNOWN) {
@@ -116,7 +121,7 @@ object SimpleItemApi {
         name("Unknown pet: $id")
     }
 
-    fun getRuneByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id) {
+    fun getRuneByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id.trySafe(::rune)) {
         val runeId = id.id.removePrefix(RUNE).uppercase()
 
         if (runeId == UNKNOWN) {
@@ -140,7 +145,7 @@ object SimpleItemApi {
         name("Unknown rune: $id")
     }
 
-    fun getEnchantmentByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id) {
+    fun getEnchantmentByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id.trySafe(::enchantment)) {
         val enchantmentId = id.id.removePrefix(ENCHANTMENT).uppercase()
 
         if (enchantmentId == UNKNOWN) {
@@ -164,7 +169,7 @@ object SimpleItemApi {
         name("Unknown enchantment: $id")
     }
 
-    fun getAttributeByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id) {
+    fun getAttributeByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id.trySafe(::attribute)) {
         val attributeId = id.id.removePrefix(ATTRIBUTE).uppercase()
 
         if (attributeId == UNKNOWN) {

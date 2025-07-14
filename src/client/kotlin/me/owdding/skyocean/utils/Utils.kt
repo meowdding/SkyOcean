@@ -140,8 +140,8 @@ object Utils {
     operator fun <T> ItemBuilder.set(type: DataComponentType<T>, value: T) = this.set(type, value)
     fun ItemBuilder(item: ItemLike, init: ItemBuilder.() -> Unit) = ItemBuilder().also { it.item = item.asItem() }.apply(init).build()
 
-    private val validChars = listOf(' ', '_', '-')
-    fun String.sanatizeForCommandInput() = this.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()
+    private val validChars = listOf(' ', '_', '-', ':')
+    fun String.sanitizeForCommandInput() = this.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()
 }
 
 @AutoCollect("LateInitModules")

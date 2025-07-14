@@ -1,6 +1,6 @@
 {
   "output": {
-    "id": "pet:frog",
+    "id": "pet:frog:common",
     "amount": 1,
     "type": "ITEM"
   },

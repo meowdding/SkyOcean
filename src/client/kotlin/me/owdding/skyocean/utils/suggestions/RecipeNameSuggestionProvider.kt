@@ -17,6 +17,9 @@ object RecipeNameSuggestionProvider : SkyOceanSuggestionProvider {
         SimpleRecipeApi.recipes.forEach { recipe ->
             recipe.output?.let {
                 suggest(builder, it.itemName.stripped)
+                if (it.itemName.stripped.startsWith("[Lvl ")) {
+                    suggest(builder, it.itemName.stripped.substringAfter("]"))
+                }
             }
         }
         return builder.buildFuture()
