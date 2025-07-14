@@ -99,12 +99,16 @@ object SimpleItemApi {
         if (petId.contains(":")) {
             val (petId, rarity) = petId.split(":")
             val sbRarity = runCatching { SkyBlockRarity.valueOf(rarity) }.getOrNull()
-            val pet = sbRarity?.let { RepoPetsAPI.getPetAsItemOrNull(PetQuery(petId, it, 1)) }
+            val pet = runCatching {
+                sbRarity?.let { RepoPetsAPI.getPetAsItemOrNull(PetQuery(petId, it, 1)) }
+            }.getOrNull()
             pet?.let { return@getOrPut it }
         }
 
         return@getOrPut SkyBlockRarity.entries.reversed().firstNotNullOfOrNull { skyBlockRarity ->
-            RepoPetsAPI.getPetAsItemOrNull(PetQuery(petId.substringBefore(":"), skyBlockRarity, 1))
+            runCatching {
+                RepoPetsAPI.getPetAsItemOrNull(PetQuery(petId.substringBefore(":"), skyBlockRarity, 1))
+            }.getOrNull()
         }
     }
 

@@ -1,0 +1,44 @@
+{
+  "output": {
+    "id": "pet:golden_dragon:legendary",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "amount": 500000000,
+      "currency": "COIN",
+      "type": "CURRENCY"
+    },
+    {
+      "id": "item:enchanted_gold_block",
+      "amount": 50,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:perfect_amethyst_gem",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:perfect_jade_gem",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:perfect_sapphire_gem",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:perfect_amber_gem",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:perfect_topaz_gem",
+      "amount": 1,
+      "type": "ITEM"
+    }
+  ]
+}
