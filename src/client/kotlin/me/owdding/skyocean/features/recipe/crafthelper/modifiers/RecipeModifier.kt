@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperStorage.setSelected
 import me.owdding.skyocean.utils.ChatUtils
@@ -16,7 +17,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
-import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -31,7 +31,7 @@ object RecipeModifier {
         if (event.slot.index != 14) return
         if (event.inventory.size < 23 || event.inventory[23].item !in Items.CRAFTING_TABLE) return
         if (event.inventory.size < 32 || event.inventory[32].item.cleanName != "Supercraft") return
-        val item = event.inventory[25].item.getSkyBlockId() ?: return
+        val item = SkyOceanItemId.fromItem(event.inventory[25].item) ?: return
         if (event.item !in ItemTag.GLASS_PANES) {
             SkyOcean.warn("Failed to place craft helper item in recipe, item is not a glass pane")
             return

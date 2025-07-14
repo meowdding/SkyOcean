@@ -38,14 +38,14 @@ class VirtualResourceArgument(
     @Throws(CommandSyntaxException::class)
     private fun fromCommandInput(reader: StringReader): ResourceLocation {
         val i = reader.cursor
-        while (reader.canRead() && ResourceLocation.validPathChar(reader.peek())) {
+        while (reader.canRead() && ResourceLocation.isAllowedInResourceLocation(reader.peek())) {
             reader.skip()
         }
         val string = reader.string.substring(i, reader.cursor)
         try {
             val split: Array<String> = split(string)
             return ResourceLocation.fromNamespaceAndPath(split[0], split[1])
-        } catch (invalidIdentifierException: ResourceLocationException) {
+        } catch (_: ResourceLocationException) {
             reader.cursor = i
             throw commandException.createWithContext(reader)
         }

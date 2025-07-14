@@ -1,5 +1,7 @@
 package me.owdding.skyocean.api
 
+import com.mojang.serialization.Codec
+import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.UNKNOWN
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
@@ -25,11 +27,13 @@ value class SkyOceanItemId private constructor(val id: String) {
         const val ENCHANTMENT = "enchantment:"
         const val UNKNOWN = "ocean:unknown"
 
-        fun item(id: String) = SkyOceanItemId("$ITEM$id")
-        fun pet(id: String) = SkyOceanItemId("$PET$id")
-        fun rune(id: String) = SkyOceanItemId("$RUNE$id")
-        fun attribute(id: String) = SkyOceanItemId("$ATTRIBUTE$id")
-        fun enchantment(id: String) = SkyOceanItemId("$ENCHANTMENT$id")
+        fun item(id: String) = SkyOceanItemId("$ITEM$id".lowercase())
+        fun pet(id: String) = SkyOceanItemId("$PET$id".lowercase())
+        fun pet(id: String, rarity: String) = SkyOceanItemId("$PET$id:$rarity".lowercase())
+        fun rune(id: String) = SkyOceanItemId("$RUNE$id".lowercase())
+        fun attribute(id: String) = SkyOceanItemId("$ATTRIBUTE$id".lowercase())
+        fun enchantment(id: String) = SkyOceanItemId("$ENCHANTMENT$id".lowercase())
+        fun enchantment(id: String, level: Int) = SkyOceanItemId("$ENCHANTMENT$id:$level".lowercase())
 
         fun fromItem(item: ItemStack) = item.getSkyOceanItemId()
 
@@ -41,8 +45,25 @@ value class SkyOceanItemId private constructor(val id: String) {
                 name = name.substringBeforeLast(" x")
             }
 
-            return SimpleItemApi.findIdByName(name)
+            return SimpleItemApi.findIdByName(name.trim()) ?: SimpleItemApi.findIdByName(name.substringBeforeLast(" ").trim())
         }
+
+        fun unknownType(input: String): SkyOceanItemId? {
+            val unsafeId = SkyOceanItemId(input)
+
+            SimpleItemApi.getItemByIdOrNull(unsafeId) ?: return item(input)
+            SimpleItemApi.getPetByIdOrNull(unsafeId) ?: return pet(input)
+            SimpleItemApi.getEnchantmentByIdOrNull(unsafeId) ?: return enchantment(input)
+            SimpleItemApi.getAttributeByIdOrNull(unsafeId) ?: return attribute(input)
+            SimpleItemApi.getRuneByIdOrNull(unsafeId) ?: return rune(input)
+
+            return null
+        }
+
+        fun unsafe(id: String) = SkyOceanItemId(id)
+
+        @IncludedCodec
+        val CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap(::SkyOceanItemId, SkyOceanItemId::id)
 
     }
 
@@ -51,6 +72,7 @@ value class SkyOceanItemId private constructor(val id: String) {
     val isRune: Boolean get() = id.startsWith(RUNE)
     val isEnchantment: Boolean get() = id.startsWith(ENCHANTMENT)
     val isAttribute: Boolean get() = id.startsWith(ATTRIBUTE)
+    val cleanId: String get() = id.substringAfter(":")
 
     fun toItem(): ItemStack = when {
 
@@ -93,11 +115,11 @@ private fun ItemStack.getSkyOceanItemId(): SkyOceanItemId? {
         }
 
         "ATTRIBUTE_SHARD" -> {
-            this.getData(DataTypes.ATTRIBUTES)?.entries?.firstOrNull()?.let { (key, value) -> "$key:$value" }
+            this.getData(DataTypes.ATTRIBUTES)?.entries?.firstOrNull()?.let { (key, _) -> key }
                 .let { it ?: UNKNOWN }.let(SkyOceanItemId::attribute)
         }
 
-        else -> (data ?: UNKNOWN).let(SkyOceanItemId::item)
+        else -> (data)?.let(SkyOceanItemId::item)
     }
 }
 

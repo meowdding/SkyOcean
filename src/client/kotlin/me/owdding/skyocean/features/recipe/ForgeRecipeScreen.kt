@@ -8,11 +8,13 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.InventoryBuilder
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.lib.extensions.withTooltip
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperStorage
 import me.owdding.skyocean.helpers.ClientSideInventory
 import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.Utils.ItemBuilder
 import me.owdding.skyocean.utils.suggestions.SkyOceanSuggestionProvider
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.world.item.Items
@@ -20,12 +22,9 @@ import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.repolib.api.recipes.ingredient.ItemIngredient
 import tech.thatgravyboat.repolib.api.recipes.ingredient.PetIngredient
-import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
-import tech.thatgravyboat.skyblockapi.api.remote.PetQuery
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
-import tech.thatgravyboat.skyblockapi.api.remote.RepoPetsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoRecipeAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -38,14 +37,11 @@ import java.util.concurrent.CompletableFuture
 import kotlin.time.Duration.Companion.seconds
 
 class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
-    val id = RepoItemsAPI.getItemIdByName(input) ?: input
-    val recipe = RepoRecipeAPI.getForgeRecipe(id)
-    val forgeItemStack = RepoItemsAPI.getItemOrNull(id)
-        ?: RepoPetsAPI.getPetAsItemOrNull(PetQuery(id, SkyBlockRarity.LEGENDARY, 100))
-        ?: Items.BARRIER.defaultInstance.withTooltip {
-            add("Item not found")
-            add("ID: $id")
-        }
+    val skyoceanid = SkyOceanItemId.fromName(input) ?: SkyOceanItemId.unknownType(input)
+    val recipe = skyoceanid?.cleanId?.uppercase()?.let(RepoRecipeAPI::getForgeRecipe)
+    val forgeItemStack = skyoceanid?.toItem() ?: ItemBuilder(Items.BARRIER) {
+        name("null")
+    }
 
     val sizes = mapOf(
         1 to listOf(10),
@@ -74,7 +70,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
                 add(index, item)
             }
 
-            if (MiscConfig.craftHelperEnabled) {
+            if (MiscConfig.craftHelperEnabled && skyoceanid != null) {
                 add(32, Items.DIAMOND_PICKAXE) {
                     add(
                         Text.join(ChatUtils.ICON_SPACE_COMPONENT, "Craft Helper") {
@@ -122,7 +118,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
         addItems(items)
         if (MiscConfig.craftHelperEnabled) {
             slots[32].onClick = {
-                CraftHelperStorage.setSelected(id)
+                CraftHelperStorage.setSelected(skyoceanid)
                 McScreen.self?.onClose()
             }
         }

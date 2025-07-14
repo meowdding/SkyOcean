@@ -10,6 +10,7 @@ import me.owdding.skyocean.api.SkyOceanItemId.Companion.RUNE
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.UNKNOWN
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils.ItemBuilder
+import me.owdding.skyocean.utils.Utils.sanatizeForCommandInput
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.repolib.api.RepoAPI
@@ -27,7 +28,7 @@ import tech.thatgravyboat.skyblockapi.utils.time.since
 @LateInitModule
 object SimpleItemApi {
 
-    private val cache: MutableMap<SkyOceanItemId, ItemStack> = mutableMapOf()
+    private val cache: MutableMap<SkyOceanItemId, ItemStack?> = mutableMapOf()
     private val nameCache: MutableMap<String, SkyOceanItemId> = mutableMapOf()
 
     init {
@@ -49,8 +50,8 @@ object SimpleItemApi {
 
         RepoAPI.attributes().attributes().flatMap { (id, attribute) ->
             listOf(
-                attribute.name to SkyOceanItemId.attribute(attribute.attributeId),
-                attribute.shardName() to SkyOceanItemId.attribute(attribute.attributeId),
+                attribute.name to SkyOceanItemId.attribute(attribute.id),
+                attribute.shardName() to SkyOceanItemId.attribute(attribute.id),
             )
         }.toMap().let(nameCache::putAll)
 
@@ -61,6 +62,12 @@ object SimpleItemApi {
         }.toMap().let(nameCache::putAll)
 
         val newCache = nameCache.mapKeys { (key) -> key.lowercase().stripColor() }
+            .entries.flatMap { (key, value) ->
+                listOf(
+                    key to value,
+                    key.sanatizeForCommandInput() to value,
+                )
+            }.distinct().toMap()
         nameCache.clear()
         nameCache.putAll(newCache)
         SkyOcean.trace("Cached ${nameCache.size} item names in ${start.since().toReadableTime(allowMs = true)}")
@@ -68,25 +75,25 @@ object SimpleItemApi {
 
     fun findIdByName(name: String) = nameCache[name.lowercase().stripColor()]
 
-    fun getItemById(id: SkyOceanItemId): ItemStack = cache.getOrPut(id) {
-        val itemId = id.id.removePrefix(ITEM)
+    fun getItemByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id) {
+        val itemId = id.id.removePrefix(ITEM).uppercase()
 
         if (itemId == UNKNOWN) {
-            return@getOrPut ItemBuilder(Items.BARRIER) {
-                name("Unknown Item")
-            }
+            return null
         }
 
-        RepoItemsAPI.getItem(itemId)
+        return RepoItemsAPI.getItemOrNull(itemId)
     }
 
-    fun getPetById(id: SkyOceanItemId): ItemStack = cache.getOrPut(id) {
-        val petId = id.id.removePrefix(PET)
+    fun getItemById(id: SkyOceanItemId): ItemStack = getItemByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+        name("Unknown item: $id")
+    }
+
+    fun getPetByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id) {
+        val petId = id.id.removePrefix(PET).uppercase()
 
         if (petId == UNKNOWN) {
-            return@getOrPut ItemBuilder(Items.BARRIER) {
-                name("Unknown Pet")
-            }
+            return@getOrPut null
         }
 
         if (petId.contains(":")) {
@@ -98,16 +105,18 @@ object SimpleItemApi {
 
         return@getOrPut SkyBlockRarity.entries.reversed().firstNotNullOfOrNull { skyBlockRarity ->
             RepoPetsAPI.getPetAsItemOrNull(PetQuery(petId.substringBefore(":"), skyBlockRarity, 1))
-        } ?: Items.BARRIER.defaultInstance
+        }
     }
 
-    fun getRuneById(id: SkyOceanItemId): ItemStack = cache.getOrPut(id) {
-        val runeId = id.id.removePrefix(RUNE)
+    fun getPetById(id: SkyOceanItemId): ItemStack = getPetByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+        name("Unknown pet: $id")
+    }
+
+    fun getRuneByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id) {
+        val runeId = id.id.removePrefix(RUNE).uppercase()
 
         if (runeId == UNKNOWN) {
-            return@getOrPut ItemBuilder(Items.BARRIER) {
-                name("Unknown Rune")
-            }
+            return@getOrPut null
         }
 
         if (runeId.contains(":")) {
@@ -120,18 +129,18 @@ object SimpleItemApi {
             RepoRunesAPI.getRuneAsItemOrNull(runeId.substringBefore(":"), i)?.let { return@getOrPut it }
         }
 
-        return@getOrPut ItemBuilder(Items.BARRIER) {
-            name("Unknown Rune: $runeId")
-        }
+        return@getOrPut null
     }
 
-    fun getEnchantmentById(id: SkyOceanItemId): ItemStack = cache.getOrPut(id) {
-        val enchantmentId = id.id.removePrefix(ENCHANTMENT)
+    fun getRuneById(id: SkyOceanItemId) = getRuneByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+        name("Unknown rune: $id")
+    }
+
+    fun getEnchantmentByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id) {
+        val enchantmentId = id.id.removePrefix(ENCHANTMENT).uppercase()
 
         if (enchantmentId == UNKNOWN) {
-            return@getOrPut ItemBuilder(Items.BARRIER) {
-                name("Unknown Enchantment")
-            }
+            return@getOrPut null
         }
 
         if (enchantmentId.contains(":")) {
@@ -144,25 +153,27 @@ object SimpleItemApi {
             EnchantmentApi.getEnchantmentAsItemOrNull(enchantmentId.substringBefore(":"), i)?.let { return@getOrPut it }
         }
 
-        return@getOrPut ItemBuilder(Items.BARRIER) {
-            name("Unknown Enchantment: $enchantmentId")
-        }
+        return@getOrPut null
     }
 
-    fun getAttributeById(id: SkyOceanItemId): ItemStack = cache.getOrPut(id) {
-        val attributeId = id.id.removePrefix(ATTRIBUTE)
+    fun getEnchantmentById(id: SkyOceanItemId): ItemStack = getEnchantmentByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+        name("Unknown enchantment: $id")
+    }
+
+    fun getAttributeByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id) {
+        val attributeId = id.id.removePrefix(ATTRIBUTE).uppercase()
 
         if (attributeId == UNKNOWN) {
-            return@getOrPut ItemBuilder(Items.BARRIER) {
-                name("Unknown Attribute")
-            }
+            return@getOrPut null
         }
 
         AttributeApi.getAttributeByIdOrNull(attributeId)?.let { return@getOrPut it }
 
-        return@getOrPut ItemBuilder(Items.BARRIER) {
-            name("Unknown Attribute: $attributeId")
-        }
+        return@getOrPut null
+    }
+
+    fun getAttributeById(id: SkyOceanItemId): ItemStack = getAttributeByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+        name("Unknown attribute: $id")
     }
 
 }

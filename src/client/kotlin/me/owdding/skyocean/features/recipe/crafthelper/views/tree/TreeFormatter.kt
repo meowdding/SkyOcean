@@ -9,8 +9,8 @@ import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
 import me.owdding.skyocean.features.item.sources.ForgeItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
-import me.owdding.skyocean.features.recipe.ItemIngredient
 import me.owdding.skyocean.features.recipe.RecipeType
+import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
@@ -61,7 +61,7 @@ object TreeFormatter : RecipeView {
             return
         }
 
-        val id = (state.ingredient as? ItemIngredient)?.skyblockId
+        val id = (state.ingredient as? SkyOceanItemIngredient)?.skyblockId
         val tooltip = buildList<Component> {
             val sources = state.usedItems.groupBy { it.source }
             fun addUsedSources() {

@@ -32,7 +32,7 @@ object SimpleRecipeApi {
     )
 
     internal val recipes = mutableListOf<Recipe>()
-    internal val idToRecipes: MutableMap<String, List<Recipe>> = mutableMapOf()
+    internal val idToRecipes: MutableMap<SkyOceanItemId, List<Recipe>> = mutableMapOf()
 
     init {
         supportedTypes.forEach { (recipe, type) ->
@@ -70,19 +70,19 @@ object SimpleRecipeApi {
     fun rebuildRecipes() {
         idToRecipes.clear()
         idToRecipes.putAll(
-            recipes.mapNotNull { recipe -> recipe.output?.skyblockId?.let { recipe to it } }
+            recipes.mapNotNull { recipe -> recipe.output?.id?.let { recipe to it } }
                 .groupBy { it.second }
                 .mapValues { (_, v) -> v.map { it.first } }
                 .filter { (_, v) -> v.isNotEmpty() },
         )
     }
 
-    fun hasRecipe(id: String) = idToRecipes.containsKey(id)
+    fun hasRecipe(id: SkyOceanItemId) = idToRecipes.containsKey(id)
 
     fun getBestRecipe(ingredient: Ingredient) =
-        (ingredient as? ItemLikeIngredient)?.skyblockId?.takeIf(::hasRecipe)?.let { getBestRecipe(it) }
+        (ingredient as? ItemLikeIngredient)?.id?.takeIf(::hasRecipe)?.let { getBestRecipe(it) }
 
-    fun getBestRecipe(id: String): Recipe? {
+    fun getBestRecipe(id: SkyOceanItemId): Recipe? {
         assert(hasRecipe(id)) { "Item has no recipe" }
         return runCatching {
             idToRecipes[id]!!.firstOrNull()!!

@@ -10,6 +10,7 @@ import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SimpleRecipeApi.getBestRecipe
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
@@ -37,7 +38,6 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -61,11 +61,11 @@ object CraftHelperDisplay {
             then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
                 callback {
                     val input = this.getArgument("recipe", String::class.java)
-                    data?.item = RepoItemsAPI.getItemIdByName(input) ?: input
+                    data?.item = SkyOceanItemId.fromName(input) ?: SkyOceanItemId.unknownType(input)
                     data?.amount = 1
                     CraftHelperStorage.save()
                     Text.of("Set current recipe to ") {
-                        append(data?.item?.let(RepoItemsAPI::getItemOrNull)?.let(ItemStack::getHoverName) ?: !"unknown")
+                        append(data?.item?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
                         append("!")
                     }.sendWithPrefix()
                 }

@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.storage.ProfileStorage
@@ -14,7 +15,7 @@ object CraftHelperStorage {
         SkyOceanCodecs.CraftHelperDataCodec.codec()
     }
 
-    fun setSelected(item: String?) {
+    fun setSelected(item: SkyOceanItemId?) {
         data?.item = item
         data?.amount = 1
         save()
