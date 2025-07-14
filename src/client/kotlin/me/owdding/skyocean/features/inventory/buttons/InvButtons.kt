@@ -85,7 +85,7 @@ object InvButtons {
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("buttons") {
             if (InventoryConfig.inventoryButtons) {
-                McClient.setScreenAsync(ButtonConfigScreen(null))
+                McClient.setScreenAsync { ButtonConfigScreen(null) }
             } else {
                 (+"skyocean.inventory.buttons.enable_first").withColor(OceanColors.WARNING).sendWithPrefix()
             }

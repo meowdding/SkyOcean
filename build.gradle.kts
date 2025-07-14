@@ -1,3 +1,4 @@
+
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
@@ -59,7 +60,7 @@ loom {
     }
 
     afterEvaluate {
-        val mixinPath = configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") }?: return@afterEvaluate
+        val mixinPath = configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") } ?: return@afterEvaluate
         runConfigs {
             "client" {
                 vmArgs.add("-javaagent:${mixinPath.toPath().toAbsolutePath()}")
@@ -115,6 +116,7 @@ dependencies {
     implementation(libs.repo) // included in sbapi, exposed through implementation
 
     includeModImplementationBundle(libs.bundles.sbapi)
+
     includeModImplementationBundle(libs.bundles.rconfig)
     includeModImplementationBundle(libs.bundles.libs)
     includeModImplementationBundle(libs.bundles.meowdding)

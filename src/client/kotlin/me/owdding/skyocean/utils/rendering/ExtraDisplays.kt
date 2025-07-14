@@ -37,7 +37,7 @@ object ExtraDisplays {
 
             override fun render(graphics: GuiGraphics) {
                 InventoryRenderer.renderNormalInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), columns, rows, color)
-                graphics.translated(0, 0, 2) {
+                graphics.translated(0.0, 0.0, 2.0) {
                     display.render(graphics)
                 }
             }

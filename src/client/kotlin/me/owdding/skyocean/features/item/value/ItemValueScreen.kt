@@ -128,7 +128,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
         fun onKeypress(event: ScreenKeyReleasedEvent) {
             if (!ITEM_VALUE_KEY.matches(event)) return
             val item = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty } ?: return
-            McClient.setScreenAsync(ItemValueScreen(item))
+            McClient.setScreenAsync { ItemValueScreen(item) }
         }
     }
 }
