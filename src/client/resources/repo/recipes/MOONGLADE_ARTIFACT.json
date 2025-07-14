@@ -1,0 +1,19 @@
+{
+  "output": {
+    "id": "item:moonglade_artifact",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:agatha_coupon",
+      "amount": 30,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:moonglade_ring",
+      "amount": 1,
+      "type": "ITEM"
+    }
+  ]
+}

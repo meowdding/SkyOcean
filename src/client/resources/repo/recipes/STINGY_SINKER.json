@@ -1,0 +1,14 @@
+{
+  "output": {
+    "id": "item:stingy_sinker",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:rusty_coin",
+      "amount": 64,
+      "type": "ITEM"
+    }
+  ]
+}

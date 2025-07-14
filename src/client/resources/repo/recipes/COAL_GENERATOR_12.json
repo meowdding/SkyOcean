@@ -1,0 +1,24 @@
+{
+  "output": {
+    "id": "item:coal_generator_12",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:coal_generator_11",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:enchanted_coal_block",
+      "amount": 16,
+      "type": "ITEM"
+    },
+    {
+      "amount": 1960000,
+      "currency": "COIN",
+      "type": "CURRENCY"
+    }
+  ]
+}

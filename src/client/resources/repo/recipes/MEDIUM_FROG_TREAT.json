@@ -1,0 +1,14 @@
+{
+  "output": {
+    "id": "item:medium_frog_treat",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:agatha_coupon",
+      "amount": 40,
+      "type": "ITEM"
+    }
+  ]
+}

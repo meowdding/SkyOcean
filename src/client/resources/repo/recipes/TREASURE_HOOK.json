@@ -1,0 +1,29 @@
+{
+  "output": {
+    "id": "item:treasure_hook",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:bayou_water_orb",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:old_leather_boot",
+      "amount": 4,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:busted_belt_buckle",
+      "amount": 32,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:rusty_coin",
+      "amount": 256,
+      "type": "ITEM"
+    }
+  ]
+}

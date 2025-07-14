@@ -1,0 +1,24 @@
+{
+  "output": {
+    "id": "item:emerald_generator_12",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:emerald_generator_11",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:enchanted_emerald_block",
+      "amount": 16,
+      "type": "ITEM"
+    },
+    {
+      "amount": 1960000,
+      "currency": "COIN",
+      "type": "CURRENCY"
+    }
+  ]
+}

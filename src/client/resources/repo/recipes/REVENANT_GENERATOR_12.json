@@ -1,0 +1,24 @@
+{
+  "output": {
+    "id": "item:revenant_generator_12",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:revenant_generator_11",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:revenant_viscera",
+      "amount": 64,
+      "type": "ITEM"
+    },
+    {
+      "amount": 1960000,
+      "currency": "COIN",
+      "type": "CURRENCY"
+    }
+  ]
+}

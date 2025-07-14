@@ -1,0 +1,24 @@
+{
+  "output": {
+    "id": "item:chicken_generator_12",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:chicken_generator_11",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:enchanted_raw_chicken",
+      "amount": 1024,
+      "type": "ITEM"
+    },
+    {
+      "amount": 75,
+      "currency": "PELT",
+      "type": "CURRENCY"
+    }
+  ]
+}

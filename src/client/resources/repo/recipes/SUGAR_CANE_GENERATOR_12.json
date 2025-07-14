@@ -1,0 +1,24 @@
+{
+  "output": {
+    "id": "item:sugar_cane_generator_12",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:sugar_cane_generator_11",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:enchanted_sugar_cane",
+      "amount": 32,
+      "type": "ITEM"
+    },
+    {
+      "amount": 75,
+      "currency": "PELT",
+      "type": "CURRENCY"
+    }
+  ]
+}

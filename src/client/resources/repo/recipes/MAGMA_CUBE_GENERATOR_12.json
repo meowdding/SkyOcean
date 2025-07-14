@@ -1,0 +1,24 @@
+{
+  "output": {
+    "id": "item:magma_cube_generator_12",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:magma_cube_generator_11",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:enchanted_magma_cream",
+      "amount": 1024,
+      "type": "ITEM"
+    },
+    {
+      "amount": 1960000,
+      "currency": "COIN",
+      "type": "CURRENCY"
+    }
+  ]
+}
