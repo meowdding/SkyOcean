@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.ktcodecs.IncludedCodec
-import me.owdding.skyocean.api.SimpleRecipeApi
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import net.minecraft.network.chat.Component

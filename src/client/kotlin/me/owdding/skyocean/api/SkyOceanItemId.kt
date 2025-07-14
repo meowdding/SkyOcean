@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.UNKNOWN
 import net.minecraft.core.component.DataComponents
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
@@ -13,6 +12,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.stripColor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @JvmInline
@@ -64,6 +64,8 @@ value class SkyOceanItemId private constructor(val id: String) {
 
         @IncludedCodec
         val CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap(::SkyOceanItemId, SkyOceanItemId::id)
+
+        fun ItemStack.getSkyOceanId() = fromItem(this) ?: fromName(this.hoverName.stripped)
 
     }
 
@@ -121,10 +123,4 @@ private fun ItemStack.getSkyOceanItemId(): SkyOceanItemId? {
 
         else -> (data)?.let(SkyOceanItemId::item)
     }
-}
-
-private fun getAppliedRune(tag: CompoundTag): Pair<String, Int>? {
-    return tag.getCompoundOrEmpty("runes")?.let { tag ->
-        buildMap { tag.keySet().forEach { key -> this[key] = tag.getIntOr(key, 0) } }
-    }?.entries?.firstOrNull()?.toPair()
 }

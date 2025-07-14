@@ -1,30 +1,30 @@
 package me.owdding.skyocean.features.dev
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.features.recipe.CurrencyIngredient
-import me.owdding.skyocean.features.recipe.CurrencyType
-import me.owdding.skyocean.features.recipe.Ingredient
-import me.owdding.skyocean.features.recipe.ItemLikeIngredient
+import me.owdding.skyocean.api.IngredientParser
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
+import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.custom.CustomRecipe
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.debugToggle
 import net.minecraft.world.entity.player.Inventory
-import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenMouseClickEvent
+import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import kotlin.contracts.ExperimentalContracts
@@ -41,7 +41,6 @@ object NpcRecipeParser {
     val path: Path = Path(System.getProperty("skyocean.recipepath", "config/skyocean/data")).resolve("repo/recipes")
 
     val enable by debugToggle("recipe/npc_parser")
-    val clickToRegex = Regex("[\\s\\S\\n]+Click to \\S+!")
     val amountRegex = Regex(".* (x[\\d,.]+)")
 
     @OptIn(ExperimentalContracts::class)
@@ -60,23 +59,21 @@ object NpcRecipeParser {
     private fun InventoryChangeEvent.inventory() = ifEnabled {
         if (isSkyBlockFiller) return
         val lore = item.getRawLore().joinToString("\n")
-        if (!lore.trim().matches(clickToRegex)) return
+        val id = item.getSkyOceanId() ?: return
 
-        val costs = lore.substringAfter("Cost").split("\n").takeWhile { it.isNotBlank() }.map {
-            runCatching { parseIngredient(it) }.getOrElse {
-                it.printStackTrace()
-                null
-            }
-        }
-        if (costs.isEmpty()) return
+        val output = IngredientParser.parse(item.hoverName.stripped)?.amount ?: 1
 
-        val (_, amount) = item.cleanName.getAmount()
-        val output = runCatching { item.toIngredient(amount) }.getOrElse {
-            it.printStackTrace()
-            null
+        val costs = lore.substringAfterLast("Cost").trim().split("\n")
+            .toList().takeWhile { line -> line.isNotBlank() }.mapNotNull { IngredientParser.parse(it) }
+
+        lastInv[slot.index] = !CustomRecipe(SkyOceanItemIngredient(id, output), costs.toMutableList())
+        slot.item.replaceVisually {
+            copyFrom(slot.item)
+            backgroundItem = Items.RED_STAINED_GLASS_PANE.defaultInstance
         }
-        lastInv[slot.index] = MaybeCustomRecipe(CustomRecipe(output, costs.filterNotNull().toMutableList()), false)
     }
+
+    private operator fun CustomRecipe.not() = MaybeCustomRecipe(this, false)
 
     fun String.getAmount(): Pair<String, Int> = if (this.matches(amountRegex)) {
         val amount = this.replace(amountRegex, "$1")
@@ -85,34 +82,13 @@ object NpcRecipeParser {
         this to 1
     }
 
-    private fun parseIngredient(cost: String): Ingredient? = when {
-        cost.endsWith("Coins") -> CurrencyIngredient.coins(cost.filter { it.isDigit() }.toIntValue())
-        cost.endsWith("Chocolate") -> CurrencyIngredient(
-            cost.filter { it.isDigit() }.toIntValue(),
-            CurrencyType.CHOCOLATE
-        )
-
-        else -> {
-            val (cost, amount) = cost.getAmount()
-
-            //val itemByName = SimpleItemApi.findIdByName(cost)?.toItem()
-
-            //itemByName.toIngredient(amount)
-            null
-        }
-    }
-
-    private fun ItemStack.toIngredient(amount: Int): ItemLikeIngredient {
-        return TODO()
-    }
-
     @Subscription
     @OnlyOnSkyBlock
     private fun ContainerCloseEvent.onClose() = ifEnabled {
         var saved = 0
         lastInv.values.filter { it.save }.map { it.recipe }.forEach {
             path.createDirectories()
-            val recipe = path.resolve("${it.output?.skyblockId}.json")
+            val recipe = path.resolve("${it.output?.skyblockId?.replace(":", ".")}.json")
             recipe.writeText(
                 it.toJson(SkyOceanCodecs.CustomRecipeCodec.codec()).toPrettyString(),
                 Charsets.UTF_8,
@@ -132,6 +108,10 @@ object NpcRecipeParser {
         if (clickedSlot.container is Inventory) return
         val data = lastInv[clickedSlot.index] ?: return
         data.save = !data.save
+        clickedSlot.item.replaceVisually {
+            copyFrom(clickedSlot.item)
+            backgroundItem = if (data.save) Items.LIME_STAINED_GLASS_PANE.defaultInstance else Items.RED_STAINED_GLASS_PANE.defaultInstance
+        }
         this.cancel()
     }
 

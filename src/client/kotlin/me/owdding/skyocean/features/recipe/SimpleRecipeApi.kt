@@ -1,10 +1,7 @@
-package me.owdding.skyocean.api
+package me.owdding.skyocean.features.recipe
 
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.features.recipe.Ingredient
-import me.owdding.skyocean.features.recipe.ItemLikeIngredient
-import me.owdding.skyocean.features.recipe.Recipe
-import me.owdding.skyocean.features.recipe.RecipeType
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.utils.LateInitModule
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient

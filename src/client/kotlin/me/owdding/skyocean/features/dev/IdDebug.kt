@@ -1,13 +1,12 @@
 package me.owdding.skyocean.features.dev
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.api.SkyOceanItemId
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
 import me.owdding.skyocean.utils.debugToggle
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ItemDebugTooltipEvent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
@@ -33,7 +32,7 @@ object IdDebug {
         event.add(
             Text.of {
                 append("SkyOceanId: ")
-                append(SkyOceanItemId.fromItem(event.item)?.id ?: SkyOceanItemId.fromName(event.item.hoverName.stripped)?.id ?: "null")
+                append(event.item.getSkyOceanId()?.id ?: "null")
                 this.color = TextColor.GRAY
             },
         )

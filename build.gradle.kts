@@ -185,6 +185,8 @@ ksp {
 compactingResources {
     sourceSets = mutableListOf("client", "main")
     basePath = "repo"
+
+    compactToArray("recipes")
 }
 
 repo {
