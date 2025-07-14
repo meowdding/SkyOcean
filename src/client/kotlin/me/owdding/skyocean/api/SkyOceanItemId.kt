@@ -26,11 +26,13 @@ value class SkyOceanItemId private constructor(val id: String) {
         const val ATTRIBUTE = "attribute:"
         const val ENCHANTMENT = "enchantment:"
         const val UNKNOWN = "ocean:unknown"
+        private val petRegex = Regex("\\[?lvl \\d+]? (.*)")
 
         fun item(id: String) = SkyOceanItemId("$ITEM$id".lowercase())
         fun pet(id: String) = SkyOceanItemId("$PET$id".lowercase())
         fun pet(id: String, rarity: String) = SkyOceanItemId("$PET$id:$rarity".lowercase())
         fun rune(id: String) = SkyOceanItemId("$RUNE$id".lowercase())
+        fun rune(id: String, level: Int) = SkyOceanItemId("$RUNE$id:$level".lowercase())
         fun attribute(id: String) = SkyOceanItemId("$ATTRIBUTE$id".lowercase())
         fun enchantment(id: String) = SkyOceanItemId("$ENCHANTMENT$id".lowercase())
         fun enchantment(id: String, level: Int) = SkyOceanItemId("$ENCHANTMENT$id:$level".lowercase())
@@ -39,8 +41,8 @@ value class SkyOceanItemId private constructor(val id: String) {
 
         fun fromName(name: String): SkyOceanItemId? {
             var name = name.lowercase().stripColor()
-            if (name.startsWith("[lvl")) {
-                name = name.substringAfterLast("]")
+            if (name.matches(petRegex)) {
+                name = name.replace(petRegex, "$1")
             } else if (name.matches(amountRegex)) {
                 name = name.substringBeforeLast(" x")
             }
@@ -49,13 +51,17 @@ value class SkyOceanItemId private constructor(val id: String) {
         }
 
         fun unknownType(input: String): SkyOceanItemId? {
-            val unsafeId = SkyOceanItemId(input)
+            val unsafeId = SkyOceanItemId(input.lowercase())
 
-            SimpleItemApi.getItemByIdOrNull(unsafeId) ?: return item(input)
-            SimpleItemApi.getPetByIdOrNull(unsafeId) ?: return pet(input)
-            SimpleItemApi.getEnchantmentByIdOrNull(unsafeId) ?: return enchantment(input)
-            SimpleItemApi.getAttributeByIdOrNull(unsafeId) ?: return attribute(input)
-            SimpleItemApi.getRuneByIdOrNull(unsafeId) ?: return rune(input)
+            fun <T> safe(init: () -> T): T? {
+                return runCatching { init() }.getOrNull()
+            }
+
+            safe { SimpleItemApi.getItemByIdOrNull(unsafeId) }?.let { return item(input) }
+            safe { SimpleItemApi.getPetByIdOrNull(unsafeId) }?.let { return pet(input) }
+            safe { SimpleItemApi.getEnchantmentByIdOrNull(unsafeId) }?.let { return enchantment(input) }
+            safe { SimpleItemApi.getAttributeByIdOrNull(unsafeId) }?.let { return attribute(input) }
+            safe { SimpleItemApi.getRuneByIdOrNull(unsafeId) }?.let { return rune(input) }
 
             return null
         }

@@ -2,8 +2,11 @@ package me.owdding.skyocean.features.recipe
 
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.Utils
 import tech.thatgravyboat.repolib.api.RepoAPI
+import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import me.owdding.skyocean.features.recipe.RepoApiRecipe as RepoApiRecipeWrapper
 import tech.thatgravyboat.repolib.api.recipes.Recipe as RepoApiRecipe
@@ -25,7 +28,7 @@ object SimpleRecipeApi {
 
     internal val supportedTypes = arrayOf(
         RepoApiRecipe.Type.FORGE to RecipeType.FORGE,
-        RepoApiRecipe.Type.CRAFTING to RecipeType.CRAFTING
+        RepoApiRecipe.Type.CRAFTING to RecipeType.CRAFTING,
     )
 
     internal val recipes = mutableListOf<Recipe>()
@@ -36,7 +39,7 @@ object SimpleRecipeApi {
             recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe ->
                 RepoApiRecipeWrapper(
                     recipe,
-                    type
+                    type,
                 )
             }
         }
@@ -49,7 +52,12 @@ object SimpleRecipeApi {
                 }
             }
         }
+
         SkyOcean.trace("Loaded ${recipes.size} Recipes from repo api")
+        val extraRecipes = Utils.loadRepoData("recipes", SkyOceanCodecs.CustomRecipeCodec.codec().listOf())
+        recipes.addAll(extraRecipes)
+
+        SkyOcean.trace("Loaded ${extraRecipes.size} extra from local repo")
 
         rebuildRecipes()
 
@@ -76,13 +84,20 @@ object SimpleRecipeApi {
 
     fun hasRecipe(id: SkyOceanItemId) = idToRecipes.containsKey(id)
 
-    fun getBestRecipe(ingredient: Ingredient) =
-        (ingredient as? ItemLikeIngredient)?.id?.takeIf(::hasRecipe)?.let { getBestRecipe(it) }
+    fun getBestRecipe(ingredient: Ingredient) = (ingredient as? ItemLikeIngredient)?.id?.takeIf(::hasRecipe)?.let { getBestRecipe(it) }
 
     fun getBestRecipe(id: SkyOceanItemId): Recipe? {
-        assert(hasRecipe(id)) { "Item has no recipe" }
+
         return runCatching {
-            idToRecipes[id]!!.firstOrNull()!!
+            idToRecipes[id]?.firstOrNull()?.let { return@runCatching it }
+
+            val variants = when {
+                id.isPet -> SkyBlockRarity.entries.reversed().map { SkyOceanItemId.pet(id.cleanId, it.name) }
+                id.isRune -> (3 downTo 0).map { SkyOceanItemId.rune(id.cleanId, it) }
+                id.isEnchantment -> (10 downTo 0).map { SkyOceanItemId.enchantment(id.cleanId, it) }
+                else -> emptyList()
+            }
+            variants.mapNotNull { idToRecipes[it] }.firstNotNullOfOrNull { it.firstOrNull() }?.let { return@runCatching it }
         }.getOrNull()
     }
 
