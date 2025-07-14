@@ -151,9 +151,8 @@ object TreeFormatter : RecipeView {
                     append(" ")
                 }
                 append {
-
                     append(available.toFormattedString())
-                    append("/")
+                    append("/") { color = TextColor.GRAY }
                     append(needed.toFormattedString())
 
                     this.color = ARGB.lerp(available.toFloat() / needed.toFloat(), TextColor.RED, TextColor.GREEN)
