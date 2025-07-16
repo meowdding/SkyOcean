@@ -18,10 +18,10 @@ public class ShulkerRendererMixin {
         if (!SkyBlockIsland.GALATEA.inIsland()) {
             return;
         }
-        if (GalateaConfig.INSTANCE.getShulkerOverwrite() == shulker.getColor()) {
+        if (GalateaConfig.INSTANCE.getShulkerOverwrite().getDye() == shulker.getColor()) {
             return;
         }
-        shulkerRenderState.color = GalateaConfig.INSTANCE.getShulkerOverwrite();
+        shulkerRenderState.color = GalateaConfig.INSTANCE.getShulkerOverwrite().getDye();
     }
 
 }
