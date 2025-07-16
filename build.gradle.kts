@@ -114,6 +114,7 @@ dependencies {
 
     implementation(libs.kotlin.stdlib)
     implementation(libs.repo) // included in sbapi, exposed through implementation
+    include(libs.repo) // included in sbapi, exposed through implementation, currently needed since i can't use sbapi multi version
 
     includeModImplementationBundle(libs.bundles.sbapi)
 

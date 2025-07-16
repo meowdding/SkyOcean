@@ -8,7 +8,7 @@ import me.owdding.skyocean.features.recipe.RecipeType
 
 @GenerateCodec
 data class CustomRecipe(
-    override val output: ItemLikeIngredient?,
+    override var output: ItemLikeIngredient?,
     override val inputs: MutableList<Ingredient>,
 ) : Recipe() {
     override val recipeType: RecipeType = RecipeType.CUSTOM

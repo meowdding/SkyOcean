@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
+import com.mojang.serialization.Codec
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
@@ -8,11 +9,19 @@ import me.owdding.skyocean.utils.storage.ProfileStorage
 @LateInitModule
 object CraftHelperStorage {
     private val storage = ProfileStorage(
-        0,
+        1,
         { CraftHelperData(null) },
         "craft_helper",
-    ) {
-        SkyOceanCodecs.CraftHelperDataCodec.codec()
+    ) { version ->
+        when (version) {
+            0 -> SkyOceanCodecs.CraftHelperDataCodec.codec().xmap(
+                { (item, amount) -> CraftHelperData(item?.id?.let { SkyOceanItemId.unknownType(it) }, amount) },
+                { it },
+            )
+
+            1 -> SkyOceanCodecs.CraftHelperDataCodec.codec()
+            else -> Codec.unit { CraftHelperData(null, 1) }
+        }
     }
 
     fun setSelected(item: SkyOceanItemId?) {

@@ -19,14 +19,15 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 value class SkyOceanItemId private constructor(val id: String) {
     companion object {
         private val amountRegex = Regex(".*?x[\\d,]+")
-
         const val ITEM = "item:"
+
         const val PET = "pet:"
         const val RUNE = "rune:"
         const val ATTRIBUTE = "attribute:"
         const val ENCHANTMENT = "enchantment:"
         const val UNSAFE = "unsafe:"
         const val UNKNOWN = "ocean:unknown"
+        val EMPTY: SkyOceanItemId = item(UNKNOWN)
         private val petRegex = Regex("\\[?lvl \\d+]? (.*)")
 
         fun item(id: String) = SkyOceanItemId("$ITEM$id".lowercase())
