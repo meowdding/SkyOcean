@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.item.search.highlight
 import com.teamresourceful.resourcefullib.common.color.Color
 import kotlinx.coroutines.*
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.events.ItemSearchComponent
 import me.owdding.skyocean.events.ItemStackCreateEvent
 import me.owdding.skyocean.features.item.search.search.ItemFilter
@@ -12,7 +13,6 @@ import me.owdding.skyocean.utils.rendering.RenderUtils.renderBox
 import net.minecraft.core.BlockPos
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.InventoryTitle
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
@@ -62,9 +62,9 @@ object ItemHighlighter {
             copyFrom(this@highlight)
 
             if (this@highlight in ItemTag.GLASS_PANES) {
-                item = Items.RED_STAINED_GLASS_PANE
+                item = MiscConfig.itemSearchItemHighlight.paneItem
             } else {
-                backgroundItem = Items.RED_STAINED_GLASS_PANE.defaultInstance
+                backgroundItem = MiscConfig.itemSearchItemHighlight.paneStack
             }
         }
         allItems.add(this)

@@ -2,8 +2,8 @@ package me.owdding.skyocean.config.features.foraging
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.defaultEnabledMessage
+import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
-import net.minecraft.world.item.DyeColor
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 object GalateaConfig : CategoryKt("galatea") {
@@ -18,7 +18,7 @@ object GalateaConfig : CategoryKt("galatea") {
         predicate = { SkyBlockIsland.GALATEA.inIsland() },
     )
 
-    var shulkerOverwrite by enum<DyeColor>(DyeColor.GREEN) {
+    var shulkerOverwrite by enum(MinecraftColor.GREEN) {
         translation = "skyocean.config.foraging.galatea.shulkerOverwrite"
     }
 

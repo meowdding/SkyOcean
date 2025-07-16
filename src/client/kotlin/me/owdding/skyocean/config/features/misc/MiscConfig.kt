@@ -3,6 +3,7 @@ package me.owdding.skyocean.config.features.misc
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.ConfigCategory
 import me.owdding.skyocean.config.separator
+import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.transparency
 
 @ConfigCategory
@@ -31,6 +32,14 @@ object MiscConfig : CategoryKt("misc") {
 
     var showHiddenPetCandy by boolean(true) {
         translation = "skyocean.config.misc.showHiddenPetCandy"
+    }
+
+    init {
+        separator("skyocean.config.misc.itemSearch")
+    }
+
+    var itemSearchItemHighlight by enum(MinecraftColor.RED) {
+        translation = "skyocean.config.misc.itemSearch.itemHighlight"
     }
 
     init {
