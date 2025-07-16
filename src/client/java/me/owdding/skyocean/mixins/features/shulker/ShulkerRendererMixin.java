@@ -14,7 +14,7 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland;
 public class ShulkerRendererMixin {
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/monster/Shulker;Lnet/minecraft/client/renderer/entity/state/ShulkerRenderState;F)V", at = @At("TAIL"))
-    public void test(Shulker shulker, ShulkerRenderState shulkerRenderState, float f, CallbackInfo ci) {
+    public void setShulkerRenderState(Shulker shulker, ShulkerRenderState shulkerRenderState, float f, CallbackInfo ci) {
         if (!SkyBlockIsland.GALATEA.inIsland()) {
             return;
         }
