@@ -4,6 +4,7 @@ import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
+import earth.terrarium.olympus.client.components.textbox.TextBox
 import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.ui.context.ContextMenu
@@ -55,6 +56,8 @@ object ItemSearchScreen : SkyOceanScreen() {
     var requireRebuild = true
     val items = mutableListOf<TrackedItem>()
 
+    private lateinit var textBox: TextBox
+
     override fun onClose() {
         super.onClose()
         this.search = null
@@ -100,18 +103,19 @@ object ItemSearchScreen : SkyOceanScreen() {
             background(olympus("buttons/dark/normal"), width, 26),
         ).asWidget().center().applyAsRenderable()
 
-        LayoutFactory.frame(width, height) {
+        val body = LayoutFactory.frame(width, height) {
             vertical {
                 LayoutFactory.frame {
                     vertical(alignment = RIGHT) {
                         spacer(width)
                         LayoutFactory.horizontal {
                             spacer(height = 24)
-                            Widgets.textInput(state) { box ->
+                            textBox = Widgets.textInput(state) { box ->
                                 box.withChangeCallback(::refreshSearch)
                                 box.withPlaceholder("Search...")
                                 box.withSize(100, 20)
-                            }.add {
+                            }
+                            textBox.add {
                                 alignVerticallyMiddle()
                             }
                             spacer(width = 2)
@@ -180,44 +184,49 @@ object ItemSearchScreen : SkyOceanScreen() {
                 spacer(height = 2)
                 spacer(width = 4, height - 26)
             }
-        }.center().let {
-            it.applyLayout()
+        }.center()
+        body.applyLayout()
 
-            LayoutFactory.vertical {
-                SearchCategory.entries.forEach { category ->
-                    val button = Button().apply {
-                        val display = Displays.item(category.icon, 16, 16).withPadding(2)
+        LayoutFactory.vertical {
+            SearchCategory.entries.forEach { category ->
+                val button = Button().apply {
+                    val display = Displays.item(category.icon, 16, 16).withPadding(2)
 
-                        val selected = WidgetRenderers.sprite<Button>(UIConstants.PRIMARY_BUTTON)
-                        val normal = WidgetRenderers.sprite<Button>(UIConstants.BUTTON)
+                    val selected = WidgetRenderers.sprite<Button>(UIConstants.PRIMARY_BUTTON)
+                    val normal = WidgetRenderers.sprite<Button>(UIConstants.BUTTON)
 
-                        // TODO: dont make this so awful
-                        withRenderer(
-                            WidgetRenderers.layered(
-                                { graphics, widget, ticks ->
-                                    (if (this@ItemSearchScreen.category == category) selected else normal)
-                                        .render(graphics, widget, ticks)
-                                },
-                                DisplayWidget.displayRenderer(display),
-                            ),
-                        )
-                        withTooltip(Text.of(category.toFormattedName()))
-                        setSize(20, 20)
-                        withTexture(null)
-                        withCallback {
-                            this@ItemSearchScreen.category = category
-                            rebuildItems()
-                            addItems()
-                        }
+                    // TODO: dont make this so awful
+                    withRenderer(
+                        WidgetRenderers.layered(
+                            { graphics, widget, ticks ->
+                                (if (this@ItemSearchScreen.category == category) selected else normal).render(graphics, widget, ticks)
+                            },
+                            DisplayWidget.displayRenderer(display),
+                        ),
+                    )
+                    withTooltip(Text.of(category.toFormattedName()))
+                    setSize(20, 20)
+                    withTexture(null)
+                    withCallback {
+                        this@ItemSearchScreen.category = category
+                        rebuildItems()
+                        addItems()
                     }
-                    widget(button)
                 }
-            }.apply {
-                setPosition(it.x - 20, it.y + 26)
-                applyLayout()
+                widget(button)
             }
-
+        }.apply {
+            setPosition(body.x - 20, body.y + 26)
+            applyLayout()
         }
+
+        // Todo: actually fix textbox not autofocusing
+        body.visitWidgets {
+            if (it is TextBox) {
+                textBox = it
+            }
+        }
+        setInitialFocus(textBox)
         addItems()
     }
 
