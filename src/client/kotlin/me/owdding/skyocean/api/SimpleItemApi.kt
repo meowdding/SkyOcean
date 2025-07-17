@@ -2,11 +2,6 @@ package me.owdding.skyocean.api
 
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.api.SkyOceanItemId.Companion.ATTRIBUTE
-import me.owdding.skyocean.api.SkyOceanItemId.Companion.ENCHANTMENT
-import me.owdding.skyocean.api.SkyOceanItemId.Companion.ITEM
-import me.owdding.skyocean.api.SkyOceanItemId.Companion.PET
-import me.owdding.skyocean.api.SkyOceanItemId.Companion.RUNE
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.UNKNOWN
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.attribute
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.enchantment
@@ -81,7 +76,7 @@ object SimpleItemApi {
     fun findIdByName(name: String) = nameCache[name.lowercase().stripColor()]
 
     fun getItemByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id.trySafe(::item)) {
-        val itemId = id.id.removePrefix(ITEM).uppercase()
+        val itemId = id.cleanId.uppercase()
 
         if (itemId == UNKNOWN) {
             return null
@@ -95,7 +90,7 @@ object SimpleItemApi {
     }
 
     fun getPetByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id.trySafe(::pet)) {
-        val petId = id.id.removePrefix(PET).uppercase()
+        val petId = id.cleanId.uppercase()
 
         if (petId == UNKNOWN) {
             return@getOrPut null
@@ -122,7 +117,7 @@ object SimpleItemApi {
     }
 
     fun getRuneByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id.trySafe(::rune)) {
-        val runeId = id.id.removePrefix(RUNE).uppercase()
+        val runeId = id.cleanId.uppercase()
 
         if (runeId == UNKNOWN) {
             return@getOrPut null
@@ -146,7 +141,7 @@ object SimpleItemApi {
     }
 
     fun getEnchantmentByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id.trySafe(::enchantment)) {
-        val enchantmentId = id.id.removePrefix(ENCHANTMENT).uppercase()
+        val enchantmentId = id.cleanId.uppercase()
 
         if (enchantmentId == UNKNOWN) {
             return@getOrPut null
@@ -170,7 +165,7 @@ object SimpleItemApi {
     }
 
     fun getAttributeByIdOrNull(id: SkyOceanItemId): ItemStack? = cache.getOrPut(id.trySafe(::attribute)) {
-        val attributeId = id.id.removePrefix(ATTRIBUTE).uppercase()
+        val attributeId = id.cleanId.uppercase()
 
         if (attributeId == UNKNOWN) {
             return@getOrPut null
