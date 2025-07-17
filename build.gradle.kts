@@ -1,3 +1,4 @@
+@file:Suppress("UnstableApiUsage")
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -147,10 +148,10 @@ cloche {
         this["resourcefulconfig"] = libs.resourceful.config1215
         this["olympus"] = libs.olympus.lib1215
     }
-    createVersion("1.21.7") {
-        this["resourcefullib"] = libs.resourceful.lib1217
-        this["resourcefulconfig"] = libs.resourceful.config1217
-        this["olympus"] = libs.olympus.lib1217
+    createVersion("1.21.8") {
+        this["resourcefullib"] = libs.resourceful.lib1218
+        this["resourcefulconfig"] = libs.resourceful.config1218
+        this["olympus"] = libs.olympus.lib1218
     }
 
     mappings { official() }
@@ -159,7 +160,7 @@ cloche {
 compactingResources {
     basePath = "repo"
 
-    configureTask(tasks.getByName<ProcessResources>("process1217Resources"))
+    configureTask(tasks.getByName<ProcessResources>("process1218Resources"))
     configureTask(tasks.getByName<ProcessResources>("process1215Resources"))
     configureTask(tasks.getByName<ProcessResources>("processResources"))
 
@@ -193,6 +194,10 @@ repo {
 tasks.withType<ProcessResources>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
+    filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
+        filter { if (it.startsWith("//!moj_import")) "#${it.substring(3)}" else it }
+    }
+
     with(copySpec {
         from("src/lang").include("*.json").into("assets/skyocean/lang")
     })
@@ -217,7 +222,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
 ksp {
     this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
-    this@ksp.excludedSources.from(sourceSets.getByName("1217").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("1218").kotlin.srcDirs)
     arg("meowdding.project_name", project.name)
     arg("meowdding.package", "me.owdding.skyocean.generated")
 }

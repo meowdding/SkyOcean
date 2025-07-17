@@ -3,7 +3,7 @@
 uniform sampler2D Sampler0;
 
 layout (std140) uniform PolyInventoryUniform {
-    vec2 Size;
+    ivec2 Size;
 };
 
 in vec2 texCoord0;
