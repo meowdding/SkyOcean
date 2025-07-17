@@ -10,8 +10,8 @@ import me.owdding.lib.extensions.toReadableTime
 import me.owdding.lib.extensions.withTooltip
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperStorage
 import me.owdding.skyocean.helpers.ClientSideInventory
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.ItemBuilder

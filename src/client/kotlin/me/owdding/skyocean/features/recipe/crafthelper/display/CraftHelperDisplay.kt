@@ -11,13 +11,13 @@ import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi.getBestRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
@@ -49,13 +49,17 @@ object CraftHelperDisplay {
 
     val data get() = CraftHelperStorage.data
 
+    fun clear() {
+        data?.item = null
+        data?.amount = 1
+        CraftHelperStorage.save()
+    }
+
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("recipe") {
             thenCallback("clear") {
-                data?.item = null
-                data?.amount = 1
-                CraftHelperStorage.save()
+                clear()
                 Text.of("Cleared current recipe!").sendWithPrefix()
             }
             then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
@@ -82,27 +86,29 @@ object CraftHelperDisplay {
         val layout = LayoutFactory.empty() as FrameLayout
         lateinit var callback: (save: Boolean) -> Unit
 
-        fun reset() {
+        fun resetLayout() {
             layout.visitWidgets { event.widgets.remove(it) }
         }
         callback = callback@{ save ->
             val currentRecipe = data?.item ?: run {
-                reset()
+                resetLayout()
                 return@callback
             }
 
             val recipe = getBestRecipe(currentRecipe) ?: run {
                 Text.of("No recipe found for $currentRecipe!") { this.color = TextColor.RED }.sendWithPrefix()
-                reset()
+                resetLayout()
+                clear()
                 return@callback
             }
             val output = recipe.output ?: run {
                 Text.of("Recipe output is null!") { this.color = TextColor.RED }.sendWithPrefix()
-                reset()
+                resetLayout()
+                clear()
                 return@callback
             }
 
-            reset()
+            resetLayout()
             (layout as? FrameLayoutAccessor)?.children()?.clear()
             val tree = ContextAwareRecipeTree(recipe, output, data?.amount?.coerceAtLeast(1) ?: 1)
             layout.addChild(visualize(tree, output) { callback })

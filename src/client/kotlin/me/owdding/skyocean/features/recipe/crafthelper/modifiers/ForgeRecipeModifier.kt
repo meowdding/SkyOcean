@@ -4,7 +4,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperStorage.setSelected
+import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.contains
 import net.minecraft.core.component.DataComponents
