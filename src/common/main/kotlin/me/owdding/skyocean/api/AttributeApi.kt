@@ -14,7 +14,6 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.ItemLore
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
-import tech.thatgravyboat.skyblockapi.utils.extentions.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.ItemUtils
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -27,9 +26,7 @@ object AttributeApi {
 
     fun getAttributeByIdOrNull(id: String) = cache.getOrPut(id) {
         val attribute = RepoAPI.attributes().getAttribute(id)
-        if (attribute == null) return@getOrPut ItemStack(Items.BARRIER) {
-            this[DataComponents.ITEM_NAME] = Text.of("Unknown Attribute: $id")
-        }
+        if (attribute == null) return@getOrPut null
 
         val item = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(attribute.item().lowercase()))
             .takeUnless { it == Items.AIR }

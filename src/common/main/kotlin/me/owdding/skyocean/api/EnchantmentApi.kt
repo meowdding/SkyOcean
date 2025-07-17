@@ -20,13 +20,11 @@ object EnchantmentApi {
 
     fun getEnchantmentAsItemOrNull(id: String, level: Int) = cache.getOrPut(id) {
         val enchantment = RepoAPI.enchantments().getEnchantment(id)
-        if (enchantment == null) return@getOrPut ItemStack(Items.BARRIER) {
-            this[DataComponents.ITEM_NAME] = Text.of("Unknown Enchantment: $id")
-        }
+        if (enchantment == null) return@getOrPut null
 
         val level = enchantment.levels.entries.sortedBy { (key) -> key }.firstOrElseLast { (key) -> key == level }.value
         if (level == null) return@getOrPut ItemStack(Items.BARRIER) {
-            this[DataComponents.ITEM_NAME] = Text.of("Unknown Enchantment: $id")
+            this[DataComponents.ITEM_NAME] = Text.of("Unknown Enchantment Level: $id")
         }
         val lore = level.lore.map { !it }
 
