@@ -19,7 +19,7 @@ import java.util.function.Function
 val MONO_TEXTURE = SkyOcean.id("textures/gui/inventory/mono.png")
 val POLY_TEXTURE = SkyOcean.id("textures/gui/inventory/poly.png")
 
-abstract class SkyBlockPvPipState<T : OlympusPictureInPictureRenderState<T>>() : OlympusPictureInPictureRenderState<T> {
+abstract class SkyOceanPipState<T : OlympusPictureInPictureRenderState<T>>() : OlympusPictureInPictureRenderState<T> {
     abstract val x0: Int
     abstract val y0: Int
     abstract val x1: Int
@@ -55,7 +55,7 @@ data class MonoInventoryPipState(
     val size: Int,
     val color: Int,
     val vertical: Boolean,
-) : SkyBlockPvPipState<MonoInventoryPipState>() {
+) : SkyOceanPipState<MonoInventoryPipState>() {
     override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<MonoInventoryPipState>> =
         Function { buffer -> MonoInventoryPipRenderer(buffer) }
 }
@@ -66,7 +66,7 @@ data class PolyInventoryPipState(
     override val pose: Matrix3x2f,
     val size: Vector2i,
     val color: Int,
-) : SkyBlockPvPipState<PolyInventoryPipState>() {
+) : SkyOceanPipState<PolyInventoryPipState>() {
     override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<PolyInventoryPipState>> =
         Function { buffer -> PolyInventoryPipRenderer(buffer) }
 }
@@ -96,14 +96,14 @@ class MonoInventoryPipRenderer(source: MultiBufferSource.BufferSource) : Picture
         RenderSystem.setShaderTexture(0, McClient.self.textureManager.getTexture(MONO_TEXTURE).textureView)
 
         PipelineRenderer.builder(InventoryRenderer.MONO_INVENTORY_BACKGROUND, buffer.buildOrThrow())
-            .uniform(MonoInventoryUnfirom.STORAGE, MonoInventoryUnfirom(state.size, if (state.vertical) 1 else 0))
+            .uniform(MonoInventoryUniform.STORAGE, MonoInventoryUniform(state.size, if (state.vertical) 1 else 0))
             .color(state.color)
             .draw()
 
         this.lastState = state
     }
 
-    override fun getTextureLabel() = "skyblockpv_mono_inventory"
+    override fun getTextureLabel() = "skyocean_mono_inventory"
 
 }
 
@@ -132,13 +132,13 @@ class PolyInventoryPipRenderer(source: MultiBufferSource.BufferSource) : Picture
         RenderSystem.setShaderTexture(0, McClient.self.textureManager.getTexture(POLY_TEXTURE).textureView)
 
         PipelineRenderer.builder(InventoryRenderer.INVENTORY_BACKGROUND, buffer.buildOrThrow())
-            .uniform(PolyInventoryUnfirom.STORAGE, PolyInventoryUnfirom(state.size))
+            .uniform(PolyInventoryUniform.STORAGE, PolyInventoryUniform(state.size))
             .color(state.color)
             .draw()
 
         this.lastState = state
     }
 
-    override fun getTextureLabel() = "skyblockpv_poly_inventory"
+    override fun getTextureLabel() = "skyocean_poly_inventory"
 
 }
