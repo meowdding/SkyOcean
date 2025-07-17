@@ -1,12 +1,10 @@
 package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
-import me.owdding.skyocean.config.ConfigCategory
 import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.transparency
 
-@ConfigCategory
 object MiscConfig : CategoryKt("misc") {
     override val name get() = Translated("skyocean.config.misc")
 

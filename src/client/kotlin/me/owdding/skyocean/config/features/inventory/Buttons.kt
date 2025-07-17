@@ -2,13 +2,11 @@ package me.owdding.skyocean.config.features.inventory
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
-import me.owdding.skyocean.config.ConfigCategory
 import me.owdding.skyocean.utils.Utils.id
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.ItemLike
 import org.intellij.lang.annotations.Language
 
-@ConfigCategory
 object Buttons : CategoryKt("buttons") {
     override val hidden: Boolean = true
 

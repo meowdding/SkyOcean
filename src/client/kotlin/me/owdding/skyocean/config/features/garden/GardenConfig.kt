@@ -1,9 +1,7 @@
 package me.owdding.skyocean.config.features.garden
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
-import me.owdding.skyocean.config.ConfigCategory
 
-@ConfigCategory
 object GardenConfig : CategoryKt("garden") {
     override val name = Translated("skyocean.config.garden")
 

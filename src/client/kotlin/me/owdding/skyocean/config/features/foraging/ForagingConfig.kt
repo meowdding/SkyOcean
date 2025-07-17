@@ -1,14 +1,9 @@
 package me.owdding.skyocean.config.features.foraging
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
-import me.owdding.skyocean.config.ConfigCategory
 
 
-@ConfigCategory
 object ForagingConfig : CategoryKt("foraging") {
-    init {
-        category(GalateaConfig)
-    }
 
     override val name get() = Translated("skyocean.config.foraging")
 

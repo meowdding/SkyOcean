@@ -1,12 +1,10 @@
 package me.owdding.skyocean.config.features.inventory
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
-import me.owdding.skyocean.config.ConfigCategory
 import me.owdding.skyocean.features.inventory.buttons.ButtonConfigScreen
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
-@ConfigCategory
 object InventoryConfig : CategoryKt("inventory") {
     override val name = Translated("skyocean.config.inventory")
 

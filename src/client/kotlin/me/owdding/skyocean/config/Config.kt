@@ -4,10 +4,21 @@ import com.google.gson.JsonObject
 import com.teamresourceful.resourcefulconfig.api.types.info.ResourcefulConfigLink
 import com.teamresourceful.resourcefulconfig.api.types.options.TranslatableValue
 import com.teamresourceful.resourcefulconfigkt.api.ConfigKt
-import me.owdding.ktmodules.AutoCollect
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.features.chat.ChatConfig
+import me.owdding.skyocean.config.features.combat.SlayerConfig
+import me.owdding.skyocean.config.features.fishing.FishingConfig
+import me.owdding.skyocean.config.features.foraging.ForagingConfig
+import me.owdding.skyocean.config.features.foraging.GalateaConfig
+import me.owdding.skyocean.config.features.garden.GardenConfig
+import me.owdding.skyocean.config.features.inventory.Buttons
+import me.owdding.skyocean.config.features.inventory.InventoryConfig
+import me.owdding.skyocean.config.features.lorecleanup.LoreCleanupConfig
+import me.owdding.skyocean.config.features.mining.MineshaftConfig
+import me.owdding.skyocean.config.features.mining.MiningConfig
+import me.owdding.skyocean.config.features.mining.MiningRetexture
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.patcher.ConfigPatches
-import me.owdding.skyocean.generated.SkyOceanConfigCategories
 import java.util.function.UnaryOperator
 
 object Config : ConfigKt("skyocean/config") {
@@ -17,7 +28,22 @@ object Config : ConfigKt("skyocean/config") {
     override val links: Array<ResourcefulConfigLink> = emptyArray()
 
     init {
-        SkyOceanConfigCategories.collected.forEach { category(it) }
+        category(ChatConfig)
+        category(SlayerConfig)
+        category(FishingConfig)
+        category(ForagingConfig) {
+            category(GalateaConfig)
+        }
+        category(GardenConfig)
+        category(InventoryConfig)
+        category(LoreCleanupConfig)
+        category(MiningConfig) {
+            category(MiningRetexture)
+            category(MineshaftConfig)
+        }
+        category(MiscConfig)
+        category(Buttons)
+
         separator {
             title = "skyocean.config.main.modifications"
             description = "skyocean.config.main.modifications.desc"
@@ -29,8 +55,3 @@ object Config : ConfigKt("skyocean/config") {
 
     fun save() = SkyOcean.config.save()
 }
-
-@AutoCollect("ConfigCategories")
-@Retention(AnnotationRetention.SOURCE)
-@Target(AnnotationTarget.CLASS)
-annotation class ConfigCategory

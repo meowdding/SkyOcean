@@ -27,6 +27,11 @@ var SeparatorBuilder.translation: String
         this.description = "$value.desc"
     }
 
+fun CategoryBuilder.category(category: CategoryKt, init: CategoryKt.() -> Unit) {
+    category(category)
+    category.init()
+}
+
 fun CategoryBuilder.separator(translation: String) = this.separator { this.translation = translation }
 
 fun <T> CategoryKt.defaultEnabledMessage(
