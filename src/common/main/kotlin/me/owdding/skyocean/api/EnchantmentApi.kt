@@ -22,19 +22,19 @@ object EnchantmentApi {
         val enchantment = RepoAPI.enchantments().getEnchantment(id)
         if (enchantment == null) return@getOrPut null
 
-        val level = enchantment.levels.entries.sortedBy { (key) -> key }.firstOrElseLast { (key) -> key == level }.value
+        val level = enchantment.levels().entries.sortedBy { (key) -> key }.firstOrElseLast { (key) -> key == level }.value
         if (level == null) return@getOrPut ItemStack(Items.BARRIER) {
             this[DataComponents.ITEM_NAME] = Text.of("Unknown Enchantment Level: $id")
         }
-        val lore = level.lore.map { !it }
+        val lore = level.lore().map { !it }
 
         ItemBuilder(Items.ENCHANTED_BOOK) {
-            this[DataComponents.ITEM_NAME] = Text.of("${enchantment.name} ${level.literalLevel}")
+            this[DataComponents.ITEM_NAME] = Text.of("${enchantment.name()} ${level.literalLevel()}")
             this[DataComponents.LORE] = ItemLore(lore, lore)
             this[DataComponents.CUSTOM_DATA] = compoundTag {
                 putString("id", "ENCHANTED_BOOK")
                 putCompound("enchantments") {
-                    putInt(enchantment.id, level.level)
+                    putInt(enchantment.id(), level.level())
                 }
             }.toData()
         }

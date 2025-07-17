@@ -33,25 +33,25 @@ object SimpleItemApi {
 
     init {
         val start = currentInstant()
-        RepoAPI.pets().pets().entries.associate { (id, data) -> data.name to pet(id) }
+        RepoAPI.pets().pets().entries.associate { (id, data) -> data.name() to pet(id) }
             .let(nameCache::putAll)
 
         RepoAPI.runes().runes().entries.flatMap { (id, data) ->
             data.map { rune ->
-                rune.name.stripColor() to rune("$id:${rune.tier}")
+                rune.name().stripColor() to rune("$id:${rune.tier()}")
             }
         }.toMap().let(nameCache::putAll)
 
         RepoAPI.enchantments().enchantments().flatMap { (id, enchantments) ->
-            enchantments.levels.map { (level, enchantment) ->
-                "${enchantments.name} ${enchantment.literalLevel}" to enchantment("$id:${enchantment.level}")
+            enchantments.levels().map { (level, enchantment) ->
+                "${enchantments.name()} ${enchantment.literalLevel()}" to enchantment("$id:${enchantment.level()}")
             }
         }.toMap().let(nameCache::putAll)
 
         RepoAPI.attributes().attributes().flatMap { (id, attribute) ->
             listOf(
-                attribute.name to attribute(attribute.id),
-                attribute.shardName() to attribute(attribute.id),
+                attribute.name() to attribute(attribute.id()),
+                attribute.shardName() to attribute(attribute.id()),
             )
         }.toMap().let(nameCache::putAll)
 
