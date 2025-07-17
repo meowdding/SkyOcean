@@ -5,15 +5,16 @@ import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.internal.artifacts.dependencies.DefaultMinimalDependency
 import org.gradle.api.internal.artifacts.dependencies.DefaultMutableVersionConstraint
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     idea
-    alias(libs.plugins.loom)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin)
-    alias(libs.plugins.meowdding.repo)
+    alias(libs.plugins.terrarium.cloche)
     alias(libs.plugins.meowdding.resources)
+    alias(libs.plugins.meowdding.repo)
+    alias(libs.plugins.kotlin.symbol.processor)
 }
 
 base {
@@ -25,75 +26,14 @@ java {
     withSourcesJar()
 }
 
-loom {
-    splitEnvironmentSourceSets()
-
-    log4jConfigs.from(project.layout.projectDirectory.file("gradle/log4j.config.xml"))
-    accessWidenerPath.set(project.projectDir.resolve("src/main/resources/skyocean.accesswidener"))
-
-    runs {
-        getByName("client") {
-            programArg("--quickPlayMultiplayer=hypixel.net")
-            vmArg("-Ddevauth.enabled=true")
-            vmArg("-Dskyblockapi.debug=true")
-            vmArg("-Dskyocean.recipepath=${sourceSets["client"].resources.srcDirs.first().toPath().toAbsolutePath()}")
-        }
-        create("clientSinglePlayer") {
-            client()
-
-            programArg("--quickPlaySingleplayer=\"New World\"")
-            vmArg("-Ddevauth.enabled=true")
-            vmArg("-Dskyblockapi.debug=true")
-        }
-        afterEvaluate {
-            getByName("datagen") {
-                vmArg("-Ddevauth.enabled=false")
-            }
-        }
-    }
-
-    mods {
-        register("skyocean") {
-            sourceSet("client")
-            sourceSet("main")
-        }
-    }
-
-    afterEvaluate {
-        val mixinPath = configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") } ?: return@afterEvaluate
-        runConfigs {
-            "client" {
-                vmArgs.add("-javaagent:${mixinPath.toPath().toAbsolutePath()}")
-            }
-        }
-    }
-}
-
-fabricApi {
-    configureDataGeneration {
-        client = true
-        createSourceSet = true
-        addToResources = true
-        outputDirectory.set(project.layout.buildDirectory.dir("generated/datagen").get().asFile)
-    }
-}
-
-tasks.getByName("sourcesJar").apply {
-    dependsOn(tasks.getByName("runDatagen"))
-}
-
-tasks.getByName<ProcessResources>("processClientResources") {
-    with(copySpec {
-        from("src/client/lang").include("*.json").into("assets/skyocean/lang")
-    })
-}
-
 repositories {
     maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
     maven(url = "https://repo.hypixel.net/repository/Hypixel/")
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven(url = "https://maven.nucleoid.xyz")
+    maven(url = "https://maven.shedaniel.me/")
+    maven(url = "https://maven.msrandom.net/repository/root")
     mavenLocal()
 }
 
@@ -103,89 +43,124 @@ dependencies {
     compileOnly(libs.meowdding.ktcodecs)
     ksp(libs.meowdding.ktcodecs)
 
-    minecraft(libs.minecraft)
-    @Suppress("UnstableApiUsage")
-    mappings(loom.layered {
-        officialMojangMappings()
-        parchment(libs.parchmentmc.get().withMcVersion().toString())
-    })
-
-    modImplementation(libs.bundles.fabric)
-
-    implementation(libs.kotlin.stdlib)
-    implementation(libs.repo) // included in sbapi, exposed through implementation
-    include(libs.repo) // included in sbapi, exposed through implementation, currently needed since i can't use sbapi multi version
-
-    includeModImplementationBundle(libs.bundles.sbapi)
-
-    includeModImplementationBundle(libs.bundles.rconfig)
-    includeModImplementationBundle(libs.bundles.libs)
-    includeModImplementationBundle(libs.bundles.meowdding)
-
-    includeImplementation(libs.keval)
-
-    modRuntimeOnly(libs.devauth)
-    modRuntimeOnly(libs.modmenu)
-    modRuntimeOnly(libs.meowdding.dev.utils)
+    compileOnly(libs.kotlin.stdlib)
 }
 
-tasks.jar {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
-
-tasks.processResources {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-
-    filesMatching(listOf("fabric.mod.json")) {
-        expand(
-            "version" to project.version,
-            "minecraft" to libs.versions.minecraft.get(),
-            "fabricLoader" to libs.versions.fabric.loader.get(),
-            "fabricLanguageKotlin" to libs.versions.fabric.language.kotlin.get(),
-            "meowddingLib" to libs.versions.meowdding.lib.get(),
-            "resourcefullib" to libs.versions.rlib.get(),
-            "skyblockApi" to libs.versions.skyblockapi.get(),
-            "olympus" to libs.versions.olympus.get(),
-            "placeholderApi" to libs.versions.placeholders.get(),
-            "resourcefulconfigkt" to libs.versions.rconfigkt.get(),
-            "resourcefulconfig" to libs.versions.rconfig.get(),
-        )
+cloche {
+    metadata {
+        modId = "skyocean"
+        name = "SkyOcean"
+        description = "SkyOcean is a hypixel skyblock mod that aims to provide a better playing experience by integrating QOL elements in an unnoticeable way."
+        license = "MIT"
+        clientOnly = true
     }
-}
 
-tasks.withType<JavaCompile>().configureEach {
-    options.encoding = "UTF-8"
-    options.release.set(21)
-}
+    common {
+        mixins.from("src/mixins/skyocean.client.mixins.json")
+        mixins.from("src/mixins/skyocean.hidearmour.mixins.json")
+        mixins.from("src/mixins/skyocean.hidelightning.mixins.json")
+        mixins.from("src/mixins/skyocean.itemsearch.mixins.json")
+        mixins.from("src/mixins/skyocean.fishing.mixins.json")
+        mixins.from("src/mixins/skyocean.features.mixins.json")
 
-tasks.withType<KotlinCompile>().configureEach {
-    compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
-}
+        dependencies {
+            compileOnly(libs.meowdding.ktcodecs)
+            compileOnly(libs.meowdding.ktmodules)
 
-idea {
-    module {
-        isDownloadJavadoc = true
-        isDownloadSources = true
+            modImplementation(libs.meowdding.lib)
+            modImplementation(libs.skyblockapi)
+            modImplementation(libs.skyblockapi.repo)
+            modImplementation(libs.keval)
+            modImplementation(libs.placeholders)
+            modImplementation(libs.resourceful.config.kotlin) { isTransitive = false }
 
-        excludeDirs.add(file("run"))
+            modImplementation(libs.fabric.language.kotlin)
+        }
     }
-}
 
-afterEvaluate {
-    tasks.getByName("kspDatagenKotlin") {
-        enabled = false
+    fun createVersion(
+        name: String,
+        version: String = name,
+        loaderVersion: Provider<String> = libs.versions.fabric.loader,
+        fabricApiVersion: Provider<String> = libs.versions.fabric.api,
+        dependencies: MutableMap<String, Provider<MinimalExternalModuleDependency>>.() -> Unit = { },
+    ) {
+        val dependencies = mutableMapOf<String, Provider<MinimalExternalModuleDependency>>().apply(dependencies)
+        val olympus = dependencies["olympus"]!!
+        val rlib = dependencies["resourcefullib"]!!
+        val rconfig = dependencies["resourcefulconfig"]!!
+
+        fabric(name) {
+            includedClient()
+            minecraftVersion = version
+            this.loaderVersion = loaderVersion.get()
+
+            include(libs.hypixelapi)
+            include(libs.skyblockapi)
+            include(libs.resourceful.config.kotlin)
+            include(libs.meowdding.lib)
+            include(libs.keval)
+            include(libs.placeholders)
+            include(rlib)
+            include(olympus)
+            include(rconfig)
+
+            metadata {
+                entrypoint("client") {
+                    adapter = "kotlin"
+                    value = "me.owdding.skyocean.SkyOcean"
+                }
+
+                fun dependency(modId: String, version: Provider<String>) {
+                    dependency {
+                        this.modId = modId
+                        this.required = true
+                        version {
+                            this.start = version
+                        }
+                    }
+                }
+
+//                 dependency("fabricloader", libs.versions.fabric.loader)
+//                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
+//                 dependency("resourcefullib", rlib.map { it.version!! })
+//                 dependency("skyblock-api", libs.versions.skyblockapi)
+//                 dependency("olympus", olympus.map { it.version!! })
+//                 dependency("placeholder-api", libs.versions.placeholders)
+            }
+
+            dependencies {
+                fabricApi(fabricApiVersion, minecraftVersion)
+                modImplementation(olympus)
+                modImplementation(rconfig)
+            }
+
+            runs {
+                client()
+            }
+        }
     }
-}
 
-ksp {
-    arg("meowdding.project_name", project.name)
-    arg("meowdding.package", "me.owdding.skyocean.generated")
-}
+    createVersion("1.21.5", fabricApiVersion = provider { "0.127.1" }) {
+        this["resourcefullib"] = libs.resourceful.lib1215
+        this["resourcefulconfig"] = libs.resourceful.config1215
+        this["olympus"] = libs.olympus.lib1215
+    }
+    createVersion("1.21.7") {
+        this["resourcefullib"] = libs.resourceful.lib1217
+        this["resourcefulconfig"] = libs.resourceful.config1217
+        this["olympus"] = libs.olympus.lib1217
+    }
 
+    mappings { official() }
+}
 
 compactingResources {
-    sourceSets = mutableListOf("client", "main")
     basePath = "repo"
+
+    configureTask(tasks.getByName<ProcessResources>("process1217Resources"))
+    configureTask(tasks.getByName<ProcessResources>("process1215Resources"))
+    configureTask(tasks.getByName<ProcessResources>("processResources"))
 
     compactToArray("recipes")
 }
@@ -214,33 +189,43 @@ repo {
     sacks { includeAll() }
 }
 
-// <editor-fold desc="Util Methods">
+tasks.withType<ProcessResources>().configureEach {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
-fun ExternalModuleDependency.withMcVersion(): ExternalModuleDependency {
-    return DefaultMinimalDependency(
-        DefaultModuleIdentifier.newId(this.group, this.name.replace("<mc_version>", libs.versions.minecraft.get())),
-        DefaultMutableVersionConstraint(this.versionConstraint)
-    )
+    with(copySpec {
+        from("src/lang").include("*.json").into("assets/skyocean/lang")
+    })
 }
 
-@Suppress("unused")
-fun DependencyHandlerScope.includeImplementationBundle(bundle: Provider<ExternalModuleDependencyBundle>) = bundle.get().forEach {
-    includeImplementation(provider { it })
+tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
+    options.release.set(21)
 }
 
-fun DependencyHandlerScope.includeModImplementationBundle(bundle: Provider<ExternalModuleDependencyBundle>) = bundle.get().forEach {
-    includeModImplementation(provider { it })
-}
-
-fun <T : ExternalModuleDependency> DependencyHandlerScope.includeImplementation(dependencyNotation: Provider<T>) =
-    with(dependencyNotation.get().withMcVersion()) {
-        include(this)
-        modImplementation(this)
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+    compilerOptions {
+        languageVersion = KotlinVersion.KOTLIN_2_0
+        freeCompilerArgs.addAll(
+            "-Xmulti-platform",
+            "-Xno-check-actual",
+            "-Xexpect-actual-classes",
+        )
     }
+}
 
-fun <T : ExternalModuleDependency> DependencyHandlerScope.includeModImplementation(dependencyNotation: Provider<T>) =
-    with(dependencyNotation.get().withMcVersion()) {
-        include(this)
-        modImplementation(this)
+ksp {
+    this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
+    this@ksp.excludedSources.from(sourceSets.getByName("1217").kotlin.srcDirs)
+    arg("meowdding.project_name", project.name)
+    arg("meowdding.package", "me.owdding.skyocean.generated")
+}
+
+idea {
+    module {
+        isDownloadJavadoc = true
+        isDownloadSources = true
+
+        excludeDirs.add(file("run"))
     }
-// </editor-fold>
+}
