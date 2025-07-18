@@ -15,6 +15,7 @@ import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
+import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.awt.Color
@@ -66,19 +67,17 @@ object RenderUtils {
             poseStack.mulPose(camera.rotation())
             poseStack.scale(scale, -scale, scale)
             val xOffset = if (center) -McFont.width(text) / 2.0f else 0.0f
-            // TODO
-//             McFont.self.drawInBatch(
-//                 text,
-//                 xOffset,
-//                 0.0f,
-//                 Color.WHITE.rgb,
-//                 false,
-//                 poseStack.last().pose(),
-//                 buffer,
-//                 Font.DisplayMode.SEE_THROUGH,
-//                 0,
-//                 LightTexture.FULL_BRIGHT,
-//             )
+
+            ctx.drawString(
+                text = text,
+                x = xOffset,
+                y = 0.0f,
+                color = Color.WHITE.rgb.toUInt(),
+                dropShadow = false,
+                displayMode = Font.DisplayMode.SEE_THROUGH,
+                backgroundColor = 0u,
+                light = LightTexture.FULL_BRIGHT,
+            )
         }
     }
 
