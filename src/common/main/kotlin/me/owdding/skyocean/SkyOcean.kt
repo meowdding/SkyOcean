@@ -9,13 +9,10 @@ import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
-import me.owdding.skyocean.helpers.fakeblocks.FakeBlocks
+import me.owdding.skyocean.helpers.FakeBlocks
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.fabricmc.api.ClientModInitializer
-import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin
 import net.fabricmc.loader.api.FabricLoader
-import net.fabricmc.loader.impl.game.minecraft.McVersion
-import net.minecraft.SharedConstants
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import org.slf4j.Logger
@@ -64,7 +61,7 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
             onRepoReady(null)
         }
 
-        PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
+        FakeBlocks.setup()
     }
 
     @Subscription

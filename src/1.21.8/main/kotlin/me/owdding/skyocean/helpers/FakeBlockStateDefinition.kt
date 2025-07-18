@@ -1,14 +1,20 @@
-package me.owdding.skyocean.helpers.fakeblocks
+package me.owdding.skyocean.helpers
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras
+import com.teamresourceful.resourcefullib.common.codecs.EnumCodec
 import net.minecraft.client.renderer.block.model.BlockModelDefinition
 import net.minecraft.client.renderer.block.model.BlockStateModel
 import net.minecraft.client.resources.model.ModelBaker
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
+import kotlin.jvm.optionals.getOrNull
 
 class FakeBlockStateDefinition(
     val model: BlockModelDefinition,
-//     val blend: BlendMode?
+    val blend: BlendMode?
 ) {
 
     private var roots: Map<BlockState, BlockStateModel.UnbakedRoot>? = null
@@ -26,9 +32,9 @@ class FakeBlockStateDefinition(
 
     companion object {
 
-//         val CODEC: Codec<FakeBlockStateDefinition> = RecordCodecBuilder.create { it.group(
-//             MapCodec.assumeMapUnsafe(BlockModelDefinition.CODEC).forGetter(FakeBlockStateDefinition::model),
-//             EnumCodec.of(BlendMode::class.java).optionalFieldOf("blend").forGetter(CodecExtras.optionalFor(FakeBlockStateDefinition::blend))
-//         ).apply(it) { model, mode -> FakeBlockStateDefinition(model, mode.getOrNull()) } }
+        val CODEC: Codec<FakeBlockStateDefinition> = RecordCodecBuilder.create { it.group(
+            MapCodec.assumeMapUnsafe(BlockModelDefinition.CODEC).forGetter(FakeBlockStateDefinition::model),
+            EnumCodec.of(BlendMode::class.java).optionalFieldOf("blend").forGetter(CodecExtras.optionalFor(FakeBlockStateDefinition::blend))
+        ).apply(it) { model, mode -> FakeBlockStateDefinition(model, mode.getOrNull()) } }
     }
 }
