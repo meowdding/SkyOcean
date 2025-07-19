@@ -5,15 +5,15 @@ fabric-language-kotlin = "1.13.0+kotlin.2.1.0"
 fabric-api = "0.128.1"
 
 kotlin = "2.1.20"
-kotlin-symbol-processor = "2.1.20-2.0.0"
+kotlin-symbol-processor = "2.1.20-1.0.32"
 
-skyblockapi = "1.0.0-beta.140-multiversion+build.20"
+skyblockapi = "1.0.0-beta.140-multiversion+build.22"
 skyblockapi-repo = "2.0.2"
 hypixelapi = "1.0.1+build.1+mc1.21"
 placeholders = "2.6.1+1.21.5"
 keval = "1.1.1"
 
-meowdding-lib = "1.0.53-multiversion+build.9"
+meowdding-lib = "1.0.53-multiversion+build.13"
 meowdding-repo = "1.0.16"
 meowdding-resources = "1.0.12"
 meowdding-ktmodules = "1.0.5"

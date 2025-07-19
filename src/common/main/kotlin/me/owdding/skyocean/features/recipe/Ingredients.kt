@@ -101,10 +101,10 @@ fun Iterable<Ingredient>.mergeSameTypes(): Iterable<Ingredient> = this.groupBy {
 
 fun CraftingIngredient.toSkyOceanIngredient(): Ingredient? {
     return when (this) {
-        is RepoItemIngredient -> SkyOceanItemIngredient(SkyOceanItemId.item(this.id), this.count())
-        is RepoPetIngredient -> SkyOceanItemIngredient(SkyOceanItemId.pet(this.id, this.tier), this.count)
-        is RepoEnchantmentIngredient -> SkyOceanItemIngredient(SkyOceanItemId.enchantment(this.id, this.level), this.count)
-        is RepoAttributeIngredient -> SkyOceanItemIngredient(SkyOceanItemId.attribute(this.id), this.count)
+        is RepoItemIngredient -> SkyOceanItemIngredient(SkyOceanItemId.item(this.id()), this.count())
+        is RepoPetIngredient -> SkyOceanItemIngredient(SkyOceanItemId.pet(this.id(), this.tier()), this.count())
+        is RepoEnchantmentIngredient -> SkyOceanItemIngredient(SkyOceanItemId.enchantment(this.id(), this.level()), this.count())
+        is RepoAttributeIngredient -> SkyOceanItemIngredient(SkyOceanItemId.attribute(this.id()), this.count())
         else -> null
     }
 }

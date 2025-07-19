@@ -36,7 +36,7 @@ object MinisterInCalendar {
             return
         }
         val minister = ElectionAPI.currentMinister ?: return
-        val texture = RepoMobsAPI.getMobOrNull("${minister.name}_MAYOR")?.texture ?: return
+        val texture = RepoMobsAPI.getMobOrNull("${minister.name}_MAYOR")?.texture() ?: return
 
         event.item.replaceVisually {
             item = Items.PLAYER_HEAD

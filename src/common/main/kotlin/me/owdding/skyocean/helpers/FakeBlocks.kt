@@ -1,6 +1,8 @@
 package me.owdding.skyocean.helpers
 
-expect object FakeBlocks {
+import net.msrandom.stub.Stub
 
+@Stub
+expect object FakeBlocks {
     fun setup()
 }

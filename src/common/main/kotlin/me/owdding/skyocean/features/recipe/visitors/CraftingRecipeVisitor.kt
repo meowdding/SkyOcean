@@ -11,12 +11,12 @@ object CraftingRecipeVisitor : RecipeVisitor {
     override fun getInputs(recipe: Recipe<*>): List<Ingredient> {
         if (recipe !is CraftingRecipe) return emptyList()
 
-        return recipe.inputs.mapNotNull(CraftingIngredient::toSkyOceanIngredient)
+        return recipe.inputs().mapNotNull(CraftingIngredient::toSkyOceanIngredient)
     }
 
     override fun getOutput(recipe: Recipe<*>): ItemLikeIngredient? {
         if (recipe !is CraftingRecipe) return null
 
-        return recipe.result.toSkyOceanIngredient() as? ItemLikeIngredient
+        return recipe.result().toSkyOceanIngredient() as? ItemLikeIngredient
     }
 }

@@ -2,8 +2,10 @@
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
+import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -45,6 +47,7 @@ dependencies {
     compileOnly(libs.meowdding.ktcodecs)
     ksp(libs.meowdding.ktcodecs)
 
+    compileOnly(libs.keval)
     compileOnly(libs.kotlin.stdlib)
 }
 
@@ -57,6 +60,21 @@ cloche {
         clientOnly = true
     }
 
+
+    fun addDependencies(arg: ClocheDependencyHandler) = arg.apply {
+        compileOnly(libs.meowdding.ktcodecs)
+        compileOnly(libs.meowdding.ktmodules)
+
+        modImplementation(libs.meowdding.lib)
+        modImplementation(libs.skyblockapi)
+        modImplementation(libs.skyblockapi.repo)
+        implementation(libs.keval)
+        modImplementation(libs.placeholders)
+        modImplementation(libs.resourceful.config.kotlin) { isTransitive = false }
+
+        modImplementation(libs.fabric.language.kotlin)
+    }
+
     common {
         mixins.from("src/mixins/skyocean.client.mixins.json")
         mixins.from("src/mixins/skyocean.hidearmour.mixins.json")
@@ -65,19 +83,10 @@ cloche {
         mixins.from("src/mixins/skyocean.fishing.mixins.json")
         mixins.from("src/mixins/skyocean.features.mixins.json")
 
-        dependencies {
-            compileOnly(libs.meowdding.ktcodecs)
-            compileOnly(libs.meowdding.ktmodules)
-
-            modImplementation(libs.meowdding.lib)
-            modImplementation(libs.skyblockapi)
-            modImplementation(libs.skyblockapi.repo)
-            modImplementation(libs.keval)
-            modImplementation(libs.placeholders)
-            modImplementation(libs.resourceful.config.kotlin) { isTransitive = false }
-
-            modImplementation(libs.fabric.language.kotlin)
+        data {
+            dependencies { addDependencies(this) }
         }
+        dependencies { addDependencies(this) }
     }
 
     fun createVersion(
@@ -112,6 +121,10 @@ cloche {
                     adapter = "kotlin"
                     value = "me.owdding.skyocean.SkyOcean"
                 }
+                entrypoint("fabric-datagen") {
+                    adapter = "kotlin"
+                    value = "me.owdding.skyocean.datagen.SkyOceanDatagen"
+                }
 
                 fun dependency(modId: String, version: Provider<String>) {
                     dependency {
@@ -131,6 +144,10 @@ cloche {
 //                 dependency("placeholder-api", libs.versions.placeholders)
             }
 
+            data {
+                includedClient()
+            }
+
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
                 modImplementation(olympus)
@@ -138,7 +155,31 @@ cloche {
             }
 
             runs {
+                clientData {
+                    mainClass("net.fabricmc.loader.impl.launch.knot.KnotClient")
+                }
                 client()
+            }
+
+            val sourceSetName = this.sourceSet.name
+
+            tasks {
+                val datagen = getByName("run${sourceSetName}ClientData")
+                val processResources = getByName("process${sourceSetName}Resources", ProcessResources::class)
+                val postProcessResources = register("postProcess${sourceSetName}Resources", ProcessResources::class) {
+                    dependsOn(processResources)
+                    mustRunAfter(datagen)
+                    inputs.files(processResources.inputs.files)
+                    actions.addAll(processResources.actions)
+                    outputs.upToDateWhen { false }
+                    destinationDir = processResources.destinationDir
+                    with(processResources.rootSpec)
+                }
+
+                getByName("${sourceSetName}Jar") {
+                    dependsOn("run${sourceSetName}ClientData")
+                    dependsOn(postProcessResources)
+                }
             }
         }
     }
@@ -165,6 +206,11 @@ compactingResources {
     configureTask(tasks.getByName<ProcessResources>("processResources"))
 
     compactToArray("recipes")
+}
+
+tasks.named("createCommonApiStub", GenerateStubApi::class) {
+    excludes.add(libs.skyblockapi.asProvider().get().module.toString())
+    excludes.add(libs.meowdding.lib.get().module.toString())
 }
 
 repo {
@@ -221,8 +267,7 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 ksp {
-    this@ksp.excludedSources.from(sourceSets.getByName("1215").kotlin.srcDirs)
-    this@ksp.excludedSources.from(sourceSets.getByName("1218").kotlin.srcDirs)
+    sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME }.forEach { this.excludedSources.from(it.kotlin.srcDirs) }
     arg("meowdding.project_name", project.name)
     arg("meowdding.package", "me.owdding.skyocean.generated")
 }

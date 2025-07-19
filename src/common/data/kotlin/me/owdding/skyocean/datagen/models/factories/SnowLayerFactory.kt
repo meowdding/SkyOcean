@@ -3,7 +3,6 @@ package me.owdding.skyocean.datagen.models.factories
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.datagen.models.BlockModelFactory
 import me.owdding.skyocean.datagen.models.ModelGenContext
-import me.owdding.skyocean.helpers.fakeblocks.FakeBlockEntry
 import net.minecraft.client.data.models.BlockModelGenerators
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator
 import net.minecraft.client.data.models.blockstates.PropertyDispatch
@@ -19,10 +18,10 @@ import java.util.*
 object SnowLayerFactory : BlockModelFactory() {
     override fun isFor(block: Block) = block == Blocks.SNOW
 
-    override fun create(block: Block, fakeBlock: FakeBlockEntry, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
+    override fun create(block: Block, fakeBlock: ResourceLocation, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
         val multiVariant = BlockModelGenerators.plainVariant(SkyOcean.id(createCopy(Blocks.SNOW_BLOCK, fakeBlock).path))
         modelGenContext.collectState(
-            fakeBlock.first,
+            fakeBlock,
             MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(BlockStateProperties.LAYERS).generate {
                     if (it < 8) {
@@ -32,10 +31,10 @@ object SnowLayerFactory : BlockModelFactory() {
                             TextureSlot.TEXTURE,
                             TextureSlot.PARTICLE,
                         ).create(
-                            getBlockModelLocation(fakeBlock.first),
+                            getBlockModelLocation(fakeBlock),
                             TextureMapping.defaultTexture(Blocks.SNOW),
                         ) { path, model -> modelOutput(path.withSuffix("_height${it * 2}"), model) }
-                        BlockModelGenerators.plainVariant(getBlockModelLocation(fakeBlock.first, "_height${it * 2}"))
+                        BlockModelGenerators.plainVariant(getBlockModelLocation(fakeBlock, "_height${it * 2}"))
                     } else multiVariant
                 },
             ),

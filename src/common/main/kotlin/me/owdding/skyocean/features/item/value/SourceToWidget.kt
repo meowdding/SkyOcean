@@ -42,7 +42,7 @@ object SourceToWidget {
                     val rune = RepoRunesAPI.getRune(string = this.itemId)
                     return text {
                         color = TextColor.DARK_GRAY
-                        append(rune?.name ?: itemId.removePrefix("rune:"))
+                        append(rune?.name() ?: itemId.removePrefix("rune:"))
                         append(": ")
                         append(price.shorten()) {
                             this.color = BETTER_GOLD

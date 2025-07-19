@@ -14,13 +14,13 @@ object ForgeRecipeVisitor : RecipeVisitor {
 
         return buildList {
             recipe.inputs().mapNotNull(CraftingIngredient::toSkyOceanIngredient).let(::addAll)
-            if (recipe.coins > 0) add(CurrencyIngredient.coins(recipe.coins))
+            if (recipe.coins() > 0) add(CurrencyIngredient.coins(recipe.coins()))
         }
     }
 
     override fun getOutput(recipe: Recipe<*>): ItemLikeIngredient? {
         if (recipe !is ForgeRecipe) return null
 
-        return recipe.result.toSkyOceanIngredient() as? ItemLikeIngredient
+        return recipe.result().toSkyOceanIngredient() as? ItemLikeIngredient
     }
 }

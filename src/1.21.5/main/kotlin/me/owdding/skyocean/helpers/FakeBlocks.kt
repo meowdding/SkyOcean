@@ -15,12 +15,9 @@ import net.minecraft.world.level.block.state.BlockState
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import kotlin.collections.iterator
 
 typealias FakeBlockEntry = Pair<ResourceLocation, (BlockState, BlockPos) -> Boolean>
 typealias FakeBlockUnbakedEntry = Pair<FakeBlockStateDefinition, (BlockState, BlockPos) -> Boolean>
-
-const val BLOCK_STATES_PATH = "virtualblockstates"
 
 actual object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlockStateDefinition>> {
 

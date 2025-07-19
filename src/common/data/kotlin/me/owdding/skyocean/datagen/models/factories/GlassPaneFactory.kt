@@ -2,13 +2,14 @@ package me.owdding.skyocean.datagen.models.factories
 
 import me.owdding.skyocean.datagen.models.BlockModelFactory
 import me.owdding.skyocean.datagen.models.ModelGenContext
-import me.owdding.skyocean.helpers.fakeblocks.FakeBlockEntry
+
 import net.minecraft.client.data.models.BlockModelGenerators
 import net.minecraft.client.data.models.BlockModelGenerators.Y_ROT_270
 import net.minecraft.client.data.models.BlockModelGenerators.Y_ROT_90
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator
 import net.minecraft.client.data.models.model.ModelTemplates
 import net.minecraft.client.data.models.model.TextureMapping
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.StainedGlassPaneBlock
@@ -38,13 +39,13 @@ object GlassPaneFactory : BlockModelFactory() {
         else -> block
     }
 
-    override fun create(block: Block, fakeBlock: FakeBlockEntry, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
+    override fun create(block: Block, fakeBlock: ResourceLocation, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
         val textureMapping = TextureMapping.pane(getBaseGlassBlock(block), block)
-        val post = (ModelTemplates.STAINED_GLASS_PANE_POST.plainVariant(fakeBlock.first, block, textureMapping))
-        val side = (ModelTemplates.STAINED_GLASS_PANE_SIDE.plainVariant(fakeBlock.first, block, textureMapping))
-        val sideAlt = (ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.plainVariant(fakeBlock.first, block, textureMapping))
-        val noSide = (ModelTemplates.STAINED_GLASS_PANE_NOSIDE.plainVariant(fakeBlock.first, block, textureMapping))
-        val noSideAlt = (ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.plainVariant(fakeBlock.first, block, textureMapping))
+        val post = (ModelTemplates.STAINED_GLASS_PANE_POST.plainVariant(fakeBlock, block, textureMapping))
+        val side = (ModelTemplates.STAINED_GLASS_PANE_SIDE.plainVariant(fakeBlock, block, textureMapping))
+        val sideAlt = (ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.plainVariant(fakeBlock, block, textureMapping))
+        val noSide = (ModelTemplates.STAINED_GLASS_PANE_NOSIDE.plainVariant(fakeBlock, block, textureMapping))
+        val noSideAlt = (ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.plainVariant(fakeBlock, block, textureMapping))
         MultiPartGenerator.multiPart(block).with(post)
             .with(BlockModelGenerators.condition().term(BlockStateProperties.NORTH, true), side)
             .with(BlockModelGenerators.condition().term(BlockStateProperties.EAST, true), side.with(Y_ROT_90))
@@ -54,6 +55,6 @@ object GlassPaneFactory : BlockModelFactory() {
             .with(BlockModelGenerators.condition().term(BlockStateProperties.EAST, false), noSideAlt)
             .with(BlockModelGenerators.condition().term(BlockStateProperties.SOUTH, false), noSideAlt.with(Y_ROT_90))
             .with(BlockModelGenerators.condition().term(BlockStateProperties.WEST, false), noSide.with(Y_ROT_270))
-            .let { modelGenContext.collectState(fakeBlock.first, it) }
+            .let { modelGenContext.collectState(fakeBlock, it) }
     }
 }

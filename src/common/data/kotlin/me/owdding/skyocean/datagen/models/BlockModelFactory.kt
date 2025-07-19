@@ -1,7 +1,6 @@
 package me.owdding.skyocean.datagen.models
 
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.helpers.fakeblocks.FakeBlockEntry
 import net.minecraft.client.data.models.BlockModelGenerators
 import net.minecraft.client.data.models.MultiVariant
 import net.minecraft.client.data.models.model.ModelInstance
@@ -19,7 +18,7 @@ abstract class BlockModelFactory {
     abstract fun isFor(block: Block): Boolean
     abstract fun create(
         block: Block,
-        fakeBlock: FakeBlockEntry,
+        fakeBlock: ResourceLocation,
         generator: BlockModelGenerators,
         modelGenContext: ModelGenContext,
     )
@@ -44,12 +43,12 @@ abstract class BlockModelFactory {
 
     fun getModelLocation(block: Block) = BuiltInRegistries.BLOCK.getKey(block).withPrefix("block/")
 
-    fun createCopy(block: Block, fakeBlock: FakeBlockEntry): ResourceLocation {
+    fun createCopy(block: Block, fakeBlock: ResourceLocation): ResourceLocation {
         return ModelTemplate(
             Optional.of(getModelLocation(block)),
             Optional.empty()
         ).create(
-            getBlockModelLocation(fakeBlock.first),
+            getBlockModelLocation(fakeBlock),
             TextureMapping(),
             ::modelOutput,
         )

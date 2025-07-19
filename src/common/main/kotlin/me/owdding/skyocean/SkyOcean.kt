@@ -56,7 +56,9 @@ object SkyOcean : ClientModInitializer, Logger by LoggerFactory.getLogger("SkyOc
     override fun onInitializeClient() {
         RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
-        SkyOceanModules.init { SkyBlockAPI.eventBus.register(it) }
+        SkyOceanModules.init {
+            SkyBlockAPI.eventBus.register(it)
+        }
         if (RepoAPI.isInitialized()) {
             onRepoReady(null)
         }
