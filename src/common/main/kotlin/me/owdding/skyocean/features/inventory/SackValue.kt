@@ -89,7 +89,7 @@ object SackValue : InventorySideGui(".* Sack") {
     private data class SackEntry(val item: String, val amount: Int) {
         val price = when (SackValueConfig.priceSource) {
             SackValueConfig.PriceSource.BAZAAR -> Pricing.getPrice(item)
-            SackValueConfig.PriceSource.NPC -> (ItemData.getNpcPrice(item) ?: 0).toLong()
+            SackValueConfig.PriceSource.NPC -> (ItemData.getNpcSellPrice(item) ?: 0).toLong()
         }.times(amount.toDouble()).toLong()
 
         operator fun component3() = price

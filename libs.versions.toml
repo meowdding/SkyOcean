@@ -7,7 +7,7 @@ fabric-api = "0.128.1"
 kotlin = "2.1.20"
 kotlin-symbol-processor = "2.1.20-1.0.32"
 
-skyblockapi = "2.0.2"
+skyblockapi = "2.1.0"
 skyblockapi-repo = "2.0.2"
 hypixelapi = "1.0.1+build.1+mc1.21"
 placeholders = "2.6.1+1.21.5"
@@ -15,7 +15,7 @@ keval = "1.1.1"
 
 rconfigkt = "3.5.12"
 
-meowdding-lib = "2.0.0"
+meowdding-lib = "2.0.2"
 meowdding-repo = "1.0.16"
 meowdding-resources = "1.0.12"
 meowdding-ktmodules = "1.0.5"
