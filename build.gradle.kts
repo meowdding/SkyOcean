@@ -9,6 +9,8 @@ import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.name
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
@@ -76,12 +78,9 @@ cloche {
     }
 
     common {
-        mixins.from("src/mixins/skyocean.client.mixins.json")
-        mixins.from("src/mixins/skyocean.hidearmour.mixins.json")
-        mixins.from("src/mixins/skyocean.hidelightning.mixins.json")
-        mixins.from("src/mixins/skyocean.itemsearch.mixins.json")
-        mixins.from("src/mixins/skyocean.fishing.mixins.json")
-        mixins.from("src/mixins/skyocean.features.mixins.json")
+        project.layout.projectDirectory.dir("src/mixins").toPath().listDirectoryEntries().forEach {
+            mixins.from("src/mixins/${it.name}")
+        }
 
         data {
             dependencies { addDependencies(this) }

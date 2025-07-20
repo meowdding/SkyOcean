@@ -32,6 +32,10 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.showHiddenPetCandy"
     }
 
+    var hideEntityFire by boolean(false) {
+        translation = "skyocean.config.misc.hideEntityFire"
+    }
+
     init {
         separator("skyocean.config.misc.itemSearch")
     }
