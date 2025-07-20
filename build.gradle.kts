@@ -136,12 +136,17 @@ cloche {
                     }
                 }
 
-//                 dependency("fabricloader", libs.versions.fabric.loader)
-//                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
-//                 dependency("resourcefullib", rlib.map { it.version!! })
-//                 dependency("skyblock-api", libs.versions.skyblockapi)
-//                 dependency("olympus", olympus.map { it.version!! })
-//                 dependency("placeholder-api", libs.versions.placeholders)
+                dependency("fabricloader", libs.versions.fabric.loader)
+                dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
+                dependency("resourcefullib", rlib.map { it.version!! })
+                dependency("skyblock-api", libs.versions.skyblockapi.asProvider())
+                dependency("olympus", olympus.map { it.version!! })
+                dependency("placeholder-api", libs.versions.placeholders)
+                dependency("resourcefulconfig", rconfig.map { it.version!! })
+                dependency("resourcefulconfigkt", libs.versions.rconfigkt)
+                dependency("meowdding-lib", libs.versions.meowdding.lib)
+                dependency("olympus", olympus.map { it.version!! })
+                dependency("placeholder-api", libs.versions.placeholders)
             }
 
             data {

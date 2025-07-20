@@ -33,7 +33,6 @@ import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -331,15 +330,14 @@ object ItemSearchScreen : SkyOceanScreen() {
         }.rightPad(columns * rows, Displays.empty(20, 20).asWidget()).chunked(columns)
 
         return LayoutFactory.frame {
-            items.asWidgetTable().add { alignVerticallyMiddle() }
             display(
                 ExtraDisplays.inventoryBackground(
                     columns,
                     items.size,
                     Displays.empty(columns * 20, items.size * 20).withPadding(2),
-                )
-                    .withPadding(top = 5, bottom = 5),
+                ).withPadding(top = 5, bottom = 5),
             )
+            items.asWidgetTable().add { alignVerticallyMiddle() }
         }
     }
 
