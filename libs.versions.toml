@@ -19,6 +19,7 @@ rlib = "3.5.0"
 placeholders = "2.6.1+1.21.5"
 keval = "1.1.1"
 repolib = "2.0.2"
+detekt = "1.23.7"
 
 meowdding-lib = "1.0.53"
 meowdding-dev-utils = "1.0.6"
@@ -80,3 +81,4 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 meowdding-resources = { id = "me.owdding.resources", version.ref = "meowdding-resources" }
 meowdding-repo = { id = "me.owdding.repo", version.ref = "meowdding-repo" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

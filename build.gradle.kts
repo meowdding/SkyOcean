@@ -1,6 +1,8 @@
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.internal.artifacts.dependencies.DefaultMinimalDependency
 import org.gradle.api.internal.artifacts.dependencies.DefaultMutableVersionConstraint
@@ -14,6 +16,7 @@ plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.meowdding.repo)
     alias(libs.plugins.meowdding.resources)
+    alias(libs.plugins.detekt)
 }
 
 base {
@@ -94,6 +97,7 @@ repositories {
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven(url = "https://maven.nucleoid.xyz")
+    maven(url = "https://maven.notenoughupdates.org/releases") // Needed for detekt rules
     mavenLocal()
 }
 
@@ -126,6 +130,10 @@ dependencies {
     modRuntimeOnly(libs.devauth)
     modRuntimeOnly(libs.modmenu)
     modRuntimeOnly(libs.meowdding.dev.utils)
+
+    detektPlugins("org.notenoughupdates:detektrules:1.0.0")
+    detektPlugins(project(":detekt"))
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
 }
 
 tasks.jar {
@@ -212,6 +220,36 @@ repo {
     }
     sacks { includeAll() }
 }
+
+// <editor-fold desc="Detekt">
+detekt {
+    buildUponDefaultConfig = true // preconfigure defaults
+    config.setFrom(rootProject.layout.projectDirectory.file("detekt/detekt.yml")) // point to your custom config defining rules to run, overwriting default behavior
+    baseline = file(layout.projectDirectory.file("detekt/baseline.xml")) // a way of suppressing issues before introducing detekt
+    source.setFrom(
+        project.sourceSets.named("client").map { it.allSource },
+        project.sourceSets.named("datagen").map { it.allSource },
+        project.sourceSets.named("main").map { it.allSource },
+    )
+}
+
+tasks.withType<Detekt>().configureEach {
+    onlyIf {
+        project.findProperty("skipDetekt") != "true"
+    }
+    outputs.cacheIf { false } // Custom rules won't work if cached
+    reports {
+        html.required.set(true) // observe findings in your browser with structure and code snippets
+        xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
+        sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
+        md.required.set(true) // simple Markdown format
+    }
+}
+
+tasks.withType<DetektCreateBaselineTask>().configureEach {
+    outputs.cacheIf { false } // Custom rules won't work if cached
+}
+// </editor-fold>
 
 // <editor-fold desc="Util Methods">
 
