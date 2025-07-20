@@ -62,6 +62,8 @@ object ItemSearchScreen : SkyOceanScreen() {
     override fun onClose() {
         super.onClose()
         this.search = null
+        this.state.set("")
+        this.category = SearchCategory.ALL
         this.requireRebuild = true
         items.clear()
     }
