@@ -18,6 +18,7 @@ import me.owdding.lib.displays.*
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.extensions.rightPad
 import me.owdding.lib.extensions.shorten
+import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.item.BundledItemContext
@@ -218,15 +219,12 @@ object ItemSearchScreen : SkyOceanScreen() {
             setPosition(body.x - 20, body.y + 26)
             applyLayout()
         }
-
-        // Todo: actually fix textbox not autofocusing
-        body.visitWidgets {
-            if (it is TextBox) {
-                textBox = it
-            }
-        }
-        setInitialFocus(textBox)
         addItems()
+    }
+
+    override fun setInitialFocus() {
+        val widget = this.children().find { ((it as? ScalableWidget)?.original ?: it) == textBox } ?: return
+        focused = widget
     }
 
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
