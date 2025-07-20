@@ -6,7 +6,9 @@ import me.owdding.lib.builder.LayoutBuilder
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ClickToExpandWidget
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
+import me.owdding.skyocean.utils.Utils.not
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.network.chat.Component
@@ -14,7 +16,6 @@ import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.api.item.calculator.*
 import tech.thatgravyboat.skyblockapi.api.item.calculator.ItemValueSource.*
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
-import tech.thatgravyboat.skyblockapi.api.remote.RepoRunesAPI
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.CoinCost
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.EssenceCost
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemCost
@@ -27,7 +28,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object SourceToWidget {
-    
+
+    private val regex = Regex("(.*)_([^_]+)")
     private fun text(string: String, init: MutableComponent.() -> Unit = {}) = text(Text.of(string, init))
     private fun text(init: MutableComponent.() -> Unit) = text(Text.of(init))
     private fun text(text: Component): TextWidget = Widgets.text(text)
@@ -38,20 +40,16 @@ object SourceToWidget {
     fun CalculationEntry.asWidget(callback: () -> Unit): LayoutElement {
         return when (this) {
             is ItemEntry -> {
-                if (this.itemId.startsWith("rune:")) {
-                    val rune = RepoRunesAPI.getRune(string = this.itemId)
-                    return text {
-                        color = TextColor.DARK_GRAY
-                        append(rune?.name() ?: itemId.removePrefix("rune:"))
-                        append(": ")
-                        append(price.shorten()) {
-                            this.color = BETTER_GOLD
-                        }
-                    }
+                var id = this.itemId
+                if (this.itemId.startsWith("ENCHANTMENT_")) {
+                    id = id.substringAfter("_").replace(regex, "$1:$2")
+                } else if (this.itemId.startsWith("rune:")) {
+                    id = id.substringAfter(":")
                 }
+                val name = SkyOceanItemId.unknownType(id.lowercase())?.toItem()?.hoverName ?: !id
                 text {
                     color = TextColor.DARK_GRAY
-                    append(itemStack.hoverName.string)
+                    append(name.string)
                     append(": ")
                     append(price.shorten()) {
                         this.color = BETTER_GOLD
