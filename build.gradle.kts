@@ -2,17 +2,16 @@
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
 import net.msrandom.minecraftcodev.core.utils.toPath
+import net.msrandom.minecraftcodev.fabric.task.JarInJar
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import kotlin.io.path.listDirectoryEntries
-import kotlin.io.path.name
-import kotlin.io.path.readText
-import kotlin.io.path.writeText
+import kotlin.io.path.*
 
 plugins {
     idea
@@ -69,7 +68,7 @@ cloche {
 
         modImplementation(libs.meowdding.lib)
         modImplementation(libs.skyblockapi)
-        modImplementation(libs.skyblockapi.repo)
+        compileOnly(libs.skyblockapi.repo)
         implementation(libs.keval)
         modImplementation(libs.placeholders)
         modImplementation(libs.resourceful.config.kotlin) { isTransitive = false }
@@ -93,6 +92,11 @@ cloche {
         version: String = name,
         loaderVersion: Provider<String> = libs.versions.fabric.loader,
         fabricApiVersion: Provider<String> = libs.versions.fabric.api,
+        minecraftVersionRange: ModMetadata.VersionRange.() -> Unit = {
+            start = version
+            end = version
+            endExclusive = false
+        },
         dependencies: MutableMap<String, Provider<MinimalExternalModuleDependency>>.() -> Unit = { },
     ) {
         val dependencies = mutableMapOf<String, Provider<MinimalExternalModuleDependency>>().apply(dependencies)
@@ -105,8 +109,8 @@ cloche {
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
 
-            include(libs.hypixelapi)
-            include(libs.skyblockapi)
+            // include(libs.hypixelapi) - included in sbapi
+            // include(libs.skyblockapi) - included in meowdding lib
             include(libs.resourceful.config.kotlin)
             include(libs.meowdding.lib)
             include(libs.keval)
@@ -125,24 +129,30 @@ cloche {
                     value = "me.owdding.skyocean.datagen.SkyOceanDatagen"
                 }
 
-                fun dependency(modId: String, version: Provider<String>) {
+                fun dependency(modId: String, version: Provider<String>? = null) {
                     dependency {
                         this.modId = modId
                         this.required = true
-                        version {
+                        if (version != null) version {
                             this.start = version
                         }
                     }
                 }
 
-                dependency("fabricloader", libs.versions.fabric.loader)
+                dependency {
+                    modId = "minecraft"
+                    required = true
+                    version(minecraftVersionRange)
+                }
+                dependency("fabric")
+                dependency("fabricloader", loaderVersion)
                 dependency("fabric-language-kotlin", libs.versions.fabric.language.kotlin)
                 dependency("resourcefullib", rlib.map { it.version!! })
                 dependency("skyblock-api", libs.versions.skyblockapi.asProvider())
                 dependency("olympus", olympus.map { it.version!! })
                 dependency("placeholder-api", libs.versions.placeholders)
-                dependency("resourcefulconfig", rconfig.map { it.version!! })
                 dependency("resourcefulconfigkt", libs.versions.rconfigkt)
+                dependency("resourcefulconfig", rconfig.map { it.version!! })
                 dependency("meowdding-lib", libs.versions.meowdding.lib)
             }
 
@@ -245,6 +255,7 @@ tasks.withType<ProcessResources>().configureEach {
     filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
         filter { if (it.startsWith("//!moj_import")) "#${it.substring(3)}" else it }
     }
+    exclude(".cache/**")
 
     with(copySpec {
         from("src/lang").include("*.json").into("assets/skyocean/lang")
@@ -287,8 +298,34 @@ idea {
 tasks.withType<WriteClasspathFile>().configureEach {
     actions.clear()
     actions.add {
+        output.get().toPath().also { it.parent.createDirectories() }.takeUnless { it.exists() }?.createFile()
         generate()
         val file = output.get().toPath()
         file.writeText(file.readText().lines().joinToString(File.pathSeparator))
     }
+}
+
+tasks.register("release") {
+    group = "meowdding"
+    sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME || it.name == SourceSet.TEST_SOURCE_SET_NAME }
+        .forEach {
+            tasks.findByName("${it.name}JarInJar")?.let { task ->
+                dependsOn(task)
+                mustRunAfter(task)
+            }
+        }
+}
+
+tasks.register("cleanRelease") {
+    group = "meowdding"
+    listOf("clean", "release").forEach {
+        tasks.getByName(it).let { task ->
+            dependsOn(task)
+            mustRunAfter(task)
+        }
+    }
+}
+
+tasks.withType<JarInJar>().configureEach {
+    include { !it.name.endsWith("-dev.jar") }
 }
