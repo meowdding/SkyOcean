@@ -15,6 +15,8 @@ keval = "1.1.1"
 
 rconfigkt = "3.5.12"
 
+detekt = "1.23.7"
+
 meowdding-lib = "2.0.2"
 meowdding-repo = "1.0.16"
 meowdding-resources = "1.0.12"
@@ -54,3 +56,4 @@ terrarium-cloche = { id = "earth.terrarium.cloche", version.ref = "terrarium-clo
 meowdding-resources = { id = "me.owdding.resources", version.ref = "meowdding-resources" }
 meowdding-repo = { id = "me.owdding.repo", version.ref = "meowdding-repo" }
 kotlin-symbol-processor = { id = "com.google.devtools.ksp", version.ref = "kotlin-symbol-processor" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

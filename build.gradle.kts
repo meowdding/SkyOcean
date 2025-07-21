@@ -3,6 +3,8 @@
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
 import net.msrandom.stubs.GenerateStubApi
@@ -21,6 +23,7 @@ plugins {
     alias(libs.plugins.meowdding.resources)
     alias(libs.plugins.meowdding.repo)
     alias(libs.plugins.kotlin.symbol.processor)
+    alias(libs.plugins.detekt)
 }
 
 base {
@@ -40,6 +43,7 @@ repositories {
     maven(url = "https://maven.nucleoid.xyz")
     maven(url = "https://maven.shedaniel.me/")
     maven(url = "https://maven.msrandom.net/repository/root")
+    maven(url = "https://maven.notenoughupdates.org/releases") // Needed for detekt rules
     mavenLocal()
 }
 
@@ -51,6 +55,11 @@ dependencies {
 
     compileOnly(libs.keval)
     compileOnly(libs.kotlin.stdlib)
+
+
+    detektPlugins("org.notenoughupdates:detektrules:1.0.0")
+    detektPlugins(project(":detekt"))
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
 }
 
 cloche {
@@ -198,6 +207,32 @@ cloche {
     }
 
     mappings { official() }
+}
+
+detekt {
+    buildUponDefaultConfig = true // preconfigure defaults
+    config.setFrom(rootProject.layout.projectDirectory.file("detekt/detekt.yml")) // point to your custom config defining rules to run, overwriting default behavior
+    baseline = file(layout.projectDirectory.file("detekt/baseline.xml")) // a way of suppressing issues before introducing detekt
+    source.setFrom(
+        project.sourceSets.map { it.allSource },
+    )
+}
+
+tasks.withType<Detekt>().configureEach {
+    onlyIf {
+        project.findProperty("skipDetekt") != "true"
+    }
+    outputs.cacheIf { false } // Custom rules won't work if cached
+    reports {
+        html.required.set(true) // observe findings in your browser with structure and code snippets
+        xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
+        sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
+        md.required.set(true) // simple Markdown format
+    }
+}
+
+tasks.withType<DetektCreateBaselineTask>().configureEach {
+    outputs.cacheIf { false } // Custom rules won't work if cached
 }
 
 compactingResources {
