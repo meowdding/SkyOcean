@@ -120,7 +120,7 @@ cloche {
             this.loaderVersion = loaderVersion.get()
 
             // include(libs.hypixelapi) - included in sbapi
-            // include(libs.skyblockapi) - included in meowdding lib
+            include(libs.skyblockapi)
             include(libs.resourceful.config.kotlin)
             include(libs.meowdding.lib)
             include(libs.keval)
@@ -211,7 +211,9 @@ cloche {
         this["resourcefulconfig"] = libs.resourceful.config1215
         this["olympus"] = libs.olympus.lib1215
     }
-    createVersion("1.21.8") {
+    createVersion("1.21.8", minecraftVersionRange = {
+        start = "1.21.6"
+    }) {
         this["resourcefullib"] = libs.resourceful.lib1218
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
