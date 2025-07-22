@@ -111,7 +111,7 @@ cloche {
             this.loaderVersion = loaderVersion.get()
 
             // include(libs.hypixelapi) - included in sbapi
-            // include(libs.skyblockapi) - included in meowdding lib
+            include(libs.skyblockapi)
             include(libs.resourceful.config.kotlin)
             include(libs.meowdding.lib)
             include(libs.keval)
