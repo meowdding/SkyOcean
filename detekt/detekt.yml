@@ -1,3 +1,74 @@
+complexity:
+    CyclomaticComplexMethod: # default threshold of 15, caught almost every complex method
+        active: true
+        threshold: 25
+    LargeClass:
+        active: false  # sometimes a class can get large, and would be worse if split up
+    LongParameterList: # too aggressive, classes can need a lot of params
+        active: false
+    NestedBlockDepth: # too aggressive
+        active: false
+    ComplexCondition: # aggressive by default, at a complexity of 4
+        active: true
+        threshold: 6
+    LongMethod: # default max length of 60, caught way too much
+        active: true
+        threshold: 100
+
+exceptions:
+    SwallowedException: # there are valid reasons to do this
+        active: false
+    ThrowingExceptionsWithoutMessageOrCause: # again, valid reasons
+        active: false
+    TooGenericExceptionCaught: # sometimes you just need to catch Exception
+        active: false
+    TooGenericExceptionThrown: # we don't have our own custom exceptions
+        active: false
+
+formatting:
+    MaximumLineLength: # ktlint - handled by detekt
+        active: false
+    MultiLineIfElse:
+        active: false
+    ArgumentListWrapping: # ktlint - way too aggressive
+        active: false
+    NoBlankLineBeforeRbrace: # pedantic
+        active: false
+    NoConsecutiveBlankLines: # pedantic
+        active: false
+    NoEmptyFirstLineInMethodBlock: # pedantic
+        active: false
+    ParameterListWrapping: # pedantic, can be useful in compact code
+        active: false
+    SpacingBetweenDeclarationsWithAnnotations: # nah
+        active: false
+    SpacingBetweenDeclarationsWithComments: # also nah
+        active: false
+    FunctionReturnTypeSpacing:
+        maxLineLength: 160
+    ParameterWrapping:
+        maxLineLength: 160
+    PropertyWrapping:
+        maxLineLength: 160
+    Wrapping:
+        maxLineLength: 160
+    NoWildcardImports: # we use wildcard imports in some places
+        active: false
+
+naming:
+    ConstructorParameterNaming: # pedantic
+        active: false
+
+performance:
+    UnnecessaryPartOfBinaryExpression:
+        active: true
+
+potential-bugs:
+    DoubleMutabilityForCollection: # went crazy about all the mutable collections
+        active: false
+    HasPlatformType: # false positives on config get() methods
+        active: false
+
 style:
     AlsoCouldBeApply:
         active: true
@@ -45,76 +116,4 @@ style:
     NullableBooleanCheck:
         active: true
     UseOrEmpty: # idk i dont vibe with this
-        active: false
-
-
-formatting:
-    MaximumLineLength: # ktlint - handled by detekt
-        active: false
-    MultiLineIfElse:
-        active: false
-    ArgumentListWrapping: # ktlint - way too aggressive
-        active: false
-    NoBlankLineBeforeRbrace: # pedantic
-        active: false
-    NoConsecutiveBlankLines: # pedantic
-        active: false
-    NoEmptyFirstLineInMethodBlock: # pedantic
-        active: false
-    ParameterListWrapping: # pedantic, can be useful in compact code
-        active: false
-    SpacingBetweenDeclarationsWithAnnotations: # nah
-        active: false
-    SpacingBetweenDeclarationsWithComments: # also nah
-        active: false
-    FunctionReturnTypeSpacing:
-        maxLineLength: 160
-    ParameterWrapping:
-        maxLineLength: 160
-    PropertyWrapping:
-        maxLineLength: 160
-    Wrapping:
-        maxLineLength: 160
-    NoWildcardImports: # we use wildcard imports in some places
-        active: false
-
-performance:
-    UnnecessaryPartOfBinaryExpression:
-        active: true
-
-complexity:
-    CyclomaticComplexMethod: # default threshold of 15, caught almost every complex method
-        active: true
-        threshold: 25
-    LargeClass:
-        active: false  # sometimes a class can get large, and would be worse if split up
-    LongParameterList: # too aggressive, classes can need a lot of params
-        active: false
-    NestedBlockDepth: # too aggressive
-        active: false
-    ComplexCondition: # aggressive by default, at a complexity of 4
-        active: true
-        threshold: 6
-    LongMethod: # default max length of 60, caught way too much
-        active: true
-        threshold: 100
-
-exceptions:
-    SwallowedException: # there are valid reasons to do this
-        active: false
-    ThrowingExceptionsWithoutMessageOrCause: # again, valid reasons
-        active: false
-    TooGenericExceptionCaught: # sometimes you just need to catch Exception
-        active: false
-    TooGenericExceptionThrown: # we don't have our own custom exceptions
-        active: false
-
-naming:
-    ConstructorParameterNaming: # pedantic
-        active: false
-
-potential-bugs:
-    DoubleMutabilityForCollection: # went crazy about all the mutable collections
-        active: false
-    HasPlatformType: # false positives on config get() methods
         active: false
