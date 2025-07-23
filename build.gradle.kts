@@ -57,6 +57,15 @@ dependencies {
     compileOnly(libs.kotlin.stdlib)
 }
 
+afterEvaluate {
+
+    tasks.withType<RemapTask>().forEach {
+        println("Force executing ${it.name}")
+        it.remap()
+    }
+
+}
+
 cloche {
     metadata {
         modId = "skyocean"
@@ -372,11 +381,4 @@ tasks.withType<ResolveMinecraftMappings>().forEach {
 tasks.withType<LoadMappings>().forEach {
     println("Force loading ${it.name}")
     it.load()
-}
-
-beforeEvaluate {
-    tasks.withType<RemapTask>().forEach {
-        println("Force executing ${it.name}")
-        it.remap()
-    }
 }
