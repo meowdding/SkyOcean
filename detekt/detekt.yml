@@ -1,27 +1,29 @@
 style:
-    MagicNumber: # I, Linnea Gräf, of sound mind and body, disagree with disabling this rule
+    AlsoCouldBeApply:
+        active: true
+    ClassOrdering:
+        active: true
+    DoubleNegativeLambda:
+        active: true
+    MagicNumber: # valid, but awful for ui design
         active: false
     UnusedParameter:
         active: true
         ignoreAnnotated:
-            - 'SubscribeEvent'
-            - 'HandleEvent'
-            - 'Mod.EventHandler'
+            - 'Subscription'
     ReturnCount:
         active: true
         max: 5
         excludeGuardClauses: true
         ignoreAnnotated:
-            - 'SubscribeEvent'
-            - 'HandleEvent'
-            - 'Mod.EventHandler'
+            - 'Subscription'
     MaxLineLength:
         active: true
-        maxLineLength: 140
+        maxLineLength: 160
         excludeCommentStatements: true
     LoopWithTooManyJumpStatements:
         active: true
-        maxJumpCount: 3
+        maxJumpCount: 5
     UnnecessaryAbstractClass: # gets horrendously messed up with Event classes
         active: false
     UnusedPrivateMember: # gets tripped up by API methods
@@ -36,6 +38,15 @@ style:
     DestructuringDeclarationWithTooManyEntries: # too aggressive
         active: true
         maxDestructuringEntries: 5
+    RedundantVisibilityModifier:
+        active: true
+    UnnecessaryBracesAroundTrailingLambda:
+        active: true
+    NullableBooleanCheck:
+        active: true
+    UseOrEmpty: # idk i dont vibe with this
+        active: false
+
 
 formatting:
     MaximumLineLength: # ktlint - handled by detekt
@@ -52,42 +63,35 @@ formatting:
         active: false
     ParameterListWrapping: # pedantic, can be useful in compact code
         active: false
-    CommentSpacing: # handled by custom rule
-        active: false
     SpacingBetweenDeclarationsWithAnnotations: # nah
         active: false
     SpacingBetweenDeclarationsWithComments: # also nah
         active: false
-    ImportOrdering: # handled by custom rule
-        active: false
-    AnnotationSpacing: # handled by custom rule
-        active: false
     FunctionReturnTypeSpacing:
-        maxLineLength: 140
+        maxLineLength: 160
     ParameterWrapping:
-        maxLineLength: 140
+        maxLineLength: 160
     PropertyWrapping:
-        maxLineLength: 140
+        maxLineLength: 160
     Wrapping:
-        maxLineLength: 140
+        maxLineLength: 160
+    NoWildcardImports: # we use wildcard imports in some places
+        active: false
+
+performance:
+    UnnecessaryPartOfBinaryExpression:
+        active: true
 
 complexity:
     CyclomaticComplexMethod: # default threshold of 15, caught almost every complex method
         active: true
         threshold: 25
+    LargeClass:
+        active: false  # sometimes a class can get large, and would be worse if split up
     LongParameterList: # too aggressive, classes can need a lot of params
         active: false
     NestedBlockDepth: # too aggressive
         active: false
-    TooManyFunctions: # ktlint - also way too aggressive by default (11 on all file types)
-        active: true
-        thresholdInFiles: 15
-        thresholdInClasses: 20
-        thresholdInInterfaces: 20
-        thresholdInObjects: 20
-        thresholdInEnums: 11
-        ignoreAnnotated:
-            - 'LoadModule'
     ComplexCondition: # aggressive by default, at a complexity of 4
         active: true
         threshold: 6
