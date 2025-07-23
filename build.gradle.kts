@@ -374,7 +374,9 @@ tasks.withType<LoadMappings>().forEach {
     it.load()
 }
 
-tasks.withType<RemapTask>().forEach {
-    println("Force executing ${it.name}")
-    //it.remap()
+beforeEvaluate {
+    tasks.withType<RemapTask>().forEach {
+        println("Force executing ${it.name}")
+        it.remap()
+    }
 }
