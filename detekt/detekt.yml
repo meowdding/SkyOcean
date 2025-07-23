@@ -109,7 +109,7 @@ style:
     DestructuringDeclarationWithTooManyEntries: # too aggressive
         active: true
         maxDestructuringEntries: 5
-    RedundantVisibilityModifier:
+    RedundantVisibilityModifierRule:
         active: true
     UnnecessaryBracesAroundTrailingLambda:
         active: true
