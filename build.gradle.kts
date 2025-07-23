@@ -227,7 +227,8 @@ detekt {
     config.setFrom(rootProject.layout.projectDirectory.file("detekt/detekt.yml")) // point to your custom config defining rules to run, overwriting default behavior
     baseline = file(layout.projectDirectory.file("detekt/baseline.xml")) // a way of suppressing issues before introducing detekt
     source.setFrom(
-        project.sourceSets.map { it.allSource },
+        project.sourceSets.map { it.allSource }.flatten()
+            .filterNot { it.path.replace(File.pathSeparator, ".").contains("build.generated.ksp.main.kotlin.me.owdding.skyocean.generated") },
     )
 }
 
