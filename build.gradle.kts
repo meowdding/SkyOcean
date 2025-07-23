@@ -245,6 +245,7 @@ tasks.withType<Detekt>().configureEach {
 }
 
 tasks.withType<DetektCreateBaselineTask>().configureEach {
+    exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.toPath()) }
     outputs.cacheIf { false } // Custom rules won't work if cached
     outputs.upToDateWhen { false }
 }
