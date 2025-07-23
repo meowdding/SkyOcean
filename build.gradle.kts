@@ -6,6 +6,7 @@ import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import me.owdding.repo.toPath
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.fabric.task.JarInJar
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
@@ -226,16 +227,14 @@ detekt {
     buildUponDefaultConfig = true // preconfigure defaults
     config.setFrom(rootProject.layout.projectDirectory.file("detekt/detekt.yml")) // point to your custom config defining rules to run, overwriting default behavior
     baseline = file(layout.projectDirectory.file("detekt/baseline.xml")) // a way of suppressing issues before introducing detekt
-    source.setFrom(
-        project.sourceSets.map { it.allSource }.flatten()
-            .filterNot { it.path.replace(File.pathSeparator, ".").contains("build.generated.ksp.main.kotlin.me.owdding.skyocean.generated") },
-    )
+    source.setFrom(project.sourceSets.map { it.allSource })
 }
 
 tasks.withType<Detekt>().configureEach {
     onlyIf {
         project.findProperty("skipDetekt") != "true"
     }
+    exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.toPath()) }
     outputs.cacheIf { false } // Custom rules won't work if cached
     reports {
         html.required.set(true) // observe findings in your browser with structure and code snippets
@@ -247,6 +246,7 @@ tasks.withType<Detekt>().configureEach {
 
 tasks.withType<DetektCreateBaselineTask>().configureEach {
     outputs.cacheIf { false } // Custom rules won't work if cached
+    outputs.upToDateWhen { false }
 }
 
 compactingResources {
