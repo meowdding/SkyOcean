@@ -1,0 +1,19 @@
+{
+  "output": {
+    "id": "item:generator_upgrade_stone_tarantula_12",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:tarantula_silk",
+      "amount": 64,
+      "type": "ITEM"
+    },
+    {
+      "amount": 2000000,
+      "currency": "COIN",
+      "type": "CURRENCY"
+    }
+  ]
+}
