@@ -4,6 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
+import net.msrandom.minecraftcodev.core.task.ResolveMinecraftMappings
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.fabric.task.JarInJar
 import net.msrandom.minecraftcodev.remapper.task.LoadMappings
@@ -342,6 +343,13 @@ tasks.register("setupForWorkflows") {
         dependsOn(it)
         mustRunAfter(it)
     }
+}
+
+
+
+tasks.withType<ResolveMinecraftMappings>().configureEach {
+    println("Force loading $name")
+    download()
 }
 
 tasks.withType<LoadMappings>().configureEach {
