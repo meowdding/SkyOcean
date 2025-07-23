@@ -4,10 +4,13 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
+import net.msrandom.minecraftcodev.core.task.ResolveMinecraftClient
+import net.msrandom.minecraftcodev.core.task.ResolveMinecraftCommon
 import net.msrandom.minecraftcodev.core.task.ResolveMinecraftMappings
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.fabric.task.JarInJar
 import net.msrandom.minecraftcodev.remapper.task.LoadMappings
+import net.msrandom.minecraftcodev.remapper.task.RemapTask
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -346,13 +349,27 @@ tasks.register("setupForWorkflows") {
 }
 
 
-
-tasks.withType<ResolveMinecraftMappings>().configureEach {
-    println("Force loading $name")
-    download()
+tasks.withType<ResolveMinecraftCommon>().forEach {
+    println("Force resolving ${it.name}")
+    it.extract()
 }
 
-tasks.withType<LoadMappings>().configureEach {
-    println("Force loading $name")
-    load()
+tasks.withType<ResolveMinecraftClient>().forEach {
+    println("Force resolving ${it.name}")
+    it.extract()
+}
+
+tasks.withType<ResolveMinecraftMappings>().forEach {
+    println("Force resolving ${it.name}")
+    it.download()
+}
+
+tasks.withType<LoadMappings>().forEach {
+    println("Force loading ${it.name}")
+    it.load()
+}
+
+tasks.withType<RemapTask>().forEach {
+    println("Force executing ${it.name}")
+    //it.remap()
 }
