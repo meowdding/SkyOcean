@@ -348,20 +348,6 @@ tasks.register("setupForWorkflows") {
     }
 }
 
-
-listOf(
-    "generate1215MappingsArtifact",
-    "resolve1215Common",
-    "remap1215CommonMinecraftIntermediary",
-    "remap1215CommonMinecraftNamed",
-    "accessWiden1215CommonMinecraft",
-    "accessWiden1215DataCommonMinecraft",
-    "resolve1215Client"
-).forEach { name ->
-    val task = tasks.getByName(name)
-    println("$name -> ${task::class}")
-}
-
 mcVersions.flatMap { listOf("resolve${it}Client", "resolve${it}Common") }.mapNotNull { tasks.findByName(it) }.forEach {
     println("Force resolving ${it.name}")
     it.outputs.files.map { it.toPath().parent }.filterNot { it.exists() }.forEach { it.createDirectories() }
