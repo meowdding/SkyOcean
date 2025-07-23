@@ -6,6 +6,7 @@ import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.fabric.task.JarInJar
+import net.msrandom.minecraftcodev.remapper.task.LoadMappings
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -341,4 +342,9 @@ tasks.register("setupForWorkflows") {
         dependsOn(it)
         mustRunAfter(it)
     }
+}
+
+tasks.withType<LoadMappings>().configureEach {
+    println("Force loading $name")
+    load()
 }
