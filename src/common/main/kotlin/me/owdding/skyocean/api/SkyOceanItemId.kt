@@ -2,6 +2,7 @@ package me.owdding.skyocean.api
 
 import com.mojang.serialization.Codec
 import me.owdding.ktcodecs.IncludedCodec
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.DELIMITER
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.UNKNOWN
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.ItemStack
@@ -19,25 +20,26 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 value class SkyOceanItemId private constructor(val id: String) {
     companion object {
         private val amountRegex = Regex(".*?x[\\d,]+")
-        const val ITEM = "item:"
+        const val DELIMITER = ":"
+        const val ITEM = "item$DELIMITER"
 
-        const val PET = "pet:"
-        const val RUNE = "rune:"
-        const val ATTRIBUTE = "attribute:"
-        const val ENCHANTMENT = "enchantment:"
-        const val UNSAFE = "unsafe:"
-        const val UNKNOWN = "ocean:unknown"
+        const val PET = "pet$DELIMITER"
+        const val RUNE = "rune$DELIMITER"
+        const val ATTRIBUTE = "attribute$DELIMITER"
+        const val ENCHANTMENT = "enchantment$DELIMITER"
+        const val UNSAFE = "unsafe$DELIMITER"
+        const val UNKNOWN = "ocean${DELIMITER}unknown"
         val EMPTY: SkyOceanItemId = item(UNKNOWN)
         private val petRegex = Regex("\\[?lvl \\d+]? (.*)")
 
         fun item(id: String) = SkyOceanItemId("$ITEM$id".lowercase())
         fun pet(id: String) = SkyOceanItemId("$PET$id".lowercase())
-        fun pet(id: String, rarity: String) = SkyOceanItemId("$PET$id:$rarity".lowercase())
+        fun pet(id: String, rarity: String) = SkyOceanItemId("$PET$id$DELIMITER$rarity".lowercase())
         fun rune(id: String) = SkyOceanItemId("$RUNE$id".lowercase())
-        fun rune(id: String, level: Int) = SkyOceanItemId("$RUNE$id:$level".lowercase())
+        fun rune(id: String, level: Int) = SkyOceanItemId("$RUNE$id$DELIMITER$level".lowercase())
         fun attribute(id: String) = SkyOceanItemId("$ATTRIBUTE$id".lowercase())
         fun enchantment(id: String) = SkyOceanItemId("$ENCHANTMENT$id".lowercase())
-        fun enchantment(id: String, level: Int) = SkyOceanItemId("$ENCHANTMENT$id:$level".lowercase())
+        fun enchantment(id: String, level: Int) = SkyOceanItemId("$ENCHANTMENT$id$DELIMITER$level".lowercase())
 
         fun fromItem(item: ItemStack) = item.getSkyOceanItemId()
 
@@ -83,7 +85,17 @@ value class SkyOceanItemId private constructor(val id: String) {
     val isEnchantment: Boolean get() = id.startsWith(ENCHANTMENT)
     val isAttribute: Boolean get() = id.startsWith(ATTRIBUTE)
     val isUnsafe: Boolean get() = id.startsWith(UNSAFE)
-    val cleanId: String get() = id.substringAfter(":")
+    val cleanId: String get() = id.substringAfter(DELIMITER)
+    val skyblockId: String
+        get() = when {
+
+            isPet -> cleanId.substringBeforeLast(DELIMITER)
+            isEnchantment -> {
+                "ENCHANTED_BOOK_${cleanId.substringBeforeLast(DELIMITER)}_${cleanId.substringAfterLast(DELIMITER)}"
+            }
+
+            else -> cleanId
+        }.uppercase()
 
     fun trySafe(consumer: (String) -> SkyOceanItemId): SkyOceanItemId = if (isUnsafe) consumer(cleanId) else this
 
@@ -112,17 +124,17 @@ private fun ItemStack.getSkyOceanItemId(): SkyOceanItemId? {
     val data = this.getData(DataTypes.ID)
     return when (data) {
         "RUNE", "UNIQUE_RUNE" -> {
-            this.getData(DataTypes.APPLIED_RUNE)?.let { (rune, level) -> "$rune:$level" }.let { it ?: UNKNOWN }
+            this.getData(DataTypes.APPLIED_RUNE)?.let { (rune, level) -> "$rune$DELIMITER$level" }.let { it ?: UNKNOWN }
                 .let(SkyOceanItemId::rune)
         }
 
         "PET" -> {
-            this.getData(DataTypes.PET_DATA)?.let { (id, _, _, rarity) -> "$id:${rarity.name}" }.let { it ?: UNKNOWN }
+            this.getData(DataTypes.PET_DATA)?.let { (id, _, _, rarity) -> "$id$DELIMITER${rarity.name}" }.let { it ?: UNKNOWN }
                 .let(SkyOceanItemId::pet)
         }
 
         "ENCHANTED_BOOK" -> {
-            this.getData(DataTypes.ENCHANTMENTS)?.entries?.firstOrNull()?.let { (key, value) -> "$key:$value" }
+            this.getData(DataTypes.ENCHANTMENTS)?.entries?.firstOrNull()?.let { (key, value) -> "$key$DELIMITER$value" }
                 .let { it ?: UNKNOWN }
                 .let(SkyOceanItemId::enchantment)
         }
