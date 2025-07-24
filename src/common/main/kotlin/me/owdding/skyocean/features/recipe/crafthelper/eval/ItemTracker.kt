@@ -54,7 +54,6 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
     fun takeN(ingredient: Ingredient, amount: Int = ingredient.amount): List<TrackedItem> {
         val items = items[ingredient.serialize()] ?: return emptyList()
 
-
         var acc = 0
         val takeWhile = items.takeWhile {
             val shouldTake = acc < amount
@@ -82,6 +81,9 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         val lastNeeded = (amount - otherSum).coerceAtMost(amount)
 
         items.addFirst(last.withAmount(last.amount - lastNeeded))
+        if (items.size == 1) {
+            this.items.put(ingredient.serialize(), items)
+        }
 
         list.add(last.withAmount(lastNeeded))
 
