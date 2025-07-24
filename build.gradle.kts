@@ -177,21 +177,23 @@ cloche {
             val sourceSetName = this.sourceSet.name
 
             tasks {
-                val datagen = getByName("run${sourceSetName}ClientData")
-                val processResources = getByName("process${sourceSetName}Resources", ProcessResources::class)
-                val postProcessResources = register("postProcess${sourceSetName}Resources", ProcessResources::class) {
-                    dependsOn(processResources)
-                    mustRunAfter(datagen)
-                    inputs.files(processResources.inputs.files)
-                    actions.addAll(processResources.actions)
-                    outputs.upToDateWhen { false }
-                    destinationDir = processResources.destinationDir
-                    with(processResources.rootSpec)
-                }
+                afterEvaluate {
+                    val datagen = getByName("run${sourceSetName}ClientData")
+                    val processResources = getByName("process${sourceSetName}Resources", ProcessResources::class)
+                    val postProcessResources = register("postProcess${sourceSetName}Resources", ProcessResources::class) {
+                        dependsOn(processResources)
+                        mustRunAfter(datagen)
+                        inputs.files(processResources.inputs.files)
+                        actions.addAll(processResources.actions)
+                        outputs.upToDateWhen { false }
+                        destinationDir = processResources.destinationDir
+                        with(processResources.rootSpec)
+                    }
 
-                getByName("${sourceSetName}Jar") {
-                    dependsOn("run${sourceSetName}ClientData")
-                    dependsOn(postProcessResources)
+                    getByName("${sourceSetName}Jar") {
+                        dependsOn("run${sourceSetName}ClientData")
+                        dependsOn(postProcessResources)
+                    }
                 }
             }
         }
@@ -221,11 +223,6 @@ compactingResources {
     configureTask(tasks.getByName<ProcessResources>("processResources"))
 
     compactToArray("recipes")
-}
-
-tasks.named("createCommonApiStub", GenerateStubApi::class) {
-    excludes.add(libs.skyblockapi.asProvider().get().module.toString())
-    excludes.add(libs.meowdding.lib.get().module.toString())
 }
 
 repo {
@@ -297,6 +294,14 @@ idea {
     }
 }
 
+
+afterEvaluate {
+    tasks.named("createCommonApiStub", GenerateStubApi::class).configure {
+        excludes.add(libs.skyblockapi.asProvider().get().module.toString())
+        excludes.add(libs.meowdding.lib.get().module.toString())
+    }
+}
+
 // TODO temporary workaround for a cloche issue on certain systems, remove once fixed
 tasks.withType<WriteClasspathFile>().configureEach {
     actions.clear()
@@ -308,15 +313,16 @@ tasks.withType<WriteClasspathFile>().configureEach {
     }
 }
 
+val mcVersions = sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME || it.name == SourceSet.TEST_SOURCE_SET_NAME }.map { it.name }
+
 tasks.register("release") {
     group = "meowdding"
-    sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME || it.name == SourceSet.TEST_SOURCE_SET_NAME }
-        .forEach {
-            tasks.findByName("${it.name}JarInJar")?.let { task ->
-                dependsOn(task)
-                mustRunAfter(task)
-            }
+    mcVersions.forEach {
+        tasks.findByName("${it}JarInJar")?.let { task ->
+            dependsOn(task)
+            mustRunAfter(task)
         }
+    }
 }
 
 tasks.register("cleanRelease") {
@@ -326,6 +332,15 @@ tasks.register("cleanRelease") {
             dependsOn(task)
             mustRunAfter(task)
         }
+    }
+}
+
+tasks.register("setupForWorkflows") {
+    mcVersions.flatMap {
+        listOf("remap${it}CommonMinecraftNamed", "remap${it}ClientMinecraftNamed")
+    }.mapNotNull { tasks.findByName(it) }.forEach {
+        dependsOn(it)
+        mustRunAfter(it)
     }
 }
 
