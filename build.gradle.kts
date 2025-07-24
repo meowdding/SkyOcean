@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
 import net.msrandom.minecraftcodev.core.utils.toPath
@@ -16,6 +18,7 @@ plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.terrarium.cloche)
     alias(libs.plugins.meowdding.resources)
+    alias(libs.plugins.meowdding.repo)
     alias(libs.plugins.kotlin.symbol.processor)
 }
 
@@ -222,9 +225,28 @@ compactingResources {
     compactToArray("recipes")
 }
 
-tasks.named("createCommonApiStub", GenerateStubApi::class).configure {
-    excludes.add(libs.skyblockapi.asProvider().get().module.toString())
-    excludes.add(libs.meowdding.lib.get().module.toString())
+repo {
+    val predicate: (JsonElement) -> Boolean = {
+        when (it) {
+            is JsonObject -> it.size() > 1
+            else -> true
+        }
+    }
+    hotm {
+        excludeAllExcept {
+            name()
+            cost()
+        }
+        withPredicate(predicate)
+    }
+    hotf {
+        excludeAllExcept {
+            name()
+            cost()
+        }
+        withPredicate(predicate)
+    }
+    sacks { includeAll() }
 }
 
 tasks.withType<ProcessResources>().configureEach {
@@ -271,6 +293,14 @@ idea {
         excludeDirs.add(file("run"))
     }
 }
+
+afterEvaluate {
+    tasks.named("createCommonApiStub", GenerateStubApi::class).configure {
+        excludes.add(libs.skyblockapi.asProvider().get().module.toString())
+        excludes.add(libs.meowdding.lib.get().module.toString())
+    }
+}
+
 
 // TODO temporary workaround for a cloche issue on certain systems, remove once fixed
 tasks.withType<WriteClasspathFile>().configureEach {
