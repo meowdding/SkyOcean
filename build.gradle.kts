@@ -6,11 +6,12 @@ import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.fabric.task.JarInJar
+import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
+import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import kotlin.io.path.listDirectoryEntries
-import kotlin.io.path.name
+import kotlin.io.path.*
 
 plugins {
     idea
@@ -290,6 +291,47 @@ idea {
         isDownloadSources = true
 
         excludeDirs.add(file("run"))
+    }
+}
+
+
+afterEvaluate {
+    tasks.named("createCommonApiStub", GenerateStubApi::class).configure {
+        excludes.add(libs.skyblockapi.asProvider().get().module.toString())
+        excludes.add(libs.meowdding.lib.get().module.toString())
+    }
+}
+
+// TODO temporary workaround for a cloche issue on certain systems, remove once fixed
+tasks.withType<WriteClasspathFile>().configureEach {
+    actions.clear()
+    actions.add {
+        output.get().toPath().also { it.parent.createDirectories() }.takeUnless { it.exists() }?.createFile()
+        generate()
+        val file = output.get().toPath()
+        file.writeText(file.readText().lines().joinToString(File.pathSeparator))
+    }
+}
+
+val mcVersions = sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME || it.name == SourceSet.TEST_SOURCE_SET_NAME }.map { it.name }
+
+tasks.register("release") {
+    group = "meowdding"
+    mcVersions.forEach {
+        tasks.findByName("${it}JarInJar")?.let { task ->
+            dependsOn(task)
+            mustRunAfter(task)
+        }
+    }
+}
+
+tasks.register("cleanRelease") {
+    group = "meowdding"
+    listOf("clean", "release").forEach {
+        tasks.getByName(it).let { task ->
+            dependsOn(task)
+            mustRunAfter(task)
+        }
     }
 }
 
