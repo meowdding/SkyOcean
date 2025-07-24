@@ -29,15 +29,15 @@
         }
       },
       "slayer": {
-        "@value": "Slayer",
+        "@value": "猎手",
         "highlights": {
           "blaze": {
-            "@value": "烈焰Slayer高亮",
-            "desc": "以当前调谐的颜色高亮烈焰Slayer"
+            "@value": "烈焰猎手高亮",
+            "desc": "以当前调谐的颜色高亮烈焰猎手"
           },
           "own_boss": {
-            "@value": "高亮自己的Slayer Boss",
-            "desc": "给你的Slayer Boss添加发光高亮"
+            "@value": "高亮自己的猎手Boss",
+            "desc": "给你的猎手Boss添加发光高亮"
           },
           "minis": {
             "@value": "高亮小怪",
