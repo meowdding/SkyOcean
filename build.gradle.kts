@@ -4,13 +4,8 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
-import net.msrandom.minecraftcodev.core.task.ResolveMinecraftClient
-import net.msrandom.minecraftcodev.core.task.ResolveMinecraftCommon
-import net.msrandom.minecraftcodev.core.task.ResolveMinecraftMappings
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.fabric.task.JarInJar
-import net.msrandom.minecraftcodev.remapper.task.LoadMappings
-import net.msrandom.minecraftcodev.remapper.task.RemapTask
 import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -55,15 +50,6 @@ dependencies {
 
     compileOnly(libs.keval)
     compileOnly(libs.kotlin.stdlib)
-}
-
-afterEvaluate {
-
-    tasks.withType<RemapTask>().forEach {
-        println("Force executing ${it.name}")
-        it.remap()
-    }
-
 }
 
 cloche {
@@ -191,21 +177,23 @@ cloche {
             val sourceSetName = this.sourceSet.name
 
             tasks {
-                val datagen = getByName("run${sourceSetName}ClientData")
-                val processResources = getByName("process${sourceSetName}Resources", ProcessResources::class)
-                val postProcessResources = register("postProcess${sourceSetName}Resources", ProcessResources::class) {
-                    dependsOn(processResources)
-                    mustRunAfter(datagen)
-                    inputs.files(processResources.inputs.files)
-                    actions.addAll(processResources.actions)
-                    outputs.upToDateWhen { false }
-                    destinationDir = processResources.destinationDir
-                    with(processResources.rootSpec)
-                }
+                afterEvaluate {
+                    val datagen = getByName("run${sourceSetName}ClientData")
+                    val processResources = getByName("process${sourceSetName}Resources", ProcessResources::class)
+                    val postProcessResources = register("postProcess${sourceSetName}Resources", ProcessResources::class) {
+                        dependsOn(processResources)
+                        mustRunAfter(datagen)
+                        inputs.files(processResources.inputs.files)
+                        actions.addAll(processResources.actions)
+                        outputs.upToDateWhen { false }
+                        destinationDir = processResources.destinationDir
+                        with(processResources.rootSpec)
+                    }
 
-                getByName("${sourceSetName}Jar") {
-                    dependsOn("run${sourceSetName}ClientData")
-                    dependsOn(postProcessResources)
+                    getByName("${sourceSetName}Jar") {
+                        dependsOn("run${sourceSetName}ClientData")
+                        dependsOn(postProcessResources)
+                    }
                 }
             }
         }
@@ -237,7 +225,7 @@ compactingResources {
     compactToArray("recipes")
 }
 
-tasks.named("createCommonApiStub", GenerateStubApi::class) {
+tasks.named("createCommonApiStub", GenerateStubApi::class).configure {
     excludes.add(libs.skyblockapi.asProvider().get().module.toString())
     excludes.add(libs.meowdding.lib.get().module.toString())
 }
@@ -346,39 +334,4 @@ tasks.register("cleanRelease") {
 
 tasks.withType<JarInJar>().configureEach {
     include { !it.name.endsWith("-dev.jar") }
-}
-
-tasks.register("setupForWorkflows") {
-    mcVersions.flatMap {
-        listOf("remap${it}CommonMinecraftNamed", "remap${it}ClientMinecraftNamed")
-    }.mapNotNull { tasks.findByName(it) }.forEach {
-        dependsOn(it)
-        mustRunAfter(it)
-    }
-}
-
-mcVersions.flatMap { listOf("resolve${it}Client", "resolve${it}Common") }.mapNotNull { tasks.findByName(it) }.forEach {
-    println("Force resolving ${it.name}")
-    it.outputs.files.map { it.toPath().parent }.filterNot { it.exists() }.forEach { it.createDirectories() }
-    it.actions.forEach { task -> task.execute(it) }
-}
-
-tasks.withType<ResolveMinecraftCommon>().forEach {
-    println("Force resolving ${it.name}")
-    it.extract()
-}
-
-tasks.withType<ResolveMinecraftClient>().forEach {
-    println("Force resolving ${it.name}")
-    it.extract()
-}
-
-tasks.withType<ResolveMinecraftMappings>().forEach {
-    println("Force resolving ${it.name}")
-    it.download()
-}
-
-tasks.withType<LoadMappings>().forEach {
-    println("Force loading ${it.name}")
-    it.load()
 }
