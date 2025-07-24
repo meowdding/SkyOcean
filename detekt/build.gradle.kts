@@ -6,16 +6,9 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
-// Dependencies:
 repositories {
     mavenCentral()
     mavenLocal()
-    maven("https://repo.spongepowered.org/maven/")
-    // If you don't want to log in with your real minecraft account, remove this line
-    maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
-    maven("https://repo.essential.gg/repository/maven-public/")
-    maven("https://repo.hypixel.net/repository/Hypixel/")
-    maven("https://repo.nea.moe/releases")
 }
 
 dependencies {
