@@ -170,14 +170,14 @@
         },
         "piggy_repair_helper": {
           "@value": "存钱罐修复助手",
-          "desc": "当存钱罐损坏时，发送一条消息允许你袋子中拿出8个附魔猪肉。"
+          "desc": "当存钱罐损坏时，发送一条消息允许你从袋子中拿出8个附魔猪肉。"
         },
         "sack_notification": {
           "@value": "袋子通知",
-          "desc": "当你特定物品进入袋子时显示通知。"
+          "desc": "当特定物品进入袋子时显示通知。"
         },
         "sack_notification_items": {
-          "@value": "通知的物品",
+          "@value": "需要通知的物品",
           "desc": "在此处编辑需要显示通知的物品。"
         }
       },
@@ -196,7 +196,7 @@
         "@value": "杂项",
         "ministerInCalendar": {
           "@value": "日历中的部长",
-          "desc": "在日历界面中市长旁边添加当前部长。"
+          "desc": "在日历界面中市长旁边显示当前部长。"
         },
         "anvilHelper": {
           "@value": "铁砧助手",
@@ -208,7 +208,7 @@
         },
         "previousServerTime": {
           "@value": "上一个服务器时间",
-          "desc": "到访过的服务器在此时间段后不再被认为加入过。"
+          "desc": "到访过的服务器在此时间后不再被认为加入过。"
         },
         "hideLightning": {
           "@value": "隐藏闪电",
@@ -268,7 +268,7 @@
         "@value": "钓鱼",
         "trophy_numbers": {
           "@value": "奖杯鱼数量",
-          "desc": "钓到奖杯鱼鱼时显示你钓到的数量。"
+          "desc": "钓到奖杯鱼时显示你钓到的数量。"
         },
         "hook_text_scale": {
           "@value": "鱼钩文本大小",
@@ -325,7 +325,7 @@
             "物品描述被修改过的物品会有<color #355AA0>\uD83C\uDF0A</color>的前缀",
             "要查看一个物品受到的所有修改，对其按<gray>Shift</gray>。",
             "",
-            "某些设置带有示例，<italic><gray>悬停</gray></italic>其上方可以查看。(翻译提醒：示例内容保留原文以避免歧义)"
+            "某些设置带有示例，在其上方<italic><gray>悬停</gray></italic>可以查看。(翻译提醒：示例内容保留原文以避免歧义)"
           ]
         },
         "drill_modifications": {
