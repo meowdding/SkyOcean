@@ -335,6 +335,15 @@ tasks.register("cleanRelease") {
     }
 }
 
+tasks.register("setupForWorkflows") {
+    mcVersions.flatMap {
+        listOf("remap${it}CommonMinecraftNamed", "remap${it}ClientMinecraftNamed")
+    }.mapNotNull { tasks.findByName(it) }.forEach {
+        dependsOn(it)
+        mustRunAfter(it)
+    }
+}
+
 tasks.withType<JarInJar>().configureEach {
     include { !it.name.endsWith("-dev.jar") }
 }

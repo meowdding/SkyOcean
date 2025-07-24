@@ -8,8 +8,7 @@
 name: Java CI with Gradle
 
 on:
-    push:
-    #        branches: [ "main" ]
+    push: #        branches: [ "main" ]
     pull_request:
         branches: [ "main" ]
 
@@ -33,7 +32,7 @@ jobs:
             -   name: Build with Gradle
                 uses: gradle/gradle-build-action@v2.11.0
                 with:
-                    arguments: cleanRelease --stacktrace
+                    arguments: setupForWorkflows cleanRelease --stacktrace
             -   name: Upload Artifact
                 uses: actions/upload-artifact@v4.0.0
                 with:
