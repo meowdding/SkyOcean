@@ -17,7 +17,7 @@
           "desc": [
             "本模组可能会改变物品（或其他视觉组件）的外观，例如修改工具提示。",
             "",
-            "如果存在此类修改，将会有<color #355AA0>\uD83C\uDF0A</color>前缀，这是为了帮助识别任何更改的来源，因此无法禁用。"
+            "如果存在此类修改，将会有<color #355AA0>\uD83C\uDF0A</color>前缀，这用于追踪此类更改的来源，因此无法禁用。"
           ]
         },
         "debug": {
@@ -52,31 +52,31 @@
       "mining": {
         "@value": "挖矿",
         "modifyCommissions": {
-          "@value": "修改任务",
+          "@value": "修改任务图标",
           "desc": "当任务开始或完成时，修改任务物品以使其在视觉上有所不同。"
         },
         "retexture": {
-          "@value": "材质重塑",
+          "@value": "更改方块材质",
           "carpets": {
-            "@value": "地毯材质重塑",
+            "@value": "更改地毯材质",
             "desc": [
               "将矮人矿井中的大多数地毯变为<red>红色</red>，使其更显眼。"
             ]
           },
           "glacite": {
-            "@value": "冰矿隧道方块材质重塑",
+            "@value": "更改冰洞方块材质",
             "desc": [
-              "允许资源包改变冰矿隧道方块的外观。"
+              "允许资源包改变冰洞方块的外观。"
             ]
           },
           "mist": {
-            "@value": "迷雾材质重塑",
+            "@value": "更改The Mist（刷鬼区域）方块材质",
             "desc": [
-              "允许资源包改变迷雾中方块的外观。"
+              "允许资源包改变The Mist中方块的外观。"
             ]
           },
           "gemstone": {
-            "@value": "宝石材质重塑",
+            "@value": "更改宝石材质",
             "desc": [
               "允许资源包改变宝石的外观。"
             ]
@@ -85,14 +85,14 @@
         "mineshaft": {
           "@value": "矿井",
           "announce": {
-            "@value": "宣布进入矿井",
+            "@value": "通知他人进入矿井",
             "desc": [
-              "当你进入矿井时发送聊天或队伍消息。",
-              "如果不在队伍中，将在聊天中发送。"
+              "当你进入矿井时发送公屏或队伍消息。",
+              "如果不在队伍中，将在公屏中发送。"
             ]
           },
           "announce-type": {
-            "@value": "公告类型",
+            "@value": "通知类型",
             "desc": "进入矿井时发送的消息类型。"
           },
           "waypoint": {
@@ -100,13 +100,13 @@
             "desc": "在矿井中所有可能的尸体位置显示路径点。"
           },
           "key-announce": {
-            "@value": "钥匙公告",
+            "@value": "钥匙通知",
             "desc": "发送一条聊天消息，显示你背包中有多少当前矿井尸体的钥匙。"
           }
         },
         "hotm": {
           "shiftCost": {
-            "@value": "显示Shift点击的花费",
+            "@value": "显示Shift点击的粉末花费",
             "desc": "显示Shift点击时将消耗的粉末数量。"
           },
           "totalProgress": {
@@ -119,13 +119,13 @@
           },
           "totalLeft": {
             "@value": "显示剩余总量",
-            "desc": "显示将一个技能升到满级仍需的总量。"
+            "desc": "显示将一个技能升到满级仍需粉末的总量。"
           }
         },
         "ch": {
           "area_walls": {
             "@value": "区域墙壁",
-            "desc": "在水晶空洞的区域之间添加墙壁。"
+            "desc": "在水晶洞的区域之间添加墙壁。"
           }
         },
         "puzzler": {
@@ -136,13 +136,13 @@
       "inventory": {
         "@value": "物品栏",
         "sack_value": {
-          "@value": "袋子的价值",
+          "@value": "袋子物品价值",
           "desc": "显示你所有袋子中物品的价值。",
           "edit": "编辑袋子的价值",
           "price_source": {
             "@value": "价格来源",
-            "desc": "用于袋子中物品价格的来源。",
-            "bazaar": "Bazaar",
+            "desc": "袋子中物品价格的来源。",
+            "bazaar": "集市",
             "npc": "NPC"
           }
         },
@@ -156,7 +156,7 @@
           "edit": {
             "@value": "编辑按钮",
             "desc": [
-              "在单独的UI中配置按钮。",
+              "进入另一个的UI中以配置按钮。",
               "<italic>也可以通过<gray>/skyocean buttons</gray>访问配置页面</italic>"
             ]
           }
@@ -170,14 +170,14 @@
         },
         "piggy_repair_helper": {
           "@value": "存钱罐修复助手",
-          "desc": "当存钱罐损坏时，发送聊天消息从袋子中获取8个附魔猪肉。"
+          "desc": "当存钱罐损坏时，发送一条消息允许你从袋子中拿出8个附魔猪肉。"
         },
         "sack_notification": {
           "@value": "袋子通知",
-          "desc": "当你获得特定袋子物品时显示通知。"
+          "desc": "当特定物品进入袋子时显示通知。"
         },
         "sack_notification_items": {
-          "@value": "需要通知物品",
+          "@value": "需要通知的物品",
           "desc": "在此处编辑需要显示通知的物品。"
         }
       },
@@ -188,7 +188,7 @@
           "desc": "添加一个UI元素，显示哪种害虫诱饵会增加特定害虫的生成几率。"
         },
         "desk_pest_highlight": {
-          "@value": "桌面害虫高亮",
+          "@value": "桌面处害虫高亮显示",
           "desc": "在“Configure Plots”菜单中高亮显示地块上有多少害虫。"
         }
       },
@@ -196,11 +196,11 @@
         "@value": "杂项",
         "ministerInCalendar": {
           "@value": "日历中的部长",
-          "desc": "在日历中市长旁边添加当前部长。"
+          "desc": "在日历界面中市长旁边显示当前部长。"
         },
         "anvilHelper": {
           "@value": "铁砧助手",
-          "desc": "高亮显示与铁砧中附魔书相同附魔的附魔书。"
+          "desc": "高亮显示与铁砧中附魔书带有相同附魔的附魔书。"
         },
         "previousServer": {
           "@value": "上一个服务器",
@@ -208,7 +208,7 @@
         },
         "previousServerTime": {
           "@value": "上一个服务器时间",
-          "desc": "服务器被缓存并显示为之前加入过的时间。"
+          "desc": "到访过的服务器在此时间后不再被认为加入过。"
         },
         "hideLightning": {
           "@value": "隐藏闪电",
@@ -216,7 +216,7 @@
         },
         "showHiddenPetCandy": {
           "@value": "显示隐藏的宠物糖果",
-          "desc": "Hypixel会在宠物达到最高等级后隐藏宠物糖果使用数量，此功能重新添加了它。"
+          "desc": "Hypixel会在宠物达到最高等级后隐藏宠物糖果使用数量，此功能重新显示这一数量。"
         },
         "hideEntityFire": {
           "@value": "隐藏实体火焰",
@@ -226,15 +226,15 @@
           "@value": "物品搜索",
           "itemHighlight": {
             "@value": "物品高亮",
-            "desc": "选择搜索到的物品将以何种颜色高亮显示。"
+            "desc": "搜索到的物品将以何种颜色高亮显示。"
           }
         },
         "crafthelper": {
           "@value": "合成助手",
-          "desc": "合成助手是一个功能，让你可以看到配方中的所有步骤以及你完成它的进度。",
+          "desc": "让你看到目标物品配方的步骤以及你完成它的进度。",
           "enabled": {
             "@value": "启用合成助手",
-            "desc": "启用合成助手的主开关。"
+            "desc": "合成助手的主开关。"
           },
           "hideCompleted": {
             "@value": "隐藏已完成",
@@ -248,7 +248,7 @@
         "transparentArmor": {
           "@value": "透明护甲",
           "desc": [
-            "更改你自己或他人护甲外观的设置。",
+            "更改你自己或他人护甲外观。",
             {
               "@id": "transparency"
             },
@@ -267,16 +267,16 @@
       "fishing": {
         "@value": "钓鱼",
         "trophy_numbers": {
-          "@value": "战利品数量",
-          "desc": "钓到战利品鱼时显示你钓到的数量。"
+          "@value": "奖杯鱼数量",
+          "desc": "钓到奖杯鱼时显示你钓到的数量。"
         },
         "hook_text_scale": {
-          "@value": "鱼钩文本比例",
-          "desc": "改变鱼钩/浮标上方文本的比例。"
+          "@value": "鱼钩文本大小",
+          "desc": "改变鱼钩/浮标上方文本的大小。"
         },
         "lava_replacement": {
-          "@value": "熔岩替换",
-          "desc": "在深红岛时将熔岩材质替换为水材质。"
+          "@value": "岩浆材质替换",
+          "desc": "在深红岛时将岩浆材质替换为水的材质。"
         },
         "bobber_fix": {
           "@value": "浮标修复",
@@ -284,32 +284,32 @@
         },
         "hide_other_bobbers": {
           "@value": "隐藏其他浮标",
-          "desc": "隐藏其他玩家的浮标，使其更容易看到自己的浮标。"
+          "desc": "隐藏其他玩家的浮标，这样更容易看到自己的浮标。"
         },
         "hotspot": {
-          "@value": "热点高亮",
+          "@value": "钓鱼热点高亮",
           "desc": "热点高亮的所有设置。",
           "circle_surface": {
-            "@value": "表面",
-            "desc": "渲染一个“实心”圆而不是粒子轮廓。"
+            "@value": "用实心圆显示热点",
+            "desc": "渲染一个实心圆而不是粒子轮廓。"
           },
           "surface_transparency": {
-            "@value": "表面透明度",
+            "@value": "实心圆的透明度",
             "desc": [
-              "改变表面的透明度。",
+              "改变实心圆的透明度。",
               {
                 "@id": "transparency"
               }
             ]
           },
           "circle_outline": {
-            "@value": "轮廓",
-            "desc": "渲染一个“实心”轮廓而不是粒子轮廓。"
+            "@value": "用空心圆显示热点",
+            "desc": "渲染一个空心圆而不是粒子轮廓。"
           },
           "outline_transparency": {
-            "@value": "表面透明度",
+            "@value": "空心圆的透明度",
             "desc": [
-              "改变轮廓的透明度。",
+              "改变空心圆的透明度。",
               {
                 "@id": "transparency"
               }
@@ -322,16 +322,16 @@
         "modifications": {
           "@value": "物品描述修改",
           "desc": [
-            "物品描述中存在任何修改的物品都以<color #355AA0>\uD83C\uDF0A</color>为前缀",
-            "要列出所有存在的修改，请按住<gray>Shift</gray>。",
+            "物品描述被修改过的物品会有<color #355AA0>\uD83C\uDF0A</color>的前缀",
+            "要查看一个物品受到的所有修改，对其按<gray>Shift</gray>。",
             "",
-            "某些设置可能包含示例，<italic><gray>悬停</gray></italic>它们即可查看。(翻译提醒：示例内容保留原文以避免歧义)"
+            "某些设置带有示例，在其上方<italic><gray>悬停</gray></italic>可以查看。(翻译提醒：示例内容保留原文以避免歧义)"
           ]
         },
         "drill_modifications": {
-          "@value": "精简钻头修改",
+          "@value": "简要的钻头插件显示",
           "desc": [
-            "将已安装的升级部件精简为每行一个。",
+            "隐藏已安装的钻头插件效果，只显示插件名称。",
             "",
             "例如: <green><hover show_text '<color #355AA0>\uD83C\uDF0A</color><aqua> Heated Divans Drill</aqua>",
             "<dark_gray>Breaking Power 10</dark_gray>",
@@ -409,7 +409,7 @@
         "dungeon_quality": {
           "@value": "地牢品质",
           "desc": [
-            "在物品描述中添加地牢品质。",
+            "在物品描述中显示地牢物品的掉落层数与品质。",
             "",
             "例如: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <gold>Smart Skeleton Master Leggings</gold>",
             "<gray>Item Quality: <red>50<gray>/</gray>50</red></gray>",
@@ -453,7 +453,7 @@
             ]
         },
         "compact_level_bars": {
-          "@value": "精简等级条",
+          "@value": "简化等级条",
           "desc": [
             "将空岛等级菜单中的进度条精简为一行，使其在小屏幕上也能显示。",
             "",
@@ -491,14 +491,14 @@
         },
         "storage_preview": {
           "@value": "存储预览",
-          "desc": "在工具提示中预览背包和末影箱的内容。"
+          "desc": "悬停可以预览背包和末影箱的内容。"
         }
       },
       "foraging": {
-        "@value": "采掘技能",
+        "@value": "伐木技能",
         "hotf": {
           "shiftCost": {
-            "@value": "显示Shift点击花费",
+            "@value": "显示Shift点击的粉末花费",
             "desc": "显示Shift点击时将消耗的粉末数量。"
           },
           "totalProgress": {
@@ -511,18 +511,18 @@
           },
           "totalLeft": {
             "@value": "显示剩余总量",
-            "desc": "显示将一个技能升到满级仍需的总量。"
+            "desc": "显示将一个技能升到满级仍需粉末的总量。"
           }
         },
         "galatea": {
           "@value": "Galatea",
           "muteThePhantoms": {
             "@value": "静音幻翼",
-            "desc": "静音所有幻翼，使其不再引起耳鸣。",
-            "warning": "<yellow>SkyOcean默认静音幻翼声音，如果你希望更改此设置，请打开配置并搜索<gold>静音幻翼</gold>！"
+            "desc": "让所有幻翼静音，这样它们就不会导致耳鸣。",
+            "warning": "<yellow>SkyOcean默认静音幻翼，如果你希望更改此设置，请打开配置并搜索<gold>静音幻翼</gold>！"
           },
           "shulkerOverwrite": {
-            "@value": "潜影贝材质重塑",
+            "@value": "更改潜影贝材质",
             "desc": "重新着色潜影贝，使其更显眼。"
           }
         }
@@ -533,7 +533,7 @@
       "open_sack": "<dark_gray>打开袋子</dark_gray>"
     },
     "inventory": {
-      "sack_value": "<dark_gray>袋子价值</dark_gray>",
+      "sack_value": "<dark_gray>袋子物品价值</dark_gray>",
       "buttons": {
         "configuration": "<white>按钮配置",
         "item": "物品ID / 空岛ID",
