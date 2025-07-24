@@ -3,9 +3,10 @@ name: Detekt
 # Copied from SkyHanni, and modified to work with SkyOcean - Daveed
 
 on:
+    push:
+        branches: [ "main" ]
     pull_request_target:
-        branches:
-            - "*"
+        branches: [ "main" ]
     workflow_dispatch:
 
 permissions:
@@ -37,7 +38,7 @@ jobs:
                 uses: ./.github/actions/gradle-retry
                 continue-on-error: true
                 with:
-                    gradle-command: detektMain --stacktrace
+                    gradle-command: setupForWorkflows detektMain --stacktrace
             -   name: Check if SARIF file exists
                 if: always()
                 id: check_sarif
