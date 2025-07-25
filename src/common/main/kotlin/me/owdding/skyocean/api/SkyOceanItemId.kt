@@ -43,7 +43,7 @@ value class SkyOceanItemId private constructor(val id: String) {
 
         fun fromItem(item: ItemStack) = item.getSkyOceanItemId()
 
-        fun fromName(name: String): SkyOceanItemId? {
+        fun fromName(name: String, dropLast: Boolean = true): SkyOceanItemId? {
             var name = name.lowercase().stripColor()
             if (name.matches(petRegex)) {
                 name = name.replace(petRegex, "$1")
@@ -51,7 +51,7 @@ value class SkyOceanItemId private constructor(val id: String) {
                 name = name.substringBeforeLast(" x")
             }
 
-            return SimpleItemApi.findIdByName(name.trim()) ?: SimpleItemApi.findIdByName(name.substringBeforeLast(" ").trim())
+            return SimpleItemApi.findIdByName(name.trim()) ?: if (dropLast) SimpleItemApi.findIdByName(name.substringBeforeLast(" ").trim()) else null
         }
 
         fun unknownType(input: String): SkyOceanItemId? {

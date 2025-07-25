@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.recipe.crafthelper.display
 
+import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
@@ -40,7 +41,9 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -62,13 +65,34 @@ object CraftHelperDisplay {
                 clear()
                 Text.of("Cleared current recipe!").sendWithPrefix()
             }
+            then("amount", IntegerArgumentType.integer()) {
+                callback {
+                    val amount = this.getArgument("amount", Int::class.java)
+                    if (amount <= 0) {
+                        Text.of("Amount must be greater than 0!").withColor(TextColor.RED).sendWithPrefix()
+                        return@callback
+                    }
+                    data?.amount = amount
+                    CraftHelperStorage.save()
+                    Text.of("Set current recipe amount to ") {
+                        append("$amount") { color = TextColor.GREEN }
+                        append("!").sendWithPrefix()
+                    }
+                }
+            }
             then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
                 callback {
                     val input = this.getArgument("recipe", String::class.java)
-                    data?.item = SkyOceanItemId.fromName(input) ?: SkyOceanItemId.unknownType(input)
                     data?.amount = 1
+                    data?.item = SkyOceanItemId.fromName(input, dropLast = false) ?: SkyOceanItemId.unknownType(input) ?: run {
+                        val splitName = input.substringBeforeLast(" ")
+                        val amount = input.substringAfterLast(" ").toIntValue()
+                        data?.amount = amount
+                        SkyOceanItemId.fromName(splitName) ?: SkyOceanItemId.unknownType(splitName)
+                    }
                     CraftHelperStorage.save()
                     Text.of("Set current recipe to ") {
+                        append("${data?.amount ?: 1}x ") { color = TextColor.GREEN }
                         append(data?.item?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
                         append("!")
                     }.sendWithPrefix()
