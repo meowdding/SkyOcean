@@ -41,7 +41,6 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -86,7 +85,7 @@ object CraftHelperDisplay {
                     data?.amount = 1
                     data?.item = SkyOceanItemId.fromName(input, dropLast = false) ?: SkyOceanItemId.unknownType(input) ?: run {
                         val splitName = input.substringBeforeLast(" ")
-                        val amount = input.substringAfterLast(" ").toIntValue()
+                        val amount = input.substringAfterLast(" ").toIntOrNull() ?: 1
                         data?.amount = amount
                         SkyOceanItemId.fromName(splitName) ?: SkyOceanItemId.unknownType(splitName)
                     }
