@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.ItemLore
+import tech.thatgravyboat.repolib.api.AttributesAPI
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.utils.extentions.ItemUtils
@@ -23,6 +24,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 object AttributeApi {
 
     private val cache: MutableMap<String, ItemStack?> = mutableMapOf()
+
+    fun getAttributeDataById(id: String): AttributesAPI.Attribute? = RepoAPI.attributes().getAttribute(id)
 
     fun getAttributeByIdOrNull(id: String) = cache.getOrPut(id) {
         val attribute = RepoAPI.attributes().getAttribute(id)

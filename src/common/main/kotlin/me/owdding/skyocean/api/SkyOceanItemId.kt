@@ -93,6 +93,9 @@ value class SkyOceanItemId private constructor(val id: String) {
             isEnchantment -> {
                 "ENCHANTED_BOOK_${cleanId.substringBeforeLast(DELIMITER)}_${cleanId.substringAfterLast(DELIMITER)}"
             }
+            isAttribute -> {
+                "${AttributeApi.getAttributeDataById(cleanId)?.shardName()}_SHARD"
+            }
 
             else -> cleanId
         }.uppercase()
