@@ -12,7 +12,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 @Module
 object WhiteNonMessage {
 
-    private val regex = ComponentRegex("(?<prefix>.* )?(?<username>.{1,16})(?<text>: .+)")
+    //                                                SBLVL            Emblem          Not Ranks
+    private val regex = ComponentRegex("(?<prefix>(?:\\[\\d+]\\s)?(?:[^\\w\\s]\\s*)?)(?!\\[[^]]+]\\s)(?<username>\\w{3,16})(?<text>: .+)")
 
     @Subscription
     private fun ChatReceivedEvent.Post.onChat() {
