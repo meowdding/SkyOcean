@@ -91,9 +91,9 @@ data class CraftHelperContext(
     val node: StandardRecipeNode,
     val ingredient: Ingredient,
     val state: CraftHelperState = CraftHelperState(
-        ingredient,
-        tracker,
-        path,
+        ingredient = ingredient,
+        itemTracker = tracker,
+        path = path,
         usedItems = mutableListOf(),
         childStates = mutableListOf(),
         recipeType = node.recipe?.recipeType ?: RecipeType.UNKNOWN,
