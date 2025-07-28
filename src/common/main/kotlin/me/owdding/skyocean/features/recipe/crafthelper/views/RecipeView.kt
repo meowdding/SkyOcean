@@ -60,6 +60,7 @@ data class CraftHelperState(
     val itemTracker: ItemTracker,
     var path: String,
     val recipeType: RecipeType,
+    val recipeOutputAmount: Int,
     var usedItems: MutableList<TrackedItem> = mutableListOf(),
     var childrenDone: Boolean = true,
     var canSupercraft: Boolean = false,
@@ -96,6 +97,7 @@ data class CraftHelperContext(
         usedItems = mutableListOf(),
         childStates = mutableListOf(),
         recipeType = node.recipe?.recipeType ?: RecipeType.UNKNOWN,
+        recipeOutputAmount = node.recipe?.output?.amount ?: 1,
     ),
     val parent: CraftHelperContext? = null,
 ) {

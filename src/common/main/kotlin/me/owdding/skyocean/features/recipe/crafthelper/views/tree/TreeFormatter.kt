@@ -53,7 +53,11 @@ object TreeFormatter : RecipeView {
             state.amountThroughParents
         } else 0
 
-        val needed = state.required + parentAmount
+
+        val multiplier = if (state.parent == null) {
+            state.recipeOutputAmount.coerceAtLeast(1)
+        } else 1
+        val needed = (state.required + parentAmount) * multiplier
         val available = state.amount + parentAmount
 
         val name = widget.name(state.ingredient)
