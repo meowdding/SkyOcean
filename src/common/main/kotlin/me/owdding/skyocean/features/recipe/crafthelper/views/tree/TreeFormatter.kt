@@ -17,6 +17,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeView
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.utils.ChatUtils.append
+import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.Utils.not
 import net.minecraft.client.gui.components.AbstractWidget
@@ -179,6 +180,7 @@ object TreeFormatter : RecipeView {
                     when (state.recipeType) {
                         RecipeType.CUSTOM -> SkyOcean.debug("Custom recipes dont support click actions!")
                         RecipeType.UNKNOWN -> SkyOcean.debug("Clicked unknown recipe type for $id")
+                        RecipeType.KAT -> Text.of("no preview yet, go to cat :(").sendWithPrefix()
                         else -> McClient.sendClientCommand("${state.recipeType.command} $id")
                     }
                 }
