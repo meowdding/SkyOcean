@@ -180,7 +180,7 @@ object TreeFormatter : RecipeView {
                     when (state.recipeType) {
                         RecipeType.CUSTOM -> SkyOcean.debug("Custom recipes dont support click actions!")
                         RecipeType.UNKNOWN -> SkyOcean.debug("Clicked unknown recipe type for $id")
-                        RecipeType.KAT -> Text.of("no preview yet, go to cat :(").sendWithPrefix()
+                        RecipeType.KAT -> Text.of("No preview yet, go to Kat :(").sendWithPrefix()
                         else -> McClient.sendClientCommand("${state.recipeType.command} $id")
                     }
                 }
