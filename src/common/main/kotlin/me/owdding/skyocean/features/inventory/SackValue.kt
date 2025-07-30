@@ -12,7 +12,6 @@ import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
 import me.owdding.skyocean.utils.Utils.unaryMinus
 import net.minecraft.client.gui.layouts.Layout
-import net.minecraft.world.entity.player.Inventory
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
@@ -32,8 +31,7 @@ object SackValue : InventorySideGui(".* Sack") {
     override val enabled get() = SackValueConfig.enabled
 
     override fun ContainerInitializedEvent.getLayout(): Layout? {
-        // todo: empa museum api only gui slots
-        val idsInInventory = screen.menu.slots.filter { it.container !is Inventory }.mapNotNullTo(mutableSetOf()) { it.item.getSkyBlockId() }
+        val idsInInventory = containerItems.mapNotNullTo(mutableSetOf()) { it.getSkyBlockId() }
 
         val ids = when (title) {
             "Runes Sack" -> emptyList()
@@ -57,7 +55,7 @@ object SackValue : InventorySideGui(".* Sack") {
             LayoutFactory.vertical {
                 sackEntries.forEach { (item, amount, price) ->
                     horizontal(alignment = MIDDLE) {
-                        display(Displays.item(RepoItemsAPI.getItem(item)))
+                        display(Displays.item(RepoItemsAPI.getItem(item), showTooltip = true))
                         textDisplay(" - ${amount.shorten()}") {
                             color = TextColor.DARK_GRAY
                             append(" (") {
