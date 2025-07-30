@@ -29,8 +29,8 @@ import kotlin.time.toJavaDuration
 @Module
 object ProfileInChat {
 
-    val profileTypes = listOf("♲", "Ⓑ", "☀")
-    val usernameToProfileTypeCache: Cache<String, Component> = CacheBuilder.newBuilder()
+    private val profileTypes = listOf("♲", "Ⓑ", "☀")
+    private val usernameToProfileTypeCache: Cache<String, Component> = CacheBuilder.newBuilder()
         .maximumSize(100)
         .expireAfterAccess(10.minutes.toJavaDuration())
         .expireAfterWrite(10.minutes.toJavaDuration())
