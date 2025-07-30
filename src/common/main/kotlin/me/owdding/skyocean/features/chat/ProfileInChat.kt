@@ -38,7 +38,7 @@ object ProfileInChat {
 
     @Subscription(TabListChangeEvent::class)
     @OnlyOnSkyBlock
-    fun check() {
+    fun onTablistUpdate() {
         if (!ChatConfig.enableProfileInChat) return
         McClient.players.forEach { player ->
             val name = player.profile.name
