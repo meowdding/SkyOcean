@@ -9,6 +9,10 @@ object ChatConfig: CategoryKt("chat") {
         this.translation = "skyocean.config.chat.profile_in_chat"
     }
 
+    var whiteNonMessage by boolean(false) {
+        this.translation = "skyocean.config.chat.white_non_message"
+    }
+
     var piggyRepairHelper by boolean(true) {
         this.translation = "skyocean.config.chat.piggy_repair_helper"
     }
