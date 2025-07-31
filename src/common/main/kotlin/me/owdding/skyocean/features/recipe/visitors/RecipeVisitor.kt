@@ -4,6 +4,7 @@ import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import tech.thatgravyboat.repolib.api.recipes.CraftingRecipe
 import tech.thatgravyboat.repolib.api.recipes.ForgeRecipe
+import tech.thatgravyboat.repolib.api.recipes.KatRecipe
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 
 interface RecipeVisitor {
@@ -13,6 +14,7 @@ interface RecipeVisitor {
             return when (recipe) {
                 is ForgeRecipe -> ForgeRecipeVisitor
                 is CraftingRecipe -> CraftingRecipeVisitor
+                is KatRecipe -> KatRecipeVisitor
                 else -> null
             }
         }
