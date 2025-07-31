@@ -38,7 +38,7 @@ interface StandardRecipeNode {
 
         recipe.inputs.mergeSameTypes().forEach {
             val recipe = SimpleRecipeApi.getBestRecipe(it)
-            val recipeOutput = recipe?.let { recipe -> recipe.output }?.amount ?: 1
+            val recipeOutput = recipe?.output?.amount ?: 1
             val totalRequired = it.amount * amount
             val carriedOver = context[it].coerceAtMost(totalRequired)
             val requiredAmount = totalRequired - carriedOver

@@ -169,6 +169,10 @@
         "desc": "Show the profile icon in chat messages.",
         "warning": "<yellow>SkyOcean by default adds the profile emblem into chat messages, if you wish to change this open the config and search for <gold>Profile in Chat</gold>!"
       },
+      "white_non_message": {
+        "@value": "White Non-Message",
+        "desc": "Changes the color from nons to white instead of gray."
+      },
       "piggy_repair_helper": {
         "@value": "Piggy Repair Helper",
         "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."

@@ -190,7 +190,7 @@ cloche {
                     println("Adding runtime mod ${file.name}")
                     val extracted = mods.resolve(file.name)
                     file.copyTo(extracted, overwrite = true)
-                    if (file.fileName.endsWith(".disabled.jar")) {
+                    if (!file.fileName.endsWith(".disabled.jar")) {
                         modRuntimeOnly(files(extracted))
                     }
                     ZipFile(extracted.toFile()).use {

@@ -29,6 +29,7 @@ object SimpleRecipeApi {
     internal val supportedTypes = arrayOf(
         RepoApiRecipe.Type.FORGE to RecipeType.FORGE,
         RepoApiRecipe.Type.CRAFTING to RecipeType.CRAFTING,
+        RepoApiRecipe.Type.KAT to RecipeType.KAT,
     )
 
     internal val recipes = mutableListOf<Recipe>()
