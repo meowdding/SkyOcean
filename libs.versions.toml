@@ -7,8 +7,8 @@ fabric-api = "0.128.1"
 kotlin = "2.1.20"
 kotlin-symbol-processor = "2.1.20-1.0.32"
 
-skyblockapi = "2.1.2"
-skyblockapi-repo = "2.0.2"
+skyblockapi = "2.2.2"
+skyblockapi-repo = "2.1.0"
 placeholders = "2.6.1+1.21.5"
 keval = "1.1.1"
 
@@ -35,8 +35,8 @@ keval = { module = "com.notkamui.libs:keval", version.ref = "keval" }
 
 resourceful-lib1215 = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.5", version = "3.5.0" }
 resourceful-lib1218 = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.6", version = "3.6.0" }
-resourceful-config1215 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.5", version = "3.5.14" }
-resourceful-config1218 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.7", version = "3.7.0" }
+resourceful-config1215 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.5", version = "3.5.15" }
+resourceful-config1218 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.7", version = "3.7.1" }
 resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-fabric-1.21.5", version.ref = "rconfigkt" }
 olympus-lib1215 = { module = "earth.terrarium.olympus:olympus-fabric-1.21.5", version = "1.3.6" }
 olympus-lib1218 = { module = "earth.terrarium.olympus:olympus-fabric-1.21.7", version = "1.5.2" }
