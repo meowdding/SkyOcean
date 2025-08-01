@@ -222,6 +222,14 @@
         "@value": "Show Hidden Pet Candy",
         "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
       },
+      "islandCloudHider": {
+        "@value": "Island Cloud Hider",
+        "desc": [
+          "Specify what island shouldn't render Clouds.",
+          "Useful for islands like the Dwarven Mines where clouds can be annoying."
+        ],
+        "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
+      },
       "hideEntityFire": {
         "@value": "Hide entity fire",
         "desc": "Removes the fire effect from all entities."
