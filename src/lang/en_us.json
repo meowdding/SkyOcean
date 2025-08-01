@@ -247,6 +247,10 @@
         "parentAmount": {
           "@value": "Add parent amount",
           "desc": "Includes the amount that is already present through parents."
+        },
+        "disableRootItems": {
+          "@value": "Disable tracking for target",
+          "desc": "Prevents the crafthelper from showing any progress for the root node, making it simpler for certain items."
         }
       },
       "transparentArmor": {
