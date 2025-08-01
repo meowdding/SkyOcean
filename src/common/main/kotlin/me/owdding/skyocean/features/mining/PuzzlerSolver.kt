@@ -71,7 +71,7 @@ object PuzzlerSolver {
         }
     }
 
-    @Subscription
+    @Subscription(receiveCancelled = true)
     @OnlyIn(SkyBlockIsland.DWARVEN_MINES)
     fun onChat(event: ChatReceivedEvent.Pre) {
         if (!event.text.startsWith("[NPC] Puzzler: ")) return
