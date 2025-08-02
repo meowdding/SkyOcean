@@ -16,11 +16,10 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 import org.lwjgl.opengl.GL11
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.platform.drawString
-import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.awt.Color
@@ -209,7 +208,6 @@ object RenderUtils {
             GL11.glEnable(GL11.GL_LINE_SMOOTH)
             GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST)
 
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
             RenderSystem.lineWidth(width)
 
             // Start drawing the line from a point slightly in front of the camera

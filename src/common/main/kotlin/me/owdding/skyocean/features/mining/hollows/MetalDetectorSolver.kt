@@ -1,20 +1,16 @@
 package me.owdding.skyocean.features.mining.hollows
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
 import me.owdding.skyocean.features.item.lore.LoreModifier
-import me.owdding.skyocean.features.mining.hollows.MetalDetectorSolver.moveDownMessage
-import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.StaticMessageWithCooldown
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.Waypoint
-import me.owdding.skyocean.utils.rendering.RenderUtils
+import me.owdding.skyocean.utils.extensions.toBlockPos
+import me.owdding.skyocean.utils.extensions.toVec3LowerUpperY
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderBox
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderLineFromCursor
-import me.owdding.skyocean.utils.toBlockPos
-import me.owdding.skyocean.utils.toVec3LowerUpperY
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
 import net.minecraft.network.chat.Component
@@ -25,14 +21,12 @@ import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
-import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.chat.ActionBarReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.NameChangedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.RightClickEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.ItemTooltipEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockAreas
@@ -45,7 +39,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import java.awt.Color
 import kotlin.time.Duration.Companion.seconds
 
 @Suppress("unused")
@@ -264,14 +257,14 @@ object MetalDetectorSolver {
             event.atCamera {
                 event.renderBox(chest.pos.toBlockPos().below(), 0xFF808080u)
             }
-            chest.render(event.poseStack, event.camera, event.buffer)
+            //chest.render(event.poseStack, event.camera, event.buffer)
             event.renderLineFromCursor(chest.pos.add(0.5, -1.5, 0.5), 0xFF808080u, 0.3F)
         }
         foundChest.takeIf { it != null }?.let { chest ->
             event.atCamera {
                 event.renderBox(chest.pos.toBlockPos().below(), 0xFFFFFF00u)
             }
-            chest.render(event.poseStack, event.camera, event.buffer)
+            //chest.render(event.poseStack, event.camera, event.buffer)
             event.renderLineFromCursor(chest.pos.add(0.5, -1.5, 0.5), 0xFFFFFF00u, 1.0F)
         }
     }

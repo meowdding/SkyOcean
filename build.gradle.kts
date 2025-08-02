@@ -94,6 +94,7 @@ cloche {
         project.layout.projectDirectory.dir("src/mixins").toPath().listDirectoryEntries().filter { it.isRegularFile() }.forEach {
             mixins.from("src/mixins/${it.name}")
         }
+        accessWideners.from(project.layout.projectDirectory.file("skyocean.accesswidener"))
 
         data {
             dependencies { addDependencies(this) }
