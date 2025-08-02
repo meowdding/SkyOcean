@@ -1,0 +1,14 @@
+{
+  "output": {
+    "id": "item:speedy_line",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:busted_belt_buckle",
+      "amount": 8,
+      "type": "ITEM"
+    }
+  ]
+}

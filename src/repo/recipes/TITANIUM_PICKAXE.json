@@ -1,0 +1,24 @@
+{
+  "output": {
+    "id": "item:titanium_pickaxe",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:rusty_titanium_pickaxe",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:enchanted_titanium",
+      "amount": 4,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:bejeweled_handle",
+      "amount": 1,
+      "type": "ITEM"
+    }
+  ]
+}

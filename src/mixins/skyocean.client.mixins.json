@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_21",
+  "package": "me.owdding.skyocean.mixins",
+  "mixins": [
+    "EntityMixin"
+  ],
+  "client": [
+    "AbstractRecipeBookScreenAccessor",
+    "BlockModelShaperMixin",
+    "EntityRendererMixin",
+    "EntityRenderStateMixin",
+    "FrameLayoutAccessor",
+    "PlayerRendererMixin",
+    "PlayerRenderStateMixin",
+    "ScreenAccessor"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "output": {
+    "id": "item:lapis_generator_12",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:lapis_generator_11",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:enchanted_lapis_lazuli_block",
+      "amount": 64,
+      "type": "ITEM"
+    },
+    {
+      "amount": 1960000,
+      "currency": "COIN",
+      "type": "CURRENCY"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "output": {
+    "id": "pet:jade_dragon:legendary",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "amount": 500000000,
+      "currency": "COIN",
+      "type": "CURRENCY"
+    },
+    {
+      "id": "item:shiniest",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:figstone",
+      "amount": 100,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:mangcore",
+      "amount": 100,
+      "type": "ITEM"
+    }
+  ]
+}

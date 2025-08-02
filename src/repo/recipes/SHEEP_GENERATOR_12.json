@@ -1,0 +1,24 @@
+{
+  "output": {
+    "id": "item:sheep_generator_12",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:sheep_generator_11",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:enchanted_cooked_mutton",
+      "amount": 16,
+      "type": "ITEM"
+    },
+    {
+      "amount": 75,
+      "currency": "PELT",
+      "type": "CURRENCY"
+    }
+  ]
+}

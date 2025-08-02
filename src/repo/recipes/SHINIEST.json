@@ -1,0 +1,14 @@
+{
+  "output": {
+    "id": "item:shiniest",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:starlyn_prize",
+      "amount": 20,
+      "type": "ITEM"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "output": {
+    "id": "item:junk_sinker",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "amount": 9800,
+      "currency": "COIN",
+      "type": "CURRENCY"
+    }
+  ]
+}

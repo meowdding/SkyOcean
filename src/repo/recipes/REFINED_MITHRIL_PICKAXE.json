@@ -1,0 +1,19 @@
+{
+  "output": {
+    "id": "item:refined_mithril_pickaxe",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:mithril_pickaxe",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:refined_mithril",
+      "amount": 2,
+      "type": "ITEM"
+    }
+  ]
+}

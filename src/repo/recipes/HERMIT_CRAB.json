@@ -1,0 +1,14 @@
+{
+  "output": {
+    "id": "pet:hermit_crab:common",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:rusty_coin",
+      "amount": 32,
+      "type": "ITEM"
+    }
+  ]
+}

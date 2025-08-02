@@ -1,0 +1,29 @@
+{
+  "output": {
+    "id": "item:mushroom_generator_12",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:mushroom_generator_11",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:enchanted_brown_mushroom",
+      "amount": 512,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:enchanted_red_mushroom",
+      "amount": 512,
+      "type": "ITEM"
+    },
+    {
+      "amount": 75,
+      "currency": "PELT",
+      "type": "CURRENCY"
+    }
+  ]
+}

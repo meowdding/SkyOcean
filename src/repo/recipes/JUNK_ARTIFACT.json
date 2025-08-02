@@ -1,0 +1,19 @@
+{
+  "output": {
+    "id": "item:junk_artifact",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:junk_ring",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:old_leather_boot",
+      "amount": 1,
+      "type": "ITEM"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "output": {
+    "id": "item:gold_bottle_cap",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:rusty_coin",
+      "amount": 512,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:busted_belt_buckle",
+      "amount": 64,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:old_leather_boot",
+      "amount": 8,
+      "type": "ITEM"
+    }
+  ]
+}

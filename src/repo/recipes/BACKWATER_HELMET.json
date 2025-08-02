@@ -1,0 +1,19 @@
+{
+  "output": {
+    "id": "item:backwater_helmet",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:angler_helmet",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:rusty_coin",
+      "amount": 4,
+      "type": "ITEM"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "output": {
+    "id": "item:refined_titanium_pickaxe",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:titanium_pickaxe",
+      "amount": 1,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:refined_titanium",
+      "amount": 1,
+      "type": "ITEM"
+    }
+  ]
+}
