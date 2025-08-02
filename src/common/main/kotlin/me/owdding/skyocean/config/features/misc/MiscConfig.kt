@@ -74,6 +74,10 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.crafthelper.parentAmount"
     }
 
+    var craftHelperNoRootItems by boolean(false) {
+        translation = "skyocean.config.misc.crafthelper.disableRootItems"
+    }
+
     init {
         separator("skyocean.config.misc.transparentArmor")
     }
