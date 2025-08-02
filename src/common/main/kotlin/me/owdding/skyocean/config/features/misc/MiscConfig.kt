@@ -1,9 +1,12 @@
 package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.utils.MinecraftColor
+import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.transparency
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 
 object MiscConfig : CategoryKt("misc") {
     override val name get() = Translated("skyocean.config.misc")
@@ -36,6 +39,17 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.hideEntityFire"
     }
 
+    var islandCloudHider by defaultEnabledMessage(
+        select(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS) {
+            translation = "skyocean.config.misc.islandCloudHider"
+        },
+        { +"skyocean.config.misc.islandCloudHider.warning" },
+        "islandCloudHider",
+        predicate = { SkyBlockIsland.inAnyIsland(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS) },
+    )
+
+    val shouldHideClouds get() = SkyBlockIsland.inAnyIsland(islandCloudHider.toList())
+
     init {
         separator("skyocean.config.misc.itemSearch")
     }
@@ -58,6 +72,10 @@ object MiscConfig : CategoryKt("misc") {
 
     var craftHelperParentAmount by boolean(true) {
         translation = "skyocean.config.misc.crafthelper.parentAmount"
+    }
+
+    var craftHelperNoRootItems by boolean(false) {
+        translation = "skyocean.config.misc.crafthelper.disableRootItems"
     }
 
     init {

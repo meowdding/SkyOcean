@@ -1,5 +1,6 @@
 package me.owdding.skyocean.utils
 
+import com.google.common.cache.Cache
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.mojang.brigadier.context.CommandContext
@@ -142,6 +143,16 @@ object Utils {
 
     private val validChars = listOf(' ', '_', '-', ':')
     fun String.sanitizeForCommandInput() = this.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()
+
+    fun Component.visitSiblings(visitor: (Component) -> Unit) {
+        this.siblings.forEach {
+            visitor(it)
+            it.visitSiblings(visitor)
+        }
+    }
+
+    operator fun <Key : Any, Value : Any> Cache<Key, Value>.get(key: Key) = this.getIfPresent(key)
+    operator fun <Key : Any, Value : Any> Cache<Key, Value>.set(key: Key, value: Value) = this.put(key, value)
 }
 
 @AutoCollect("LateInitModules")

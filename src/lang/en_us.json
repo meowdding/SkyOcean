@@ -166,7 +166,12 @@
       "@value": "Chat",
       "profile_in_chat": {
         "@value": "Profile in Chat",
-        "desc": "Show the profile icon in chat messages."
+        "desc": "Show the profile icon in chat messages.",
+        "warning": "<yellow>SkyOcean by default adds the profile emblem into chat messages, if you wish to change this open the config and search for <gold>Profile in Chat</gold>!"
+      },
+      "white_non_message": {
+        "@value": "White Non-Message",
+        "desc": "Changes the color from nons to white instead of gray."
       },
       "piggy_repair_helper": {
         "@value": "Piggy Repair Helper",
@@ -218,6 +223,14 @@
         "@value": "Show Hidden Pet Candy",
         "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
       },
+      "islandCloudHider": {
+        "@value": "Island Cloud Hider",
+        "desc": [
+          "Specify what island shouldn't render Clouds.",
+          "Useful for islands like the Dwarven Mines where clouds can be annoying."
+        ],
+        "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
+      },
       "hideEntityFire": {
         "@value": "Hide entity fire",
         "desc": "Removes the fire effect from all entities."
@@ -243,6 +256,10 @@
         "parentAmount": {
           "@value": "Add parent amount",
           "desc": "Includes the amount that is already present through parents."
+        },
+        "disableRootItems": {
+          "@value": "Disable tracking for target",
+          "desc": "Prevents the crafthelper from showing any progress for the root node, making it simpler for certain items."
         }
       },
       "transparentArmor": {

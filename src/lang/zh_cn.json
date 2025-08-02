@@ -1,0 +1,556 @@
+{
+    "@meowdding:metadata": {
+      "allowMultiline": true,
+      "allowReferences": true,
+      "allowTags": true,
+      "objectAsKeys": true,
+      "prefix": "skyocean",
+      "@references": {
+        "transparency": "取值范围为0-100%，100%表示完全可见。"
+      }
+    },
+    "@value": "SkyOcean",
+    "config": {
+      "main": {
+        "modifications": {
+          "@value": "视觉改动",
+          "desc": [
+            "本模组可能会改变物品（或其他视觉组件）的外观，例如修改工具提示。",
+            "",
+            "如果存在此类修改，将会有<color #355AA0>\uD83C\uDF0A</color>前缀，这用于追踪此类更改的来源，因此无法禁用。"
+          ]
+        },
+        "debug": {
+          "@value": "启用调试模式",
+          "desc": [
+            "在整个模组中启用一些不同的调试功能",
+            "<red>可能导致崩溃或意外/未定义行为"
+          ]
+        }
+      },
+      "slayer": {
+        "@value": "猎手",
+        "highlights": {
+          "blaze": {
+            "@value": "烈焰猎手高亮",
+            "desc": "以当前调谐的颜色高亮烈焰猎手"
+          },
+          "own_boss": {
+            "@value": "高亮自己的猎手Boss",
+            "desc": "给你的猎手Boss添加发光高亮"
+          },
+          "minis": {
+            "@value": "高亮小怪",
+            "desc": "用<red>红色</red>发光效果高亮所有小Boss。",
+            "big_boys": {
+              "@value": "高亮高级小怪",
+              "desc": "用<dark_red>深红色</dark_red>高亮更高级的小Boss。"
+            }
+          }
+        }
+      },
+      "mining": {
+        "@value": "挖矿",
+        "modifyCommissions": {
+          "@value": "修改任务图标",
+          "desc": "当任务开始或完成时，修改任务物品以使其在视觉上有所不同。"
+        },
+        "retexture": {
+          "@value": "更改方块材质",
+          "carpets": {
+            "@value": "更改地毯材质",
+            "desc": [
+              "将矮人矿井中的大多数地毯变为<red>红色</red>，使其更显眼。"
+            ]
+          },
+          "glacite": {
+            "@value": "更改冰洞方块材质",
+            "desc": [
+              "允许资源包改变冰洞方块的外观。"
+            ]
+          },
+          "mist": {
+            "@value": "更改The Mist（刷鬼区域）方块材质",
+            "desc": [
+              "允许资源包改变The Mist中方块的外观。"
+            ]
+          },
+          "gemstone": {
+            "@value": "更改宝石材质",
+            "desc": [
+              "允许资源包改变宝石的外观。"
+            ]
+          }
+        },
+        "mineshaft": {
+          "@value": "矿井",
+          "announce": {
+            "@value": "通知他人进入矿井",
+            "desc": [
+              "当你进入矿井时发送公屏或队伍消息。",
+              "如果不在队伍中，将在公屏中发送。"
+            ]
+          },
+          "announce-type": {
+            "@value": "通知类型",
+            "desc": "进入矿井时发送的消息类型。"
+          },
+          "waypoint": {
+            "@value": "尸体路径点",
+            "desc": "在矿井中所有可能的尸体位置显示路径点。"
+          },
+          "key-announce": {
+            "@value": "钥匙通知",
+            "desc": "发送一条聊天消息，显示你背包中有多少当前矿井尸体的钥匙。"
+          }
+        },
+        "hotm": {
+          "shiftCost": {
+            "@value": "显示Shift点击的粉末花费",
+            "desc": "显示Shift点击时将消耗的粉末数量。"
+          },
+          "totalProgress": {
+            "@value": "显示总进度",
+            "desc": "显示你将一个技能升到满级的总进度。"
+          },
+          "stackSize": {
+            "@value": "显示等级为物品堆叠数量",
+            "desc": "显示技能等级为物品堆叠数量。"
+          },
+          "totalLeft": {
+            "@value": "显示剩余总量",
+            "desc": "显示将一个技能升到满级仍需粉末的总量。"
+          }
+        },
+        "ch": {
+          "area_walls": {
+            "@value": "区域墙壁",
+            "desc": "在水晶洞的区域之间添加墙壁。"
+          }
+        },
+        "puzzler": {
+          "@value": "解谜器",
+          "desc": "高亮解谜器中正确的方块。"
+        }
+      },
+      "inventory": {
+        "@value": "物品栏",
+        "sack_value": {
+          "@value": "袋子物品价值",
+          "desc": "显示你所有袋子中物品的价值。",
+          "edit": "编辑袋子的价值",
+          "price_source": {
+            "@value": "价格来源",
+            "desc": "袋子中物品价格的来源。",
+            "bazaar": "集市",
+            "npc": "NPC"
+          }
+        },
+        "inventory_buttons": {
+          "@value": "物品栏按钮",
+          "desc": "配置和更改物品栏按钮的设置。",
+          "enabled": {
+            "@value": "物品栏按钮",
+            "desc": "是否显示物品栏按钮。"
+          },
+          "edit": {
+            "@value": "编辑按钮",
+            "desc": [
+              "进入另一个的UI中以配置按钮。",
+              "<italic>也可以通过<gray>/skyocean buttons</gray>访问配置页面</italic>"
+            ]
+          }
+        }
+      },
+      "chat": {
+        "@value": "聊天",
+        "profile_in_chat": {
+          "@value": "聊天中显示个人资料",
+          "desc": "在聊天消息中显示个人资料图标。"
+        },
+        "piggy_repair_helper": {
+          "@value": "存钱罐修复助手",
+          "desc": "当存钱罐损坏时，发送一条消息允许你从袋子中拿出8个附魔猪肉。"
+        },
+        "sack_notification": {
+          "@value": "袋子通知",
+          "desc": "当特定物品进入袋子时显示通知。"
+        },
+        "sack_notification_items": {
+          "@value": "需要通知的物品",
+          "desc": "在此处编辑需要显示通知的物品。"
+        }
+      },
+      "garden": {
+        "@value": "花园",
+        "pest_bait_type": {
+          "@value": "害虫诱饵类型",
+          "desc": "添加一个UI元素，显示哪种害虫诱饵会增加特定害虫的生成几率。"
+        },
+        "desk_pest_highlight": {
+          "@value": "桌面处害虫高亮显示",
+          "desc": "在“Configure Plots”菜单中高亮显示地块上有多少害虫。"
+        }
+      },
+      "misc": {
+        "@value": "杂项",
+        "ministerInCalendar": {
+          "@value": "日历中的部长",
+          "desc": "在日历界面中市长旁边显示当前部长。"
+        },
+        "anvilHelper": {
+          "@value": "铁砧助手",
+          "desc": "高亮显示与铁砧中附魔书带有相同附魔的附魔书。"
+        },
+        "previousServer": {
+          "@value": "上一个服务器",
+          "desc": "当你加入之前进入过的服务器时发送聊天消息。"
+        },
+        "previousServerTime": {
+          "@value": "上一个服务器时间",
+          "desc": "到访过的服务器在此时间后不再被认为加入过。"
+        },
+        "hideLightning": {
+          "@value": "隐藏闪电",
+          "desc": "隐藏闪电和天空闪烁效果。"
+        },
+        "showHiddenPetCandy": {
+          "@value": "显示隐藏的宠物糖果",
+          "desc": "Hypixel会在宠物达到最高等级后隐藏宠物糖果使用数量，此功能重新显示这一数量。"
+        },
+        "hideEntityFire": {
+          "@value": "隐藏实体火焰",
+          "desc": "移除所有实体的火焰效果。"
+        },
+        "itemSearch": {
+          "@value": "物品搜索",
+          "itemHighlight": {
+            "@value": "物品高亮",
+            "desc": "搜索到的物品将以何种颜色高亮显示。"
+          }
+        },
+        "crafthelper": {
+          "@value": "合成助手",
+          "desc": "让你看到目标物品配方的步骤以及你完成它的进度。",
+          "enabled": {
+            "@value": "启用合成助手",
+            "desc": "合成助手的主开关。"
+          },
+          "hideCompleted": {
+            "@value": "隐藏已完成",
+            "desc": "是否隐藏已完成的部分。"
+          },
+          "parentAmount": {
+            "@value": "添加上一级数量",
+            "desc": "包括通过上一级已存在的数量。"
+          }
+        },
+        "transparentArmor": {
+          "@value": "透明护甲",
+          "desc": [
+            "更改你自己或他人护甲外观。",
+            {
+              "@id": "transparency"
+            },
+            "<italic>不适用于NPC。</italic>"
+          ],
+          "self": {
+            "@value": "自己",
+            "desc": "仅适用于你自己的护甲。"
+          },
+          "others": {
+            "@value": "他人",
+            "desc": "仅适用于其他玩家。"
+          }
+        }
+      },
+      "fishing": {
+        "@value": "钓鱼",
+        "trophy_numbers": {
+          "@value": "奖杯鱼数量",
+          "desc": "钓到奖杯鱼时显示你钓到的数量。"
+        },
+        "hook_text_scale": {
+          "@value": "鱼钩文本大小",
+          "desc": "改变鱼钩/浮标上方文本的大小。"
+        },
+        "lava_replacement": {
+          "@value": "岩浆材质替换",
+          "desc": "在深红岛时将岩浆材质替换为水的材质。"
+        },
+        "bobber_fix": {
+          "@value": "浮标修复",
+          "desc": "修复钓鱼时浮标回弹问题。"
+        },
+        "hide_other_bobbers": {
+          "@value": "隐藏其他浮标",
+          "desc": "隐藏其他玩家的浮标，这样更容易看到自己的浮标。"
+        },
+        "hotspot": {
+          "@value": "钓鱼热点高亮",
+          "desc": "热点高亮的所有设置。",
+          "circle_surface": {
+            "@value": "用实心圆显示热点",
+            "desc": "渲染一个实心圆而不是粒子轮廓。"
+          },
+          "surface_transparency": {
+            "@value": "实心圆的透明度",
+            "desc": [
+              "改变实心圆的透明度。",
+              {
+                "@id": "transparency"
+              }
+            ]
+          },
+          "circle_outline": {
+            "@value": "用空心圆显示热点",
+            "desc": "渲染一个空心圆而不是粒子轮廓。"
+          },
+          "outline_transparency": {
+            "@value": "空心圆的透明度",
+            "desc": [
+              "改变空心圆的透明度。",
+              {
+                "@id": "transparency"
+              }
+            ]
+          }
+        }
+      },
+      "lore_modifiers": {
+        "@value": "物品描述修改器",
+        "modifications": {
+          "@value": "物品描述修改",
+          "desc": [
+            "物品描述被修改过的物品会有<color #355AA0>\uD83C\uDF0A</color>的前缀",
+            "要查看一个物品受到的所有修改，对其按<gray>Shift</gray>。",
+            "",
+            "某些设置带有示例，在其上方<italic><gray>悬停</gray></italic>可以查看。(翻译提醒：示例内容保留原文以避免歧义)"
+          ]
+        },
+        "drill_modifications": {
+          "@value": "简要的钻头插件显示",
+          "desc": [
+            "隐藏已安装的钻头插件效果，只显示插件名称。",
+            "",
+            "例如: <green><hover show_text '<color #355AA0>\uD83C\uDF0A</color><aqua> Heated Divans Drill</aqua>",
+            "<dark_gray>Breaking Power 10</dark_gray>",
+            "",
+            "<gray>Damage: <red>+75</red></gray>",
+            "<gray>Mining Speed: <green>+7,320</green> <gold>[+500]</gold> <blue>[+50] (+70)</blue> <light_purple>(+240)</light_purple></gray>",
+            "<gray>Pristine: <green>+4.7</green> <light_purple>(+2.2)</light_purple></gray>",
+            "<gray>Mining Fortune: <green>+340</green> <blue>[+5] (+25)</blue> <light_purple>(+120)</light_purple></gray>",
+            "<gray>Gemstone Fortune: <green>+50</green></gray>",
+            "<gray>Mining Wisdom: <green>+10</green></gray>",
+            "<gold>[⸕] [⸕] [<green>☘</green>] [<green>☘</green>] [<yellow>✦</yellow>]</gold>",
+            "",
+            "<light_purple><bold>Flowstate III</bold></light_purple>",
+            "<blue>Compact X</blue>",
+            "<blue>Efficiency X</blue>",
+            "<blue>Experience IV</blue>",
+            "<blue>Fortune IV</blue>",
+            "<blue>Lapidary V</blue>",
+            "<blue>Paleontologist V</blue>",
+            "<blue>Prismatic V</blue>",
+            "",
+            "<gray>Fuel Tank: <blue>Perfectly-Cut Fuel Tank</blue></gray>",
+            "<gray>Drill Engine: <blue>Amber-Polished Drill Engine</blue></gray>",
+            "<gray>Upgrade Module: <blue>Blue Cheese Goblin Omelette</blue></gray>",
+            "",
+            "<gray>Fuel: </gray><dark_green>69,801</dark_green><dark_gray>/100k</dark_gray>",
+            "",
+            "<blue>Heated Bonus</blue>",
+            "<gray>Grants <gold>+1☘ Mining Fortune</gold> and <gold>+4⸕</gold></gray>",
+            "<gray><gold>Mining Speed</gold> per <red>1♨ Heat</red> you have.</gray>",
+            "",
+            "<dark_gray><bold>*</bold> Co-op Soulbound <bold>*</bold></dark_gray>",
+            "<aqua><bold><obfuscated>a</obfuscated> DIVINE DRILL <obfuscated>a</obfuscated></bold></aqua>'>On</hover></green>/<hover show_text '<aqua>Heated Divans Drill</aqua>",
+            "<dark_gray>Breaking Power 10</dark_gray>",
+            "",
+            "<gray>Damage: <red>+75</red></gray>",
+            "<gray>Mining Speed: <green>+7,320</green> <gold>[+500]</gold> <blue>[+50] (+70)</blue> <light_purple>(+240)</light_purple></gray>",
+            "<gray>Pristine: <green>+4.7</green> <light_purple>(+2.2)</light_purple></gray>",
+            "<gray>Mining Fortune: <green>+340</green> <blue>[+5] (+25)</blue> <light_purple>(+120)</light_purple></gray>",
+            "<gray>Gemstone Fortune: <green>+50</green></gray>",
+            "<gray>Mining Wisdom: <green>+10</green></gray>",
+            "<gold>[⸕] [⸕] [<green>☘</green>] [<green>☘</green>] [<yellow>✦</yellow>]</gold>",
+            "",
+            "<light_purple><bold>Flowstate III</bold></light_purple>",
+            "<blue>Compact X</blue>",
+            "<blue>Efficiency X</blue>",
+            "<blue>Experience IV</blue>",
+            "<blue>Fortune IV</blue>",
+            "<blue>Lapidary V</blue>",
+            "<blue>Paleontologist V</blue>",
+            "<blue>Prismatic V</blue>",
+            "",
+            "<green>Perfectly-Cut Fuel Tank</green>",
+            "<dark_green>100,000 Max Fuel Capacity<dark_green>",
+            "<green>-10% Pickaxe Ability Cooldown</green>",
+            "",
+            "<green>Amber-Polished Drill Engine</green>",
+            "<gold>+600⸕ Mining Speed</gold>",
+            "<gold>+100☘ Mining Fortune</gold>",
+            "",
+            "<green>Blue Cheese Goblin Omelette Part</green>",
+            "<gray>Adds <green>+1 Level</green> to all of your unlocked <purple>Heart of</purple></gray>",
+            "<gray><purple>the Mountain</purple> perks.</gray>",
+            "",
+            "<gray>Fuel: </gray><dark_green>69,801</dark_green><dark_gray>/100k</dark_gray>",
+            "",
+            "<blue>Heated Bonus</blue>",
+            "<gray>Grants <gold>+1☘ Mining Fortune</gold> and <gold>+4⸕</gold></gray>",
+            "<gray><gold>Mining Speed</gold> per <red>1♨ Heat</red> you have.</gray>",
+            "",
+            "<dark_gray><bold>*</bold> Co-op Soulbound <bold>*</bold></dark_gray>",
+            "<aqua><bold><obfuscated>a</obfuscated> DIVINE DRILL <obfuscated>a</obfuscated></bold></aqua>'><red>Off</red></hover>"
+            ]
+          },
+        "dungeon_quality": {
+          "@value": "地牢品质",
+          "desc": [
+            "在物品描述中显示地牢物品的掉落层数与品质。",
+            "",
+            "例如: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <gold>Smart Skeleton Master Leggings</gold>",
+            "<gray>Item Quality: <red>50<gray>/</gray>50</red></gray>",
+            "<gray>Tier: <light_purple>8<gray>/</gray>10</light_purple></gray>",
+            "<gray>Gear Score: <light_purple>555</light_purple> <dark_gray>(2543)</dark_gray></gray>",
+            "<gray>Crit Chance: <red>+5%</red> <dark_gray>(+5.25%)</dark_gray></gray>",
+            "<gray>Crit Damage: <red>+57%</red> <dark_gray>(+271.32%)</dark_gray></gray>",
+            "<gray>Health: <green>+155</green> <blue>(+15)</blue> <dark_gray>(+737.8)</dark_gray></gray>",
+            "<gray>Defense: <green>+139</green> <blue>(+15)</blue> <dark_gray>(+661.64)</dark_gray></gray>",
+            "<gray>Intelligence: <green>+100</green> <blue>(+100)</blue> <dark_gray>(+476)</dark_gray></gray>",
+            "",
+            "<blue>Growth V, Protection V, Thorns III</blue>",
+            "",
+            "<gray>Increase the damage you deal with",
+            "arrows by <red>5%</red>.</gray>",
+            "<gold>Full Set Bonus: Skeleton Master</gold><gray> (0/4)</gray>",
+            "<gray>Increase the damage you deal with",
+            "arrows by <red>25%</red>.",
+            "",
+            "<green>This item is Undead ༕!<green>",
+            "",
+            "<gold><bold>LEGENDARY DUNGEON LEGGINGS</bold></gold>'>On</hover></green>/<red><hover '<gold>Smart Skeleton Master Leggings</gold>",
+            "<gray>Gear Score: <light_purple>555</light_purple> <dark_gray>(2543)</dark_gray></gray>",
+            "<gray>Crit Chance: <red>+5%</red> <dark_gray>(+5.25%)</dark_gray></gray>",
+            "<gray>Crit Damage: <red>+57%</red> <dark_gray>(+271.32%)</dark_gray></gray>",
+            "<gray>Health: <green>+155</green> <blue>(+15)</blue> <dark_gray>(+737.8)</dark_gray></gray>",
+            "<gray>Defense: <green>+139</green> <blue>(+15)</blue> <dark_gray>(+661.64)</dark_gray></gray>",
+            "<gray>Intelligence: <green>+100</green> <blue>(+100)</blue> <dark_gray>(+476)</dark_gray></gray>",
+            "",
+            "<blue>Growth V, Protection V, Thorns III</blue>",
+            "",
+            "<gray>Increase the damage you deal with",
+            "arrows by <red>5%</red>.</gray>",
+            "<gold>Full Set Bonus: Skeleton Master</gold><gray> (0/4)</gray>",
+            "<gray>Increase the damage you deal with",
+            "arrows by <red>25%</red>.",
+            "",
+            "<green>This item is Undead ༕!<green>",
+            "",
+            "<gold><bold>LEGENDARY DUNGEON LEGGINGS</bold></gold>'>Off</red>"
+            ]
+        },
+        "compact_level_bars": {
+          "@value": "简化等级条",
+          "desc": [
+            "将空岛等级菜单中的进度条精简为一行，使其在小屏幕上也能显示。",
+            "",
+            "例如: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <dark_aqua>Dungeon Tasks</dark_aqua>",
+            "<dark_gray>3 Tasks</dark_gray>",
+            "",
+            "<gray>All Dungeon related XP Tasks</gray>",
+            "",
+            "<yellow>▶ Catacombs Level Up</yellow> <dark_gray>(<red>980</red>/<green>1.220</green> <aqua>XP</aqua>)</dark_gray>",
+            "<yellow>▶ Class Level Up</yellow> <dark_gray>(<red>768</red>/<green>1.000</green> <aqua>XP</aqua>)</dark_gray>",
+            "<yellow>▶ Complete Dungeons</yellow> <dark_gray>(<green>540</green>/<green>540</green> <aqua>XP</aqua>)</dark_gray>",
+            "",
+            "<gray>Progress to Complete Category:</gray> <gold>82.9%</gold>",
+            "<gold><strikethrough>                     <white>    </white></strikethrough> <yellow>2,288</yellow>/<yellow>2,760 XP</yellow></gold>",
+            "",
+            "<yellow>Click to view tasks!</yellow>'>On</hover></green>/<red><hover '<dark_aqua>Dungeon Tasks</dark_aqua>",
+            "<dark_gray>3 Tasks</dark_gray>",
+            "",
+            "<gray>All Dungeon related XP Tasks</gray>",
+            "",
+            "<yellow>▶ Catacombs Level Up</yellow>",
+            "<strikethrough><green>                     </green><white>    </white></strikethrough> <green>980<dark_gray>/</dark_gray>1,120 XP</green>",
+            "",
+            "<yellow>▶ Class Level Up</yellow>",
+            "<strikethrough><green>                    </green><white>     </white></strikethrough> <green>768<dark_gray>/</dark_gray>1,000 XP</green>",
+            "",
+            "<yellow>▶ Complete Dungeons</yellow>",
+            "<strikethrough><green>                         </green></strikethrough> <green>540<dark_gray>/</dark_gray>540 XP</green>",
+            "",
+            "<gray>Progress to Complete Category:</gray> <gold>82.9%</gold>",
+            "<gold><strikethrough>                     <white>    </white></strikethrough> <yellow>2,288</yellow>/<yellow>2,760 XP</yellow></gold>",
+            "",
+            "<yellow>Click to view tasks!</yellow>'>Off</hover></red>"
+            ]
+        },
+        "storage_preview": {
+          "@value": "存储预览",
+          "desc": "悬停可以预览背包和末影箱的内容。"
+        }
+      },
+      "foraging": {
+        "@value": "伐木技能",
+        "hotf": {
+          "shiftCost": {
+            "@value": "显示Shift点击的粉末花费",
+            "desc": "显示Shift点击时将消耗的粉末数量。"
+          },
+          "totalProgress": {
+            "@value": "显示总进度",
+            "desc": "显示你将一个技能升到满级的总进度。"
+          },
+          "stackSize": {
+            "@value": "显示等级为物品堆叠数量",
+            "desc": "显示技能等级为物品堆叠数量。"
+          },
+          "totalLeft": {
+            "@value": "显示剩余总量",
+            "desc": "显示将一个技能升到满级仍需粉末的总量。"
+          }
+        },
+        "galatea": {
+          "@value": "Galatea",
+          "muteThePhantoms": {
+            "@value": "静音幻翼",
+            "desc": "让所有幻翼静音，这样它们就不会导致耳鸣。",
+            "warning": "<yellow>SkyOcean默认静音幻翼，如果你希望更改此设置，请打开配置并搜索<gold>静音幻翼</gold>！"
+          },
+          "shulkerOverwrite": {
+            "@value": "更改潜影贝材质",
+            "desc": "重新着色潜影贝，使其更显眼。"
+          }
+        }
+      }
+    },
+    "garden": {
+      "pest_bait_type": "<dark_gray>害虫诱饵类型</dark_gray>",
+      "open_sack": "<dark_gray>打开袋子</dark_gray>"
+    },
+    "inventory": {
+      "sack_value": "<dark_gray>袋子物品价值</dark_gray>",
+      "buttons": {
+        "configuration": "<white>按钮配置",
+        "item": "物品ID / 空岛ID",
+        "command": "命令",
+        "screen_title": "屏幕标题",
+        "tooltip": "按钮工具提示",
+        "select_button": "<color #cff8ff>选择要编辑的按钮",
+        "enable_first": "请先在配置中启用物品栏按钮！",
+        "disable": "禁用",
+        "enable": "启用",
+        "reset": "重置"
+      }
+    },
+    "item_search": {
+      "keybind": "物品搜索"
+    },
+    "item_value": {
+      "keybind": "物品价值"
+    }
+  }

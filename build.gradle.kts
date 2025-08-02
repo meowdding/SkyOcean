@@ -91,7 +91,7 @@ cloche {
     }
 
     common {
-        project.layout.projectDirectory.dir("src/mixins").toPath().listDirectoryEntries().forEach {
+        project.layout.projectDirectory.dir("src/mixins").toPath().listDirectoryEntries().filter { it.isRegularFile() }.forEach {
             mixins.from("src/mixins/${it.name}")
         }
 
@@ -122,6 +122,8 @@ cloche {
             includedClient()
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
+
+            mixins.from("src/mixins/versioned/skyocean.${sourceSet.name}.mixins.json")
 
             // include(libs.hypixelapi) - included in sbapi
             include(libs.skyblockapi)
@@ -190,7 +192,7 @@ cloche {
                     println("Adding runtime mod ${file.name}")
                     val extracted = mods.resolve(file.name)
                     file.copyTo(extracted, overwrite = true)
-                    if (file.fileName.endsWith(".disabled.jar")) {
+                    if (!file.fileName.endsWith(".disabled.jar")) {
                         modRuntimeOnly(files(extracted))
                     }
                     ZipFile(extracted.toFile()).use {

@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.views
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.extensions.floor
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.*
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
@@ -146,6 +147,8 @@ data class CraftHelperContext(
     fun getMax() = node.outputWithAmount.amount
 
     private fun amount(): Pair<Int, MutableList<TrackedItem>> {
+        if (parent == null && MiscConfig.craftHelperNoRootItems) return 0 to mutableListOf()
+
         var amount = amountThroughParents()
 
         val list: MutableList<TrackedItem> = mutableListOf()
