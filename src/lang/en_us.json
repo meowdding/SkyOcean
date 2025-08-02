@@ -166,7 +166,8 @@
       "@value": "Chat",
       "profile_in_chat": {
         "@value": "Profile in Chat",
-        "desc": "Show the profile icon in chat messages."
+        "desc": "Show the profile icon in chat messages.",
+        "warning": "<yellow>SkyOcean by default adds the profile emblem into chat messages, if you wish to change this open the config and search for <gold>Profile in Chat</gold>!"
       },
       "white_non_message": {
         "@value": "White Non-Message",
