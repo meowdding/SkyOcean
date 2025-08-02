@@ -8,6 +8,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.layouts.BackgroundWidget
+import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
@@ -41,6 +42,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.mixins.accessors.AbstractContainerScreenAccessor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -106,6 +108,8 @@ object CraftHelperDisplay {
         if (!LocationAPI.isOnSkyBlock) return
         if (event.screen !is AbstractContainerScreen<*>) return
 
+        val maxWidth = (event.screen as AbstractContainerScreenAccessor).leftPos - 20
+
         val layout = LayoutFactory.empty() as FrameLayout
         lateinit var callback: (save: Boolean) -> Unit
 
@@ -136,8 +140,15 @@ object CraftHelperDisplay {
             val tree = ContextAwareRecipeTree(recipe, output, data?.amount?.coerceAtLeast(1) ?: 1)
             layout.addChild(visualize(tree, output) { callback })
             layout.arrangeElements()
-            layout.setPosition(10, (McScreen.self?.height?.div(2) ?: 0) - (layout.height / 2))
-            layout.visitWidgets { event.widgets.add(it) }
+
+            val scaledWidget = if (layout.width > maxWidth) {
+                ScalableWidget(layout.asWidget()).apply {
+                    scale(maxWidth.toDouble() / layout.width)
+                }
+            } else layout
+
+            scaledWidget.setPosition(10, (McScreen.self?.height?.div(2) ?: 0) - (layout.height / 2))
+            scaledWidget.visitWidgets { event.widgets.add(it) }
             if (save) CraftHelperStorage.save()
         }
         callback(false)
