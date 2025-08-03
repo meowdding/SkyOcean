@@ -13,11 +13,10 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 
 @Module
 object InventoryStorage {
-    private val storage: ProfileStorage<InventoryData> = ProfileStorage<InventoryData>(
-        0,
-        { mutableMapOf() },
-        "inventory",
-        { InventoryType.CODEC },
+    private val storage: ProfileStorage<InventoryData> = ProfileStorage(
+        defaultData = { mutableMapOf() },
+        fileName = "inventory",
+        codec = { InventoryType.CODEC },
     )
 
     val data get() = storage.get()
