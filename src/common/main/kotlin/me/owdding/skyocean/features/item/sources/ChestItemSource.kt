@@ -5,6 +5,7 @@ import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
 import net.minecraft.core.BlockPos
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -27,11 +28,16 @@ data class ChestItemContext(
             append("Chest at x: ${chestPos.x}, y: ${chestPos.y}, z: ${chestPos.z}")
             color = TextColor.GRAY
         }
-        add("Click to highlight chest!") { this.color = TextColor.YELLOW }
+        val clickText = if (SkyBlockIsland.PRIVATE_ISLAND.inIsland()) "Click to highlight chest!" else "Click to warp to island and highlight chest!"
+        add(clickText) { this.color = TextColor.YELLOW }
     }
 
     override fun open() = McClient.runNextTick {
         ItemHighlighter.addChest(chestPos)
         secondPos?.let(ItemHighlighter::addChest)
+
+        if (!SkyBlockIsland.PRIVATE_ISLAND.inIsland()) {
+            McClient.sendCommand("warp island")
+        }
     }
 }
