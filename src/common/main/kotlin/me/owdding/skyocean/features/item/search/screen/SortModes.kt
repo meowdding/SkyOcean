@@ -22,7 +22,6 @@ private enum class AdditionalSortModes(val comparator: Comparator<ItemStack>) {
     AMOUNT(reversed(Comparator.comparingInt { it.count })),
     RARITY(reversed(Comparator.comparingInt { (it.getData(DataTypes.RARITY)?.ordinal ?: -1) })),
     PRICE(reversed(Comparator.comparing { it.getItemValue().price })),
-    ;
 }
 
 private fun <T> reversed(comparator: Comparator<T>): Comparator<T> {

@@ -73,7 +73,7 @@ object Utils {
     ) = this.writeText(element.toPrettyString(), charset, *options)
 
     inline fun <K, V, R> Map<out K, V>.mapNotNull(nullConsumer: (Map.Entry<K, V>) -> Unit, transform: (Map.Entry<K, V>) -> R?): List<R> {
-        return this.mapNotNull { it ->
+        return this.mapNotNull {
             val value = transform(it)
 
             if (value == null) {
@@ -139,7 +139,7 @@ object Utils {
     fun CompoundTag.toData(): CustomData = CustomData.of(this)
 
     operator fun <T> ItemBuilder.set(type: DataComponentType<T>, value: T) = this.set(type, value)
-    fun ItemBuilder(item: ItemLike, init: ItemBuilder.() -> Unit) = ItemBuilder().also { it.item = item.asItem() }.apply(init).build()
+    fun itemBuilder(item: ItemLike, init: ItemBuilder.() -> Unit) = ItemBuilder().also { it.item = item.asItem() }.apply(init).build()
 
     private val validChars = listOf(' ', '_', '-', ':')
     fun String.sanitizeForCommandInput() = this.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()

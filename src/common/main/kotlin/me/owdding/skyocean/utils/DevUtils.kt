@@ -49,7 +49,7 @@ internal object DevUtils {
     }
 
     fun toggle(location: ResourceLocation) {
-        states[location] = states[location]?.not() ?: false
+        states[location] = states[location]?.not() == true
     }
 
     fun isOn(location: ResourceLocation) = states.getOrDefault(location, false)

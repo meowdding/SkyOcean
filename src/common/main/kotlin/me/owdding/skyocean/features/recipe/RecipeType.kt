@@ -7,5 +7,4 @@ enum class RecipeType(val command: String) {
     KAT(""),
     CUSTOM(""),
     UNKNOWN(""),
-    ;
 }

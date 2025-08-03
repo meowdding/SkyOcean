@@ -35,7 +35,8 @@ object HotfHelper {
     @Subscription
     @OnlyOnSkyBlock
     fun onInventoryUpdate(event: InventoryChangeEvent) {
-        if (!ForagingConfig.hotfDisplayTotalLeft && ForagingConfig.hotfDisplayShiftCost && !ForagingConfig.hotfTotalProgress && !ForagingConfig.hotfStackSize) return
+        val config = ForagingConfig
+        if (!config.hotfDisplayTotalLeft && config.hotfDisplayShiftCost && !config.hotfTotalProgress && !config.hotfStackSize) return
         if (event.title != "Heart of the Forest") return
         if (event.isInPlayerInventory) return
         if (event.item !in ItemModelTagKey.HOTM_PERK_ITEMS) return
@@ -43,20 +44,20 @@ object HotfHelper {
         val tooltipLines = event.item.getLore()
         val isLocked = event.item.getItemModel() == Items.PALE_OAK_BUTTON
         val level = tooltipLines.firstOrNull()?.stripped?.substringBefore("/")?.filter { c -> c.isDigit() }?.toInt() ?: 1
-        if (isLocked && !ForagingConfig.hotfTotalProgress) {
+        if (isLocked && !config.hotfTotalProgress) {
             return
         }
 
         event.item.replaceVisually {
             copyFrom(event.item)
             namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
-            if (ForagingConfig.hotfStackSize) {
+            if (config.hotfStackSize) {
                 count = level
             }
             tooltip {
                 val listMerger = ListMerger(tooltipLines)
 
-                if (ForagingConfig.hotfTotalProgress) {
+                if (config.hotfTotalProgress) {
                     listMerger.addAfterNext({ it.stripped.startsWith("Level") }) {
                         add(
                             Text.of {
@@ -77,7 +78,7 @@ object HotfHelper {
                     }
                 }
 
-                if (level != 0 && (ForagingConfig.hotfDisplayTotalLeft || ForagingConfig.hotfDisplayShiftCost) && !isLocked) {
+                if (level != 0 && (config.hotfDisplayTotalLeft || config.hotfDisplayShiftCost) && !isLocked) {
                     listMerger.addBeforeNext({ it.stripped in listOf("ENABLED", "DISABLED") }) {
                         fun MutableList<Component>.add(levels: Int) {
                             add("Cost (") {
@@ -95,14 +96,14 @@ object HotfHelper {
                         if (level + 1 >= perkByName.maxLevel) return@addBeforeNext
 
                         val levelsOnShiftClick = perkByName.maxLevel.minus(level).coerceAtMost(10)
-                        if (ForagingConfig.hotfDisplayShiftCost) {
+                        if (config.hotfDisplayShiftCost) {
                             add(levelsOnShiftClick)
                         }
 
-                        if (ForagingConfig.hotfDisplayShiftCost && levelsOnShiftClick < 10) return@addBeforeNext
+                        if (config.hotfDisplayShiftCost && levelsOnShiftClick < 10) return@addBeforeNext
                         val levelsUntilMax = perkByName.maxLevel.minus(level)
-                        if (ForagingConfig.hotfDisplayShiftCost && levelsUntilMax == 10) return@addBeforeNext
-                        if (ForagingConfig.hotfDisplayTotalLeft) {
+                        if (config.hotfDisplayShiftCost && levelsUntilMax == 10) return@addBeforeNext
+                        if (config.hotfDisplayTotalLeft) {
                             add(levelsUntilMax)
                         }
                     }

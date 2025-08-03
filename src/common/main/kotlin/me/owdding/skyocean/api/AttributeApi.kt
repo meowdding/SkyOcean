@@ -1,7 +1,7 @@
 package me.owdding.skyocean.api
 
-import me.owdding.skyocean.utils.Utils.ItemBuilder
 import me.owdding.skyocean.utils.Utils.compoundTag
+import me.owdding.skyocean.utils.Utils.itemBuilder
 import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.Utils.putCompound
 import me.owdding.skyocean.utils.Utils.set
@@ -35,7 +35,7 @@ object AttributeApi {
             .takeUnless { it == Items.AIR }
             ?: Items.BARRIER
 
-        ItemBuilder(item) {
+        itemBuilder(item) {
             if (attribute.texture() != null) {
                 copyFrom(ItemUtils.createSkull(attribute.texture()!!))
             }
@@ -48,8 +48,7 @@ object AttributeApi {
             }
 
             val rawLore = attribute.lore()
-            val lore = rawLore.map { !it }.toMutableList()
-                .also { it.addFirst(Text.of(attribute.name()) { this.color = TextColor.GOLD }) }.toList()
+            val lore = rawLore.map { !it }.toMutableList().apply { addFirst(Text.of(attribute.name()) { this.color = TextColor.GOLD }) }.toList()
 
             this[DataComponents.LORE] = ItemLore(lore, lore)
             this[DataComponents.CUSTOM_DATA] = compoundTag {

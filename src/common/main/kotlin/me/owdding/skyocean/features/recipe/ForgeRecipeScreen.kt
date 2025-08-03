@@ -14,7 +14,7 @@ import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import me.owdding.skyocean.helpers.ClientSideInventory
 import me.owdding.skyocean.utils.ChatUtils
-import me.owdding.skyocean.utils.Utils.ItemBuilder
+import me.owdding.skyocean.utils.Utils.itemBuilder
 import me.owdding.skyocean.utils.suggestions.SkyOceanSuggestionProvider
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.world.item.Items
@@ -39,7 +39,7 @@ import kotlin.time.Duration.Companion.seconds
 class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
     val skyoceanid = SkyOceanItemId.fromName(input) ?: SkyOceanItemId.unknownType(input)
     val recipe = skyoceanid?.cleanId?.uppercase()?.let(RepoRecipeAPI::getForgeRecipe)
-    val forgeItemStack = skyoceanid?.toItem() ?: ItemBuilder(Items.BARRIER) {
+    val forgeItemStack = skyoceanid?.toItem() ?: itemBuilder(Items.BARRIER) {
         name("null")
     }
 
