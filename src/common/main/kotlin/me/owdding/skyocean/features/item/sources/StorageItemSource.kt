@@ -8,19 +8,19 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
+
+internal fun List<PlayerStorageInstance>.convert(function: (Int) -> ItemContext): List<SimpleTrackedItem> {
+    return this.flatMap { (index, stacks) ->
+        val context = function(index + 1)
+        stacks.map { stack -> SimpleTrackedItem(stack, context) }
+    }
+}
+
 object StorageItemSource : ItemSource {
     override fun getAll(): List<SimpleTrackedItem> = buildList {
         addAll(StorageAPI.backpacks.convert(::BackpackStorageItemContext))
         addAll(StorageAPI.enderchests.convert(::EnderChestStorageItemContext))
     }
-
-    private fun List<PlayerStorageInstance>.convert(function: (Int) -> ItemContext): List<SimpleTrackedItem> {
-        return this.flatMap { (index, stacks) ->
-            val context = function(index + 1)
-            stacks.map { stack -> SimpleTrackedItem(stack, context) }
-        }
-    }
-
     override val type = ItemSources.STORAGE
 }
 

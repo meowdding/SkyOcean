@@ -1,6 +1,7 @@
 package me.owdding.skyocean.utils
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.IncludedCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
@@ -20,4 +21,10 @@ object CodecHelpers {
     @IncludedCodec
     val RESOURCE_LOCATION: Codec<ResourceLocation> = ResourceLocation.CODEC
 
+    fun <T, B> pair(t: Codec<T>, b: Codec<B>): Codec<Pair<T, B>> = RecordCodecBuilder.create {
+        it.group(
+            t.fieldOf("first").forGetter { it.first },
+            b.fieldOf("second").forGetter { it.second },
+        ).apply(it, { a, b -> a to b })
+    }
 }
