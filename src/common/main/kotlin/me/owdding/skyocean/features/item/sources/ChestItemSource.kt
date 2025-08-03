@@ -27,11 +27,14 @@ data class ChestItemContext(
             append("Chest at x: ${chestPos.x}, y: ${chestPos.y}, z: ${chestPos.z}")
             color = TextColor.GRAY
         }
-        add("Click to highlight chest!") { this.color = TextColor.YELLOW }
+        requiresOverworld { add("Click to highlight chest!") { this.color = TextColor.YELLOW } }
+        riftWarning()
     }
 
-    override fun open() = McClient.runNextTick {
-        ItemHighlighter.addChest(chestPos)
-        secondPos?.let(ItemHighlighter::addChest)
+    override fun open() = requiresOverworld(true) {
+        McClient.runNextTick {
+            ItemHighlighter.addChest(chestPos)
+            secondPos?.let(ItemHighlighter::addChest)
+        }
     }
 }

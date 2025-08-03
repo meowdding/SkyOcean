@@ -12,10 +12,10 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object InventoryItemSource : ItemSource {
     override fun getAll() = buildList {
-        if (!SkyBlockIsland.THE_RIFT.inIsland()) {
-            addAll(McPlayer.inventory.map { SimpleTrackedItem(it, InventoryItemContext) })
-        } else {
+        if (SkyBlockIsland.THE_RIFT.inIsland()) {
             InventoryStorage.data?.get(InventoryType.NORMAL)?.map { SimpleTrackedItem(it, InventoryItemContext) }?.toMutableList()?.let { addAll(it) }
+        } else {
+            addAll(McPlayer.inventory.map { SimpleTrackedItem(it, InventoryItemContext) })
         }
         fun addEquipment(stack: ItemStack) {
             add(SimpleTrackedItem(stack, EquipmentItemContext))
@@ -35,9 +35,15 @@ interface OnPlayerItemContext : ItemContext {
 }
 
 object EquipmentItemContext : OnPlayerItemContext {
-    override fun collectLines() = build { add("You are wearing this item!") { color = TextColor.GRAY } }
+    override fun collectLines() = build {
+        requiresOverworld { add("Equipped!") { color = TextColor.GRAY } }
+        requiresRift { add("Equipped in overworld!") { color = TextColor.GRAY } }
+    }
 }
 
 object InventoryItemContext : OnPlayerItemContext {
-    override fun collectLines() = build { add("This item is in your inventory!") { color = TextColor.GRAY } }
+    override fun collectLines() = build {
+        requiresOverworld { add("In your inventory!") { color = TextColor.GRAY } }
+        requiresRift { add("In your overworld inventory!") { color = TextColor.GRAY } }
+    }
 }

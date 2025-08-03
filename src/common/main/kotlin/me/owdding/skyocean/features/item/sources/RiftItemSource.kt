@@ -4,7 +4,6 @@ import me.owdding.skyocean.data.profile.InventoryStorage
 import me.owdding.skyocean.features.inventory.InventoryType
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
@@ -20,7 +19,7 @@ object RiftItemSource : ItemSource {
     override val type: ItemSources = ItemSources.RIFT
 
     override fun getAll(): List<SimpleTrackedItem> = buildList {
-        addAll(StorageAPI.riftStorage.convert(::RiftEnderchestPage))
+        addAll(StorageAPI.riftStorage.convert(::RiftEnderchestPageContext))
         addAll(EquipmentAPI.riftEquipment.map { (_, stack) -> SimpleTrackedItem(stack, RiftEquipment) })
         if (SkyBlockIsland.THE_RIFT.inIsland()) {
             addAll(McPlayer.inventory.map { SimpleTrackedItem(it, RiftInventoryContext) })
@@ -45,37 +44,51 @@ interface RiftItemContext : ItemContext {
             }
         }
     }
+}
 
-    fun requiresRift(runnable: () -> Unit) {
-        if (!SkyBlockIsland.THE_RIFT.inIsland()) {
-            Text.of("Requires to be in the rift!").sendWithPrefix()
-            return
-        }
-        runnable()
+interface AbstractRiftStorageContext : RiftItemContext
+
+object RiftBundleContext : RiftItemContext {
+    override val clickText: MutableComponent = Text.of("")
+    override fun lines(): List<Component> = emptyList()
+}
+
+object RiftStorageContext : AbstractRiftStorageContext {
+    override val clickText: MutableComponent = Text.of("Click to open!") { color = TextColor.GRAY }
+
+    override fun lines(): List<Component> = build {
+        add("Rift Enderchest") { color = TextColor.GRAY }
     }
+
+    override fun open() = requiresRift(true) { McClient.sendCommand("/ec") }
 }
 
 object RiftInventoryContext : RiftItemContext {
     override fun lines(): List<Component> = build {
-        add("Rift Inventory")
+        add("Rift Inventory") { color = TextColor.GRAY }
     }
 }
 
 object RiftEquipment : RiftItemContext {
+    override val clickText: MutableComponent = Text.of("Click to equipment menu!") { color = TextColor.GRAY }
+
     override fun lines(): List<Component> = build {
-        add("Equipped!")
+        requiresRift { add("Equipped!") { color = TextColor.GRAY } }
+        requiresOverworld { add("Equipped in rift!") { color = TextColor.GRAY } }
     }
 
-    override fun open() = requiresRift { McClient.sendCommand("/eq") }
+    override fun open() = requiresRift(true) { McClient.sendCommand("/eq") }
 }
 
-data class RiftEnderchestPage(
+data class RiftEnderchestPageContext(
     val index: Int,
-) : RiftItemContext {
+) : AbstractRiftStorageContext {
     override val clickText = Text.of("Click to open enderchest!") { color = TextColor.GRAY }
 
     override fun lines() = build {
-        add("Enderchest Page $index") { color = TextColor.GRAY }
+        requiresRift { add("Enderchest Page $index") { color = TextColor.GRAY } }
+        requiresOverworld { add("Rift Enderchest Page $index") { color = TextColor.GRAY } }
     }
-    override fun open() = requiresRift { McClient.sendCommand("/bp $index") }
+
+    override fun open() = requiresRift(true) { McClient.sendCommand("/ec $index") }
 }

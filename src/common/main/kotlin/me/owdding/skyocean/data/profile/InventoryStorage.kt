@@ -1,6 +1,5 @@
 package me.owdding.skyocean.data.profile
 
-import com.mojang.serialization.Codec
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.features.inventory.InventoryData
 import me.owdding.skyocean.features.inventory.InventoryType
@@ -18,12 +17,8 @@ object InventoryStorage {
         0,
         { mutableMapOf() },
         "inventory",
-    ) { version ->
-        when (version) {
-            0 -> InventoryType.CODEC
-            else -> Codec.unit { mutableMapOf() }
-        }
-    }
+        { InventoryType.CODEC },
+    )
 
     val data get() = storage.get()
 
