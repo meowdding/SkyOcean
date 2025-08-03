@@ -17,6 +17,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object RiftItemSource : ItemSource {
+    override val type: ItemSources = ItemSources.RIFT
+
     override fun getAll(): List<SimpleTrackedItem> = buildList {
         addAll(StorageAPI.riftStorage.convert(::RiftEnderchestPage))
         addAll(EquipmentAPI.riftEquipment.map { (_, stack) -> SimpleTrackedItem(stack, RiftEquipment) })
@@ -26,8 +28,6 @@ object RiftItemSource : ItemSource {
             InventoryStorage.data?.get(InventoryType.RIFT)?.map { SimpleTrackedItem(it, RiftInventoryContext) }?.toMutableList()?.let { addAll(it) }
         }
     }
-
-    override val type: ItemSources = ItemSources.RIFT
 }
 
 interface RiftItemContext : ItemContext {
@@ -72,10 +72,10 @@ object RiftEquipment : RiftItemContext {
 data class RiftEnderchestPage(
     val index: Int,
 ) : RiftItemContext {
+    override val clickText = Text.of("Click to open enderchest!") { color = TextColor.GRAY }
+
     override fun lines() = build {
         add("Enderchest Page $index") { color = TextColor.GRAY }
     }
-
-    override val clickText = Text.of("Click to open enderchest!") { color = TextColor.GRAY }
     override fun open() = requiresRift { McClient.sendCommand("/bp $index") }
 }

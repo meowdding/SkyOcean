@@ -25,6 +25,8 @@ object InventoryStorage {
         }
     }
 
+    val data get() = storage.get()
+
     @Subscription(PlayerInventoryChangeEvent::class)
     @OnlyOnSkyBlock
     fun onInventoryChange() {
@@ -40,6 +42,4 @@ object InventoryStorage {
     fun save() {
         storage.save()
     }
-
-    val data get() = storage.get()
 }
