@@ -24,8 +24,9 @@ object SackItemContext : ItemContext {
 
     override fun collectLines() = build {
         add("Sacks") { color = TextColor.GRAY }
-        add("Click to open sacks!") { this.color = TextColor.YELLOW }
+        requiresOverworld { add("Click to open sacks!") { this.color = TextColor.YELLOW } }
+        riftWarning()
     }
 
-    override fun open() = McClient.sendCommand("sacks")
+    override fun open() = requiresOverworld(true) { McClient.sendCommand("sacks") }
 }

@@ -29,15 +29,18 @@ data class ChestItemContext(
             color = TextColor.GRAY
         }
         val clickText = if (SkyBlockIsland.PRIVATE_ISLAND.inIsland()) "Click to highlight chest!" else "Click to warp to island and highlight chest!"
-        add(clickText) { this.color = TextColor.YELLOW }
+        requiresOverworld { add(clickText) { this.color = TextColor.YELLOW } }
+        riftWarning()
     }
 
-    override fun open() = McClient.runNextTick {
-        ItemHighlighter.addChest(chestPos)
-        secondPos?.let(ItemHighlighter::addChest)
+    override fun open() = requiresOverworld(true) {
+        McClient.runNextTick {
+            ItemHighlighter.addChest(chestPos)
+            secondPos?.let(ItemHighlighter::addChest)
 
-        if (!SkyBlockIsland.PRIVATE_ISLAND.inIsland()) {
-            McClient.sendCommand("warp island")
+            if (!SkyBlockIsland.PRIVATE_ISLAND.inIsland()) {
+                McClient.sendCommand("warp island")
+            }
         }
     }
 }

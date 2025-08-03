@@ -105,6 +105,7 @@ object TreeFormatter : RecipeView {
             addSimple(ItemSources.CHEST, "${Icons.CHESTS} Chest")
             addSimple(ItemSources.ACCESSORY_BAG, "${Icons.ACCESSORIES} Accessory Bag")
             addSimple(ItemSources.VAULT, "${Icons.VAULT} Vault")
+            addSimple(ItemSources.RIFT, "${Icons.RIFT} Rift")
 
 
             if (sources.containsKey(ItemSources.FORGE)) {

@@ -24,7 +24,8 @@ enum class ItemSources(val itemSource: ItemSource?) {
     FORGE(ForgeItemSource),
     INVENTORY(InventoryItemSource),
     VAULT(VaultItemSource),
-    MUSEUM(MuseumItemSource)
+    MUSEUM(MuseumItemSource),
+    RIFT(RiftItemSource)
     ;
     // todo SACK_OF_SACKS(TODO()),
     // todo POTION_BAG(TODO()),
@@ -37,7 +38,7 @@ enum class ItemSources(val itemSource: ItemSource?) {
 
     companion object {
         fun getAllItems(): Iterable<SimpleTrackedItem> {
-            val entries = entries.filter { ItemSearchScreen.category.source == null || it.itemSource == ItemSearchScreen.category.source }
+            val entries = entries.filter { ItemSearchScreen.category.source.isEmpty() || it.itemSource in ItemSearchScreen.category.source }
 
             return entries.mapNotNull { it.itemSource?.getAll() }.flatten().filterNot { (itemStack, _) -> itemStack.isEmpty }
         }
