@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
+import me.owdding.lib.builder.ScalableFrameLayout
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.withPadding
@@ -33,7 +34,6 @@ import me.owdding.skyocean.utils.suggestions.CombinedSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeIdSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeNameSuggestionProvider
 import net.minecraft.client.gui.components.AbstractWidget
-import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.world.item.ItemStack
@@ -110,7 +110,7 @@ object CraftHelperDisplay {
 
         val maxWidth = (event.screen as AbstractContainerScreenAccessor).leftPos - 20
 
-        val layout = LayoutFactory.empty() as FrameLayout
+        val layout = LayoutFactory.empty() as ScalableFrameLayout
         lateinit var callback: (save: Boolean) -> Unit
 
         fun resetLayout() {
@@ -138,17 +138,19 @@ object CraftHelperDisplay {
             resetLayout()
             (layout as? FrameLayoutAccessor)?.children()?.clear()
             val tree = ContextAwareRecipeTree(recipe, output, data?.amount?.coerceAtLeast(1) ?: 1)
-            layout.addChild(visualize(tree, output) { callback })
+            layout.addChild(ScalableWidget(visualize(tree, output) { callback }))
             layout.arrangeElements()
 
-            val scaledWidget = if (layout.width > maxWidth) {
-                ScalableWidget(layout.asWidget()).apply {
-                    scale(maxWidth.toDouble() / layout.width)
-                }
-            } else layout
 
-            scaledWidget.setPosition(10, (McScreen.self?.height?.div(2) ?: 0) - (layout.height / 2))
-            scaledWidget.visitWidgets { event.widgets.add(it) }
+            if (layout.width > maxWidth) {
+                layout.scale(maxWidth.toDouble() / layout.width)
+            } else {
+                layout.scale(1.0)
+            }
+            layout.arrangeElements()
+
+            layout.setPosition(10, (McScreen.self?.height?.div(2) ?: 0) - (layout.height / 2))
+            layout.visitWidgets { event.widgets.add(it) }
             if (save) CraftHelperStorage.save()
         }
         callback(false)
