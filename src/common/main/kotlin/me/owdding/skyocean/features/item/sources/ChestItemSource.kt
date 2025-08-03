@@ -33,12 +33,14 @@ data class ChestItemContext(
         riftWarning()
     }
 
-    override fun open() =  requiresOverworld(true) {McClient.runNextTick {
-        ItemHighlighter.addChest(chestPos)
-        secondPos?.let(ItemHighlighter::addChest)
+    override fun open() = requiresOverworld(true) {
+        McClient.runNextTick {
+            ItemHighlighter.addChest(chestPos)
+            secondPos?.let(ItemHighlighter::addChest)
 
-        if (!SkyBlockIsland.PRIVATE_ISLAND.inIsland()) {
-            McClient.sendCommand("warp island")
+            if (!SkyBlockIsland.PRIVATE_ISLAND.inIsland()) {
+                McClient.sendCommand("warp island")
+            }
         }
-    }}
+    }
 }
