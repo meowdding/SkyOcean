@@ -1,5 +1,7 @@
 package me.owdding.skyocean.features.item.sources
 
+import me.owdding.skyocean.data.profile.InventoryStorage
+import me.owdding.skyocean.features.inventory.InventoryType
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
@@ -9,6 +11,7 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.profile.items.equipment.EquipmentAPI
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -17,7 +20,11 @@ object RiftItemSource : ItemSource {
     override fun getAll(): List<SimpleTrackedItem> = buildList {
         addAll(StorageAPI.riftStorage.convert(::RiftEnderchestPage))
         addAll(EquipmentAPI.riftEquipment.map { (_, stack) -> SimpleTrackedItem(stack, RiftEquipment) })
-
+        if (SkyBlockIsland.THE_RIFT.inIsland()) {
+            addAll(McPlayer.inventory.map { SimpleTrackedItem(it, RiftInventoryContext) })
+        } else {
+            InventoryStorage.data?.get(InventoryType.RIFT)?.map { SimpleTrackedItem(it, RiftInventoryContext) }?.toMutableList()?.let { addAll(it) }
+        }
     }
 
     override val type: ItemSources = ItemSources.RIFT
@@ -45,6 +52,12 @@ interface RiftItemContext : ItemContext {
             return
         }
         runnable()
+    }
+}
+
+object RiftInventoryContext : RiftItemContext {
+    override fun lines(): List<Component> = build {
+        add("Rift Inventory")
     }
 }
 

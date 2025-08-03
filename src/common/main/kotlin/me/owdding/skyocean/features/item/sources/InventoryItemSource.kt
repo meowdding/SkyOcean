@@ -1,15 +1,22 @@
 package me.owdding.skyocean.features.item.sources
 
+import me.owdding.skyocean.data.profile.InventoryStorage
+import me.owdding.skyocean.features.inventory.InventoryType
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object InventoryItemSource : ItemSource {
     override fun getAll() = buildList {
-        addAll(McPlayer.inventory.map { SimpleTrackedItem(it, InventoryItemContext) })
+        if (!SkyBlockIsland.THE_RIFT.inIsland()) {
+            addAll(McPlayer.inventory.map { SimpleTrackedItem(it, InventoryItemContext) })
+        } else {
+            InventoryStorage.data?.get(InventoryType.NORMAL)?.map { SimpleTrackedItem(it, InventoryItemContext) }?.toMutableList()?.let { addAll(it) }
+        }
         fun addEquipment(stack: ItemStack) {
             add(SimpleTrackedItem(stack, EquipmentItemContext))
         }
