@@ -16,7 +16,7 @@ object MinibossHighlight {
     @Subscription
     @OnlySlayerMiniBosses
     fun onMiniBossEvent(event: SlayerEvent) {
-        val type = event.slayerInfo.type?: return
+        val type = event.slayerInfo.type ?: return
         if (type !is SlayerMiniBoss) {
             return
         }

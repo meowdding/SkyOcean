@@ -17,7 +17,7 @@ abstract class BlockRetexture {
         this.register(block, SkyOcean.id(id), condition)
     }
 
-    fun RegisterFakeBlocksEvent.registerMultiple(vararg defaultBlocks: Block, id: String, condition: Condition = ::defaultCondition){
+    fun RegisterFakeBlocksEvent.registerMultiple(vararg defaultBlocks: Block, id: String, condition: Condition = ::defaultCondition) {
         defaultBlocks.forEach { this.register(it, id, condition) }
     }
 }

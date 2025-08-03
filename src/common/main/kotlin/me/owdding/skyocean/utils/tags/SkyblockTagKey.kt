@@ -27,7 +27,7 @@ interface SkyblockTagKey<T> {
     companion object {
         private fun getResourcePaths(path: String) = FabricLoader.getInstance().allMods.mapNotNull { mod -> mod.findPath(path).getOrNull() }
 
-        fun load(path: String): List<String> = getResourcePaths(path).flatMap { it ->
+        fun load(path: String): List<String> = getResourcePaths(path).flatMap {
             val file = it.readAsJson().toData(SkyOceanCodecs.SkyblockTagFileCodec.codec()) ?: run {
                 SkyOcean.error("Failed to load tag file $path")
                 return@flatMap emptyList<String>()

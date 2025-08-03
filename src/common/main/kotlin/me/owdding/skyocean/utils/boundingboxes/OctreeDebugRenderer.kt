@@ -8,15 +8,15 @@ import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
 import org.apache.commons.lang3.mutable.MutableInt
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import kotlin.math.roundToInt
 
 data class OctreeDebugRenderer(val octree: Octree) {
 
     fun render(event: RenderWorldEvent) {
-        val camX = McClient.self.gameRenderer.mainCamera?.position?.x ?: 0.0
-        val camY = McClient.self.gameRenderer.mainCamera?.position?.y ?: 0.0
-        val camZ = McClient.self.gameRenderer.mainCamera?.position?.z ?: 0.0
+        val camX = event.camera.position.x
+        val camY = event.camera.position.y
+        val camZ = event.camera.position.z
         octree.boxes.forEach {
             val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderType.lines())
             ShapeRenderer.renderLineBox(
@@ -40,12 +40,12 @@ data class OctreeDebugRenderer(val octree: Octree) {
     fun visit(event: RenderWorldEvent, node: Node, nodesRendered: MutableInt, depth: Int, playerNode: Leaf?) {
         val aABB: AABB = AABB.of(node.getBox())
         val size = aABB.xsize
-        val color = Math.round(size / 16.0)
+        val color = (size / 16.0).roundToInt()
         val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderType.lines())
         val colorValue = color + 5L
-        val camX = McClient.self.gameRenderer.mainCamera?.position?.x ?: 0.0
-        val camY = McClient.self.gameRenderer.mainCamera?.position?.y ?: 0.0
-        val camZ = McClient.self.gameRenderer.mainCamera?.position?.z ?: 0.0
+        val camX = event.camera.position.x
+        val camY = event.camera.position.y
+        val camZ = event.camera.position.z
         ShapeRenderer.renderLineBox(
             event.poseStack,
             vertexConsumer,

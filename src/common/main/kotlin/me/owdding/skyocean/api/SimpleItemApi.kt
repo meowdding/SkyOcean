@@ -9,7 +9,7 @@ import me.owdding.skyocean.api.SkyOceanItemId.Companion.item
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.pet
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.rune
 import me.owdding.skyocean.utils.LateInitModule
-import me.owdding.skyocean.utils.Utils.ItemBuilder
+import me.owdding.skyocean.utils.Utils.itemBuilder
 import me.owdding.skyocean.utils.Utils.sanitizeForCommandInput
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -85,7 +85,7 @@ object SimpleItemApi {
         return RepoItemsAPI.getItemOrNull(itemId)
     }
 
-    fun getItemById(id: SkyOceanItemId): ItemStack = getItemByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+    fun getItemById(id: SkyOceanItemId): ItemStack = getItemByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown item: $id")
     }
 
@@ -112,7 +112,7 @@ object SimpleItemApi {
         }
     }
 
-    fun getPetById(id: SkyOceanItemId): ItemStack = getPetByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+    fun getPetById(id: SkyOceanItemId): ItemStack = getPetByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown pet: $id")
     }
 
@@ -136,7 +136,7 @@ object SimpleItemApi {
         return@getOrPut null
     }
 
-    fun getRuneById(id: SkyOceanItemId) = getRuneByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+    fun getRuneById(id: SkyOceanItemId) = getRuneByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown rune: $id")
     }
 
@@ -160,7 +160,7 @@ object SimpleItemApi {
         return@getOrPut null
     }
 
-    fun getEnchantmentById(id: SkyOceanItemId): ItemStack = getEnchantmentByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+    fun getEnchantmentById(id: SkyOceanItemId): ItemStack = getEnchantmentByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown enchantment: $id")
     }
 
@@ -176,7 +176,7 @@ object SimpleItemApi {
         return@getOrPut null
     }
 
-    fun getAttributeById(id: SkyOceanItemId): ItemStack = getAttributeByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+    fun getAttributeById(id: SkyOceanItemId): ItemStack = getAttributeByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown attribute: $id")
     }
 

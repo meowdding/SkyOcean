@@ -6,7 +6,6 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.Utils.readJson
 import me.owdding.skyocean.utils.Utils.writeJson
-import net.fabricmc.loader.api.FabricLoader
 import org.apache.commons.io.FileUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
