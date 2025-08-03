@@ -170,8 +170,8 @@
         "warning": "<yellow>SkyOcean by default adds the profile emblem into chat messages, if you wish to change this open the config and search for <gold>Profile in Chat</gold>!"
       },
       "white_non_message": {
-        "@value": "White Non-Message",
-        "desc": "Changes the color from nons to white instead of gray."
+        "@value": "Consistent Player Message Colour",
+        "desc": "Changes the color of messages sent by unranked players from gray to white."
       },
       "piggy_repair_helper": {
         "@value": "Piggy Repair Helper",
