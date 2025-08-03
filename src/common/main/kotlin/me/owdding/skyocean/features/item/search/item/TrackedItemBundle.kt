@@ -95,7 +95,6 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
 
     private inline fun <reified T> any() = contexts.filterIsInstance<T>().isNotEmpty()
 
-    @Suppress("CyclomaticComplexMethod")
     fun add(newItem: TrackedItem) {
         assert(newItem.context.source != ItemSources.BUNDLE)
         if (!this::item.isInitialized) {

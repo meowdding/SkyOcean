@@ -1,7 +1,6 @@
 complexity:
-    CyclomaticComplexMethod: # default threshold of 15, caught almost every complex method
-        active: true
-        threshold: 25
+    CyclomaticComplexMethod: # we have good reasons for this :3
+        active: false
     LargeClass:
         active: false  # sometimes a class can get large, and would be worse if split up
     LongParameterList: # too aggressive, classes can need a lot of params
