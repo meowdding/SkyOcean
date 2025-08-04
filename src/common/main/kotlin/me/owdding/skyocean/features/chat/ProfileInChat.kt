@@ -61,7 +61,7 @@ object ProfileInChat {
 
     @OnlyOnSkyBlock
     @Subscription(priority = LOWEST)
-    fun onChat(event: ChatReceivedEvent.Pre) {
+    fun onChat(event: ChatReceivedEvent.Post) {
         if (!ChatConfig.enableProfileInChat) return
         val index = event.component.siblings.indexOfFirst { sibling -> sibling.stripped.startsWith(": ") } - 1
         if (index < 0) return
@@ -70,8 +70,7 @@ object ProfileInChat {
             event.component.siblings.indexOfFirst { sibling -> sibling.style.hoverEvent == null }
         } else index
         val profileType = usernameToProfileTypeCache[name] ?: return
-        event.cancel()
-        val modified = event.component.copy()
+        val modified = event.component
         modified.siblings.add(targetIndex, profileType)
         modified.send()
     }
