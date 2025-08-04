@@ -2,7 +2,7 @@ package me.owdding.skyocean.config.features.combat
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 
-object SlayerConfig: CategoryKt("slayer") {
+object SlayerConfig : CategoryKt("slayer") {
     override val name = Translated("skyocean.config.slayer")
 
     var enableBlazeHighlight by boolean(true) {

@@ -47,6 +47,14 @@ class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
             context is AbstractStorageItemContext && other is AbstractStorageItemContext -> {
                 this.context = StorageItemContext
             }
+            context is RiftInventoryContext && other is RiftInventoryContext -> {}
+            context is RiftEnderchestPageContext && other is RiftEnderchestPageContext -> {
+                if (context.index == other.index) return
+                this.context = RiftStorageContext
+            }
+
+            context is AbstractRiftStorageContext && other is AbstractRiftStorageContext -> RiftStorageContext
+            context is RiftItemContext && other is RiftItemContext -> RiftBundleContext
 
             context is InventoryItemContext && other is InventoryItemContext -> {}
             context is EquipmentItemContext && other is EquipmentItemContext -> {}
@@ -76,6 +84,12 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
                 append(value.toFormattedString())
                 this.color = TextColor.GRAY
             }
+        }
+
+        if (map.contains(ItemSources.RIFT)) {
+            requiresOverworld { add("Not currently in the rift!") { color = TextColor.RED } }
+        } else {
+            riftWarning()
         }
     }
 

@@ -2,13 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
-    <ID>AlsoCouldBeApply:AttributeApi.kt$AttributeApi$also</ID>
-    <ID>AlsoCouldBeApply:CraftHelperDisplay.kt$CraftHelperDisplay$also</ID>
-    <ID>ArgumentListWrapping:HotspotHighlighter.kt$HotspotHighlighter$( pos.x.toFloat(), pos.y.toFloat(), pos.z.toFloat(), radius.toFloat(), 0.1f, ARGB.color(HotspotHighlightConfig.outlineTransparency, type.color.value), )</ID>
-    <ID>ArgumentListWrapping:HotspotHighlighter.kt$HotspotHighlighter$( pos.x.toFloat(), pos.y.toFloat(), pos.z.toFloat(), radius.toFloat(), ARGB.color(HotspotHighlightConfig.surfaceTransparency, type.color.value), )</ID>
-    <ID>ArgumentListWrapping:InvButton.kt$InvButton$( sprite, this.x, this.y, baseWidth, baseHeight, -1, )</ID>
-    <ID>ArgumentListWrapping:ItemValueScreen.kt$ItemValueScreen$( width, height, { val callback: () -&gt; Unit = { this@asRefreshableScrollable.arrangeElements() val widget = LayoutWidget(this@asRefreshableScrollable).also { it.visible = true }.withStretchToContentSize() this.withSize(width, height) .withContents { contents -&gt; contents.setMinWidth(width - 10) (contents as? FrameLayoutAccessor)?.children()?.clear() contents.addChild(widget, LayoutSettings.defaults().alignHorizontallyCenter().alignVerticallyMiddle()) } } callback.invoke() refreshCallback(callback) }, )</ID>
-    <ID>ArgumentListWrapping:SackValue.kt$SackValue$( it.width + 10, screen.containerHeight - 10 - title.height, { this.withScroll(oldList?.xScroll ?: 0, oldList?.yScroll ?: 0) oldList = this }, )</ID>
     <ID>ClassOrdering:AccessoryBagItemSource.kt$AccessoryBagItemContext$override val source = ItemSources.ACCESSORY_BAG</ID>
     <ID>ClassOrdering:AccessoryBagItemSource.kt$AccessoryBagItemSource$override val type = ItemSources.ACCESSORY_BAG</ID>
     <ID>ClassOrdering:BlockTagKey.kt$BlockTagKey$override val key: TagKey&lt;Block&gt; = TagKey.create(Registries.BLOCK, SkyOcean.id(path))</ID>
@@ -35,7 +28,6 @@
     <ID>ClassOrdering:ItemHighlighter.kt$ItemHighlighter$private val enderchest = Regex("Ender Chest Page (\\d)")</ID>
     <ID>ClassOrdering:ItemSource.kt$ItemSource$val type: ItemSources</ID>
     <ID>ClassOrdering:ItemTracker.kt$ItemTracker$constructor(vararg sources: ItemSources) : this(sources.toList())</ID>
-    <ID>ClassOrdering:LayoutUtils.kt$SkyOceanScreen$private val zeroDelay = (-1).seconds.toJavaDuration()</ID>
     <ID>ClassOrdering:MovePatch.kt$MovePatch$Companion</ID>
     <ID>ClassOrdering:MuseumItemSource.kt$MuseumItemContext$override val source = ItemSources.MUSEUM</ID>
     <ID>ClassOrdering:MuseumItemSource.kt$MuseumItemSource$override val type = ItemSources.MUSEUM</ID>
@@ -52,6 +44,7 @@
     <ID>ClassOrdering:SacksItemSource.kt$SacksItemSource$override val type = ItemSources.SACKS</ID>
     <ID>ClassOrdering:SkyOceanItemId.kt$SkyOceanItemId$Companion</ID>
     <ID>ClassOrdering:SkyOceanItemId.kt$SkyOceanItemId.Companion$@IncludedCodec val CODEC: Codec&lt;SkyOceanItemId&gt; = Codec.STRING.xmap(::SkyOceanItemId, SkyOceanItemId::id)</ID>
+    <ID>ClassOrdering:SkyOceanScreen.kt$SkyOceanScreen$private val zeroDelay = (-1).seconds.toJavaDuration()</ID>
     <ID>ClassOrdering:SkyblockTagKey.kt$SkyblockTagKey$operator fun contains(value: T): Boolean</ID>
     <ID>ClassOrdering:SkyblockTagKey.kt$SkyblockTagKey$val location: ResourceLocation</ID>
     <ID>ClassOrdering:StorageItemSource.kt$StorageItemSource$override val type = ItemSources.STORAGE</ID>
@@ -70,8 +63,6 @@
     <ID>EmptyFunctionBlock:ButtonConfigScreen.kt$ButtonConfigScreen${}</ID>
     <ID>EnumWrapping:ItemSource.kt$ItemSources</ID>
     <ID>EnumWrapping:MinecraftColor.kt$MinecraftColor</ID>
-    <ID>ExplicitItLambdaParameter:SkyblockTagKey.kt$SkyblockTagKey.Companion${ it -&gt; val file = it.readAsJson().toData(SkyOceanCodecs.SkyblockTagFileCodec.codec()) ?: run { SkyOcean.error("Failed to load tag file $path") return@flatMap emptyList&lt;String&gt;() } file.values }</ID>
-    <ID>ExplicitItLambdaParameter:Utils.kt$Utils${ it -&gt; val value = transform(it) if (value == null) { nullConsumer(it) } value }</ID>
     <ID>Filename:const.kt$me.owdding.skyocean.helpers.const.kt</ID>
     <ID>FunctionNaming:EntityHelper.kt$EntityAccessor$fun `ocean$getNameTagScale`(): Float</ID>
     <ID>FunctionNaming:EntityHelper.kt$EntityAccessor$fun `ocean$glowTime`(time: Long)</ID>
@@ -81,15 +72,11 @@
     <ID>FunctionNaming:EntityHelper.kt$EntityRenderStateAccessor$fun `ocean$getNameTagScale`(): Float</ID>
     <ID>FunctionNaming:EntityHelper.kt$EntityRenderStateAccessor$fun `ocean$setNameTagScale`(scale: Float)</ID>
     <ID>FunctionNaming:NpcRecipeParser.kt$NpcRecipeParser$@Subscription @OnlyOnSkyBlock private fun ScreenMouseClickEvent.Pre()</ID>
-    <ID>FunctionNaming:Utils.kt$Utils$fun ItemBuilder(item: ItemLike, init: ItemBuilder.() -&gt; Unit)</ID>
-    <ID>FunctionStartOfBodySpacing:BlockRetexture.kt$BlockRetexture$fun RegisterFakeBlocksEvent.registerMultiple(vararg defaultBlocks: Block, id: String, condition: Condition = ::defaultCondition)</ID>
     <ID>InjectDispatcher:ItemHighlighter.kt$ItemHighlighter$Default</ID>
     <ID>LongMethod:CraftHelperDisplay.kt$CraftHelperDisplay$private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -&gt; ((save: Boolean) -&gt; Unit)): AbstractWidget</ID>
     <ID>LongMethod:ItemSearchScreen.kt$ItemSearchScreen$override fun init()</ID>
     <ID>LongMethod:SourceToWidget.kt$SourceToWidget$fun CalculationEntry.asWidget(callback: () -&gt; Unit): LayoutElement</ID>
     <ID>LongMethod:TreeFormatter.kt$TreeFormatter$fun append(state: CraftHelperState, widget: WidgetBuilder, widgetConsumer: (AbstractWidget) -&gt; Unit, depth: Int = 0, prefix: String = "")</ID>
-    <ID>MatchingDeclarationName:LayoutUtils.kt$SkyOceanScreen : BaseCursorScreen</ID>
-    <ID>MaxLineLength:HotfHelper.kt$HotfHelper$if (!ForagingConfig.hotfDisplayTotalLeft &amp;&amp; ForagingConfig.hotfDisplayShiftCost &amp;&amp; !ForagingConfig.hotfTotalProgress &amp;&amp; !ForagingConfig.hotfStackSize) return</ID>
     <ID>MemberNameEqualsClassName:Buttons.kt$Buttons$val buttons get() = arrayOf( button0, button1, button2, button3, button4, button5, button6, button7, button8, button9, button10, button11, button12, button13, )</ID>
     <ID>NamedArguments:AreaWalls.kt$AreaWalls$renderPlane(Direction.DOWN, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.maxY() + 1, colorValue)</ID>
     <ID>NamedArguments:AreaWalls.kt$AreaWalls$renderPlane(Direction.DOWN, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.minY(), colorValue)</ID>
@@ -111,27 +98,10 @@
     <ID>NamedArguments:ExtraDisplays.kt$ExtraDisplays.&lt;no name provided&gt;$renderNormalInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), columns, rows, color)</ID>
     <ID>NamedArguments:InvButtons.kt$InvButtons$InvButton(button, x, y == 1, screen, x + y * 7, posX, posY, 26, buttonHeight)</ID>
     <ID>NamedArguments:RenderUtils.kt$RenderUtils$renderPlane(direction, startX.toFloat(), startY.toFloat(), endX.toFloat(), endY.toFloat(), z.toFloat(), color)</ID>
-    <ID>NoSemicolons:Ingredients.kt$CurrencyType.CHOCOLATE$;</ID>
-    <ID>NoSemicolons:RecipeType.kt$RecipeType.UNKNOWN$;</ID>
-    <ID>NoSemicolons:SortModes.kt$AdditionalSortModes.PRICE$;</ID>
-    <ID>NoUnusedImports:InvButton.kt$me.owdding.skyocean.features.inventory.buttons.InvButton.kt</ID>
-    <ID>NoUnusedImports:ProfileStorage.kt$me.owdding.skyocean.utils.storage.ProfileStorage.kt</ID>
-    <ID>NullableBooleanCheck:DevUtils.kt$DevUtils$states[location]?.not() ?: false</ID>
-    <ID>NullableBooleanCheck:Octree.kt$Octree$findLeaf(pos)?.isInside(pos) ?: false</ID>
     <ID>PrintStackTrace:DataStorage.kt$DataStorage$e</ID>
     <ID>PrintStackTrace:ProfileStorage.kt$ProfileStorage$e</ID>
     <ID>ReturnCount:SkyOceanItemId.kt$SkyOceanItemId.Companion$fun unknownType(input: String): SkyOceanItemId?</ID>
-    <ID>SpacingAroundColon:ChatConfig.kt$ChatConfig$:</ID>
-    <ID>SpacingAroundColon:SlayerConfig.kt$SlayerConfig$:</ID>
-    <ID>SpacingAroundCurly:BlockRetexture.kt$BlockRetexture${</ID>
-    <ID>SpacingAroundOperators:BlazeSlayerHighlight.kt$BlazeSlayerHighlight$?:</ID>
-    <ID>SpacingAroundOperators:MinibossHighlight.kt$MinibossHighlight$?:</ID>
     <ID>SpreadOperator:CombinedSuggestionProvider.kt$CombinedSuggestionProvider$(*futures.toTypedArray())</ID>
-    <ID>StringTemplate:Octree.kt$Leaf$${leafBox}</ID>
-    <ID>UnnecessaryFilter:CorpseKeyAnnouncement.kt$CorpseKeyAnnouncement$filter { corpse == it.type }</ID>
-    <ID>UnnecessarySafeCall:ConfigExtensions.kt$McClient.self.levelRenderer?.allChanged()</ID>
-    <ID>UnnecessarySafeCall:InvButton.kt$InvButton$BuiltInRegistries.ITEM.get(it)?.getOrNull()</ID>
-    <ID>UnnecessarySafeCall:OctreeDebugRenderer.kt$OctreeDebugRenderer$McClient.self.gameRenderer.mainCamera?.position</ID>
     <ID>UnsafeCallOnNullableType:AttributeApi.kt$AttributeApi$attribute.texture()!!</ID>
     <ID>UnsafeCallOnNullableType:ButtonConfigScreen.kt$ButtonConfigScreen$selectedButton!!</ID>
     <ID>UnsafeCallOnNullableType:CalcCommand.kt$CalcCommand$getArgument&lt;Int&gt;("maxLevel")!!</ID>
@@ -146,7 +116,5 @@
     <ID>UnusedParameter:IngredientParser.kt$IngredientParser$regex: Regex</ID>
     <ID>UnusedParameter:OctreeDebugRenderer.kt$OctreeDebugRenderer$depth: Int</ID>
     <ID>UnusedParameter:OctreeDebugRenderer.kt$OctreeDebugRenderer$nodesRendered: MutableInt</ID>
-    <ID>VarCouldBeVal:ItemHighlighter.kt$ItemHighlighter$private var chests: MutableList&lt;BlockPos&gt; = CopyOnWriteArrayList()</ID>
-    <ID>Wrapping:ClientSideInventory.kt$ClientSideInventory$(</ID>
   </CurrentIssues>
 </SmellBaseline>

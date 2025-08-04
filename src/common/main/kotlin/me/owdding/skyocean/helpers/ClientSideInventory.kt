@@ -89,11 +89,15 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
         if (slot.mouseOver(mouseX, mouseY)) {
             RenderUtils.drawSlotHighlightBack(graphics, slot.x, slot.y)
             RenderUtils.drawSlotHighlightFront(graphics, slot.x, slot.y)
-            graphics.showTooltip(Text.multiline(itemStack.getTooltipLines(
-                Item.TooltipContext.of(McLevel.self),
-                McPlayer.self!!,
-                if (McClient.options.advancedItemTooltips) TooltipFlag.ADVANCED else TooltipFlag.NORMAL
-            )))
+            graphics.showTooltip(
+                Text.multiline(
+                    itemStack.getTooltipLines(
+                        Item.TooltipContext.of(McLevel.self),
+                        McPlayer.self!!,
+                        if (McClient.options.advancedItemTooltips) TooltipFlag.ADVANCED else TooltipFlag.NORMAL,
+                    ),
+                ),
+            )
         }
     }
 

@@ -18,7 +18,7 @@ object BlazeSlayerHighlight {
         "ashen" to TextColor.DARK_GRAY,
         "auric" to TextColor.YELLOW,
         "crystal" to TextColor.AQUA,
-        "spirit" to TextColor.WHITE
+        "spirit" to TextColor.WHITE,
     ).toList()
 
     @Subscription(priority = Subscription.HIGH)
@@ -31,7 +31,7 @@ object BlazeSlayerHighlight {
 
         val stripped = event.component.stripped
 
-        val color = colors.firstOrNull { stripped.startsWith(it.first, true) }?.second?: return
+        val color = colors.firstOrNull { stripped.startsWith(it.first, true) }?.second ?: return
 
         event.slayerInfo.entity.isGlowing = true
         event.slayerInfo.entity.glowingColor = color

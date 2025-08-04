@@ -33,7 +33,7 @@ class Octree(val boxes: List<BoundingBox>) {
     }
 
     fun isInside(pos: BlockPos): Boolean {
-        return findLeaf(pos)?.isInside(pos) ?: false
+        return findLeaf(pos)?.isInside(pos) == true
     }
 
     operator fun contains(pos: BlockPos): Boolean = isInside(pos)
@@ -53,7 +53,7 @@ open class Leaf(private val leafBox: BoundingBox, private val box: BoundingBox) 
 
     override fun getBox(): BoundingBox = leafBox
     override fun toString(): String {
-        return "Leaf(${leafBox})"
+        return "Leaf($leafBox)"
     }
 
     override fun visit(visitor: (Node, Int) -> Unit, depth: Int) {
@@ -75,7 +75,7 @@ class Branch(private val boundingBox: BoundingBox, boxes: List<BoundingBox>) : N
         List(8) { it to getChildBox(it) }
             .associate { it.first to boxes.filter { box -> it.second.intersects(box) } }
             .mapValues { it.value.toMutableList() }.forEach { (index, boxes) ->
-                if (boxes.size == 0) {
+                if (boxes.isEmpty()) {
                     return@forEach
                 }
                 if (this.areChildrenLeaves()) {

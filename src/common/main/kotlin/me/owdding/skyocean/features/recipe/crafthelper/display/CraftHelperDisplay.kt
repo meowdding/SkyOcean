@@ -170,7 +170,7 @@ object CraftHelperDisplay {
                             this.color = TextColor.RED
                         }
                     }
-            }.also { it.visitChildren { child -> maxLine = maxOf(maxLine, child.width + 10) } }
+            }.apply { visitChildren { child -> maxLine = maxOf(maxLine, child.width + 10) } }
 
             horizontal(5, MIDDLE) {
                 val item = ExtraDisplays.inventoryBackground(1, 1, Displays.item(output.item, showTooltip = true).withPadding(2))

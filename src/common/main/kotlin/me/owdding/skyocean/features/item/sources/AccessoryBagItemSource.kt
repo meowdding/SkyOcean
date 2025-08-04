@@ -16,10 +16,11 @@ object AccessoryBagItemSource : ItemSource {
 data class AccessoryBagItemContext(val page: Int) : ItemContext {
     override fun collectLines() = build {
         add("Accessory bag page $page") { color = TextColor.GRAY }
-        add("Click to open accessories!") { color = TextColor.YELLOW }
+        requiresOverworld { add("Click to open accessories!") { color = TextColor.YELLOW } }
+        riftWarning()
     }
 
     override val source = ItemSources.ACCESSORY_BAG
 
-    override fun open() = requiresCookie { McClient.sendCommand("/ab $page") }
+    override fun open() = requiresOverworld(true) { requiresCookie { McClient.sendCommand("/ab $page") } }
 }

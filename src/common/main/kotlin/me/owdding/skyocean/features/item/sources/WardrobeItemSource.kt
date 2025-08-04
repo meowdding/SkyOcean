@@ -21,8 +21,9 @@ data class WardrobeContext(
     override val source = ItemSources.WARDROBE
     override fun collectLines() = build {
         add("Wardrobe Slot $slot") { color = TextColor.GRAY }
-        add("Click to open wardrobe!") { this.color = TextColor.YELLOW }
+        requiresOverworld { add("Click to open wardrobe!") { this.color = TextColor.YELLOW } }
+        riftWarning()
     }
 
-    override fun open() = McClient.sendCommand("wd ${(slot - 1) / 9 + 1}")
+    override fun open() = requiresOverworld(true) { McClient.sendCommand("wd ${(slot - 1) / 9 + 1}") }
 }

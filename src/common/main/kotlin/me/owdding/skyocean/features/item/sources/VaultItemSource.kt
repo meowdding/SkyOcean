@@ -17,8 +17,9 @@ object VaultItemContext : ItemContext {
     override val source = ItemSources.VAULT
     override fun collectLines() = build {
         add("Vault") { color = TextColor.GRAY }
-        add("Click to open bank!") { this.color = TextColor.YELLOW }
+        requiresOverworld { add("Click to open bank!") { this.color = TextColor.YELLOW } }
+        riftWarning()
     }
 
-    override fun open() = requiresCookie { McClient.sendCommand("/bank") }
+    override fun open() = requiresOverworld(true) { requiresCookie { McClient.sendCommand("/bank") } }
 }

@@ -8,17 +8,18 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
+
+internal fun List<PlayerStorageInstance>.convert(function: (Int) -> ItemContext): List<SimpleTrackedItem> {
+    return this.flatMap { (index, stacks) ->
+        val context = function(index + 1)
+        stacks.map { stack -> SimpleTrackedItem(stack, context) }
+    }
+}
+
 object StorageItemSource : ItemSource {
     override fun getAll(): List<SimpleTrackedItem> = buildList {
         addAll(StorageAPI.backpacks.convert(::BackpackStorageItemContext))
         addAll(StorageAPI.enderchests.convert(::EnderChestStorageItemContext))
-    }
-
-    private fun List<PlayerStorageInstance>.convert(function: (Int) -> ItemContext): List<SimpleTrackedItem> {
-        return this.flatMap { (index, stacks) ->
-            val context = function(index + 1)
-            stacks.map { stack -> SimpleTrackedItem(stack, context) }
-        }
     }
 
     override val type = ItemSources.STORAGE
@@ -31,10 +32,11 @@ interface AbstractStorageItemContext : ItemContext {
 object StorageItemContext : AbstractStorageItemContext {
     override fun collectLines() = build {
         add("Storage") { color = TextColor.GRAY }
-        add("Click to open storage!") { this.color = TextColor.YELLOW }
+        requiresOverworld { add("Click to open storage!") { this.color = TextColor.YELLOW } }
+        riftWarning()
     }
 
-    override fun open() = McClient.sendCommand("storage")
+    override fun open() = requiresOverworld(true) { McClient.sendCommand("storage") }
 }
 
 data class BackpackStorageItemContext(
@@ -42,10 +44,11 @@ data class BackpackStorageItemContext(
 ) : AbstractStorageItemContext {
     override fun collectLines() = build {
         add("Backpack Page $index") { color = TextColor.GRAY }
-        add("Click to open backpack!") { this.color = TextColor.YELLOW }
+        requiresOverworld { add("Click to open backpack!") { this.color = TextColor.YELLOW } }
+        riftWarning()
     }
 
-    override fun open() = McClient.sendCommand("/bp $index")
+    override fun open() = requiresOverworld(true) { McClient.sendCommand("/bp $index") }
 }
 
 data class EnderChestStorageItemContext(
@@ -53,8 +56,9 @@ data class EnderChestStorageItemContext(
 ) : AbstractStorageItemContext {
     override fun collectLines() = build {
         add("Enderchest Page $index") { color = TextColor.GRAY }
-        add("Click to open enderchest!") { this.color = TextColor.YELLOW }
+        requiresOverworld { add("Click to open enderchest!") { this.color = TextColor.YELLOW } }
+        riftWarning()
     }
 
-    override fun open() = McClient.sendCommand("/ec $index")
+    override fun open() = requiresOverworld(true) { McClient.sendCommand("/ec $index") }
 }
