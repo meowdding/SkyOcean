@@ -4,12 +4,11 @@ import me.owdding.skyocean.datagen.models.factories.DefaultModelFactory
 import me.owdding.skyocean.datagen.models.factories.GlassPaneFactory
 import me.owdding.skyocean.datagen.models.factories.InfestedStoneFactory
 import me.owdding.skyocean.datagen.models.factories.SnowLayerFactory
+import me.owdding.skyocean.datagen.providers.SkyOceanModelProvider
 import me.owdding.skyocean.events.RegisterFakeBlocksEvent
 import me.owdding.skyocean.helpers.BLOCK_STATES_PATH
-import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.minecraft.client.data.models.BlockModelGenerators
-import net.minecraft.client.data.models.ItemModelGenerators
 import net.minecraft.data.CachedOutput
 import net.minecraft.data.PackOutput
 import net.minecraft.resources.ResourceLocation
@@ -17,7 +16,7 @@ import net.minecraft.world.level.block.Block
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import java.util.concurrent.CompletableFuture
 
-class ModelGen(output: FabricDataOutput) : FabricModelProvider(output) {
+class ModelGen(output: FabricDataOutput) : SkyOceanModelProvider(output) {
     val blockStatePathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, BLOCK_STATES_PATH)
     val fakeBlockStateCollector = FakeBlockStateCollector(mutableListOf())
     val context = ModelGenContext(fakeBlockStateCollector, output)
@@ -33,8 +32,8 @@ class ModelGen(output: FabricDataOutput) : FabricModelProvider(output) {
         return CompletableFuture.allOf(super.run(output), fakeBlockStateCollector.save(output, blockStatePathProvider))
     }
 
-    override fun generateBlockStateModels(blockStateModelGenerator: BlockModelGenerators) {
-        factories.forEach { it.generator = blockStateModelGenerator }
+    override fun generateBlockStateModels(blockModelGenerators: BlockModelGenerators) {
+        factories.forEach { it.generator = blockModelGenerators }
 
         val fakeBlocks = mutableMapOf<Block, MutableList<ResourceLocation>>()
         fun register(block: Block, definition: ResourceLocation) {
@@ -49,13 +48,9 @@ class ModelGen(output: FabricDataOutput) : FabricModelProvider(output) {
             factories.firstOrNull { it.isFor(block) }?.let {
                 entries.forEach { model ->
                     println("Creating $model")
-                    it.create(block, model, blockStateModelGenerator, context)
+                    it.create(block, model, blockModelGenerators, context)
                 }
             }
         }
-    }
-
-    override fun generateItemModels(itemModelGenerator: ItemModelGenerators) {
-
     }
 }
