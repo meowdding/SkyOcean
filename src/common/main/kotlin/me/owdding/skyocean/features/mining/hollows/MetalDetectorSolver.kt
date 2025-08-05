@@ -34,7 +34,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
-@Suppress("unused")
 @Module
 object MetalDetectorSolver {
 
@@ -50,66 +49,26 @@ object MetalDetectorSolver {
     )
 
     private val offsets = arrayOf(
-        Vec3i(-24, -22, 12),
-        Vec3i(-42, -20, -28),
-        Vec3i(30, -21, -25),
-        Vec3i(40, -22, -30),
-        Vec3i(-14, -21, 43),
-        Vec3i(-23, -22, 40),
-        Vec3i(23, -22, -39),
-        Vec3i(42, -19, -41),
-        Vec3i(6, -21, 28),
-        Vec3i(-43, -22, -40),
-        Vec3i(-12, -21, -44),
-        Vec3i(12, -21, -43),
-        Vec3i(25, -22, 17),
-        Vec3i(20, -21, -26),
-        Vec3i(-37, -21, -14),
-        Vec3i(1, -21, 20),
-        Vec3i(-5, -21, 16),
-        Vec3i(22, -21, -14),
-        Vec3i(7, -21, 22),
-        Vec3i(-40, -22, 18),
-        Vec3i(12, -21, 7),
-        Vec3i(-1, -22, -20),
-        Vec3i(38, -22, -26),
-        Vec3i(12, -22, 31),
-        Vec3i(-20, -22, 0),
-        Vec3i(43, -21, -16),
-        Vec3i(-17, -21, 20),
-        Vec3i(-31, -21, -40),
-        Vec3i(29, -21, -44),
-        Vec3i(20, -22, 0),
-        Vec3i(-14, -21, 22),
-        Vec3i(12, -22, -22),
-        Vec3i(-37, -21, -22),
-        Vec3i(7, -21, 11),
-        Vec3i(-36, -20, 42),
-        Vec3i(19, -22, 29),
-        Vec3i(-38, -22, 26),
-        Vec3i(-31, -21, -12),
-        Vec3i(24, -22, 27),
+        Vec3i(-24, -22, 12), Vec3i(-42, -20, -28), Vec3i(30, -21, -25), Vec3i(40, -22, -30), Vec3i(-14, -21, 43), Vec3i(-23, -22, 40),
+        Vec3i(23, -22, -39), Vec3i(42, -19, -41), Vec3i(6, -21, 28), Vec3i(-43, -22, -40), Vec3i(-12, -21, -44), Vec3i(12, -21, -43),
+        Vec3i(25, -22, 17), Vec3i(20, -21, -26), Vec3i(-37, -21, -14), Vec3i(1, -21, 20), Vec3i(-5, -21, 16), Vec3i(22, -21, -14),
+        Vec3i(7, -21, 22), Vec3i(-40, -22, 18), Vec3i(12, -21, 7), Vec3i(-1, -22, -20), Vec3i(38, -22, -26), Vec3i(12, -22, 31),
+        Vec3i(-20, -22, 0), Vec3i(43, -21, -16), Vec3i(-17, -21, 20), Vec3i(-31, -21, -40), Vec3i(29, -21, -44), Vec3i(20, -22, 0),
+        Vec3i(-14, -21, 22), Vec3i(12, -22, -22), Vec3i(-37, -21, -22), Vec3i(7, -21, 11), Vec3i(-36, -20, 42), Vec3i(19, -22, 29),
+        Vec3i(-38, -22, 26), Vec3i(-31, -21, -12), Vec3i(24, -22, 27),
     )
     private var center: BlockPos? = null
     private val locations = arrayListOf<BlockPos>()
-
     private val possibleChests = arrayListOf<BlockPos>()
     private var foundChest: BlockPos? = null
-
     private var distance: Double? = null
-
     private var cooldown = System.currentTimeMillis()
-
     private var noChestFoundCounter = 0
     private var previousCurrentChests = -1
-
     private var distanceOnFind = -1.0
-
     private var moveCloseToKeeperWarning = true
     private val moveDownMessage = ReplaceMessage("Please move further down to correctly detect treasure.")
     private val resetMessage = ReplaceMessage("Move around some more!")
-
-    /* Coordinate Tracking */
     private var checkingFromPos: PosAndTime? = null
     private var hasntBeenMoving = false
 
@@ -120,96 +79,81 @@ object MetalDetectorSolver {
     fun eachSecond(event: TickEvent) {
         val currentPos = McPlayer.position ?: return
         if (!searchCheck()) return
-        if (center != null) {
-            if (currentPos.y > center!!.y - 2) {
-                moveDownMessage.send()
-            } else if (hasntBeenMoving) {
-                check(currentPos)
+
+        center?.let {
+            if (currentPos.y > it.y - 2) moveDownMessage.send()
+            else if (hasntBeenMoving) check(currentPos)
+        } ?: run {
+            if (moveCloseToKeeperWarning) {
+                moveCloseToKeeperWarning = false
+                Text.of("Move close to a keeper to get proper locations").sendWithPrefix()
             }
-        } else if (moveCloseToKeeperWarning) {
-            moveCloseToKeeperWarning = false
-            Text.of("Move close to a keeper to get proper locations").sendWithPrefix()
         }
     }
 
+    // bad loc: 0xFF808080u
+    // found: 0xFFFFFF00u
     private fun check(pos: Vec3) {
-        if (distance == null) {
-            resetMessage.send()
-        }
-        val chests = arrayListOf<BlockPos>()
-        (possibleChests.takeIf { it.isNotEmpty() } ?: locations).forEach { loc ->
-            val dist = distance ?: return@forEach
+        if (distance == null) resetMessage.send()
 
-            val distToLower = pos.distanceTo(loc.toVec3LowerUpperY())
-            if (distToLower in dist - 0.1..dist + 0.1) {
-                chests.add(loc)
-            }
+        val candidates = (possibleChests.takeIf { it.isNotEmpty() } ?: locations).filter {
+            val distToLower = pos.distanceTo(it.toVec3LowerUpperY())
+            val distance = distance ?: return@filter false
+            distToLower in distance - 0.1..distance + 0.1
         }
-        if (chests.size == 1) {
-            // when only one chest is found
-            foundChest = chests.first()
-            possibleChests.clear()
-            Text.of("Chest found at §a${foundChest!!.x}§f, §a${foundChest!!.y}§f, §a${foundChest!!.z}").sendWithPrefix()
-        } else if (chests.isEmpty()) {
-            // when no chest is found
-            noChestFoundCounter++
-        } else {
-            // when few chests are found
-            if (possibleChests.isNotEmpty()) {
-                val combined = possibleChests.intersect(chests)
-                possibleChests.clear()
-                possibleChests.addAll(combined)
-                if (possibleChests.size == 1) {
-                    foundChest = chests.first()
-                    return
+
+        when (candidates.size) {
+            0 -> {
+                noChestFoundCounter++
+                if (noChestFoundCounter > 2) {
+                    resetMessage.send()
+                    reset()
                 }
-            } else {
-                possibleChests.addAll(chests)
             }
-            if (possibleChests.size != previousCurrentChests) {
-                Text.of("Found §c${possibleChests.size}§f chests, Keep moving around!").sendWithPrefix()
+
+            1 -> {
+                foundChest = candidates.first()
+                possibleChests.clear()
+                Text.of("Chest found at §a${foundChest!!.x}§f, §a${foundChest!!.y}§f, §a${foundChest!!.z}").sendWithPrefix()
             }
-            previousCurrentChests = possibleChests.size
-        }
-        if (noChestFoundCounter > 2) {
-            resetMessage.send()
-            reset()
+
+            else -> {
+                possibleChests.run {
+                    if (isNotEmpty()) {
+                        retainAll(candidates)
+                        if (size == 1) foundChest = first()
+                    } else addAll(candidates)
+                }
+                if (possibleChests.size != previousCurrentChests) {
+                    Text.of("Found §c${possibleChests.size}§f chests, Keep moving around!").sendWithPrefix()
+                }
+                previousCurrentChests = possibleChests.size
+            }
         }
     }
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onActionBar(event: ActionBarReceivedEvent.Pre) {
-        if (distance != -1.0) {
-            if (getDistance(event.text) != distanceOnFind) {
-                distanceOnFind = -1.0
-                cooldown = System.currentTimeMillis() - 10000
-            }
+        val distanceFromActionbar = getDistance(event.text)
+        if (distance != -1.0 && distanceFromActionbar != distanceOnFind) {
+            distanceOnFind = -1.0
+            cooldown = System.currentTimeMillis() - 10000
         }
-        if (searchCheck()) {
-            val distance = getDistance(event.text)
-            if (distance != -1.0) {
-                this.distance = distance
-            }
-        }
+        if (searchCheck() && distanceFromActionbar != 1.0) distance = distanceFromActionbar
     }
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onEntityNamed(event: NameChangedEvent) {
-        if (center != null) return
-        if (locations.isNotEmpty()) return
+        if (center != null || locations.isNotEmpty()) return
         if (event.infoLineEntity !is ArmorStand || !event.literalComponent.startsWith("Keeper of ")) return
 
-        val keeperPos = event.infoLineEntity.blockPosition()
-        val keeperType = event.literalComponent.substringAfter("Keeper of ")
+        val keeperType = event.literalComponent.removePrefix("Keeper of ")
         val offset = keeperOffset[keeperType] ?: return
-        val foundCenter = BlockPos(keeperPos.x + offset.x, keeperPos.y + offset.y, keeperPos.z + offset.z)
-
-        center = foundCenter
-        offsets.forEach { location ->
-            locations.add(BlockPos(location.x + foundCenter.x, location.y + foundCenter.y, location.z + foundCenter.z))
-        }
+        val keeperPos = event.infoLineEntity.blockPosition()
+        center = BlockPos(keeperPos.x + offset.x, keeperPos.y + offset.y, keeperPos.z + offset.z)
+        offsets.mapTo(locations) { BlockPos(it.x + center!!.x, it.y + center!!.y, it.z + center!!.z) }
     }
 
     @Subscription
@@ -221,9 +165,7 @@ object MetalDetectorSolver {
         if (foundTreasureRegex.matches(event.text)) {
             reset()
             cooldown = System.currentTimeMillis() + 2500
-            McClient.self.gui.overlayMessageString?.stripped?.let { message ->
-                distanceOnFind = getDistance(message)
-            }
+            McClient.self.gui.overlayMessageString?.stripped?.let { distanceOnFind = getDistance(it) }
         }
     }
 
@@ -243,32 +185,23 @@ object MetalDetectorSolver {
         previousCurrentChests = -1
     }
 
-    // bad loc: 0xFF808080u
-    // found: 0xFFFFFF00u
+    fun searchCheck() = SkyBlockAreas.MINES_OF_DIVAN.inArea() && McPlayer.heldItem.isDetector() && foundChest == null && System.currentTimeMillis() > cooldown
 
-    fun searchCheck(): Boolean =
-        SkyBlockAreas.MINES_OF_DIVAN.inArea() && McPlayer.heldItem.isDetector() && foundChest == null && System.currentTimeMillis() > cooldown
-
-    fun getDistance(actionBar: String): Double {
-        val split = actionBar.split("     ")
-        for (widget in split) {
-            actionbarDistanceRegex.findGroup(widget, "distance")?.let {
-                return it.toDouble()
-            }
-        }
-        return -1.0
-    }
+    fun getDistance(actionBar: String): Double = actionBar.split("     ").firstNotNullOfOrNull {
+        actionbarDistanceRegex.findGroup(it, "distance")?.toDoubleOrNull()
+    } ?: -1.0
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onTick(event: TickEvent) {
         val delta = McPlayer.self?.deltaMovement ?: return
+        val playerPosition = McPlayer.self?.position() ?: return
         if (delta.x == 0.0 && delta.z == 0.0 && McPlayer.self!!.onGround()) {
             if (checkingFromPos == null) {
-                checkingFromPos = PosAndTime(System.currentTimeMillis(), McPlayer.self!!.position())
+                checkingFromPos = PosAndTime(System.currentTimeMillis(), playerPosition)
             } else {
                 if (System.currentTimeMillis() > checkingFromPos!!.time + 1000) {
-                    if (checkingFromPos!!.pos == McPlayer.self!!.position()) {
+                    if (checkingFromPos!!.position == playerPosition) {
                         hasntBeenMoving = true
                     } else {
                         checkingFromPos = null
@@ -282,7 +215,7 @@ object MetalDetectorSolver {
         }
     }
 
-    class PosAndTime(val time: Long, val pos: Vec3)
+    class PosAndTime(val time: Long, val position: Vec3)
 
     @Subscription
     fun onRightClick(event: RightClickEvent) {
@@ -299,29 +232,25 @@ object MetalDetectorSolver {
 
         override fun appliesTo(item: ItemStack): Boolean = item.isDetector()
 
-        override fun modify(
-            item: ItemStack,
-            list: MutableList<Component>,
-        ): Boolean = withMerger(list) {
+        override fun modify(item: ItemStack, list: MutableList<Component>): Boolean = withMerger(list) {
             addUntil { it.stripped == "SPECIAL" }
             add(
                 Text.of {
                     append("Ability: Solver Reset ").withColor(TextColor.ORANGE)
                     append("SNEAK RIGHT CLICK") {
-                        this.color = TextColor.YELLOW
-                        this.bold = true
+                        color = TextColor.YELLOW
+                        bold = true
                     }
                 },
             )
             add(
                 Text.of {
-                    this.color = TextColor.GRAY
+                    color = TextColor.GRAY
                     append("Reset the solver if it breaks.")
                 },
             )
             space()
             true
         }
-
     }
 }

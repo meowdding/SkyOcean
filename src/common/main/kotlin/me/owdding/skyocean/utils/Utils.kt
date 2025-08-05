@@ -35,6 +35,7 @@ import java.nio.file.StandardOpenOption
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.math.roundToInt
+import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.jvm.javaType
 import kotlin.reflect.typeOf
 
@@ -153,6 +154,14 @@ object Utils {
 
     operator fun <Key : Any, Value : Any> Cache<Key, Value>.get(key: Key) = this.getIfPresent(key)
     operator fun <Key : Any, Value : Any> Cache<Key, Value>.set(key: Key, value: Value) = this.put(key, value)
+
+    inline fun <T> KMutableProperty0<T>.setIf(value: T, predicate: (T) -> Boolean) {
+        if (predicate(value)) this.set(value)
+    }
+
+    inline fun <T> KMutableProperty0<T>.setNotIf(value: T, predicate: (T) -> Boolean) {
+        if (!predicate(value)) this.set(value)
+    }
 }
 
 @AutoCollect("LateInitModules")
