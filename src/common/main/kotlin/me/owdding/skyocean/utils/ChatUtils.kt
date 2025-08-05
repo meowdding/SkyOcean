@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
@@ -58,8 +59,10 @@ internal object ChatUtils {
 
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))
     fun chat(text: Component) = Text.join(prefix, text).withoutShadow().send()
+    fun chat(text: Component, id: String) = Text.join(prefix, text).withoutShadow().send(id)
 
     fun Component.sendWithPrefix() = chat(this)
+    fun Component.sendWithPrefix(id: String) = chat(this, id)
 }
 
 object OceanColors {
@@ -67,6 +70,15 @@ object OceanColors {
     const val WARNING = PINK
     const val DARK_CYAN_BLUE = 0x355AA0
     const val LIGHT_GRAYISH_CYAN = 0xcff8ff
+}
+
+data class ReplaceMessage(val message: Component) {
+    constructor(message: String) : this(Text.of(message))
+
+    private val stripped = message.stripped
+    fun send() {
+        message.sendWithPrefix(stripped)
+    }
 }
 
 data class StaticMessageWithCooldown(val duration: Duration, val message: Component) {

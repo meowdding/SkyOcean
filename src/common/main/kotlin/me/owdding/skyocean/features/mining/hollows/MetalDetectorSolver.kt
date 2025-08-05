@@ -4,21 +4,15 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
 import me.owdding.skyocean.features.item.lore.LoreModifier
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.StaticMessageWithCooldown
+import me.owdding.skyocean.utils.ReplaceMessage
 import me.owdding.skyocean.utils.Utils.unaryPlus
-import me.owdding.skyocean.utils.Waypoint
-import me.owdding.skyocean.utils.extensions.toBlockPos
 import me.owdding.skyocean.utils.extensions.toVec3LowerUpperY
-import me.owdding.skyocean.utils.rendering.RenderUtils.renderBox
-import me.owdding.skyocean.utils.rendering.RenderUtils.renderLineFromCursor
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
-import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
-import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.chat.ActionBarReceivedEvent
@@ -26,35 +20,36 @@ import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.NameChangedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.RightClickEvent
-import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
-import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockAreas
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
+import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.findGroup
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import kotlin.time.Duration.Companion.seconds
 
 @Suppress("unused")
 @Module
 object MetalDetectorSolver {
 
-    val treasureRegex = Regex("""TREASURE: (\d+\.\d+)m""")
+    private const val DETECTOR = "DWARVEN_METAL_DETECTOR"
+    private val actionbarDistanceRegex = "TREASURE: (?<distance>[\\d.]+)m".toRegex()
+    private val foundTreasureRegex = "You found .* with your Metal Detector!".toRegex()
 
-    val keeperOffset = mapOf(
+    private val keeperOffset = mapOf(
         "Gold" to Vec3i(3, 0, -33),
         "Diamond" to Vec3i(33, 0, 3),
         "Emerald" to Vec3i(-3, 0, 33),
         "Lapis" to Vec3i(-33, 0, -3),
     )
 
-    val offsets = arrayOf(
+    private val offsets = arrayOf(
         Vec3i(-24, -22, 12),
         Vec3i(-42, -20, -28),
         Vec3i(30, -21, -25),
@@ -93,33 +88,37 @@ object MetalDetectorSolver {
         Vec3i(19, -22, 29),
         Vec3i(-38, -22, 26),
         Vec3i(-31, -21, -12),
-        Vec3i(24, -22, 27)
+        Vec3i(24, -22, 27),
     )
+    private var center: BlockPos? = null
+    private val locations = arrayListOf<BlockPos>()
 
-    var foundChest: Waypoint? = null
-    // Gets populated once per lobby
-    val locations = arrayListOf<Waypoint>()
+    private val possibleChests = arrayListOf<BlockPos>()
+    private var foundChest: BlockPos? = null
 
-    val possibleChests = arrayListOf<Waypoint>()
+    private var distance: Double? = null
 
-    var distance: Double? = null
-    var center: BlockPos? = null
+    private var cooldown = System.currentTimeMillis()
 
-    var cooldown = System.currentTimeMillis()
+    private var noChestFoundCounter = 0
+    private var previousCurrentChests = -1
 
-    var noChestFoundCounter = 0
-    var previousCurrentChests = -1
+    private var distanceOnFind = -1.0
 
-    var distanceOnFind = -1.0
+    private var moveCloseToKeeperWarning = true
+    private val moveDownMessage = ReplaceMessage("Please move further down to correctly detect treasure.")
+    private val resetMessage = ReplaceMessage("Move around some more!")
 
-    val moveDownMessage = StaticMessageWithCooldown(5.seconds, Text.of("Please move further down to correctly detect treasure."))
-    var moveCloseToKeeperWarning = true
-    val resetMessage = StaticMessageWithCooldown(4.seconds, Text.of("Move around some more!"))
+    /* Coordinate Tracking */
+    private var checkingFromPos: PosAndTime? = null
+    private var hasntBeenMoving = false
+
+    private fun ItemStack?.isDetector() = this?.getSkyBlockId() == DETECTOR
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun eachSecond(event: TickEvent) {
-        val currentPos = McPlayer.position?: return
+        val currentPos = McPlayer.position ?: return
         if (!searchCheck()) return
         if (center != null) {
             if (currentPos.y > center!!.y - 2) {
@@ -137,12 +136,12 @@ object MetalDetectorSolver {
         if (distance == null) {
             resetMessage.send()
         }
-        val chests = arrayListOf<Waypoint>()
+        val chests = arrayListOf<BlockPos>()
         (possibleChests.takeIf { it.isNotEmpty() } ?: locations).forEach { loc ->
             val dist = distance ?: return@forEach
 
-            val distToLower = pos.distanceTo(loc.pos.toBlockPos().toVec3LowerUpperY())
-            if (distToLower in dist-0.1..dist+0.1) {
+            val distToLower = pos.distanceTo(loc.toVec3LowerUpperY())
+            if (distToLower in dist - 0.1..dist + 0.1) {
                 chests.add(loc)
             }
         }
@@ -150,7 +149,7 @@ object MetalDetectorSolver {
             // when only one chest is found
             foundChest = chests.first()
             possibleChests.clear()
-            Text.of("Chest found at §a${chests[0].pos.x.toInt()}§f, §a${chests[0].pos.y.toInt()}§f, §a${chests[0].pos.z.toInt()}").sendWithPrefix()
+            Text.of("Chest found at §a${foundChest!!.x}§f, §a${foundChest!!.y}§f, §a${foundChest!!.z}").sendWithPrefix()
         } else if (chests.isEmpty()) {
             // when no chest is found
             noChestFoundCounter++
@@ -198,41 +197,28 @@ object MetalDetectorSolver {
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onEntityNamed(event: NameChangedEvent) {
-        if (event.infoLineEntity is ArmorStand && event.literalComponent.startsWith("Keeper of ")) {
-            val type = event.literalComponent.substringAfter("Keeper of ")
-            val blockPos = event.infoLineEntity.blockPosition()
-            val offset = keeperOffset[type]?: return
-            if (center == null) {
-                val newPos = BlockPos(blockPos.x + offset.x, blockPos.y + offset.y, blockPos.z + offset.z)
-                center = newPos
-                locations.ifEmpty {
-                    offsets.forEach { location ->
-                        locations.add(Waypoint(
-                            Text.of("Treasure"),
-                            BlockPos(location.x + newPos.x, location.y + newPos.y, location.z + newPos.z).toVec3LowerUpperY(),
-                            0.8F,
-                            true,
-                            box = true
-                        ))
-                    }
-                }
-            }
+        if (center != null) return
+        if (locations.isNotEmpty()) return
+        if (event.infoLineEntity !is ArmorStand || !event.literalComponent.startsWith("Keeper of ")) return
+
+        val keeperPos = event.infoLineEntity.blockPosition()
+        val keeperType = event.literalComponent.substringAfter("Keeper of ")
+        val offset = keeperOffset[keeperType] ?: return
+        val foundCenter = BlockPos(keeperPos.x + offset.x, keeperPos.y + offset.y, keeperPos.z + offset.z)
+
+        center = foundCenter
+        offsets.forEach { location ->
+            locations.add(BlockPos(location.x + foundCenter.x, location.y + foundCenter.y, location.z + foundCenter.z))
         }
     }
 
     @Subscription
-    fun onServerChange(event: ServerChangeEvent) {
-        center = null
-        locations.clear()
-        moveCloseToKeeperWarning = true
-        distanceOnFind = -1.0
-        reset()
-    }
+    fun onServerChange(event: ServerChangeEvent) = fullReset()
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onChatMessage(event: ChatReceivedEvent.Pre) {
-        if (event.text.startsWith("You found") && event.text.endsWith("with your Metal Detector!")) {
+        if (foundTreasureRegex.matches(event.text)) {
             reset()
             cooldown = System.currentTimeMillis() + 2500
             McClient.self.gui.overlayMessageString?.stripped?.let { message ->
@@ -241,7 +227,15 @@ object MetalDetectorSolver {
         }
     }
 
-    fun reset() {
+    private fun fullReset() {
+        center = null
+        locations.clear()
+        moveCloseToKeeperWarning = true
+        distanceOnFind = -1.0
+        reset()
+    }
+
+    private fun reset() {
         noChestFoundCounter = 0
         distance = null
         possibleChests.clear()
@@ -249,51 +243,21 @@ object MetalDetectorSolver {
         previousCurrentChests = -1
     }
 
-    @Subscription
-    @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onRender(event: RenderWorldEvent.AfterEntities) {
-        if (LocationAPI.area != SkyBlockAreas.MINES_OF_DIVAN) return
-        possibleChests.forEach { chest ->
-            event.atCamera {
-                event.renderBox(chest.pos.toBlockPos().below(), 0xFF808080u)
-            }
-            //chest.render(event.poseStack, event.camera, event.buffer)
-            event.renderLineFromCursor(chest.pos.add(0.5, -1.5, 0.5), 0xFF808080u, 0.3F)
-        }
-        foundChest.takeIf { it != null }?.let { chest ->
-            event.atCamera {
-                event.renderBox(chest.pos.toBlockPos().below(), 0xFFFFFF00u)
-            }
-            //chest.render(event.poseStack, event.camera, event.buffer)
-            event.renderLineFromCursor(chest.pos.add(0.5, -1.5, 0.5), 0xFFFFFF00u, 1.0F)
-        }
-    }
+    // bad loc: 0xFF808080u
+    // found: 0xFFFFFF00u
 
-    fun searchCheck(): Boolean = LocationAPI.area == SkyBlockAreas.MINES_OF_DIVAN && McPlayer.heldItem.getData(DataTypes.ID)?.equals("DWARVEN_METAL_DETECTOR") == true && foundChest == null && System.currentTimeMillis() > cooldown
-
-    private fun getPlayerPosAdjustedForEyeHeight(playerPos: Vec3): Vec3 {
-        return Vec3(
-            playerPos.x,
-            playerPos.y + McPlayer.self!!.eyeHeight,
-            playerPos.z,
-        )
-    }
+    fun searchCheck(): Boolean =
+        SkyBlockAreas.MINES_OF_DIVAN.inArea() && McPlayer.heldItem.isDetector() && foundChest == null && System.currentTimeMillis() > cooldown
 
     fun getDistance(actionBar: String): Double {
         val split = actionBar.split("     ")
         for (widget in split) {
-            if (widget.matches(treasureRegex)) {
-                treasureRegex.matchEntire(widget)?.let {
-                    return it.groupValues[1].toDouble()
-                }
+            actionbarDistanceRegex.findGroup(widget, "distance")?.let {
+                return it.toDouble()
             }
         }
         return -1.0
     }
-
-    /* Coordinate Tracking */
-    var checkingFromPos: PosAndTime? = null
-    var hasntBeenMoving = false
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
@@ -322,7 +286,7 @@ object MetalDetectorSolver {
 
     @Subscription
     fun onRightClick(event: RightClickEvent) {
-        if (event.stack.getData(DataTypes.ID) == "DWARVEN_METAL_DETECTOR" && McPlayer.self!!.isCrouching) {
+        if (event.stack.isDetector() && McPlayer.self!!.isCrouching) {
             Text.of("Resetting Metal Detector Solver").sendWithPrefix()
             reset()
         }
@@ -333,7 +297,7 @@ object MetalDetectorSolver {
         override val displayName: Component = +"skyocean.config.lore_modifiers.metal_detector_lore"
         override val isEnabled: Boolean get() = true
 
-        override fun appliesTo(item: ItemStack): Boolean = item.getData(DataTypes.ID) == "DWARVEN_METAL_DETECTOR"
+        override fun appliesTo(item: ItemStack): Boolean = item.isDetector()
 
         override fun modify(
             item: ItemStack,
@@ -347,13 +311,13 @@ object MetalDetectorSolver {
                         this.color = TextColor.YELLOW
                         this.bold = true
                     }
-                }
+                },
             )
             add(
                 Text.of {
                     this.color = TextColor.GRAY
                     append("Reset the solver if it breaks.")
-                }
+                },
             )
             space()
             true
