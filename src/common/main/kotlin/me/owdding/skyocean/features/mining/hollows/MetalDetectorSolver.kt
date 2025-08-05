@@ -1,6 +1,9 @@
 package me.owdding.skyocean.features.mining.hollows
 
 import me.owdding.ktmodules.Module
+import me.owdding.lib.waypoints.ExpellingWaypoint
+import me.owdding.lib.waypoints.ExpellingWaypointList
+import me.owdding.lib.waypoints.MeowddingWaypoint
 import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
 import me.owdding.skyocean.features.item.lore.LoreModifier
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
@@ -59,8 +62,8 @@ object MetalDetectorSolver {
     )
     private var center: BlockPos? = null
     private val locations = arrayListOf<BlockPos>()
-    private val possibleChests = arrayListOf<BlockPos>()
-    private var foundChest: BlockPos? = null
+    private var possibleChests by ExpellingWaypointList()
+    private var foundChest by ExpellingWaypoint()
     private var distance: Double? = null
     private var cooldown = System.currentTimeMillis()
     private var noChestFoundCounter = 0
@@ -91,13 +94,19 @@ object MetalDetectorSolver {
         }
     }
 
-    // bad loc: 0xFF808080u
-    // found: 0xFFFFFF00u
     private fun check(pos: Vec3) {
         if (distance == null) resetMessage.send()
 
-        val candidates = (possibleChests.takeIf { it.isNotEmpty() } ?: locations).filter {
-            val distToLower = pos.distanceTo(it.toVec3LowerUpperY())
+        val possibleLocations = possibleChests.takeIf { it.isNotEmpty() } ?: locations.map {
+            MeowddingWaypoint(it, false) {
+                withName(Text.of("Possible Treasure").withColor(TextColor.GRAY))
+                withColor(0xFF808080.toInt())
+                withAllRenderTypes()
+                inLocatorBar()
+            }
+        }
+        val candidates = possibleLocations.filter {
+            val distToLower = pos.distanceTo(it.getBlockPos().toVec3LowerUpperY())
             val distance = distance ?: return@filter false
             distToLower in distance - 0.1..distance + 0.1
         }
@@ -112,24 +121,36 @@ object MetalDetectorSolver {
             }
 
             1 -> {
-                foundChest = candidates.first()
-                possibleChests.clear()
-                Text.of("Chest found at §a${foundChest!!.x}§f, §a${foundChest!!.y}§f, §a${foundChest!!.z}").sendWithPrefix()
+                foundPosition(candidates.first().getBlockPos())
+                possibleChests = mutableListOf()
             }
 
             else -> {
                 possibleChests.run {
                     if (isNotEmpty()) {
                         retainAll(candidates)
-                        if (size == 1) foundChest = first()
+                        if (size == 1) foundPosition(first().getBlockPos())
                     } else addAll(candidates)
                 }
+                @Suppress("SelfAssignment") // this needs this, cry about it
+                possibleChests = possibleChests
                 if (possibleChests.size != previousCurrentChests) {
                     Text.of("Found §c${possibleChests.size}§f chests, Keep moving around!").sendWithPrefix()
                 }
                 previousCurrentChests = possibleChests.size
             }
         }
+    }
+
+    // todo: play ding
+    private fun foundPosition(blockPos: BlockPos) {
+        foundChest = MeowddingWaypoint(blockPos, false) {
+            withName(Text.of("Treasure").withColor(TextColor.ORANGE))
+            withColor(0xFFFFFF00.toInt())
+            withAllRenderTypes()
+            inLocatorBar()
+        }
+        Text.of("Chest found at §a${blockPos.x}§f, §a${blockPos.y}§f, §a${blockPos.z}").sendWithPrefix()
     }
 
     @Subscription
