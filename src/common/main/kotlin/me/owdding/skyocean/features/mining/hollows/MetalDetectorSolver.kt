@@ -165,8 +165,9 @@ object MetalDetectorSolver {
         val keeperType = event.literalComponent.removePrefix("Keeper of ")
         val offset = keeperOffset[keeperType] ?: return
         val keeperPos = event.infoLineEntity.blockPosition()
-        center = BlockPos(keeperPos.x + offset.x, keeperPos.y + offset.y, keeperPos.z + offset.z)
-        offsets.mapTo(locations) { BlockPos(it.x + center!!.x, it.y + center!!.y, it.z + center!!.z) }
+        center = BlockPos(keeperPos.x + offset.x, keeperPos.y + offset.y, keeperPos.z + offset.z).also { center ->
+            offsets.mapTo(locations) { BlockPos(it.x + center.x, it.y + center.y, it.z + center.z) }
+        }
     }
 
     @Subscription
@@ -252,7 +253,7 @@ object MetalDetectorSolver {
     @Subscription
     fun onRightClick(event: RightClickEvent) {
         if (!isEnabled()) return
-        if (event.stack.isDetector() && McPlayer.self!!.isCrouching) {
+        if (event.stack.isDetector() && McPlayer.self?.isCrouching == true) {
             Text.of("Resetting Metal Detector Solver").sendWithPrefix()
             reset()
         }
