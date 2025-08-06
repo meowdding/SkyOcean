@@ -131,6 +131,21 @@
       "puzzler": {
         "@value": "Puzzler Solver",
         "desc": "Highlights the correct block for the puzzler."
+      },
+      "metal_detector": {
+        "@value": "Metal Detector Solver",
+        "metalDetector": {
+          "@value": "Enable Metal Detector Solver",
+          "desc": "todo"
+        },
+        "playDingOnFind": {
+          "@value": "Play Ding on Find",
+          "desc": "Plays a sound when the metal detector finds a treasure."
+        },
+        "showTitleOnFind": {
+          "@value": "Show Title on Find",
+          "desc": "Shows a title when the metal detector finds a treasure."
+        }
       }
     },
     "inventory": {
@@ -509,7 +524,8 @@
       "storage_preview": {
         "@value": "Storage Preview",
         "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
-      }
+      },
+      "metal_detector_lore": "Metal Detector Solver Lore"
     },
     "foraging": {
       "@value": "Foraging",
