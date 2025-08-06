@@ -24,7 +24,6 @@ object MobIcons {
     enum class DisplayType(val font: ResourceLocation) {
         NORMAL(MOB_ICONS),
         SHORT(MOB_ICONS_SHORT),
-        ;
     }
 
     private val MOB_TYPES = Regex(KnownMobIcon.entries.joinToString("|") { it.icon })
@@ -36,7 +35,7 @@ object MobIcons {
         val stripped = event.literalComponent
         if (!stripped.matches(Regex("(?:﴾ )?\\[Lv.*"))) return
         if (!stripped.contains(MOB_TYPES)) return
-        event.component.visitSiblings { it ->
+        event.component.visitSiblings {
             val stripped = it.stripped.trim()
             if (stripped.matches(MOB_TYPES)) {
                 val text = (it as? MutableComponent) ?: return@visitSiblings
@@ -72,7 +71,7 @@ enum class KnownMobIcon(val icon: String, short: String? = null) {
     SHIELDED('⛨', "SHIE"),
     AIRBORNE('✈', "AIR"),
     GLACIAL('❆', "GLAC"),
-    WOODLAND('⸙', "WOOD")
+    WOODLAND('⸙', "WOOD"),
     ;
 
     var color: Int? = null
