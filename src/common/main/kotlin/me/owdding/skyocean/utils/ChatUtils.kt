@@ -73,9 +73,9 @@ object OceanColors {
 }
 
 data class ReplaceMessage(val message: Component) {
-    private val stripped = message.stripped
-
     constructor(message: String) : this(Text.of(message))
+
+    private val stripped = message.stripped
 
     fun send() {
         message.sendWithPrefix(stripped)
