@@ -19,7 +19,7 @@ const val fontWidth = 5
 const val fontHeight = 5
 const val backgroundHeight = 7
 
-class MobTypesFont(output: FabricDataOutput, val converter: (KnownMobIcon) -> String, val fontType: String) :
+class MobTypesFontProvider(output: FabricDataOutput, val converter: (KnownMobIcon) -> String, val fontType: String) :
     SkyOceanFontProvider(output, SkyOcean.id(fontType)) {
     val mobTypesTexturePath = "font/$fontType"
 
