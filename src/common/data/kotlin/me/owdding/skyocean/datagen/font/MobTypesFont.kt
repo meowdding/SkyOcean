@@ -62,7 +62,7 @@ class MobTypesFont(output: FabricDataOutput, val converter: (KnownMobIcon) -> St
             pngHolder.submit(SkyOcean.id(it.name.lowercase()), outputStream, hashingOutputStream)
 
             val id = SkyOcean.id("${it.name.lowercase()}.png").withPrefix("$mobTypesTexturePath/")
-            bitmap(id, backgroundHeight, ascent = 6) {
+            bitmap(id, backgroundHeight) {
                 row(it.icon)
             }
         }
