@@ -261,7 +261,7 @@ object MetalDetectorSolver {
 
     @LoreModifier
     object MetalDetectorLoreModifier : AbstractLoreModifier() {
-        override val displayName: Component = +"skyocean.config.lore_modifiers.metal_detector_lore"
+        override val displayName: Component = +"skyocean.config.mining.metal_detector.metalDetector"
         override val isEnabled: Boolean get() = MiningConfig.metalDetectorSolver
 
         override fun appliesTo(item: ItemStack): Boolean = item.isDetector()

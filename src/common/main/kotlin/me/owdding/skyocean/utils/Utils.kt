@@ -159,7 +159,7 @@ object Utils {
         if (predicate(value)) this.set(value)
     }
 
-    inline fun <T> KMutableProperty0<T>.setNotIf(value: T, predicate: (T) -> Boolean) {
+    inline fun <T> KMutableProperty0<T>.setIfNot(value: T, predicate: (T) -> Boolean) {
         if (!predicate(value)) this.set(value)
     }
 }

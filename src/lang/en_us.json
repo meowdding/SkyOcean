@@ -136,7 +136,7 @@
         "@value": "Metal Detector Solver",
         "metalDetector": {
           "@value": "Enable Metal Detector Solver",
-          "desc": "todo"
+          "desc": "Enables the metal detector solver, which helps you find treasures in the Mines of Divan."
         },
         "playDingOnFind": {
           "@value": "Play Ding on Find",
@@ -524,8 +524,7 @@
       "storage_preview": {
         "@value": "Storage Preview",
         "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
-      },
-      "metal_detector_lore": "Metal Detector Solver Lore"
+      }
     },
     "foraging": {
       "@value": "Foraging",
