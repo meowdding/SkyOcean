@@ -22,7 +22,7 @@ object MobIcons {
     @OnlyOnSkyBlock
     fun attachmentModifyEvent(event: EntityInfoLineEvent) {
         val stripped = event.literalComponent
-        if (!stripped.startsWith("[Lv")) return
+        if (!stripped.matches(Regex("(?:﴾ )?\\[Lv.*"))) return
         if (!stripped.contains(MOB_TYPES)) return
         event.component.visitSiblings {
             val stripped = it.stripped.trim()

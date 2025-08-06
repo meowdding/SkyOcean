@@ -17,7 +17,7 @@ val CODEC = RecordCodecBuilder.create { it ->
     ).apply(it) { it }
 }
 
-abstract class SkyOceanFontProvider(output: PackOutput, val id: ResourceLocation) : DataProvider {
+abstract class SkyOceanFontProvider(val output: PackOutput, val id: ResourceLocation) : DataProvider {
     val fontPathProvider: PackOutput.PathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "font")
 
     abstract fun SkyOceanFontProviderHolder.create()
