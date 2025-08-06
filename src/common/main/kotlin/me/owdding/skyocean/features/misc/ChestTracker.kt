@@ -105,6 +105,7 @@ object ChestTracker {
         }
         IslandChestStorage.save()
         resetCoords()
+        ChestTracker.container = null
     }
 
     private val Slot.savableIndex get() = this.index % 27
