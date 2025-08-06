@@ -6,7 +6,6 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.datagen.providers.PngHolder
 import me.owdding.skyocean.datagen.providers.SkyOceanFontProvider
 import me.owdding.skyocean.features.textures.KnownMobIcon
-import me.owdding.skyocean.features.textures.MobIcons
 import me.owdding.skyocean.utils.Utils
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.minecraft.data.CachedOutput
@@ -16,9 +15,14 @@ import java.awt.image.BufferedImage
 import java.util.concurrent.CompletableFuture
 import javax.imageio.ImageIO
 
-const val mobTypesTexturePath = "font/mob_types"
+const val fontWidth = 5
+const val fontHeight = 5
+const val backgroundHeight = 7
 
-class MobTypesFont(output: FabricDataOutput) : SkyOceanFontProvider(output, MobIcons.FONT_ID) {
+class MobTypesFont(output: FabricDataOutput, val converter: (KnownMobIcon) -> String, val fontType: String) :
+    SkyOceanFontProvider(output, SkyOcean.id(fontType)) {
+    val mobTypesTexturePath = "font/$fontType"
+
     val mobTypesProvider: PackOutput.PathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "textures/$mobTypesTexturePath")
     val pngHolder = PngHolder(mobTypesProvider)
 
@@ -29,26 +33,27 @@ class MobTypesFont(output: FabricDataOutput) : SkyOceanFontProvider(output, MobI
         }
 
         val blank = ImageIO.read(Utils.loadFromResourcesAsStream("data/skyocean/textures/mob_types_blank.png"))
-        val left = blank.getSubimage(0, 0, 3, 10)
-        val middle = blank.getSubimage(3, 0, 6, 10)
-        val right = blank.getSubimage(9, 0, 3, 10)
+        val left = blank.getSubimage(0, 0, 2, backgroundHeight)
+        val middle = blank.getSubimage(2, 0, 6, backgroundHeight)
+        val right = blank.getSubimage(9, 0, 2, backgroundHeight)
 
-        val font = ImageIO.read(Utils.loadFromResourcesAsStream("data/skyocean/textures/mob_types_font.png"))
+        val font = ImageIO.read(Utils.loadFromResourcesAsStream("data/skyocean/textures/small.png"))
         val fontMap: Map<Char, BufferedImage> = ('a'..'z').mapIndexed { index, character ->
-            character.uppercaseChar() to font.getSubimage(index * 6, 0, 6, 8)
+            character.uppercaseChar() to font.getSubimage(index * fontWidth, 0, fontWidth, fontHeight)
         }.toMap()
 
         KnownMobIcon.entries.forEach {
-            val name = it.name
-            val totalWidth = 6 + name.length * 6
-            val image = BufferedImage(totalWidth, 10, BufferedImage.TYPE_INT_ARGB)
+            val name = converter(it)
+            val spacedWidth = fontWidth + 1
+            val totalWidth = 4 + name.length * spacedWidth - 1
+            val image = BufferedImage(totalWidth, backgroundHeight, BufferedImage.TYPE_INT_ARGB)
             val graphics = image.createGraphics()
             graphics.drawImage(left, 0, 0, null)
             name.forEachIndexed { index, character ->
-                graphics.drawImage(middle, 3 + index * 6, 0, null)
-                graphics.drawImage(fontMap[character]!!, 3 + index * 6, 1, null)
+                graphics.drawImage(middle, 2 + index * spacedWidth, 0, null)
+                graphics.drawImage(fontMap[character]!!, 2 + index * spacedWidth, 1, null)
             }
-            graphics.drawImage(right, totalWidth - 3, 0, null)
+            graphics.drawImage(right, totalWidth - 2, 0, null)
 
             graphics.dispose()
             val outputStream = ByteArrayOutputStream()
@@ -57,7 +62,7 @@ class MobTypesFont(output: FabricDataOutput) : SkyOceanFontProvider(output, MobI
             pngHolder.submit(SkyOcean.id(it.name.lowercase()), outputStream, hashingOutputStream)
 
             val id = SkyOcean.id("${it.name.lowercase()}.png").withPrefix("$mobTypesTexturePath/")
-            bitmap(id, 10, ascent = 8) {
+            bitmap(id, backgroundHeight, ascent = 6) {
                 row(it.icon)
             }
         }
@@ -68,5 +73,5 @@ class MobTypesFont(output: FabricDataOutput) : SkyOceanFontProvider(output, MobI
         return CompletableFuture.allOf(pngHolder.save(output))
     }
 
-    override fun getName() = "Mob Types Font Generator"
+    override fun getName() = "Mob Types Font Generator ('$fontType')"
 }

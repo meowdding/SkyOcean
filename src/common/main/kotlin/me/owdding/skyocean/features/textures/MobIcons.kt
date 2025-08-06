@@ -14,7 +14,8 @@ import java.util.concurrent.ConcurrentHashMap
 @Module
 object MobIcons {
 
-    val FONT_ID = id("mob_types")
+    val MOB_ICONS = id("mob_icons")
+    val MOB_ICONS_SHORT = id("mob_icons/short")
 
     private val MOB_TYPES = Regex(KnownMobIcon.entries.joinToString("|") { it.icon })
 
@@ -28,40 +29,42 @@ object MobIcons {
             val stripped = it.stripped.trim()
             if (stripped.matches(MOB_TYPES)) {
                 KnownMobIcon.getByIcon(stripped)?.name ?: return@visitSiblings
-                (it as? MutableComponent)?.font = FONT_ID
+                (it as? MutableComponent)?.font = MOB_ICONS_SHORT
             }
         }
     }
 
 }
 
-enum class KnownMobIcon(val icon: String) {
-    UNDEAD('༕'),
-    SKELETAL("🦴"),
-    ENDER('⊙'),
-    ATHROPOD('Ж'),
-    HUMANOID('✰'),
-    INFERNAL('♨'),
-    CUBIC('⚂'),
-    FROZEN('☃'),
-    SOOKY('☽'),
-    MYTHOLOGICAL('✿'),
-    WITHER('☠'),
-    SUBTERRANEAN('⛏'),
-    AQUATIC('⚓'),
+enum class KnownMobIcon(val icon: String, short: String? = null) {
+    UNDEAD('༕', "UND"),
+    SKELETAL("🦴", "SKEL"),
+    ENDER('⊙', "END"),
+    ATHROPOD('Ж', "ATHR"),
+    HUMANOID('✰', "HUM"),
+    INFERNAL('♨', "INF"),
+    CUBIC('⚂', "CUB"),
+    FROZEN('☃', "FRO"),
+    SPOOKY('☽', "BOO"),
+    MYTHOLOGICAL('✿', "MYTH"),
+    WITHER('☠', "WITH"),
+    SUBTERRANEAN('⛏', "SUB"),
+    AQUATIC('⚓', "AQUA"),
     PEST('ൠ'),
-    ANIMAL('☮'),
-    MAGMATIC('♆'),
-    ELUSIVE('♣'),
-    CONSTRUCT('⚙'),
-    ARCANE('♃'),
-    SHIELDED('⛨'),
-    AIRBORNE('✈'),
-    GLACIAL('❆'),
-    WOODLAND('⸙')
+    ANIMAL('☮', "ANI"),
+    MAGMATIC('♆', "MAGM"),
+    ELUSIVE('♣', "ELUS"),
+    CONSTRUCT('⚙', "CONST"),
+    ARCANE('♃', "ARC"),
+    SHIELDED('⛨', "SHIE"),
+    AIRBORNE('✈', "AIR"),
+    GLACIAL('❆', "GLAC"),
+    WOODLAND('⸙', "WOOD")
     ;
 
-    constructor(icon: Char) : this(icon.toString())
+    val short: String = short ?: name
+
+    constructor(icon: Char, short: String? = null) : this(icon.toString(), short)
 
     companion object {
         private val cache: MutableMap<String, KnownMobIcon?> = ConcurrentHashMap()
