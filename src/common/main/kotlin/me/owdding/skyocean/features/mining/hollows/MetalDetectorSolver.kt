@@ -4,6 +4,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.waypoints.ExpellingWaypoint
 import me.owdding.lib.waypoints.ExpellingWaypointList
 import me.owdding.lib.waypoints.MeowddingWaypoint
+import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
 import me.owdding.skyocean.features.item.lore.LoreModifier
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
@@ -13,6 +14,7 @@ import me.owdding.skyocean.utils.extensions.toVec3LowerUpperY
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
 import net.minecraft.network.chat.Component
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
@@ -77,23 +79,6 @@ object MetalDetectorSolver {
 
     private fun ItemStack?.isDetector() = this?.getSkyBlockId() == DETECTOR
 
-    @Subscription
-    @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun eachSecond(event: TickEvent) {
-        val currentPos = McPlayer.position ?: return
-        if (!searchCheck()) return
-
-        center?.let {
-            if (currentPos.y > it.y - 2) moveDownMessage.send()
-            else if (hasntBeenMoving) check(currentPos)
-        } ?: run {
-            if (moveCloseToKeeperWarning) {
-                moveCloseToKeeperWarning = false
-                Text.of("Move close to a keeper to get proper locations").sendWithPrefix()
-            }
-        }
-    }
-
     private fun check(pos: Vec3) {
         if (distance == null) resetMessage.send()
 
@@ -142,7 +127,6 @@ object MetalDetectorSolver {
         }
     }
 
-    // todo: play ding
     private fun foundPosition(blockPos: BlockPos) {
         foundChest = MeowddingWaypoint(blockPos, false) {
             withName(Text.of("Treasure").withColor(TextColor.ORANGE))
@@ -151,11 +135,19 @@ object MetalDetectorSolver {
             inLocatorBar()
         }
         Text.of("Chest found at §a${blockPos.x}§f, §a${blockPos.y}§f, §a${blockPos.z}").sendWithPrefix()
+        if (MiningConfig.playDingOnFind) McPlayer.self?.playSound(SoundEvents.NOTE_BLOCK_PLING.value())
+        if (MiningConfig.showTitleOnFind) {
+            val gui = McClient.self.gui
+            gui.setTimes(5, 20, 5)
+            gui.setSubtitle(Text.of("§a${blockPos.x}§f, §a${blockPos.y}§f, §a${blockPos.z}"))
+            gui.setTitle(Text.of("Treasure Found!").withColor(TextColor.YELLOW))
+        }
     }
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onActionBar(event: ActionBarReceivedEvent.Pre) {
+        if (!isEnabled()) return
         val distanceFromActionbar = getDistance(event.text)
         if (distance != -1.0 && distanceFromActionbar != distanceOnFind) {
             distanceOnFind = -1.0
@@ -173,8 +165,9 @@ object MetalDetectorSolver {
         val keeperType = event.literalComponent.removePrefix("Keeper of ")
         val offset = keeperOffset[keeperType] ?: return
         val keeperPos = event.infoLineEntity.blockPosition()
-        center = BlockPos(keeperPos.x + offset.x, keeperPos.y + offset.y, keeperPos.z + offset.z)
-        offsets.mapTo(locations) { BlockPos(it.x + center!!.x, it.y + center!!.y, it.z + center!!.z) }
+        center = BlockPos(keeperPos.x + offset.x, keeperPos.y + offset.y, keeperPos.z + offset.z).also { center ->
+            offsets.mapTo(locations) { BlockPos(it.x + center.x, it.y + center.y, it.z + center.z) }
+        }
     }
 
     @Subscription
@@ -183,6 +176,7 @@ object MetalDetectorSolver {
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onChatMessage(event: ChatReceivedEvent.Pre) {
+        if (!isEnabled()) return
         if (foundTreasureRegex.matches(event.text)) {
             reset()
             cooldown = System.currentTimeMillis() + 2500
@@ -206,33 +200,51 @@ object MetalDetectorSolver {
         previousCurrentChests = -1
     }
 
-    fun searchCheck() = SkyBlockAreas.MINES_OF_DIVAN.inArea() && McPlayer.heldItem.isDetector() && foundChest == null && System.currentTimeMillis() > cooldown
+    private fun isEnabled() = MiningConfig.metalDetectorSolver && SkyBlockAreas.MINES_OF_DIVAN.inArea()
+    private fun searchCheck() = isEnabled() && McPlayer.heldItem.isDetector() && foundChest == null && System.currentTimeMillis() > cooldown
 
-    fun getDistance(actionBar: String): Double = actionBar.split("     ").firstNotNullOfOrNull {
+    private fun getDistance(actionBar: String): Double = actionBar.split("     ").firstNotNullOfOrNull {
         actionbarDistanceRegex.findGroup(it, "distance")?.toDoubleOrNull()
     } ?: -1.0
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onTick(event: TickEvent) {
-        val delta = McPlayer.self?.deltaMovement ?: return
-        val playerPosition = McPlayer.self?.position() ?: return
-        if (delta.x == 0.0 && delta.z == 0.0 && McPlayer.self!!.onGround()) {
-            if (checkingFromPos == null) {
-                checkingFromPos = PosAndTime(System.currentTimeMillis(), playerPosition)
-            } else {
-                if (System.currentTimeMillis() > checkingFromPos!!.time + 1000) {
-                    if (checkingFromPos!!.position == playerPosition) {
-                        hasntBeenMoving = true
-                    } else {
-                        checkingFromPos = null
-                        hasntBeenMoving = false
-                    }
+        if (!isEnabled()) return
+        val playerPosition = McPlayer.position ?: return
+
+        onTickMove(playerPosition)
+        onTickWarning(playerPosition)
+    }
+
+    private fun onTickMove(playerPosition: Vec3) {
+        if (!isEnabled()) return
+
+        checkingFromPos?.let {
+            if (System.currentTimeMillis() > it.time + 1000) {
+                if (it.position == playerPosition) {
+                    hasntBeenMoving = true
+                } else {
+                    checkingFromPos = null
+                    hasntBeenMoving = false
                 }
             }
-        } else {
-            checkingFromPos = null
-            hasntBeenMoving = false
+        } ?: run {
+            checkingFromPos = PosAndTime(System.currentTimeMillis(), playerPosition)
+        }
+    }
+
+    private fun onTickWarning(playerPosition: Vec3) {
+        if (!searchCheck()) return
+
+        center?.let {
+            if (playerPosition.y > it.y - 2) moveDownMessage.send()
+            else if (hasntBeenMoving) check(playerPosition)
+        } ?: run {
+            if (moveCloseToKeeperWarning) {
+                moveCloseToKeeperWarning = false
+                Text.of("Move close to a keeper to get proper locations").sendWithPrefix()
+            }
         }
     }
 
@@ -240,7 +252,8 @@ object MetalDetectorSolver {
 
     @Subscription
     fun onRightClick(event: RightClickEvent) {
-        if (event.stack.isDetector() && McPlayer.self!!.isCrouching) {
+        if (!isEnabled()) return
+        if (event.stack.isDetector() && McPlayer.self?.isCrouching == true) {
             Text.of("Resetting Metal Detector Solver").sendWithPrefix()
             reset()
         }
@@ -248,8 +261,8 @@ object MetalDetectorSolver {
 
     @LoreModifier
     object MetalDetectorLoreModifier : AbstractLoreModifier() {
-        override val displayName: Component = +"skyocean.config.lore_modifiers.metal_detector_lore"
-        override val isEnabled: Boolean get() = true
+        override val displayName: Component = +"skyocean.config.mining.metal_detector.metalDetector"
+        override val isEnabled: Boolean get() = MiningConfig.metalDetectorSolver
 
         override fun appliesTo(item: ItemStack): Boolean = item.isDetector()
 
