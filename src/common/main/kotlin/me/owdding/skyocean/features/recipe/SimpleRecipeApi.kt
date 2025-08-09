@@ -22,7 +22,7 @@ private val illegalIngredients = listOf(
     "HAY_BLOCK",
     "SLIME_BLOCK",
     "LEATHER",
-
+    "BLAZE_POWDER",
 )
 
 @LateInitModule
