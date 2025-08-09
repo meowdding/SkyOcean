@@ -10,8 +10,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object RodUpgradesItemSource : ItemSource {
-    override fun getAll(): List<SimpleTrackedItem> = emptyList()
     override val type: ItemSources = ItemSources.ROD_UPGRADE
+    override fun getAll(): List<SimpleTrackedItem> = emptyList()
 
     override fun postProcess(items: List<SimpleTrackedItem>): List<SimpleTrackedItem> {
         return items.filter { (itemStack) -> itemStack.getData(DataTypes.CATEGORY)?.name?.contains("rod", true) == true }
@@ -28,6 +28,8 @@ object RodUpgradesItemSource : ItemSource {
 }
 
 data class RodUpgradeItemContext(override val parent: SimpleTrackedItem) : ParentItemContext(parent) {
+    override val source: ItemSources = ItemSources.ROD_UPGRADE
+
     override fun collectLines(): List<Component> = build {
         add("Installed on ") {
             append(parent.itemStack.hoverName)
@@ -40,6 +42,4 @@ data class RodUpgradeItemContext(override val parent: SimpleTrackedItem) : Paren
     override fun open() {
         parent.context.open()
     }
-
-    override val source: ItemSources = ItemSources.ROD_UPGRADE
 }

@@ -46,9 +46,9 @@ interface SkyblockTagKey<T> {
 interface BaseSkyblockItemTagKey : SkyblockTagKey<ItemStack> {
 
     override fun toPath(resourceLocation: ResourceLocation) = super.toPath(resourceLocation.withPrefix("item/"))
-    override operator fun contains(value: ItemStack) = value.getSkyBlockId()?.lowercase() in this.tag
-        || value.getApiId()?.lowercase() in this.tag
-        || value.getSkyOceanId()?.let { it.cleanId in this.tag || it.skyblockId in this.tag } == true
+    override operator fun contains(value: ItemStack) = value.getSkyBlockId()?.lowercase() in this.tag ||
+        value.getApiId()?.lowercase() in this.tag ||
+        value.getSkyOceanId()?.let { it.cleanId in this.tag || it.skyblockId in this.tag } == true
 
     operator fun contains(id: String) = id in this.tag
 }

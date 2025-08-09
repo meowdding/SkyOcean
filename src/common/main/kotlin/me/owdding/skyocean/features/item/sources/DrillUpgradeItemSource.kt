@@ -11,8 +11,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object DrillUpgradeItemSource : ItemSource {
-    override fun getAll(): List<SimpleTrackedItem> = emptyList()
     override val type: ItemSources = ItemSources.DRILL_UPGRADE
+    override fun getAll(): List<SimpleTrackedItem> = emptyList()
 
     override fun postProcess(items: List<SimpleTrackedItem>): List<SimpleTrackedItem> {
         return items.filter { (itemStack) -> itemStack in SkyblockItemTagKey.DRILLS }
@@ -29,6 +29,8 @@ object DrillUpgradeItemSource : ItemSource {
 }
 
 data class DrillItemContext(override val parent: SimpleTrackedItem) : ParentItemContext(parent) {
+    override val source: ItemSources = ItemSources.DRILL_UPGRADE
+
     override fun collectLines(): List<Component> = build {
         add("Installed on ") {
             append(parent.itemStack.hoverName)
@@ -41,6 +43,4 @@ data class DrillItemContext(override val parent: SimpleTrackedItem) : ParentItem
     override fun open() {
         parent.context.open()
     }
-
-    override val source: ItemSources = ItemSources.DRILL_UPGRADE
 }
