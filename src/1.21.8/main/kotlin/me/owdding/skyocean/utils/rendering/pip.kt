@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer
-import me.owdding.lib.render.MeowddingPipState
+import me.owdding.lib.rendering.MeowddingPipState
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer

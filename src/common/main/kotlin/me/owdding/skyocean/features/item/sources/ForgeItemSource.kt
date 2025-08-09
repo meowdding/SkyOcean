@@ -1,6 +1,8 @@
 package me.owdding.skyocean.features.item.sources
 
 import kotlinx.datetime.Instant
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
@@ -9,9 +11,9 @@ import tech.thatgravyboat.skyblockapi.api.profile.items.forge.ForgeAPI
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
-object ForgeItemSource : ItemSource {
+object ForgeItemSource : ItemSource, MeowddingLogger by SkyOcean.featureLogger() {
     override fun getAll() = ForgeAPI.getForgeSlots().mapNotNull(
-        { (id) -> SkyOcean.warn("Couldn't find item for {}", id) },
+        { (id) -> warn("Couldn't find item for $id") },
         { (slot, item) ->
             createFromIdAndAmount(item.id, 1)?.let { SimpleTrackedItem(it, ForgeItemContext(slot, item.expiryTime)) }
         },

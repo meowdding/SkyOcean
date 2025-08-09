@@ -1,5 +1,7 @@
 package me.owdding.skyocean.features.item.sources
 
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
@@ -9,9 +11,9 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
-object SacksItemSource : ItemSource {
+object SacksItemSource : ItemSource, MeowddingLogger by SkyOcean.featureLogger() {
     override fun getAll() = SacksAPI.sackItems.mapNotNull(
-        { (id) -> SkyOcean.warn("Couldn't find item for {}", id) },
+        { (id) -> warn("Couldn't find item for $id") },
         { (id, amount) -> createFromIdAndAmount(id, amount) },
     ).map { SimpleTrackedItem(it, SackItemContext) }
 
