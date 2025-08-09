@@ -185,6 +185,7 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
         if (ItemSources.FORGE in sources) append(Icons.FORGE)
         if (ItemSources.CHEST in sources) append(Icons.CHESTS)
         if (ItemSources.RIFT in sources) append(Icons.RIFT) { this.color = TextColor.DARK_PURPLE }
+        if (ItemSources.DRILL_UPGRADE in sources || ItemSources.ROD_UPGRADE in sources) append(Icons.ITEM_IN_ITEM)
     }
 
     fun reload() = refreshCallback(false)

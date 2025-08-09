@@ -31,8 +31,17 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
     ).mapValues { (_, number) -> number.toInt() }.toMutableMap()
 
     val items = sources.mapNotNull { source -> source.itemSource?.getAll() }.flatten()
-        .mapNotNull { item -> item.itemStack.getSkyBlockId()?.let { TrackedItem(it, item.itemStack.count, item.context, item.context.source) } }
-        .groupBy { it.id }
+        .let { items ->
+
+            buildList {
+                addAll(items)
+                addAll(sources.mapNotNull { it.itemSource?.postProcess(items) }.flatten())
+            }
+        }.mapNotNull { item ->
+            item.itemStack.getSkyBlockId()?.let {
+                TrackedItem(it, item.itemStack.count, item.context, item.context.source)
+            }
+        }.groupBy { it.id.lowercase() }
         .mapValues { (_, values) -> values.sortedBy { sourceToPriority(it.source) }.toMutableList() }.toMutableMap()
 
 
@@ -40,7 +49,6 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         ItemSources.INVENTORY -> 0
         ItemSources.SACKS -> 1
         ItemSources.STORAGE -> 2
-        ItemSources.DRILL_UPGRADE, ItemSources.ROD_UPGRADE -> 4
         else -> 3
     }
 
@@ -53,7 +61,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
 
 
     fun takeN(ingredient: Ingredient, amount: Int = ingredient.amount): List<TrackedItem> {
-        val items = items[ingredient.serialize()] ?: return emptyList()
+        val items = items[ingredient.serialize().lowercase()] ?: return emptyList()
 
         var acc = 0
         val takeWhile = items.takeWhile {
@@ -66,7 +74,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         }
 
         items.removeAll(takeWhile)
-        if (items.isEmpty()) this.items.remove(ingredient.serialize())
+        if (items.isEmpty()) this.items.remove(ingredient.serialize().lowercase())
 
         if (takeWhile.sumOf { it.amount } <= amount) return takeWhile
 
@@ -83,7 +91,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
 
         items.addFirst(last.withAmount(last.amount - lastNeeded))
         if (items.size == 1) {
-            this.items.put(ingredient.serialize(), items)
+            this.items.put(ingredient.serialize().lowercase(), items)
         }
 
         list.add(last.withAmount(lastNeeded))

@@ -41,5 +41,5 @@ data class RodUpgradeItemContext(override val parent: SimpleTrackedItem) : Paren
         parent.context.open()
     }
 
-    override val source: ItemSources = parent.context.source
+    override val source: ItemSources = ItemSources.ROD_UPGRADE
 }

@@ -42,5 +42,5 @@ data class DrillItemContext(override val parent: SimpleTrackedItem) : ParentItem
         parent.context.open()
     }
 
-    override val source: ItemSources = parent.context.source
+    override val source: ItemSources = ItemSources.DRILL_UPGRADE
 }
