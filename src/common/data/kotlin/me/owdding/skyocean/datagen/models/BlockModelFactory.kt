@@ -56,7 +56,7 @@ abstract class BlockModelFactory {
 
     fun modelOutput(location: ResourceLocation, model: ModelInstance) {
         if (savedModels.contains(location)) {
-            SkyOcean.info("Model with id {} already registered, skipping!", location)
+            SkyOcean.info("Model with id $location already registered, skipping!")
             return
         }
         savedModels.add(location)
