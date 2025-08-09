@@ -17,7 +17,7 @@ fun <T, B : TypeBuilder> CategoryKt.observable(entry: Entry<T, B>, onChange: () 
     this.observable(entry) { _, _ -> onChange() }
 
 fun CategoryKt.requiresChunkRebuild(entry: Entry<Boolean, *>) = observable(entry) {
-    McClient.self.levelRenderer.allChanged()
+    McClient.self?.levelRenderer?.allChanged()
 }
 
 var SeparatorBuilder.translation: String
