@@ -40,7 +40,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         ItemSources.INVENTORY -> 0
         ItemSources.SACKS -> 1
         ItemSources.STORAGE -> 2
-        ItemSources.DRILL_UPGRADE -> 4
+        ItemSources.DRILL_UPGRADE, ItemSources.ROD_UPGRADE -> 4
         else -> 3
     }
 
