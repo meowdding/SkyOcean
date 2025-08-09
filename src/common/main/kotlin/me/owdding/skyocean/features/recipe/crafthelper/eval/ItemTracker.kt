@@ -1,8 +1,8 @@
 package me.owdding.skyocean.features.recipe.crafthelper.eval
 
 import me.owdding.lib.extensions.floor
-import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
+import me.owdding.skyocean.features.item.sources.system.ItemContext
 import me.owdding.skyocean.features.recipe.CurrencyType
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.serialize
@@ -40,6 +40,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         ItemSources.INVENTORY -> 0
         ItemSources.SACKS -> 1
         ItemSources.STORAGE -> 2
+        ItemSources.DRILL_UPGRADE -> 4
         else -> 3
     }
 

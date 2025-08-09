@@ -2,8 +2,8 @@ package me.owdding.skyocean.features.item.sources
 
 import me.owdding.skyocean.data.profile.InventoryStorage
 import me.owdding.skyocean.features.inventory.InventoryType
-import me.owdding.skyocean.features.item.search.ItemContext
-import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
+import me.owdding.skyocean.features.item.sources.system.ItemContext
+import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland

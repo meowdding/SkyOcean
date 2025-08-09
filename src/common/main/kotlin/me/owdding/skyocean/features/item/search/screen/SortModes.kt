@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.item.search.screen
 
-import me.owdding.skyocean.features.item.search.item.TrackedItem
+import me.owdding.skyocean.features.item.sources.system.TrackedItem
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData

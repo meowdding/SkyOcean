@@ -58,6 +58,10 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.itemSearch.itemHighlight"
     }
 
+    var preserveLastSearch by boolean(false) {
+        translation = "skyocean.config.misc.itemSearch.preserve_search"
+    }
+
     init {
         separator("skyocean.config.misc.crafthelper")
     }
