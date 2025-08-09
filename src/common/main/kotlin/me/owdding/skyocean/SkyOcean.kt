@@ -66,7 +66,7 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     }
 
     @Subscription(RepoStatusEvent::class)
-    private fun onRepoReady() {
+    fun onRepoReady() {
         SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
     }
 
