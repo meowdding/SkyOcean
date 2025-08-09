@@ -10,6 +10,7 @@ import kotlinx.coroutines.runBlocking
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.repoPatcher
+import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.core.BlockPos
@@ -17,6 +18,7 @@ import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -28,16 +30,19 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
+import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
+import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.math.roundToInt
 import kotlin.reflect.jvm.javaType
 import kotlin.reflect.typeOf
 
+@Suppress("ClassOrdering")
 object Utils {
     infix fun Int.exclusiveInclusive(other: Int) = (this + 1)..other
     infix fun Int.exclusiveExclusive(other: Int) = (this + 1)..(other - 1)
@@ -92,6 +97,12 @@ object Utils {
         }
         return json
     }
+
+    fun loadFromResourcesAsStream(path: String): InputStream = runBlocking {
+        SkyOcean.SELF.findPath(path).orElseThrow().inputStream()
+    }
+
+    fun loadFromResources(path: String): ByteArray = loadFromResourcesAsStream(path).readAllBytes()
 
     inline fun <reified T : Any> loadFromRepo(file: String): T? = runBlocking {
         try {
@@ -153,6 +164,14 @@ object Utils {
 
     operator fun <Key : Any, Value : Any> Cache<Key, Value>.get(key: Key) = this.getIfPresent(key)
     operator fun <Key : Any, Value : Any> Cache<Key, Value>.set(key: Key, value: Value) = this.put(key, value)
+
+    fun MutableComponent.appendSafe(other: Component): MutableComponent? = (this as? SafeMutableComponentAccessor)?.`skyocean$appendSafe`(other)
+    fun MutableComponent.mutableSiblings(): MutableList<Component>? = (this as? SafeMutableComponentAccessor)?.`skyocean$mutableSiblings`()
+    var MutableComponent.textContents: ComponentContents
+        get() = this.contents
+        set(value) {
+            (this as? SafeMutableComponentAccessor)?.`skyocean$setContents`(value)
+        }
 }
 
 @AutoCollect("LateInitModules")

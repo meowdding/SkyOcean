@@ -12,6 +12,7 @@
     "EntityRendererMixin",
     "EntityRenderStateMixin",
     "FrameLayoutAccessor",
+    "MutableComponentMixin",
     "PlayerRendererMixin",
     "PlayerRenderStateMixin",
     "ScreenAccessor"
