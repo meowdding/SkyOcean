@@ -1,11 +1,17 @@
 package me.owdding.skyocean.utils
 
-import eu.pb4.placeholders.api.ParserContext
-import eu.pb4.placeholders.api.parsers.TagParser
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
+import me.owdding.lib.rendering.text.TextShader
+import me.owdding.lib.rendering.text.builtin.GradientTextShader
+import me.owdding.lib.rendering.text.textShader
+import me.owdding.skyocean.config.CachedValue
+import me.owdding.skyocean.config.Config
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 
@@ -30,8 +36,6 @@ internal object Icons {
 }
 
 internal object ChatUtils {
-    private const val gradient = "#87CEEB #7FFFD4"
-
     const val ICON = Icons.WAVE
 
     const val ICON_WITH_SPACE = "$ICON "
@@ -39,11 +43,32 @@ internal object ChatUtils {
     val ICON_COMPONENT = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
     val ICON_SPACE_COMPONENT = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
 
-    val prefix = TagParser.QUICK_TEXT_SAFE.parseText("<gray>[<gr $gradient>SkyOcean</gr>]</gray> ", ParserContext.of()).copy().withoutShadow()
+    val prefix by CachedValue {
+        Text.of {
+            append("[")
+            append("SkyOcean") {
+                this.textShader = Config.prefixGradient.takeUnless { it.isDisabled }
+            }
+            append("] ")
+            this.color = TextColor.GRAY
+        }.withPotentialShadow()
+    }
+
+    fun MutableComponent.withPotentialShadow(): MutableComponent {
+        return if (Config.disableMessageTextShadow) {
+            this.withoutShadow()
+        } else {
+            this
+        }
+    }
 
     const val BETTER_GOLD = 0xfc6f03
 
-    fun asSkyOceanColor(text: String) = TagParser.QUICK_TEXT_SAFE.parseText("<gr $gradient>$text</gr>", ParserContext.of()).copy().withoutShadow()
+    fun asSkyOceanColor(text: String) = Text.of {
+        append(text)
+        this.color = OceanColors.SKYOCEAN_BLUE
+        textShader = OceanGradients.DEFAULT.takeUnless { Config.prefixGradient.isDisabled }
+    }
 
     fun MutableComponent.withoutShadow(): MutableComponent = this.apply {
         this.shadowColor = null
@@ -53,7 +78,7 @@ internal object ChatUtils {
     fun MutableComponent.append(init: MutableComponent.() -> Unit) = this.append(Text.of(init))
 
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))
-    fun chat(text: Component) = Text.join(prefix, text).withoutShadow().send()
+    fun chat(text: Component) = Text.join(prefix, text).withPotentialShadow().send()
 
     fun Component.sendWithPrefix() = chat(this)
 }
@@ -62,5 +87,27 @@ object OceanColors {
     const val PINK = 0xf38ba8
     const val WARNING = PINK
     const val DARK_CYAN_BLUE = 0x355AA0
+    const val SKYOCEAN_BLUE = 0x87CEEB
     const val LIGHT_GRAYISH_CYAN = 0xcff8ff
+}
+
+enum class OceanGradients(val colors: List<Int>) : TextShader by GradientTextShader(colors), Translatable {
+    DEFAULT(0x87CEEB, 0x7FFFD4, 0x87CEEB),
+    RAINBOW("#FF0000 #FF7F00 #FFFF00 #00FF00 #0000FF #4B0082 #8B00FF"),
+    BISEXUAL("#D60270 #9B4F96 #0038A8"),
+    GAY("#FF0000 #FF9900 #FFFF00 #33CC33 #3399FF #9900CC"),
+    LESBIAN("#D62900 #FF9A56 #FFAC54 #FFFFFF #D362A4 #B9558A #A40061"),
+    PANSEXUAL("#FF1B8D #FFD800 #1BB3FF"),
+    ASEXUAL("#000000 #A4A4A4 #FFFFFF #810081"),
+    NON_BINARY("#FFD800 #FFFFFF #9C59D1 #000000"),
+    TRANS("#55CDFC #F7A8B8 #FFFFFF #F7A8B8 #55CDFC"),
+    DISABLED(0),
+    ;
+
+    val isDisabled = this.colors.size == 1
+    override fun getTranslationKey() = "skyocean.gradients.${name.lowercase()}"
+
+    constructor(vararg colors: Int) : this(colors.toList())
+    constructor(colors: String) : this(colors.split(Regex("\\s+")).map { it.removePrefix("#").toInt(16) }.toMutableList().apply { addLast(first()) })
+
 }

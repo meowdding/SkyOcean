@@ -3,6 +3,7 @@ package me.owdding.skyocean.utils
 import net.minecraft.ChatFormatting
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 
@@ -24,9 +25,8 @@ enum class MinecraftColor(val formatting: ChatFormatting, val paneItem: Item, va
     RED(ChatFormatting.RED, Items.RED_STAINED_GLASS_PANE, DyeColor.RED),
     BLACK(ChatFormatting.BLACK, Items.BLACK_STAINED_GLASS_PANE, DyeColor.BLACK);
 
-    val paneStack = paneItem.defaultInstance
+    val paneStack: ItemStack = paneItem.defaultInstance
 
     override fun toString() = "§${formatting.char}${toFormattedName()}"
-
 
 }

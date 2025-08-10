@@ -2,21 +2,21 @@ package me.owdding.skyocean.config
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import com.teamresourceful.resourcefulconfigkt.api.ConfigDelegateProvider
-import com.teamresourceful.resourcefulconfigkt.api.Entry
 import com.teamresourceful.resourcefulconfigkt.api.RConfigKtEntry
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
-import com.teamresourceful.resourcefulconfigkt.api.builders.TypeBuilder
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import kotlin.reflect.KProperty
+import kotlin.reflect.KProperty0
+import kotlin.reflect.jvm.isAccessible
 
-fun <T, B : TypeBuilder> CategoryKt.observable(entry: Entry<T, B>, onChange: () -> Unit) =
+fun <T> CategoryBuilder.observable(entry: ConfigDelegateProvider<RConfigKtEntry<T>>, onChange: () -> Unit) =
     this.observable(entry) { _, _ -> onChange() }
 
-fun CategoryKt.requiresChunkRebuild(entry: Entry<Boolean, *>) = observable(entry) {
+fun CategoryBuilder.requiresChunkRebuild(entry: ConfigDelegateProvider<RConfigKtEntry<Boolean>>) = observable(entry) {
     McClient.self.levelRenderer.allChanged()
 }
 
@@ -34,7 +34,7 @@ fun CategoryBuilder.category(category: CategoryKt, init: CategoryKt.() -> Unit) 
 
 fun CategoryBuilder.separator(translation: String) = this.separator { this.translation = translation }
 
-fun <T> CategoryKt.defaultEnabledMessage(
+fun <T> CategoryBuilder.defaultEnabledMessage(
     entry: ConfigDelegateProvider<RConfigKtEntry<T>>,
     messageProvider: () -> Component,
     id: String,
@@ -66,5 +66,36 @@ class DefaultEnabledMessageEntryDelegate<T> internal constructor(
             DefaultEnabledMessageHelper.markSend(id)
         }
         return parent.getValue(thisRef, property)
+    }
+}
+
+
+class CachedValue<T>(private val supplier: () -> T) {
+    private var value: T? = null
+
+    operator fun getValue(thisRef: Any?, property: Any?): T {
+        if (value == null) {
+            value = supplier()
+        }
+        return value!!
+    }
+
+    fun invalidate() {
+        value = null
+    }
+}
+
+fun <T> CategoryBuilder.invalidProperty(
+    entry: ConfigDelegateProvider<RConfigKtEntry<T>>,
+    property: KProperty0<Any>,
+): ConfigDelegateProvider<RConfigKtEntry<T>> {
+    property.isAccessible = true
+    val delegate = property.getDelegate()
+    return if (delegate is CachedValue<*>) {
+        this.observable(entry) {
+            delegate.invalidate()
+        }
+    } else {
+        entry
     }
 }
