@@ -83,8 +83,7 @@ jobs:
         needs: detekt
         if: ${{
             needs.detekt.outputs.sarif_exists == 'true' &&
-            needs.detekt.outputs.detekt_failed == 'true' &&
-            github.event.pull_request.draft == false
+            needs.detekt.outputs.detekt_failed == 'true'
             }}
         permissions:
             pull-requests: write

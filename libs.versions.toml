@@ -16,7 +16,7 @@ rconfigkt = "3.5.13"
 
 detekt = "1.23.7"
 
-meowdding-lib = "2.2.7"
+meowdding-lib = "2.2.8"
 meowdding-repo = "1.0.16"
 meowdding-resources = "1.0.12"
 meowdding-ktmodules = "1.0.5"
