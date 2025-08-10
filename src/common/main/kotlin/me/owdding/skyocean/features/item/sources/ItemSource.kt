@@ -1,13 +1,14 @@
 package me.owdding.skyocean.features.item.sources
 
-import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen
+import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 
 interface ItemSource {
 
     fun getAll(): List<SimpleTrackedItem>
+    fun postProcess(items: List<SimpleTrackedItem>): List<SimpleTrackedItem> = emptyList()
     val type: ItemSources
 
     fun createFromIdAndAmount(id: String, amount: Int): ItemStack? = RepoItemsAPI.getItemOrNull(id)?.copyWithCount(amount)
@@ -25,7 +26,9 @@ enum class ItemSources(val itemSource: ItemSource?) {
     INVENTORY(InventoryItemSource),
     VAULT(VaultItemSource),
     MUSEUM(MuseumItemSource),
-    RIFT(RiftItemSource)
+    RIFT(RiftItemSource),
+    DRILL_UPGRADE(DrillUpgradeItemSource),
+    ROD_UPGRADE(RodUpgradesItemSource),
     ;
     // todo SACK_OF_SACKS(TODO()),
     // todo POTION_BAG(TODO()),
@@ -40,7 +43,12 @@ enum class ItemSources(val itemSource: ItemSource?) {
         fun getAllItems(): Iterable<SimpleTrackedItem> {
             val entries = entries.filter { ItemSearchScreen.category.source.isEmpty() || it.itemSource in ItemSearchScreen.category.source }
 
-            return entries.mapNotNull { it.itemSource?.getAll() }.flatten().filterNot { (itemStack, _) -> itemStack.isEmpty }
+            val list = entries.mapNotNull { it.itemSource?.getAll() }.flatten().filterNot { (itemStack, _) -> itemStack.isEmpty }
+
+            return buildList {
+                addAll(list)
+                addAll(entries.mapNotNull { it.itemSource?.postProcess(list) }.flatten())
+            }
         }
     }
 }
