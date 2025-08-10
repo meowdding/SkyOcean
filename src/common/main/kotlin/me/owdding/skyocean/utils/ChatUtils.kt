@@ -62,8 +62,6 @@ internal object ChatUtils {
         }
     }
 
-    const val BETTER_GOLD = 0xfc6f03
-
     fun asSkyOceanColor(text: String) = Text.of {
         append(text)
         this.color = OceanColors.SKYOCEAN_BLUE
@@ -89,6 +87,7 @@ object OceanColors {
     const val DARK_CYAN_BLUE = 0x355AA0
     const val SKYOCEAN_BLUE = 0x87CEEB
     const val LIGHT_GRAYISH_CYAN = 0xcff8ff
+    const val BETTER_GOLD = 0xfc6f03
 }
 
 enum class OceanGradients(val colors: List<Int>) : TextShader by GradientTextShader(colors), Translatable {
@@ -109,5 +108,6 @@ enum class OceanGradients(val colors: List<Int>) : TextShader by GradientTextSha
 
     constructor(vararg colors: Int) : this(colors.toList())
     constructor(colors: String) : this(colors.split(Regex("\\s+")).map { it.removePrefix("#").toInt(16) }.toMutableList().apply { addLast(first()) })
+
 
 }
