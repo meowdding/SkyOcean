@@ -279,6 +279,21 @@
           "@value": "Others",
           "desc": "Only applies to other players."
         }
+      },
+      "mob_icons": {
+        "@value": "Mob Icons",
+        "enabled": {
+          "@value": "Enable Mob Icons",
+          "desc": "Replaces the hypixel mob icons with a spelled out version."
+        },
+        "display_type": {
+          "@value": "Display type",
+          "desc": "Changes the way the mob icons are displayed."
+        },
+        "colors": {
+          "@value": "Individual colors",
+          "desc": "Overwrites the colors for the different mob icons."
+        }
       }
     },
     "fishing": {

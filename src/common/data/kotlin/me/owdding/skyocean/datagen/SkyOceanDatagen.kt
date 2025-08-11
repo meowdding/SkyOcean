@@ -1,17 +1,17 @@
 package me.owdding.skyocean.datagen
 
 import me.owdding.skyocean.datagen.font.MobTypesFontProvider
-import me.owdding.skyocean.datagen.models.ModelGen
+import me.owdding.skyocean.datagen.models.FakeBlocksProvider
+import me.owdding.skyocean.datagen.providers.SkyOceanDataGeneratorEntrypoint
 import me.owdding.skyocean.features.textures.KnownMobIcon
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
+import me.owdding.skyocean.features.textures.MobIcons
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 
-object SkyOceanDatagen : DataGeneratorEntrypoint {
+object SkyOceanDatagen : SkyOceanDataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         val createPack = fabricDataGenerator.createPack()
-        createPack.addProvider { ModelGen(it as FabricDataOutput) }
-        createPack.addProvider { MobTypesFontProvider(it as FabricDataOutput, KnownMobIcon::name, "mob_icons") }
-        createPack.addProvider { MobTypesFontProvider(it as FabricDataOutput, { it.short.uppercase() }, "mob_icons/short") }
+        createPack.register(::FakeBlocksProvider)
+        createPack.register { MobTypesFontProvider(it, KnownMobIcon::name, MobIcons.MOB_ICONS) }
+        createPack.register { MobTypesFontProvider(it, KnownMobIcon::short, MobIcons.MOB_ICONS_SHORT) }
     }
 }

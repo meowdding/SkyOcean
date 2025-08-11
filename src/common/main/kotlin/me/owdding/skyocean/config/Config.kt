@@ -47,10 +47,7 @@ object Config : ConfigKt("skyocean/config") {
         }
         category(Buttons)
 
-        separator {
-            title = "skyocean.config.main.modifications"
-            description = "skyocean.config.main.modifications.desc"
-        }
+        separator("skyocean.config.main.modifications")
     }
 
     override val patches: Map<Int, UnaryOperator<JsonObject>> = ConfigPatches.loadPatches()

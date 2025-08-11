@@ -35,6 +35,8 @@ object MobIcons {
 
     internal var settings: Map<KnownMobIcon, MobIconSettings> = emptyMap()
 
+    fun getSetting(icon: KnownMobIcon): MobIconSettings = settings[icon] ?: DEFAULT_SETTINGS
+
     enum class DisplayType(val font: ResourceLocation) {
         NORMAL(MOB_ICONS),
         SHORT(MOB_ICONS_SHORT),
@@ -60,7 +62,7 @@ object MobIcons {
                 val icon = KnownMobIcon.getByIcon(stripped) ?: return@visitSiblings
                 text.font = MobIconsConfig.style.font
 
-                val settings = settings[icon] ?: DEFAULT_SETTINGS
+                val settings = getSetting(icon)
 
                 if (settings.shouldColor) {
                     icon.color?.let { color -> text.color = color }

@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.Block
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import java.util.concurrent.CompletableFuture
 
-class ModelGen(output: FabricDataOutput) : SkyOceanModelProvider(output) {
+class FakeBlocksProvider(output: FabricDataOutput) : SkyOceanModelProvider(output) {
     val blockStatePathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, BLOCK_STATES_PATH)
     val fakeBlockStateCollector = FakeBlockStateCollector(mutableListOf())
     val context = ModelGenContext(fakeBlockStateCollector, output)
