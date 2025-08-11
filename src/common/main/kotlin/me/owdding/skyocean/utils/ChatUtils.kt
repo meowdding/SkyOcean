@@ -76,7 +76,7 @@ internal object ChatUtils {
         this.siblings.filterIsInstance<MutableComponent>().forEach { it.withoutShadow() }
     }
 
-    fun MutableComponent.append(init: MutableComponent.() -> Unit) = this.append(Text.of(init))
+    fun MutableComponent.append(init: MutableComponent.() -> Unit): MutableComponent = this.append(Text.of(init))
 
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))
     fun chat(text: Component) = Text.join(prefix, text).withPotentialShadow().send()
@@ -107,10 +107,10 @@ enum class OceanGradients(val colors: List<Int>) : TextShader by GradientTextSha
     ;
 
     val isDisabled = this.colors.size == 1
-    override fun getTranslationKey() = "skyocean.gradients.${name.lowercase()}"
 
     constructor(vararg colors: Int) : this(colors.toList())
     constructor(colors: String) : this(colors.split(Regex("\\s+")).map { it.removePrefix("#").toInt(16) }.toMutableList().apply { addLast(first()) })
 
+    override fun getTranslationKey() = "skyocean.gradients.${name.lowercase()}"
 
 }

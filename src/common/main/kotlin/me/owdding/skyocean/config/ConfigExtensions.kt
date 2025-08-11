@@ -74,10 +74,9 @@ class CachedValue<T>(private val supplier: () -> T) {
     private var value: T? = null
 
     operator fun getValue(thisRef: Any?, property: Any?): T {
-        if (value == null) {
-            value = supplier()
-        }
-        return value!!
+        val value = value ?: supplier()
+        if (this.value != value) this.value = value
+        return value
     }
 
     fun invalidate() {
