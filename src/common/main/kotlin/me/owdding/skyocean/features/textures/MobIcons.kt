@@ -31,11 +31,9 @@ object MobIcons {
 
     val MOB_ICONS = id("mob_icons")
     val MOB_ICONS_SHORT = id("mob_icons/short")
-    val DEFAULT_SETTINGS = MobIconSettings(shouldColor = true)
+    private val DEFAULT_SETTINGS = MobIconSettings(shouldColor = true)
 
-    var settings: Map<KnownMobIcon, MobIconSettings> = emptyMap()
-        internal set
-
+    internal var settings: Map<KnownMobIcon, MobIconSettings> = emptyMap()
 
     enum class DisplayType(val font: ResourceLocation) {
         NORMAL(MOB_ICONS),
