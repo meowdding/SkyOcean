@@ -20,6 +20,14 @@
           "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix, this is done to help identify the origin of any changes and therefore can't be disabled."
         ]
       },
+      "text_shadow": {
+        "@value": "Disable Text Shadow",
+        "desc": "Disables text shadows for all messages sent by SkyOcean."
+      },
+      "prefix_gradient": {
+        "@value": "Prefix Gradient",
+        "desc": "Changes the gradient that is used for the prefix."
+      },
       "debug": {
         "@value": "Enable Debug Mode",
         "desc": [
@@ -569,5 +577,16 @@
   },
   "item_value": {
     "keybind": "Item Value"
+  },
+  "gradients": {
+    "default": "Default",
+    "rainbow": "Rainbow",
+    "bisexual": "Bisexual",
+    "gay": "Gay",
+    "lesbian": "Lesbian",
+    "pansexual": "Pansexual",
+    "asexual": "Asexual",
+    "non_binary": "Non Binary",
+    "trans": "Transgender"
   }
 }
