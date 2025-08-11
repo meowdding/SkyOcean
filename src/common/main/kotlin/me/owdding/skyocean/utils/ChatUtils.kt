@@ -65,7 +65,10 @@ internal object ChatUtils {
     fun asSkyOceanColor(text: String) = Text.of {
         append(text)
         this.color = OceanColors.SKYOCEAN_BLUE
-        textShader = OceanGradients.DEFAULT.takeUnless { Config.prefixGradient.isDisabled }
+    }
+
+    fun asSkyOceanColorAnimated(text: String, useSelected: Boolean = false) = Text.of(text) {
+        this.textShader = if (useSelected) Config.prefixGradient else OceanGradients.DEFAULT
     }
 
     fun MutableComponent.withoutShadow(): MutableComponent = this.apply {
