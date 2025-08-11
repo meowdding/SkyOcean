@@ -78,18 +78,18 @@ internal class DataStorage<T : Any>(
     private val currentCodec = codec(version)
 
     private fun saveToSystem() {
-        SkyOcean.debug("Saving {}", path)
+        SkyOcean.debug("Saving $path")
         try {
             val version = this.version
             val json = JsonObject {
                 this["@skyocean:version"] = version
-                this["@skyocean:data"] = data.toJson(currentCodec) ?: return SkyOcean.warn("Failed to encode {} to json", data)
+                this["@skyocean:data"] = data.toJson(currentCodec) ?: return SkyOcean.warn("Failed to encode $data to json")
             }
             path.writeJson(json)
             FileUtils.write(path.toFile(), json.toPrettyString(), Charsets.UTF_8)
-            SkyOcean.debug("saved {}", path)
+            SkyOcean.debug("saved $path")
         } catch (e: Exception) {
-            SkyOcean.error("Failed to save {} to file", data)
+            SkyOcean.error("Failed to save $data to file")
             e.printStackTrace()
         }
     }

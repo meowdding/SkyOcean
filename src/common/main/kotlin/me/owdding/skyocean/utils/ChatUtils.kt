@@ -25,6 +25,7 @@ internal object Icons {
     const val FORGE = "\u16dd"
     const val CHESTS = "\u2302"
     const val RIFT = "\u0444"
+    const val ITEM_IN_ITEM = "\u29c9"
 
 }
 

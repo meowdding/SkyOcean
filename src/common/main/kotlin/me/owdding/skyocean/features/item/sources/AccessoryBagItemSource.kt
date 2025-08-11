@@ -1,7 +1,7 @@
 package me.owdding.skyocean.features.item.sources
 
-import me.owdding.skyocean.features.item.search.ItemContext
-import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
+import me.owdding.skyocean.features.item.sources.system.ItemContext
+import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
 import tech.thatgravyboat.skyblockapi.api.profile.items.accessory.AccessoryBagAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor

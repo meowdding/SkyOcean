@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.item.search
+package me.owdding.skyocean.features.item.sources.system
 
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
@@ -50,3 +50,5 @@ interface ItemContext {
         runnable()
     }
 }
+
+abstract class ParentItemContext(open val parent: SimpleTrackedItem) : ItemContext
