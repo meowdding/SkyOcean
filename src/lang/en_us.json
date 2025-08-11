@@ -284,7 +284,10 @@
         "@value": "Mob Icons",
         "enabled": {
           "@value": "Enable Mob Icons",
-          "desc": "Replaces the hypixel mob icons with a spelled out version."
+          "desc": [
+            "Replaces the hypixel mob icons with a spelled out version.",
+            "<red>This requires a nametag update, meaning it doesn't refresh instantly!</red>"
+          ]
         },
         "display_type": {
           "@value": "Display type",
@@ -292,7 +295,10 @@
         },
         "colors": {
           "@value": "Individual colors",
-          "desc": "Overwrites the colors for the different mob icons."
+          "desc": [
+            "Overwrites the colors for the different mob icons.",
+            "The default <white>#FFFFFF</white> means that it doesn't get changed at all."
+          ]
         }
       }
     },
