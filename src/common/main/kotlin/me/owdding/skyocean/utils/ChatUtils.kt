@@ -112,5 +112,4 @@ enum class OceanGradients(val colors: List<Int>) : TextShader by GradientTextSha
     constructor(colors: String) : this(colors.split(Regex("\\s+")).map { it.removePrefix("#").toInt(16) }.toMutableList().apply { addLast(first()) })
 
     override fun getTranslationKey() = "skyocean.gradients.${name.lowercase()}"
-
 }
