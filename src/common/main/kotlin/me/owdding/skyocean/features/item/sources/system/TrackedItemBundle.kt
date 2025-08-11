@@ -1,6 +1,5 @@
-package me.owdding.skyocean.features.item.search.item
+package me.owdding.skyocean.features.item.sources.system
 
-import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.sources.*
 import net.minecraft.core.BlockPos
@@ -31,7 +30,7 @@ class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
 
     private fun updateContext(newItem: TrackedItem) {
         val context = context
-        val other = newItem.context
+        val other = (newItem.context as? ParentItemContext)?.parent ?: newItem.context
         when {
             context is BundledItemContext -> context.add(newItem)
             context is EnderChestStorageItemContext && other is EnderChestStorageItemContext -> {

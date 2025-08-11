@@ -20,14 +20,16 @@ import me.owdding.lib.extensions.rightPad
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.layouts.withPadding
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
-import me.owdding.skyocean.features.item.search.item.BundledItemContext
-import me.owdding.skyocean.features.item.search.item.TrackedItem
-import me.owdding.skyocean.features.item.search.item.TrackedItemBundle
 import me.owdding.skyocean.features.item.search.matcher.ItemMatcher
 import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.item.sources.SackItemContext
+import me.owdding.skyocean.features.item.sources.system.BundledItemContext
+import me.owdding.skyocean.features.item.sources.system.ParentItemContext
+import me.owdding.skyocean.features.item.sources.system.TrackedItem
+import me.owdding.skyocean.features.item.sources.system.TrackedItemBundle
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
@@ -61,8 +63,10 @@ object ItemSearchScreen : SkyOceanScreen() {
 
     override fun onClose() {
         super.onClose()
-        this.search = null
-        this.state.set("")
+        if (!MiscConfig.preserveLastSearch) {
+            this.search = null
+            this.state.set("")
+        }
         this.category = SearchCategory.ALL
         this.requireRebuild = true
         items.clear()
@@ -301,9 +305,9 @@ object ItemSearchScreen : SkyOceanScreen() {
 
 
             val leftAction = { button: Button ->
-                ItemHighlighter.setHighlight(ReferenceItemFilter(itemStack))
+                ItemHighlighter.setHighlight(ReferenceItemFilter((context as? ParentItemContext)?.parent?.itemStack ?: itemStack))
                 context.open()
-                McClient.setScreen(null)
+                onClose()
             }
 
             if (context is SackItemContext || (context is BundledItemContext && context.map.containsKey(ItemSources.SACKS))) {

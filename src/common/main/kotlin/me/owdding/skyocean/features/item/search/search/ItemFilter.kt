@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.item.search.search
 
-import me.owdding.skyocean.features.item.search.item.TrackedItem
+import me.owdding.skyocean.features.item.sources.system.TrackedItem
 import net.minecraft.world.item.ItemStack
 import java.util.function.Predicate
 
