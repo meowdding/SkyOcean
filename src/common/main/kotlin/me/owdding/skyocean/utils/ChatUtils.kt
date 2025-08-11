@@ -1,22 +1,20 @@
 package me.owdding.skyocean.utils
 
-import eu.pb4.placeholders.api.ParserContext
-import eu.pb4.placeholders.api.parsers.TagParser
-import kotlinx.datetime.Instant
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
+import kotlinx.datetime.Instant
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
-import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
