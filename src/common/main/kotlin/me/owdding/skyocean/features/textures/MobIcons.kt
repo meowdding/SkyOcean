@@ -123,7 +123,7 @@ enum class KnownMobIcon(val icon: String, short: String? = null) {
     ARCANE('♃', "ARC"),
     SHIELDED('⛨', "SHIE"),
     AIRBORNE('✈', "AIR"),
-    GLACIAL('❆', "GLAC"),
+    GLACIAL('❄', "GLAC"),
     WOODLAND('⸙', "WOOD"),
     ;
 
