@@ -20,6 +20,8 @@ import me.owdding.skyocean.config.features.mining.MiningRetexture
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.misc.MobIconsConfig
 import me.owdding.skyocean.config.patcher.ConfigPatches
+import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.OceanGradients
 import java.util.function.UnaryOperator
 
 object Config : ConfigKt("skyocean/config") {
@@ -49,6 +51,20 @@ object Config : ConfigKt("skyocean/config") {
 
         separator("skyocean.config.main.modifications")
     }
+
+    val disableMessageTextShadow: Boolean by invalidProperty(
+        boolean(true) {
+            translation = "skyocean.config.main.text_shadow"
+        },
+        ChatUtils::prefix,
+    )
+
+    val prefixGradient: OceanGradients by invalidProperty(
+        enum(OceanGradients.DEFAULT) {
+            translation = "skyocean.config.main.prefix_gradient"
+        },
+        ChatUtils::prefix,
+    )
 
     override val patches: Map<Int, UnaryOperator<JsonObject>> = ConfigPatches.loadPatches()
     override val version: Int = patches.size + 1
