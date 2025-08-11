@@ -35,8 +35,6 @@ object MobIcons {
 
     internal var settings: Map<KnownMobIcon, MobIconSettings> = emptyMap()
 
-    fun getSetting(icon: KnownMobIcon): MobIconSettings = settings[icon] ?: DEFAULT_SETTINGS
-
     enum class DisplayType(val font: ResourceLocation) {
         NORMAL(MOB_ICONS),
         SHORT(MOB_ICONS_SHORT),
@@ -47,6 +45,8 @@ object MobIcons {
     init {
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(MobIconSettingsListener)
     }
+
+    fun getSetting(icon: KnownMobIcon): MobIconSettings = settings[icon] ?: DEFAULT_SETTINGS
 
     @Subscription
     @OnlyOnSkyBlock
