@@ -18,6 +18,7 @@ import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.config.features.mining.MiningRetexture
 import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.config.features.misc.MobIconsConfig
 import me.owdding.skyocean.config.patcher.ConfigPatches
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.OceanGradients
@@ -43,12 +44,12 @@ object Config : ConfigKt("skyocean/config") {
             category(MiningRetexture)
             category(MineshaftConfig)
         }
-        category(MiscConfig)
+        category(MiscConfig) {
+            category(MobIconsConfig)
+        }
         category(Buttons)
 
-        separator {
-            translation = "skyocean.config.main.modifications"
-        }
+        separator("skyocean.config.main.modifications")
     }
 
     val disableMessageTextShadow: Boolean by invalidProperty(
