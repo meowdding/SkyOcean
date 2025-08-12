@@ -3,9 +3,13 @@ package me.owdding.skyocean.config.features.inventory
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
 import me.owdding.skyocean.utils.Utils.id
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.ItemLike
 import org.intellij.lang.annotations.Language
+import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 
 object Buttons : CategoryKt("buttons") {
     override val hidden: Boolean = true
@@ -58,7 +62,9 @@ class ButtonConfig(
     var regex = Regex(titleName)
         private set
 
-    var item by string(itemName)
+    var item by observable(string(itemName)) { _, new ->
+        this.itemStack = toItem(new)
+    }
     var command by string(commandName)
     var title by observable(string(titleName)) { _, new ->
         runCatching {
@@ -68,6 +74,8 @@ class ButtonConfig(
     var tooltip by string(tooltipName)
     var disabled by boolean(false)
 
+    var itemStack: ItemStack = toItem(item)
+
     fun reset() {
         item = itemName
         command = commandName
@@ -75,5 +83,9 @@ class ButtonConfig(
         tooltip = tooltipName
         disabled = false
     }
+
+    private fun toItem(id: String) = ResourceLocation.tryParse(id.lowercase())?.let {
+        BuiltInRegistries.ITEM.getValue(it).defaultInstance
+    }?.takeUnless { it.item == Items.AIR } ?: RepoItemsAPI.getItem(id.uppercase())
 }
 
