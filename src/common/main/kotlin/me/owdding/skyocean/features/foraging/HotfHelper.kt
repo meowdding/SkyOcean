@@ -51,8 +51,8 @@ object HotfHelper {
         event.item.replaceVisually {
             copyFrom(event.item)
             namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
-            if (config.hotfStackSize) {
-                count = level
+            if (config.hotfStackSize && !isLocked) {
+                customSlotText = level.toString()
             }
             tooltip {
                 val listMerger = ListMerger(tooltipLines)
