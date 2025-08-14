@@ -53,8 +53,8 @@ object HotmHelper {
         event.item.replaceVisually {
             copyFrom(event.item)
             namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
-            if (MiningConfig.hotmStackSize) {
-                count = level
+            if (MiningConfig.hotmStackSize && !isLocked) {
+                customSlotText = level.toString()
             }
             tooltip {
                 val listMerger = ListMerger(tooltipLines)
