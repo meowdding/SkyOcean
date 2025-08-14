@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.anyMatch
 
 @Module
 object DeskPestHighlight {
-    private val regex = "ൠ This plot has (?<amount>.*) Pests?!".toRegex()
+    private val regex = "ൠ This plot has (?<amount>.*) ൠ Pests?!".toRegex()
 
     @Subscription
     @InventoryTitle("Configure Plots")
