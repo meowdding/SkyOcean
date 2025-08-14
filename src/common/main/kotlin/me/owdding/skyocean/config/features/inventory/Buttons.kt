@@ -85,7 +85,7 @@ class ButtonConfig(
     }
 
     private fun toItem(id: String) = ResourceLocation.tryParse(id.lowercase())?.let {
-        BuiltInRegistries.ITEM.getValue(it).defaultInstance
-    }?.takeUnless { it.item == Items.AIR } ?: RepoItemsAPI.getItem(id.uppercase())
+        BuiltInRegistries.ITEM.getOptional(it).getOrNull()?.defaultInstance
+    } ?: RepoItemsAPI.getItem(id.uppercase())
 }
 
