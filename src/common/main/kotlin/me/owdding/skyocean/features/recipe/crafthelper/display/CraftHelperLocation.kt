@@ -5,17 +5,17 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 enum class CraftHelperLocation(val position: (Int, Int) -> Pair<Int, Int>) {
     TOP_LEFT(
-        { width, height ->
+        { _, _ ->
             margin to margin
         },
     ),
     TOP_RIGHT(
-        { width, height ->
+        { width, _ ->
             screenWidth - width - margin to margin
         },
     ),
     BOTTOM_LEFT(
-        { width, height ->
+        { _, height ->
             margin to screenHeight - height - margin
         },
     ),
@@ -25,7 +25,7 @@ enum class CraftHelperLocation(val position: (Int, Int) -> Pair<Int, Int>) {
         },
     ),
     LEFT_OF_INVENTORY(
-        { width, height ->
+        { _, height ->
             margin to (screenHeight / 2 - height / 2)
         },
     ),
