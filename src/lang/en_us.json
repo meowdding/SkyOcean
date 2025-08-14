@@ -245,9 +245,14 @@
       },
       "itemSearch": {
         "@value": "Item Search",
+        "desc": "Item Search is a feature that allows you to search for items in your inventory, backpacks, storage, sacks, island chests and more.",
         "itemHighlight": {
           "@value": "Item Highlight",
           "desc": "Choose what color the searched item will be highlighted with."
+        },
+        "preserve_search": {
+          "@value": "Preserve Search",
+          "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
         }
       },
       "crafthelper": {
@@ -267,7 +272,15 @@
         },
         "disableRootItems": {
           "@value": "Disable tracking for target",
-          "desc": "Prevents the crafthelper from showing any progress for the root node, making it simpler for certain items."
+          "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
+        },
+        "position": {
+          "@value": "Position",
+          "desc": "Craft helper position inside the inventory."
+        },
+        "margin": {
+          "@value": "Margin",
+          "desc": "How much space to leave between the inventory/screen edges and the craft helper element."
         }
       },
       "transparentArmor": {
