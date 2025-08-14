@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.builder.ScalableFrameLayout
+import me.owdding.lib.compat.REIRenderOverlayEvent
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.withPadding
@@ -30,14 +31,18 @@ import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
+import me.owdding.skyocean.utils.setPosition
 import me.owdding.skyocean.utils.suggestions.CombinedSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeIdSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeNameSuggestionProvider
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.layouts.FrameLayout
+import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McFont
@@ -52,6 +57,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object CraftHelperDisplay {
 
     val data get() = CraftHelperStorage.data
+
+    private var craftHelperLayout: LayoutElement? = null
 
     fun clear() {
         data?.item = null
@@ -141,7 +148,6 @@ object CraftHelperDisplay {
             layout.addChild(ScalableWidget(visualize(tree, output) { callback }))
             layout.arrangeElements()
 
-
             if (layout.width > maxWidth) {
                 layout.scale(maxWidth.toDouble() / layout.width)
             } else {
@@ -149,11 +155,24 @@ object CraftHelperDisplay {
             }
             layout.arrangeElements()
 
-            layout.setPosition(10, (McScreen.self?.height?.div(2) ?: 0) - (layout.height / 2))
+            layout.setPosition(MiscConfig.craftHelperPosition.position(layout.width, layout.height))
             layout.visitWidgets { event.widgets.add(it) }
+            this.craftHelperLayout = layout
             if (save) CraftHelperStorage.save()
         }
         callback(false)
+    }
+
+    @Subscription
+    fun onREI(event: REIRenderOverlayEvent) {
+        craftHelperLayout?.let {
+            event.register(it.x, it.y, it.width, it.height)
+        }
+    }
+
+    @Subscription
+    fun onScreenClose(event: ContainerCloseEvent) {
+        craftHelperLayout = null
     }
 
     private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
@@ -183,7 +202,7 @@ object CraftHelperDisplay {
                             this.color = TextColor.RED
                         }
                     }
-            }.also { it.visitChildren { child -> maxLine = maxOf(maxLine, child.width + 10) } }
+            }.apply { visitChildren { child -> maxLine = maxOf(maxLine, child.width + 10) } }
 
             horizontal(5, MIDDLE) {
                 val item = ExtraDisplays.inventoryBackground(1, 1, Displays.item(output.item, showTooltip = true).withPadding(2))

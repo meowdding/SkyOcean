@@ -18,7 +18,6 @@ import tech.thatgravyboat.skyblockapi.api.events.info.TabListChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -61,7 +60,7 @@ object ProfileInChat {
 
     @OnlyOnSkyBlock
     @Subscription(priority = LOWEST)
-    fun onChat(event: ChatReceivedEvent.Pre) {
+    fun onChat(event: ChatReceivedEvent.Post) {
         if (!ChatConfig.enableProfileInChat) return
         val index = event.component.siblings.indexOfFirst { sibling -> sibling.stripped.startsWith(": ") } - 1
         if (index < 0) return
@@ -70,9 +69,8 @@ object ProfileInChat {
             event.component.siblings.indexOfFirst { sibling -> sibling.style.hoverEvent == null }
         } else index
         val profileType = usernameToProfileTypeCache[name] ?: return
-        event.cancel()
         val modified = event.component.copy()
         modified.siblings.add(targetIndex, profileType)
-        modified.send()
+        event.component = modified
     }
 }

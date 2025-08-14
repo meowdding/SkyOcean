@@ -422,6 +422,7 @@ tasks.register("setupForWorkflows") {
 
 tasks.withType<JarInJar>().configureEach {
     include { !it.name.endsWith("-dev.jar") }
+    archiveBaseName = "SkyOcean"
 
     manifest {
         attributes["Fabric-Loom-Mixin-Remap-Type"] = "static"

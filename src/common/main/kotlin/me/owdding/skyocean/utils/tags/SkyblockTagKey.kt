@@ -2,6 +2,7 @@ package me.owdding.skyocean.utils.tags
 
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils.readAsJson
 import net.fabricmc.loader.api.FabricLoader
@@ -27,7 +28,7 @@ interface SkyblockTagKey<T> {
     companion object {
         private fun getResourcePaths(path: String) = FabricLoader.getInstance().allMods.mapNotNull { mod -> mod.findPath(path).getOrNull() }
 
-        fun load(path: String): List<String> = getResourcePaths(path).flatMap { it ->
+        fun load(path: String): List<String> = getResourcePaths(path).flatMap {
             val file = it.readAsJson().toData(SkyOceanCodecs.SkyblockTagFileCodec.codec()) ?: run {
                 SkyOcean.error("Failed to load tag file $path")
                 return@flatMap emptyList<String>()
@@ -45,7 +46,9 @@ interface SkyblockTagKey<T> {
 interface BaseSkyblockItemTagKey : SkyblockTagKey<ItemStack> {
 
     override fun toPath(resourceLocation: ResourceLocation) = super.toPath(resourceLocation.withPrefix("item/"))
-    override operator fun contains(value: ItemStack) = value.getSkyBlockId()?.lowercase() in this.tag || value.getApiId()?.lowercase() in this.tag
+    override operator fun contains(value: ItemStack) = value.getSkyBlockId()?.lowercase() in this.tag ||
+        value.getApiId()?.lowercase() in this.tag ||
+        value.getSkyOceanId()?.let { it.cleanId in this.tag || it.skyblockId in this.tag } == true
 
     operator fun contains(id: String) = id in this.tag
 }

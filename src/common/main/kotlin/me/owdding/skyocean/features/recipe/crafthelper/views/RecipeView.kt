@@ -17,6 +17,7 @@ import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -183,6 +184,8 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
         if (ItemSources.ACCESSORY_BAG in sources) append(Icons.ACCESSORIES)
         if (ItemSources.FORGE in sources) append(Icons.FORGE)
         if (ItemSources.CHEST in sources) append(Icons.CHESTS)
+        if (ItemSources.RIFT in sources) append(Icons.RIFT) { this.color = TextColor.DARK_PURPLE }
+        if (ItemSources.DRILL_UPGRADE in sources || ItemSources.ROD_UPGRADE in sources) append(Icons.ITEM_IN_ITEM)
     }
 
     fun reload() = refreshCallback(false)

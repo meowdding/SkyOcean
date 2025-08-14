@@ -1,8 +1,8 @@
 package me.owdding.skyocean.api
 
-import me.owdding.skyocean.utils.Utils.ItemBuilder
 import me.owdding.skyocean.utils.Utils.compoundTag
 import me.owdding.skyocean.utils.Utils.firstOrElseLast
+import me.owdding.skyocean.utils.Utils.itemBuilder
 import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.Utils.putCompound
 import me.owdding.skyocean.utils.Utils.set
@@ -28,7 +28,7 @@ object EnchantmentApi {
         }
         val lore = level.lore().map { !it }
 
-        ItemBuilder(Items.ENCHANTED_BOOK) {
+        itemBuilder(Items.ENCHANTED_BOOK) {
             this[DataComponents.ITEM_NAME] = Text.of("${enchantment.name()} ${level.literalLevel()}")
             this[DataComponents.LORE] = ItemLore(lore, lore)
             this[DataComponents.CUSTOM_DATA] = compoundTag {

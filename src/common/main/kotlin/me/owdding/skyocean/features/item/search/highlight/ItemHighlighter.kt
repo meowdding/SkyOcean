@@ -34,7 +34,7 @@ object ItemHighlighter {
     private var currentSearch: ItemFilter? = null
     private val allItems = mutableSetOf<ItemStack>()
     private var future: Job? = null
-    private var chests: MutableList<BlockPos> = CopyOnWriteArrayList()
+    private val chests: MutableList<BlockPos> = CopyOnWriteArrayList()
 
     fun setHighlight(filter: ItemFilter?) = McClient.runNextTick {
         allItems.forEach { it.replaceVisually(null) }

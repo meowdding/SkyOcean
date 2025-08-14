@@ -1,7 +1,7 @@
 package me.owdding.skyocean.features.item.sources
 
-import me.owdding.skyocean.features.item.search.ItemContext
-import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
+import me.owdding.skyocean.features.item.sources.system.ItemContext
+import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
 import tech.thatgravyboat.skyblockapi.api.profile.items.wardrobe.WardrobeAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -21,8 +21,9 @@ data class WardrobeContext(
     override val source = ItemSources.WARDROBE
     override fun collectLines() = build {
         add("Wardrobe Slot $slot") { color = TextColor.GRAY }
-        add("Click to open wardrobe!") { this.color = TextColor.YELLOW }
+        requiresOverworld { add("Click to open wardrobe!") { this.color = TextColor.YELLOW } }
+        riftWarning()
     }
 
-    override fun open() = McClient.sendCommand("wd ${(slot - 1) / 9 + 1}")
+    override fun open() = requiresOverworld(true) { McClient.sendCommand("wd ${(slot - 1) / 9 + 1}") }
 }

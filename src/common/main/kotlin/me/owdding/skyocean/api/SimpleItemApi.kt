@@ -1,6 +1,8 @@
 package me.owdding.skyocean.api
 
 import me.owdding.lib.extensions.toReadableTime
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.UNKNOWN
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.attribute
@@ -9,7 +11,7 @@ import me.owdding.skyocean.api.SkyOceanItemId.Companion.item
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.pet
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.rune
 import me.owdding.skyocean.utils.LateInitModule
-import me.owdding.skyocean.utils.Utils.ItemBuilder
+import me.owdding.skyocean.utils.Utils.itemBuilder
 import me.owdding.skyocean.utils.Utils.sanitizeForCommandInput
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -26,7 +28,7 @@ import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.time.since
 
 @LateInitModule
-object SimpleItemApi {
+object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
 
     private val cache: MutableMap<SkyOceanItemId, ItemStack?> = mutableMapOf()
     private val nameCache: MutableMap<String, SkyOceanItemId> = mutableMapOf()
@@ -70,7 +72,7 @@ object SimpleItemApi {
             }.distinct().toMap()
         nameCache.clear()
         nameCache.putAll(newCache)
-        SkyOcean.trace("Cached ${nameCache.size} item names in ${start.since().toReadableTime(allowMs = true)}")
+        trace("Cached ${nameCache.size} item names in ${start.since().toReadableTime(allowMs = true)}")
     }
 
     fun findIdByName(name: String) = nameCache[name.lowercase().stripColor()]
@@ -85,7 +87,7 @@ object SimpleItemApi {
         return RepoItemsAPI.getItemOrNull(itemId)
     }
 
-    fun getItemById(id: SkyOceanItemId): ItemStack = getItemByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+    fun getItemById(id: SkyOceanItemId): ItemStack = getItemByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown item: $id")
     }
 
@@ -112,7 +114,7 @@ object SimpleItemApi {
         }
     }
 
-    fun getPetById(id: SkyOceanItemId): ItemStack = getPetByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+    fun getPetById(id: SkyOceanItemId): ItemStack = getPetByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown pet: $id")
     }
 
@@ -136,7 +138,7 @@ object SimpleItemApi {
         return@getOrPut null
     }
 
-    fun getRuneById(id: SkyOceanItemId) = getRuneByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+    fun getRuneById(id: SkyOceanItemId) = getRuneByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown rune: $id")
     }
 
@@ -160,7 +162,7 @@ object SimpleItemApi {
         return@getOrPut null
     }
 
-    fun getEnchantmentById(id: SkyOceanItemId): ItemStack = getEnchantmentByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+    fun getEnchantmentById(id: SkyOceanItemId): ItemStack = getEnchantmentByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown enchantment: $id")
     }
 
@@ -176,7 +178,7 @@ object SimpleItemApi {
         return@getOrPut null
     }
 
-    fun getAttributeById(id: SkyOceanItemId): ItemStack = getAttributeByIdOrNull(id) ?: ItemBuilder(Items.BARRIER) {
+    fun getAttributeById(id: SkyOceanItemId): ItemStack = getAttributeByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown attribute: $id")
     }
 

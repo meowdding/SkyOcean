@@ -18,6 +18,7 @@ object ChatConfig : CategoryKt("chat") {
     )
 
     var whiteNonMessage by boolean(false) {
+        this.searchTerms += "non"
         this.translation = "skyocean.config.chat.white_non_message"
     }
 

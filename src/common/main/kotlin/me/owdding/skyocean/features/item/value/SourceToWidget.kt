@@ -7,7 +7,7 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ClickToExpandWidget
 import me.owdding.skyocean.api.SkyOceanItemId
-import me.owdding.skyocean.utils.ChatUtils.BETTER_GOLD
+import me.owdding.skyocean.utils.OceanColors.BETTER_GOLD
 import me.owdding.skyocean.utils.Utils.not
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement

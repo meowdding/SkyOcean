@@ -1,10 +1,11 @@
 package me.owdding.skyocean.features.item.sources
 
 import me.owdding.skyocean.data.profile.IslandChestStorage
-import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
-import me.owdding.skyocean.features.item.search.item.SimpleTrackedItem
+import me.owdding.skyocean.features.item.sources.system.ItemContext
+import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
 import net.minecraft.core.BlockPos
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -27,11 +28,19 @@ data class ChestItemContext(
             append("Chest at x: ${chestPos.x}, y: ${chestPos.y}, z: ${chestPos.z}")
             color = TextColor.GRAY
         }
-        add("Click to highlight chest!") { this.color = TextColor.YELLOW }
+        val clickText = if (SkyBlockIsland.PRIVATE_ISLAND.inIsland()) "Click to highlight chest!" else "Click to warp to island and highlight chest!"
+        requiresOverworld { add(clickText) { this.color = TextColor.YELLOW } }
+        riftWarning()
     }
 
-    override fun open() = McClient.runNextTick {
-        ItemHighlighter.addChest(chestPos)
-        secondPos?.let(ItemHighlighter::addChest)
+    override fun open() = requiresOverworld(true) {
+        McClient.runNextTick {
+            ItemHighlighter.addChest(chestPos)
+            secondPos?.let(ItemHighlighter::addChest)
+
+            if (!SkyBlockIsland.PRIVATE_ISLAND.inIsland()) {
+                McClient.sendCommand("warp island")
+            }
+        }
     }
 }

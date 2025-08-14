@@ -74,7 +74,6 @@ enum class CurrencyType(val displayName: Component) {
     PELT(Text.of("Pelt") { this.color = TextColor.MAGENTA }),
     GEM(Text.of("Gems") { this.color = TextColor.GREEN }),
     CHOCOLATE(Text.of("Chocolate") { this.color = TextColor.GOLD }),
-    ;
 }
 
 @GenerateCodec

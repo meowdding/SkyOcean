@@ -7,15 +7,10 @@ import me.owdding.skyocean.SkyOcean.minecraft
 import me.owdding.skyocean.config.features.inventory.ButtonConfig
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.platform.pushPop
-import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
-import kotlin.jvm.optionals.getOrNull
 
 class InvButton(
     val button: ButtonConfig,
@@ -44,10 +39,7 @@ class InvButton(
             } else {
                 baseWidth / 2 - 8 + this@InvButton.y
             }
-            val stack = ResourceLocation.tryParse(button.item.lowercase())?.let {
-                BuiltInRegistries.ITEM.get(it)?.getOrNull()?.value()?.defaultInstance
-            } ?: RepoItemsAPI.getItem(button.item.uppercase())
-            graphics.renderItem(stack, itemX, itemY)
+            graphics.renderItem(button.itemStack, itemX, itemY)
         }
     }
 

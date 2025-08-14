@@ -1,6 +1,5 @@
-package me.owdding.skyocean.features.item.search.item
+package me.owdding.skyocean.features.item.sources.system
 
-import me.owdding.skyocean.features.item.search.ItemContext
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.sources.*
 import net.minecraft.core.BlockPos
@@ -31,7 +30,7 @@ class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
 
     private fun updateContext(newItem: TrackedItem) {
         val context = context
-        val other = newItem.context
+        val other = (newItem.context as? ParentItemContext)?.parent ?: newItem.context
         when {
             context is BundledItemContext -> context.add(newItem)
             context is EnderChestStorageItemContext && other is EnderChestStorageItemContext -> {
@@ -47,6 +46,14 @@ class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
             context is AbstractStorageItemContext && other is AbstractStorageItemContext -> {
                 this.context = StorageItemContext
             }
+            context is RiftInventoryContext && other is RiftInventoryContext -> {}
+            context is RiftEnderchestPageContext && other is RiftEnderchestPageContext -> {
+                if (context.index == other.index) return
+                this.context = RiftStorageContext
+            }
+
+            context is AbstractRiftStorageContext && other is AbstractRiftStorageContext -> RiftStorageContext
+            context is RiftItemContext && other is RiftItemContext -> RiftBundleContext
 
             context is InventoryItemContext && other is InventoryItemContext -> {}
             context is EquipmentItemContext && other is EquipmentItemContext -> {}
@@ -76,6 +83,12 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
                 append(value.toFormattedString())
                 this.color = TextColor.GRAY
             }
+        }
+
+        if (map.contains(ItemSources.RIFT)) {
+            requiresOverworld { add("Not currently in the rift!") { color = TextColor.RED } }
+        } else {
+            riftWarning()
         }
     }
 

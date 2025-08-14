@@ -26,14 +26,10 @@ object CorpseKeyAnnouncement {
 
     private fun sendKeys(corpses: List<Corpse>) {
         val keys = CorpseType.entries.associateWith { corpse ->
-            val amount = corpses.filter { corpse == it.type }.size
+            val amount = corpses.count { corpse == it.type }
             val sackAmount = SacksAPI.sackItems[corpse.key] ?: 0
-            val enderChestAmount =
-                StorageAPI.enderchests.flatMap { it.items }.filter { it.getData(DataTypes.ID) == corpse.key }
-                    .sumOf { it.count }
-            val storageAmount =
-                StorageAPI.backpacks.flatMap { it.items }.filter { it.getData(DataTypes.ID) == corpse.key }
-                    .sumOf { it.count }
+            val enderChestAmount = StorageAPI.enderchests.flatMap { it.items }.filter { it.getData(DataTypes.ID) == corpse.key }.sumOf { it.count }
+            val storageAmount = StorageAPI.backpacks.flatMap { it.items }.filter { it.getData(DataTypes.ID) == corpse.key }.sumOf { it.count }
             amount to sackAmount + enderChestAmount + storageAmount
         }.filter { it.value.first > 0 && it.key != CorpseType.LAPIS }
 

@@ -6,7 +6,6 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.Utils.readJson
 import me.owdding.skyocean.utils.Utils.writeJson
-import net.fabricmc.loader.api.FabricLoader
 import org.apache.commons.io.FileUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
@@ -110,19 +109,19 @@ internal class ProfileStorage<T : Any>(
 
     private fun saveToSystem() {
         if (!this::data.isInitialized) return
-        SkyOcean.debug("Saving {}", lastPath)
+        SkyOcean.debug("Saving $lastPath")
         try {
             val version = this.version
             val codec = this.codec(version)
             val json = JsonObject {
                 this["@skyocean:version"] = version
-                this["@skyocean:data"] = data.toJson(codec) ?: return SkyOcean.warn("Failed to encode {} to json", data)
+                this["@skyocean:data"] = data.toJson(codec) ?: return SkyOcean.warn("Failed to encode $data to json")
             }
             lastPath.writeJson(json)
             FileUtils.write(lastPath.toFile(), json.toPrettyString(), Charsets.UTF_8)
-            SkyOcean.debug("saved {}", lastPath)
+            SkyOcean.debug("saved $lastPath")
         } catch (e: Exception) {
-            SkyOcean.error("Failed to save {} to file", data)
+            SkyOcean.error("Failed to save $data to file")
             e.printStackTrace()
         }
     }

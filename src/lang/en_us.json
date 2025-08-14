@@ -20,6 +20,14 @@
           "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix, this is done to help identify the origin of any changes and therefore can't be disabled."
         ]
       },
+      "text_shadow": {
+        "@value": "Disable Text Shadow",
+        "desc": "Disables text shadows for all messages sent by SkyOcean."
+      },
+      "prefix_gradient": {
+        "@value": "Prefix Gradient",
+        "desc": "Changes the gradient that is used for the prefix."
+      },
       "debug": {
         "@value": "Enable Debug Mode",
         "desc": [
@@ -170,8 +178,8 @@
         "warning": "<yellow>SkyOcean by default adds the profile emblem into chat messages, if you wish to change this open the config and search for <gold>Profile in Chat</gold>!"
       },
       "white_non_message": {
-        "@value": "White Non-Message",
-        "desc": "Changes the color from nons to white instead of gray."
+        "@value": "Consistent Player Message Colour",
+        "desc": "Changes the color of messages sent by unranked players from gray to white."
       },
       "piggy_repair_helper": {
         "@value": "Piggy Repair Helper",
@@ -237,9 +245,14 @@
       },
       "itemSearch": {
         "@value": "Item Search",
+        "desc": "Item Search is a feature that allows you to search for items in your inventory, backpacks, storage, sacks, island chests and more.",
         "itemHighlight": {
           "@value": "Item Highlight",
           "desc": "Choose what color the searched item will be highlighted with."
+        },
+        "preserve_search": {
+          "@value": "Preserve Search",
+          "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
         }
       },
       "crafthelper": {
@@ -259,7 +272,15 @@
         },
         "disableRootItems": {
           "@value": "Disable tracking for target",
-          "desc": "Prevents the crafthelper from showing any progress for the root node, making it simpler for certain items."
+          "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
+        },
+        "position": {
+          "@value": "Position",
+          "desc": "Craft helper position inside the inventory."
+        },
+        "margin": {
+          "@value": "Margin",
+          "desc": "How much space to leave between the inventory/screen edges and the craft helper element."
         }
       },
       "transparentArmor": {
@@ -278,6 +299,27 @@
         "others": {
           "@value": "Others",
           "desc": "Only applies to other players."
+        }
+      },
+      "mob_icons": {
+        "@value": "Mob Icons",
+        "enabled": {
+          "@value": "Enable Mob Icons",
+          "desc": [
+            "Replaces the hypixel mob icons with a spelled out version.",
+            "<red>This requires a nametag update, meaning it doesn't refresh instantly!</red>"
+          ]
+        },
+        "display_type": {
+          "@value": "Display type",
+          "desc": "Changes the way the mob icons are displayed."
+        },
+        "colors": {
+          "@value": "Individual colors",
+          "desc": [
+            "Overwrites the colors for the different mob icons.",
+            "The default <white>#FFFFFF</white> means that it doesn't get changed at all."
+          ]
         }
       }
     },
@@ -569,5 +611,16 @@
   },
   "item_value": {
     "keybind": "Item Value"
+  },
+  "gradients": {
+    "default": "Default",
+    "rainbow": "Rainbow",
+    "bisexual": "Bisexual",
+    "gay": "Gay",
+    "lesbian": "Lesbian",
+    "pansexual": "Pansexual",
+    "asexual": "Asexual",
+    "non_binary": "Non Binary",
+    "trans": "Transgender"
   }
 }
