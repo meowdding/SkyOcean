@@ -36,7 +36,6 @@ import me.owdding.skyocean.utils.suggestions.CombinedSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeIdSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeNameSuggestionProvider
 import net.minecraft.client.gui.components.AbstractWidget
-import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
