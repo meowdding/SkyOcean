@@ -148,7 +148,9 @@ object MetalDetectorSolver {
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onActionBar(event: ActionBarReceivedEvent.Pre) {
         if (!isEnabled()) return
-        val distanceFromActionbar = getDistance(event.text)
+        val distanceFromActionbar = event.text.split("     ").firstNotNullOfOrNull {
+            actionbarDistanceRegex.findGroup(it, "distance")?.toDoubleOrNull()
+        } ?: -1.0
         if (distance != -1.0 && distanceFromActionbar != distanceOnFind) {
             distanceOnFind = -1.0
             cooldown = System.currentTimeMillis() - 10000
@@ -180,7 +182,6 @@ object MetalDetectorSolver {
         if (foundTreasureRegex.matches(event.text)) {
             reset()
             cooldown = System.currentTimeMillis() + 2500
-            McClient.self.gui.overlayMessageString?.stripped?.let { distanceOnFind = getDistance(it) }
         }
     }
 
