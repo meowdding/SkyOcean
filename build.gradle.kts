@@ -40,6 +40,7 @@ java {
 
 repositories {
     maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
+    maven(url = "https://maven.teamresourceful.com/repository/maven-private/")
     maven(url = "https://repo.hypixel.net/repository/Hypixel/")
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
@@ -94,6 +95,7 @@ cloche {
         project.layout.projectDirectory.dir("src/mixins").toPath().listDirectoryEntries().filter { it.isRegularFile() }.forEach {
             mixins.from("src/mixins/${it.name}")
         }
+        accessWideners.from(project.layout.projectDirectory.file("skyocean.accesswidener"))
 
         data {
             dependencies { addDependencies(this) }

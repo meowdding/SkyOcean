@@ -39,6 +39,7 @@ import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.math.roundToInt
+import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.jvm.javaType
 import kotlin.reflect.typeOf
 
@@ -172,6 +173,14 @@ object Utils {
         set(value) {
             (this as? SafeMutableComponentAccessor)?.`skyocean$setContents`(value)
         }
+
+    inline fun <T> KMutableProperty0<T>.setIf(value: T, predicate: (T) -> Boolean) {
+        if (predicate(value)) this.set(value)
+    }
+
+    inline fun <T> KMutableProperty0<T>.setIfNot(value: T, predicate: (T) -> Boolean) {
+        if (!predicate(value)) this.set(value)
+    }
 }
 
 @AutoCollect("LateInitModules")

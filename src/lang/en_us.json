@@ -139,6 +139,21 @@
       "puzzler": {
         "@value": "Puzzler Solver",
         "desc": "Highlights the correct block for the puzzler."
+      },
+      "metal_detector": {
+        "@value": "Metal Detector Solver",
+        "metalDetector": {
+          "@value": "Enable Metal Detector Solver",
+          "desc": "Enables the metal detector solver, which helps you find treasures in the Mines of Divan."
+        },
+        "playDingOnFind": {
+          "@value": "Play Ding on Find",
+          "desc": "Plays a sound when the metal detector finds a treasure."
+        },
+        "showTitleOnFind": {
+          "@value": "Show Title on Find",
+          "desc": "Shows a title when the metal detector finds a treasure."
+        }
       }
     },
     "inventory": {
