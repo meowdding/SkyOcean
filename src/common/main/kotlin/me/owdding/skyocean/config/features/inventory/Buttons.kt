@@ -10,6 +10,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.ItemLike
 import org.intellij.lang.annotations.Language
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import kotlin.jvm.optionals.getOrNull
 
 object Buttons : CategoryKt("buttons") {
     override val hidden: Boolean = true
