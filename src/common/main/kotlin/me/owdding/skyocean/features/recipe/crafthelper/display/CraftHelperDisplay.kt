@@ -114,7 +114,7 @@ object CraftHelperDisplay {
         if (!LocationAPI.isOnSkyBlock) return
         if (event.screen !is AbstractContainerScreen<*>) return
 
-        val maxWidth = (event.screen as AbstractContainerScreenAccessor).leftPos - 20
+        val maxWidth = (event.screen as AbstractContainerScreenAccessor).leftPos - (MiscConfig.craftHelperMargin * 2)
 
         val layout = LayoutFactory.empty() as ScalableFrameLayout
         lateinit var callback: (save: Boolean) -> Unit
