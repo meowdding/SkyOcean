@@ -1,7 +1,6 @@
 package me.owdding.skyocean.utils
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
-import kotlinx.datetime.Instant
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
@@ -20,6 +19,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.time.since
 import kotlin.time.Duration
+import kotlin.time.Instant
 
 internal object Icons {
 
