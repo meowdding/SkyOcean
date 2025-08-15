@@ -364,6 +364,7 @@ ksp {
     sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME }.forEach { this.excludedSources.from(it.kotlin.srcDirs) }
     arg("meowdding.project_name", project.name)
     arg("meowdding.package", "me.owdding.skyocean.generated")
+    arg("actualStubDir", project.layout.buildDirectory.dir("generated/ksp/main/stubs").get().asFile.absolutePath)
 }
 
 idea {
