@@ -14,7 +14,7 @@ keval = "1.1.1"
 
 rconfigkt = "3.5.13"
 
-detekt = "1.23.7"
+detekt = "1.23.8"
 
 meowdding-lib = "2.2.11"
 meowdding-repo = "1.0.16"

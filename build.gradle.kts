@@ -40,7 +40,6 @@ java {
 
 repositories {
     maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
-    maven(url = "https://maven.teamresourceful.com/repository/maven-private/")
     maven(url = "https://maven.fabricmc.net/")
     maven(url = "https://repo.hypixel.net/repository/Hypixel/")
     maven(url = "https://api.modrinth.com/maven")

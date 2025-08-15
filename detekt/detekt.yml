@@ -76,6 +76,8 @@ performance:
         active: true
 
 potential-bugs:
+    UnreachableCode: # TODO broken with kt 2.2
+        active: false
     DoubleMutabilityForCollection: # went crazy about all the mutable collections
         active: false
     HasPlatformType: # false positives on config get() methods
