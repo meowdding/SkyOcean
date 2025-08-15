@@ -49,7 +49,7 @@ internal object ChatUtils {
     val ICON_COMPONENT = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
     val ICON_SPACE_COMPONENT = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
 
-    val prefix by CachedValue {
+    val prefixDelegate = CachedValue {
         Text.of {
             append("[")
             append("SkyOcean") {
@@ -59,6 +59,7 @@ internal object ChatUtils {
             this.color = TextColor.GRAY
         }.withPotentialShadow()
     }
+    val prefix: MutableComponent by prefixDelegate
 
     fun MutableComponent.withPotentialShadow(): MutableComponent {
         return if (Config.disableMessageTextShadow) {

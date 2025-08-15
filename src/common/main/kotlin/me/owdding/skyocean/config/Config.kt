@@ -56,14 +56,14 @@ object Config : ConfigKt("skyocean/config") {
         boolean(true) {
             translation = "skyocean.config.main.text_shadow"
         },
-        ChatUtils::prefix,
+        ChatUtils.prefixDelegate,
     )
 
     val prefixGradient: OceanGradients by invalidProperty(
         enum(OceanGradients.DEFAULT) {
             translation = "skyocean.config.main.prefix_gradient"
         },
-        ChatUtils::prefix,
+        ChatUtils.prefixDelegate,
     )
 
     override val patches: Map<Int, UnaryOperator<JsonObject>> = ConfigPatches.loadPatches()
