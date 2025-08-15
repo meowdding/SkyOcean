@@ -1,0 +1,19 @@
+{
+  "output": {
+    "id": "item:kalhuiki_mask",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:wood",
+      "amount": 20,
+      "type": "ITEM"
+    },
+    {
+      "id": "item:sludge_juice",
+      "amount": 20,
+      "type": "ITEM"
+    }
+  ]
+}
