@@ -3,7 +3,7 @@
 ### 0. Definitions
 
 "Code" refers to:
-1. Any file found in the `.../resources/repo/...` directory
+1. Any file found in the `src/repo/...` directory
 2. Any file found in the `buildSrc/...` directory
 3. Source files, which refers to
     1. Files ending in `.java` and `.kt`
