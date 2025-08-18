@@ -11,6 +11,7 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.Companion.inAnyIsland
 
 object MiscConfig : CategoryKt("misc") {
+    private val defaultCloudIslands = listOf(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS, SkyBlockIsland.THE_CATACOMBS)
     override val name get() = Translated("skyocean.config.misc")
 
     var ministerInCalendar by boolean(true) {
@@ -41,14 +42,14 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.hideEntityFire"
     }
 
-    private val defaultIslands = listOf(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS, SkyBlockIsland.THE_CATACOMBS)
     var islandCloudHider by defaultEnabledMessage(
-        select(*defaultIslands.toTypedArray()) {
+        @Suppress("SpreadOperator")
+        select(*defaultCloudIslands.toTypedArray()) {
             translation = "skyocean.config.misc.islandCloudHider"
         },
         { +"skyocean.config.misc.islandCloudHider.warning" },
         "islandCloudHider",
-        predicate = { inAnyIsland(defaultIslands) },
+        predicate = { inAnyIsland(defaultCloudIslands) },
     )
 
     val shouldHideClouds get() = SkyBlockIsland.inAnyIsland(islandCloudHider.toList())
