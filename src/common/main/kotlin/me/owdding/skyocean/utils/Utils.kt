@@ -26,10 +26,13 @@ import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
+import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
+import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
+import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.file.Files
@@ -181,6 +184,15 @@ object Utils {
     inline fun <T> KMutableProperty0<T>.setIfNot(value: T, predicate: (T) -> Boolean) {
         if (!predicate(value)) this.set(value)
     }
+
+    fun String.replaceTrim(regex: Regex, replacement: String = "") = this.replace(regex, replacement).trim()
+    fun String.replaceTrim(oldValue: String, newValue: String = "") = this.replace(oldValue, newValue).trim()
+
+    fun TooltipBuilder.copyFrom(itemStack: ItemStack) = lines().addAll(itemStack.getLore())
+    fun MutableComponent.wrap(wrap: String) = this.wrap(wrap, wrap)
+    fun ItemBuilder.skyOceanPrefix() = this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
+
+    fun <T, Z> List<T>.mapMutable(converter: (T) -> Z) = this.map(converter).toMutableList()
 }
 
 @AutoCollect("LateInitModules")

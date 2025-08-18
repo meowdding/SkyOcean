@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
+import tech.thatgravyboat.skyblockapi.api.remote.api.RepoAttributeAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.stripColor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -70,7 +71,7 @@ value class SkyOceanItemId private constructor(val id: String) {
             return null
         }
 
-        fun unsafe(id: String) = SkyOceanItemId("$UNSAFE$id")
+        fun unsafe(id: String) = SkyOceanItemId("$UNSAFE$id".lowercase())
 
         @IncludedCodec
         val CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap(::SkyOceanItemId, SkyOceanItemId::id)
@@ -94,7 +95,7 @@ value class SkyOceanItemId private constructor(val id: String) {
                 "ENCHANTED_BOOK_${cleanId.substringBeforeLast(DELIMITER)}_${cleanId.substringAfterLast(DELIMITER)}"
             }
             isAttribute -> {
-                "${AttributeApi.getAttributeDataById(cleanId)?.shardName()}_SHARD"
+                "${RepoAttributeAPI.getAttributeDataById(cleanId)?.shardName()}_SHARD"
             }
 
             else -> cleanId

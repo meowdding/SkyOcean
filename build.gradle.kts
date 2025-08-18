@@ -23,10 +23,11 @@ plugins {
     idea
     alias(libs.plugins.kotlin)
     alias(libs.plugins.terrarium.cloche)
-    alias(libs.plugins.meowdding.resources)
-    alias(libs.plugins.meowdding.repo)
     alias(libs.plugins.kotlin.symbol.processor)
     alias(libs.plugins.detekt)
+    `museum-data` // defined in buildSrc
+    alias(libs.plugins.meowdding.resources)
+    alias(libs.plugins.meowdding.repo)
 }
 
 base {
@@ -40,13 +41,13 @@ java {
 
 repositories {
     maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
+    maven(url = "https://maven.teamresourceful.com/repository/msrandom/")
     maven(url = "https://maven.fabricmc.net/")
     maven(url = "https://repo.hypixel.net/repository/Hypixel/")
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven(url = "https://maven.nucleoid.xyz")
     maven(url = "https://maven.shedaniel.me/")
-    maven(url = "https://maven.msrandom.net/repository/root")
     maven(url = "https://maven.notenoughupdates.org/releases") // Needed for detekt rules
     mavenCentral()
     mavenLocal()
@@ -82,14 +83,14 @@ cloche {
         compileOnly(libs.meowdding.ktcodecs)
         compileOnly(libs.meowdding.ktmodules)
 
-        modImplementation(libs.meowdding.lib)
-        modImplementation(libs.skyblockapi)
+        implementation(libs.meowdding.lib)
+        implementation(libs.skyblockapi)
         compileOnly(libs.skyblockapi.repo)
         implementation(libs.keval)
-        modImplementation(libs.placeholders)
-        modImplementation(libs.resourceful.config.kotlin) { isTransitive = false }
+        implementation(libs.placeholders)
+        implementation(libs.resourceful.config.kotlin) { isTransitive = false }
 
-        modImplementation(libs.fabric.language.kotlin)
+        implementation(libs.fabric.language.kotlin)
     }
 
     common {
@@ -297,11 +298,12 @@ tasks.withType<DetektCreateBaselineTask>().configureEach {
 compactingResources {
     basePath = "repo"
 
-    configureTask(tasks.getByName<ProcessResources>("process1218Resources"))
-    configureTask(tasks.getByName<ProcessResources>("process1215Resources"))
-    configureTask(tasks.getByName<ProcessResources>("processResources"))
+    tasks.withType<ProcessResources> {
+        configureTask(this)
+    }
 
     compactToArray("recipes")
+    removeComments("unobtainable_ids")
 }
 
 repo {
