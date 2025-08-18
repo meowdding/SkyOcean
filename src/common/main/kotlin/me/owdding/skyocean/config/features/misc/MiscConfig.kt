@@ -8,6 +8,7 @@ import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.transparency
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.Companion.inAnyIsland
 
 object MiscConfig : CategoryKt("misc") {
     override val name get() = Translated("skyocean.config.misc")
@@ -40,13 +41,14 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.hideEntityFire"
     }
 
+    private val defaultIslands = listOf(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS, SkyBlockIsland.THE_CATACOMBS)
     var islandCloudHider by defaultEnabledMessage(
-        select(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS) {
+        select(*defaultIslands.toTypedArray()) {
             translation = "skyocean.config.misc.islandCloudHider"
         },
         { +"skyocean.config.misc.islandCloudHider.warning" },
         "islandCloudHider",
-        predicate = { SkyBlockIsland.inAnyIsland(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS) },
+        predicate = { inAnyIsland(defaultIslands) },
     )
 
     val shouldHideClouds get() = SkyBlockIsland.inAnyIsland(islandCloudHider.toList())

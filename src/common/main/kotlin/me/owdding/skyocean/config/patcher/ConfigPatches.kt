@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils
 import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
@@ -40,6 +41,7 @@ object ConfigPatches {
     init {
         register(MovePatch.ID, MovePatch.CODEC)
         register(CompoundPatch.ID, CompoundPatch.CODEC)
+        register(AddPatch.ID, SkyOceanCodecs.AddPatchCodec)
     }
 
 }
