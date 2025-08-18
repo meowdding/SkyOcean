@@ -16,6 +16,12 @@ import kotlin.io.path.readText
 
 object ConfigPatches {
 
+    init {
+        register(MovePatch.ID, MovePatch.CODEC)
+        register(CompoundPatch.ID, CompoundPatch.CODEC)
+        register(AddPatch.ID, SkyOceanCodecs.AddPatchCodec)
+    }
+
     private val registry = mutableMapOf<ResourceLocation, MapCodec<out Patch>>()
 
     val CODEC: Codec<Patch> = ResourceLocation.CODEC.dispatch(Patch::id, registry::get)
@@ -36,12 +42,6 @@ object ConfigPatches {
             }
         }
         return patches.sortedBy { it.first }.toMap()
-    }
-
-    init {
-        register(MovePatch.ID, MovePatch.CODEC)
-        register(CompoundPatch.ID, CompoundPatch.CODEC)
-        register(AddPatch.ID, SkyOceanCodecs.AddPatchCodec)
     }
 
 }
