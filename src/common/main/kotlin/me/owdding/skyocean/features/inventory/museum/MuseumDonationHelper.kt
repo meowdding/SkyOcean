@@ -17,8 +17,10 @@ import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
 import me.owdding.skyocean.utils.Utils.contains
-import me.owdding.skyocean.utils.Utils.copyFrom
+import me.owdding.skyocean.utils.Utils.modifyTooltip
 import me.owdding.skyocean.utils.Utils.skyOceanPrefix
+import me.owdding.skyocean.utils.Utils.skyoceanReplace
+import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.Utils.wrap
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.world.item.Items
@@ -29,6 +31,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -61,15 +64,12 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
                 MuseumRepoData.MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM -> Items.BARRIER
                 MuseumRepoData.MuseumDataError.Type.ARMOR_NOT_FOUND -> Items.RED_DYE
             }
-            event.item.replaceVisually {
-                copyFrom(event.item)
-                skyOceanPrefix()
+
+            event.item.skyoceanReplace {
                 this.item = item
-                tooltip {
-                    copyFrom(event.item)
 
-                    if (!isEmpty()) space()
-
+                modifyTooltip {
+                    space()
                     add("Can't find item with name ") {
                         append(event.item.hoverName.copy().wrap("'"))
                         this.color = TextColor.RED
@@ -84,12 +84,15 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
         val copy = itemTracker.snapshot()
         val items = copy.takeN(id, 1)
         val amount = items.sumOf { it.amount }
-        event.item.replaceVisually {
-            copyFrom(event.item)
-            skyOceanPrefix()
+        event.item.skyoceanReplace {
             if (amount >= 1) {
                 this.item = Items.GREEN_DYE
-                return@replaceVisually
+                modifyTooltip {
+                    space()
+                    add("This item was found on your profile!") { this.color = TextColor.GREEN }
+                    items.first().context.collectLines()
+                }
+                return@skyoceanReplace
             }
 
             val recipe = SimpleRecipeApi.getBestRecipe(id)
@@ -97,16 +100,34 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
             if (recipe == null) {
                 debug("Recipe is null $id")
                 this.item = Items.RED_DYE
-                return@replaceVisually
+                modifyTooltip {
+                    space()
+                    add("No recipe found for item!")
+                }
+                return@skyoceanReplace
             }
+
             val tree = ContextAwareRecipeTree(recipe, SkyOceanItemIngredient(id, 1), 1)
             val context = CraftHelperContext.create(tree, copy)
             create(context)
             val rootState = context.toState()
+
             if (rootState.childrenDone) {
                 this.item = Items.YELLOW_DYE
+                modifyTooltip {
+                    space()
+                    add("You have all materials to craft this item!") { this.color = TextColor.YELLOW }
+                    add("Click to set as craft helper item!") { this.color = TextColor.YELLOW }
+                    onClick {
+                        (+"Imagine its set as crafthelper item").send()
+                    }
+                }
             } else {
                 this.item = Items.ORANGE_DYE
+                modifyTooltip {
+                    space()
+                    add("This item can be crafted!")
+                }
             }
         }
     }

@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
 import me.owdding.ktmodules.AutoCollect
+import me.owdding.lib.extensions.ListMerger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
@@ -25,6 +26,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
+import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
@@ -193,6 +195,30 @@ object Utils {
     fun ItemBuilder.skyOceanPrefix() = this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
 
     fun <T, Z> List<T>.mapMutable(converter: (T) -> Z) = this.map(converter).toMutableList()
+
+    inline fun ItemStack.skyoceanReplace(crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
+        this.replaceVisually {
+            copyFrom(this@skyoceanReplace)
+            skyOceanPrefix()
+            init()
+        }
+    }
+
+    context(original: ItemStack) inline fun ItemBuilder.modifyTooltip(crossinline init: TooltipBuilder.() -> Unit) {
+        this.tooltip {
+            lines().addAll(original.getLore())
+            init()
+        }
+    }
+
+    context(original: ItemStack) inline fun ItemBuilder.mergeTooltip(crossinline init: ListMerger<Component>.() -> Unit) {
+        val merger = ListMerger(original.getLore())
+        merger.init()
+        merger.addRemaining()
+        tooltip { lines().addAll(merger.destination) }
+
+    }
+
 }
 
 @AutoCollect("LateInitModules")
