@@ -8,8 +8,10 @@ import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.transparency
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.Companion.inAnyIsland
 
 object MiscConfig : CategoryKt("misc") {
+    private val defaultCloudIslands = listOf(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS, SkyBlockIsland.THE_CATACOMBS)
     override val name get() = Translated("skyocean.config.misc")
 
     var ministerInCalendar by boolean(true) {
@@ -41,12 +43,13 @@ object MiscConfig : CategoryKt("misc") {
     }
 
     var islandCloudHider by defaultEnabledMessage(
-        select(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS) {
+        @Suppress("SpreadOperator")
+        select(*defaultCloudIslands.toTypedArray()) {
             translation = "skyocean.config.misc.islandCloudHider"
         },
         { +"skyocean.config.misc.islandCloudHider.warning" },
         "islandCloudHider",
-        predicate = { SkyBlockIsland.inAnyIsland(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS) },
+        predicate = { inAnyIsland(defaultCloudIslands) },
     )
 
     val shouldHideClouds get() = SkyBlockIsland.inAnyIsland(islandCloudHider.toList())
