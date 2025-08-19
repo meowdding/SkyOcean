@@ -297,9 +297,9 @@ tasks.withType<DetektCreateBaselineTask>().configureEach {
 compactingResources {
     basePath = "repo"
 
-    configureTask(tasks.getByName<ProcessResources>("process1218Resources"))
-    configureTask(tasks.getByName<ProcessResources>("process1215Resources"))
-    configureTask(tasks.getByName<ProcessResources>("processResources"))
+    tasks.withType<ProcessResources> {
+        configureTask(this)
+    }
 
     compactToArray("recipes")
 }
