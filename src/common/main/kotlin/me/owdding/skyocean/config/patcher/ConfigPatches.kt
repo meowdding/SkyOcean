@@ -16,15 +16,15 @@ import kotlin.io.path.readText
 
 object ConfigPatches {
 
+    private val registry = mutableMapOf<ResourceLocation, MapCodec<out Patch>>()
+
+    val CODEC: Codec<Patch> = ResourceLocation.CODEC.dispatch(Patch::id, registry::get)
+
     init {
         register(MovePatch.ID, MovePatch.CODEC)
         register(CompoundPatch.ID, CompoundPatch.CODEC)
         register(AddPatch.ID, SkyOceanCodecs.AddPatchCodec)
     }
-
-    private val registry = mutableMapOf<ResourceLocation, MapCodec<out Patch>>()
-
-    val CODEC: Codec<Patch> = ResourceLocation.CODEC.dispatch(Patch::id, registry::get)
 
     fun register(id: ResourceLocation, codec: MapCodec<out Patch>) {
         registry[id] = codec
