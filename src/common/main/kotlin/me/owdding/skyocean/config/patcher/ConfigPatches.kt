@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils
 import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
@@ -18,6 +19,12 @@ object ConfigPatches {
     private val registry = mutableMapOf<ResourceLocation, MapCodec<out Patch>>()
 
     val CODEC: Codec<Patch> = ResourceLocation.CODEC.dispatch(Patch::id, registry::get)
+
+    init {
+        register(MovePatch.ID, MovePatch.CODEC)
+        register(CompoundPatch.ID, CompoundPatch.CODEC)
+        register(AddPatch.ID, SkyOceanCodecs.AddPatchCodec)
+    }
 
     fun register(id: ResourceLocation, codec: MapCodec<out Patch>) {
         registry[id] = codec
@@ -35,11 +42,6 @@ object ConfigPatches {
             }
         }
         return patches.sortedBy { it.first }.toMap()
-    }
-
-    init {
-        register(MovePatch.ID, MovePatch.CODEC)
-        register(CompoundPatch.ID, CompoundPatch.CODEC)
     }
 
 }

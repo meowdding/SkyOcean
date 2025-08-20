@@ -28,7 +28,18 @@ seamless way.
     - This screen shows a breakdown of item value sources by category, such as item stars, recombs, and more.
 - Item Search Screen
     - Press `o` or run `/skyocean search` to open the item search screen.
-    - Allowing you to search through all your ender chest pages, storage pages, vault, island chests, etc.
+    - Allowing you to search through the following:
+        - Island Chests
+        - Storage (Backpack/Enderchest)
+        - Wardrobe
+        - Sacks
+        - Accessory Bag
+        - Forge
+        - Inventory (overworld)
+        - Vault
+        - Museum
+        - Rift (Inventory/Enderchest)
+        - Drill & Rod upgrades (upgrade parts that are applied)
   - Using Right Click on any sack item will open an input to get that item from the sack.
 
 </details>
@@ -39,9 +50,17 @@ seamless way.
 - /skyocean calc \<equation> - performs a mathematical equation and prints the result
 - /skyocean sendcoords - sends the current coordinates in all chat
 - /skyocean search - opens the item search screen
+- /skyocean recipe \<recipe> [\<amount>]
 
 </details>
 
+
+<details>
+<summary>General config</summary>
+
+- Option to disable text shadows for all skyocean messages.
+- Prefix gradient
+</details>
 
 <details>
 <summary>Chat Config</summary>
@@ -52,6 +71,8 @@ seamless way.
     - When you die and the piggy bank breaks, you can click on the chat message to get 8 Enchanted Pork from your sacks.
 - Sack Notification
     - Specify for which sack items you want to receive a notification when you gain them, e.g. `Glossy Gemstone`.
+- White non mesages
+    - Makes messages from players without rank white.
 
 </details>
 
@@ -156,6 +177,7 @@ seamless way.
     - Retexture gemstones
 - Crystal Hollows Area Walls
 - Puzzler Solver
+- Metal detector solver
 
 </details>
 
@@ -163,6 +185,7 @@ seamless way.
 <summary>Misc Config</summary>
 
 - Craft Helper
+    - Also accessible through `/skyocean recipe <recipe> [<amount>]`
 - Mute the phantoms
 - Minister in Calendar
 - Previous server notifications
@@ -172,5 +195,10 @@ seamless way.
     - Readds pet candy that Hypixel hides for pets that are level 100.
 - Transparent armour
     - On yourself and others, configurable transparency.
+- Hide entity fire
+    - Removes the fire effect from all entities
+- Cloud hider for specific islands
+- Mob icoons
+    - Replaces the default hypixel mob icons with a custom texture, also has texturepack support.
 
 </details>
