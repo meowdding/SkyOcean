@@ -1,10 +1,17 @@
 package me.owdding.skyocean.features.inventory.museum
 
 import me.owdding.ktmodules.Module
+import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.CachedValue
+import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
+import me.owdding.skyocean.features.item.lore.InventoryTooltipComponent
+import me.owdding.skyocean.features.item.lore.LoreModifier
+import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
+import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
@@ -16,27 +23,68 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.*
+import me.owdding.skyocean.utils.Utils.add
+import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.modifyTooltip
-import me.owdding.skyocean.utils.Utils.skyOceanPrefix
+import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.Utils.skipRemaining
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
-import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.Utils.wrap
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
+import net.minecraft.network.chat.Component
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
-import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
+import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
-object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), RecipeView {
+@LoreModifier
+object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), RecipeView, AbstractLoreModifier() {
+
+    private val modifierCache: MutableMap<String, Pair<ComponentModifier?, TooltipComponentModifier?>> = mutableMapOf()
+
+    private context(item: ItemStack) fun registerModifier(component: ComponentModifier?, tooltip: TooltipComponentModifier?) {
+        if (component == null && tooltip == null) return
+        modifierCache[item.cleanName] = component to tooltip
+    }
+
+    private context(item: ItemStack) fun registerModifier(component: ComponentModifier) {
+        modifierCache[item.cleanName] = component to null
+    }
+
+    private context(item: ItemStack) fun buildModifiers(init: ModifierBuilder.() -> Unit) {
+        val builder = object : ModifierBuilder {
+            override var component: ComponentModifier? = null
+            override var tooltip: TooltipComponentModifier? = null
+
+            override fun registerModifier(component: ComponentModifier) {
+                this.component = component
+            }
+
+            override fun registerComponentModifier(modifier: TooltipComponentModifier) {
+                this.tooltip = modifier
+            }
+        }
+        builder.init()
+        if (builder.component == null && builder.tooltip == null) return
+        modifierCache[item.cleanName] = builder.component to builder.tooltip
+    }
 
     val museumRegex = Regex(".*?[Mm]useum.*?")
 
@@ -51,18 +99,17 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
         if (event.item !in Items.GRAY_DYE) return
 
         try {
-            val data = MuseumRepoData.getDataByName(event.item.cleanName)
-            when (data) {
-                is MuseumArmour -> handleMuseumArmourData(event, data)
-                is MuseumItem -> handleMuseumItemData(event, data)
+            when (val data = MuseumRepoData.getDataByName(event.item.cleanName)) {
+                is MuseumArmour -> data.handleMuseumArmourData(event)
+                is MuseumItem -> data.handleMuseumItemData(event)
             }
         } catch (error: MuseumRepoData.MuseumDataError) {
             error("${error.message}: ${error.type}")
 
-            val item = when (error.type) {
-                MuseumRepoData.MuseumDataError.Type.ITEM_NOT_FOUND -> return
-                MuseumRepoData.MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM -> Items.BARRIER
-                MuseumRepoData.MuseumDataError.Type.ARMOR_NOT_FOUND -> Items.RED_DYE
+            val item: Item = when (error.type) {
+                ITEM_NOT_FOUND -> Items.BLACKSTONE
+                NO_MATCHING_MUSEUM_ITEM -> Items.BARRIER
+                ARMOR_NOT_FOUND -> Items.RED_DYE
             }
 
             event.item.skyoceanReplace {
@@ -79,69 +126,121 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
         }
     }
 
-    private fun handleMuseumItemData(event: InventoryChangeEvent, data: MuseumItem) {
+    private fun MuseumItem.handleMuseumItemData(event: InventoryChangeEvent) {
+        val data = this
         val id = data.skyoceanId
         val copy = itemTracker.snapshot()
         val items = copy.takeN(id, 1)
         val amount = items.sumOf { it.amount }
-        event.item.skyoceanReplace {
+        event.item.skyoceanReplace(false) {
             if (amount >= 1) {
                 this.item = Items.GREEN_DYE
-                modifyTooltip {
-                    space()
+                registerModifier {
+                    beforeWiki()
                     add("This item was found on your profile!") { this.color = TextColor.GREEN }
-                    items.first().context.collectLines()
+                    space()
+                    addAll(items.first().context.collectLines())
+                    skipRemaining()
+                }
+                onClick {
+                    val item = items.first()
+                    ItemHighlighter.setHighlight(ReferenceItemFilter.create(item.context, item.itemStack))
+                    item.context.open()
                 }
                 return@skyoceanReplace
             }
 
-            val recipe = SimpleRecipeApi.getBestRecipe(id)
+            val rootState = copy.toState(id)
 
-            if (recipe == null) {
+            if (rootState == null) {
                 debug("Recipe is null $id")
                 this.item = Items.RED_DYE
-                modifyTooltip {
+
+                registerModifier {
+                    beforeWiki()
+                    add("No recipe found for item!") { this.color = TextColor.RED }
                     space()
-                    add("No recipe found for item!")
                 }
                 return@skyoceanReplace
             }
-
-            val tree = ContextAwareRecipeTree(recipe, SkyOceanItemIngredient(id, 1), 1)
-            val context = CraftHelperContext.create(tree, copy)
-            create(context)
-            val rootState = context.toState()
 
             if (rootState.childrenDone) {
                 this.item = Items.YELLOW_DYE
-                modifyTooltip {
-                    space()
-                    add("You have all materials to craft this item!") { this.color = TextColor.YELLOW }
-                    add("Click to set as craft helper item!") { this.color = TextColor.YELLOW }
-                    onClick {
-                        (+"Imagine its set as crafthelper item").send()
-                    }
+                registerModifier {
+                    beforeWiki()
+                    add("You have all materials to craft this item!") { this.color = TextColor.GREEN }
+                    add("Click to set as craft helper item!") { this.color = TextColor.GREEN }
+                    skipRemaining()
                 }
             } else {
                 this.item = Items.ORANGE_DYE
-                modifyTooltip {
-                    space()
-                    add("This item can be crafted!")
+                registerModifier {
+                    beforeWiki()
+                    add("This item can be crafted!") { this.color = TextColor.GRAY }
+                    add("Click to set as craft helper item!") { this.color = TextColor.YELLOW }
+                    skipRemaining()
                 }
+            }
+
+            onClick {
+                (!"Imagine its set as crafthelper item").send()
             }
         }
     }
 
-    private fun handleMuseumArmourData(event: InventoryChangeEvent, data: MuseumArmour) {
-        event.item.replaceVisually {
-            copyFrom(event.item)
-            skyOceanPrefix()
+    fun ItemTracker.toState(id: SkyOceanItemId): CraftHelperState? {
+        val recipe = SimpleRecipeApi.getBestRecipe(id) ?: return null
+        val tree = ContextAwareRecipeTree(recipe, SkyOceanItemIngredient(id, 1), 1)
+        val context = CraftHelperContext.create(tree, this)
+        create(context)
+        return context.toState()
+    }
+
+    private fun ListMerger<Component>.beforeWiki() = this.addUntil(::isWikiLine)
+    private fun isWikiLine(component: Component) = component.stripped.contains("Click to view on the")
+
+    private fun MuseumArmour.handleMuseumArmourData(event: InventoryChangeEvent) = context(event.item) {
+        val data = this
+        val items = data.armorIds.map { SkyOceanItemId.item(it) }
+        val copy = itemTracker.snapshot()
+        buildModifiers {
+            registerModifier {
+                beforeWiki()
+
+            }
+            registerComponentModifier {
+                addUntil { it.getWidth(McFont.self) <= McFont.self.width(" ") && it is ClientTextTooltip }
+                read()
+                add(
+                    InventoryTooltipComponent(
+                        items.map { it.toItem() }.sortedBy {
+                            when (it[DataTypes.CATEGORY]?.name?.lowercase()) {
+                                "helmet" -> 1
+                                "chestplate" -> 2
+                                "leggings" -> 3
+                                "boots" -> 4
+                                "necklace" -> 5
+                                "cloak" -> 6
+                                "belt" -> 7
+                                "bracelet" -> 8
+                                else -> {
+                                    info("Unknown category ${it[DataTypes.CATEGORY]?.name}")
+                                    1
+                                }
+                            }
+                        },
+                        4, true,
+                    ),
+                )
+            }
         }
     }
 
-    @Subscription
-    fun containerClose(event: ContainerCloseEvent) {
+
+    @Subscription(ContainerCloseEvent::class)
+    fun containerClose() {
         itemCache.invalidate()
+        modifierCache.clear()
     }
 
     override fun create(
@@ -149,4 +248,45 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
         widget: WidgetBuilder,
         widgetConsumer: (AbstractWidget) -> Unit,
     ) = Unit
+
+    override val displayName: Component = !"todo"
+    override val isEnabled: Boolean = true
+
+    override fun appliesTo(item: ItemStack): Boolean = itemCache.hasValue()
+
+    override fun modify(item: ItemStack, list: MutableList<Component>): Boolean {
+        if (item.cleanName !in modifierCache) return false
+        return withMerger(list) {
+            modifierCache[item.cleanName]?.first?.publicMerge(this)
+            true
+        }
+    }
+
+    override fun appendComponents(
+        item: ItemStack,
+        list: MutableList<ClientTooltipComponent>,
+    ) {
+        if (item.cleanName !in modifierCache) return
+        return withComponentMerger(list) {
+            modifierCache[item.cleanName]?.second?.publicMerge(this)
+        }
+    }
+}
+
+private fun interface ComponentModifier {
+    fun publicMerge(merger: ListMerger<Component>) = merger.merge()
+    fun ListMerger<Component>.merge()
+}
+
+private fun interface TooltipComponentModifier {
+    fun publicMerge(merger: ListMerger<ClientTooltipComponent>) = merger.merge()
+    fun ListMerger<ClientTooltipComponent>.merge()
+}
+
+private interface ModifierBuilder {
+    var component: ComponentModifier?
+    var tooltip: TooltipComponentModifier?
+
+    fun registerModifier(component: ComponentModifier)
+    fun registerComponentModifier(modifier: TooltipComponentModifier)
 }

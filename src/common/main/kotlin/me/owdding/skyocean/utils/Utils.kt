@@ -18,6 +18,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
@@ -34,6 +35,7 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -196,10 +198,10 @@ object Utils {
 
     fun <T, Z> List<T>.mapMutable(converter: (T) -> Z) = this.map(converter).toMutableList()
 
-    inline fun ItemStack.skyoceanReplace(crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
+    inline fun ItemStack.skyoceanReplace(prependIcon: Boolean = true, crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
         this.replaceVisually {
             copyFrom(this@skyoceanReplace)
-            skyOceanPrefix()
+            if (prependIcon) skyOceanPrefix()
             init()
         }
     }
@@ -214,11 +216,17 @@ object Utils {
     context(original: ItemStack) inline fun ItemBuilder.mergeTooltip(crossinline init: ListMerger<Component>.() -> Unit) {
         val merger = ListMerger(original.getLore())
         merger.init()
-        merger.addRemaining()
         tooltip { lines().addAll(merger.destination) }
-
     }
 
+    fun TooltipBuilder.addAll(iterable: Collection<Component>) = lines().addAll(iterable)
+    fun ListMerger<Component>.space() = add(CommonComponents.EMPTY)
+    fun ListMerger<Component>.add(init: MutableComponent.() -> Unit) = add(Text.of(init))
+    fun ListMerger<Component>.add(text: String, init: MutableComponent.() -> Unit = {}) = add(Text.of(text, init))
+    fun ListMerger<Component>.addAll(iterable: Collection<Component>) = this.destination.addAll(iterable)
+    fun ListMerger<*>.skipRemaining() {
+        while (this.canRead()) read()
+    }
 }
 
 @AutoCollect("LateInitModules")

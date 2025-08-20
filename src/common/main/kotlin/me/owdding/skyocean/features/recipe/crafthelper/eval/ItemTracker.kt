@@ -8,6 +8,7 @@ import me.owdding.skyocean.features.recipe.CurrencyType
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.serialize
 import me.owdding.skyocean.utils.Utils.mapMutable
+import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.area.farming.TrapperAPI
 import tech.thatgravyboat.skyblockapi.api.area.hub.FarmhouseAPI
 import tech.thatgravyboat.skyblockapi.api.area.rift.RiftAPI
@@ -42,7 +43,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
             }
         }.mapNotNull { item ->
             item.itemStack.getSkyBlockId()?.let {
-                TrackedItem(it, item.itemStack.count, item.context, item.context.source)
+                TrackedItem(it, item.itemStack, item.itemStack.count, item.context, item.context.source)
             }
         }.groupBy { it.id.lowercase() }
         .mapValues { (_, values) -> values.sortedBy { sourceToPriority(it.source) }.toMutableList() }.toMutableMap()
@@ -114,6 +115,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
 
 data class TrackedItem(
     val id: String,
+    val itemStack: ItemStack,
     val amount: Int,
     val context: ItemContext,
     val source: ItemSources,
