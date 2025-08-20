@@ -14,6 +14,7 @@ import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
@@ -28,6 +29,7 @@ import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
@@ -226,6 +228,10 @@ object Utils {
     fun ListMerger<Component>.addAll(iterable: Collection<Component>) = this.destination.addAll(iterable)
     fun ListMerger<*>.skipRemaining() {
         while (this.canRead()) read()
+    }
+
+    fun Screen?.rebuild() {
+        this?.resize(McClient.self, this.width, this.height)
     }
 }
 

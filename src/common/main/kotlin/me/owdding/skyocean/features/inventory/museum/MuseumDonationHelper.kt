@@ -7,6 +7,7 @@ import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.CachedValue
+import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
 import me.owdding.skyocean.features.item.lore.InventoryTooltipComponent
 import me.owdding.skyocean.features.item.lore.LoreModifier
@@ -15,6 +16,7 @@ import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperDisplay
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperContext
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
@@ -24,11 +26,13 @@ import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
 import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.*
+import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.modifyTooltip
 import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.Utils.rebuild
 import me.owdding.skyocean.utils.Utils.skipRemaining
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.Utils.wrap
@@ -46,9 +50,10 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
-import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -183,7 +188,10 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
             }
 
             onClick {
-                (!"Imagine its set as crafthelper item").send()
+                CraftHelperDisplay.data?.item = id
+                CraftHelperDisplay.data?.amount = 1
+                CraftHelperStorage.save()
+                McScreen.self.rebuild()
             }
         }
     }
@@ -203,32 +211,43 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
         val data = this
         val items = data.armorIds.map { SkyOceanItemId.item(it) }
         val copy = itemTracker.snapshot()
+
+        val itemList = items.map { it to it.toItem() }.sortedBy { (_, item) -> item.getPriority() }
         buildModifiers {
             registerModifier {
                 beforeWiki()
+                val copy = copy.snapshot()
+                itemList.forEach { (id, stack) ->
+                    val take = copy.takeN(id, 1)
+                    if (take.sumOf { it.amount } >= 1) {
+                        add {
+                            append(Icons.CHECKMARK) { this.color = TextColor.GREEN }
+                            append(" ")
+                            append(stack.hoverName)
+                        }
+                        return@forEach
+                    }
 
+                    val state = copy.toState(id)
+                    add {
+                        if (state == null || !state.childrenDone) {
+                            append(Icons.CROSS) { this.color = TextColor.RED }
+                        } else {
+                            append(Icons.WARNING) { this.color = TextColor.YELLOW }
+                        }
+                        append(" ")
+                        append(stack.hoverName)
+
+                    }
+                }
+                space()
             }
             registerComponentModifier {
                 addUntil { it.getWidth(McFont.self) <= McFont.self.width(" ") && it is ClientTextTooltip }
                 read()
                 add(
                     InventoryTooltipComponent(
-                        items.map { it.toItem() }.sortedBy {
-                            when (it[DataTypes.CATEGORY]?.name?.lowercase()) {
-                                "helmet" -> 1
-                                "chestplate" -> 2
-                                "leggings" -> 3
-                                "boots" -> 4
-                                "necklace" -> 5
-                                "cloak" -> 6
-                                "belt" -> 7
-                                "bracelet" -> 8
-                                else -> {
-                                    info("Unknown category ${it[DataTypes.CATEGORY]?.name}")
-                                    1
-                                }
-                            }
-                        },
+                        itemList.map { it.second },
                         4, true,
                     ),
                 )
@@ -236,6 +255,20 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
         }
     }
 
+    private fun ItemStack.getPriority() = when (this[DataTypes.CATEGORY]?.name?.lowercase()) {
+        "helmet" -> 1
+        "chestplate" -> 2
+        "leggings" -> 3
+        "boots" -> 4
+        "necklace" -> 5
+        "cloak" -> 6
+        "belt" -> 7
+        "bracelet" -> 8
+        else -> {
+            info("Unknown category ${this[DataTypes.CATEGORY]?.name?.lowercase()}")
+            Int.MAX_VALUE
+        }
+    }
 
     @Subscription(ContainerCloseEvent::class)
     fun containerClose() {
