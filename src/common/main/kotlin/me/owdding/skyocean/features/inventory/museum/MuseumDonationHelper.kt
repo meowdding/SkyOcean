@@ -7,6 +7,7 @@ import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.CachedValue
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
 import me.owdding.skyocean.features.item.lore.InventoryTooltipComponent
@@ -31,10 +32,10 @@ import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.modifyTooltip
-import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.Utils.rebuild
 import me.owdding.skyocean.utils.Utils.skipRemaining
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
+import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.Utils.wrap
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip
@@ -102,11 +103,12 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
     fun inventoryChangeEvent(event: InventoryChangeEvent) {
         if (!event.title.matches(museumRegex)) return
         if (event.item !in Items.GRAY_DYE) return
+        if (!MiscConfig.museumArmourPieces && !MiscConfig.itemSearchMuseumIntegration) return
 
         try {
             when (val data = MuseumRepoData.getDataByName(event.item.cleanName)) {
                 is MuseumArmour -> data.handleMuseumArmourData(event)
-                is MuseumItem -> data.handleMuseumItemData(event)
+                is MuseumItem if MiscConfig.itemSearchMuseumIntegration -> data.handleMuseumItemData(event)
             }
         } catch (error: MuseumRepoData.MuseumDataError) {
             error("${error.message}: ${error.type}")
@@ -214,44 +216,46 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
 
         val itemList = items.map { it to it.toItem() }.sortedBy { (_, item) -> item.getPriority() }
         buildModifiers {
-            registerModifier {
-                beforeWiki()
-                val copy = copy.snapshot()
-                itemList.forEach { (id, stack) ->
-                    val take = copy.takeN(id, 1)
-                    if (take.sumOf { it.amount } >= 1) {
+            if (MiscConfig.itemSearchMuseumIntegration)
+                registerModifier {
+                    beforeWiki()
+                    val copy = copy.snapshot()
+                    itemList.forEach { (id, stack) ->
+                        val take = copy.takeN(id, 1)
+                        if (take.sumOf { it.amount } >= 1) {
+                            add {
+                                append(Icons.CHECKMARK) { this.color = TextColor.GREEN }
+                                append(" ")
+                                append(stack.hoverName)
+                            }
+                            return@forEach
+                        }
+
+                        val state = copy.toState(id)
                         add {
-                            append(Icons.CHECKMARK) { this.color = TextColor.GREEN }
+                            if (state == null || !state.childrenDone) {
+                                append(Icons.CROSS) { this.color = TextColor.RED }
+                            } else {
+                                append(Icons.WARNING) { this.color = TextColor.YELLOW }
+                            }
                             append(" ")
                             append(stack.hoverName)
-                        }
-                        return@forEach
-                    }
 
-                    val state = copy.toState(id)
-                    add {
-                        if (state == null || !state.childrenDone) {
-                            append(Icons.CROSS) { this.color = TextColor.RED }
-                        } else {
-                            append(Icons.WARNING) { this.color = TextColor.YELLOW }
                         }
-                        append(" ")
-                        append(stack.hoverName)
-
                     }
+                    space()
                 }
-                space()
-            }
-            registerComponentModifier {
-                addUntil { it.getWidth(McFont.self) <= McFont.self.width(" ") && it is ClientTextTooltip }
-                read()
-                add(
-                    InventoryTooltipComponent(
-                        itemList.map { it.second },
-                        4, true,
-                    ),
-                )
-            }
+            if (MiscConfig.museumArmourPieces)
+                registerComponentModifier {
+                    addUntil { it.getWidth(McFont.self) <= McFont.self.width(" ") && it is ClientTextTooltip }
+                    read()
+                    add(
+                        InventoryTooltipComponent(
+                            itemList.map { it.second },
+                            4, true,
+                        ),
+                    )
+                }
         }
     }
 
@@ -282,7 +286,16 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
         widgetConsumer: (AbstractWidget) -> Unit,
     ) = Unit
 
-    override val displayName: Component = !"todo"
+    override val displayName: Component? = null
+    override val extraNames: List<Component>
+        get() = buildList {
+            if (MiscConfig.itemSearchMuseumIntegration) {
+                add(+"skyocean.config.misc.itemSearch.museumIntegration")
+            }
+            if (MiscConfig.museumArmourPieces) {
+                add(+"skyocean.config.misc.museumArmourPieces")
+            }
+        }
     override val isEnabled: Boolean = true
 
     override fun appliesTo(item: ItemStack): Boolean = itemCache.hasValue()

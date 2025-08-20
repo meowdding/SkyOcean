@@ -24,7 +24,8 @@ import kotlin.reflect.full.findAnnotation
 
 abstract class AbstractLoreModifier {
 
-    abstract val displayName: Component
+    abstract val displayName: Component?
+    open val extraNames: List<Component>? = null
     abstract val isEnabled: Boolean
     abstract fun appliesTo(item: ItemStack): Boolean
 
@@ -82,11 +83,15 @@ object LoreModifiers {
                         this.color = ChatUtils.DARK_OCEAN_BLUE
                     }
                     modified.forEach {
-                        add {
-                            append("- ")
-                            append(it.displayName)
-                            this.color = TextColor.GRAY
+                        fun addName(name: Component) {
+                            add {
+                                append("- ")
+                                append(name)
+                                this.color = TextColor.GRAY
+                            }
                         }
+                        it.displayName?.let(::addName)
+                        it.extraNames?.forEach(::addName)
                     }
                     space()
                 }.lines(),
