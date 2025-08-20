@@ -48,7 +48,6 @@ repositories {
     maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven(url = "https://maven.nucleoid.xyz")
     maven(url = "https://maven.shedaniel.me/")
-    maven(url = "https://maven.notenoughupdates.org/releases") // Needed for detekt rules
     mavenCentral()
     mavenLocal()
 }
@@ -63,7 +62,7 @@ dependencies {
     compileOnly(libs.kotlin.stdlib)
 
 
-    detektPlugins("org.notenoughupdates:detektrules:1.0.0")
+    implementation("com.pinterest.ktlint:ktlint-cli:1.7.1")
     detektPlugins(project(":detekt"))
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
 }

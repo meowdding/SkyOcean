@@ -65,15 +65,35 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
 
     private val modifierCache: MutableMap<String, Pair<ComponentModifier?, TooltipComponentModifier?>> = mutableMapOf()
 
+    val museumRegex = Regex("museum", RegexOption.IGNORE_CASE)
+
+    val itemCache = CachedValue { ItemTracker() }
+    val itemTracker by itemCache
+
+    override val displayName: Component? = null
+    override val extraNames: List<Component>
+        get() = buildList {
+            if (MiscConfig.itemSearchMuseumIntegration) {
+                add(+"skyocean.config.misc.itemSearch.museumIntegration")
+            }
+            if (MiscConfig.museumArmourPieces) {
+                add(+"skyocean.config.misc.museumArmourPieces")
+            }
+        }
+    override val isEnabled: Boolean = true
+
+    @Suppress("SpacingAroundColon")
     private context(item: ItemStack) fun registerModifier(component: ComponentModifier?, tooltip: TooltipComponentModifier?) {
         if (component == null && tooltip == null) return
         modifierCache[item.cleanName] = component to tooltip
     }
 
+    @Suppress("SpacingAroundColon")
     private context(item: ItemStack) fun registerModifier(component: ComponentModifier) {
         modifierCache[item.cleanName] = component to null
     }
 
+    @Suppress("SpacingAroundColon")
     private context(item: ItemStack) fun buildModifiers(init: ModifierBuilder.() -> Unit) {
         val builder = object : ModifierBuilder {
             override var component: ComponentModifier? = null
@@ -92,16 +112,11 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
         modifierCache[item.cleanName] = builder.component to builder.tooltip
     }
 
-    val museumRegex = Regex(".*?[Mm]useum.*?")
-
-    val itemCache = CachedValue { ItemTracker() }
-    val itemTracker by itemCache
-
     @MustBeContainer
     @OnlyOnSkyBlock
     @Subscription
     fun inventoryChangeEvent(event: InventoryChangeEvent) {
-        if (!event.title.matches(museumRegex)) return
+        if (museumRegex.find(event.title) != null) return
         if (event.item !in Items.GRAY_DYE) return
         if (!MiscConfig.museumArmourPieces && !MiscConfig.itemSearchMuseumIntegration) return
 
@@ -216,46 +231,44 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
 
         val itemList = items.map { it to it.toItem() }.sortedBy { (_, item) -> item.getPriority() }
         buildModifiers {
-            if (MiscConfig.itemSearchMuseumIntegration)
-                registerModifier {
-                    beforeWiki()
-                    val copy = copy.snapshot()
-                    itemList.forEach { (id, stack) ->
-                        val take = copy.takeN(id, 1)
-                        if (take.sumOf { it.amount } >= 1) {
-                            add {
-                                append(Icons.CHECKMARK) { this.color = TextColor.GREEN }
-                                append(" ")
-                                append(stack.hoverName)
-                            }
-                            return@forEach
-                        }
-
-                        val state = copy.toState(id)
+            if (MiscConfig.itemSearchMuseumIntegration) registerModifier {
+                beforeWiki()
+                val copy = copy.snapshot()
+                itemList.forEach { (id, stack) ->
+                    val take = copy.takeN(id, 1)
+                    if (take.sumOf { it.amount } >= 1) {
                         add {
-                            if (state == null || !state.childrenDone) {
-                                append(Icons.CROSS) { this.color = TextColor.RED }
-                            } else {
-                                append(Icons.WARNING) { this.color = TextColor.YELLOW }
-                            }
+                            append(Icons.CHECKMARK) { this.color = TextColor.GREEN }
                             append(" ")
                             append(stack.hoverName)
-
                         }
+                        return@forEach
                     }
-                    space()
+
+                    val state = copy.toState(id)
+                    add {
+                        if (state == null || !state.childrenDone) {
+                            append(Icons.CROSS) { this.color = TextColor.RED }
+                        } else {
+                            append(Icons.WARNING) { this.color = TextColor.YELLOW }
+                        }
+                        append(" ")
+                        append(stack.hoverName)
+
+                    }
                 }
-            if (MiscConfig.museumArmourPieces)
-                registerComponentModifier {
-                    addUntil { it.getWidth(McFont.self) <= McFont.self.width(" ") && it is ClientTextTooltip }
-                    read()
-                    add(
-                        InventoryTooltipComponent(
-                            itemList.map { it.second },
-                            4, true,
-                        ),
-                    )
-                }
+                space()
+            }
+            if (MiscConfig.museumArmourPieces) registerComponentModifier {
+                addUntil { it.getWidth(McFont.self) <= McFont.self.width(" ") && it is ClientTextTooltip }
+                read()
+                add(
+                    InventoryTooltipComponent(
+                        itemList.map { it.second },
+                        4, true,
+                    ),
+                )
+            }
         }
     }
 
@@ -285,18 +298,6 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
         widget: WidgetBuilder,
         widgetConsumer: (AbstractWidget) -> Unit,
     ) = Unit
-
-    override val displayName: Component? = null
-    override val extraNames: List<Component>
-        get() = buildList {
-            if (MiscConfig.itemSearchMuseumIntegration) {
-                add(+"skyocean.config.misc.itemSearch.museumIntegration")
-            }
-            if (MiscConfig.museumArmourPieces) {
-                add(+"skyocean.config.misc.museumArmourPieces")
-            }
-        }
-    override val isEnabled: Boolean = true
 
     override fun appliesTo(item: ItemStack): Boolean = itemCache.hasValue()
 

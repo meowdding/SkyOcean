@@ -29,7 +29,7 @@ abstract class CreateMuseumDataTask : DefaultTask() {
 
     init {
         val configuration = project.extensions.getByType<CompactingResourcesExtension>()
-        val file = project.layout.buildDirectory.file("generated/meowdding/museum_data/${configuration.basePath!!}/museum_data.json").get().asFile
+        val file = project.layout.buildDirectory.file("generated/meowdding/museum_data/${configuration.basePath}/museum_data.json").get().asFile
         fun write(byteArray: ByteArray) {
             val filePath = file.toPath()
             filePath.parent.createDirectories()

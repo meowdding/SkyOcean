@@ -208,6 +208,7 @@ object Utils {
         }
     }
 
+    @Suppress("SpacingAroundColon")
     context(original: ItemStack) inline fun ItemBuilder.modifyTooltip(crossinline init: TooltipBuilder.() -> Unit) {
         this.tooltip {
             lines().addAll(original.getLore())
@@ -215,6 +216,7 @@ object Utils {
         }
     }
 
+    @Suppress("SpacingAroundColon")
     context(original: ItemStack) inline fun ItemBuilder.mergeTooltip(crossinline init: ListMerger<Component>.() -> Unit) {
         val merger = ListMerger(original.getLore())
         merger.init()

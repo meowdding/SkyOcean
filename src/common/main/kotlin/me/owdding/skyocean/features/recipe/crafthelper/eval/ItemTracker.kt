@@ -7,7 +7,7 @@ import me.owdding.skyocean.features.item.sources.system.ItemContext
 import me.owdding.skyocean.features.recipe.CurrencyType
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.serialize
-import me.owdding.skyocean.utils.Utils.mapMutable
+import me.owdding.skyocean.utils.Utils.mapToMutableList
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.area.farming.TrapperAPI
 import tech.thatgravyboat.skyblockapi.api.area.hub.FarmhouseAPI
@@ -17,8 +17,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import kotlin.math.min
 
 data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries) {
-    constructor(vararg sources: ItemSources) : this(sources.toList())
-    private constructor(b: Boolean) : this()
 
     val currencies = mutableMapOf<CurrencyType, Number>(
         CurrencyType.COIN to (CurrencyAPI.bank + CurrencyAPI.purse).floor(),
@@ -48,6 +46,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         }.groupBy { it.id.lowercase() }
         .mapValues { (_, values) -> values.sortedBy { sourceToPriority(it.source) }.toMutableList() }.toMutableMap()
 
+    constructor(vararg sources: ItemSources) : this(sources.toList())
 
     fun sourceToPriority(source: ItemSources) = when (source) {
         ItemSources.INVENTORY -> 0
@@ -106,9 +105,9 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
     }
 
     fun snapshot(): ItemTracker {
-        val copy = ItemTracker(true)
+        val copy = ItemTracker()
         copy.currencies.putAll(this.currencies)
-        copy.items.putAll(this.items.mapValues { (_, list) -> list.mapMutable { it.copy() } })
+        copy.items.putAll(this.items.mapValues { (_, list) -> list.mapToMutableList { it.copy() } })
         return copy
     }
 }

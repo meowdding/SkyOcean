@@ -9,10 +9,6 @@ import tech.thatgravyboat.skyblockapi.api.datatype.getData
 class ReferenceItemFilter(
     val reference: ItemStack,
 ) : ItemFilter {
-    companion object {
-        fun create(context: ItemContext, stack: ItemStack) = ReferenceItemFilter((context as? ParentItemContext)?.parent?.itemStack ?: stack)
-    }
-
     val id = reference.getData(DataTypes.API_ID)
     val attributes = reference.getData(DataTypes.ATTRIBUTES)
     val enchants = reference.getData(DataTypes.ENCHANTMENTS)
@@ -54,5 +50,8 @@ class ReferenceItemFilter(
         return true
     }
 
+    companion object {
+        fun create(context: ItemContext, stack: ItemStack) = ReferenceItemFilter((context as? ParentItemContext)?.parent?.itemStack ?: stack)
+    }
 
 }
