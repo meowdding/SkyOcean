@@ -198,7 +198,7 @@ object Utils {
     fun MutableComponent.wrap(wrap: String) = this.wrap(wrap, wrap)
     fun ItemBuilder.skyOceanPrefix() = this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
 
-    fun <T, Z> List<T>.mapMutable(converter: (T) -> Z) = this.map(converter).toMutableList()
+    fun <T, Z> List<T>.mapToMutableList(converter: (T) -> Z) = this.map(converter).toMutableList()
 
     inline fun ItemStack.skyoceanReplace(prependIcon: Boolean = true, crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
         this.replaceVisually {
