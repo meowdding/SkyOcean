@@ -24,11 +24,13 @@ object IslandChestStorage {
         return storage.get() ?: mutableListOf()
     }
 
+    fun hasBlock(position: BlockPos) = storage.get()?.any { (_, _, pos) -> pos == position } ?: false
+
     fun removeBlock(position: BlockPos) {
         val list = storage.get() ?: return
         list.removeAll { (_, _, pos) -> pos == position }
         val filter = list.filter { (_, _, _, pos2) -> pos2 == position }
-        list.removeAll(filter)
+        list.removeAll(filter.toSet())
         list.addAll(filter.map { (itemStack, slot, pos) -> ChestItem(itemStack, slot, pos, null) })
     }
 

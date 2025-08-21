@@ -81,7 +81,13 @@ object ChestTracker {
     private fun InventoryChangeEvent.onInventoryChange() {
         val mutable = this.titleComponent as? MutableComponent
         val contents = mutable?.contents as? TranslatableContents
-        if (contents?.key?.startsWith("container.chest") != true) return
+        if (contents?.key?.startsWith("container.chest") != true) {
+            if (mutable?.stripped?.equals("Minion Chest") == true) {
+                first?.let { if (IslandChestStorage.hasBlock(it)) IslandChestStorage.removeBlock(it) }
+            }
+
+            return
+        }
         container = this.inventory
     }
 
