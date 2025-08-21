@@ -23,7 +23,6 @@ dependencyResolutionManagement {
 
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.teamresourceful.com/repository/maven-private/")
