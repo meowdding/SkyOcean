@@ -82,8 +82,9 @@ object ChestTracker {
         val mutable = this.titleComponent as? MutableComponent
         val contents = mutable?.contents as? TranslatableContents
         if (contents?.key?.startsWith("container.chest") != true) {
-            if (mutable?.stripped?.equals("Minion Chest") == true) {
-                first?.let { if (IslandChestStorage.hasBlock(it)) IslandChestStorage.removeBlock(it) }
+            if (title == "Minion Chest") {
+                val first = first ?: return
+                if (IslandChestStorage.hasBlock(first)) IslandChestStorage.removeBlock(first)
             }
 
             return

@@ -24,7 +24,7 @@ object IslandChestStorage {
         return storage.get() ?: mutableListOf()
     }
 
-    fun hasBlock(position: BlockPos) = storage.get()?.any { (_, _, pos) -> pos == position } ?: false
+    fun hasBlock(position: BlockPos) = storage.get()?.any { (_, _, pos) -> pos == position } == true
 
     fun removeBlock(position: BlockPos) {
         val list = storage.get() ?: return
