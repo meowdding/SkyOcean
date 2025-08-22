@@ -299,8 +299,6 @@ idea {
 
 afterEvaluate {
     tasks.withType<GenerateStubApi> {
-        excludes.add(libs.skyblockapi.asProvider().get().module.toString())
-        excludes.add(libs.meowdding.lib.get().module.toString())
         excludes.addAll(
             "org.jetbrains.kotlin",
             "me.owdding",
