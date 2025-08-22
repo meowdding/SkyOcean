@@ -318,8 +318,7 @@ afterEvaluate {
             "com.nimbusds",
             "tech.thatgravyboat",
             "net.msrandom",
-            "eu.pb4",
-            "com.teamresourceful"
+            "eu.pb4"
         )
     }
 }
