@@ -6,6 +6,7 @@ rootProject.name = "SkyOcean"
 
 pluginManagement {
     repositories {
+        maven("https://maven.teamresourceful.com/repository/maven-private/")
         maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
         maven(url = "https://maven.msrandom.net/repository/cloche")
         gradlePluginPortal()
@@ -23,7 +24,6 @@ dependencyResolutionManagement {
 
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.teamresourceful.com/repository/maven-private/")
