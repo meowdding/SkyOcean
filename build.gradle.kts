@@ -5,12 +5,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import me.owdding.repo.toPath
 import net.msrandom.minecraftcodev.core.utils.toPath
-import net.msrandom.minecraftcodev.fabric.task.JarInJar
-import net.msrandom.minecraftcodev.runs.task.WriteClasspathFile
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
@@ -23,11 +18,12 @@ plugins {
     idea
     alias(libs.plugins.kotlin)
     alias(libs.plugins.terrarium.cloche)
-    alias(libs.plugins.kotlin.symbol.processor)
-    alias(libs.plugins.detekt)
-    `museum-data` // defined in buildSrc
     alias(libs.plugins.meowdding.resources)
     alias(libs.plugins.meowdding.repo)
+    alias(libs.plugins.kotlin.symbol.processor)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.meowdding.gradle)
+    `museum-data` // defined in buildSrc
 }
 
 base {
@@ -48,23 +44,16 @@ repositories {
     maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven(url = "https://maven.nucleoid.xyz")
     maven(url = "https://maven.shedaniel.me/")
+    maven(url = "https://maven.msrandom.net/repository/root")
     mavenCentral()
     mavenLocal()
 }
 
 dependencies {
-    compileOnly(libs.meowdding.ktmodules)
-    ksp(libs.meowdding.ktmodules)
-    compileOnly(libs.meowdding.ktcodecs)
-    ksp(libs.meowdding.ktcodecs)
-
     compileOnly(libs.keval)
     compileOnly(libs.kotlin.stdlib)
 
-
-    implementation("com.pinterest.ktlint:ktlint-cli:1.7.1")
     detektPlugins(project(":detekt"))
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
 }
 
 cloche {
@@ -77,11 +66,7 @@ cloche {
         clientOnly = true
     }
 
-
     fun addDependencies(arg: ClocheDependencyHandler) = arg.apply {
-        compileOnly(libs.meowdding.ktcodecs)
-        compileOnly(libs.meowdding.ktmodules)
-
         implementation(libs.meowdding.lib)
         implementation(libs.skyblockapi)
         compileOnly(libs.skyblockapi.repo)
@@ -181,8 +166,8 @@ cloche {
 
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
-                modImplementation(olympus)
-                modImplementation(rconfig)
+                implementation(olympus)
+                implementation(rconfig)
 
                 val mods = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods")
                 val modsTmp = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods/tmp")
@@ -226,28 +211,6 @@ cloche {
                 client()
             }
 
-            val sourceSetName = this.sourceSet.name
-
-            tasks {
-                afterEvaluate {
-                    val datagen = getByName("run${sourceSetName}ClientData")
-                    val processResources = getByName("process${sourceSetName}Resources", ProcessResources::class)
-                    val postProcessResources = register("postProcess${sourceSetName}Resources", ProcessResources::class) {
-                        dependsOn(processResources)
-                        mustRunAfter(datagen)
-                        inputs.files(processResources.inputs.files)
-                        actions.addAll(processResources.actions)
-                        outputs.upToDateWhen { false }
-                        destinationDir = processResources.destinationDir
-                        with(processResources.rootSpec)
-                    }
-
-                    getByName("${sourceSetName}Jar") {
-                        dependsOn("run${sourceSetName}ClientData")
-                        dependsOn(postProcessResources)
-                    }
-                }
-            }
         }
     }
 
@@ -265,33 +228,6 @@ cloche {
     }
 
     mappings { official() }
-}
-
-detekt {
-    buildUponDefaultConfig = true // preconfigure defaults
-    config.setFrom(rootProject.layout.projectDirectory.file("detekt/detekt.yml")) // point to your custom config defining rules to run, overwriting default behavior
-    baseline = file(layout.projectDirectory.file("detekt/baseline.xml")) // a way of suppressing issues before introducing detekt
-    source.setFrom(project.sourceSets.map { it.allSource })
-}
-
-tasks.withType<Detekt>().configureEach {
-    onlyIf {
-        project.findProperty("skipDetekt") != "true"
-    }
-    exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.toPath()) }
-    outputs.cacheIf { false } // Custom rules won't work if cached
-    reports {
-        html.required.set(true) // observe findings in your browser with structure and code snippets
-        xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
-        sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
-        md.required.set(true) // simple Markdown format
-    }
-}
-
-tasks.withType<DetektCreateBaselineTask>().configureEach {
-    exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.toPath()) }
-    outputs.cacheIf { false } // Custom rules won't work if cached
-    outputs.upToDateWhen { false }
 }
 
 compactingResources {
@@ -331,15 +267,6 @@ repo {
 
 tasks.withType<ProcessResources>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
-
-    filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
-        filter { if (it.startsWith("//!moj_import")) "#${it.substring(3)}" else it }
-    }
-    exclude(".cache/**")
-
-    with(copySpec {
-        from("src/lang").include("*.json").into("assets/skyocean/lang")
-    })
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -363,9 +290,6 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 ksp {
-    sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME }.forEach { this.excludedSources.from(it.kotlin.srcDirs) }
-    arg("meowdding.project_name", project.name)
-    arg("meowdding.package", "me.owdding.skyocean.generated")
     arg("actualStubDir", project.layout.buildDirectory.dir("generated/ksp/main/stubs").get().asFile.absolutePath)
 }
 
@@ -378,63 +302,33 @@ idea {
     }
 }
 
-
 afterEvaluate {
-    tasks.named("createCommonApiStub", GenerateStubApi::class).configure {
-        excludes.add(libs.skyblockapi.asProvider().get().module.toString())
-        excludes.add(libs.meowdding.lib.get().module.toString())
+    tasks.withType<GenerateStubApi> {
+        excludes.addAll(
+            "org.jetbrains.kotlin",
+            "me.owdding",
+            "net.hypixel",
+            "maven.modrinth",
+            "com.fasterxml.jackson",
+            "com.google",
+            "com.ibm",
+            "io.netty",
+            "net.fabricmc:fabric-language-kotlin",
+            "com.mojang:datafixerupper",
+            "com.mojang:brigardier",
+            "io.github.llamalad7:mixinextras",
+            "net.minidev",
+            "com.nimbusds",
+            "tech.thatgravyboat",
+            "net.msrandom",
+            "eu.pb4"
+        )
     }
 }
 
-// TODO temporary workaround for a cloche issue on certain systems, remove once fixed
-tasks.withType<WriteClasspathFile>().configureEach {
-    actions.clear()
-    actions.add {
-        output.get().toPath().also { it.parent.createDirectories() }.takeUnless { it.exists() }?.createFile()
-        generate()
-        val file = output.get().toPath()
-        file.writeText(file.readText().lines().joinToString(File.pathSeparator))
-    }
-}
-
-val mcVersions = sourceSets.filterNot { it.name == SourceSet.MAIN_SOURCE_SET_NAME || it.name == SourceSet.TEST_SOURCE_SET_NAME }.map { it.name }
-
-tasks.register("release") {
-    group = "meowdding"
-    mcVersions.forEach {
-        tasks.findByName("${it}JarInJar")?.let { task ->
-            dependsOn(task)
-            mustRunAfter(task)
-        }
-    }
-}
-
-tasks.register("cleanRelease") {
-    group = "meowdding"
-    listOf("clean", "release").forEach {
-        tasks.getByName(it).let { task ->
-            dependsOn(task)
-            mustRunAfter(task)
-        }
-    }
-}
-
-tasks.register("setupForWorkflows") {
-    mcVersions.flatMap {
-        listOf("remap${it}CommonMinecraftNamed", "remap${it}ClientMinecraftNamed")
-    }.mapNotNull { tasks.findByName(it) }.forEach {
-        dependsOn(it)
-        mustRunAfter(it)
-    }
-}
-
-tasks.withType<JarInJar>().configureEach {
-    include { !it.name.endsWith("-dev.jar") }
-    archiveBaseName = "SkyOcean"
-
-    manifest {
-        attributes["Fabric-Loom-Mixin-Remap-Type"] = "static"
-        attributes["Fabric-Jar-Type"] = "classes"
-        attributes["Fabric-Mapping-Namespace"] = "intermediary"
-    }
+meowdding {
+    setupClocheClasspathFix()
+    configureModules = true
+    configureCodecs = true
+    configureDetekt = true
 }
