@@ -140,4 +140,10 @@ style:
         active: false
     ThrowsCount:
         active: false
-
+    ForbiddenImport:
+        active: true
+        imports:
+            -   value: kotlinx.datetime.*
+                reason: "Kotlinx datetime is still in beta and shouldn't be used"
+    UnusedImports:
+        active: true
