@@ -61,14 +61,15 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
 @LoreModifier
-object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), RecipeView, AbstractLoreModifier() {
+object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
 
+    private var logger: MeowddingLogger = SkyOcean.featureLogger()
     private val modifierCache: MutableMap<String, Pair<ComponentModifier?, TooltipComponentModifier?>> = mutableMapOf()
 
     val museumRegex = Regex("museum", RegexOption.IGNORE_CASE)
 
-    val itemCache = CachedValue { ItemTracker() }
-    val itemTracker by itemCache
+    private val itemCache = CachedValue { ItemTracker() }
+    private val itemTracker by itemCache
 
     override val displayName: Component? = null
     override val extraNames: List<Component>
@@ -81,12 +82,6 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
             }
         }
     override val isEnabled: Boolean = true
-
-    @Suppress("SpacingAroundColon")
-    private context(item: ItemStack) fun registerModifier(component: ComponentModifier?, tooltip: TooltipComponentModifier?) {
-        if (component == null && tooltip == null) return
-        modifierCache[item.cleanName] = component to tooltip
-    }
 
     @Suppress("SpacingAroundColon")
     private context(item: ItemStack) fun registerModifier(component: ComponentModifier) {
@@ -126,7 +121,7 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
                 is MuseumItem if MiscConfig.itemSearchMuseumIntegration -> data.handleMuseumItemData(event)
             }
         } catch (error: MuseumRepoData.MuseumDataError) {
-            error("${error.message}: ${error.type}")
+            logger.error("${error.message}: ${error.type}")
 
             val item: Item = when (error.type) {
                 ITEM_NOT_FOUND -> Items.BLACKSTONE
@@ -175,7 +170,7 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
             val rootState = copy.toState(id)
 
             if (rootState == null) {
-                debug("Recipe is null $id")
+                logger.debug("Recipe is null $id")
                 this.item = Items.RED_DYE
 
                 registerModifier {
@@ -282,7 +277,7 @@ object MuseumDonationHelper : MeowddingLogger by SkyOcean.featureLogger(), Recip
         "belt" -> 7
         "bracelet" -> 8
         else -> {
-            info("Unknown category ${this[DataTypes.CATEGORY]?.name?.lowercase()}")
+            logger.info("Unknown category ${this[DataTypes.CATEGORY]?.name?.lowercase()}")
             Int.MAX_VALUE
         }
     }
