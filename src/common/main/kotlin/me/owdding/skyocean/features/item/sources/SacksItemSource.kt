@@ -13,7 +13,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object SacksItemSource : ItemSource, MeowddingLogger by SkyOcean.featureLogger() {
     override fun getAll() = SacksAPI.sackItems.mapNotNull(
-        { (id) -> warn("Couldn't find item for $id") },
+        { (id) -> debug("Couldn't find item for $id") },
         { (id, amount) -> createFromIdAndAmount(id, amount) },
     ).map { SimpleTrackedItem(it, SackItemContext) }
 

@@ -23,6 +23,7 @@ plugins {
     alias(libs.plugins.kotlin.symbol.processor)
     alias(libs.plugins.detekt)
     alias(libs.plugins.meowdding.gradle)
+    `museum-data` // defined in buildSrc
 }
 
 base {
@@ -36,6 +37,7 @@ java {
 
 repositories {
     maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
+    maven(url = "https://maven.teamresourceful.com/repository/msrandom/")
     maven(url = "https://maven.fabricmc.net/")
     maven(url = "https://repo.hypixel.net/repository/Hypixel/")
     maven(url = "https://api.modrinth.com/maven")
@@ -236,6 +238,7 @@ compactingResources {
     }
 
     compactToArray("recipes")
+    removeComments("unobtainable_ids")
 }
 
 repo {
@@ -280,6 +283,8 @@ tasks.withType<KotlinCompile>().configureEach {
             "-Xno-check-actual",
             "-Xexpect-actual-classes",
             "-Xopt-in=kotlin.time.ExperimentalTime",
+            "-Xcontext-parameters",
+            "-Xcontext-sensitive-resolution"
         )
     }
 }

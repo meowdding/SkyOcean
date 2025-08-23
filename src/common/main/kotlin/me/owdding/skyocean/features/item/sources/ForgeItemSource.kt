@@ -13,7 +13,7 @@ import kotlin.time.Instant
 
 object ForgeItemSource : ItemSource, MeowddingLogger by SkyOcean.featureLogger() {
     override fun getAll() = ForgeAPI.getForgeSlots().mapNotNull(
-        { (id) -> warn("Couldn't find item for $id") },
+        { (id) -> debug("Couldn't find item for $id") },
         { (slot, item) ->
             createFromIdAndAmount(item.id, 1)?.let { SimpleTrackedItem(it, ForgeItemContext(slot, item.expiryTime)) }
         },

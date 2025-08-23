@@ -11,6 +11,7 @@ import me.owdding.skyocean.api.SkyOceanItemId.Companion.item
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.pet
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.rune
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.itemBuilder
 import me.owdding.skyocean.utils.Utils.sanitizeForCommandInput
 import net.minecraft.world.item.ItemStack
@@ -21,6 +22,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.PetQuery
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoPetsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoRunesAPI
+import tech.thatgravyboat.skyblockapi.api.remote.api.RepoAttributeAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.stripColor
 import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.json.getPath
@@ -30,38 +32,38 @@ import tech.thatgravyboat.skyblockapi.utils.time.since
 @LateInitModule
 object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
 
+    private val unobtainableIds = Utils.loadRepoData("unobtainable_ids", SkyOceanItemId.CODEC.listOf())
     private val cache: MutableMap<SkyOceanItemId, ItemStack?> = mutableMapOf()
     private val nameCache: MutableMap<String, SkyOceanItemId> = mutableMapOf()
 
     init {
         val start = currentInstant()
-        RepoAPI.pets().pets().entries.associate { (id, data) -> data.name() to pet(id) }
-            .let(nameCache::putAll)
+        RepoAPI.pets().pets().entries.map { (id, data) -> data.name() to pet(id) }.applyFiltered()
 
         RepoAPI.runes().runes().entries.flatMap { (id, data) ->
-            data.map { rune ->
-                rune.name().stripColor() to rune("$id:${rune.tier()}")
+            data.mapNotNull { rune ->
+                rune.name().stripColor() to rune("$id", rune.tier())
             }
-        }.toMap().let(nameCache::putAll)
+        }.applyFiltered()
 
         RepoAPI.enchantments().enchantments().flatMap { (id, enchantments) ->
-            enchantments.levels().map { (level, enchantment) ->
+            enchantments.levels().map { (_, enchantment) ->
                 "${enchantments.name()} ${enchantment.literalLevel()}" to enchantment("$id:${enchantment.level()}")
             }
-        }.toMap().let(nameCache::putAll)
+        }.applyFiltered()
 
-        RepoAPI.attributes().attributes().flatMap { (id, attribute) ->
+        RepoAPI.attributes().attributes().flatMap { (_, attribute) ->
             listOf(
-                attribute.name() to attribute(attribute.id()),
-                attribute.shardName() to attribute(attribute.id()),
+                attribute.name() to attribute(attribute.attributeId()),
+                attribute.shardName() to attribute(attribute.attributeId()),
+                attribute.shardName().removeSuffix("Shard").trim() to attribute(attribute.attributeId()),
             )
-        }.toMap().let(nameCache::putAll)
+        }.applyFiltered()
 
         RepoAPI.items().items().entries.mapNotNull { (id, element) ->
-            val components =
-                element.getPath("['components'].['minecraft:custom_name'].['text']") ?: return@mapNotNull null
+            val components = element.getPath("['components'].['minecraft:custom_name'].['text']") ?: return@mapNotNull null
             components.asString.stripColor() to item(id)
-        }.toMap().let(nameCache::putAll)
+        }.applyFiltered()
 
         val newCache = nameCache.mapKeys { (key) -> key.lowercase().stripColor() }
             .entries.flatMap { (key, value) ->
@@ -74,6 +76,8 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
         nameCache.putAll(newCache)
         trace("Cached ${nameCache.size} item names in ${start.since().toReadableTime(allowMs = true)}")
     }
+
+    fun List<Pair<String, SkyOceanItemId>>.applyFiltered() = nameCache.putAll(this.filter { (_, id) -> id !in unobtainableIds }.toMap())
 
     fun findIdByName(name: String) = nameCache[name.lowercase().stripColor()]
 
@@ -173,7 +177,7 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
             return@getOrPut null
         }
 
-        AttributeApi.getAttributeByIdOrNull(attributeId)?.let { return@getOrPut it }
+        RepoAttributeAPI.getAttributeByIdOrNull(attributeId)?.let { return@getOrPut it }
 
         return@getOrPut null
     }
