@@ -63,7 +63,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @LoreModifier
 object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
 
-    private var logger: MeowddingLogger = SkyOcean.featureLogger()
+    private val logger: MeowddingLogger = SkyOcean.featureLogger()
     private val modifierCache: MutableMap<String, Pair<ComponentModifier?, TooltipComponentModifier?>> = mutableMapOf()
 
     val museumRegex = Regex("museum", RegexOption.IGNORE_CASE)
