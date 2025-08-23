@@ -1,5 +1,6 @@
 package me.owdding.skyocean.datagen
 
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.datagen.font.MobTypesFontProvider
 import me.owdding.skyocean.datagen.models.FakeBlocksProvider
 import me.owdding.skyocean.datagen.providers.SkyOceanDataGeneratorEntrypoint
@@ -13,5 +14,8 @@ object SkyOceanDatagen : SkyOceanDataGeneratorEntrypoint {
         createPack.register(::FakeBlocksProvider)
         createPack.register { MobTypesFontProvider(it, KnownMobIcon::name, MobIcons.MOB_ICONS) }
         createPack.register { MobTypesFontProvider(it, KnownMobIcon::short, MobIcons.MOB_ICONS_SHORT) }
+
+        val deepHollows = fabricDataGenerator.createBuiltinResourcePack(SkyOcean.id("deep_hollows"))
+
     }
 }

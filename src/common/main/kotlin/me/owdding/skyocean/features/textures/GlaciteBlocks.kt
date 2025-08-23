@@ -19,11 +19,11 @@ object GlaciteBlocks : BlockRetexture() {
         register(Blocks.SNOW, "glacite_snow")
         register(Blocks.SNOW_BLOCK, "glacite_snow_block")
         register(Blocks.PACKED_ICE, "glacite")
-        registerMultiple(Blocks.INFESTED_STONE, Blocks.STONE, id = "glacite_hard_stone") { state, pos ->
+        registerMultiple(Blocks.INFESTED_STONE, Blocks.STONE, id = "glacite_hard_stone", parent = CrystalHollowBlocks.HARDSTONE) { state, pos ->
             if (state.block == Blocks.STONE && !SkyBlockIsland.MINESHAFT.inIsland()) return@registerMultiple false
             return@registerMultiple defaultCondition(state, pos)
         }
-        register(Blocks.LIGHT_GRAY_WOOL, "glacite_hard_stone_wool")
+        register(Blocks.LIGHT_GRAY_WOOL, "glacite_hard_stone_wool", CrystalHollowBlocks.HARDSTONE)
     }
 
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {

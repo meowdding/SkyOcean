@@ -2,7 +2,7 @@ package me.owdding.skyocean.datagen.models
 
 import me.owdding.skyocean.datagen.models.factories.DefaultModelFactory
 import me.owdding.skyocean.datagen.models.factories.GlassPaneFactory
-import me.owdding.skyocean.datagen.models.factories.InfestedStoneFactory
+import me.owdding.skyocean.datagen.models.factories.RemapFactory
 import me.owdding.skyocean.datagen.models.factories.SnowLayerFactory
 import me.owdding.skyocean.datagen.providers.SkyOceanModelProvider
 import me.owdding.skyocean.events.RegisterFakeBlocksEvent
@@ -24,7 +24,7 @@ class FakeBlocksProvider(output: FabricDataOutput) : SkyOceanModelProvider(outpu
     val factories = listOf(
         SnowLayerFactory,
         GlassPaneFactory,
-        InfestedStoneFactory,
+        RemapFactory,
         DefaultModelFactory,
     )
 
@@ -35,20 +35,21 @@ class FakeBlocksProvider(output: FabricDataOutput) : SkyOceanModelProvider(outpu
     override fun generateBlockStateModels(blockModelGenerators: BlockModelGenerators) {
         factories.forEach { it.generator = blockModelGenerators }
 
-        val fakeBlocks = mutableMapOf<Block, MutableList<ResourceLocation>>()
-        fun register(block: Block, definition: ResourceLocation) {
-            fakeBlocks.getOrPut(block, ::mutableListOf).add(definition)
+        val fakeBlocks = mutableMapOf<Block, MutableMap<ResourceLocation, ResourceLocation?>>()
+        fun register(block: Block, definition: ResourceLocation, parent: ResourceLocation?) {
+            fakeBlocks.getOrPut(block, ::mutableMapOf)[definition] = parent
         }
-        RegisterFakeBlocksEvent { block, definition, predicate ->
-            register(block, definition)
+        RegisterFakeBlocksEvent { block, definition, parent, predicate ->
+            register(block, definition, parent)
             println("Registering $block")
         }.post(SkyBlockAPI.eventBus)
         println("meow")
         fakeBlocks.entries.forEach { (block, entries) ->
             factories.firstOrNull { it.isFor(block) }?.let {
                 entries.forEach { model ->
+                    val (model, parent) = model
                     println("Creating $model")
-                    it.create(block, model, blockModelGenerators, context)
+                    it.create(block, model, parent, blockModelGenerators, context)
                 }
             }
         }

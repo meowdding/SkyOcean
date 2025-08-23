@@ -33,6 +33,7 @@ actual object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, Fa
     private fun register(
         block: Block,
         definition: ResourceLocation,
+        parent: ResourceLocation?,
         predicate: (BlockState, BlockPos) -> Boolean,
     ) {
         fakeBlocks.getOrPut(block, ::mutableListOf).add(FakeBlockEntry(definition, predicate))

@@ -39,7 +39,14 @@ object GlassPaneFactory : BlockModelFactory() {
         else -> block
     }
 
-    override fun create(block: Block, fakeBlock: ResourceLocation, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
+    override fun create(
+        block: Block,
+        fakeBlock: ResourceLocation,
+        parent: ResourceLocation?,
+        generator: BlockModelGenerators,
+        modelGenContext: ModelGenContext,
+    ) {
+        assert(parent == null) { "Parents aren't supported for MultiPart blocks" }
         val textureMapping = TextureMapping.pane(getBaseGlassBlock(block), block)
         val post = (ModelTemplates.STAINED_GLASS_PANE_POST.plainVariant(fakeBlock, block, textureMapping))
         val side = (ModelTemplates.STAINED_GLASS_PANE_SIDE.plainVariant(fakeBlock, block, textureMapping))
