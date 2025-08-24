@@ -289,6 +289,10 @@
           "@value": "Disable tracking for target",
           "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
         },
+        "itemSources": {
+          "@value": "Select allowed item sources",
+          "desc": "Select sources from which the craft helper can count items"
+        },
         "position": {
           "@value": "Position",
           "desc": "Craft helper position inside the inventory."
