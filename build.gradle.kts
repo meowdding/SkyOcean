@@ -280,6 +280,7 @@ tasks.withType<KotlinCompile>().configureEach {
             "-Xno-check-actual",
             "-Xexpect-actual-classes",
             "-Xopt-in=kotlin.time.ExperimentalTime",
+            "-Xcontext-parameters",
         )
     }
 }
