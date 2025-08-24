@@ -3,6 +3,7 @@ package me.owdding.skyocean.config.features.misc
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.config.separator
+import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperLocation
 import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
@@ -12,6 +13,7 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.Companion.inAn
 
 object MiscConfig : CategoryKt("misc") {
     private val defaultCloudIslands = listOf(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS, SkyBlockIsland.THE_CATACOMBS)
+    private val possibleItemSources = listOf(ItemSources.entries)
     override val name get() = Translated("skyocean.config.misc")
 
     var ministerInCalendar by boolean(true) {
@@ -85,6 +87,15 @@ object MiscConfig : CategoryKt("misc") {
     var craftHelperNoRootItems by boolean(false) {
         translation = "skyocean.config.misc.crafthelper.disableRootItems"
     }
+
+    var craftHelperSources by defaultEnabledMessage(
+        @Suppress("SpreadOperator")
+        select(*possibleItemSources.toTypedArray()) {
+            translation = "skyocean.config.misc.itemSources"
+        },
+        "craftHelperSources",
+        predicate = { possibleItemSources },
+    )
 
     var craftHelperPosition by enum(CraftHelperLocation.LEFT_OF_INVENTORY) {
         translation = "skyocean.config.misc.crafthelper.position"
