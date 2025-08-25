@@ -88,14 +88,9 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.crafthelper.disableRootItems"
     }
 
-    var craftHelperSources by defaultEnabledMessage(
-        @Suppress("SpreadOperator")
-        select(*possibleItemSources.toTypedArray()) {
-            translation = "skyocean.config.misc.itemSources"
-        },
-        "craftHelperSources",
-        predicate = { possibleItemSources },
-    )
+    var craftHelperSources by select(*ItemSources.entries.toTypedArray()) {
+        translation = "skyocean.config.misc.itemSources"
+    }
 
     var craftHelperPosition by enum(CraftHelperLocation.LEFT_OF_INVENTORY) {
         translation = "skyocean.config.misc.crafthelper.position"
