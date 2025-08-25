@@ -48,11 +48,11 @@ object GlassPaneFactory : BlockModelFactory() {
     ) {
         assert(parent == null) { "Parents aren't supported for MultiPart blocks" }
         val textureMapping = TextureMapping.pane(getBaseGlassBlock(block), block)
-        val post = (ModelTemplates.STAINED_GLASS_PANE_POST.plainVariant(fakeBlock, block, textureMapping))
-        val side = (ModelTemplates.STAINED_GLASS_PANE_SIDE.plainVariant(fakeBlock, block, textureMapping))
-        val sideAlt = (ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.plainVariant(fakeBlock, block, textureMapping))
-        val noSide = (ModelTemplates.STAINED_GLASS_PANE_NOSIDE.plainVariant(fakeBlock, block, textureMapping))
-        val noSideAlt = (ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.plainVariant(fakeBlock, block, textureMapping))
+        val post = ModelTemplates.STAINED_GLASS_PANE_POST.plainVariant(fakeBlock, block, textureMapping)
+        val side = ModelTemplates.STAINED_GLASS_PANE_SIDE.plainVariant(fakeBlock, block, textureMapping)
+        val sideAlt = ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.plainVariant(fakeBlock, block, textureMapping)
+        val noSide = ModelTemplates.STAINED_GLASS_PANE_NOSIDE.plainVariant(fakeBlock, block, textureMapping)
+        val noSideAlt = ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.plainVariant(fakeBlock, block, textureMapping)
         MultiPartGenerator.multiPart(block).with(post)
             .with(BlockModelGenerators.condition().term(BlockStateProperties.NORTH, true), side)
             .with(BlockModelGenerators.condition().term(BlockStateProperties.EAST, true), side.with(Y_ROT_90))

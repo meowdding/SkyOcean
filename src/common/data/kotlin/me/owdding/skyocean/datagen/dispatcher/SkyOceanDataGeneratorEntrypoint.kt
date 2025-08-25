@@ -12,7 +12,6 @@ abstract class SkyOceanDataGeneratorEntrypoint(val target: DatagenTarget = Datag
     abstract val name: String
 
     override fun onInitializeDataGenerator(output: FabricDataGenerator) {
-        SkyOceanDatagenDispatcher.register()
         if (target != SkyOceanDatagenDispatcher.target) {
             info("Skipping $name as target $target doesn't match active target ${SkyOceanDatagenDispatcher.target}")
             return

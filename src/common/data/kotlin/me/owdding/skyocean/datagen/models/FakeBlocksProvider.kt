@@ -1,9 +1,6 @@
 package me.owdding.skyocean.datagen.models
 
-import me.owdding.skyocean.datagen.models.factories.DefaultModelFactory
-import me.owdding.skyocean.datagen.models.factories.GlassPaneFactory
-import me.owdding.skyocean.datagen.models.factories.RemapFactory
-import me.owdding.skyocean.datagen.models.factories.SnowLayerFactory
+import me.owdding.skyocean.datagen.models.factories.*
 import me.owdding.skyocean.datagen.providers.SkyOceanModelProvider
 import me.owdding.skyocean.events.FakeBlockModelEventRegistrar
 import me.owdding.skyocean.events.RegisterFakeBlocksEvent
@@ -26,6 +23,7 @@ class FakeBlocksProvider(output: FabricDataOutput, saveBlockStates: Boolean = tr
     val factories = listOf(
         SnowLayerFactory,
         GlassPaneFactory,
+        WallModelFactory,
         RemapFactory,
         DefaultModelFactory,
     )

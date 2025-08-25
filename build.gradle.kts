@@ -127,20 +127,8 @@ cloche {
                     adapter = "kotlin"
                     this.value = value
                 }
-                entrypoint("client") {
-                    adapter = "kotlin"
-                    value = "me.owdding.skyocean.SkyOcean"
-                }
-                entrypoint("fabric-datagen") {
-                    adapter = "kotlin"
-                    value = ""
-                }
-                entrypoint(
-                    "fabric-datagen", listOf(
-                        kotlin("me.owdding.skyocean.datagen.SkyOceanDatagen"),
-                        kotlin("me.owdding.skyocean.datagen.resourcepacks.SkyOceanDeepHollows"),
-                    )
-                )
+                entrypoint("client", kotlin("me.owdding.skyocean.SkyOcean"))
+                entrypoint("fabric-datagen", kotlin("me.owdding.skyocean.datagen.dispatcher.SkyOceanDatagenEntrypoint"))
 
                 fun dependency(modId: String, version: Provider<String>? = null) {
                     dependency {

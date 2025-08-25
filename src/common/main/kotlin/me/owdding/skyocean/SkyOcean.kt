@@ -13,8 +13,6 @@ import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.helpers.FakeBlocks
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.fabricmc.api.ClientModInitializer
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
@@ -64,11 +62,6 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
             onRepoReady()
         }
 
-        runCatching {
-            ResourceManagerHelper.registerBuiltinResourcePack(id("deep_hollows"), SELF, ResourcePackActivationType.NORMAL);
-        }.onFailure {
-            warn("Failed to register 'skyocean:deep_hollows'", it)
-        }
         FakeBlocks.setup()
     }
 
