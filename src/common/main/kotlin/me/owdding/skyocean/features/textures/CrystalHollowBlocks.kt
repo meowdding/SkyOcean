@@ -19,6 +19,10 @@ object CrystalHollowBlocks : BlockRetexture() {
     val GOLD_ORE = id("mining/hollows/gold_ore")
     val DIAMOND_ORE = id("mining/hollows/diamond_ore")
     val REDSTONE_ORE = id("mining/hollows/redstone_ore")
+    val COBBLESTONE = id("mining/hollows/cobblestone")
+    val COBBLESTONE_SLAB = id("mining/hollows/cobblestone_slab")
+    val COBBLESTONE_STAIRS = id("mining/hollows/cobblestone_stairs")
+    val COBBLESTONE_WALL = id("mining/hollows/cobblestone_wall")
 
     @Subscription
     fun registerFakeBlocks(event: RegisterFakeBlocksEvent) = with(event) {
@@ -26,9 +30,13 @@ object CrystalHollowBlocks : BlockRetexture() {
         register(Blocks.COAL_ORE, COAL_ORE)
         register(Blocks.IRON_ORE, IRON_ORE)
         register(Blocks.EMERALD_ORE, EMERALD_ORE)
-        register(Blocks.GOLD_BLOCK, GOLD_ORE)
+        register(Blocks.GOLD_ORE, GOLD_ORE)
         register(Blocks.DIAMOND_ORE, DIAMOND_ORE)
         register(Blocks.REDSTONE_ORE, REDSTONE_ORE)
+        register(Blocks.COBBLESTONE, COBBLESTONE)
+        register(Blocks.COBBLESTONE_SLAB, COBBLESTONE_SLAB)
+        register(Blocks.COBBLESTONE_STAIRS, COBBLESTONE_STAIRS)
+        register(Blocks.COBBLESTONE_WALL, COBBLESTONE_WALL)
     }
 
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos) = SkyBlockIsland.CRYSTAL_HOLLOWS.inIsland()

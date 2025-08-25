@@ -17,7 +17,7 @@ class PackMcMetaProvider(val output: FabricDataOutput, val init: PackBuilder.() 
         val element = jsonObject {
             putObject("pack") {
                 putString("description", builder.description)
-                putNumber("version", builder.version)
+                putNumber("pack_format", builder.version)
             }
         }
 

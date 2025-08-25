@@ -3,9 +3,11 @@
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import earth.terrarium.cloche.api.metadata.FabricMetadata
 import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
 import net.msrandom.minecraftcodev.core.utils.toPath
+import net.msrandom.minecraftcodev.runs.MinecraftRunConfiguration
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
@@ -79,7 +81,6 @@ cloche {
         project.layout.projectDirectory.dir("src/mixins").toPath().listDirectoryEntries().filter { it.isRegularFile() }.forEach {
             mixins.from("src/mixins/${it.name}")
         }
-        accessWideners.from(project.layout.projectDirectory.file("skyocean.accesswidener"))
 
         data {
             dependencies { addDependencies(this) }
@@ -122,14 +123,24 @@ cloche {
             include(rconfig)
 
             metadata {
+                fun kotlin(value: String): Action<FabricMetadata.Entrypoint> = Action {
+                    adapter = "kotlin"
+                    this.value = value
+                }
                 entrypoint("client") {
                     adapter = "kotlin"
                     value = "me.owdding.skyocean.SkyOcean"
                 }
                 entrypoint("fabric-datagen") {
                     adapter = "kotlin"
-                    value = "me.owdding.skyocean.datagen.SkyOceanDatagen"
+                    value = ""
                 }
+                entrypoint(
+                    "fabric-datagen", listOf(
+                        kotlin("me.owdding.skyocean.datagen.SkyOceanDatagen"),
+                        kotlin("me.owdding.skyocean.datagen.resourcepacks.SkyOceanDeepHollows"),
+                    )
+                )
 
                 fun dependency(modId: String, version: Provider<String>? = null) {
                     dependency {
@@ -158,9 +169,7 @@ cloche {
                 dependency("meowdding-lib", libs.versions.meowdding.lib)
             }
 
-            data {
-                includedClient()
-            }
+            data()
 
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
@@ -262,26 +271,58 @@ repo {
     sacks { includeAll() }
 }
 
-tasks.withType<ProcessResources>().configureEach {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+tasks {
+    withType<ProcessResources>().configureEach {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+
+    withType<JavaCompile>().configureEach {
+        options.encoding = "UTF-8"
+        options.release.set(21)
+    }
+
+    withType<KotlinCompile>().configureEach {
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+        compilerOptions {
+            languageVersion = KotlinVersion.KOTLIN_2_2
+            freeCompilerArgs.addAll(
+                "-Xmulti-platform",
+                "-Xno-check-actual",
+                "-Xexpect-actual-classes",
+                "-Xopt-in=kotlin.time.ExperimentalTime",
+                "-Xcontext-parameters",
+            )
+        }
+    }
 }
 
-tasks.withType<JavaCompile>().configureEach {
-    options.encoding = "UTF-8"
-    options.release.set(21)
+val createResourcePacks = tasks.register("createResourcePacks").apply {
+    configure {
+        group = "meowdding"
+    }
 }
 
-tasks.withType<KotlinCompile>().configureEach {
-    compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
-    compilerOptions {
-        languageVersion = KotlinVersion.KOTLIN_2_2
-        freeCompilerArgs.addAll(
-            "-Xmulti-platform",
-            "-Xno-check-actual",
-            "-Xexpect-actual-classes",
-            "-Xopt-in=kotlin.time.ExperimentalTime",
-            "-Xcontext-parameters",
-        )
+cloche.targets.forEach { target ->
+    target.runs {
+        val run = this
+        run.clientData.takeIf { clientData -> clientData.value.isPresent }?.configure {
+            val parentRun = this
+            minecraftRuns.add(objects.newInstance(MinecraftRunConfiguration::class, "${parentRun.name}:resourcepack", project).apply {
+                this.mainClass = "me.owdding.skyocean.datagen.dispatcher.SkyOceanDatagenDispatcher"
+                this.jvmVersion = parentRun.jvmVersion
+                this.sourceSet = parentRun.sourceSet
+                this.beforeRun = parentRun.beforeRun
+                this.arguments = parentRun.arguments
+                this.jvmArguments = parentRun.jvmArguments
+                this.environment = parentRun.environment
+                this.workingDirectory = parentRun.workingDirectory
+                jvmArgs("-Dskyocean.datagen.target=RESOURCE_PACKS")
+                jvmArgs("-Dskyocean.datagen.dir=${project.layout.buildDirectory.dir("resourcepacks/${target.name}").get().toPath().absolutePathString()}")
+                jvmArgs("-Dskyocean.datagen.output=${project.layout.buildDirectory.dir("libs").get().toPath().absolutePathString()}")
+                createResourcePacks.get().dependsOn(this.runTask)
+                createResourcePacks.get().mustRunAfter(this.runTask)
+            })
+        }
     }
 }
 
