@@ -72,6 +72,19 @@ internal class ProfileStorage<T : Any>(
         return if (this::data.isInitialized) data else null
     }
 
+    fun set(new: T) {
+        if (isCurrentlyActive()) {
+            data = new
+            return
+        }
+
+        saveToSystem()
+        load()
+        if (this::data.isInitialized) {
+            data = new
+        }
+    }
+
     fun save() {
         requiresSave.add(this)
     }
