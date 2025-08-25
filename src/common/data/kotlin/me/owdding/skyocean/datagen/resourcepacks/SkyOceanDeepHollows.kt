@@ -24,6 +24,7 @@ object SkyOceanDeepHollows : SkyOceanDataGeneratorEntrypoint(DatagenTarget.RESOU
                 registrar(Blocks.DEEPSLATE_GOLD_ORE, CrystalHollowBlocks.GOLD_ORE)
                 registrar(Blocks.DEEPSLATE_DIAMOND_ORE, CrystalHollowBlocks.DIAMOND_ORE)
                 registrar(Blocks.DEEPSLATE_REDSTONE_ORE, CrystalHollowBlocks.REDSTONE_ORE)
+                registrar(Blocks.DEEPSLATE_LAPIS_ORE, CrystalHollowBlocks.LAPIS_ORE)
                 registrar(Blocks.COBBLED_DEEPSLATE, CrystalHollowBlocks.COBBLESTONE)
                 registrar(Blocks.COBBLED_DEEPSLATE_SLAB, CrystalHollowBlocks.COBBLESTONE_SLAB)
                 registrar(Blocks.COBBLED_DEEPSLATE_STAIRS, CrystalHollowBlocks.COBBLESTONE_STAIRS)

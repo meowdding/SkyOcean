@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.textures
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean.id
+import me.owdding.skyocean.config.features.mining.MiningRetexture
 import me.owdding.skyocean.events.RegisterFakeBlocksEvent
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Blocks
@@ -19,6 +20,7 @@ object CrystalHollowBlocks : BlockRetexture() {
     val GOLD_ORE = id("mining/hollows/gold_ore")
     val DIAMOND_ORE = id("mining/hollows/diamond_ore")
     val REDSTONE_ORE = id("mining/hollows/redstone_ore")
+    val LAPIS_ORE = id("mining/hollows/lapis_ore")
     val COBBLESTONE = id("mining/hollows/cobblestone")
     val COBBLESTONE_SLAB = id("mining/hollows/cobblestone_slab")
     val COBBLESTONE_STAIRS = id("mining/hollows/cobblestone_stairs")
@@ -33,11 +35,15 @@ object CrystalHollowBlocks : BlockRetexture() {
         register(Blocks.GOLD_ORE, GOLD_ORE)
         register(Blocks.DIAMOND_ORE, DIAMOND_ORE)
         register(Blocks.REDSTONE_ORE, REDSTONE_ORE)
+        register(Blocks.LAPIS_ORE, LAPIS_ORE)
         register(Blocks.COBBLESTONE, COBBLESTONE)
         register(Blocks.COBBLESTONE_SLAB, COBBLESTONE_SLAB)
         register(Blocks.COBBLESTONE_STAIRS, COBBLESTONE_STAIRS)
         register(Blocks.COBBLESTONE_WALL, COBBLESTONE_WALL)
     }
 
-    override fun defaultCondition(blockState: BlockState, blockPos: BlockPos) = SkyBlockIsland.CRYSTAL_HOLLOWS.inIsland()
+    override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
+        if (!MiningRetexture.customHollowTextures) return false
+        return SkyBlockIsland.CRYSTAL_HOLLOWS.inIsland()
+    }
 }

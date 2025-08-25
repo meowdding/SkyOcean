@@ -284,17 +284,17 @@ tasks {
     }
 }
 
-val createResourcePacks = tasks.register("createResourcePacks").apply {
-    configure {
-        group = "meowdding"
-    }
-}
+fun registerMeowdding(name: String) = tasks.register(name).apply { configure { group = "meowdding" } }
+val createResourcePacks = registerMeowdding("createResourcePacks")
+val runAllDatagen = registerMeowdding("runAllDatagen")
 
 cloche.targets.forEach { target ->
     target.runs {
         val run = this
         run.clientData.takeIf { clientData -> clientData.value.isPresent }?.configure {
             val parentRun = this
+            runAllDatagen.get().dependsOn(this.runTask)
+            runAllDatagen.get().mustRunAfter(this.runTask)
             minecraftRuns.add(objects.newInstance(MinecraftRunConfiguration::class, "${parentRun.name}:resourcepack", project).apply {
                 this.mainClass = "me.owdding.skyocean.datagen.dispatcher.SkyOceanDatagenDispatcher"
                 this.jvmVersion = parentRun.jvmVersion
@@ -309,6 +309,9 @@ cloche.targets.forEach { target ->
                 jvmArgs("-Dskyocean.datagen.output=${project.layout.buildDirectory.dir("libs").get().toPath().absolutePathString()}")
                 createResourcePacks.get().dependsOn(this.runTask)
                 createResourcePacks.get().mustRunAfter(this.runTask)
+
+                runAllDatagen.get().dependsOn(this.runTask)
+                runAllDatagen.get().mustRunAfter(this.runTask)
             })
         }
     }
