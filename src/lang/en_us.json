@@ -290,7 +290,7 @@
           "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
         },
         "itemSources": {
-          "@value": "Select allowed item sources",
+          "@value": "Allowed item sources",
           "desc": "Select sources from which the craft helper can count items"
         },
         "position": {
