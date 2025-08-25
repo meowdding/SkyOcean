@@ -19,6 +19,7 @@ abstract class BlockModelFactory {
     abstract fun create(
         block: Block,
         fakeBlock: ResourceLocation,
+        parent: ResourceLocation?,
         generator: BlockModelGenerators,
         modelGenContext: ModelGenContext,
     )
@@ -41,18 +42,21 @@ abstract class BlockModelFactory {
         return location.withPrefix("block/").withSuffix(suffix)
     }
 
-    fun getModelLocation(block: Block) = BuiltInRegistries.BLOCK.getKey(block).withPrefix("block/")
+    fun getModelLocation(block: Block): ResourceLocation = BuiltInRegistries.BLOCK.getKey(block).withPrefix("block/")
 
-    fun createCopy(block: Block, fakeBlock: ResourceLocation): ResourceLocation {
+    fun createCopy(block: Block, fakeBlock: ResourceLocation, parent: ResourceLocation?): ResourceLocation {
         return ModelTemplate(
-            Optional.of(getModelLocation(block)),
-            Optional.empty()
+            parent.asOptional().map { getBlockModelLocation(it) }.orElse { getModelLocation(block) },
+            Optional.empty(),
         ).create(
             getBlockModelLocation(fakeBlock),
             TextureMapping(),
             ::modelOutput,
         )
     }
+
+    fun <T : Any> T?.asOptional(): Optional<T> = Optional.ofNullable(this)
+    fun <T : Any> Optional<T>.orElse(supplier: () -> T): Optional<T> = this.or { supplier().asOptional() }
 
     fun modelOutput(location: ResourceLocation, model: ModelInstance) {
         if (savedModels.contains(location)) {

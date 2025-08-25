@@ -9,7 +9,8 @@ import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
 typealias FakeBlockModelEventRegistrar = (
     block: Block,
     definition: ResourceLocation,
-    predicate: (BlockState, BlockPos) -> Boolean
+    parent: ResourceLocation?,
+    predicate: (BlockState, BlockPos) -> Boolean,
 ) -> Unit
 
 data class RegisterFakeBlocksEvent(private val registrar: FakeBlockModelEventRegistrar) : CancellableSkyBlockEvent() {
@@ -17,9 +18,10 @@ data class RegisterFakeBlocksEvent(private val registrar: FakeBlockModelEventReg
     fun register(
         block: Block,
         definition: ResourceLocation,
-        predicate: (BlockState, BlockPos) -> Boolean
+        parent: ResourceLocation?,
+        predicate: (BlockState, BlockPos) -> Boolean,
     ) {
-        registrar(block, definition, predicate)
+        registrar(block, definition, parent, predicate)
     }
 
 }

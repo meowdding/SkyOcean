@@ -30,4 +30,10 @@ object MiningRetexture : CategoryKt("retexture") {
             translation = "skyocean.config.mining.retexture.gemstone"
         },
     )
+
+    var customHollowTextures by requiresChunkRebuild(
+        boolean(false) {
+            translation = "skyocean.config.mining.retexture.hollows"
+        },
+    )
 }
