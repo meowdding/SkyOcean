@@ -276,6 +276,7 @@ tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
         languageVersion = KotlinVersion.KOTLIN_2_2
         freeCompilerArgs.addAll(
+            "-Xcontext-parameters",
             "-Xmulti-platform",
             "-Xno-check-actual",
             "-Xexpect-actual-classes",

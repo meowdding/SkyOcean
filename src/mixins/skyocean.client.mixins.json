@@ -15,6 +15,7 @@
     "MutableComponentMixin",
     "PlayerRendererMixin",
     "PlayerRenderStateMixin",
-    "ScreenAccessor"
+    "ScreenAccessor",
+    "GameRendererAccessor"
   ]
 }
