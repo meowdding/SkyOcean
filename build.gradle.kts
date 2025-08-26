@@ -113,14 +113,6 @@ cloche {
             mixins.from("src/mixins/versioned/skyocean.${sourceSet.name}.mixins.json")
 
             // include(libs.hypixelapi) - included in sbapi
-            include(libs.skyblockapi)
-            include(libs.resourceful.config.kotlin)
-            include(libs.meowdding.lib)
-            include(libs.keval)
-            include(libs.placeholders)
-            include(rlib)
-            include(olympus)
-            include(rconfig)
 
             metadata {
                 fun kotlin(value: String): Action<FabricMetadata.Entrypoint> = Action {
@@ -163,6 +155,15 @@ cloche {
                 fabricApi(fabricApiVersion, minecraftVersion)
                 implementation(olympus)
                 implementation(rconfig)
+
+                include(libs.skyblockapi)
+                include(libs.resourceful.config.kotlin)
+                include(libs.meowdding.lib)
+                include(libs.keval)
+                include(libs.placeholders)
+                include(rlib)
+                include(olympus)
+                include(rconfig)
 
                 val mods = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods")
                 val modsTmp = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods/tmp")
