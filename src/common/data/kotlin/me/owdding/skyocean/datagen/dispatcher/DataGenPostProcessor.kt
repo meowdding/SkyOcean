@@ -7,8 +7,11 @@ import com.mojang.serialization.JsonOps
 import me.owdding.skyocean.datagen.dispatcher.Utils.zipFile
 import me.owdding.skyocean.utils.PACK_FORMAT
 import me.owdding.skyocean.utils.PackMetadata
+import me.owdding.skyocean.utils.PackOverlay
 import me.owdding.skyocean.utils.Utils.readAsJson
+import me.owdding.skyocean.utils.Utils.writeJson
 import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 import kotlin.io.path.*
 
 object DataGenPostProcessor {
@@ -25,6 +28,9 @@ object DataGenPostProcessor {
         return codec.parse(JsonOps.INSTANCE, this).getOrThrow()
     }
 
+    fun <T : Any> T.toJsonOrThrow(codec: Codec<T>): JsonElement {
+        return codec.encodeStart(JsonOps.INSTANCE, this).getOrThrow()
+    }
 
     fun processPack(folder: Path, output: Path) = zipFile(output.resolve("${folder.name}.zip")) { root ->
         val versions = folder.listDirectoryEntries("*.zip")
@@ -38,15 +44,41 @@ object DataGenPostProcessor {
 
                 info[it] = VersionInfo(
                     format,
-                    root.walk().filter { it.isRegularFile() }.map { entry ->
+                    root.walk().filter { entry -> entry.isRegularFile() }.map { entry ->
                         val data = entry.readBytes()
-                        HashedEntry(entry.toString(), Hashing.sha256().hashBytes(data).asBytes().toHexString(), data)
+                        HashedEntry(entry.toString(), Hashing.sha256().hashBytes(data).asBytes().toHexString(), data, it.nameWithoutExtension)
                     }.toMutableList(),
                 )
             }
         }
 
-        print("meow")
+        val metatadata = info.values.fold(info.values.first().metadata) { first, second -> first.merge(second.metadata) }
+
+        val versionOverlays = mutableListOf<String>()
+
+        info.values.map { it.entries }.flatten().groupBy { it.path }.forEach { (path, entries) ->
+            if (entries.size == info.size && entries.distinctBy { it.hash }.count() == 1) {
+                val newPath = root.resolve(path)
+                newPath.createParentDirectories().writeBytes(entries.first().data, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
+                return@forEach
+            }
+
+            entries.forEach { (path, _, data, version) ->
+                if (path == "/pack.mcmeta") {
+                    return@forEach
+                }
+                versionOverlays.add(version)
+                root.resolve("$version/$path").createParentDirectories().writeBytes(data, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
+            }
+        }
+
+        info.forEach { (path, info) ->
+            if (path.nameWithoutExtension in versionOverlays) {
+                metatadata.overlays.add(PackOverlay(path.nameWithoutExtension, info.metadata.pack.formats))
+            }
+        }
+
+        root.resolve("pack.mcmeta").writeJson(metatadata.toJsonOrThrow(PACK_FORMAT))
     }
 
     data class VersionInfo(
@@ -54,7 +86,7 @@ object DataGenPostProcessor {
         val entries: MutableList<HashedEntry>,
     )
 
-    data class HashedEntry(val path: String, val hash: String, val data: ByteArray) {
+    data class HashedEntry(val path: String, val hash: String, val data: ByteArray, val version: String) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other !is HashedEntry) return false

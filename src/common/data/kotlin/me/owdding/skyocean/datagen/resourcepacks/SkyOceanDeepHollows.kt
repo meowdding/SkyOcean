@@ -9,6 +9,7 @@ import me.owdding.skyocean.datagen.providers.PackMcMetaProvider
 import me.owdding.skyocean.features.textures.CrystalHollowBlocks
 import me.owdding.skyocean.utils.Utils.not
 import net.minecraft.world.level.block.Blocks
+import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
 
 object SkyOceanDeepHollows : SkyOceanDataGeneratorEntrypoint(DatagenTarget.RESOURCE_PACKS) {
 
@@ -29,7 +30,8 @@ object SkyOceanDeepHollows : SkyOceanDataGeneratorEntrypoint(DatagenTarget.RESOU
                 registrar(Blocks.COBBLED_DEEPSLATE, CrystalHollowBlocks.COBBLESTONE)
                 registrar(Blocks.COBBLED_DEEPSLATE_SLAB, CrystalHollowBlocks.COBBLESTONE_SLAB)
                 registrar(Blocks.COBBLED_DEEPSLATE_STAIRS, CrystalHollowBlocks.COBBLESTONE_STAIRS)
-                registrar(Blocks.COBBLED_DEEPSLATE_WALL, CrystalHollowBlocks.COBBLESTONE_WALL)
+                if (McVersionGroup.MC_1_21_6.isActive)
+                    registrar(Blocks.COBBLED_DEEPSLATE_WALL, CrystalHollowBlocks.COBBLESTONE_WALL)
             }
         }
         deepHollows.register {
