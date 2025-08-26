@@ -36,7 +36,6 @@ object DungeonGambling {
 
         val winner = items.first { it.getSkyOceanId() != null }
 
-        // todo: dont close the other screen when opening this one
         val gamblingScreen = DungeonGamblingScreen(floor, type, winner, event.screen)
         entries.add(WeakReference(chest))
         McClient.setScreen(gamblingScreen)
