@@ -12,6 +12,7 @@ import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Utils.getArgument
+import me.owdding.skyocean.utils.debugToggle
 import me.owdding.skyocean.utils.storage.FolderStorage
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -36,12 +37,15 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 @Module
 object ChestDump {
 
+    val enabled by debugToggle("chest_dumps", "Allows you to save inventories by pressing 'S'")
+
     val logger = SkyOcean.featureLogger()
 
     private val storage = FolderStorage("chest_dumps", SkyOceanCodecs.ChestDumpStorageCodec.codec())
 
     @Subscription
     fun onKey(event: ScreenKeyPressedEvent.Pre) {
+        if (!enabled) return
         if (event.key != InputConstants.KEY_S) return
 
         val chest = (event.screen as? AbstractContainerScreen<*>)?.menu as? ChestMenu ?: return

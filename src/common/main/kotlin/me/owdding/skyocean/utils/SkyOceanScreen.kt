@@ -11,8 +11,11 @@ import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.layouts.LayoutSettings
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
@@ -103,4 +106,18 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
 
         return scrollable
     }
+}
+
+abstract class SkyOceanPopupScreen(val parent: Screen? = McScreen.self, title: Component = CommonComponents.EMPTY) : SkyOceanScreen(title) {
+
+    override fun onClose() {
+        super.onClose()
+        McClient.setScreenAsync { parent }
+    }
+
+    override fun removed() {
+        super.removed()
+        McClient.setScreenAsync { parent }
+    }
+
 }

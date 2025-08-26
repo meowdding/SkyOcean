@@ -12,10 +12,11 @@
     "EntityRendererMixin",
     "EntityRenderStateMixin",
     "FrameLayoutAccessor",
+    "GameRendererAccessor",
+    "MinecraftMixin",
     "MutableComponentMixin",
     "PlayerRendererMixin",
     "PlayerRenderStateMixin",
-    "ScreenAccessor",
-    "GameRendererAccessor"
+    "ScreenAccessor"
   ]
 }

@@ -4,6 +4,7 @@ import earth.terrarium.olympus.client.components.Widgets
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonItems
+import me.owdding.skyocean.utils.SkyOceanPopupScreen
 import me.owdding.skyocean.utils.rendering.applyPostEffect
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -18,7 +19,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.*
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
-import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -32,7 +32,8 @@ private const val TIME = 5 * 1000f
 private const val FULL_CARD_WIDTH = (DungeonCard.WIDTH * ITEM_SCALE) + ITEM_GAP
 private const val FULL_CARD_HEIGHT = (DungeonCard.HEIGHT * ITEM_SCALE)
 
-class DungeonGamblingScreen(val floor: DungeonFloor, val chest: DungeonChestType, val winner: ItemStack? = null) : Screen(CommonText.EMPTY) {
+class DungeonGamblingScreen(val floor: DungeonFloor, val chest: DungeonChestType, val winner: ItemStack? = null, parentScreen: Screen? = null) :
+    SkyOceanPopupScreen(parentScreen) {
 
     private var items = mutableListOf<ItemStack>()
     private var randomOffset = 0
@@ -110,6 +111,10 @@ class DungeonGamblingScreen(val floor: DungeonFloor, val chest: DungeonChestType
             val length = McFont.width(winner)
 
             val scale = Mth.lerp((progress - 0.96f) / 0.04f, 1f, 3f)
+
+            if (scale >= 2.8f) {
+                McClient.runNextTick { onClose() }
+            }
 
             graphics.translated(this.width / 2, this.height * 0.2f) {
                 graphics.scale(scale, scale)
