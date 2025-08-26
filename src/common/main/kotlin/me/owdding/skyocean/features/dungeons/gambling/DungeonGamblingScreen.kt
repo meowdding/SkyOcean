@@ -25,14 +25,14 @@ import kotlin.math.sqrt
 
 private const val ITEM_SCALE = 4
 private const val ITEM_SIZE = 50
-private const val ITEM_INDEX = ITEM_SIZE - 10
+private const val WINNER_INDEX = ITEM_SIZE - 10
 private const val ITEM_GAP = 5
 private const val TIME = 5 * 1000f
 
 private const val FULL_CARD_WIDTH = (DungeonCard.WIDTH * ITEM_SCALE) + ITEM_GAP
 private const val FULL_CARD_HEIGHT = (DungeonCard.HEIGHT * ITEM_SCALE)
 
-class DungeonGamblingScreen : Screen(CommonText.EMPTY) {
+class DungeonGamblingScreen(val floor: DungeonFloor, val chest: DungeonChestType, val winner: ItemStack? = null) : Screen(CommonText.EMPTY) {
 
     private var items = mutableListOf<ItemStack>()
     private var randomOffset = 0
@@ -53,10 +53,13 @@ class DungeonGamblingScreen : Screen(CommonText.EMPTY) {
                     randomOffset = ((4 * ITEM_SCALE) + ThreadLocalRandom.current().nextInt(4 * ITEM_SCALE)) * (if (ThreadLocalRandom.current().nextBoolean()) 1 else -1)
                     items.clear()
 
-                    val items = DungeonItems[DungeonFloor.M7, DungeonChestType.BEDROCK]!!
+                    val items = DungeonItems[floor, chest] ?: return@withCallback
 
                     repeat(ITEM_SIZE) {
                         this.items.add(items.getRandomItem()?.item ?: ItemStack.EMPTY)
+                    }
+                    winner?.let {
+                        this.items[WINNER_INDEX] = it
                     }
                 },
         )
@@ -70,7 +73,7 @@ class DungeonGamblingScreen : Screen(CommonText.EMPTY) {
         super.render(graphics, mouseX, mouseY, partialTicks)
 
         val progress = (((System.currentTimeMillis() - start) / TIME) + 0.25f).coerceIn(0f, 1f)
-        val endOffset = (ITEM_INDEX * FULL_CARD_WIDTH) * ease(progress)
+        val endOffset = (WINNER_INDEX * FULL_CARD_WIDTH) * ease(progress)
 
         val soundIndex = endOffset.toInt() / FULL_CARD_WIDTH
 
@@ -103,7 +106,7 @@ class DungeonGamblingScreen : Screen(CommonText.EMPTY) {
         graphics.applyPostEffect(SkyOcean.id("case_screen"))
 
         if (progress >= 0.96f && items.isNotEmpty()) {
-            val winner = items[ITEM_INDEX].hoverName
+            val winner = items[WINNER_INDEX].hoverName
             val length = McFont.width(winner)
 
             val scale = Mth.lerp((progress - 0.96f) / 0.04f, 1f, 3f)

@@ -8,4 +8,8 @@ enum class DungeonChestType {
     OBSIDIAN,
     BEDROCK,
     ;
+
+    companion object {
+        fun getByName(name: String): DungeonChestType? = entries.find { it.name.equals(name, true) }
+    }
 }
