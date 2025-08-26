@@ -7,6 +7,7 @@ import me.owdding.skyocean.datagen.dispatcher.SkyOceanDataGeneratorEntrypoint
 import me.owdding.skyocean.datagen.models.FakeBlocksProvider
 import me.owdding.skyocean.datagen.providers.PackMcMetaProvider
 import me.owdding.skyocean.features.textures.CrystalHollowBlocks
+import me.owdding.skyocean.utils.Utils.not
 import net.minecraft.world.level.block.Blocks
 
 object SkyOceanDeepHollows : SkyOceanDataGeneratorEntrypoint(DatagenTarget.RESOURCE_PACKS) {
@@ -33,7 +34,7 @@ object SkyOceanDeepHollows : SkyOceanDataGeneratorEntrypoint(DatagenTarget.RESOU
         }
         deepHollows.register {
             PackMcMetaProvider(it) {
-                description = "Converts all stone textures to deepslate in the crystal hollows"
+                description = !"Converts all stone textures to deepslate in the crystal hollows"
             }
         }
     }

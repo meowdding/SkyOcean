@@ -191,6 +191,7 @@ object Utils {
     context(parent: JsonObject) fun putNumber(property: String, value: Number) = parent.addProperty(property, value)
     context(parent: JsonObject) fun putBoolean(property: String, value: Boolean) = parent.addProperty(property, value)
     context(parent: JsonObject) fun putChar(property: String, value: Char) = parent.addProperty(property, value)
+    context(parent: JsonObject) fun putElement(property: String, value: JsonElement) = parent.add(property, value)
 
     context(parent: JsonArray) fun putString(value: String) = parent.add(value)
     context(parent: JsonArray) fun putNumber(value: Number) = parent.add(value)

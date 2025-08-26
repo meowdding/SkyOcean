@@ -284,9 +284,17 @@ tasks {
     }
 }
 
-fun registerMeowdding(name: String) = tasks.register(name).apply { configure { group = "meowdding" } }
+fun registerMeowdding(name: String, init: Task.() -> Unit = {}) = tasks.register(name).apply { configure { group = "meowdding"; init() } }
 val createResourcePacks = registerMeowdding("createResourcePacks")
 val runAllDatagen = registerMeowdding("runAllDatagen")
+val mergePackOutputs = tasks.register("mergePackOutputs", JavaExec::class) {
+    classpath = cloche.targets.first().data.value.get().sourceSet.runtimeClasspath
+    mainClass = "me.owdding.skyocean.datagen.dispatcher.DataGenPostProcessor"
+    group = "meowdding"
+    jvmArgs("-Dskyocean.datagen.output=${project.layout.buildDirectory.dir("libs").get().toPath().absolutePathString()}")
+    dependsOn(createResourcePacks)
+    mustRunAfter(createResourcePacks)
+}
 
 cloche.targets.forEach { target ->
     target.runs {

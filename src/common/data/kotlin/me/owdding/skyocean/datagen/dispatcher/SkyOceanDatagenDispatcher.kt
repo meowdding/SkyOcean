@@ -1,16 +1,17 @@
 package me.owdding.skyocean.datagen.dispatcher
 
+import me.owdding.skyocean.datagen.dispatcher.Utils.zip
 import me.owdding.skyocean.events.DatagenFinishEvent
 import net.fabricmc.loader.impl.launch.knot.KnotClient
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import java.io.ByteArrayOutputStream
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
-import kotlin.io.path.*
+import kotlin.io.path.PathWalkOption
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.walk
+import kotlin.io.path.writeBytes
 
 object SkyOceanDatagenDispatcher {
     val target = runCatching {
@@ -49,27 +50,11 @@ object SkyOceanDatagenDispatcher {
         val resourcePacks = root.resolve("resourcepacks")
         packs.forEach { pack ->
             val packRoot = resourcePacks.resolve(pack)
+
             val zipFile = packRoot.walk(PathWalkOption.INCLUDE_DIRECTORIES).zip(packRoot)
-            output.resolve("$pack-${McClient.version}.zip").writeBytes(zipFile, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
+            output.resolve("intermediates/$pack/${McClient.version}.zip").apply { createParentDirectories() }
+                .writeBytes(zipFile, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
         }
-    }
-
-    fun Sequence<Path>.zip(root: Path): ByteArray {
-
-        val output = ByteArrayOutputStream()
-        ZipOutputStream(output).use {
-            this.forEach { file ->
-                val relative = root.relativize(file).toString() + ("/".takeUnless { file.isRegularFile() } ?: "")
-                val entry = ZipEntry(relative)
-                it.putNextEntry(entry)
-                if (!entry.isDirectory) {
-                    it.write(file.readBytes())
-                }
-                it.closeEntry()
-            }
-        }
-
-        return output.toByteArray()
     }
 
 }

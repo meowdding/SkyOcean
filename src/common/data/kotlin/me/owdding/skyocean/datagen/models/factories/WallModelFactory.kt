@@ -56,7 +56,6 @@ object WallModelFactory : BlockModelFactory() {
     ) {
         val textureMapping = TextureMapping.columnWithWall(getBaseBlock(block))
 
-
         val wallPost = ModelTemplates.WALL_POST.plainVariant(fakeBlock, block, textureMapping)
         val wallLowSide = ModelTemplates.WALL_LOW_SIDE.plainVariant(fakeBlock, block, textureMapping)
         val wallTallSide = ModelTemplates.WALL_TALL_SIDE.plainVariant(fakeBlock, block, textureMapping)

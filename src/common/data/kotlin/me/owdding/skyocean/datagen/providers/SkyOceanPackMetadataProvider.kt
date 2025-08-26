@@ -1,13 +1,18 @@
 package me.owdding.skyocean.datagen.providers
 
 import me.owdding.skyocean.utils.Utils.jsonObject
+import me.owdding.skyocean.utils.Utils.putElement
 import me.owdding.skyocean.utils.Utils.putNumber
 import me.owdding.skyocean.utils.Utils.putObject
-import me.owdding.skyocean.utils.Utils.putString
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
-import net.minecraft.SharedConstants
 import net.minecraft.data.CachedOutput
 import net.minecraft.data.DataProvider
+import net.minecraft.network.chat.CommonComponents
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentSerialization
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import java.util.concurrent.CompletableFuture
 
 class PackMcMetaProvider(val output: FabricDataOutput, val init: PackBuilder.() -> Unit) : DataProvider {
@@ -16,8 +21,9 @@ class PackMcMetaProvider(val output: FabricDataOutput, val init: PackBuilder.() 
 
         val element = jsonObject {
             putObject("pack") {
-                putString("description", builder.description)
-                putNumber("pack_format", builder.version)
+                putElement("description", builder.description.toJsonOrThrow(ComponentSerialization.CODEC))
+                putNumber("min_format", builder.minVersion)
+                putNumber("max_format", builder.maxVersion)
             }
         }
 
@@ -27,7 +33,16 @@ class PackMcMetaProvider(val output: FabricDataOutput, val init: PackBuilder.() 
     override fun getName() = "pack.mcmeta"
 }
 
+val versions = mutableMapOf(
+    McVersionGroup.MC_1_21_5 to (55 to 55),
+    McVersionGroup.MC_1_21_6 to (63 to 64),
+)
+
+fun minVersion(): Int = versions[McClient.mcVersionGroup]!!.first
+fun maxVersion(): Int = versions[McClient.mcVersionGroup]!!.second
+
 class PackBuilder {
-    var description: String = ""
-    var version: Int = SharedConstants.RESOURCE_PACK_FORMAT
+    var description: Component = CommonComponents.EMPTY
+    var minVersion: Int = minVersion()
+    var maxVersion: Int = maxVersion()
 }
