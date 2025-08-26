@@ -13,7 +13,6 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.Companion.inAn
 
 object MiscConfig : CategoryKt("misc") {
     private val defaultCloudIslands = listOf(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS, SkyBlockIsland.THE_CATACOMBS)
-    private val possibleItemSources = listOf(ItemSources.entries)
     override val name get() = Translated("skyocean.config.misc")
 
     var ministerInCalendar by boolean(true) {
