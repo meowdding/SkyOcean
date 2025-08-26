@@ -156,14 +156,15 @@ cloche {
                 implementation(olympus)
                 implementation(rconfig)
 
-                include(libs.skyblockapi)
-                include(libs.resourceful.config.kotlin)
-                include(libs.meowdding.lib)
-                include(libs.keval)
-                include(libs.placeholders)
-                include(rlib)
-                include(olympus)
-                include(rconfig)
+                include(libs.resourceful.config.kotlin) { isTransitive = false }
+                include(libs.keval) { isTransitive = false }
+                include(libs.placeholders) { isTransitive = false }
+                include(rlib) { isTransitive = false }
+                include(olympus) { isTransitive = false }
+                include(rconfig) { isTransitive = false }
+
+                include(libs.skyblockapi) { isTransitive = false }
+                include(libs.meowdding.lib) { isTransitive = false }
 
                 val mods = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods")
                 val modsTmp = project.layout.buildDirectory.get().toPath().resolve("tmp/extracted${sourceSet.name}RuntimeMods/tmp")
