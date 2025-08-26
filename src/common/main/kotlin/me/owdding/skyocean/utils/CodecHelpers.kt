@@ -5,6 +5,8 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.IncludedCodec
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
@@ -25,6 +27,9 @@ object CodecHelpers {
 
     @IncludedCodec
     val JSON_CODEC: Codec<JsonElement> = ExtraCodecs.JSON
+
+    @IncludedCodec
+    val COMPONENT_CODEC: Codec<Component> = ComponentSerialization.CODEC
 
     fun <T, B> pair(t: Codec<T>, b: Codec<B>): Codec<Pair<T, B>> = RecordCodecBuilder.create {
         it.group(
