@@ -163,7 +163,7 @@ object CraftHelperDisplay {
     }
 
     private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
-        val tracker = ItemTracker(MiscConfig.craftHelperSources)
+        val tracker = ItemTracker(MiscConfig.craftHelperSources.toList())
         val callback = callback()
 
         return LayoutFactory.vertical(2) {
