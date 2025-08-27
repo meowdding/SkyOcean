@@ -20,6 +20,8 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
@@ -181,6 +183,9 @@ object Utils {
     inline fun <T> KMutableProperty0<T>.setIfNot(value: T, predicate: (T) -> Boolean) {
         if (!predicate(value)) this.set(value)
     }
+
+    fun List<Slot>.container() = this.filterNot { it.container is Inventory }
+    fun List<Slot>.containerItems() = this.filterNot { it.container is Inventory }.map { it.item }
 }
 
 @AutoCollect("LateInitModules")

@@ -1,6 +1,5 @@
 package me.owdding.skyocean.features.dungeons.gambling
 
-import earth.terrarium.olympus.client.components.Widgets
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonItems
@@ -32,8 +31,12 @@ private const val TIME = 5 * 1000f
 private const val FULL_CARD_WIDTH = (DungeonCard.WIDTH * ITEM_SCALE) + ITEM_GAP
 private const val FULL_CARD_HEIGHT = (DungeonCard.HEIGHT * ITEM_SCALE)
 
-class DungeonGamblingScreen(val floor: DungeonFloor, val chest: DungeonChestType, val winner: ItemStack? = null, parentScreen: Screen? = null) :
-    SkyOceanPopupScreen(parentScreen) {
+class DungeonGamblingScreen(
+    val floor: DungeonFloor,
+    val chest: DungeonChestType,
+    val winner: ItemStack? = null,
+    parentScreen: Screen? = null,
+) : SkyOceanPopupScreen(parentScreen) {
 
     private var items = mutableListOf<ItemStack>()
     private var randomOffset = 0
@@ -44,26 +47,23 @@ class DungeonGamblingScreen(val floor: DungeonFloor, val chest: DungeonChestType
 
     override fun init() {
         super.init()
+        start()
+    }
 
-        addRenderableWidget(
-            Widgets.button()
-                .withSize(100, 20)
-                .withCallback {
-                    start = System.currentTimeMillis()
-                    lastSound = 0
-                    randomOffset = ((4 * ITEM_SCALE) + ThreadLocalRandom.current().nextInt(4 * ITEM_SCALE)) * (if (ThreadLocalRandom.current().nextBoolean()) 1 else -1)
-                    items.clear()
+    fun start() {
+        start = System.currentTimeMillis()
+        lastSound = 0
+        randomOffset = ((4 * ITEM_SCALE) + ThreadLocalRandom.current().nextInt(4 * ITEM_SCALE)) * (if (ThreadLocalRandom.current().nextBoolean()) 1 else -1)
+        items.clear()
 
-                    val items = DungeonItems[floor, chest] ?: return@withCallback
+        val items = DungeonItems[floor, chest] ?: return
 
-                    repeat(ITEM_SIZE) {
-                        this.items.add(items.getRandomItem()?.item ?: ItemStack.EMPTY)
-                    }
-                    winner?.let {
-                        this.items[WINNER_INDEX] = it
-                    }
-                },
-        )
+        repeat(ITEM_SIZE) {
+            this.items.add(items.getRandomItem()?.item ?: ItemStack.EMPTY)
+        }
+        winner?.let {
+            this.items[WINNER_INDEX] = it
+        }
     }
 
     fun ease(t: Float): Float {
@@ -101,18 +101,20 @@ class DungeonGamblingScreen(val floor: DungeonFloor, val chest: DungeonChestType
         graphics.drawGradient(
             this.width / 2 - 1, (this.height + FULL_CARD_HEIGHT) / 2,
             2, (DungeonCard.HEIGHT * ITEM_SCALE * 0.25).toInt(),
-            0xFFFF5555.toInt(), 0xFFFF5555.toInt(), 0xFFFF5555.toInt(), 0xFFFF5555.toInt()
+            0xFFFF5555.toInt(), 0xFFFF5555.toInt(), 0xFFFF5555.toInt(), 0xFFFF5555.toInt(),
         )
 
         graphics.applyPostEffect(SkyOcean.id("case_screen"))
 
         if (progress >= 0.96f && items.isNotEmpty()) {
+            // todo: enchanted book names when using actual items (not the command) (its just Enchanted Book)
             val winner = items[WINNER_INDEX].hoverName
             val length = McFont.width(winner)
 
             val scale = Mth.lerp((progress - 0.96f) / 0.04f, 1f, 3f)
 
-            if (scale >= 2.8f) {
+            // todo: better closing (closes too fast (basically instantly))
+            if (scale >= 3f) {
                 McClient.runNextTick { onClose() }
             }
 

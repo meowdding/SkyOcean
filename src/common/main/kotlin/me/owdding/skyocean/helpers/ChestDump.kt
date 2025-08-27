@@ -11,6 +11,7 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.Utils.containerItems
 import me.owdding.skyocean.utils.Utils.getArgument
 import me.owdding.skyocean.utils.debugToggle
 import me.owdding.skyocean.utils.storage.FolderStorage
@@ -26,6 +27,7 @@ import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -50,19 +52,18 @@ object ChestDump {
 
         val chest = (event.screen as? AbstractContainerScreen<*>)?.menu as? ChestMenu ?: return
         val title = event.screen.title
+        val items = chest.slots.containerItems()
 
         val hash = Hashing.sha256().newHasher()
         hash.putUnencodedChars(title.string)
-        chest.slots.forEach {
-            hash.putUnencodedChars(it.item.displayName.string)
-        }
+        items.forEach { hash.putUnencodedChars(it.displayName.string) }
 
         val type = BuiltInRegistries.MENU.getKey(chest.type) ?: run {
             logger.error("meow")
             return
         }
 
-        storage.set(hash.hash().asBytes().toHexString(), ChestDumpStorage(title, chest.slots.map { it.item }, type))
+        storage.set(hash.hash().asBytes().toHexString(), ChestDumpStorage(title, items, type))
     }
 
 
@@ -72,15 +73,16 @@ object ChestDump {
             object : ContainerScreen(menu as ChestMenu, McPlayer.self!!.inventory, dump.title) {
                 override fun init() {
                     super.init()
+                    ScreenInitializedEvent(this).post(SkyBlockAPI.eventBus)
                     dump.items.forEachIndexed { index, item ->
                         menu.slots[index].set(item)
+                        InventoryChangeEvent(item, menu.slots[index], dump.title, menu.slots, this).post(SkyBlockAPI.eventBus)
                     }
                 }
             }
         }
 
         else -> {
-
             throw UnsupportedOperationException("Unsupported menu type: $type")
         }
     }
@@ -89,7 +91,6 @@ object ChestDump {
         val type = BuiltInRegistries.MENU.getValue(dump.type)!!
         val screen = createScreen(type, dump)
         McClient.setScreenAsync { screen }
-        ScreenInitializedEvent(screen).post(SkyBlockAPI.eventBus)
     }
 
     @Subscription
