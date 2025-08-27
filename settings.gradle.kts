@@ -1,6 +1,6 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include("detekt")
+//include("detekt")
 
 rootProject.name = "SkyOcean"
 
