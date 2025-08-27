@@ -23,7 +23,7 @@ plugins {
     alias(libs.plugins.meowdding.resources)
     alias(libs.plugins.meowdding.repo)
     alias(libs.plugins.kotlin.symbol.processor)
-    alias(libs.plugins.detekt)
+    //alias(libs.plugins.detekt) - temporarily disabled
     alias(libs.plugins.meowdding.gradle)
 }
 
@@ -53,7 +53,7 @@ dependencies {
     compileOnly(libs.keval)
     compileOnly(libs.kotlin.stdlib)
 
-    detektPlugins(project(":detekt"))
+    //detektPlugins(project(":detekt"))
 }
 
 cloche {
@@ -368,5 +368,4 @@ meowdding {
     setupClocheClasspathFix()
     configureModules = true
     configureCodecs = true
-    configureDetekt = true
 }
