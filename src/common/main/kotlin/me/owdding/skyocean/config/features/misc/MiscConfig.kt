@@ -66,6 +66,10 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.itemSearch.preserve_search"
     }
 
+    var itemSearchWarpToIsland by boolean(false) {
+        translation = "skyocean.config.misc.itemSearch.warp_to_island"
+    }
+
     init {
         separator("skyocean.config.misc.crafthelper")
     }

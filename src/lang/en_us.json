@@ -88,6 +88,10 @@
           "desc": [
             "Allows resource packs to change the appearance of gemstones."
           ]
+        },
+        "hollows": {
+          "@value": "Retexture Hollows",
+          "desc": "Allows resource packs to change the appearance of most hardstone blocks and ores in the hollows."
         }
       },
       "mineshaft": {
@@ -268,6 +272,10 @@
         "preserve_search": {
           "@value": "Preserve Search",
           "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
+        },
+        "warp_to_island": {
+          "@value": "Warp to island",
+          "desc": "Automatically warp to island if you click an item that is on it."
         }
       },
       "crafthelper": {
