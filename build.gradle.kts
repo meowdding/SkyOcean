@@ -368,4 +368,5 @@ meowdding {
     setupClocheClasspathFix()
     configureModules = true
     configureCodecs = true
+    //configureDetekt = true
 }
