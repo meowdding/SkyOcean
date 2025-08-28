@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.WallSide
 
 object WallModelFactory : BlockModelFactory() {
-    val map = mutableMapOf(
+    private val map = mutableMapOf(
         Blocks.COBBLESTONE_WALL to Blocks.COBBLESTONE,
         Blocks.MOSSY_COBBLESTONE_WALL to Blocks.MOSSY_COBBLESTONE,
         Blocks.STONE_BRICK_WALL to Blocks.STONE_BRICKS,
