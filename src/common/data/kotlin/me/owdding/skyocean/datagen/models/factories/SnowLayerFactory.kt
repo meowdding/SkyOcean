@@ -18,8 +18,15 @@ import java.util.*
 object SnowLayerFactory : BlockModelFactory() {
     override fun isFor(block: Block) = block == Blocks.SNOW
 
-    override fun create(block: Block, fakeBlock: ResourceLocation, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
-        val multiVariant = BlockModelGenerators.plainVariant(SkyOcean.id(createCopy(Blocks.SNOW_BLOCK, fakeBlock).path))
+    override fun create(
+        block: Block,
+        fakeBlock: ResourceLocation,
+        parent: ResourceLocation?,
+        generator: BlockModelGenerators,
+        modelGenContext: ModelGenContext,
+    ) {
+        assert(parent == null) { "Parents aren't supported for snow blocks" }
+        val multiVariant = BlockModelGenerators.plainVariant(SkyOcean.id(createCopy(Blocks.SNOW_BLOCK, fakeBlock, parent).path))
         modelGenContext.collectState(
             fakeBlock,
             MultiVariantGenerator.dispatch(block).with(

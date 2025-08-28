@@ -26,8 +26,8 @@ object GemstoneBlocks : BlockRetexture() {
         register(Blocks.LIME_STAINED_GLASS_PANE, "jade_pane")
         register(Blocks.PURPLE_STAINED_GLASS, "amethyst")
         register(Blocks.PURPLE_STAINED_GLASS_PANE, "amethyst_pane")
-        register(Blocks.WHITE_STAINED_GLASS, "opal", ::opalCondition) // opal can only generate in mineshafts and crimson isle
-        register(Blocks.WHITE_STAINED_GLASS_PANE, "opal_pane", ::opalCondition) // opal can only generate in mineshafts and crimson isle
+        register(Blocks.WHITE_STAINED_GLASS, "opal", condition = ::opalCondition) // opal can only generate in mineshafts and crimson isle
+        register(Blocks.WHITE_STAINED_GLASS_PANE, "opal_pane", condition = ::opalCondition) // opal can only generate in mineshafts and crimson isle
         register(Blocks.YELLOW_STAINED_GLASS, "topaz")
         register(Blocks.YELLOW_STAINED_GLASS_PANE, "topaz_pane")
         register(Blocks.MAGENTA_STAINED_GLASS, "jasper")
