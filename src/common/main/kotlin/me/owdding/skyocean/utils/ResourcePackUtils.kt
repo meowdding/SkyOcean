@@ -10,12 +10,17 @@ import kotlin.math.min
 @GenerateCodec
 data class PackMetadata(
     val pack: PackDescriptor,
-    val overlays: MutableList<PackOverlay> = mutableListOf(),
+    var overlays: PackOverlayHolder?,
 ) {
     fun merge(other: PackMetadata) = PackMetadata(
         pack = pack.merge(other.pack),
-        overlays = listOf(overlays, other.overlays).flatten().toMutableList(),
+        overlays = PackOverlayHolder(listOfNotNull(overlays?.entries, other.overlays?.entries).flatten().toMutableList()).takeUnless { it.entries.isEmpty() },
     )
+
+    fun add(packOverlay: PackOverlay) {
+        if (overlays == null) overlays = PackOverlayHolder()
+        overlays!!.entries.add(packOverlay)
+    }
 }
 
 @GenerateCodec
@@ -23,7 +28,7 @@ data class PackDescriptor(
     val description: JsonElement,
     @Unnamed val formats: PackDescriptorFormats,
     @FieldName("pack_format") val packFormat: Int = formats.minFormat,
-    @FieldName("supported_formats") val _supportedFormats: PackDescriptorFormats = formats,
+    @FieldName("supported_formats") val _supportedFormats: OldPackDescriptorFormats = formats.toOldDescriptor(),
 ) {
     fun merge(other: PackDescriptor): PackDescriptor = PackDescriptor(
         description = description,
@@ -40,11 +45,24 @@ data class PackDescriptorFormats(
         minFormat = min(minFormat, other.minFormat),
         maxFormat = max(maxFormat, other.maxFormat),
     )
+
+    fun toOldDescriptor() = OldPackDescriptorFormats(minFormat, maxFormat)
 }
+
+@GenerateCodec
+data class OldPackDescriptorFormats(
+    @FieldName("min_inclusive") val minFormat: Int,
+    @FieldName("max_inclusive") val maxFormat: Int,
+)
+
+@GenerateCodec
+data class PackOverlayHolder(
+    val entries: MutableList<PackOverlay> = mutableListOf(),
+)
 
 @GenerateCodec
 data class PackOverlay(
     val directory: String,
     @Unnamed val formats: PackDescriptorFormats,
-    @FieldName("formats") val _formats: PackDescriptorFormats = formats,
+    @FieldName("formats") val _formats: OldPackDescriptorFormats = formats.toOldDescriptor(),
 )

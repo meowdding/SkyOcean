@@ -74,7 +74,7 @@ object DataGenPostProcessor {
 
         info.forEach { (path, info) ->
             if (path.nameWithoutExtension in versionOverlays) {
-                metatadata.overlays.add(PackOverlay(path.nameWithoutExtension, info.metadata.pack.formats))
+                metatadata.add(PackOverlay(path.nameWithoutExtension, info.metadata.pack.formats))
             }
         }
 
