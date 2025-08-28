@@ -44,7 +44,6 @@ object MiscConfig : CategoryKt("misc") {
     }
 
     var islandCloudHider by defaultEnabledMessage(
-        @Suppress("SpreadOperator")
         select(*defaultCloudIslands.toTypedArray()) {
             translation = "skyocean.config.misc.islandCloudHider"
         },
