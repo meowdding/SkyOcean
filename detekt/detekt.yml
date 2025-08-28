@@ -36,10 +36,10 @@ formatting:
     ArgumentListWrapping: # some arguments are better on the same line (e.g. x,y,z)
         active: false
     ParameterListWrapping: # pedantic, can be useful in compact code
-        active: false
+        active: true
         maxLineLength: 160
     EnumWrapping:
-        active: false
+        active: true
     NoBlankLineBeforeRbrace: # pedantic
         active: false
     NoConsecutiveBlankLines: # pedantic
@@ -53,13 +53,13 @@ formatting:
     FunctionReturnTypeSpacing:
         maxLineLength: 160
     ParameterWrapping:
-        active: false
+        active: true
         maxLineLength: 160
     PropertyWrapping:
-        active: false
+        active: true
         maxLineLength: 160
     Wrapping:
-        active: false
+        active: true
         maxLineLength: 160
     NoWildcardImports: # we use wildcard imports in some places
         active: false
