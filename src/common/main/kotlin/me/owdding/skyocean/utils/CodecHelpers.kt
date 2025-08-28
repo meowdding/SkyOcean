@@ -1,23 +1,15 @@
 package me.owdding.skyocean.utils
 
-import com.google.gson.JsonElement
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
 import java.util.concurrent.CopyOnWriteArrayList
 
-/** This is needed for the [DataGenPostProcessor], since we don't actually start Minecraft and only have it on the classpath when post-processing and merging the versions, we also can't use most of the codecs.*/
-object CodecIsolation {
-    @IncludedCodec
-    val JSON_CODEC: Codec<JsonElement> = ExtraCodecs.JSON
-
-    val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
-}
+val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
 
 object CodecHelpers {
 

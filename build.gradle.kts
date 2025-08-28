@@ -369,4 +369,6 @@ meowdding {
     configureModules = true
     configureCodecs = true
     //configureDetekt = true
+
+    codecVersion = libs.versions.meowdding.ktcodecs
 }
