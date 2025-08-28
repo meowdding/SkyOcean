@@ -91,7 +91,7 @@
         },
         "hollows": {
           "@value": "Retexture Hollows",
-          "desc": "Allows resource packs to change the appearance of most hardstone blocks in the hollows."
+          "desc": "Allows resource packs to change the appearance of most hardstone blocks and ores in the hollows."
         }
       },
       "mineshaft": {
