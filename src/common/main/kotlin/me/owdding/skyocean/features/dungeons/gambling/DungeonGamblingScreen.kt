@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.dungeons.gambling
 
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonItems
 import me.owdding.skyocean.utils.SkyOceanPopupScreen
@@ -73,7 +74,8 @@ class DungeonGamblingScreen(
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
         super.render(graphics, mouseX, mouseY, partialTicks)
 
-        val progress = (((System.currentTimeMillis() - start) / TIME) + 0.25f).coerceIn(0f, 1f)
+        val rawProgress = (((System.currentTimeMillis() - start) / TIME))
+        val progress = (rawProgress + 0.25f).coerceIn(0f, 1f)
         val endOffset = (WINNER_INDEX * FULL_CARD_WIDTH) * ease(progress)
 
         val soundIndex = endOffset.toInt() / FULL_CARD_WIDTH
@@ -107,14 +109,14 @@ class DungeonGamblingScreen(
         graphics.applyPostEffect(SkyOcean.id("case_screen"))
 
         if (progress >= 0.96f && items.isNotEmpty()) {
-            // todo: enchanted book names when using actual items (not the command) (its just Enchanted Book)
-            val winner = items[WINNER_INDEX].hoverName
+            val winnerItem = items[WINNER_INDEX]
+            val winner = winnerItem.getSkyOceanId()?.toItem()?.hoverName.takeIf { winnerItem.getSkyOceanId()?.isEnchantment == true } ?: winnerItem.hoverName
             val length = McFont.width(winner)
 
             val scale = Mth.lerp((progress - 0.96f) / 0.04f, 1f, 3f)
 
             // todo: better closing (closes too fast (basically instantly))
-            if (scale >= 3f) {
+            if (rawProgress >= 1f) {
                 McClient.runNextTick { onClose() }
             }
 
