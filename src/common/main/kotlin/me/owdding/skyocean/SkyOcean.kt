@@ -103,8 +103,6 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         }
     }
 
-    operator fun invoke(path: String): Lazy<ResourceLocation> = lazy { id(path) }
-
     fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
     fun minecraft(path: String): ResourceLocation = ResourceLocation.withDefaultNamespace(path)
     fun olympus(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("olympus", path)
