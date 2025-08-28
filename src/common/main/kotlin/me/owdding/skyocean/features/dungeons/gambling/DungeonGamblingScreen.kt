@@ -115,7 +115,6 @@ class DungeonGamblingScreen(
 
             val scale = Mth.lerp((progress - 0.96f) / 0.04f, 1f, 3f)
 
-            // todo: better closing (closes too fast (basically instantly))
             if (rawProgress >= 1f) {
                 McClient.runNextTick { onClose() }
             }
