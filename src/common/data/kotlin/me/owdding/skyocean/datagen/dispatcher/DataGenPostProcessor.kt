@@ -5,7 +5,7 @@ import com.google.gson.JsonElement
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import me.owdding.skyocean.datagen.dispatcher.Utils.zipFile
-import me.owdding.skyocean.utils.PACK_FORMAT
+import me.owdding.skyocean.utils.CodecIsolation
 import me.owdding.skyocean.utils.PackMetadata
 import me.owdding.skyocean.utils.PackOverlay
 import me.owdding.skyocean.utils.Utils.readAsJson
@@ -39,7 +39,7 @@ object DataGenPostProcessor {
 
         versions.forEach {
             zipFile(it) { root ->
-                val format = root.resolve("pack.mcmeta").readAsJson().toDataOrThrow(PACK_FORMAT)
+                val format = root.resolve("pack.mcmeta").readAsJson().toDataOrThrow(CodecIsolation.PACK_FORMAT)
 
 
                 info[it] = VersionInfo(
@@ -78,7 +78,7 @@ object DataGenPostProcessor {
             }
         }
 
-        root.resolve("pack.mcmeta").writeJson(metatadata.toJsonOrThrow(PACK_FORMAT))
+        root.resolve("pack.mcmeta").writeJson(metatadata.toJsonOrThrow(CodecIsolation.PACK_FORMAT))
     }
 
     data class VersionInfo(
