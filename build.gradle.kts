@@ -277,7 +277,7 @@ tasks {
             languageVersion = KotlinVersion.KOTLIN_2_2
             freeCompilerArgs.addAll(
                 "-Xcontext-parameters",
-            "-Xmulti-platform",
+                "-Xmulti-platform",
                 "-Xno-check-actual",
                 "-Xexpect-actual-classes",
                 "-Xopt-in=kotlin.time.ExperimentalTime",

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.type.EnumArgumentType
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
+import me.owdding.skyocean.config.features.dungeons.DungeonsConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
 import me.owdding.skyocean.utils.Utils.containerItems
@@ -44,6 +45,7 @@ object DungeonGambling {
 
     @Subscription
     fun onScreenChange(event: InventoryChangeEvent) {
+        if (!DungeonsConfig.gamblingScreenEnabled) return
         if (event.item !in Items.BARRIER) return
         val chest = event.screen as? ContainerScreen ?: return
         val items = chest.menu.slots.containerItems()
