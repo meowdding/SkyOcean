@@ -63,7 +63,8 @@ object DungeonGambling {
 
     @Subscription
     fun onScreenRender(event: RenderScreenBackgroundEvent) {
-        rendering = DungeonGamblingRenderer.render(event.graphics)
+        val menu = (event.screen as? ContainerScreen)?.menu
+        rendering = menu?.containerId == this.menu && DungeonGamblingRenderer.render(event.graphics)
         if (rendering) event.cancel()
     }
 
@@ -86,7 +87,7 @@ object DungeonGambling {
     @Subscription
     fun onScreenKeyPressed(event: ScreenKeyPressedEvent) {
         cancelIfRendering(event)
-        if (event.key == InputConstants.KEY_ESCAPE) {
+        if (event.key == InputConstants.KEY_ESCAPE && rendering) {
             DungeonGamblingRenderer.cancel()
             rendering = false
             menu = -1

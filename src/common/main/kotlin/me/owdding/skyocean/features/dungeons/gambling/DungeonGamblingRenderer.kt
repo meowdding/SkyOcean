@@ -6,6 +6,7 @@ import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonItems
 import me.owdding.skyocean.utils.rendering.applyPostEffect
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
@@ -65,6 +66,8 @@ object DungeonGamblingRenderer {
     fun render(graphics: GuiGraphics): Boolean {
         if (items.isEmpty()) return false
         if (start == 0L) return false
+
+        graphics.fill(0, 0, graphics.guiWidth(), graphics.guiHeight(), 0x80000000.toInt())
 
         val rawProgress = (((System.currentTimeMillis() - start) / TIME))
         val progress = (rawProgress + 0.25f).coerceIn(0f, 1f)

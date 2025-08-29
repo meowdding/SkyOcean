@@ -7,7 +7,7 @@ const float ZOOM_RADIUS = 0.2;
 
 const float BLUR_DIRECTIONS = 32.0;
 const float BLUR_QUALITY = 9.0;
-const float BLUR_SIZE = 5.0;
+const float BLUR_SIZE = 8.0;
 
 uniform sampler2D InSampler;
 uniform vec2 InSize;

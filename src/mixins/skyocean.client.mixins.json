@@ -14,7 +14,6 @@
     "FabricDataGenHelperMixin",
     "FrameLayoutAccessor",
     "GameRendererAccessor",
-    "MinecraftMixin",
     "MutableComponentMixin",
     "PlayerRendererMixin",
     "PlayerRenderStateMixin",

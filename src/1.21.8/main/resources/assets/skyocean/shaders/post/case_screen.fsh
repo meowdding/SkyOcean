@@ -7,7 +7,7 @@ const float ZOOM_RADIUS = 0.2;
 
 const float BLUR_DIRECTIONS = 32.0;
 const float BLUR_QUALITY = 9.0;
-const float BLUR_SIZE = 5.0;
+const float BLUR_SIZE = 8.0;
 
 uniform sampler2D InSampler;
 
@@ -47,9 +47,9 @@ void main() {
             }
         }
 
-        fragColor = vec4(1, 0, 0, 1);//color / (BLUR_QUALITY * BLUR_DIRECTIONS - 15.0);
+        fragColor = color / (BLUR_QUALITY * BLUR_DIRECTIONS - 15.0);
     } else {
         vec2 newCoords = center + (texCoord - center) * mix(1.0, 1.0 / ZOOM, 1.0);
-        fragColor = vec4(1, dist, 0, 1);//vec4(texture(InSampler, newCoords).rgb, 1.0);
+        fragColor = vec4(texture(InSampler, newCoords).rgb, 1.0);
     }
 }

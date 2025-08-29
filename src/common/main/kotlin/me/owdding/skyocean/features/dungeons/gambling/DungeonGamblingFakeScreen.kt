@@ -20,8 +20,6 @@ class DungeonGamblingFakeScreen(
     }
 
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        super.render(graphics, mouseX, mouseY, partialTicks)
-
         DungeonGamblingRenderer.render(graphics)
     }
 
