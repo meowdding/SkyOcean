@@ -107,17 +107,3 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         return scrollable
     }
 }
-
-abstract class SkyOceanPopupScreen(val parent: Screen? = McScreen.self, title: Component = CommonComponents.EMPTY) : SkyOceanScreen(title) {
-
-    override fun onClose() {
-        super.onClose()
-        McClient.setScreenAsync { parent }
-    }
-
-    override fun removed() {
-        super.removed()
-        McClient.setScreenAsync { parent }
-    }
-
-}
