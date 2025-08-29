@@ -40,18 +40,6 @@ object DungeonItems {
         )
     }
 
-    init {
-        for (it in items.values) {
-            for (chestItems in it.values) {
-                for (item in chestItems.items) {
-                    if (item.item.item == Items.BARRIER) {
-                        println(item.item.customName!!.stripped)
-                    }
-                }
-            }
-        }
-    }
-
     operator fun get(floor: DungeonFloor, type: DungeonChestType): DungeonChestItems? {
         return items[floor]?.get(type)
     }
