@@ -24,6 +24,7 @@ class FakeBlocksProvider(output: FabricDataOutput, saveBlockStates: Boolean = tr
         SnowLayerFactory,
         GlassPaneFactory,
         WallModelFactory,
+        StairModelFactory,
         RemapFactory,
         DefaultModelFactory,
     )
