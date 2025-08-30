@@ -1,6 +1,7 @@
 package me.owdding.skyocean.helpers
 
 import com.google.common.hash.Hashing
+import com.google.gson.JsonElement
 import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktcodecs.GenerateCodec
@@ -11,6 +12,7 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.CodecHelpers
 import me.owdding.skyocean.utils.Utils.containerItems
 import me.owdding.skyocean.utils.Utils.getArgument
 import me.owdding.skyocean.utils.debugToggle
@@ -24,7 +26,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.inventory.ChestMenu
 import net.minecraft.world.inventory.MenuType
-import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
@@ -32,6 +33,8 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
@@ -63,7 +66,7 @@ object ChestDump {
             return
         }
 
-        storage.set(hash.hash().asBytes().toHexString(), ChestDumpStorage(title, items, type))
+        storage.set(hash.hash().asBytes().toHexString(), ChestDumpStorage(title, items.toJsonOrThrow(CodecHelpers.ITEM_STACK_CODEC.listOf()), type))
     }
 
 
@@ -74,7 +77,7 @@ object ChestDump {
                 override fun init() {
                     super.init()
                     ScreenInitializedEvent(this).post(SkyBlockAPI.eventBus)
-                    dump.items.forEachIndexed { index, item ->
+                    dump.items.toDataOrThrow(CodecHelpers.ITEM_STACK_CODEC.listOf()).forEachIndexed { index, item ->
                         menu.slots[index].set(item)
                         InventoryChangeEvent(item, menu.slots[index], dump.title, menu.slots, this).post(SkyBlockAPI.eventBus)
                     }
@@ -137,7 +140,7 @@ object ChestDump {
     @GenerateCodec
     data class ChestDumpStorage(
         val title: Component,
-        val items: List<ItemStack>,
+        val items: JsonElement,
         val type: ResourceLocation,
     )
 
