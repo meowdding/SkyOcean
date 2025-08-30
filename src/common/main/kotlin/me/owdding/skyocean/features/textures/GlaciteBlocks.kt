@@ -21,8 +21,9 @@ object GlaciteBlocks : BlockRetexture() {
     val GLACITE_HARD_STONE = id("mining/glacite/glacite_hard_stone")
     val GLACITE_HARD_STONE_WOOL = id("mining/glacite/glacite_hard_stone_wool")
     val LOW_TIER_TUNGSTEN = id("mining/glacite/low_tier_tungsten")
+    val LOW_TIER_TUNGSTEN_MINESHAFT = id("mining/glacite/low_tier_tungsten_mineshaft")
     val LOW_TIER_TUNGSTEN_STAIRS = id("mining/glacite/low_tier_tungsten_stairs")
-    val LOW_TIER_TUNGSTEN_SLAB = id("mining/glacite/low_tier_tungsten_stairs")
+    val LOW_TIER_TUNGSTEN_SLAB = id("mining/glacite/low_tier_tungsten_slab")
     val HIGH_TIER_TUNGSTEN = id("mining/glacite/high_tier_tungsten")
     val LOW_TIER_UMBER = id("mining/glacite/low_tier_umber")
     val MID_TIER_UMBER = id("mining/glacite/mid_tier_umber")
@@ -34,14 +35,15 @@ object GlaciteBlocks : BlockRetexture() {
         register(Blocks.SNOW, GLACITE_SNOW)
         register(Blocks.SNOW_BLOCK, GLACITE_SNOW_BLOCK)
         register(Blocks.PACKED_ICE, GLACITE_BLOCK)
-        registerMultiple(Blocks.INFESTED_STONE, Blocks.STONE, id = GLACITE_HARD_STONE, parent = CrystalHollowBlocks.HARDSTONE) { state, pos ->
+        registerMultiple(Blocks.INFESTED_STONE, Blocks.STONE, id = GLACITE_HARD_STONE) { state, pos ->
             if (state.block == Blocks.STONE && !SkyBlockIsland.MINESHAFT.inIsland()) return@registerMultiple false
             return@registerMultiple defaultCondition(state, pos)
         }
         register(Blocks.LIGHT_GRAY_WOOL, GLACITE_HARD_STONE_WOOL, CrystalHollowBlocks.HARDSTONE)
-        registerMultiple(Blocks.INFESTED_COBBLESTONE, Blocks.COBBLESTONE, id = LOW_TIER_TUNGSTEN) { state, pos ->
-            if (state.block == Blocks.COBBLESTONE && !SkyBlockIsland.MINESHAFT.inIsland()) return@registerMultiple false
-            return@registerMultiple defaultCondition(state, pos)
+        register(Blocks.INFESTED_COBBLESTONE, LOW_TIER_TUNGSTEN)
+        register(Blocks.COBBLESTONE, id = LOW_TIER_TUNGSTEN_MINESHAFT, LOW_TIER_TUNGSTEN) { state, pos ->
+            if (state.block == Blocks.COBBLESTONE && !SkyBlockIsland.MINESHAFT.inIsland()) return@register false
+            return@register defaultCondition(state, pos)
         }
         register(Blocks.COBBLESTONE_STAIRS, id = LOW_TIER_TUNGSTEN_STAIRS) { state, pos ->
             if (state.block == Blocks.COBBLESTONE_STAIRS && !SkyBlockIsland.MINESHAFT.inIsland()) return@register false
