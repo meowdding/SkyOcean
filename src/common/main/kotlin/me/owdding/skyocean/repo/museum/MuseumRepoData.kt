@@ -68,7 +68,7 @@ object MuseumRepoData {
             val id = armorNameExceptions.getOrElse(name) {
                 armorNames.map { name.replaceTrim(it) }.minBy { it.length }
             }.uppercase().replace(" ", "_")
-            val secondaryId = name.lowercase().replace(" ", "_")
+            val secondaryId = name.uppercase().replace(" ", "_")
             return armor.firstOrNull { it.id == id || it.id == secondaryId } ?: throw MuseumDataError(MuseumDataError.Type.ARMOR_NOT_FOUND, name)
         }
 
