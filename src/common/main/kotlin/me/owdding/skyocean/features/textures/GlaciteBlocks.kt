@@ -19,7 +19,7 @@ object GlaciteBlocks : BlockRetexture() {
     val GLACITE_SNOW = id("mining/glacite/glacite_snow")
     val GLACITE_SNOW_BLOCK = id("mining/glacite/glacite_snow_block")
     val GLACITE_HARD_STONE = id("mining/glacite/glacite_hard_stone")
-    val GLACITE_HARD_STONE_WOOL = id("glacite/glacite_hard_stone_wool")
+    val GLACITE_HARD_STONE_WOOL = id("mining/glacite/glacite_hard_stone_wool")
 
     @Subscription
     fun registerFakeBlocks(event: RegisterFakeBlocksEvent) = with(event) {
