@@ -13,6 +13,7 @@
     "EntityRenderStateMixin",
     "FabricDataGenHelperMixin",
     "FrameLayoutAccessor",
+    "GameRendererAccessor",
     "MutableComponentMixin",
     "PlayerRendererMixin",
     "PlayerRenderStateMixin",

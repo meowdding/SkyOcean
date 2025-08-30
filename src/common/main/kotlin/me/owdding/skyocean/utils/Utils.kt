@@ -22,6 +22,8 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
@@ -199,12 +201,13 @@ object Utils {
     context(parent: JsonArray) fun putChar(value: Char) = parent.add(value)
 
     context(parent: JsonArray) fun putArray(init: context(JsonArray) () -> Unit) = parent.add(JsonArray().apply(init))
-
     context(parent: JsonObject) fun putArray(property: String, init: context(JsonArray) () -> Unit) = parent.add(property, JsonArray().apply(init))
 
     context(parent: JsonArray) fun putObject(init: context(JsonObject) () -> Unit) = parent.add(JsonObject().apply(init))
-
     context(parent: JsonObject) fun putObject(property: String, init: context(JsonObject) () -> Unit) = parent.add(property, JsonObject().apply(init))
+
+    fun List<Slot>.container() = this.filterNot { it.container is Inventory }
+    fun List<Slot>.containerItems() = this.filterNot { it.container is Inventory }.map { it.item }
 }
 
 @AutoCollect("LateInitModules")
