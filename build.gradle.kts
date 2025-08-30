@@ -81,6 +81,7 @@ cloche {
         project.layout.projectDirectory.dir("src/mixins").toPath().listDirectoryEntries().filter { it.isRegularFile() }.forEach {
             mixins.from("src/mixins/${it.name}")
         }
+        accessWideners.from(project.layout.projectDirectory.file("src/skyocean.accesswidener"))
 
         data {
             dependencies { addDependencies(this) }
@@ -369,6 +370,7 @@ meowdding {
     setupClocheClasspathFix()
     configureModules = true
     configureCodecs = true
+    hasAccessWideners = true
     //configureDetekt = true
 
     codecVersion = libs.versions.meowdding.ktcodecs

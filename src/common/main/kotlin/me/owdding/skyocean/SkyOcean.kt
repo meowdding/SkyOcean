@@ -10,7 +10,9 @@ import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
+import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.FakeBlocks
+import me.owdding.skyocean.helpers.MixinHelper
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
@@ -47,12 +49,17 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
             patch = null
         }
         repoPatcher = patch
+
+        SkyOceanPreInitModules.init {
+            SkyBlockAPI.eventBus.register(it)
+        }
     }
 
     val configurator = Configurator("skyocean")
     val config = Config.register(configurator)
 
     override fun onInitializeClient() {
+        MixinHelper.isStarted = true
         RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
         SkyOceanModules.init {

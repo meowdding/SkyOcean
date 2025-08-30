@@ -1,6 +1,7 @@
 package me.owdding.skyocean.utils
 
 import com.google.common.cache.Cache
+import com.google.common.cache.CacheLoader
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -34,6 +35,7 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.file.Files
@@ -208,9 +210,23 @@ object Utils {
 
     fun List<Slot>.container() = this.filterNot { it.container is Inventory }
     fun List<Slot>.containerItems() = this.filterNot { it.container is Inventory }.map { it.item }
+
+    fun <T : Any, V : Any> simpleCacheLoader(constructor: (T) -> V) = object : CacheLoader<T, V>() {
+        override fun load(key: T): V = constructor(key)
+    }
+
+    fun text(text: String, init: MutableComponent.() -> Unit = {}) = Text.of(text, init)
 }
 
 @AutoCollect("LateInitModules")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class LateInitModule
+
+@AutoCollect("PreInitModules")
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+annotation class PreInitModule
+
+
+
