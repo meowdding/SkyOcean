@@ -19,6 +19,7 @@ object GlaciteBlocks : BlockRetexture() {
     val GLACITE_SNOW = id("mining/glacite/glacite_snow")
     val GLACITE_SNOW_BLOCK = id("mining/glacite/glacite_snow_block")
     val GLACITE_HARD_STONE = id("mining/glacite/glacite_hard_stone")
+    val GLACITE_HARD_STONE_CAMPFIRE_MINESHAFT = id("mining/glacite/glacite_hard_stone_campfire")
     val GLACITE_HARD_STONE_WOOL = id("mining/glacite/glacite_hard_stone_wool")
     val LOW_TIER_TUNGSTEN = id("mining/glacite/low_tier_tungsten")
     val LOW_TIER_TUNGSTEN_MINESHAFT = id("mining/glacite/low_tier_tungsten_mineshaft")
@@ -35,10 +36,8 @@ object GlaciteBlocks : BlockRetexture() {
         register(Blocks.SNOW, GLACITE_SNOW)
         register(Blocks.SNOW_BLOCK, GLACITE_SNOW_BLOCK)
         register(Blocks.PACKED_ICE, GLACITE_BLOCK)
-        registerMultiple(Blocks.INFESTED_STONE, Blocks.STONE, id = GLACITE_HARD_STONE) { state, pos ->
-            if (state.block == Blocks.STONE && !SkyBlockIsland.MINESHAFT.inIsland()) return@registerMultiple false
-            return@registerMultiple defaultCondition(state, pos)
-        }
+        register(Blocks.INFESTED_STONE, id = GLACITE_HARD_STONE)
+        register(Blocks.STONE, GLACITE_HARD_STONE_CAMPFIRE_MINESHAFT, GLACITE_HARD_STONE)
         register(Blocks.LIGHT_GRAY_WOOL, GLACITE_HARD_STONE_WOOL, CrystalHollowBlocks.HARDSTONE)
         register(Blocks.INFESTED_COBBLESTONE, LOW_TIER_TUNGSTEN)
         register(Blocks.COBBLESTONE, id = LOW_TIER_TUNGSTEN_MINESHAFT, LOW_TIER_TUNGSTEN) { state, pos ->
