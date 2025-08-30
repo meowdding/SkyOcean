@@ -11,6 +11,7 @@
     "BlockModelShaperMixin",
     "EntityRendererMixin",
     "EntityRenderStateMixin",
+    "FabricDataGenHelperMixin",
     "FrameLayoutAccessor",
     "MutableComponentMixin",
     "PlayerRendererMixin",
