@@ -8,7 +8,9 @@ object DwarvenMinesBB {
 
     val GLACITE_TUNNELS = Octree(
         create(Vec3i(-128, 112, 198), Vec3i(127, 174, 479)),
-        create(Vec3i(-19, 127, 182), Vec3i(26, 166, 197)),
+        create(Vec3i(-23, 127, 193), Vec3i(73, 166, 197)),
+        create(Vec3i(-18, 126, 192), Vec3i(17, 165, 183)),
+
     )
     
     val MIST = Octree(
