@@ -70,6 +70,14 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.itemSearch.warp_to_island"
     }
 
+    var itemSearchMuseumIntegration by boolean(false) {
+        translation = "skyocean.config.misc.itemSearch.museumIntegration"
+    }
+
+    var museumArmourPieces by boolean(true) {
+        translation = "skyocean.config.misc.museumArmourPieces"
+    }
+
     init {
         separator("skyocean.config.misc.crafthelper")
     }

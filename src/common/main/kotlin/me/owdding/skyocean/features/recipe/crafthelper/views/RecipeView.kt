@@ -35,7 +35,7 @@ fun interface RecipeView {
         visitor.create(context.toState(), widget, widgetConsumer)
     }
 
-    private fun create(context: CraftHelperContext) {
+    fun create(context: CraftHelperContext) {
         val state = context.toState()
 
         if (context.node is NodeWithChildren) {

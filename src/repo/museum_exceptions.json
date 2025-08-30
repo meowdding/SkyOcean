@@ -1,0 +1,19 @@
+{
+  "armor": {
+    "prospector's outfit": "miner outfit",
+    "miner armor": "tank_miner",
+    "salmon armor": "salmon new",
+    "flamebreaker armor": "flame breaker",
+    "ender armor": "end",
+    "maxor's armor": "speed wither",
+    "necron's armor": "power wither",
+    "storm's armor": "wise wither",
+    "goldor's armor": "tank wither",
+    "vanquisher set": "vanquished",
+    "perfect armor - tier xii": "perfect tier 12",
+    "perfect armor - tier xiii": "perfect tier 13"
+  },
+  "items": {
+    "enchanted clock": "enchanted time clock"
+  }
+}

@@ -9,19 +9,20 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.world.item.ItemStack
-import kotlin.math.nextUp
+import kotlin.math.min
 
 class InventoryTooltipComponent(
-    val items: List<ItemStack>,
+    val items: Collection<ItemStack>,
     columns: Int,
+    shrinkToItems: Boolean = false,
 ) : ClientTooltipComponent {
-    val rows = (items.size / columns.toFloat()).nextUp().toInt()
+    val rows = items.chunked(columns).size
 
     val width = columns * 20 + 4 + 10
     val height = rows * 20 + 4 + 10
 
     val display = ExtraDisplays.inventoryBackground(
-        columns,
+        if (shrinkToItems) min(columns, items.size) else columns,
         rows,
         items.map { Displays.item(it, showStackSize = true).withPadding(2) }.chunked(columns).map { it.toRow() }.toColumn().withPadding(2),
     )

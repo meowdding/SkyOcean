@@ -1,11 +1,14 @@
 package me.owdding.skyocean.features.recipe.crafthelper.eval
 
 import me.owdding.lib.extensions.floor
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.item.sources.system.ItemContext
 import me.owdding.skyocean.features.recipe.CurrencyType
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.serialize
+import me.owdding.skyocean.utils.Utils.mapToMutableList
+import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.area.farming.TrapperAPI
 import tech.thatgravyboat.skyblockapi.api.area.hub.FarmhouseAPI
 import tech.thatgravyboat.skyblockapi.api.area.rift.RiftAPI
@@ -14,7 +17,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import kotlin.math.min
 
 data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries) {
-    constructor(vararg sources: ItemSources) : this(sources.toList())
 
     val currencies = mutableMapOf<CurrencyType, Number>(
         CurrencyType.COIN to (CurrencyAPI.bank + CurrencyAPI.purse).floor(),
@@ -39,11 +41,12 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
             }
         }.mapNotNull { item ->
             item.itemStack.getSkyBlockId()?.let {
-                TrackedItem(it, item.itemStack.count, item.context, item.context.source)
+                TrackedItem(it, item.itemStack, item.itemStack.count, item.context, item.context.source)
             }
         }.groupBy { it.id.lowercase() }
         .mapValues { (_, values) -> values.sortedBy { sourceToPriority(it.source) }.toMutableList() }.toMutableMap()
 
+    constructor(vararg sources: ItemSources) : this(sources.toList())
 
     fun sourceToPriority(source: ItemSources) = when (source) {
         ItemSources.INVENTORY -> 0
@@ -59,9 +62,11 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         return min
     }
 
+    fun takeN(ingredient: Ingredient, amount: Int = ingredient.amount): List<TrackedItem> = takeN(ingredient.serialize().lowercase(), amount)
+    fun takeN(itemId: SkyOceanItemId, amount: Int) = takeN(itemId.cleanId, amount)
 
-    fun takeN(ingredient: Ingredient, amount: Int = ingredient.amount): List<TrackedItem> {
-        val items = items[ingredient.serialize().lowercase()] ?: return emptyList()
+    fun takeN(itemId: String, amount: Int): List<TrackedItem> {
+        val items = items[itemId] ?: return emptyList()
 
         var acc = 0
         val takeWhile = items.takeWhile {
@@ -74,7 +79,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         }
 
         items.removeAll(takeWhile)
-        if (items.isEmpty()) this.items.remove(ingredient.serialize().lowercase())
+        if (items.isEmpty()) this.items.remove(itemId)
 
         if (takeWhile.sumOf { it.amount } <= amount) return takeWhile
 
@@ -91,17 +96,25 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
 
         items.addFirst(last.withAmount(last.amount - lastNeeded))
         if (items.size == 1) {
-            this.items.put(ingredient.serialize().lowercase(), items)
+            this.items.put(itemId, items)
         }
 
         list.add(last.withAmount(lastNeeded))
 
         return list
     }
+
+    fun snapshot(): ItemTracker {
+        val copy = ItemTracker()
+        copy.currencies.putAll(this.currencies)
+        copy.items.putAll(this.items.mapValues { (_, list) -> list.mapToMutableList { it.copy() } })
+        return copy
+    }
 }
 
 data class TrackedItem(
     val id: String,
+    val itemStack: ItemStack,
     val amount: Int,
     val context: ItemContext,
     val source: ItemSources,

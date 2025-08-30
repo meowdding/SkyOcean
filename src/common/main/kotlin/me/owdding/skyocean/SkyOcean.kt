@@ -33,6 +33,7 @@ import java.net.URI
 object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
 
     val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
+    val SBAPI by lazy { FabricLoader.getInstance().getModContainer(SkyBlockAPI.MOD_ID).get() }
     val MOD_ID: String = SELF.metadata.id
     val VERSION: String = SELF.metadata.version.friendlyString
 

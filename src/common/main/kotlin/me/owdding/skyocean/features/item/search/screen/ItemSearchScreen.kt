@@ -27,7 +27,6 @@ import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.item.sources.SackItemContext
 import me.owdding.skyocean.features.item.sources.system.BundledItemContext
-import me.owdding.skyocean.features.item.sources.system.ParentItemContext
 import me.owdding.skyocean.features.item.sources.system.TrackedItem
 import me.owdding.skyocean.features.item.sources.system.TrackedItemBundle
 import me.owdding.skyocean.utils.SkyOceanScreen
@@ -304,8 +303,8 @@ object ItemSearchScreen : SkyOceanScreen() {
             }.withPadding(2)
 
 
-            val leftAction = { button: Button ->
-                ItemHighlighter.setHighlight(ReferenceItemFilter((context as? ParentItemContext)?.parent?.itemStack ?: itemStack))
+            val leftAction = { _: Button ->
+                ItemHighlighter.setHighlight(ReferenceItemFilter.create(context, itemStack))
                 context.open()
                 onClose()
             }
