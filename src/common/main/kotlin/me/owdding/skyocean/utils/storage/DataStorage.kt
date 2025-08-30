@@ -8,6 +8,7 @@ import me.owdding.skyocean.utils.Utils.readJson
 import me.owdding.skyocean.utils.Utils.writeJson
 import org.apache.commons.io.FileUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
@@ -17,6 +18,7 @@ import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
 import kotlin.io.path.createParentDirectories
+import kotlin.io.path.deleteIfExists
 import kotlin.io.path.exists
 import kotlin.io.path.relativeTo
 
@@ -39,6 +41,7 @@ internal class DataStorage<T : Any>(
         val requiresSave = mutableSetOf<DataStorage<*>>()
 
         @Subscription(TickEvent::class)
+        @TimePassed("5s")
         fun onTick() {
             val toSave = requiresSave.toTypedArray()
             requiresSave.clear()
@@ -76,6 +79,14 @@ internal class DataStorage<T : Any>(
     }
 
     private val currentCodec = codec(version)
+
+    fun delete() {
+        try {
+            path.deleteIfExists()
+        } catch (e: Exception) {
+            SkyOcean.error("Failed to delete $path", e)
+        }
+    }
 
     private fun saveToSystem() {
         SkyOcean.debug("Saving $path")

@@ -14,6 +14,9 @@ import net.minecraft.world.item.component.ItemLore
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object EnchantmentApi {
     private val cache: MutableMap<String, ItemStack?> = mutableMapOf()
@@ -29,7 +32,14 @@ object EnchantmentApi {
         val lore = level.lore().map { !it }
 
         itemBuilder(Items.ENCHANTED_BOOK) {
-            this[DataComponents.ITEM_NAME] = Text.of("${enchantment.name()} ${level.literalLevel()}")
+            this[DataComponents.ITEM_NAME] = Text.of("${enchantment.name()} ${level.literalLevel()}") {
+                if (enchantment.isUltimate) {
+                    this.color = TextColor.PINK
+                    this.bold = true
+                } else {
+                    this.color = TextColor.BLUE
+                }
+            }
             this[DataComponents.LORE] = ItemLore(lore, lore)
             this[DataComponents.CUSTOM_DATA] = compoundTag {
                 putString("id", "ENCHANTED_BOOK")

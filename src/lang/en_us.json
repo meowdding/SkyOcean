@@ -608,6 +608,15 @@
           "desc": "Recolors the shulkers to make them more visible."
         }
       }
+    },
+    "dungeons": {
+      "@value": "Dungeons",
+      "gambling": {
+        "enabled": {
+          "@value": "CSGO Case Opening",
+          "desc": "Shows a CSGO case opening animation when opening a dungeon chest."
+        }
+      }
     }
   },
   "garden": {

@@ -1,0 +1,1778 @@
+{
+  "F1": {
+    "obsidian": [
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 3
+      },
+      {
+        "id": "item:bonzo_staff",
+        "weight": 1
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 2
+      },
+      {
+        "id": "item:bonzo_mask",
+        "weight": 3
+      },
+      {
+        "id": "item:red_nose",
+        "weight": 3
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 15
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 15
+      },
+      {
+        "id": "item:necromancer_brooch",
+        "weight": 10
+      },
+      {
+        "id": "enchantment:ultimate_bank:1",
+        "weight": 2
+      },
+      {
+        "id": "enchantment:ultimate_jerry:1",
+        "weight": 1
+      },
+      {
+        "id": "enchantment:infinite_quiver:6",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:feather_falling:6",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:rejuvenate:1",
+        "weight": 25
+      }
+    ]
+  },
+  "F2": {
+    "obsidian": [
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 2
+      },
+      {
+        "id": "item:stone_blade",
+        "weight": 2
+      },
+      {
+        "id": "item:adaptive_belt",
+        "weight": 3
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 3
+      },
+      {
+        "id": "item:red_scarf",
+        "weight": 1
+      },
+      {
+        "id": "item:scarf_studies",
+        "weight": 4
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 5
+      },
+      {
+        "id": "item:necromancer_brooch",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_bank:1",
+        "weight": 2
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 10
+      },
+      {
+        "id": "enchantment:rejuvenate:1",
+        "weight": 15
+      }
+    ]
+  },
+  "F3": {
+    "obsidian": [
+      {
+        "id": "item:adaptive_chestplate",
+        "weight": 1
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 4
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 3
+      },
+      {
+        "id": "item:adaptive_leggings",
+        "weight": 1
+      },
+      {
+        "id": "item:adaptive_helmet",
+        "weight": 2
+      },
+      {
+        "id": "item:adaptive_boots",
+        "weight": 2
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 5
+      },
+      {
+        "id": "item:suspicious_vial",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 5
+      },
+      {
+        "id": "item:necromancer_brooch",
+        "weight": 4
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:1",
+        "weight": 12
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:ultimate_jerry:2",
+        "weight": 1
+      },
+      {
+        "id": "enchantment:ultimate_bank:2",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:rejuvenate:2",
+        "weight": 12
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 8
+      }
+    ]
+  },
+  "F4": {
+    "obsidian": [
+      {
+        "id": "item:spirit_sword",
+        "weight": 1
+      },
+      {
+        "id": "item:item_spirit_bow",
+        "weight": 1
+      },
+      {
+        "id": "item:thorn_boots",
+        "weight": 1
+      },
+      {
+        "id": "item:spirit_wing",
+        "weight": 2
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 3
+      },
+      {
+        "id": "item:spirit_bone",
+        "weight": 2
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 3
+      },
+      {
+        "id": "pet:spirit:LEGENDARY",
+        "weight": 1
+      },
+      {
+        "id": "item:spirit_decoy",
+        "weight": 2
+      },
+      {
+        "id": "enchantment:ultimate_rend:1",
+        "weight": 2
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:1",
+        "weight": 12
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:ultimate_jerry:2",
+        "weight": 1
+      },
+      {
+        "id": "enchantment:ultimate_bank:2",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:rejuvenate:2",
+        "weight": 12
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 8
+      }
+    ]
+  },
+  "F5": {
+    "obsidian": [
+      {
+        "id": "item:livid_dagger",
+        "weight": 1
+      },
+      {
+        "id": "item:shadow_assassin_leggings",
+        "weight": 4
+      },
+      {
+        "id": "item:shadow_assassin_cloak",
+        "weight": 4
+      },
+      {
+        "id": "item:aote_stone",
+        "weight": 1
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 6
+      },
+      {
+        "id": "item:shadow_assassin_helmet",
+        "weight": 8
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 9
+      },
+      {
+        "id": "item:shadow_assassin_boots",
+        "weight": 12
+      },
+      {
+        "id": "enchantment:overload:1",
+        "weight": 16
+      },
+      {
+        "id": "enchantment:ultimate_legion:1",
+        "weight": 16
+      },
+      {
+        "id": "item:dark_orb",
+        "weight": 12
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:lethality:6",
+        "weight": 16
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:1",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 30
+      },
+      {
+        "id": "enchantment:ultimate_jerry:2",
+        "weight": 3
+      },
+      {
+        "id": "enchantment:ultimate_bank:2",
+        "weight": 30
+      },
+      {
+        "id": "enchantment:rejuvenate:2",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 30
+      }
+    ],
+    "bedrock": [
+      {
+        "id": "item:shadow_fury",
+        "weight": 1
+      },
+      {
+        "id": "item:last_breath",
+        "weight": 1
+      },
+      {
+        "id": "item:shadow_assassin_chestplate",
+        "weight": 2
+      },
+      {
+        "id": "item:livid_dagger",
+        "weight": 4
+      },
+      {
+        "id": "item:shadow_assassin_leggings",
+        "weight": 5
+      },
+      {
+        "id": "item:shadow_assassin_cloak",
+        "weight": 5
+      },
+      {
+        "id": "item:aote_stone",
+        "weight": 2
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 6
+      },
+      {
+        "id": "item:shadow_assassin_helmet",
+        "weight": 10
+      },
+      {
+        "id": "item:shadow_assassin_boots",
+        "weight": 15
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:overload:1",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_legion:1",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:lethality:6",
+        "weight": 20
+      },
+      {
+        "id": "item:dark_orb",
+        "weight": 30
+      },
+      {
+        "id": "enchantment:ultimate_combo:2",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:2",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_wise:2",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_jerry:3",
+        "weight": 4
+      },
+      {
+        "id": "enchantment:rejuvenate:3",
+        "weight": 45
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:2",
+        "weight": 45
+      },
+      {
+        "id": "enchantment:ultimate_bank:3",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:2",
+        "weight": 25
+      }
+    ]
+  },
+  "F6": {
+    "obsidian": [
+      {
+        "id": "item:summoning_ring",
+        "weight": 1
+      },
+      {
+        "id": "item:necromancer_sword",
+        "weight": 2
+      },
+      {
+        "id": "item:necromancer_lord_leggings",
+        "weight": 3
+      },
+      {
+        "id": "item:soulweaver_gloves",
+        "weight": 3
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 6
+      },
+      {
+        "id": "item:necromancer_lord_helmet",
+        "weight": 4
+      },
+      {
+        "id": "item:sadan_brooch",
+        "weight": 4
+      },
+      {
+        "id": "item:necromancer_lord_boots",
+        "weight": 6
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 9
+      },
+      {
+        "id": "enchantment:ultimate_swarm:1",
+        "weight": 15
+      },
+      {
+        "id": "item:giant_tooth",
+        "weight": 15
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:1",
+        "weight": 60
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 45
+      },
+      {
+        "id": "enchantment:ultimate_jerry:2",
+        "weight": 4
+      },
+      {
+        "id": "enchantment:ultimate_bank:2",
+        "weight": 45
+      },
+      {
+        "id": "enchantment:rejuvenate:2",
+        "weight": 60
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 45
+      }
+    ],
+    "bedrock": [
+      {
+        "id": "item:precursor_eye",
+        "weight": 3
+      },
+      {
+        "id": "item:giants_sword",
+        "weight": 5
+      },
+      {
+        "id": "item:necromancer_lord_chestplate",
+        "weight": 8
+      },
+      {
+        "id": "item:summoning_ring",
+        "weight": 10
+      },
+      {
+        "id": "item:fel_skull",
+        "weight": 15
+      },
+      {
+        "id": "item:necromancer_sword",
+        "weight": 20
+      },
+      {
+        "id": "item:necromancer_lord_leggings",
+        "weight": 30
+      },
+      {
+        "id": "item:soulweaver_gloves",
+        "weight": 30
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 100
+      },
+      {
+        "id": "item:necromancer_lord_helmet",
+        "weight": 40
+      },
+      {
+        "id": "item:sadan_brooch",
+        "weight": 40
+      },
+      {
+        "id": "item:necromancer_lord_boots",
+        "weight": 60
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 200
+      },
+      {
+        "id": "enchantment:ultimate_swarm:1",
+        "weight": 150
+      },
+      {
+        "id": "item:giant_tooth",
+        "weight": 50
+      },
+      {
+        "id": "enchantment:ultimate_combo:2",
+        "weight": 200
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:2",
+        "weight": 175
+      },
+      {
+        "id": "enchantment:ultimate_wise:2",
+        "weight": 330
+      },
+      {
+        "id": "enchantment:ultimate_jerry:3",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:rejuvenate:3",
+        "weight": 380
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:2",
+        "weight": 380
+      },
+      {
+        "id": "enchantment:ultimate_bank:3",
+        "weight": 175
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:2",
+        "weight": 225
+      }
+    ]
+  },
+  "F7": {
+    "obsidian": [
+      {
+        "id": "item:wither_chestplate",
+        "weight": 1
+      },
+      {
+        "id": "enchantment:ultimate_one_for_all:1",
+        "weight": 1
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 2
+      },
+      {
+        "id": "item:wither_leggings",
+        "weight": 4
+      },
+      {
+        "id": "item:wither_cloak",
+        "weight": 6
+      },
+      {
+        "id": "item:wither_helmet",
+        "weight": 6
+      },
+      {
+        "id": "item:wither_blood",
+        "weight": 6
+      },
+      {
+        "id": "enchantment:ultimate_soul_eater:1",
+        "weight": 14
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 14
+      },
+      {
+        "id": "item:wither_boots",
+        "weight": 14
+      },
+      {
+        "id": "item:wither_catalyst",
+        "weight": 14
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 10
+      },
+      {
+        "id": "item:precursor_gear",
+        "weight": 16
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 10
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 32
+      },
+      {
+        "id": "enchantment:ultimate_bank:2",
+        "weight": 15
+      },
+      {
+        "id": "enchantment:rejuvenate:2",
+        "weight": 50
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 15
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:1",
+        "weight": 30
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 18
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_jerry:2",
+        "weight": 8
+      }
+    ],
+    "bedrock": [
+      {
+        "id": "item:necron_handle",
+        "weight": 15
+      },
+      {
+        "id": "item:shadow_warp_scroll",
+        "weight": 20
+      },
+      {
+        "id": "item:wither_shield_scroll",
+        "weight": 20
+      },
+      {
+        "id": "item:implosion_scroll",
+        "weight": 20
+      },
+      {
+        "id": "item:auto_recombobulator",
+        "weight": 80
+      },
+      {
+        "id": "item:wither_chestplate",
+        "weight": 80
+      },
+      {
+        "id": "enchantment:ultimate_one_for_all:1",
+        "weight": 80
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 400
+      },
+      {
+        "id": "item:wither_leggings",
+        "weight": 320
+      },
+      {
+        "id": "item:wither_cloak",
+        "weight": 480
+      },
+      {
+        "id": "item:wither_helmet",
+        "weight": 480
+      },
+      {
+        "id": "item:wither_blood",
+        "weight": 480
+      },
+      {
+        "id": "enchantment:ultimate_soul_eater:1",
+        "weight": 800
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 400
+      },
+      {
+        "id": "item:wither_boots",
+        "weight": 480
+      },
+      {
+        "id": "item:wither_catalyst",
+        "weight": 400
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 800
+      },
+      {
+        "id": "item:precursor_gear",
+        "weight": 1200
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:2",
+        "weight": 400
+      },
+      {
+        "id": "enchantment:ultimate_combo:2",
+        "weight": 1000
+      },
+      {
+        "id": "enchantment:rejuvenate:3",
+        "weight": 1000
+      },
+      {
+        "id": "enchantment:ultimate_bank:3",
+        "weight": 500
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:2",
+        "weight": 500
+      },
+      {
+        "id": "enchantment:ultimate_wise:2",
+        "weight": 800
+      },
+      {
+        "id": "enchantment:ultimate_jerry:3",
+        "weight": 600
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:2",
+        "weight": 1000
+      },
+      {
+        "id": "enchantment:infinite_quiver:6",
+        "weight": 1000
+      },
+      {
+        "id": "enchantment:feather_falling:6",
+        "weight": 320
+      },
+      {
+        "id": "item:storm_the_fish",
+        "weight": 10
+      },
+      {
+        "id": "item:maxor_the_fish",
+        "weight": 10
+      },
+      {
+        "id": "item:goldor_the_fish",
+        "weight": 10
+      }
+    ]
+  },
+  "M1": {
+    "obsidian": [
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 4
+      },
+      {
+        "id": "item:master_skull_tier_1",
+        "weight": 3
+      },
+      {
+        "id": "item:bonzo_staff",
+        "weight": 1
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 2
+      },
+      {
+        "id": "item:bonzo_mask",
+        "weight": 3
+      },
+      {
+        "id": "item:red_nose",
+        "weight": 4
+      },
+      {
+        "id": "item:balloon_snake",
+        "weight": 3
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 10
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 10
+      },
+      {
+        "id": "item:necromancer_brooch",
+        "weight": 10
+      },
+      {
+        "id": "enchantment:ultimate_bank:1",
+        "weight": 2
+      },
+      {
+        "id": "enchantment:ultimate_jerry:1",
+        "weight": 1
+      },
+      {
+        "id": "enchantment:infinite_quiver:6",
+        "weight": 6
+      },
+      {
+        "id": "enchantment:feather_falling:6",
+        "weight": 6
+      },
+      {
+        "id": "enchantment:rejuvenate:1",
+        "weight": 15
+      }
+    ]
+  },
+  "M2": {
+    "obsidian": [
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 3
+      },
+      {
+        "id": "item:stone_blade",
+        "weight": 2
+      },
+      {
+        "id": "item:master_skull_tier_2",
+        "weight": 3
+      },
+      {
+        "id": "item:adaptive_belt",
+        "weight": 3
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 3
+      },
+      {
+        "id": "item:red_scarf",
+        "weight": 1
+      },
+      {
+        "id": "item:scarf_studies",
+        "weight": 4
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 5
+      },
+      {
+        "id": "item:necromancer_brooch",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_bank:1",
+        "weight": 2
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 10
+      },
+      {
+        "id": "enchantment:rejuvenate:1",
+        "weight": 10
+      }
+    ]
+  },
+  "M3": {
+    "obsidian": [
+      {
+        "id": "item:first_master_star",
+        "weight": 2
+      },
+      {
+        "id": "item:adaptive_chestplate",
+        "weight": 1
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 4
+      },
+      {
+        "id": "item:master_skull_tier_3",
+        "weight": 4
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 3
+      },
+      {
+        "id": "item:adaptive_leggings",
+        "weight": 1
+      },
+      {
+        "id": "item:adaptive_helmet",
+        "weight": 2
+      },
+      {
+        "id": "item:adaptive_boots",
+        "weight": 2
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 5
+      },
+      {
+        "id": "item:suspicious_vial",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 5
+      },
+      {
+        "id": "item:necromancer_brooch",
+        "weight": 4
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:1",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:ultimate_jerry:2",
+        "weight": 1
+      },
+      {
+        "id": "enchantment:ultimate_bank:2",
+        "weight": 6
+      },
+      {
+        "id": "enchantment:rejuvenate:2",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 6
+      }
+    ]
+  },
+  "M4": {
+    "obsidian": [
+      {
+        "id": "item:second_master_star",
+        "weight": 2
+      },
+      {
+        "id": "item:spirit_sword",
+        "weight": 1
+      },
+      {
+        "id": "item:item_spirit_bow",
+        "weight": 1
+      },
+      {
+        "id": "item:thorn_boots",
+        "weight": 1
+      },
+      {
+        "id": "item:spirit_wing",
+        "weight": 2
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 3
+      },
+      {
+        "id": "item:master_skull_tier_3",
+        "weight": 3
+      },
+      {
+        "id": "item:spirit_bone",
+        "weight": 2
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 3
+      },
+      {
+        "id": "pet:spirit:LEGENDARY",
+        "weight": 1
+      },
+      {
+        "id": "item:spirit_decoy",
+        "weight": 2
+      },
+      {
+        "id": "enchantment:ultimate_rend:2",
+        "weight": 2
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 5
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:1",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 6
+      },
+      {
+        "id": "enchantment:ultimate_jerry:2",
+        "weight": 1
+      },
+      {
+        "id": "enchantment:ultimate_bank:2",
+        "weight": 6
+      },
+      {
+        "id": "enchantment:rejuvenate:2",
+        "weight": 8
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 6
+      }
+    ]
+  },
+  "M5": {
+    "obsidian": [
+      {
+        "id": "item:livid_dagger",
+        "weight": 1
+      },
+      {
+        "id": "item:third_master_star",
+        "weight": 1
+      },
+      {
+        "id": "item:shadow_assassin_leggings",
+        "weight": 4
+      },
+      {
+        "id": "item:shadow_assassin_cloak",
+        "weight": 4
+      },
+      {
+        "id": "item:aote_stone",
+        "weight": 1
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 6
+      },
+      {
+        "id": "item:master_skull_tier_3",
+        "weight": 4
+      },
+      {
+        "id": "item:shadow_assassin_helmet",
+        "weight": 8
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 9
+      },
+      {
+        "id": "item:shadow_assassin_boots",
+        "weight": 12
+      },
+      {
+        "id": "enchantment:overload:1",
+        "weight": 16
+      },
+      {
+        "id": "enchantment:ultimate_legion:1",
+        "weight": 16
+      },
+      {
+        "id": "item:dark_orb",
+        "weight": 10
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:lethality:6",
+        "weight": 16
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:1",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 30
+      },
+      {
+        "id": "enchantment:ultimate_jerry:2",
+        "weight": 3
+      },
+      {
+        "id": "enchantment:ultimate_bank:2",
+        "weight": 30
+      },
+      {
+        "id": "enchantment:rejuvenate:2",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 30
+      }
+    ],
+    "bedrock": [
+      {
+        "id": "item:dye_livid",
+        "weight": 1
+      },
+      {
+        "id": "item:shadow_fury",
+        "weight": 1
+      },
+      {
+        "id": "item:last_breath",
+        "weight": 1
+      },
+      {
+        "id": "item:shadow_assassin_chestplate",
+        "weight": 2
+      },
+      {
+        "id": "item:livid_dagger",
+        "weight": 4
+      },
+      {
+        "id": "item:third_master_star",
+        "weight": 2
+      },
+      {
+        "id": "item:shadow_assassin_leggings",
+        "weight": 5
+      },
+      {
+        "id": "item:shadow_assassin_cloak",
+        "weight": 5
+      },
+      {
+        "id": "item:aote_stone",
+        "weight": 2
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 6
+      },
+      {
+        "id": "item:master_skull_tier_4",
+        "weight": 5
+      },
+      {
+        "id": "item:shadow_assassin_helmet",
+        "weight": 10
+      },
+      {
+        "id": "item:shadow_assassin_boots",
+        "weight": 15
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:overload:1",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_legion:1",
+        "weight": 20
+      },
+      {
+        "id": "item:dark_orb",
+        "weight": 30
+      },
+      {
+        "id": "enchantment:lethality:6",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_combo:2",
+        "weight": 15
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:2",
+        "weight": 15
+      },
+      {
+        "id": "enchantment:ultimate_wise:2",
+        "weight": 30
+      },
+      {
+        "id": "enchantment:ultimate_jerry:3",
+        "weight": 4
+      },
+      {
+        "id": "enchantment:rejuvenate:3",
+        "weight": 35
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:2",
+        "weight": 35
+      },
+      {
+        "id": "enchantment:ultimate_bank:3",
+        "weight": 10
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:2",
+        "weight": 12
+      }
+    ]
+  },
+  "M6": {
+    "obsidian": [
+      {
+        "id": "item:fourth_master_star",
+        "weight": 3
+      },
+      {
+        "id": "item:summoning_ring",
+        "weight": 1
+      },
+      {
+        "id": "item:necromancer_sword",
+        "weight": 2
+      },
+      {
+        "id": "item:necromancer_lord_leggings",
+        "weight": 3
+      },
+      {
+        "id": "item:soulweaver_gloves",
+        "weight": 3
+      },
+      {
+        "id": "item:master_skull_tier_4",
+        "weight": 6
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 6
+      },
+      {
+        "id": "item:necromancer_lord_helmet",
+        "weight": 4
+      },
+      {
+        "id": "item:sadan_brooch",
+        "weight": 4
+      },
+      {
+        "id": "item:necromancer_lord_boots",
+        "weight": 6
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 9
+      },
+      {
+        "id": "enchantment:ultimate_swarm:1",
+        "weight": 15
+      },
+      {
+        "id": "item:giant_tooth",
+        "weight": 15
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_bank:2",
+        "weight": 45
+      },
+      {
+        "id": "enchantment:rejuvenate:2",
+        "weight": 60
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 45
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:1",
+        "weight": 60
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 45
+      },
+      {
+        "id": "enchantment:ultimate_jerry:2",
+        "weight": 3
+      }
+    ],
+    "bedrock": [
+      {
+        "id": "item:precursor_eye",
+        "weight": 3
+      },
+      {
+        "id": "item:giants_sword",
+        "weight": 6
+      },
+      {
+        "id": "item:necromancer_lord_chestplate",
+        "weight": 8
+      },
+      {
+        "id": "item:fourth_master_star",
+        "weight": 10
+      },
+      {
+        "id": "item:summoning_ring",
+        "weight": 10
+      },
+      {
+        "id": "item:fel_skull",
+        "weight": 15
+      },
+      {
+        "id": "item:necromancer_sword",
+        "weight": 20
+      },
+      {
+        "id": "item:master_skull_tier_4",
+        "weight": 10
+      },
+      {
+        "id": "item:necromancer_lord_leggings",
+        "weight": 30
+      },
+      {
+        "id": "item:soulweaver_gloves",
+        "weight": 30
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 120
+      },
+      {
+        "id": "item:necromancer_lord_helmet",
+        "weight": 40
+      },
+      {
+        "id": "item:sadan_brooch",
+        "weight": 40
+      },
+      {
+        "id": "item:necromancer_lord_boots",
+        "weight": 60
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 200
+      },
+      {
+        "id": "enchantment:ultimate_swarm:1",
+        "weight": 150
+      },
+      {
+        "id": "item:giant_tooth",
+        "weight": 50
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:2",
+        "weight": 175
+      },
+      {
+        "id": "enchantment:ultimate_combo:2",
+        "weight": 200
+      },
+      {
+        "id": "enchantment:rejuvenate:3",
+        "weight": 380
+      },
+      {
+        "id": "enchantment:ultimate_bank:3",
+        "weight": 175
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:3",
+        "weight": 225
+      },
+      {
+        "id": "enchantment:ultimate_wise:2",
+        "weight": 330
+      },
+      {
+        "id": "enchantment:ultimate_jerry:3",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:2",
+        "weight": 380
+      }
+    ]
+  },
+  "M7": {
+    "obsidian": [
+      {
+        "id": "item:fifth_master_star",
+        "weight": 1
+      },
+      {
+        "id": "item:wither_chestplate",
+        "weight": 1
+      },
+      {
+        "id": "enchantment:ultimate_one_for_all:1",
+        "weight": 1
+      },
+      {
+        "id": "item:master_skull_tier_4",
+        "weight": 4
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 2
+      },
+      {
+        "id": "item:wither_leggings",
+        "weight": 4
+      },
+      {
+        "id": "item:wither_cloak",
+        "weight": 6
+      },
+      {
+        "id": "item:wither_helmet",
+        "weight": 6
+      },
+      {
+        "id": "item:wither_blood",
+        "weight": 6
+      },
+      {
+        "id": "enchantment:ultimate_soul_eater:1",
+        "weight": 14
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 14
+      },
+      {
+        "id": "item:wither_boots",
+        "weight": 14
+      },
+      {
+        "id": "item:wither_catalyst",
+        "weight": 14
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 10
+      },
+      {
+        "id": "item:precursor_gear",
+        "weight": 16
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:1",
+        "weight": 10
+      },
+      {
+        "id": "enchantment:ultimate_combo:1",
+        "weight": 32
+      },
+      {
+        "id": "enchantment:ultimate_bank:2",
+        "weight": 15
+      },
+      {
+        "id": "enchantment:rejuvenate:2",
+        "weight": 50
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:1",
+        "weight": 15
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:1",
+        "weight": 30
+      },
+      {
+        "id": "enchantment:ultimate_wise:1",
+        "weight": 40
+      },
+      {
+        "id": "enchantment:ultimate_jerry:2",
+        "weight": 8
+      }
+    ],
+    "bedrock": [
+      {
+        "id": "item:necron_handle",
+        "weight": 18
+      },
+      {
+        "id": "item:dye_necron",
+        "weight": 9
+      },
+      {
+        "id": "item:shadow_warp_scroll",
+        "weight": 25
+      },
+      {
+        "id": "item:wither_shield_scroll",
+        "weight": 25
+      },
+      {
+        "id": "item:implosion_scroll",
+        "weight": 25
+      },
+      {
+        "id": "item:dark_claymore",
+        "weight": 10
+      },
+      {
+        "id": "item:auto_recombobulator",
+        "weight": 80
+      },
+      {
+        "id": "item:fifth_master_star",
+        "weight": 30
+      },
+      {
+        "id": "item:wither_chestplate",
+        "weight": 80
+      },
+      {
+        "id": "enchantment:ultimate_one_for_all:1",
+        "weight": 80
+      },
+      {
+        "id": "item:master_skull_tier_5",
+        "weight": 24
+      },
+      {
+        "id": "item:recombobulator_3000",
+        "weight": 500
+      },
+      {
+        "id": "item:wither_leggings",
+        "weight": 320
+      },
+      {
+        "id": "item:wither_cloak",
+        "weight": 480
+      },
+      {
+        "id": "item:wither_helmet",
+        "weight": 480
+      },
+      {
+        "id": "item:wither_blood",
+        "weight": 480
+      },
+      {
+        "id": "enchantment:thunderlord:7",
+        "weight": 20
+      },
+      {
+        "id": "enchantment:ultimate_soul_eater:1",
+        "weight": 800
+      },
+      {
+        "id": "item:fuming_potato_book",
+        "weight": 400
+      },
+      {
+        "id": "item:wither_boots",
+        "weight": 480
+      },
+      {
+        "id": "item:wither_catalyst",
+        "weight": 400
+      },
+      {
+        "id": "item:hot_potato_book",
+        "weight": 800
+      },
+      {
+        "id": "item:precursor_gear",
+        "weight": 1200
+      },
+      {
+        "id": "enchantment:ultimate_no_pain_no_gain:2",
+        "weight": 400
+      },
+      {
+        "id": "enchantment:ultimate_combo:2",
+        "weight": 1000
+      },
+      {
+        "id": "enchantment:rejuvenate:3",
+        "weight": 1000
+      },
+      {
+        "id": "enchantment:ultimate_bank:3",
+        "weight": 500
+      },
+      {
+        "id": "enchantment:ultimate_wisdom:2",
+        "weight": 500
+      },
+      {
+        "id": "enchantment:ultimate_wise:2",
+        "weight": 800
+      },
+      {
+        "id": "enchantment:ultimate_jerry:3",
+        "weight": 600
+      },
+      {
+        "id": "enchantment:ultimate_last_stand:2",
+        "weight": 1000
+      },
+      {
+        "id": "enchantment:infinite_quiver:7",
+        "weight": 1000
+      },
+      {
+        "id": "enchantment:feather_falling:7",
+        "weight": 320
+      },
+      {
+        "id": "item:storm_the_fish",
+        "weight": 5
+      },
+      {
+        "id": "item:maxor_the_fish",
+        "weight": 5
+      },
+      {
+        "id": "item:goldor_the_fish",
+        "weight": 5
+      }
+    ]
+  }
+}

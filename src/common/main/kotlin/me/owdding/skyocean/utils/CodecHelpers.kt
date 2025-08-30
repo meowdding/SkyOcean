@@ -5,6 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import java.util.concurrent.CopyOnWriteArrayList
@@ -23,6 +25,9 @@ object CodecHelpers {
 
     @IncludedCodec
     val RESOURCE_LOCATION: Codec<ResourceLocation> = ResourceLocation.CODEC
+
+    @IncludedCodec
+    val COMPONENT_CODEC: Codec<Component> = ComponentSerialization.CODEC
 
     fun <T, B> pair(t: Codec<T>, b: Codec<B>): Codec<Pair<T, B>> = RecordCodecBuilder.create {
         it.group(

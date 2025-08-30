@@ -40,7 +40,7 @@ internal class ProfileStorage<T : Any>(
         }
 
         @Subscription(TickEvent::class)
-        @TimePassed("30s")
+        @TimePassed("5s")
         fun onTick() {
             val toSave = requiresSave.toTypedArray()
             requiresSave.clear()
