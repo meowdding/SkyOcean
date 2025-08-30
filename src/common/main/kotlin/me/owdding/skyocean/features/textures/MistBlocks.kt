@@ -15,14 +15,14 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 object MistBlocks : BlockRetexture() {
 
     val MIST_SNOW = id("mining/mist/mist_snow")
-    val MIST_SNOW_BLOCK = id("mining/mist/mist_snow")
-    val MIST_GLASS = id("mining/mist/mist_snow")
-    val MIST_GLASS_SECONDARY = id("mining/mist/mist_snow")
-    val MIST_CLAY = id("mining/mist/mist_snow")
-    val MIST_ICE = id("mining/mist/mist_snow")
-    val MIST_CARPET = id("mining/mist/mist_snow")
-    val MIST_LIGHT_BLUE_GLASS_PANE = id("mist/mist_snow")
-    val MIST_BLUE_GLASS_PANE = id("mist/mist_snow")
+    val MIST_SNOW_BLOCK = id("mining/mist/mist_snow_block")
+    val MIST_GLASS = id("mining/mist/mist_glass")
+    val MIST_GLASS_SECONDARY = id("mining/mist/mist_glass_secondary")
+    val MIST_CLAY = id("mining/mist/mist_clay")
+    val MIST_ICE = id("mining/mist/mist_ice")
+    val MIST_CARPET = id("mining/mist/mist_carpet")
+    val MIST_LIGHT_BLUE_GLASS_PANE = id("mining/mist/mist_light_blue_glass_pane")
+    val MIST_BLUE_GLASS_PANE = id("mining/mist/mist_blue_glass_pane")
 
 
     @Subscription
