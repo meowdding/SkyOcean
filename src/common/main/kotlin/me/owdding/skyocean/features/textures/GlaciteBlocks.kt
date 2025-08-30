@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.textures
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.config.features.mining.MiningRetexture
 import me.owdding.skyocean.events.RegisterFakeBlocksEvent
 import me.owdding.skyocean.utils.boundingboxes.DwarvenMinesBB
@@ -14,16 +15,22 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 @Module
 object GlaciteBlocks : BlockRetexture() {
 
+    val GLACITE_BLOCK = id("mining/glacite/glacite_block")
+    val GLACITE_SNOW = id("mining/glacite/glacite_snow")
+    val GLACITE_SNOW_BLOCK = id("mining/glacite/glacite_snow_block")
+    val GLACITE_HARD_STONE = id("mining/glacite/glacite_hard_stone")
+    val GLACITE_HARD_STONE_WOOL = id("glacite/glacite_hard_stone_wool")
+
     @Subscription
     fun registerFakeBlocks(event: RegisterFakeBlocksEvent) = with(event) {
-        register(Blocks.SNOW, "glacite_snow")
-        register(Blocks.SNOW_BLOCK, "glacite_snow_block")
-        register(Blocks.PACKED_ICE, "glacite")
-        registerMultiple(Blocks.INFESTED_STONE, Blocks.STONE, id = "glacite_hard_stone", parent = CrystalHollowBlocks.HARDSTONE) { state, pos ->
+        register(Blocks.SNOW, GLACITE_SNOW)
+        register(Blocks.SNOW_BLOCK, GLACITE_SNOW_BLOCK)
+        register(Blocks.PACKED_ICE, GLACITE_BLOCK)
+        registerMultiple(Blocks.INFESTED_STONE, Blocks.STONE, id = GLACITE_HARD_STONE, parent = CrystalHollowBlocks.HARDSTONE) { state, pos ->
             if (state.block == Blocks.STONE && !SkyBlockIsland.MINESHAFT.inIsland()) return@registerMultiple false
             return@registerMultiple defaultCondition(state, pos)
         }
-        register(Blocks.LIGHT_GRAY_WOOL, "glacite_hard_stone_wool", CrystalHollowBlocks.HARDSTONE)
+        register(Blocks.LIGHT_GRAY_WOOL, GLACITE_HARD_STONE_WOOL, CrystalHollowBlocks.HARDSTONE)
     }
 
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {

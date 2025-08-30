@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.textures
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.config.features.mining.MiningRetexture
 import me.owdding.skyocean.events.RegisterFakeBlocksEvent
 import me.owdding.skyocean.utils.boundingboxes.DwarvenMinesBB
@@ -13,17 +14,28 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 @Module
 object MistBlocks : BlockRetexture() {
 
+    val MIST_SNOW = id("mining/mist/mist_snow")
+    val MIST_SNOW_BLOCK = id("mining/mist/mist_snow")
+    val MIST_GLASS = id("mining/mist/mist_snow")
+    val MIST_GLASS_SECONDARY = id("mining/mist/mist_snow")
+    val MIST_CLAY = id("mining/mist/mist_snow")
+    val MIST_ICE = id("mining/mist/mist_snow")
+    val MIST_CARPET = id("mining/mist/mist_snow")
+    val MIST_LIGHT_BLUE_GLASS_PANE = id("mist/mist_snow")
+    val MIST_BLUE_GLASS_PANE = id("mist/mist_snow")
+
+
     @Subscription
     fun registerFakeBlocks(event: RegisterFakeBlocksEvent) = with(event) {
-        register(Blocks.SNOW, "mist_snow")
-        register(Blocks.SNOW_BLOCK, "mist_snow_block")
-        register(Blocks.WHITE_STAINED_GLASS, "mist_glass")
-        register(Blocks.CLAY, "mist_clay")
-        register(Blocks.ICE, "mist_ice")
-        register(Blocks.LIGHT_BLUE_STAINED_GLASS, "mist_glass_secondary")
-        register(Blocks.WHITE_CARPET, "mist_carpet")
-        register(Blocks.LIGHT_BLUE_STAINED_GLASS_PANE, "mist_light_blue_glass_pane")
-        register(Blocks.BLUE_STAINED_GLASS_PANE, "mist_blue_glass_pane")
+        register(Blocks.SNOW, MIST_SNOW)
+        register(Blocks.SNOW_BLOCK, MIST_SNOW_BLOCK)
+        register(Blocks.WHITE_STAINED_GLASS, MIST_GLASS)
+        register(Blocks.CLAY, MIST_CLAY)
+        register(Blocks.ICE, MIST_ICE)
+        register(Blocks.LIGHT_BLUE_STAINED_GLASS, MIST_GLASS_SECONDARY)
+        register(Blocks.WHITE_CARPET, MIST_CARPET)
+        register(Blocks.LIGHT_BLUE_STAINED_GLASS_PANE, MIST_LIGHT_BLUE_GLASS_PANE)
+        register(Blocks.BLUE_STAINED_GLASS_PANE, MIST_BLUE_GLASS_PANE)
     }
 
     override fun defaultCondition(blockState: BlockState, blockPos: BlockPos): Boolean {
