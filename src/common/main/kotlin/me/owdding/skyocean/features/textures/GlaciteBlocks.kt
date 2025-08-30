@@ -15,20 +15,20 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 @Module
 object GlaciteBlocks : BlockRetexture() {
 
-    val GLACITE_BLOCK = id("mining/glacite/glacite_block")
-    val GLACITE_SNOW = id("mining/glacite/glacite_snow")
-    val GLACITE_SNOW_BLOCK = id("mining/glacite/glacite_snow_block")
-    val GLACITE_HARD_STONE = id("mining/glacite/glacite_hard_stone")
-    val GLACITE_HARD_STONE_CAMPFIRE_MINESHAFT = id("mining/glacite/glacite_hard_stone_campfire")
-    val GLACITE_HARD_STONE_WOOL = id("mining/glacite/glacite_hard_stone_wool")
-    val LOW_TIER_TUNGSTEN = id("mining/glacite/low_tier_tungsten")
-    val LOW_TIER_TUNGSTEN_MINESHAFT = id("mining/glacite/low_tier_tungsten_mineshaft")
-    val LOW_TIER_TUNGSTEN_STAIRS = id("mining/glacite/low_tier_tungsten_stairs")
-    val LOW_TIER_TUNGSTEN_SLAB = id("mining/glacite/low_tier_tungsten_slab")
-    val HIGH_TIER_TUNGSTEN = id("mining/glacite/high_tier_tungsten")
-    val LOW_TIER_UMBER = id("mining/glacite/low_tier_umber")
-    val MID_TIER_UMBER = id("mining/glacite/mid_tier_umber")
-    val HIGH_TIER_UMBER = id("mining/glacite/high_tier_umber")
+    val GLACITE_BLOCK = id("mining/tunnels/glacite_block")
+    val GLACITE_SNOW = id("mining/tunnels/glacite_snow")
+    val GLACITE_SNOW_BLOCK = id("mining/tunnels/glacite_snow_block")
+    val GLACITE_HARD_STONE = id("mining/tunnels/glacite_hard_stone")
+    val GLACITE_HARD_STONE_CAMPFIRE_MINESHAFT = id("mining/tunnels/glacite_hard_stone_campfire")
+    val GLACITE_HARD_STONE_WOOL = id("mining/tunnels/glacite_hard_stone_wool")
+    val LOW_TIER_TUNGSTEN = id("mining/tunnels/low_tier_tungsten")
+    val LOW_TIER_TUNGSTEN_MINESHAFT = id("mining/tunnels/low_tier_tungsten_mineshaft")
+    val LOW_TIER_TUNGSTEN_STAIRS = id("mining/tunnels/low_tier_tungsten_stairs")
+    val LOW_TIER_TUNGSTEN_SLAB = id("mining/tunnels/low_tier_tungsten_slab")
+    val HIGH_TIER_TUNGSTEN = id("mining/tunnels/high_tier_tungsten")
+    val LOW_TIER_UMBER = id("mining/tunnels/low_tier_umber")
+    val MID_TIER_UMBER = id("mining/tunnels/mid_tier_umber")
+    val HIGH_TIER_UMBER = id("mining/tunnels/high_tier_umber")
 
 
     @Subscription
