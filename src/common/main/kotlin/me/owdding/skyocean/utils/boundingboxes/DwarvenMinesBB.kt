@@ -6,7 +6,11 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox
 object DwarvenMinesBB {
     private fun create(pos1: Vec3i, pos2: Vec3i): BoundingBox = BoundingBox.fromCorners(pos1, pos2)
 
-    val GLACITE_TUNNELS = create(Vec3i(-128, 112, 184), Vec3i(127, 174, 479))
+    val GLACITE_TUNNELS = Octree(
+        create(Vec3i(-128, 112, 198), Vec3i(127, 174, 479)),
+        create(Vec3i(-19, 127, 182), Vec3i(26, 166, 197)),
+    )
+    
     val MIST = Octree(
         create(Vec3i(-73, 88, 162), Vec3i(181, 64, 34)),
         create(Vec3i(175, 89, 99), Vec3i(106, 117, 28)),
