@@ -66,7 +66,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
     private val logger: MeowddingLogger = SkyOcean.featureLogger()
     private val modifierCache: MutableMap<String, Pair<ComponentModifier?, TooltipComponentModifier?>> = mutableMapOf()
 
-    val museumRegex = Regex("museum", RegexOption.IGNORE_CASE)
+    val museumRegex = Regex(".*[Mm]useum.*")
 
     private val itemCache = CachedValue { ItemTracker() }
     private val itemTracker by itemCache
@@ -111,7 +111,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
     @OnlyOnSkyBlock
     @Subscription
     fun inventoryChangeEvent(event: InventoryChangeEvent) {
-        if (museumRegex.find(event.title) != null) return
+        if (!museumRegex.matches(event.title)) return
         if (event.item !in Items.GRAY_DYE) return
         if (!MiscConfig.museumArmourPieces && !MiscConfig.itemSearchMuseumIntegration) return
 
