@@ -101,7 +101,6 @@
     <ID>PrintStackTrace:DataStorage.kt$DataStorage$e</ID>
     <ID>PrintStackTrace:ProfileStorage.kt$ProfileStorage$e</ID>
     <ID>ReturnCount:SkyOceanItemId.kt$SkyOceanItemId.Companion$fun unknownType(input: String): SkyOceanItemId?</ID>
-    <ID>SpreadOperator:CombinedSuggestionProvider.kt$CombinedSuggestionProvider$(*futures.toTypedArray())</ID>
     <ID>UnsafeCallOnNullableType:AttributeApi.kt$AttributeApi$attribute.texture()!!</ID>
     <ID>UnsafeCallOnNullableType:ButtonConfigScreen.kt$ButtonConfigScreen$selectedButton!!</ID>
     <ID>UnsafeCallOnNullableType:CalcCommand.kt$CalcCommand$getArgument&lt;Int&gt;("maxLevel")!!</ID>
