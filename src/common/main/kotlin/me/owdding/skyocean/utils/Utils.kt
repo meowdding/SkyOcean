@@ -17,12 +17,17 @@ import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
@@ -36,6 +41,7 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.file.Files
@@ -44,6 +50,7 @@ import java.nio.file.StandardOpenOption
 import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.jvm.javaType
@@ -216,7 +223,33 @@ object Utils {
     }
 
     fun text(text: String, init: MutableComponent.() -> Unit = {}) = Text.of(text, init)
+
+    fun Component.wrapWithNotItalic() = Text.of {
+        append(this@wrapWithNotItalic)
+        this.italic = false
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T, V> V.unsafe(): T = this as T
+
+    @JvmStatic
+    fun <T> nonNullElse(value: T?, default: T?): T? {
+        return value ?: default
+    }
+
+    @JvmStatic
+    fun <T> nonNullElseGet(value: T?, default: () -> T?): T? {
+        return value ?: default()
+    }
+
+    fun <T> ResourceKey<T>.get(): Holder<T>? = SkyOcean.registryLookup.get(this).getOrNull()
+    fun <T> ResourceKey<Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
+    fun <T> ResourceKey<Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
+    fun <T> ResourceKey<Registry<T>>.get(value: ResourceLocation): Holder<T> = this.lookup().listElements().filter {
+        it.unwrapKey().get().location() == value
+    }.findFirst().orElseThrow()
 }
+
 
 @AutoCollect("LateInitModules")
 @Target(AnnotationTarget.CLASS)

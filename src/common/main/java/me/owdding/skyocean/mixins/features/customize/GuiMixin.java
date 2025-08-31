@@ -7,7 +7,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Objects;
@@ -15,12 +14,9 @@ import java.util.Objects;
 @Mixin(Gui.class)
 public class GuiMixin {
 
-    @Shadow
-    private ItemStack lastToolHighlight;
-
     @WrapOperation(method = {"renderSelectedItemName", "tick()V"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getHoverName()Lnet/minecraft/network/chat/Component;"))
     public Component renderSelectedItemName(ItemStack instance, Operation<Component> original) {
-        return Objects.requireNonNullElseGet(CustomItemsHelper.getNameReplacement(lastToolHighlight), () -> original.call(instance));
+        return Objects.requireNonNullElseGet(CustomItemsHelper.getNameReplacement(instance), () -> original.call(instance));
     }
 
 }

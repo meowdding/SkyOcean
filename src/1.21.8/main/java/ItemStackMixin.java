@@ -1,4 +1,6 @@
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.owdding.skyocean.accessors.customize.ItemStackAccessor;
 import me.owdding.skyocean.features.item.custom.CustomItems;
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper;
@@ -20,10 +22,16 @@ import java.util.Objects;
 public class ItemStackMixin implements ItemStackAccessor {
 
     @Unique
+    private final static ThreadLocal<Boolean> COPYING = ThreadLocal.withInitial(() -> false);
+
+    @Unique
     private ItemKey key;
 
     @Inject(method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("RETURN"), order = 1200)
     public void init(ItemLike itemLike, int count, PatchedDataComponentMap patches, CallbackInfo ci) {
+        if (COPYING.get()) {
+            return;
+        }
         key = CustomItems.INSTANCE.getKey(self());
     }
 
@@ -31,6 +39,16 @@ public class ItemStackMixin implements ItemStackAccessor {
     public Component getStylizedHoverName(Component original) {
         return Objects.requireNonNullElse(CustomItemsHelper.getNameReplacement(self()), original);
     }
+
+    @WrapOperation(method = "copy", at = @At(value = "NEW", target = "(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)Lnet/minecraft/world/item/ItemStack;"))
+    private ItemStack copy(ItemLike item, int count, PatchedDataComponentMap patches, Operation<ItemStack> original) {
+        COPYING.set(true);
+        var other = original.call(item, count, patches);
+        ((ItemStackMixin) (Object) other).key = key;
+        COPYING.set(false);
+        return other;
+    }
+
 
     @Unique
     public ItemStack self() {

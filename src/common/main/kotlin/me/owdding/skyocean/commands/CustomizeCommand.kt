@@ -2,18 +2,35 @@ package me.owdding.skyocean.commands
 
 import me.owdding.ktmodules.Module
 import me.owdding.lib.rendering.text.withTextShader
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
-import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.OceanColors
 import me.owdding.skyocean.utils.OceanGradients
+import me.owdding.skyocean.utils.Utils.contains
+import me.owdding.skyocean.utils.Utils.get
 import me.owdding.skyocean.utils.Utils.getArgument
 import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
+import me.owdding.skyocean.utils.commands.HexColorArgumentType
+import me.owdding.skyocean.utils.commands.SkyBlockIdArgumentType
+import me.owdding.skyocean.utils.commands.VirtualResourceArgument
 import net.minecraft.commands.arguments.ComponentArgument
+import net.minecraft.commands.arguments.ResourceKeyArgument
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.equipment.trim.TrimMaterial
+import net.minecraft.world.item.equipment.trim.TrimPattern
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.style
 
@@ -22,33 +39,169 @@ object CustomizeCommand {
 
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
-        event.registerDev("customize") {
-            thenCallback(name = "name name", argument = ComponentArgument.textComponent(context())) {
-                val name = getArgument<Component>("name")!!.copy().apply {
-                    style { withTextShader(OceanGradients.TRANS) }
-                }
-                val item = McClient.self.player?.mainHandItem?.takeUnless { it.isEmpty } ?: run {
-                    text("Not holding any item!") {
-                        this.color = OceanColors.WARNING
-                    }.sendWithPrefix()
-                    return@thenCallback
-                }
-
-                val success = CustomItems.modify(item) {
-                    this[CustomItemDataComponents.NAME] = name
+        event.register("customize") {
+            then("name") {
+                callback {
+                    remove(CustomItemDataComponents.NAME) { item ->
+                        text("Removed custom name from ") {
+                            append(item.hoverName)
+                            append("!")
+                        }
+                    }
                 }
 
-                if (success) {
-                    text("Renamed item to ") {
-                        append(name)
-                        append("!")
-                    }.sendWithPrefix()
-                } else {
-                    text("Unable to rename item!") {
-                        this.color = OceanColors.WARNING
-                    }.sendWithPrefix()
+                thenCallback("name", ComponentArgument.textComponent(context())) {
+                    val name = getArgument<Component>("name")!!.copy().apply {
+                        style { withTextShader(OceanGradients.TRANS) }
+                    }
+                    val item = mainHandItemOrNull() ?: return@thenCallback
+
+                    val success = CustomItems.modify(item) {
+                        this[CustomItemDataComponents.NAME] = name.wrapWithNotItalic()
+                    }
+
+                    if (success) {
+                        text("Renamed item to ") {
+                            append(name)
+                            append("!")
+                        }.sendWithPrefix()
+                    } else {
+                        unableToCustomize()
+                    }
                 }
             }
+            then("model") {
+                callback {
+                    remove(CustomItemDataComponents.MODEL) { item, model ->
+                        text("Removed custom model $model from item!")
+                    }
+                }
+
+                thenCallback("skyblock_model", SkyBlockIdArgumentType()) {
+                    val item = mainHandItemOrNull() ?: return@thenCallback
+                    val itemId = getArgument<SkyOceanItemId>("skyblock_model")!!
+
+                    val success = CustomItems.modify(item) {
+                        this[CustomItemDataComponents.MODEL] = SkyblockModel(itemId)
+
+                        if (itemId.toItem() in Items.PLAYER_HEAD) {
+                            this[CustomItemDataComponents.SKIN] = SkyblockSkin(itemId)
+                        }
+                    }
+
+                    if (success) {
+                        text("Set item model to ") {
+                            append(itemId.id)
+                            append("!")
+                        }.sendWithPrefix()
+                    } else {
+                        unableToCustomize()
+                    }
+                }
+                val key = (McClient.self.modelManager as ModelManagerAccessor).bakedItemModels().keys
+                thenCallback("vanilla_model", VirtualResourceArgument(key)) {
+                    val item = mainHandItemOrNull() ?: return@thenCallback
+                    val model = getArgument<ResourceLocation>("vanilla_model")!!
+
+                    val success = CustomItems.modify(item) {
+                        this[CustomItemDataComponents.MODEL] = StaticModel(model)
+                    }
+                    if (success) {
+                        text("Set item model to ") {
+                            append(model.toString())
+                            append("!")
+                        }.sendWithPrefix()
+                    } else {
+                        unableToCustomize()
+                    }
+                }
+            }
+            then("armor_trim") {
+                callback {
+                    remove(CustomItemDataComponents.ARMOR_TRIM) { item, model ->
+                        text("Removed armor trim from item!")
+                    }
+                }
+                then("material", ResourceKeyArgument(Registries.TRIM_MATERIAL)) {
+                    thenCallback("pattern", ResourceKeyArgument(Registries.TRIM_PATTERN)) {
+                        val item = mainHandItemOrNull() ?: return@thenCallback
+                        val material = getArgument<ResourceKey<TrimMaterial>>("material")!!.get()
+                        val pattern = getArgument<ResourceKey<TrimPattern>>("pattern")!!.get()
+
+                        val trimMaterial = material?.value() ?: return@thenCallback
+                        val trimPattern = pattern?.value() ?: return@thenCallback
+
+                        val success = CustomItems.modify(item) {
+                            this[CustomItemDataComponents.ARMOR_TRIM] = ArmorTrim(trimMaterial, trimPattern)
+                        }
+                        if (success) {
+                            text("Successfully set armor trim!").sendWithPrefix()
+                        } else {
+                            unableToCustomize()
+                        }
+                    }
+                }
+            }
+            then("color") {
+                callback {
+                    remove(CustomItemDataComponents.COLOR) {
+                        text("Removed color from item!")
+                    }
+                }
+
+                thenCallback("hex_color", HexColorArgumentType()) {
+                    val item = mainHandItemOrNull() ?: return@thenCallback
+                    val color = getArgument<Int>("hex_color")!!
+
+                    val success = CustomItems.modify(item) {
+                        this[CustomItemDataComponents.COLOR] = StaticItemColor(color)
+                    }
+                    if (success) {
+                        text("Successfully set color to ") {
+                            append("#${color.toString(16).padStart(6, '0')}") {
+                                this.color = color
+                            }
+                            append("!")
+                        }.sendWithPrefix()
+                    } else {
+                        unableToCustomize()
+                    }
+                }
+            }
+        }
+    }
+
+    fun remove(type: CustomItemComponent<*>, messageProvider: (item: ItemStack) -> Component) = remove(type, { item, _ -> messageProvider(item) })
+
+    fun <T> remove(type: CustomItemComponent<T>, messageProvider: (item: ItemStack, oldData: T?) -> Component) {
+        val item = mainHandItemOrNull() ?: return@remove
+
+        var oldData: T? = null
+        val success = CustomItems.modify(item) {
+            oldData = this[type]
+            this[type] = null
+        }
+
+        if (success) {
+            messageProvider(item, oldData).sendWithPrefix()
+        } else {
+            unableToCustomize()
+        }
+    }
+
+    fun unableToCustomize() {
+
+        text("Unable to customize item!") {
+            this.color = OceanColors.WARNING
+        }.sendWithPrefix()
+    }
+
+    internal fun mainHandItemOrNull(): ItemStack? {
+        return McClient.self.player?.mainHandItem?.takeUnless { it.isEmpty } ?: run {
+            text("Not holding any item!") {
+                this.color = OceanColors.WARNING
+            }.sendWithPrefix()
+            return null
         }
     }
 

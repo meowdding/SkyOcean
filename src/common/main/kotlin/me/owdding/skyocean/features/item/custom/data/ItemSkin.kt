@@ -6,8 +6,11 @@ import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.utils.Utils.simpleCacheLoader
+import net.minecraft.core.component.DataComponents
+import net.minecraft.world.item.component.ResolvableProfile
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.time.Duration.Companion.minutes
@@ -16,6 +19,7 @@ import kotlin.time.toJavaDuration
 @GenerateDispatchCodec(ItemSkin::class)
 enum class ItemSkinType(override val type: KClass<out ItemSkin>) : DispatchHelper<ItemSkin> {
     STATIC(StaticSkin::class),
+    SKYBLOCK_SKIN(SkyblockSkin::class)
     ;
 
     companion object {
@@ -23,7 +27,7 @@ enum class ItemSkinType(override val type: KClass<out ItemSkin>) : DispatchHelpe
     }
 }
 
-val skinCache: LoadingCache<String, GameProfile> = CacheBuilder.newBuilder()
+val skinCache: LoadingCache<String, ResolvableProfile> = CacheBuilder.newBuilder()
     .maximumSize(500)
     .expireAfterAccess(10.minutes.toJavaDuration())
     .expireAfterWrite(10.minutes.toJavaDuration())
@@ -31,7 +35,7 @@ val skinCache: LoadingCache<String, GameProfile> = CacheBuilder.newBuilder()
         simpleCacheLoader { skin ->
             val profile = GameProfile(UUID.randomUUID(), "a")
             profile.properties.put("textures", Property("textures", skin))
-            profile
+            ResolvableProfile(profile)
         },
     )
 
@@ -41,11 +45,20 @@ data class StaticSkin(
 ) : ItemSkin {
     override val type: ItemSkinType = ItemSkinType.STATIC
 
-    override fun getGameProfile(): GameProfile = skinCache[skin]
+    override fun getResolvableProfile(): ResolvableProfile = skinCache[skin]
+}
+
+@GenerateCodec
+data class SkyblockSkin(
+    val item: SkyOceanItemId,
+) : ItemSkin {
+    override val type: ItemSkinType = ItemSkinType.SKYBLOCK_SKIN
+
+    override fun getResolvableProfile(): ResolvableProfile? = item.toItem().get(DataComponents.PROFILE)
 }
 
 interface ItemSkin {
     val type: ItemSkinType
 
-    fun getGameProfile(): GameProfile
+    fun getResolvableProfile(): ResolvableProfile?
 }

@@ -37,6 +37,7 @@ object CustomItems {
         context(itemStack) {
             getOrPut(key).init()
         }
+        storage.save()
         return true
     }
 

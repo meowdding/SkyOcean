@@ -16,6 +16,8 @@ import me.owdding.skyocean.helpers.MixinHelper
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.core.HolderLookup
+import net.minecraft.data.registries.VanillaRegistries
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.repolib.api.RepoAPI
@@ -34,6 +36,7 @@ import java.net.URI
 @Module
 object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
 
+    val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createLookup() }
     val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
     val MOD_ID: String = SELF.metadata.id
     val VERSION: String = SELF.metadata.version.friendlyString

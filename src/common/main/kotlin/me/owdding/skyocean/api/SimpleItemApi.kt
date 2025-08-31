@@ -32,36 +32,43 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
 
     private val cache: MutableMap<SkyOceanItemId, ItemStack?> = mutableMapOf()
     private val nameCache: MutableMap<String, SkyOceanItemId> = mutableMapOf()
+    private val allIds: MutableList<SkyOceanItemId> = mutableListOf()
+
+    fun Iterable<Pair<String, SkyOceanItemId>>.saveIds() = this.apply {
+        allIds.addAll(this.map { (_, id) -> id })
+    }
 
     init {
         val start = currentInstant()
-        RepoAPI.pets().pets().entries.associate { (id, data) -> data.name() to pet(id) }
+        RepoAPI.pets().pets().entries.map { (id, data) -> data.name() to pet(id) }
+            .saveIds()
+            .toMap()
             .let(nameCache::putAll)
 
         RepoAPI.runes().runes().entries.flatMap { (id, data) ->
             data.map { rune ->
                 rune.name().stripColor() to rune("$id:${rune.tier()}")
             }
-        }.toMap().let(nameCache::putAll)
+        }.saveIds().toMap().let(nameCache::putAll)
 
         RepoAPI.enchantments().enchantments().flatMap { (id, enchantments) ->
             enchantments.levels().map { (level, enchantment) ->
                 "${enchantments.name()} ${enchantment.literalLevel()}" to enchantment("$id:${enchantment.level()}")
             }
-        }.toMap().let(nameCache::putAll)
+        }.saveIds().toMap().let(nameCache::putAll)
 
         RepoAPI.attributes().attributes().flatMap { (id, attribute) ->
             listOf(
                 attribute.name() to attribute(attribute.id()),
                 attribute.shardName() to attribute(attribute.id()),
             )
-        }.toMap().let(nameCache::putAll)
+        }.saveIds().toMap().let(nameCache::putAll)
 
         RepoAPI.items().items().entries.mapNotNull { (id, element) ->
             val components =
                 element.getPath("['components'].['minecraft:custom_name'].['text']") ?: return@mapNotNull null
             components.asString.stripColor() to item(id)
-        }.toMap().let(nameCache::putAll)
+        }.saveIds().toMap().let(nameCache::putAll)
 
         val newCache = nameCache.mapKeys { (key) -> key.lowercase().stripColor() }
             .entries.flatMap { (key, value) ->
@@ -72,7 +79,7 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
             }.distinct().toMap()
         nameCache.clear()
         nameCache.putAll(newCache)
-        trace("Cached ${nameCache.size} item names in ${start.since().toReadableTime(allowMs = true)}")
+        trace("Cached ${nameCache.size} item names and ${allIds.size} ids in ${start.since().toReadableTime(allowMs = true)}")
     }
 
     fun findIdByName(name: String) = nameCache[name.lowercase().stripColor()]
@@ -181,5 +188,7 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
     fun getAttributeById(id: SkyOceanItemId): ItemStack = getAttributeByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown attribute: $id")
     }
+
+    fun getAllIds(): List<SkyOceanItemId> = allIds
 
 }

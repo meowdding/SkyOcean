@@ -9,20 +9,28 @@ import me.owdding.ktcodecs.NamedCodec
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.CodecHelpers
+import me.owdding.skyocean.utils.Utils.get
+import me.owdding.skyocean.utils.Utils.unsafe
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.equipment.trim.TrimMaterial
 import net.minecraft.world.item.equipment.trim.TrimPattern
+import net.minecraft.world.item.equipment.trim.ArmorTrim as VanillaArmorTrim
 
 @GenerateCodec
 data class CustomItemData(
     val key: ItemKey,
     @NamedCodec("custom_item_component_map") val data: MutableMap<CustomItemComponent<*>, Any?> = mutableMapOf(),
 ) {
-    @Suppress("UNCHECKED_CAST")
-    operator fun <T> get(component: CustomItemComponent<T>): T? = data[component] as? T
+    operator fun <T> get(component: CustomItemComponent<T>): T? = data[component].unsafe()
 
     operator fun <T> set(component: CustomItemComponent<T>, value: T?) {
+        if (value == null) {
+            data.remove(component)
+            return
+        }
+
         data[component] = value as? Any
     }
 }
@@ -34,16 +42,40 @@ data class CustomItemComponent<T>(
 
 @GenerateCodec
 data class ArmorTrim(
-    val trimMaterial: TrimMaterial,
-    val trimPattern: TrimPattern,
-)
+    val trimMaterial: ResourceLocation,
+    val trimPattern: ResourceLocation,
+) {
+    constructor(trimMaterial: TrimMaterial, trimPattern: TrimPattern) : this(
+        Registries.TRIM_MATERIAL.get(trimMaterial).unwrapKey().get().location(),
+        Registries.TRIM_PATTERN.get(trimPattern).unwrapKey().get().location(),
+    )
+
+    val trim by lazy {
+        getOrCreate(
+            Registries.TRIM_MATERIAL.get(trimMaterial).value(),
+            Registries.TRIM_PATTERN.get(trimPattern).value(),
+        )
+    }
+
+    companion object {
+        val cache = mutableMapOf<Pair<TrimMaterial, TrimPattern>, VanillaArmorTrim>()
+
+        fun getOrCreate(trimMaterial: TrimMaterial, trimPattern: TrimPattern) = cache.getOrPut(trimMaterial to trimPattern) {
+            VanillaArmorTrim(
+                Registries.TRIM_MATERIAL.get(trimMaterial),
+                Registries.TRIM_PATTERN.get(trimPattern),
+            )
+        }
+    }
+}
 
 object CustomItemDataComponents {
     val registry = mutableMapOf<ResourceLocation, CustomItemComponent<*>>()
     val COMPONENT_CODEC: Codec<CustomItemComponent<*>> = ResourceLocation.CODEC.xmap({ registry[it] }, { it.id })
 
     @IncludedCodec(named = "custom_item_component_map")
-    val COMPONENT_MAP_CODEC: Codec<MutableMap<CustomItemComponent<*>, Any?>> = DispatchedMapCodec(COMPONENT_CODEC, CustomItemComponent<*>::codec)
+    val COMPONENT_MAP_CODEC: Codec<MutableMap<CustomItemComponent<*>, Any?>> =
+        DispatchedMapCodec(COMPONENT_CODEC, CustomItemComponent<*>::codec).xmap({ HashMap(it) }, { it })
 
     val MODEL = register("model", SkyOceanCodecs.ItemModelCodec)
     val NAME: CustomItemComponent<Component> = register("name", CodecHelpers.CUSTOM_COMPONENT_CODEC)
