@@ -35,7 +35,7 @@ object GlaciteBlocks : BlockRetexture() {
         register(Blocks.SNOW, GLACITE_SNOW)
         register(Blocks.SNOW_BLOCK, GLACITE_SNOW_BLOCK)
         register(Blocks.PACKED_ICE, GLACITE_BLOCK)
-        registerMultiple(Blocks.INFESTED_STONE, Blocks.STONE, id = GLACITE_HARD_STONE, parent = CrystalHollowBlocks.HARDSTONE) { state, pos ->
+        registerMultiple(Blocks.INFESTED_STONE, Blocks.STONE, id = GLACITE_HARD_STONE) { state, pos ->
             if (state.block == Blocks.STONE && !SkyBlockIsland.MINESHAFT.inIsland()) return@registerMultiple false
             return@registerMultiple defaultCondition(state, pos)
         }
