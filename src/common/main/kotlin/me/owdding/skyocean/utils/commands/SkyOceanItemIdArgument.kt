@@ -16,14 +16,14 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.CompletableFuture
 
-data class SkyBlockIdArgumentType(val filter: (SkyOceanItemId) -> Boolean = { true }) : ArgumentType<SkyOceanItemId>, SkyOceanSuggestionProvider {
+data class SkyOceanItemIdArgument(val skyblockIds: List<SkyOceanItemId> = SimpleItemApi.getAllIds(), val filter: (SkyOceanItemId) -> Boolean = { true }) :
+    ArgumentType<SkyOceanItemId>, SkyOceanSuggestionProvider {
     private val identifierNotFound: DynamicCommandExceptionType = DynamicCommandExceptionType { id: Any? ->
         ChatUtils.prefix.copy().append("SkyBlock id ") {
             append("$id") { this.color = TextColor.GOLD }
             append(" not found")
         }
     }
-    val skyblockIds = SimpleItemApi.getAllIds()
 
     override fun parse(reader: StringReader): SkyOceanItemId {
         val cursor = reader.cursor

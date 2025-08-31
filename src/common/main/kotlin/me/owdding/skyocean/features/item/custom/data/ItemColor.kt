@@ -5,6 +5,7 @@ import com.google.common.cache.LoadingCache
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.skyocean.generated.DispatchHelper
+import me.owdding.skyocean.repo.customization.DyeData
 import me.owdding.skyocean.utils.Utils.simpleCacheLoader
 import net.minecraft.world.item.component.DyedItemColor
 import kotlin.reflect.KClass
@@ -13,7 +14,9 @@ import kotlin.time.toJavaDuration
 
 @GenerateDispatchCodec(ItemColor::class)
 enum class ItemColorType(override val type: KClass<out ItemColor>) : DispatchHelper<ItemColor> {
-    STATIC(StaticItemColor::class)
+    STATIC(StaticItemColor::class),
+    SKYBLOCK_DYE(SkyBlockDye::class),
+    ANIMATED_SKYBLOCK_DYE(AnimatedSkyBlockDye::class)
     ;
 
     companion object {
@@ -33,6 +36,21 @@ data class StaticItemColor(val colorCode: Int) : ItemColor {
 
     override fun getColor() = colorCode
 }
+
+@GenerateCodec
+data class SkyBlockDye(val id: String) : ItemColor {
+    override val type: ItemColorType = ItemColorType.SKYBLOCK_DYE
+
+    override fun getColor(): Int = DyeData.staticDyes[id]!!
+}
+
+@GenerateCodec
+data class AnimatedSkyBlockDye(val id: String) : ItemColor {
+    override val type: ItemColorType = ItemColorType.ANIMATED_SKYBLOCK_DYE
+
+    override fun getColor(): Int = DyeData.getAnimated(id)
+}
+
 
 interface ItemColor {
     val type: ItemColorType

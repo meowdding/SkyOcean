@@ -8,6 +8,7 @@ import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.mixins.ModelManagerAccessor
+import me.owdding.skyocean.repo.customization.DyeData
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.OceanColors
 import me.owdding.skyocean.utils.OceanGradients
@@ -17,7 +18,7 @@ import me.owdding.skyocean.utils.Utils.getArgument
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
 import me.owdding.skyocean.utils.commands.HexColorArgumentType
-import me.owdding.skyocean.utils.commands.SkyBlockIdArgumentType
+import me.owdding.skyocean.utils.commands.SkyOceanItemIdArgument
 import me.owdding.skyocean.utils.commands.VirtualResourceArgument
 import net.minecraft.commands.arguments.ComponentArgument
 import net.minecraft.commands.arguments.ResourceKeyArgument
@@ -79,7 +80,7 @@ object CustomizeCommand {
                     }
                 }
 
-                thenCallback("skyblock_model", SkyBlockIdArgumentType()) {
+                thenCallback("skyblock_model", SkyOceanItemIdArgument()) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
                     val itemId = getArgument<SkyOceanItemId>("skyblock_model")!!
 
@@ -163,6 +164,39 @@ object CustomizeCommand {
                             append("#${color.toString(16).padStart(6, '0')}") {
                                 this.color = color
                             }
+                            append("!")
+                        }.sendWithPrefix()
+                    } else {
+                        unableToCustomize()
+                    }
+                }
+
+                thenCallback("static_color", SkyOceanItemIdArgument(DyeData.staticDyes.keys.map { SkyOceanItemId.item(it.lowercase()) })) {
+                    val item = mainHandItemOrNull() ?: return@thenCallback
+                    val color = getArgument<SkyOceanItemId>("static_color")!!
+
+                    val success = CustomItems.modify(item) {
+                        this[CustomItemDataComponents.COLOR] = SkyBlockDye(color.cleanId)
+                    }
+                    if (success) {
+                        text("Successfully set color to ") {
+                            append(color.toItem().hoverName)
+                            append("!")
+                        }.sendWithPrefix()
+                    } else {
+                        unableToCustomize()
+                    }
+                }
+                thenCallback("animated_color", SkyOceanItemIdArgument(DyeData.animatedDyes.keys.map { SkyOceanItemId.item(it.lowercase()) })) {
+                    val item = mainHandItemOrNull() ?: return@thenCallback
+                    val color = getArgument<SkyOceanItemId>("animated_color")!!
+
+                    val success = CustomItems.modify(item) {
+                        this[CustomItemDataComponents.COLOR] = AnimatedSkyBlockDye(color.cleanId)
+                    }
+                    if (success) {
+                        text("Successfully set color to ") {
+                            append(color.toItem().hoverName)
                             append("!")
                         }.sendWithPrefix()
                     } else {

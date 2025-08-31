@@ -9,9 +9,30 @@ import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.runs.MinecraftRunConfiguration
 import net.msrandom.stubs.GenerateStubApi
+import org.gradle.api.artifacts.MinimalExternalModuleDependency
+import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.api.tasks.JavaExec
+import org.gradle.internal.impldep.org.apache.http.client.methods.RequestBuilder.options
+import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.include
+import org.gradle.internal.tools.api.impl.JavaApiMemberWriter.adapter
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.kotlin.dsl.cloche
+import org.gradle.kotlin.dsl.compactingResources
+import org.gradle.kotlin.dsl.idea
+import org.gradle.kotlin.dsl.invoke
+import org.gradle.kotlin.dsl.java
+import org.gradle.kotlin.dsl.ksp
+import org.gradle.kotlin.dsl.libs
+import org.gradle.kotlin.dsl.meowdding
+import org.gradle.kotlin.dsl.minecraftRuns
+import org.gradle.kotlin.dsl.repo
+import org.gradle.language.jvm.tasks.ProcessResources
+import org.gradle.model.internal.core.ModelNodes.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import sun.jvmstat.monitor.MonitoredVmUtil.jvmArgs
+import sun.jvmstat.monitor.MonitoredVmUtil.mainClass
 import java.nio.file.StandardOpenOption
 import java.util.zip.ZipFile
 import kotlin.io.path.*
@@ -236,6 +257,7 @@ compactingResources {
     }
 
     compactToArray("recipes")
+    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/dyes.json", "dyes.json")
 }
 
 repo {
