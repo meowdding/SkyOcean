@@ -1,5 +1,6 @@
 package me.owdding.skyocean.commands
 
+import com.mojang.brigadier.arguments.BoolArgumentType
 import me.owdding.ktmodules.Module
 import me.owdding.lib.rendering.text.withTextShader
 import me.owdding.skyocean.api.SkyOceanItemId
@@ -31,6 +32,7 @@ import net.minecraft.world.item.equipment.trim.TrimPattern
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.style
 
@@ -161,6 +163,32 @@ object CustomizeCommand {
                             append("#${color.toString(16).padStart(6, '0')}") {
                                 this.color = color
                             }
+                            append("!")
+                        }.sendWithPrefix()
+                    } else {
+                        unableToCustomize()
+                    }
+                }
+            }
+
+            then("enchantment_glint") {
+                callback {
+                    remove(CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE) {
+                        text("Removed enchantment glint override!")
+                    }
+                }
+
+                thenCallback("state", BoolArgumentType.bool()) {
+                    val item = mainHandItemOrNull() ?: return@thenCallback
+                    val state = getArgument<Boolean>("state")!!
+
+                    val success = CustomItems.modify(item) {
+                        this[CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE] = state
+                    }
+                    if (success) {
+                        text("Toggled enchantment glint override ") {
+                            if (state) append("on") { this.color = TextColor.GREEN }
+                            else append("off") { color = TextColor.RED }
                             append("!")
                         }.sendWithPrefix()
                     } else {
