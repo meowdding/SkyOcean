@@ -8,6 +8,7 @@ import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.DispatchHelper
+import me.owdding.skyocean.repo.customization.AnimatedSkulls
 import me.owdding.skyocean.utils.Utils.simpleCacheLoader
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.component.ResolvableProfile
@@ -19,7 +20,8 @@ import kotlin.time.toJavaDuration
 @GenerateDispatchCodec(ItemSkin::class)
 enum class ItemSkinType(override val type: KClass<out ItemSkin>) : DispatchHelper<ItemSkin> {
     STATIC(StaticSkin::class),
-    SKYBLOCK_SKIN(SkyblockSkin::class)
+    SKYBLOCK_SKIN(SkyblockSkin::class),
+    ANIMATED_SKYBLOCK_SKIN(AnimatedSkyblockSkin::class),
     ;
 
     companion object {
@@ -55,6 +57,17 @@ data class SkyblockSkin(
     override val type: ItemSkinType = ItemSkinType.SKYBLOCK_SKIN
 
     override fun getResolvableProfile(): ResolvableProfile? = item.toItem().get(DataComponents.PROFILE)
+}
+
+@GenerateCodec
+data class AnimatedSkyblockSkin(
+    val id: SkyOceanItemId,
+) : ItemSkin {
+    val skin by lazy { AnimatedSkulls.skins[id] }
+    override val type: ItemSkinType = ItemSkinType.ANIMATED_SKYBLOCK_SKIN
+
+    override fun getResolvableProfile(): ResolvableProfile? = skin?.let { skinCache[it.getTexture()] }
+
 }
 
 interface ItemSkin {

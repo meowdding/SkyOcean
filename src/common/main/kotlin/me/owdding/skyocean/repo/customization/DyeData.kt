@@ -11,7 +11,6 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 @Module
 object DyeData {
     val animatedDyes: MutableMap<String, List<Int>> = mutableMapOf()
-
     val staticDyes: MutableMap<String, Int> = mutableMapOf()
 
     init {

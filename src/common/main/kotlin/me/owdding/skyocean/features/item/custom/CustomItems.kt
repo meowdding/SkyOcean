@@ -10,13 +10,6 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
 
-/**
- * change item model
- * change name
- * trims maybe
- * color for leather armor for surte/sb dye integration would be awesome
- * head texture + skin textures/variants
- */
 @Module
 object CustomItems {
 

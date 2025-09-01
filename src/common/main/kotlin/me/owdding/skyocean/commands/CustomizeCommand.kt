@@ -8,6 +8,7 @@ import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.mixins.ModelManagerAccessor
+import me.owdding.skyocean.repo.customization.AnimatedSkulls
 import me.owdding.skyocean.repo.customization.DyeData
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.OceanColors
@@ -75,7 +76,7 @@ object CustomizeCommand {
             }
             then("model") {
                 callback {
-                    remove(CustomItemDataComponents.MODEL) { item, model ->
+                    remove(CustomItemDataComponents.MODEL) { _, model ->
                         text("Removed custom model $model from item!")
                     }
                 }
@@ -121,7 +122,7 @@ object CustomizeCommand {
             }
             then("armor_trim") {
                 callback {
-                    remove(CustomItemDataComponents.ARMOR_TRIM) { item, model ->
+                    remove(CustomItemDataComponents.ARMOR_TRIM) { _ ->
                         text("Removed armor trim from item!")
                     }
                 }
@@ -230,13 +231,36 @@ object CustomizeCommand {
                     }
                 }
             }
+
+            then("skin") {
+                callback {
+                    remove(CustomItemDataComponents.SKIN) {
+                        text("Removed skin override!")
+                    }
+
+                }
+
+                thenCallback("animated_skull", SkyOceanItemIdArgument(AnimatedSkulls.skins.keys)) {
+                    val item = mainHandItemOrNull() ?: return@thenCallback
+                    val skin = getArgument<SkyOceanItemId>("animated_skull")!!
+
+                    val success = CustomItems.modify(item) {
+                        this[CustomItemDataComponents.SKIN] = AnimatedSkyblockSkin(skin)
+                    }
+                    if (success) {
+                        text("Todo").sendWithPrefix()
+                    } else {
+                        unableToCustomize()
+                    }
+                }
+            }
         }
     }
 
     fun remove(type: CustomItemComponent<*>, messageProvider: (item: ItemStack) -> Component) = remove(type, { item, _ -> messageProvider(item) })
 
     fun <T> remove(type: CustomItemComponent<T>, messageProvider: (item: ItemStack, oldData: T?) -> Component) {
-        val item = mainHandItemOrNull() ?: return@remove
+        val item = mainHandItemOrNull() ?: return
 
         var oldData: T? = null
         val success = CustomItems.modify(item) {

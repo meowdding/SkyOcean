@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.CompletableFuture
 
-data class SkyOceanItemIdArgument(val skyblockIds: List<SkyOceanItemId> = SimpleItemApi.getAllIds(), val filter: (SkyOceanItemId) -> Boolean = { true }) :
+data class SkyOceanItemIdArgument(val skyblockIds: Iterable<SkyOceanItemId> = SimpleItemApi.getAllIds(), val filter: (SkyOceanItemId) -> Boolean = { true }) :
     ArgumentType<SkyOceanItemId>, SkyOceanSuggestionProvider {
     private val identifierNotFound: DynamicCommandExceptionType = DynamicCommandExceptionType { id: Any? ->
         ChatUtils.prefix.copy().append("SkyBlock id ") {

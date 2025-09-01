@@ -15,8 +15,6 @@ import net.minecraft.network.chat.contents.*
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.equipment.trim.TrimMaterial
-import net.minecraft.world.item.equipment.trim.TrimPattern
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.concurrent.CopyOnWriteArrayList
@@ -43,11 +41,8 @@ object CodecHelpers {
     @IncludedCodec
     val COMPONENT_CODEC: Codec<Component> = ComponentSerialization.CODEC
 
-    @IncludedCodec
-    val TRIM_MATERIAL_CODEC: Codec<TrimMaterial> = TrimMaterial.DIRECT_CODEC
-
-    @IncludedCodec
-    val TRIM_PATTERN_CODEC: Codec<TrimPattern> = TrimPattern.DIRECT_CODEC
+    @IncludedCodec(keyable = true, named = "str_low")
+    val STRING_LOWER: Codec<String> = Codec.STRING.xmap({ it.lowercase() }, { it })
 
     val STYLE_WITH_SHADER_CODEC: MapCodec<Style> = RecordCodecBuilder.mapCodec {
         it.group(
