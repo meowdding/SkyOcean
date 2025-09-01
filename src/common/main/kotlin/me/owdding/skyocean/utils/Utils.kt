@@ -8,6 +8,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
 import me.owdding.ktmodules.AutoCollect
@@ -248,6 +249,8 @@ object Utils {
     fun <T> ResourceKey<Registry<T>>.get(value: ResourceLocation): Holder<T> = this.lookup().listElements().filter {
         it.unwrapKey().get().location() == value
     }.findFirst().orElseThrow()
+
+    fun <T> DataResult<T>.resultOrError() = error().map { it.message() }.orElse(this.result().get().toString())
 }
 
 

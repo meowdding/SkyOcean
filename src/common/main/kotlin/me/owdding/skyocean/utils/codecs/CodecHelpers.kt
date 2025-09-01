@@ -1,4 +1,4 @@
-package me.owdding.skyocean.utils
+package me.owdding.skyocean.utils.codecs
 
 import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
@@ -9,6 +9,7 @@ import me.owdding.lib.helper.TextShaderHolder
 import me.owdding.lib.rendering.text.TextShaders
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.PackMetadata
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.*
 import net.minecraft.network.chat.contents.*
@@ -27,7 +28,10 @@ object CodecHelpers {
 
     internal inline fun <reified T> list() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
 
-    fun <T> copyOnWriteList(original: Codec<T>): Codec<CopyOnWriteArrayList<T>> = original.listOf().xmap({ CopyOnWriteArrayList(it) }, { it })
+    fun <T> copyOnWriteList(original: Codec<T>): Codec<CopyOnWriteArrayList<T>> = original.listOf().xmap(
+        { CopyOnWriteArrayList(it) },
+        { it },
+    )
 
     @IncludedCodec
     val ITEM_STACK_CODEC: Codec<ItemStack> = ItemStack.OPTIONAL_CODEC
@@ -76,7 +80,13 @@ object CodecHelpers {
                 STYLE_WITH_SHADER_CODEC.forGetter { it.style },
             ).apply(
                 it,
-            ) { contents: ComponentContents, siblings: List<Component>, style: Style -> MutableComponent(contents, siblings, style) }
+            ) { contents: ComponentContents, siblings: List<Component>, style: Style ->
+                MutableComponent(
+                    contents,
+                    siblings,
+                    style,
+                )
+            }
         }
 
         return@recursive Codec.either(

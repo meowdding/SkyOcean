@@ -2,15 +2,15 @@ package me.owdding.skyocean.features.item.custom.data
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
-import com.mojang.serialization.codecs.DispatchedMapCodec
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.NamedCodec
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.CodecHelpers
 import me.owdding.skyocean.utils.Utils.get
 import me.owdding.skyocean.utils.Utils.unsafeCast
+import me.owdding.skyocean.utils.codecs.CodecHelpers
+import me.owdding.skyocean.utils.codecs.LenientDispatchedMapCodec
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -50,12 +50,11 @@ data class ArmorTrim(
         Registries.TRIM_PATTERN.get(trimPattern).unwrapKey().get().location(),
     )
 
-    val trim by lazy {
-        getOrCreate(
-            Registries.TRIM_MATERIAL.get(trimMaterial).value(),
-            Registries.TRIM_PATTERN.get(trimPattern).value(),
-        )
-    }
+    val trim = getOrCreate(
+        Registries.TRIM_MATERIAL.get(trimMaterial).value(),
+        Registries.TRIM_PATTERN.get(trimPattern).value(),
+    )
+
 
     companion object {
         val cache = mutableMapOf<Pair<TrimMaterial, TrimPattern>, VanillaArmorTrim>()
@@ -74,8 +73,10 @@ object CustomItemDataComponents {
     val COMPONENT_CODEC: Codec<CustomItemComponent<*>> = ResourceLocation.CODEC.xmap({ registry[it] }, { it.id })
 
     @IncludedCodec(named = "custom_item_component_map")
-    val COMPONENT_MAP_CODEC: Codec<MutableMap<CustomItemComponent<*>, Any?>> =
-        DispatchedMapCodec(COMPONENT_CODEC, CustomItemComponent<*>::codec).xmap({ HashMap(it) }, { it })
+    val COMPONENT_MAP_CODEC: Codec<MutableMap<CustomItemComponent<*>, Any?>> = LenientDispatchedMapCodec(
+        COMPONENT_CODEC,
+        CustomItemComponent<*>::codec,
+    ).xmap({ HashMap(it) }, { it })
 
     val MODEL = register("model", SkyOceanCodecs.ItemModelCodec)
     val NAME: CustomItemComponent<Component> = register("name", CodecHelpers.CUSTOM_COMPONENT_CODEC)

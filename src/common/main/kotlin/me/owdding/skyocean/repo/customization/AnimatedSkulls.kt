@@ -9,8 +9,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.CodecHelpers
 import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.codecs.CodecHelpers
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import kotlin.math.max

@@ -4,7 +4,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.accessors.customize.ItemStackAccessor
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
 import me.owdding.skyocean.features.item.custom.data.*
-import me.owdding.skyocean.utils.CodecHelpers
+import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.DataStorage
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
