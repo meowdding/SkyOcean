@@ -14,13 +14,17 @@ object DyeData {
     val staticDyes: MutableMap<String, Int> = mutableMapOf()
 
     init {
-        val element = Utils.loadFromRepo<JsonElement>("dyes")!!.asJsonObject
+        runCatching {
+            val element = Utils.loadFromRepo<JsonElement>("dyes")!!.asJsonObject
 
-        val lower: Codec<String> = Codec.STRING.xmap({ it.lowercase() }, { it })
-        val hexCodec: Codec<Int> = Codec.STRING.xmap({ it.removePrefix("#").toInt(16) }, { "#${it.toString(16)}" })
+            val lower: Codec<String> = Codec.STRING.xmap({ it.lowercase() }, { it })
+            val hexCodec: Codec<Int> = Codec.STRING.xmap({ it.removePrefix("#").toInt(16) }, { "#${it.toString(16)}" })
 
-        animatedDyes.putAll(element.get("animated").toDataOrThrow(CodecUtils.map(lower, hexCodec.listOf())))
-        staticDyes.putAll(element.get("static").toDataOrThrow(CodecUtils.map(lower, hexCodec)))
+            animatedDyes.putAll(element.get("animated").toDataOrThrow(CodecUtils.map(lower, hexCodec.listOf())))
+            staticDyes.putAll(element.get("static").toDataOrThrow(CodecUtils.map(lower, hexCodec)))
+        }.onFailure {
+            throw RuntimeException("Failed to load dye data!", it)
+        }
     }
 
     fun getAnimated(id: String): Int {

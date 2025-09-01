@@ -28,16 +28,20 @@ object AnimatedSkulls {
     val textureCodec: Codec<List<String>> = Codec.STRING.xmap({ it.substringAfter(':') }, { it }).listOf()
 
     init {
-        val skulls = Utils.loadFromRepo<JsonElement>("skulls")!!.asJsonObject
-        ids.addAll(skulls.get("help").toDataOrThrow(CodecUtils.map(CodecHelpers.STRING_LOWER, CodecUtils.JSON_ELEMENT_CODEC)).keys)
-        skins.putAll(
-            skulls.get("skins").toDataOrThrow(
-                CodecUtils.map(
-                    CodecHelpers.STRING_LOWER,
-                    SkyOceanCodecs.AnimatedSkullDataCodec.codec(),
-                ),
-            ).mapKeys { (key) -> SkyOceanItemId.item(key) },
-        )
+        runCatching {
+            val skulls = Utils.loadFromRepo<JsonElement>("skulls")!!.asJsonObject
+            ids.addAll(skulls.get("help").toDataOrThrow(CodecUtils.map(CodecHelpers.STRING_LOWER, CodecUtils.JSON_ELEMENT_CODEC)).keys)
+            skins.putAll(
+                skulls.get("skins").toDataOrThrow(
+                    CodecUtils.map(
+                        CodecHelpers.STRING_LOWER,
+                        SkyOceanCodecs.AnimatedSkullDataCodec.codec(),
+                    ),
+                ).mapKeys { (key) -> SkyOceanItemId.item(key) },
+            )
+        }.onFailure {
+            throw RuntimeException("Failed to load animated skulls!", it)
+        }
     }
 
     @GenerateCodec
