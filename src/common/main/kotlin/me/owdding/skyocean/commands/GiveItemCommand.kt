@@ -15,7 +15,7 @@ object GiveItemCommand {
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerDevWithCallback("give") {
-            if (McPlayer.self?.gameMode()?.isCreative != true) return@registerDevWithCallback
+            if (McPlayer.self?.gameMode()?.isCreative != true && McClient.self.isSingleplayer) return@registerDevWithCallback
             val item = JsonParser.parseString(McClient.clipboard).toDataOrThrow(ItemStack.CODEC)
             McClient.self.player?.inventory?.add(item)
         }

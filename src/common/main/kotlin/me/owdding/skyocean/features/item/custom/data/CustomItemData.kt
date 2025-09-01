@@ -10,7 +10,7 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.CodecHelpers
 import me.owdding.skyocean.utils.Utils.get
-import me.owdding.skyocean.utils.Utils.unsafe
+import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -23,7 +23,7 @@ data class CustomItemData(
     val key: ItemKey,
     @NamedCodec("custom_item_component_map") val data: MutableMap<CustomItemComponent<*>, Any?> = mutableMapOf(),
 ) {
-    operator fun <T> get(component: CustomItemComponent<T>): T? = data[component].unsafe()
+    operator fun <T> get(component: CustomItemComponent<T>): T? = data[component].unsafeCast()
 
     operator fun <T> set(component: CustomItemComponent<T>, value: T?) {
         if (value == null) {
@@ -85,7 +85,7 @@ object CustomItemDataComponents {
 
     //val BLOCKING_ANIMATION: CustomItemComponent<Boolean> = register("block", Codec.BOOL)
     val ENCHANTMENT_GLINT_OVERRIDE: CustomItemComponent<Boolean> = register("glint", Codec.BOOL)
-    val ENCHANTMENT_GLING_COLOR: CustomItemComponent<Int> = register("glint_color", Codec.INT)
+    //val ENCHANTMENT_GLINT_COLOR: CustomItemComponent<Int> = register("glint_color", Codec.INT)
 
     fun <T> register(id: String, codec: MapCodec<T>): CustomItemComponent<T> = register(id, codec.codec())
     fun <T> register(id: String, codec: Codec<T>): CustomItemComponent<T> {

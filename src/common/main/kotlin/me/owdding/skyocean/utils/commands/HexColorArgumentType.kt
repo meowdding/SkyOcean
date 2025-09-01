@@ -24,9 +24,6 @@ class HexColorArgumentType : ArgumentType<Int> {
             append(" is invalid")
         }
     }
-    private val wrongPrefix: DynamicCommandExceptionType = DynamicCommandExceptionType { id: Any? ->
-        ChatUtils.prefix.copy().append("Expected # got $id")
-    }
 
 
     override fun parse(reader: StringReader): Int {

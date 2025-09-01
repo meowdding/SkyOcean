@@ -1,8 +1,6 @@
 package me.owdding.skyocean.utils
 
-import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.lib.events.RegisterTextShaderEvent
 import me.owdding.lib.rendering.text.TextShader
@@ -11,6 +9,7 @@ import me.owdding.lib.rendering.text.textShader
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
@@ -133,11 +132,7 @@ enum class OceanGradients(val colors: List<Int>, private val shader: GradientTex
     @PreInitModule
     companion object {
         val ID = id("named_gradient")
-        val CODEC: MapCodec<OceanGradients> = RecordCodecBuilder.mapCodec {
-            it.group(
-                Codec.STRING.fieldOf("name").forGetter { it.name },
-            ).apply(it, { name -> valueOf(name) })
-        }
+        val CODEC: MapCodec<OceanGradients> = SkyOceanCodecs.getCodec<OceanGradients>().fieldOf("name")
 
         @Subscription
         fun registerShaders(event: RegisterTextShaderEvent) {

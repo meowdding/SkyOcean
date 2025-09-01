@@ -53,7 +53,7 @@ public class ItemStackMixin implements ItemStackAccessor {
 
 
     @Unique
-    public ItemStack self() {
+    private ItemStack self() {
         return (ItemStack) (Object) this;
     }
 

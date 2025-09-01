@@ -3,7 +3,7 @@ package me.owdding.skyocean.features.item.custom
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation
 import me.owdding.skyocean.features.item.custom.CustomItems.get
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
-import me.owdding.skyocean.utils.Utils.unsafe
+import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
@@ -23,7 +23,7 @@ object CustomItemsHelper {
         DataComponents.PROFILE -> instance[CustomItemDataComponents.SKIN]?.getResolvableProfile()
         DataComponents.DYED_COLOR -> instance[CustomItemDataComponents.COLOR]?.getDyeColor()
         else -> null
-    }.unsafe()
+    }.unsafeCast()
 
     @JvmStatic
     fun <T> replace(itemStack: ItemStack, type: DataComponentType<T>, original: Operation<T>): T {

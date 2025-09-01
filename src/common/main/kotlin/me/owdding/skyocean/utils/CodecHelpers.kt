@@ -53,11 +53,17 @@ object CodecHelpers {
         }
     }
 
+    private val componentTypes = arrayOf(
+        PlainTextContents.TYPE,
+        TranslatableContents.TYPE,
+        KeybindContents.TYPE,
+        ScoreContents.TYPE,
+        SelectorContents.TYPE,
+        NbtContents.TYPE,
+    )
     val CUSTOM_COMPONENT_CODEC: Codec<Component> = Codec.recursive("SkyOceanComponentCodec") { self ->
-        val types =
-            arrayOf(PlainTextContents.TYPE, TranslatableContents.TYPE, KeybindContents.TYPE, ScoreContents.TYPE, SelectorContents.TYPE, NbtContents.TYPE)
         val componentMatcher = ComponentSerialization.createLegacyComponentMatcher(
-            types,
+            componentTypes,
             ComponentContents.Type<*>::codec,
             { it!!.type() },
             "type",
