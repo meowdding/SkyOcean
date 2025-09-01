@@ -246,9 +246,13 @@ object Utils {
     fun <T> ResourceKey<T>.get(): Holder<T>? = SkyOcean.registryLookup.get(this).getOrNull()
     fun <T> ResourceKey<Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
     fun <T> ResourceKey<Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
-    fun <T> ResourceKey<Registry<T>>.get(value: ResourceLocation): Holder<T> = this.lookup().listElements().filter {
-        it.unwrapKey().get().location() == value
-    }.findFirst().orElseThrow()
+    fun <T> ResourceKey<Registry<T>>.get(value: ResourceLocation): Holder<T> = runCatching {
+        this.lookup().listElements().filter {
+            it.unwrapKey().get().location() == value
+        }.findFirst().orElseThrow()
+    }.onFailure {
+        throw RuntimeException("Failed to load $value from registry ${this.location()}", it)
+    }.getOrThrow()
 
     fun <T> DataResult<T>.resultOrError() = error().map { it.message() }.orElse(this.result().get().toString())
 }
