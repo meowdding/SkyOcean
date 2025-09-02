@@ -2,7 +2,6 @@ package me.owdding.skyocean.commands
 
 import com.mojang.brigadier.arguments.BoolArgumentType
 import me.owdding.ktmodules.Module
-import me.owdding.lib.rendering.text.withTextShader
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
@@ -12,7 +11,6 @@ import me.owdding.skyocean.repo.customization.AnimatedSkulls
 import me.owdding.skyocean.repo.customization.DyeData
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.OceanColors
-import me.owdding.skyocean.utils.OceanGradients
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.get
 import me.owdding.skyocean.utils.Utils.getArgument
@@ -36,7 +34,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.style
 
 @Module
 object CustomizeCommand {
@@ -44,8 +41,8 @@ object CustomizeCommand {
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("customize") {
-            then("name") {
-                callback {
+            then("reset") {
+                thenCallback("name") {
                     remove(CustomItemDataComponents.NAME) { item ->
                         text("Removed custom name from ") {
                             append(item.hoverName)
@@ -53,34 +50,50 @@ object CustomizeCommand {
                         }
                     }
                 }
-
-                thenCallback("name", ComponentArgument.textComponent(context())) {
-                    val name = getArgument<Component>("name")!!.copy().apply {
-                        style { withTextShader(OceanGradients.TRANS) }
-                    }
-                    val item = mainHandItemOrNull() ?: return@thenCallback
-
-                    val success = CustomItems.modify(item) {
-                        this[CustomItemDataComponents.NAME] = name.wrapWithNotItalic()
-                    }
-
-                    if (success) {
-                        text("Renamed item to ") {
-                            append(name)
-                            append("!")
-                        }.sendWithPrefix()
-                    } else {
-                        unableToCustomize()
-                    }
-                }
-            }
-            then("model") {
-                callback {
+                thenCallback("model") {
                     remove(CustomItemDataComponents.MODEL) { _, model ->
                         text("Removed custom model $model from item!")
                     }
                 }
+                thenCallback("armor_trim") {
+                    remove(CustomItemDataComponents.ARMOR_TRIM) { _ ->
+                        text("Removed armor trim from item!")
+                    }
+                }
+                thenCallback("color") {
+                    remove(CustomItemDataComponents.COLOR) {
+                        text("Removed color from item!")
+                    }
+                }
+                thenCallback("enchantment_glint") {
+                    remove(CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE) {
+                        text("Removed enchantment glint override!")
+                    }
+                }
+                thenCallback("skin") {
+                    remove(CustomItemDataComponents.SKIN) {
+                        text("Removed skin override!")
+                    }
+                }
+            }
+            thenCallback("name name", ComponentArgument.textComponent(context())) {
+                val name = getArgument<Component>("name")!!
+                val item = mainHandItemOrNull() ?: return@thenCallback
 
+                val success = CustomItems.modify(item) {
+                    this[CustomItemDataComponents.NAME] = name.wrapWithNotItalic()
+                }
+
+                if (success) {
+                    text("Renamed item to ") {
+                        append(name)
+                        append("!")
+                    }.sendWithPrefix()
+                } else {
+                    unableToCustomize()
+                }
+            }
+            then("model") {
                 thenCallback("skyblock_model", SkyOceanItemIdArgument()) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
                     val itemId = getArgument<SkyOceanItemId>("skyblock_model")!!
@@ -102,8 +115,8 @@ object CustomizeCommand {
                         unableToCustomize()
                     }
                 }
-                val key = (McClient.self.modelManager as ModelManagerAccessor).bakedItemModels().keys
-                thenCallback("vanilla_model", VirtualResourceArgument(key)) {
+                val keys = (McClient.self.modelManager as ModelManagerAccessor).bakedItemModels().keys
+                thenCallback("vanilla_model", VirtualResourceArgument(keys)) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
                     val model = getArgument<ResourceLocation>("vanilla_model")!!
 
@@ -120,39 +133,26 @@ object CustomizeCommand {
                     }
                 }
             }
-            then("armor_trim") {
-                callback {
-                    remove(CustomItemDataComponents.ARMOR_TRIM) { _ ->
-                        text("Removed armor trim from item!")
+            then("armor_trim material", ResourceKeyArgument(Registries.TRIM_MATERIAL)) {
+                thenCallback("pattern", ResourceKeyArgument(Registries.TRIM_PATTERN)) {
+                    val item = mainHandItemOrNull() ?: return@thenCallback
+                    val material = getArgument<ResourceKey<TrimMaterial>>("material")!!.get()
+                    val pattern = getArgument<ResourceKey<TrimPattern>>("pattern")!!.get()
+
+                    val trimMaterial = material?.value() ?: return@thenCallback
+                    val trimPattern = pattern?.value() ?: return@thenCallback
+
+                    val success = CustomItems.modify(item) {
+                        this[CustomItemDataComponents.ARMOR_TRIM] = ArmorTrim(trimMaterial, trimPattern)
                     }
-                }
-                then("material", ResourceKeyArgument(Registries.TRIM_MATERIAL)) {
-                    thenCallback("pattern", ResourceKeyArgument(Registries.TRIM_PATTERN)) {
-                        val item = mainHandItemOrNull() ?: return@thenCallback
-                        val material = getArgument<ResourceKey<TrimMaterial>>("material")!!.get()
-                        val pattern = getArgument<ResourceKey<TrimPattern>>("pattern")!!.get()
-
-                        val trimMaterial = material?.value() ?: return@thenCallback
-                        val trimPattern = pattern?.value() ?: return@thenCallback
-
-                        val success = CustomItems.modify(item) {
-                            this[CustomItemDataComponents.ARMOR_TRIM] = ArmorTrim(trimMaterial, trimPattern)
-                        }
-                        if (success) {
-                            text("Successfully set armor trim!").sendWithPrefix()
-                        } else {
-                            unableToCustomize()
-                        }
+                    if (success) {
+                        text("Successfully set armor trim!").sendWithPrefix()
+                    } else {
+                        unableToCustomize()
                     }
                 }
             }
             then("color") {
-                callback {
-                    remove(CustomItemDataComponents.COLOR) {
-                        text("Removed color from item!")
-                    }
-                }
-
                 thenCallback("hex_color", HexColorArgumentType()) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
                     val color = getArgument<Int>("hex_color")!!
@@ -206,52 +206,35 @@ object CustomizeCommand {
                 }
             }
 
-            then("enchantment_glint") {
-                callback {
-                    remove(CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE) {
-                        text("Removed enchantment glint override!")
-                    }
+            thenCallback("enchantment_glint state", BoolArgumentType.bool()) {
+                val item = mainHandItemOrNull() ?: return@thenCallback
+                val state = getArgument<Boolean>("state")!!
+
+                val success = CustomItems.modify(item) {
+                    this[CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE] = state
                 }
-
-                thenCallback("state", BoolArgumentType.bool()) {
-                    val item = mainHandItemOrNull() ?: return@thenCallback
-                    val state = getArgument<Boolean>("state")!!
-
-                    val success = CustomItems.modify(item) {
-                        this[CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE] = state
-                    }
-                    if (success) {
-                        text("Toggled enchantment glint override ") {
-                            if (state) append("on") { this.color = TextColor.GREEN }
-                            else append("off") { color = TextColor.RED }
-                            append("!")
-                        }.sendWithPrefix()
-                    } else {
-                        unableToCustomize()
-                    }
+                if (success) {
+                    text("Toggled enchantment glint override ") {
+                        if (state) append("on") { this.color = TextColor.GREEN }
+                        else append("off") { color = TextColor.RED }
+                        append("!")
+                    }.sendWithPrefix()
+                } else {
+                    unableToCustomize()
                 }
             }
 
-            then("skin") {
-                callback {
-                    remove(CustomItemDataComponents.SKIN) {
-                        text("Removed skin override!")
-                    }
+            thenCallback("skin animated_skull", SkyOceanItemIdArgument(AnimatedSkulls.skins.keys)) {
+                val item = mainHandItemOrNull() ?: return@thenCallback
+                val skin = getArgument<SkyOceanItemId>("animated_skull")!!
 
+                val success = CustomItems.modify(item) {
+                    this[CustomItemDataComponents.SKIN] = AnimatedSkyblockSkin(skin)
                 }
-
-                thenCallback("animated_skull", SkyOceanItemIdArgument(AnimatedSkulls.skins.keys)) {
-                    val item = mainHandItemOrNull() ?: return@thenCallback
-                    val skin = getArgument<SkyOceanItemId>("animated_skull")!!
-
-                    val success = CustomItems.modify(item) {
-                        this[CustomItemDataComponents.SKIN] = AnimatedSkyblockSkin(skin)
-                    }
-                    if (success) {
-                        text("Todo").sendWithPrefix()
-                    } else {
-                        unableToCustomize()
-                    }
+                if (success) {
+                    text("Todo").sendWithPrefix()
+                } else {
+                    unableToCustomize()
                 }
             }
         }
