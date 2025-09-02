@@ -4,6 +4,7 @@
   "parent": "skyocean.client.mixins.json",
   "client": [
     "GuiRenderStateMixin",
-    "GuiRendererMixin"
+    "GuiRendererMixin",
+    "BakedGlyphMixin"
   ]
 }

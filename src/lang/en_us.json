@@ -246,6 +246,14 @@
         "@value": "Hide Lightning",
         "desc": "Hides lightning bolts and sky flash effect."
       },
+      "fullTextShadow": {
+        "@value": "Full Text Shadow",
+        "desc": [
+          "Makes text shadow render as \"full\" all around the glyph.",
+          "",
+          "<red>May Significantly impact performance.</red>"
+        ]
+      },
       "showHiddenPetCandy": {
         "@value": "Show Hidden Pet Candy",
         "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."

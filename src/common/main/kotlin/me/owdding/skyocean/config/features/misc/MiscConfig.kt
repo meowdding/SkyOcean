@@ -35,6 +35,10 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.hideLightning"
     }
 
+    var fullTextShadow by boolean(false) {
+        translation = "skyocean.config.misc.fullTextShadow"
+    }
+
     var showHiddenPetCandy by boolean(true) {
         translation = "skyocean.config.misc.showHiddenPetCandy"
     }
