@@ -15,20 +15,21 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 @Module
 object GlaciteBlocks : BlockRetexture() {
 
-    val GLACITE_BLOCK = id("mining/tunnels/glacite_block")
-    val GLACITE_SNOW = id("mining/tunnels/glacite_snow")
-    val GLACITE_SNOW_BLOCK = id("mining/tunnels/glacite_snow_block")
-    val GLACITE_HARD_STONE = id("mining/tunnels/glacite_hard_stone")
-    val GLACITE_HARD_STONE_WOOL = id("mining/tunnels/glacite_hard_stone_wool")
-    val LOW_TIER_TUNGSTEN = id("mining/tunnels/low_tier_tungsten")
-    val LOW_TIER_TUNGSTEN_MINESHAFT = id("mining/tunnels/low_tier_tungsten_mineshaft")
-    val LOW_TIER_TUNGSTEN_STAIRS = id("mining/tunnels/low_tier_tungsten_stairs")
-    val LOW_TIER_TUNGSTEN_SLAB = id("mining/tunnels/low_tier_tungsten_slab")
-    val HIGH_TIER_TUNGSTEN = id("mining/tunnels/high_tier_tungsten")
-    val LOW_TIER_UMBER = id("mining/tunnels/low_tier_umber")
-    val MID_TIER_UMBER = id("mining/tunnels/mid_tier_umber")
-    val HIGH_TIER_UMBER = id("mining/tunnels/high_tier_umber")
+    val GLACITE_BLOCK = tunnels("glacite_block")
+    val GLACITE_SNOW = tunnels("glacite_snow")
+    val GLACITE_SNOW_BLOCK = tunnels("glacite_snow_block")
+    val GLACITE_HARD_STONE = tunnels("glacite_hard_stone")
+    val GLACITE_HARD_STONE_WOOL = tunnels("glacite_hard_stone_wool")
+    val LOW_TIER_TUNGSTEN = tunnels("low_tier_tungsten")
+    val LOW_TIER_TUNGSTEN_MINESHAFT = tunnels("low_tier_tungsten_mineshaft")
+    val LOW_TIER_TUNGSTEN_STAIRS = tunnels("low_tier_tungsten_stairs")
+    val LOW_TIER_TUNGSTEN_SLAB = tunnels("low_tier_tungsten_slab")
+    val HIGH_TIER_TUNGSTEN = tunnels("high_tier_tungsten")
+    val LOW_TIER_UMBER = tunnels("low_tier_umber")
+    val MID_TIER_UMBER = tunnels("mid_tier_umber")
+    val HIGH_TIER_UMBER = tunnels("high_tier_umber")
 
+    private fun tunnels(s: String) = id("mining/tunnels/$s")
 
     @Subscription
     fun registerFakeBlocks(event: RegisterFakeBlocksEvent) = with(event) {
