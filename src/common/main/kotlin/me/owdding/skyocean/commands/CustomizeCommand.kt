@@ -259,7 +259,6 @@ object CustomizeCommand {
     }
 
     fun unableToCustomize() {
-
         text("Unable to customize item!") {
             this.color = OceanColors.WARNING
         }.sendWithPrefix()
