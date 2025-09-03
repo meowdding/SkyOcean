@@ -17,6 +17,7 @@ import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
+import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi.getBestRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
@@ -164,7 +165,8 @@ object CraftHelperDisplay {
     }
 
     private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
-        val tracker = ItemTracker(MiscConfig.craftHelperSources.toList())
+        val sources = ItemSources.entries - MiscConfig.disallowedCraftHelperSources.toList()
+        val tracker = ItemTracker(sources)
         val callback = callback()
 
         return LayoutFactory.vertical(2) {
