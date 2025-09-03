@@ -4,10 +4,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation
 import me.owdding.skyocean.features.item.custom.CustomItems.getCustomData
 import me.owdding.skyocean.features.item.custom.CustomItems.getVanillaIntegrationData
 import me.owdding.skyocean.features.item.custom.data.CustomItemData
+import me.owdding.skyocean.features.item.custom.CustomItems.get
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.component.DataComponents
+import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 
 object CustomItemsHelper {
@@ -15,6 +17,7 @@ object CustomItemsHelper {
     @JvmStatic
     fun <T> getData(instance: ItemStack, type: DataComponentType<T>): T? =
         instance.getCustomData()?.getData(type) ?: instance.getVanillaIntegrationData()?.getData(type)
+    fun getNameReplacement(stack: ItemStack): Component? = stack[CustomItemDataComponents.NAME]
 
     fun <T> CustomItemData.getData(type: DataComponentType<T>): T? = when (type) {
         DataComponents.ITEM_MODEL -> this[CustomItemDataComponents.MODEL]?.getModel()

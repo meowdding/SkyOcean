@@ -232,7 +232,7 @@ object CustomizeCommand {
                     this[CustomItemDataComponents.SKIN] = AnimatedSkyblockSkin(skin)
                 }
                 if (success) {
-                    text("Todo").sendWithPrefix()
+                    text("Successfully set skin texture!").sendWithPrefix()
                 } else {
                     unableToCustomize()
                 }

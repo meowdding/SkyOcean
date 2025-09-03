@@ -55,7 +55,6 @@ data class ArmorTrim(
         Registries.TRIM_PATTERN.get(trimPattern).value(),
     )
 
-
     companion object {
         val cache = mutableMapOf<Pair<TrimMaterial, TrimPattern>, VanillaArmorTrim>()
 

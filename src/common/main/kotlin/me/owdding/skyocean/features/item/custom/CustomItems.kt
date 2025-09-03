@@ -19,7 +19,7 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
 @Module
-object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
+object CustomItems {
 
     private val map: MutableMap<ItemKey, CustomItemData> = mutableMapOf()
 

@@ -74,7 +74,7 @@
         "glacite": {
           "@value": "Retexture Glacite Tunnel blocks",
           "desc": [
-            "Allows resource packs to change the appearance of glacite tunnel blocks."
+            "Allows resource packs to change the appearance of tungsten, umber and glacite tunnel blocks."
           ]
         },
         "mist": {
@@ -296,6 +296,10 @@
         "disableRootItems": {
           "@value": "Disable tracking for target",
           "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
+        },
+        "itemSources": {
+          "@value": "Allowed item sources",
+          "desc": "Select sources from which the craft helper can count items"
         },
         "position": {
           "@value": "Position",
