@@ -24,7 +24,11 @@ object HotmData {
     }
 
     init {
-        perks.addAll(Utils.loadFromRepo<JsonArray>("hotm").toDataOrThrow(PERK_CODEC.listOf()))
+        runCatching {
+            perks.addAll(Utils.loadFromRepo<JsonArray>("hotm").toDataOrThrow(PERK_CODEC.listOf()))
+        }.onFailure {
+            throw RuntimeException("Failed to load hotm data!", it)
+        }
     }
 
     data class HotmPerk(

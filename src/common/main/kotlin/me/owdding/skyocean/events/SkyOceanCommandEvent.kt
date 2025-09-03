@@ -9,6 +9,7 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
+import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.SharedSuggestionProvider
 import tech.thatgravyboat.skyblockapi.api.events.base.SkyBlockEvent
 
@@ -16,7 +17,10 @@ typealias LiteralCommandBuilder = CommandBuilder<LiteralArgumentBuilder<FabricCl
 typealias ArgumentCommandBuilder<T> = CommandBuilder<RequiredArgumentBuilder<FabricClientCommandSource, T>>
 
 
-class RegisterSkyOceanCommandEvent(private val dispatcher: CommandDispatcher<FabricClientCommandSource>) : SkyBlockEvent() {
+class RegisterSkyOceanCommandEvent(
+    private val dispatcher: CommandDispatcher<FabricClientCommandSource>,
+    private val context: CommandBuildContext,
+) : SkyBlockEvent() {
 
     fun register(command: LiteralArgumentBuilder<FabricClientCommandSource>) {
         ClientCommandManager.literal("skyocean")
@@ -26,7 +30,7 @@ class RegisterSkyOceanCommandEvent(private val dispatcher: CommandDispatcher<Fab
 
     fun register(command: String, builder: LiteralCommandBuilder.() -> Unit) {
         ClientCommandManager.literal("skyocean")
-            ?.apply { LiteralCommandBuilder(this).then(command, action = builder) }
+            ?.apply { LiteralCommandBuilder(this, context).then(command, action = builder) }
             ?.let(dispatcher::register)
     }
 
@@ -49,7 +53,7 @@ class RegisterSkyOceanCommandEvent(private val dispatcher: CommandDispatcher<Fab
     fun registerDev(command: String, builder: LiteralCommandBuilder.() -> Unit) {
         register(
             ClientCommandManager.literal("dev").apply {
-                LiteralCommandBuilder(this).then(command, action = builder)
+                LiteralCommandBuilder(this, context).then(command, action = builder)
             },
         )
     }
@@ -58,6 +62,7 @@ class RegisterSkyOceanCommandEvent(private val dispatcher: CommandDispatcher<Fab
 
 class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal constructor(
     private val builder: ArgumentBuilder<FabricClientCommandSource, B>,
+    private val context: CommandBuildContext,
 ) {
 
     fun callback(callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
@@ -70,12 +75,12 @@ class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal
     fun then(vararg names: String, action: LiteralCommandBuilder.() -> Unit): CommandBuilder<B> {
         for (name in names) {
             if (name.contains(" ")) {
-                val builder = CommandBuilder(ClientCommandManager.literal(name.substringBefore(" ")))
+                val builder = CommandBuilder(ClientCommandManager.literal(name.substringBefore(" ")), context)
                 builder.then(name.substringAfter(" "), action = action)
                 this.builder.then(builder.builder)
                 continue
             }
-            val builder = CommandBuilder(ClientCommandManager.literal(name))
+            val builder = CommandBuilder(ClientCommandManager.literal(name), context)
             builder.action()
             this.builder.then(builder.builder)
         }
@@ -107,7 +112,7 @@ class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal
         action: ArgumentCommandBuilder<T>.() -> Unit,
     ): CommandBuilder<B> {
         if (name.contains(" ")) {
-            val builder = CommandBuilder(ClientCommandManager.literal(name.substringBefore(" ")))
+            val builder = CommandBuilder(ClientCommandManager.literal(name.substringBefore(" ")), context)
             builder.then(name.substringAfter(" "), argument, suggestions, action)
             this.builder.then(builder.builder)
             return this
@@ -116,9 +121,21 @@ class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal
             ClientCommandManager.argument(name, argument).apply {
                 if (suggestions != null) suggests(suggestions)
             },
+            context,
         )
         builder.action()
         this.builder.then(builder.builder)
         return this
     }
+
+    fun <T> thenCallback(
+        name: String,
+        argument: ArgumentType<T>,
+        suggestions: SuggestionProvider<FabricClientCommandSource>? = null,
+        callback: CommandContext<FabricClientCommandSource>.() -> Unit,
+    ): CommandBuilder<B> = then(name, argument, suggestions) {
+        callback(callback)
+    }
+
+    fun context() = context
 }

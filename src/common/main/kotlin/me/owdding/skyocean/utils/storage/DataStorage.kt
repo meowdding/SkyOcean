@@ -13,6 +13,7 @@ import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
@@ -51,6 +52,7 @@ internal class DataStorage<T : Any>(
                 }
             }
         }
+
         val defaultPath: Path = McClient.config.resolve("skyocean/data")
     }
 
@@ -67,7 +69,10 @@ internal class DataStorage<T : Any>(
             try {
                 val readJson = path.readJson<JsonObject>()
                 val version = readJson.get("@skyocean:version").asInt
-                val data = readJson.get("@skyocean:data")
+                var data = readJson.get("@skyocean:data")
+                for (version in version until this.version) {
+                    data = data.toDataOrThrow(codec(version)).toJsonOrThrow(codec(version))
+                }
                 val codec = codec(version)
                 newData = data.toDataOrThrow(codec)
             } catch (e: Exception) {
@@ -100,8 +105,7 @@ internal class DataStorage<T : Any>(
             FileUtils.write(path.toFile(), json.toPrettyString(), Charsets.UTF_8)
             SkyOcean.debug("saved $path")
         } catch (e: Exception) {
-            SkyOcean.error("Failed to save $data to file")
-            e.printStackTrace()
+            SkyOcean.error("Failed to save $data to file", e)
         }
     }
 }
