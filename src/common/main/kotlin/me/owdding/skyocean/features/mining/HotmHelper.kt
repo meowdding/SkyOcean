@@ -33,7 +33,7 @@ object HotmHelper {
     @Subscription
     @OnlyOnSkyBlock
     fun onInventoryUpdate(event: InventoryChangeEvent) {
-        if (!MiningConfig.hotmDisplayTotalLeft && MiningConfig.hotmDisplayShiftCost && !MiningConfig.hotmTotalProgress && !MiningConfig.hotmStackSize) return
+        if (!MiningConfig.hotmDisplayTotalLeft && !MiningConfig.hotmDisplayShiftCost && !MiningConfig.hotmTotalProgress && !MiningConfig.hotmStackSize) return
         if (event.title != "Heart of the Mountain") return
         if (event.isInPlayerInventory) return
         if (event.item !in ItemTagKey.HOTM_PERK_ITEMS) return
