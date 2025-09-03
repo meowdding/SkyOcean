@@ -232,7 +232,7 @@ object CustomizeCommand {
                     this[CustomItemDataComponents.SKIN] = AnimatedSkyblockSkin(skin)
                 }
                 if (success) {
-                    text("Todo").sendWithPrefix()
+                    text("Successfully set skin texture!").sendWithPrefix()
                 } else {
                     unableToCustomize()
                 }
@@ -259,7 +259,6 @@ object CustomizeCommand {
     }
 
     fun unableToCustomize() {
-
         text("Unable to customize item!") {
             this.color = OceanColors.WARNING
         }.sendWithPrefix()

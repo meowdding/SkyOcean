@@ -45,16 +45,15 @@ data class ArmorTrim(
     val trimMaterial: ResourceLocation,
     val trimPattern: ResourceLocation,
 ) {
-    constructor(trimMaterial: TrimMaterial, trimPattern: TrimPattern) : this(
-        Registries.TRIM_MATERIAL.get(trimMaterial).unwrapKey().get().location(),
-        Registries.TRIM_PATTERN.get(trimPattern).unwrapKey().get().location(),
-    )
-
     val trim = getOrCreate(
         Registries.TRIM_MATERIAL.get(trimMaterial).value(),
         Registries.TRIM_PATTERN.get(trimPattern).value(),
     )
 
+    constructor(trimMaterial: TrimMaterial, trimPattern: TrimPattern) : this(
+        Registries.TRIM_MATERIAL.get(trimMaterial).unwrapKey().get().location(),
+        Registries.TRIM_PATTERN.get(trimPattern).unwrapKey().get().location(),
+    )
 
     companion object {
         val cache = mutableMapOf<Pair<TrimMaterial, TrimPattern>, VanillaArmorTrim>()
