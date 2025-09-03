@@ -3,18 +3,15 @@ package me.owdding.skyocean.datagen.models.factories
 import me.owdding.skyocean.datagen.models.BlockModelFactory
 import me.owdding.skyocean.datagen.models.ModelGenContext
 import net.minecraft.client.data.models.BlockModelGenerators
-import net.minecraft.client.data.models.BlockModelGenerators.*
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator
 import net.minecraft.client.data.models.blockstates.PropertyDispatch
 import net.minecraft.client.data.models.model.ModelTemplates
 import net.minecraft.client.data.models.model.TexturedModel
-import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.SlabType
-import net.minecraft.core.registries.BuiltInRegistries
 
 object SlabModelFactory : BlockModelFactory() {
     private val map = mutableMapOf(
