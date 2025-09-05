@@ -192,8 +192,14 @@ object CustomizeCommand {
                     val item = mainHandItemOrNull() ?: return@thenCallback
                     val color = getArgument<SkyOceanItemId>("animated_color")!!
 
-                    val success = CustomItems.modify(item) {
-                        this[CustomItemDataComponents.COLOR] = AnimatedSkyBlockDye(color.cleanId)
+                    val success = runCatching {
+                        CustomItems.modify(item) {
+                            this[CustomItemDataComponents.COLOR] = AnimatedSkyBlockDye(color.cleanId)
+                        }
+                    }.getOrElse {
+                        text("An error occurred while trying to customize!").sendWithPrefix()
+                        CustomItems.error("An error occurred while setting dye", it)
+                        return@thenCallback
                     }
                     if (success) {
                         text("Successfully set color to ") {

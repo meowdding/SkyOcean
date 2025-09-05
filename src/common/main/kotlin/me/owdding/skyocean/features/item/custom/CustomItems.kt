@@ -9,6 +9,7 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.customize.ItemStackAccessor
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.DataStorage
@@ -19,7 +20,7 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
 @Module
-object CustomItems {
+object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
 
     private val map: MutableMap<ItemKey, CustomItemData> = mutableMapOf()
 
@@ -72,7 +73,9 @@ object CustomItems {
 
     fun ItemStack.getKey(): ItemKey? = ItemStackAccessor.getItemKey(this)
     fun ItemStack.getCustomData() = map[this.getKey()]
-    fun ItemStack.getVanillaIntegrationData() = this.getKey()?.let { vanillaIntegration.getIfPresent(it) }
+    fun ItemStack.getVanillaIntegrationData() =
+        this.getKey()?.let { vanillaIntegration.getIfPresent(it) }?.takeIf { MiscConfig.customizationVanillaIntegration }
+
     fun ItemStack.getOrTryCreateCustomData() = this.getKey()?.let { getOrPut(it) }
 
     operator fun <T> ItemStack.get(component: CustomItemComponent<T>): T? {
@@ -95,7 +98,7 @@ object CustomItems {
             AnimatedSkyblockSkin(SkyOceanItemId.item(it.lowercase()))
         }
         val dye = self[DataTypes.APPLIED_DYE]?.let { dye ->
-            runCatching { SkyBlockDye(dye.lowercase()) }.recoverCatching { AnimatedSkyBlockDye(dye.lowercase()) }.getOrNull()
+            runCatching { AnimatedSkyBlockDye(dye.lowercase()) }.getOrNull()
         }
 
         if (skin == null && dye == null) return
