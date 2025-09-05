@@ -54,6 +54,10 @@ object MiscConfig : CategoryKt("misc") {
 
     val shouldHideClouds get() = SkyBlockIsland.inAnyIsland(islandCloudHider.toList())
 
+    var museumArmourPieces by boolean(true) {
+        translation = "skyocean.config.misc.museumArmourPieces"
+    }
+
     init {
         separator("skyocean.config.misc.itemSearch")
     }
@@ -72,10 +76,6 @@ object MiscConfig : CategoryKt("misc") {
 
     var itemSearchMuseumIntegration by boolean(false) {
         translation = "skyocean.config.misc.itemSearch.museumIntegration"
-    }
-
-    var museumArmourPieces by boolean(true) {
-        translation = "skyocean.config.misc.museumArmourPieces"
     }
 
     init {

@@ -83,12 +83,10 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
         }
     override val isEnabled: Boolean = true
 
-    @Suppress("SpacingAroundColon")
     private context(item: ItemStack) fun registerModifier(component: ComponentModifier) {
         modifierCache[item.cleanName] = component to null
     }
 
-    @Suppress("SpacingAroundColon")
     private context(item: ItemStack) fun buildModifiers(init: ModifierBuilder.() -> Unit) {
         val builder = object : ModifierBuilder {
             override var component: ComponentModifier? = null
