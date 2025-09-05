@@ -90,8 +90,8 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.crafthelper.disableRootItems"
     }
 
-    var craftHelperSources by select(*ItemSources.entries.toTypedArray()) {
-        translation = "skyocean.config.misc.itemSources"
+    var disallowedCraftHelperSources by select<ItemSources> {
+        translation = "skyocean.config.misc.crafthelper.disallowedItemSources"
     }
 
     var craftHelperPosition by enum(CraftHelperLocation.LEFT_OF_INVENTORY) {
