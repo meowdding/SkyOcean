@@ -29,8 +29,9 @@ enum class ItemSources(val itemSource: ItemSource?) {
     RIFT(RiftItemSource),
     DRILL_UPGRADE(DrillUpgradeItemSource),
     ROD_UPGRADE(RodUpgradesItemSource),
-    HUNTAXE(HuntaxeItemSource),
-    TOOLKIT(ToolkitItemSource)
+    HUNT_AXE(HuntaxeItemSource),
+    TOOLKIT(ToolkitItemSource),
+    SACK_OF_SACKS(SackOfSacksItemSource),
     ;
     // todo SACK_OF_SACKS(TODO()),
     // todo POTION_BAG(TODO()),
