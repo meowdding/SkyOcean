@@ -54,6 +54,10 @@ object MiscConfig : CategoryKt("misc") {
 
     val shouldHideClouds get() = SkyBlockIsland.inAnyIsland(islandCloudHider.toList())
 
+    var customizationVanillaIntegration by boolean(false) {
+        this.translation = "skyocean.config.misc.customization_vanilla_integration"
+    }
+
     init {
         separator("skyocean.config.misc.itemSearch")
     }

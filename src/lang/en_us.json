@@ -258,6 +258,14 @@
         ],
         "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
       },
+      "customization_vanilla_integration": {
+        "@value": "Animate dyes and skins in inventories",
+        "desc": [
+          "Will always animate dyed armors and helmet skins even in inventories or menus.",
+          "",
+          "<yellow>(Doesn't currently work with skins that allow variant selection or pets)</yellow>"
+        ]
+      },
       "hideEntityFire": {
         "@value": "Hide entity fire",
         "desc": "Removes the fire effect from all entities."

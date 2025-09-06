@@ -1,6 +1,9 @@
 package me.owdding.skyocean.features.item.custom
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation
+import me.owdding.skyocean.features.item.custom.CustomItems.getCustomData
+import me.owdding.skyocean.features.item.custom.CustomItems.getVanillaIntegrationData
+import me.owdding.skyocean.features.item.custom.data.CustomItemData
 import me.owdding.skyocean.features.item.custom.CustomItems.get
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
 import me.owdding.skyocean.utils.Utils.unsafeCast
@@ -12,16 +15,17 @@ import net.minecraft.world.item.ItemStack
 object CustomItemsHelper {
 
     @JvmStatic
+    fun <T> getData(instance: ItemStack, type: DataComponentType<T>): T? =
+        instance.getCustomData()?.getData(type) ?: instance.getVanillaIntegrationData()?.getData(type)
     fun getNameReplacement(stack: ItemStack): Component? = stack[CustomItemDataComponents.NAME]
 
-    @JvmStatic
-    fun <T> getData(instance: ItemStack, type: DataComponentType<T>): T? = when (type) {
-        DataComponents.ITEM_MODEL -> instance[CustomItemDataComponents.MODEL]?.getModel()
-        DataComponents.CUSTOM_NAME -> instance[CustomItemDataComponents.NAME]
-        DataComponents.ENCHANTMENT_GLINT_OVERRIDE -> instance[CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE]
-        DataComponents.TRIM -> instance[CustomItemDataComponents.ARMOR_TRIM]?.trim
-        DataComponents.PROFILE -> instance[CustomItemDataComponents.SKIN]?.getResolvableProfile()
-        DataComponents.DYED_COLOR -> instance[CustomItemDataComponents.COLOR]?.getDyeColor()
+    fun <T> CustomItemData.getData(type: DataComponentType<T>): T? = when (type) {
+        DataComponents.ITEM_MODEL -> this[CustomItemDataComponents.MODEL]?.getModel()
+        DataComponents.CUSTOM_NAME -> this[CustomItemDataComponents.NAME]
+        DataComponents.ENCHANTMENT_GLINT_OVERRIDE -> this[CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE]
+        DataComponents.TRIM -> this[CustomItemDataComponents.ARMOR_TRIM]?.trim
+        DataComponents.PROFILE -> this[CustomItemDataComponents.SKIN]?.getResolvableProfile()
+        DataComponents.DYED_COLOR -> this[CustomItemDataComponents.COLOR]?.getDyeColor()
         else -> null
     }.unsafeCast()
 

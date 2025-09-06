@@ -41,12 +41,26 @@ data class StaticItemColor(val colorCode: Int) : ItemColor {
 data class SkyBlockDye(val id: String) : ItemColor {
     override val type: ItemColorType = ItemColorType.SKYBLOCK_DYE
 
-    override fun getColor(): Int = DyeData.staticDyes[id]!!
+    init {
+        if (DyeData.staticDyes[id] == null) {
+            throw IllegalArgumentException("Unknown dye $id")
+        }
+    }
+
+    val dye = DyeData.staticDyes[id]!!
+
+    override fun getColor(): Int = dye
 }
 
 @GenerateCodec
 data class AnimatedSkyBlockDye(val id: String) : ItemColor {
     override val type: ItemColorType = ItemColorType.ANIMATED_SKYBLOCK_DYE
+
+    init {
+        if (DyeData.animatedDyes[id] == null) {
+            throw IllegalArgumentException("Unknown animated dye $id")
+        }
+    }
 
     override fun getColor(): Int = DyeData.getAnimated(id)
 }

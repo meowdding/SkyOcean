@@ -12,6 +12,7 @@ import com.mojang.serialization.DataResult
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
 import me.owdding.ktmodules.AutoCollect
+import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
@@ -255,6 +256,13 @@ object Utils {
     }.getOrThrow()
 
     fun <T> DataResult<T>.resultOrError() = error().map { it.message() }.orElse(this.result().get().toString())
+
+    context(logger: MeowddingLogger)
+    fun <T> Result<T>.debug(message: String): Result<T> = apply {
+        this.onFailure {
+            logger.debug(message, it)
+        }
+    }
 }
 
 
