@@ -21,7 +21,7 @@ object GalateaItemStorage {
 
     val data get() = storage.get()
 
-    @Subscription()
+    @Subscription
     @OnlyOnSkyBlock
     private fun InventoryChangeEvent.onInventoryChange() {
         val items = inventory.containerItems()
