@@ -77,6 +77,8 @@ class CachedValue<T>(private val supplier: () -> T) {
         return value
     }
 
+    fun hasValue() = value != null
+
     fun invalidate() {
         value = null
     }

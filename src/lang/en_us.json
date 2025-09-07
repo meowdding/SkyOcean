@@ -281,10 +281,18 @@
           "@value": "Preserve Search",
           "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
         },
+        "museumIntegration": {
+          "@value": "Museum integration",
+          "desc": "Changes the museum to highlight items that are found on your profile, furthermore it also tells you which items you can craft and which ones are not craftable at all."
+        },
         "warp_to_island": {
           "@value": "Warp to island",
           "desc": "Automatically warp to island if you click an item that is on it."
         }
+      },
+      "museumArmourPieces": {
+        "@value": "Show museum armour pieces",
+        "desc": "Displays all pieces required to finish an armor set in the tooltip in the museum."
       },
       "crafthelper": {
         "@value": "Craft Helper",

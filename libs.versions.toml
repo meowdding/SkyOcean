@@ -6,9 +6,9 @@ fabric-api = "0.128.1"
 
 kotlin = "2.2.0"
 kotlin-symbol-processor = "2.2.0-2.0.2"
-
+gson = "2.12.1"
 skyblockapi = "2.3.1"
-skyblockapi-repo = "2.1.0"
+skyblockapi-repo = "3.0.0"
 placeholders = "2.6.1+1.21.5"
 keval = "1.1.1"
 
@@ -34,6 +34,9 @@ skyblockapi-repo = { module = "tech.thatgravyboat.repo-lib:repo-lib", version.re
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
 keval = { module = "com.notkamui.libs:keval", version.ref = "keval" }
 
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+meowdding-resources = { module = "me.owdding.repo:compacting-resources", version.ref = "meowdding-resources" }
+
 resourceful-lib1215 = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.5", version = "3.5.0" }
 resourceful-lib1218 = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.6", version = "3.6.0" }
 resourceful-config1215 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.5", version = "3.5.15" }
@@ -50,7 +53,7 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.re
 
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 terrarium-cloche = { id = "earth.terrarium.cloche", version.ref = "terrarium-cloche" }
-meowdding-resources = { id = "me.owdding.resources", version.ref = "meowdding-resources" }
+meowdding-resources = { id = "me.owdding.resources" }
 meowdding-repo = { id = "me.owdding.repo", version.ref = "meowdding-repo" }
 meowdding-gradle = { id = "me.owdding.gradle", version.ref = "meowdding-gradle" }
 kotlin-symbol-processor = { id = "com.google.devtools.ksp", version.ref = "kotlin-symbol-processor" }
