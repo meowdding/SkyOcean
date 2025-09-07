@@ -21,6 +21,10 @@ object SkyOceanDatagen : SkyOceanDataGeneratorEntrypoint() {
     }
 
     operator fun FakeBlockModelEventRegistrar.invoke(block: Block, definition: ResourceLocation) {
-        this(block, definition, null) { _, _ -> false }
+        this(block, block, definition, null) { _, _ -> false }
+    }
+
+    operator fun FakeBlockModelEventRegistrar.invoke(block: Block, texture: Block, definition: ResourceLocation) {
+        this(block, texture, definition, null) { _, _ -> false }
     }
 }

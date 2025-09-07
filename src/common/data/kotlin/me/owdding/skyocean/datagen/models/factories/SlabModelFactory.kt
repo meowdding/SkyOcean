@@ -84,12 +84,13 @@ object SlabModelFactory : BlockModelFactory() {
 
     override fun create(
         block: Block,
+        texture: Block,
         fakeBlock: ResourceLocation,
         parent: ResourceLocation?,
         generator: BlockModelGenerators,
         modelGenContext: ModelGenContext,
     ) {
-        val textureMapping = TexturedModel.CUBE.get(getBaseBlock(block)).mapping
+        val textureMapping = TexturedModel.CUBE.get(getBaseBlock(texture)).mapping
 
         val bottomSlab = ModelTemplates.SLAB_BOTTOM.plainVariant(fakeBlock, block, textureMapping)
         val topSlab = ModelTemplates.SLAB_TOP.plainVariant(fakeBlock, block, textureMapping)

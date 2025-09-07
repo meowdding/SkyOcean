@@ -40,20 +40,21 @@ class FakeBlocksProvider(output: FabricDataOutput, saveBlockStates: Boolean = tr
         savedModels.clear()
         factories.forEach { it.generator = blockModelGenerators }
 
-        val fakeBlocks = mutableMapOf<Block, MutableMap<ResourceLocation, ResourceLocation?>>()
-        fun register(block: Block, definition: ResourceLocation, parent: ResourceLocation?) {
-            fakeBlocks.getOrPut(block, ::mutableMapOf)[definition] = parent
+        val fakeBlocks = mutableMapOf<Block, MutableMap<ResourceLocation, Pair<ResourceLocation?, Block>>>()
+        fun register(block: Block, texture: Block, definition: ResourceLocation, parent: ResourceLocation?) {
+            fakeBlocks.getOrPut(block, ::mutableMapOf)[definition] = (parent to texture)
         }
-        collector { block, definition, parent, _ ->
-            register(block, definition, parent)
+        collector { block, texture, definition, parent, _ ->
+            register(block, texture, definition, parent)
             println("Registering $block")
         }
         fakeBlocks.entries.forEach { (block, entries) ->
             factories.firstOrNull { it.isFor(block) }?.let {
                 entries.forEach { model ->
-                    val (model, parent) = model
+                    val (model, pair) = model
+                    val (parent, texture) = pair
                     println("Creating $model")
-                    it.create(block, model, parent, blockModelGenerators, context)
+                    it.create(block, texture, model, parent, blockModelGenerators, context)
                 }
             }
         }

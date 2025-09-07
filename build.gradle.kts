@@ -294,6 +294,47 @@ tasks {
     }
 }
 
+fun registerMeowdding(name: String, init: Task.() -> Unit = {}) = tasks.register(name).apply { configure { group = "meowdding"; init() } }
+val createResourcePacks = registerMeowdding("createResourcePacks")
+val runAllDatagen = registerMeowdding("runAllDatagen")
+val mergePackOutputs = tasks.register("mergePackOutputs", JavaExec::class) {
+    classpath = cloche.targets.first().data.value.get().sourceSet.runtimeClasspath
+    mainClass = "me.owdding.skyocean.datagen.dispatcher.DataGenPostProcessor"
+    group = "meowdding"
+    jvmArgs("-Dskyocean.datagen.output=${project.layout.buildDirectory.dir("libs").get().toPath().absolutePathString()}")
+    dependsOn(createResourcePacks)
+    mustRunAfter(createResourcePacks)
+}
+
+cloche.targets.forEach { target ->
+    target.runs {
+        val run = this
+        run.clientData.takeIf { clientData -> clientData.value.isPresent }?.configure {
+            val parentRun = this
+            runAllDatagen.get().dependsOn(this.runTask)
+            runAllDatagen.get().mustRunAfter(this.runTask)
+            minecraftRuns.add(objects.newInstance(MinecraftRunConfiguration::class, "${parentRun.name}:resourcepack", project).apply {
+                this.mainClass = "me.owdding.skyocean.datagen.dispatcher.SkyOceanDatagenDispatcher"
+                this.jvmVersion = parentRun.jvmVersion
+                this.sourceSet = parentRun.sourceSet
+                this.beforeRun = parentRun.beforeRun
+                this.arguments = parentRun.arguments
+                this.jvmArguments = parentRun.jvmArguments
+                this.environment = parentRun.environment
+                this.workingDirectory = parentRun.workingDirectory
+                jvmArgs("-Dskyocean.datagen.target=RESOURCE_PACKS")
+                jvmArgs("-Dskyocean.datagen.dir=${project.layout.buildDirectory.dir("resourcepacks/${target.name}").get().toPath().absolutePathString()}")
+                jvmArgs("-Dskyocean.datagen.output=${project.layout.buildDirectory.dir("libs").get().toPath().absolutePathString()}")
+                createResourcePacks.get().dependsOn(this.runTask)
+                createResourcePacks.get().mustRunAfter(this.runTask)
+
+                runAllDatagen.get().dependsOn(this.runTask)
+                runAllDatagen.get().mustRunAfter(this.runTask)
+            })
+        }
+    }
+}
+
 ksp {
     arg("actualStubDir", project.layout.buildDirectory.dir("generated/ksp/main/stubs").get().asFile.absolutePath)
 }

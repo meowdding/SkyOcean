@@ -83,12 +83,13 @@ object StairModelFactory : BlockModelFactory() {
 
     override fun create(
         block: Block,
+        texture: Block,
         fakeBlock: ResourceLocation,
         parent: ResourceLocation?,
         generator: BlockModelGenerators,
         modelGenContext: ModelGenContext,
     ) {
-        val textureMapping = TexturedModel.CUBE.get(getBaseBlock(block)).mapping
+        val textureMapping = TexturedModel.CUBE.get(getBaseBlock(texture)).mapping
 
         val innerStairs = ModelTemplates.STAIRS_INNER.plainVariant(fakeBlock, block, textureMapping)
         val straightStairs = ModelTemplates.STAIRS_STRAIGHT.plainVariant(fakeBlock, block, textureMapping)

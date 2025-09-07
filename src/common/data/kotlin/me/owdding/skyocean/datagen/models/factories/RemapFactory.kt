@@ -22,6 +22,7 @@ object RemapFactory : BlockModelFactory() {
 
     override fun create(
         block: Block,
+        texture: Block,
         fakeBlock: ResourceLocation,
         parent: ResourceLocation?,
         generator: BlockModelGenerators,
@@ -31,6 +32,6 @@ object RemapFactory : BlockModelFactory() {
             error("Unhandled block $block")
         }
 
-        DefaultModelFactory.create(actualBlock, fakeBlock, parent, generator, modelGenContext)
+        DefaultModelFactory.create(actualBlock, texture, fakeBlock, parent, generator, modelGenContext)
     }
 }
