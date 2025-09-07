@@ -77,7 +77,7 @@ public class EquipmentLayerRendererMixin {
     ) {
         var color = original.call(layer, defaultColor);
         var alpha = ItemStackAccessor.getAlpha(stack);
-        if (alpha != null && color != null) {
+        if (alpha != null && color != null && alpha < 253) {
             renderTranslucent.set(true);
             return (alpha << 24) | (color & 0xFFFFFF);
         }
