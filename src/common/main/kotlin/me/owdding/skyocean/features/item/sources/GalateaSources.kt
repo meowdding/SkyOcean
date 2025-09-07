@@ -10,7 +10,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object HuntaxeItemSource : ItemSource {
-    override val type = ItemSources.HUNTAXE
+    override val type = ItemSources.HUNT_AXE
 
     override fun getAll(): List<SimpleTrackedItem> = emptyList()
 
@@ -24,7 +24,7 @@ object HuntaxeItemSource : ItemSource {
 }
 
 data class HuntaxeItemContext(override val parent: SimpleTrackedItem) : ParentItemContext(parent) {
-    override val source: ItemSources = ItemSources.HUNTAXE
+    override val source: ItemSources = ItemSources.HUNT_AXE
 
     override fun collectLines(): List<Component> = build {
         add("Contained in ") {
