@@ -56,7 +56,8 @@ object MiscConfig : CategoryKt("misc") {
 
     var museumArmourPieces by boolean(true) {
         translation = "skyocean.config.misc.museumArmourPieces"
-      
+    }
+
     var customizationVanillaIntegration by boolean(false) {
         this.translation = "skyocean.config.misc.customization_vanilla_integration"
     }

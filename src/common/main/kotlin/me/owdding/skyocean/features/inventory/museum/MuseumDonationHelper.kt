@@ -17,7 +17,6 @@ import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
-import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperDisplay
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperContext
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
@@ -53,7 +52,6 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
-import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -198,8 +196,8 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
             }
 
             onClick {
-                CraftHelperDisplay.data?.item = id
-                CraftHelperDisplay.data?.amount = 1
+                CraftHelperStorage.setSelected(id)
+                CraftHelperStorage.setAmount(1)
                 CraftHelperStorage.save()
                 McScreen.self.rebuild()
             }
