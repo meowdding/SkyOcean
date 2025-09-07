@@ -13,18 +13,20 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 @Module
 object CrystalHollowBlocks : BlockRetexture() {
 
-    val HARDSTONE = id("mining/hollows/hardstone")
-    val COAL_ORE = id("mining/hollows/coal_ore")
-    val IRON_ORE = id("mining/hollows/iron_ore")
-    val EMERALD_ORE = id("mining/hollows/emerald_ore")
-    val GOLD_ORE = id("mining/hollows/gold_ore")
-    val DIAMOND_ORE = id("mining/hollows/diamond_ore")
-    val REDSTONE_ORE = id("mining/hollows/redstone_ore")
-    val LAPIS_ORE = id("mining/hollows/lapis_ore")
-    val COBBLESTONE = id("mining/hollows/cobblestone")
-    val COBBLESTONE_SLAB = id("mining/hollows/cobblestone_slab")
-    val COBBLESTONE_STAIRS = id("mining/hollows/cobblestone_stairs")
-    val COBBLESTONE_WALL = id("mining/hollows/cobblestone_wall")
+    val HARDSTONE = hollows("hardstone")
+    val COAL_ORE = hollows("coal_ore")
+    val IRON_ORE = hollows("iron_ore")
+    val EMERALD_ORE = hollows("emerald_ore")
+    val GOLD_ORE = hollows("gold_ore")
+    val DIAMOND_ORE = hollows("diamond_ore")
+    val REDSTONE_ORE = hollows("redstone_ore")
+    val LAPIS_ORE = hollows("lapis_ore")
+    val COBBLESTONE = hollows("cobblestone")
+    val COBBLESTONE_SLAB = hollows("cobblestone_slab")
+    val COBBLESTONE_STAIRS = hollows("cobblestone_stairs")
+    val COBBLESTONE_WALL = hollows("cobblestone_wall")
+    
+    private fun hollows(s: String) = id("mining/hollows/$s")
 
     @Subscription
     fun registerFakeBlocks(event: RegisterFakeBlocksEvent) = with(event) {

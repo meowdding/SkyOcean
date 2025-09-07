@@ -3,7 +3,7 @@ package me.owdding.skyocean.data.profile
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.CodecHelpers
+import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.ItemStack

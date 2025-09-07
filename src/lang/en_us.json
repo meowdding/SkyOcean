@@ -74,7 +74,7 @@
         "glacite": {
           "@value": "Retexture Glacite Tunnel blocks",
           "desc": [
-            "Allows resource packs to change the appearance of glacite tunnel blocks."
+            "Allows resource packs to change the appearance of tungsten, umber and glacite tunnel blocks."
           ]
         },
         "mist": {
@@ -258,6 +258,14 @@
         ],
         "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
       },
+      "customization_vanilla_integration": {
+        "@value": "Animate dyes and skins in inventories",
+        "desc": [
+          "Will always animate dyed armors and helmet skins even in inventories or menus.",
+          "",
+          "<yellow>(Doesn't currently work with skins that allow variant selection or pets)</yellow>"
+        ]
+      },
       "hideEntityFire": {
         "@value": "Hide entity fire",
         "desc": "Removes the fire effect from all entities."
@@ -304,6 +312,10 @@
         "disableRootItems": {
           "@value": "Disable tracking for target",
           "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
+        },
+        "disallowedItemSources": {
+          "@value": "Disallowed item sources",
+          "desc": "Select sources from which the craft helper will ignore."
         },
         "position": {
           "@value": "Position",
@@ -614,6 +626,15 @@
         "shulkerOverwrite": {
           "@value": "Retexture shulker",
           "desc": "Recolors the shulkers to make them more visible."
+        }
+      }
+    },
+    "dungeons": {
+      "@value": "Dungeons",
+      "gambling": {
+        "enabled": {
+          "@value": "CSGO Case Opening",
+          "desc": "Shows a CSGO case opening animation when opening a dungeon chest."
         }
       }
     }

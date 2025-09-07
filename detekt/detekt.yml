@@ -75,6 +75,8 @@ naming:
         variablePattern: "[a-z][A-Za-z0-9]*|[a-z]+$[a-z][A-Za-z0-9]*"
 
 performance:
+    SpreadOperator:
+        active: false
     UnnecessaryPartOfBinaryExpression:
         active: true
 

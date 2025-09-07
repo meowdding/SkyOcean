@@ -35,6 +35,11 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
     private val unobtainableIds = Utils.loadRepoData("unobtainable_ids", SkyOceanItemId.CODEC.listOf())
     private val cache: MutableMap<SkyOceanItemId, ItemStack?> = mutableMapOf()
     private val nameCache: MutableMap<String, SkyOceanItemId> = mutableMapOf()
+    private val allIds: MutableList<SkyOceanItemId> = mutableListOf()
+
+    fun Iterable<Pair<String, SkyOceanItemId>>.saveIds() = this.apply {
+        allIds.addAll(this.map { (_, id) -> id })
+    }
 
     init {
         val start = currentInstant()
@@ -45,6 +50,7 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
                 rune.name().stripColor() to rune("$id", rune.tier())
             }
         }.applyFiltered()
+
 
         RepoAPI.enchantments().enchantments().flatMap { (id, enchantments) ->
             enchantments.levels().map { (_, enchantment) ->
@@ -74,10 +80,10 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
             }.distinct().toMap()
         nameCache.clear()
         nameCache.putAll(newCache)
-        trace("Cached ${nameCache.size} item names in ${start.since().toReadableTime(allowMs = true)}")
+        trace("Cached ${nameCache.size} item names and ${allIds.size} ids in ${start.since().toReadableTime(allowMs = true)}")
     }
 
-    fun List<Pair<String, SkyOceanItemId>>.applyFiltered() = nameCache.putAll(this.filter { (_, id) -> id !in unobtainableIds }.toMap())
+    fun List<Pair<String, SkyOceanItemId>>.applyFiltered() = nameCache.putAll(this.saveIds().filter { (_, id) -> id !in unobtainableIds }.toMap())
 
     fun findIdByName(name: String) = nameCache[name.lowercase().stripColor()]
 
@@ -185,5 +191,7 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
     fun getAttributeById(id: SkyOceanItemId): ItemStack = getAttributeByIdOrNull(id) ?: itemBuilder(Items.BARRIER) {
         name("Unknown attribute: $id")
     }
+
+    fun getAllIds(): List<SkyOceanItemId> = allIds
 
 }

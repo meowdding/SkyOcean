@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ARGB
 import net.minecraft.world.phys.Vec3
+import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
@@ -22,6 +23,9 @@ import java.awt.Color
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
+
+@Stub
+expect fun GuiGraphics.applyPostEffect(id: ResourceLocation)
 
 object RenderUtils {
 

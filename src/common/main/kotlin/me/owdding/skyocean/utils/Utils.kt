@@ -1,16 +1,19 @@
 package me.owdding.skyocean.utils
 
 import com.google.common.cache.Cache
+import com.google.common.cache.CacheLoader
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.lib.extensions.ListMerger
+import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
@@ -18,6 +21,9 @@ import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
@@ -25,6 +31,10 @@ import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
@@ -41,6 +51,7 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.file.Files
@@ -49,6 +60,7 @@ import java.nio.file.StandardOpenOption
 import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.jvm.javaType
@@ -253,15 +265,69 @@ object Utils {
     context(parent: JsonArray) fun putChar(value: Char) = parent.add(value)
 
     context(parent: JsonArray) fun putArray(init: context(JsonArray) () -> Unit) = parent.add(JsonArray().apply(init))
-
     context(parent: JsonObject) fun putArray(property: String, init: context(JsonArray) () -> Unit) = parent.add(property, JsonArray().apply(init))
 
     context(parent: JsonArray) fun putObject(init: context(JsonObject) () -> Unit) = parent.add(JsonObject().apply(init))
-
     context(parent: JsonObject) fun putObject(property: String, init: context(JsonObject) () -> Unit) = parent.add(property, JsonObject().apply(init))
+
+    fun List<Slot>.container() = this.filterNot { it.container is Inventory }
+    fun List<Slot>.containerItems() = this.filterNot { it.container is Inventory }.map { it.item }
+
+    fun <T : Any, V : Any> simpleCacheLoader(constructor: (T) -> V) = object : CacheLoader<T, V>() {
+        override fun load(key: T): V = constructor(key)
+    }
+
+    fun text(text: String, init: MutableComponent.() -> Unit = {}) = Text.of(text, init)
+
+    fun Component.wrapWithNotItalic() = Text.of {
+        append(this@wrapWithNotItalic)
+        this.italic = false
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T, V> V.unsafeCast(): T = this as T
+
+    @JvmStatic
+    fun <T> nonNullElse(value: T?, default: T?): T? {
+        return value ?: default
+    }
+
+    @JvmStatic
+    fun <T> nonNullElseGet(value: T?, default: () -> T?): T? {
+        return value ?: default()
+    }
+
+    fun <T> ResourceKey<T>.get(): Holder<T>? = SkyOcean.registryLookup.get(this).getOrNull()
+    fun <T> ResourceKey<Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
+    fun <T> ResourceKey<Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
+    fun <T> ResourceKey<Registry<T>>.get(value: ResourceLocation): Holder<T> = runCatching {
+        this.lookup().listElements().filter {
+            it.unwrapKey().get().location() == value
+        }.findFirst().orElseThrow()
+    }.onFailure {
+        throw RuntimeException("Failed to load $value from registry ${this.location()}", it)
+    }.getOrThrow()
+
+    fun <T> DataResult<T>.resultOrError() = error().map { it.message() }.orElse(this.result().get().toString())
+
+    context(logger: MeowddingLogger)
+    fun <T> Result<T>.debug(message: String): Result<T> = apply {
+        this.onFailure {
+            logger.debug(message, it)
+        }
+    }
 }
+
 
 @AutoCollect("LateInitModules")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class LateInitModule
+
+@AutoCollect("PreInitModules")
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+annotation class PreInitModule
+
+
+

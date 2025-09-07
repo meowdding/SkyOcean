@@ -3,6 +3,7 @@ package me.owdding.skyocean.config.features.misc
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.config.separator
+import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperLocation
 import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
@@ -43,7 +44,6 @@ object MiscConfig : CategoryKt("misc") {
     }
 
     var islandCloudHider by defaultEnabledMessage(
-        @Suppress("SpreadOperator")
         select(*defaultCloudIslands.toTypedArray()) {
             translation = "skyocean.config.misc.islandCloudHider"
         },
@@ -56,6 +56,9 @@ object MiscConfig : CategoryKt("misc") {
 
     var museumArmourPieces by boolean(true) {
         translation = "skyocean.config.misc.museumArmourPieces"
+      
+    var customizationVanillaIntegration by boolean(false) {
+        this.translation = "skyocean.config.misc.customization_vanilla_integration"
     }
 
     init {
@@ -96,6 +99,10 @@ object MiscConfig : CategoryKt("misc") {
 
     var craftHelperNoRootItems by boolean(false) {
         translation = "skyocean.config.misc.crafthelper.disableRootItems"
+    }
+
+    var disallowedCraftHelperSources by select<ItemSources> {
+        translation = "skyocean.config.misc.crafthelper.disallowedItemSources"
     }
 
     var craftHelperPosition by enum(CraftHelperLocation.LEFT_OF_INVENTORY) {

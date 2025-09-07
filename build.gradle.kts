@@ -83,6 +83,7 @@ cloche {
         project.layout.projectDirectory.dir("src/mixins").toPath().listDirectoryEntries().filter { it.isRegularFile() }.forEach {
             mixins.from("src/mixins/${it.name}")
         }
+        accessWideners.from(project.layout.projectDirectory.file("src/skyocean.accesswidener"))
 
         data {
             dependencies { addDependencies(this) }
@@ -238,6 +239,8 @@ compactingResources {
 
     compactToArray("recipes")
     removeComments("unobtainable_ids")
+    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/dyes.json", "dyes.json")
+    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/animatedskulls.json", "skulls.json")
 }
 
 repo {
@@ -279,6 +282,7 @@ tasks {
         compilerOptions {
             languageVersion = KotlinVersion.KOTLIN_2_2
             freeCompilerArgs.addAll(
+                "-Xcontext-parameters",
                 "-Xmulti-platform",
                 "-Xno-check-actual",
                 "-Xexpect-actual-classes",
@@ -331,6 +335,7 @@ meowdding {
     setupClocheClasspathFix()
     configureModules = true
     configureCodecs = true
+    hasAccessWideners = true
     //configureDetekt = true
 
     codecVersion = libs.versions.meowdding.ktcodecs
