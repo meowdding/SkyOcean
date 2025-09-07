@@ -5,7 +5,9 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
+import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.repo.customization.AnimatedSkulls
 import me.owdding.skyocean.repo.customization.DyeData
@@ -31,6 +33,8 @@ import net.minecraft.world.item.equipment.trim.TrimMaterial
 import net.minecraft.world.item.equipment.trim.TrimPattern
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -41,6 +45,26 @@ object CustomizeCommand {
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("customize") {
+            callback {
+                val item = McPlayer.heldItem
+                if (item.isEmpty) {
+                    Text.of("You aren't holding an item!").sendWithPrefix()
+                    return@callback
+                }
+
+                if (item.getKey() == null) {
+                    text {
+                        append(item.hoverName)
+                        append(" can't be customized!")
+                    }.sendWithPrefix()
+                    return@callback
+                }
+
+                McClient.runNextTick {
+                    StandardCustomizationUi.open(item)
+                }
+            }
+
             then("reset") {
                 thenCallback("name") {
                     remove(CustomItemDataComponents.NAME) { item ->

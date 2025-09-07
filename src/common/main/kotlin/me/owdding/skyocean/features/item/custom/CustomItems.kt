@@ -42,7 +42,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     }
 
     fun modify(itemStack: ItemStack, init: context(ItemStack) CustomItemData.() -> Unit): Boolean {
-        val key = itemStack.createKey() ?: return false
+        val key = itemStack.getKey() ?: return false
         context(itemStack) {
             getOrPut(key).init()
         }

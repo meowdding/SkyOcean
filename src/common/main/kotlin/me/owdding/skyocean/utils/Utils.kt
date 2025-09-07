@@ -277,7 +277,7 @@ object Utils {
         override fun load(key: T): V = constructor(key)
     }
 
-    fun text(text: String, init: MutableComponent.() -> Unit = {}) = Text.of(text, init)
+    fun text(text: String = "", init: MutableComponent.() -> Unit = {}) = Text.of(text, init)
 
     fun Component.wrapWithNotItalic() = Text.of {
         append(this@wrapWithNotItalic)
