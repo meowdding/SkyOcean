@@ -17,6 +17,7 @@ import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
+import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import net.minecraft.client.gui.screens.Screen
@@ -51,6 +52,7 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -210,14 +212,22 @@ object Utils {
 
     fun TooltipBuilder.copyFrom(itemStack: ItemStack) = lines().addAll(itemStack.getLore())
     fun MutableComponent.wrap(wrap: String) = this.wrap(wrap, wrap)
-    fun ItemBuilder.skyOceanPrefix() = this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
+
+    context(_: ItemStack) fun ItemBuilder.skyOceanIndicator() = when (Config.replaceIndicator) {
+        SkyOceanReplaceIndicator.PREFIX -> this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
+        SkyOceanReplaceIndicator.SUFFIX -> this.nameSuffix(ChatUtils.SPACE_ICON_COMPONENT)
+        SkyOceanReplaceIndicator.LORE -> this.modifyTooltip {
+            lines().add(0, Text.of("Added by SkyOcean").withColor(TextColor.DARK_GRAY))
+            lines().add(1, CommonComponents.EMPTY)
+        }
+    }
 
     fun <T, Z> List<T>.mapToMutableList(converter: (T) -> Z) = this.map(converter).toMutableList()
 
-    inline fun ItemStack.skyoceanReplace(prependIcon: Boolean = true, crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
+    inline fun ItemStack.skyoceanReplace(addIndicator: Boolean = true, crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
         this.replaceVisually {
             copyFrom(this@skyoceanReplace)
-            if (prependIcon) skyOceanPrefix()
+            if (addIndicator) skyOceanIndicator()
             init()
         }
     }
@@ -318,6 +328,11 @@ object Utils {
     }
 }
 
+enum class SkyOceanReplaceIndicator {
+    PREFIX,
+    SUFFIX,
+    LORE;
+}
 
 @AutoCollect("LateInitModules")
 @Target(AnnotationTarget.CLASS)
