@@ -57,6 +57,8 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -285,7 +287,13 @@ object Utils {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T, V> V.unsafeCast(): T = this as T
+    @OptIn(ExperimentalContracts::class)
+    inline fun <reified T, reified V> V.unsafeCast(): T {
+        contract {
+            returns() implies (this@unsafeCast is T)
+        }
+        return this as T
+    }
 
     @JvmStatic
     fun <T> nonNullElse(value: T?, default: T?): T? {
