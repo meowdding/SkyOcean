@@ -3,8 +3,10 @@ package me.owdding.skyocean.features.item.lore
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.lib.extensions.ListMerger
+import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanLoreModifiers
 import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.SkyOceanReplaceIndicator
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.network.chat.CommonComponents
@@ -74,7 +76,15 @@ object LoreModifiers {
 
         if (modified.isEmpty()) return null
 
-        this.tooltip.addFirst(Text.join(ChatUtils.ICON_SPACE_COMPONENT, this.tooltip.removeFirst()))
+        when (Config.replaceIndicator) {
+            SkyOceanReplaceIndicator.PREFIX -> this.tooltip.addFirst(Text.join(ChatUtils.ICON_SPACE_COMPONENT, this.tooltip.removeFirst()))
+            SkyOceanReplaceIndicator.SUFFIX -> this.tooltip.addFirst(Text.join(this.tooltip.removeFirst(), ChatUtils.SPACE_ICON_COMPONENT))
+            SkyOceanReplaceIndicator.LORE -> {
+                this.tooltip.add(1, Text.of("Modified by SkyOcean").withColor(TextColor.DARK_GRAY))
+                this.tooltip.add(2, CommonComponents.EMPTY)
+            }
+        }
+
         if (Screen.hasShiftDown()) {
             this.tooltip.addAll(
                 TooltipBuilder().apply {

@@ -26,6 +26,7 @@ import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.CommonComponents
@@ -39,6 +40,7 @@ import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
+import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
@@ -216,8 +218,8 @@ object Utils {
     context(_: ItemStack) fun ItemBuilder.skyOceanIndicator() = when (Config.replaceIndicator) {
         SkyOceanReplaceIndicator.PREFIX -> this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
         SkyOceanReplaceIndicator.SUFFIX -> this.nameSuffix(ChatUtils.SPACE_ICON_COMPONENT)
-        SkyOceanReplaceIndicator.LORE -> this.modifyTooltip {
-            lines().add(0, Text.of("Added by SkyOcean").withColor(TextColor.DARK_GRAY))
+        SkyOceanReplaceIndicator.LORE -> this.alterTooltip {
+            lines().add(0, Text.of("Modified by SkyOcean").withColor(TextColor.DARK_GRAY))
             lines().add(1, CommonComponents.EMPTY)
         }
     }
@@ -227,7 +229,16 @@ object Utils {
     inline fun ItemStack.skyoceanReplace(addIndicator: Boolean = true, crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
         this.replaceVisually {
             copyFrom(this@skyoceanReplace)
+            init()
             if (addIndicator) skyOceanIndicator()
+
+            set(DataComponents.TOOLTIP_DISPLAY, this@skyoceanReplace.get(DataComponents.TOOLTIP_DISPLAY)?.hiddenComponents()?.let { TooltipDisplay(false, it) })
+        }
+    }
+
+    context(_: ItemStack) inline fun ItemBuilder.alterTooltip(crossinline init: TooltipBuilder.() -> Unit) {
+        this.tooltip {
+            lines().addAll(this@alterTooltip.build().getLore())
             init()
         }
     }
