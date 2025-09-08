@@ -122,7 +122,7 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
 
         val button: Button = Widgets.button { btn ->
             btn.withRenderer(
-                state.withRenderer { value: T, open ->
+                state.withRenderer { value, open ->
                     (if (value == null) WidgetRenderers.ellpsisWithChevron(open) else WidgetRenderers.textWithChevron<Button>(
                         optionText(value),
                         open,
