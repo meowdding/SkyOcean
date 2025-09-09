@@ -66,6 +66,7 @@ object RecipeModifier {
         if (!SET_CRAFTHELPER_KEYBIND.matches(event)) return
         val item = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty } ?: return
         setSelected(SkyOceanItemId.fromItem(item))
+        McScreen.self?.let { it.resize(McClient.self, it.width, it.height) }
     }
 
 }
