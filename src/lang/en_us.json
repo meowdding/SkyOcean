@@ -28,6 +28,17 @@
         "@value": "Prefix Gradient",
         "desc": "Changes the gradient that is used for the prefix."
       },
+      "modify_indicator": {
+        "@value": "SkyOcean Modify Indicator",
+        "desc": [
+          "Items modified or added by SkyOcean will have a small indicator (normally <color #355AA0>\uD83C\uDF0A</color>) in their name.",
+          "This indicator can be customized here."
+        ],
+        "prefix": "Prefix in name",
+        "suffix": "Suffix in name",
+        "lore": "First line in lore",
+        "nothing": "No indicator"
+      },
       "debug": {
         "@value": "Enable Debug Mode",
         "desc": [

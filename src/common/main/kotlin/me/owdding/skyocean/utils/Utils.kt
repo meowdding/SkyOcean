@@ -9,6 +9,7 @@ import com.google.gson.JsonParser
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
 import me.owdding.ktmodules.AutoCollect
@@ -215,13 +216,15 @@ object Utils {
     fun TooltipBuilder.copyFrom(itemStack: ItemStack) = lines().addAll(itemStack.getLore())
     fun MutableComponent.wrap(wrap: String) = this.wrap(wrap, wrap)
 
-    context(_: ItemStack) fun ItemBuilder.skyOceanIndicator() = when (Config.replaceIndicator) {
-        SkyOceanReplaceIndicator.PREFIX -> this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
-        SkyOceanReplaceIndicator.SUFFIX -> this.nameSuffix(ChatUtils.SPACE_ICON_COMPONENT)
-        SkyOceanReplaceIndicator.LORE -> this.alterTooltip {
+    context(_: ItemStack) fun ItemBuilder.skyOceanIndicator() = when (Config.modifyIndicator) {
+        SkyOceanModifyIndicator.PREFIX -> this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
+        SkyOceanModifyIndicator.SUFFIX -> this.nameSuffix(ChatUtils.SPACE_ICON_COMPONENT)
+        SkyOceanModifyIndicator.LORE -> this.alterTooltip {
             lines().add(0, Text.of("Modified by SkyOcean").withColor(TextColor.DARK_GRAY))
             lines().add(1, CommonComponents.EMPTY)
         }
+
+        SkyOceanModifyIndicator.NOTHING -> {}
     }
 
     fun <T, Z> List<T>.mapToMutableList(converter: (T) -> Z) = this.map(converter).toMutableList()
@@ -339,10 +342,13 @@ object Utils {
     }
 }
 
-enum class SkyOceanReplaceIndicator {
+enum class SkyOceanModifyIndicator : Translatable {
     PREFIX,
     SUFFIX,
-    LORE;
+    LORE,
+    NOTHING;
+
+    override fun getTranslationKey() = "skyocean.config.main.modify_indicator.${name.lowercase()}"
 }
 
 @AutoCollect("LateInitModules")

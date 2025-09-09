@@ -6,7 +6,7 @@ import me.owdding.lib.extensions.ListMerger
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanLoreModifiers
 import me.owdding.skyocean.utils.ChatUtils
-import me.owdding.skyocean.utils.SkyOceanReplaceIndicator
+import me.owdding.skyocean.utils.SkyOceanModifyIndicator
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.network.chat.CommonComponents
@@ -76,13 +76,15 @@ object LoreModifiers {
 
         if (modified.isEmpty()) return null
 
-        when (Config.replaceIndicator) {
-            SkyOceanReplaceIndicator.PREFIX -> this.tooltip.addFirst(Text.join(ChatUtils.ICON_SPACE_COMPONENT, this.tooltip.removeFirst()))
-            SkyOceanReplaceIndicator.SUFFIX -> this.tooltip.addFirst(Text.join(this.tooltip.removeFirst(), ChatUtils.SPACE_ICON_COMPONENT))
-            SkyOceanReplaceIndicator.LORE -> {
+        when (Config.modifyIndicator) {
+            SkyOceanModifyIndicator.PREFIX -> this.tooltip.addFirst(Text.join(ChatUtils.ICON_SPACE_COMPONENT, this.tooltip.removeFirst()))
+            SkyOceanModifyIndicator.SUFFIX -> this.tooltip.addFirst(Text.join(this.tooltip.removeFirst(), ChatUtils.SPACE_ICON_COMPONENT))
+            SkyOceanModifyIndicator.LORE -> {
                 this.tooltip.add(1, Text.of("Modified by SkyOcean").withColor(TextColor.DARK_GRAY))
                 this.tooltip.add(2, CommonComponents.EMPTY)
             }
+
+            SkyOceanModifyIndicator.NOTHING -> {}
         }
 
         if (Screen.hasShiftDown()) {

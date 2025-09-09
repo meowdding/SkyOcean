@@ -23,7 +23,7 @@ import me.owdding.skyocean.config.features.misc.MobIconsConfig
 import me.owdding.skyocean.config.patcher.ConfigPatches
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.OceanGradients
-import me.owdding.skyocean.utils.SkyOceanReplaceIndicator
+import me.owdding.skyocean.utils.SkyOceanModifyIndicator
 import java.util.function.UnaryOperator
 
 object Config : ConfigKt("skyocean/config") {
@@ -69,8 +69,8 @@ object Config : ConfigKt("skyocean/config") {
         ChatUtils.prefixDelegate,
     )
 
-    val replaceIndicator by enum(SkyOceanReplaceIndicator.PREFIX) {
-        translation = "skyocean.config.main.replace_indicator"
+    val modifyIndicator by enum(SkyOceanModifyIndicator.PREFIX) {
+        translation = "skyocean.config.main.modify_indicator"
     }
 
     override val patches: Map<Int, UnaryOperator<JsonObject>> = ConfigPatches.loadPatches()
