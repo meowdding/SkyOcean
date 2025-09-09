@@ -3,8 +3,9 @@
   "package": "me.owdding.skyocean.mixins",
   "parent": "skyocean.client.mixins.json",
   "client": [
-    "GuiRenderStateMixin",
     "GuiRendererMixin",
+    "GuiRenderStateMixin",
+    "features.customize.PlayerHeadSpecialRendererMixin",
     "BakedGlyphMixin"
   ]
 }

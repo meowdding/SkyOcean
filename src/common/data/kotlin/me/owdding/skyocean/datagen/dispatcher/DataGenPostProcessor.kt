@@ -5,11 +5,11 @@ import com.google.gson.JsonElement
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import me.owdding.skyocean.datagen.dispatcher.Utils.zipFile
-import me.owdding.skyocean.utils.PACK_FORMAT
 import me.owdding.skyocean.utils.PackMetadata
 import me.owdding.skyocean.utils.PackOverlay
 import me.owdding.skyocean.utils.Utils.readAsJson
 import me.owdding.skyocean.utils.Utils.writeJson
+import me.owdding.skyocean.utils.codecs.PACK_FORMAT
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import kotlin.io.path.*

@@ -1,5 +1,7 @@
 package me.owdding.skyocean.features.item.search.search
 
+import me.owdding.skyocean.features.item.sources.system.ItemContext
+import me.owdding.skyocean.features.item.sources.system.ParentItemContext
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
@@ -48,5 +50,8 @@ class ReferenceItemFilter(
         return true
     }
 
+    companion object {
+        fun create(context: ItemContext, stack: ItemStack) = ReferenceItemFilter((context as? ParentItemContext)?.parent?.itemStack ?: stack)
+    }
 
 }

@@ -1,27 +1,38 @@
 package me.owdding.skyocean.utils
 
 import com.google.common.cache.Cache
+import com.google.common.cache.CacheLoader
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
 import me.owdding.ktmodules.AutoCollect
+import me.owdding.lib.extensions.ListMerger
+import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
@@ -29,11 +40,18 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
+import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
+import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
+import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.file.Files
@@ -42,6 +60,7 @@ import java.nio.file.StandardOpenOption
 import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.roundToInt
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.jvm.javaType
@@ -186,6 +205,51 @@ object Utils {
         if (!predicate(value)) this.set(value)
     }
 
+    fun String.replaceTrim(regex: Regex, replacement: String = "") = this.replace(regex, replacement).trim()
+    fun String.replaceTrim(oldValue: String, newValue: String = "") = this.replace(oldValue, newValue).trim()
+
+    fun TooltipBuilder.copyFrom(itemStack: ItemStack) = lines().addAll(itemStack.getLore())
+    fun MutableComponent.wrap(wrap: String) = this.wrap(wrap, wrap)
+    fun ItemBuilder.skyOceanPrefix() = this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
+
+    fun <T, Z> List<T>.mapToMutableList(converter: (T) -> Z) = this.map(converter).toMutableList()
+
+    inline fun ItemStack.skyoceanReplace(prependIcon: Boolean = true, crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
+        this.replaceVisually {
+            copyFrom(this@skyoceanReplace)
+            if (prependIcon) skyOceanPrefix()
+            init()
+        }
+    }
+
+    @Suppress("SpacingAroundColon")
+    context(original: ItemStack) inline fun ItemBuilder.modifyTooltip(crossinline init: TooltipBuilder.() -> Unit) {
+        this.tooltip {
+            lines().addAll(original.getLore())
+            init()
+        }
+    }
+
+    @Suppress("SpacingAroundColon")
+    context(original: ItemStack) inline fun ItemBuilder.mergeTooltip(crossinline init: ListMerger<Component>.() -> Unit) {
+        val merger = ListMerger(original.getLore())
+        merger.init()
+        tooltip { lines().addAll(merger.destination) }
+    }
+
+    fun TooltipBuilder.addAll(iterable: Collection<Component>) = lines().addAll(iterable)
+    fun ListMerger<Component>.space() = add(CommonComponents.EMPTY)
+    fun ListMerger<Component>.add(init: MutableComponent.() -> Unit) = add(Text.of(init))
+    fun ListMerger<Component>.add(text: String, init: MutableComponent.() -> Unit = {}) = add(Text.of(text, init))
+    fun ListMerger<Component>.addAll(iterable: Collection<Component>) = this.destination.addAll(iterable)
+    fun ListMerger<*>.skipRemaining() {
+        while (this.canRead()) read()
+    }
+
+    fun Screen?.rebuild() {
+        this?.resize(McClient.self, this.width, this.height)
+    }
+
     fun jsonObject(init: context(JsonObject) () -> Unit) = JsonObject().apply(init)
     fun jsonArray(init: context(JsonArray) () -> Unit) = JsonArray().apply(init)
 
@@ -208,9 +272,62 @@ object Utils {
 
     fun List<Slot>.container() = this.filterNot { it.container is Inventory }
     fun List<Slot>.containerItems() = this.filterNot { it.container is Inventory }.map { it.item }
+
+    fun <T : Any, V : Any> simpleCacheLoader(constructor: (T) -> V) = object : CacheLoader<T, V>() {
+        override fun load(key: T): V = constructor(key)
+    }
+
+    fun text(text: String, init: MutableComponent.() -> Unit = {}) = Text.of(text, init)
+
+    fun Component.wrapWithNotItalic() = Text.of {
+        append(this@wrapWithNotItalic)
+        this.italic = false
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T, V> V.unsafeCast(): T = this as T
+
+    @JvmStatic
+    fun <T> nonNullElse(value: T?, default: T?): T? {
+        return value ?: default
+    }
+
+    @JvmStatic
+    fun <T> nonNullElseGet(value: T?, default: () -> T?): T? {
+        return value ?: default()
+    }
+
+    fun <T> ResourceKey<T>.get(): Holder<T>? = SkyOcean.registryLookup.get(this).getOrNull()
+    fun <T> ResourceKey<Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
+    fun <T> ResourceKey<Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
+    fun <T> ResourceKey<Registry<T>>.get(value: ResourceLocation): Holder<T> = runCatching {
+        this.lookup().listElements().filter {
+            it.unwrapKey().get().location() == value
+        }.findFirst().orElseThrow()
+    }.onFailure {
+        throw RuntimeException("Failed to load $value from registry ${this.location()}", it)
+    }.getOrThrow()
+
+    fun <T> DataResult<T>.resultOrError() = error().map { it.message() }.orElse(this.result().get().toString())
+
+    context(logger: MeowddingLogger)
+    fun <T> Result<T>.debug(message: String): Result<T> = apply {
+        this.onFailure {
+            logger.debug(message, it)
+        }
+    }
 }
+
 
 @AutoCollect("LateInitModules")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class LateInitModule
+
+@AutoCollect("PreInitModules")
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+annotation class PreInitModule
+
+
+

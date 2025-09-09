@@ -74,7 +74,7 @@
         "glacite": {
           "@value": "Retexture Glacite Tunnel blocks",
           "desc": [
-            "Allows resource packs to change the appearance of glacite tunnel blocks."
+            "Allows resource packs to change the appearance of tungsten, umber and glacite tunnel blocks."
           ]
         },
         "mist": {
@@ -266,6 +266,14 @@
         ],
         "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
       },
+      "customization_vanilla_integration": {
+        "@value": "Animate dyes and skins in inventories",
+        "desc": [
+          "Will always animate dyed armors and helmet skins even in inventories or menus.",
+          "",
+          "<yellow>(Doesn't currently work with skins that allow variant selection or pets)</yellow>"
+        ]
+      },
       "hideEntityFire": {
         "@value": "Hide entity fire",
         "desc": "Removes the fire effect from all entities."
@@ -281,10 +289,18 @@
           "@value": "Preserve Search",
           "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
         },
+        "museumIntegration": {
+          "@value": "Museum integration",
+          "desc": "Changes the museum to highlight items that are found on your profile, furthermore it also tells you which items you can craft and which ones are not craftable at all."
+        },
         "warp_to_island": {
           "@value": "Warp to island",
           "desc": "Automatically warp to island if you click an item that is on it."
         }
+      },
+      "museumArmourPieces": {
+        "@value": "Show museum armour pieces",
+        "desc": "Displays all pieces required to finish an armor set in the tooltip in the museum."
       },
       "crafthelper": {
         "@value": "Craft Helper",
@@ -305,9 +321,9 @@
           "@value": "Disable tracking for target",
           "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
         },
-        "itemSources": {
-          "@value": "Allowed item sources",
-          "desc": "Select sources from which the craft helper can count items"
+        "disallowedItemSources": {
+          "@value": "Disallowed item sources",
+          "desc": "Select sources from which the craft helper will ignore."
         },
         "position": {
           "@value": "Position",

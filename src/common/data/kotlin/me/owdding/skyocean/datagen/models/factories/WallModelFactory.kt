@@ -49,12 +49,13 @@ object WallModelFactory : BlockModelFactory() {
 
     override fun create(
         block: Block,
+        texture: Block,
         fakeBlock: ResourceLocation,
         parent: ResourceLocation?,
         generator: BlockModelGenerators,
         modelGenContext: ModelGenContext,
     ) {
-        val textureMapping = TextureMapping.columnWithWall(getBaseBlock(block))
+        val textureMapping = TextureMapping.columnWithWall(getBaseBlock(texture))
 
         val wallPost = ModelTemplates.WALL_POST.plainVariant(fakeBlock, block, textureMapping)
         val wallLowSide = ModelTemplates.WALL_LOW_SIDE.plainVariant(fakeBlock, block, textureMapping)

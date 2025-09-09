@@ -32,6 +32,7 @@ actual object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, Fa
 
     private fun register(
         block: Block,
+        texture: Block,
         definition: ResourceLocation,
         parent: ResourceLocation?,
         predicate: (BlockState, BlockPos) -> Boolean,

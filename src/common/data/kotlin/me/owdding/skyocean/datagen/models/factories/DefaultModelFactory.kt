@@ -12,12 +12,13 @@ object DefaultModelFactory : BlockModelFactory() {
 
     override fun create(
         block: Block,
+        texture: Block,
         fakeBlock: ResourceLocation,
         parent: ResourceLocation?,
         generator: BlockModelGenerators,
         modelGenContext: ModelGenContext,
     ) {
-        val multiVariant = BlockModelGenerators.plainVariant(SkyOcean.id(createCopy(block, fakeBlock, parent).path))
+        val multiVariant = BlockModelGenerators.plainVariant(SkyOcean.id(createCopy(texture, fakeBlock, parent).path))
         modelGenContext.collectState(fakeBlock, BlockModelGenerators.createSimpleBlock(block, multiVariant))
     }
 }

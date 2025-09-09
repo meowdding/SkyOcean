@@ -1,14 +1,20 @@
 package me.owdding.skyocean.utils
 
+import com.mojang.serialization.MapCodec
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
+import me.owdding.lib.events.RegisterTextShaderEvent
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
+import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
@@ -102,7 +108,7 @@ object OceanColors {
     const val BETTER_GOLD = 0xfc6f03
 }
 
-enum class OceanGradients(val colors: List<Int>) : TextShader by GradientTextShader(colors), Translatable {
+enum class OceanGradients(val colors: List<Int>, private val shader: GradientTextShader = GradientTextShader(colors)) : TextShader by shader, Translatable {
     DEFAULT(0x87CEEB, 0x7FFFD4, 0x87CEEB),
     RAINBOW("#FF0000 #FF7F00 #FFFF00 #00FF00 #0000FF #4B0082 #8B00FF"),
     BISEXUAL("#D60270 #9B4F96 #0038A8"),
@@ -115,12 +121,24 @@ enum class OceanGradients(val colors: List<Int>) : TextShader by GradientTextSha
     DISABLED(0),
     ;
 
+    override val id: ResourceLocation = id("named_gradient")
     val isDisabled = this.colors.size == 1
 
     constructor(vararg colors: Int) : this(colors.toList())
     constructor(colors: String) : this(colors.split(Regex("\\s+")).map { it.removePrefix("#").toInt(16) }.toMutableList().apply { addLast(first()) })
 
     override fun getTranslationKey() = "skyocean.gradients.${name.lowercase()}"
+
+    @PreInitModule
+    companion object {
+        val ID = id("named_gradient")
+        val CODEC: MapCodec<OceanGradients> = SkyOceanCodecs.getCodec<OceanGradients>().fieldOf("name")
+
+        @Subscription
+        fun registerShaders(event: RegisterTextShaderEvent) {
+            event.register(ID, CODEC)
+        }
+    }
 }
 
 data class ReplaceMessage(val message: Component) {

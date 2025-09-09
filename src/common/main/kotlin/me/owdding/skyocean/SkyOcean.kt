@@ -10,10 +10,14 @@ import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
+import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.FakeBlocks
+import me.owdding.skyocean.helpers.MixinHelper
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.core.HolderLookup
+import net.minecraft.data.registries.VanillaRegistries
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.repolib.api.RepoAPI
@@ -32,7 +36,9 @@ import java.net.URI
 @Module
 object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
 
+    val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createLookup() }
     val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
+    val SBAPI by lazy { FabricLoader.getInstance().getModContainer(SkyBlockAPI.MOD_ID).get() }
     val MOD_ID: String = SELF.metadata.id
     val VERSION: String = SELF.metadata.version.friendlyString
 
@@ -47,12 +53,17 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
             patch = null
         }
         repoPatcher = patch
+
+        SkyOceanPreInitModules.init {
+            SkyBlockAPI.eventBus.register(it)
+        }
     }
 
     val configurator = Configurator("skyocean")
     val config = Config.register(configurator)
 
     override fun onInitializeClient() {
+        MixinHelper.isStarted = true
         RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
         SkyOceanModules.init {

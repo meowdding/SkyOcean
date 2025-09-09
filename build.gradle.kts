@@ -25,6 +25,7 @@ plugins {
     alias(libs.plugins.kotlin.symbol.processor)
     //alias(libs.plugins.detekt) - temporarily disabled
     alias(libs.plugins.meowdding.gradle)
+    `museum-data` // defined in buildSrc
 }
 
 base {
@@ -38,6 +39,7 @@ java {
 
 repositories {
     maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
+    maven(url = "https://maven.teamresourceful.com/repository/msrandom/")
     maven(url = "https://maven.fabricmc.net/")
     maven(url = "https://repo.hypixel.net/repository/Hypixel/")
     maven(url = "https://api.modrinth.com/maven")
@@ -81,6 +83,7 @@ cloche {
         project.layout.projectDirectory.dir("src/mixins").toPath().listDirectoryEntries().filter { it.isRegularFile() }.forEach {
             mixins.from("src/mixins/${it.name}")
         }
+        accessWideners.from(project.layout.projectDirectory.file("src/skyocean.accesswidener"))
 
         data {
             dependencies { addDependencies(this) }
@@ -235,6 +238,9 @@ compactingResources {
     }
 
     compactToArray("recipes")
+    removeComments("unobtainable_ids")
+    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/dyes.json", "dyes.json")
+    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/animatedskulls.json", "skulls.json")
 }
 
 repo {
@@ -282,6 +288,7 @@ tasks {
                 "-Xexpect-actual-classes",
                 "-Xopt-in=kotlin.time.ExperimentalTime",
                 "-Xcontext-parameters",
+                "-Xcontext-sensitive-resolution"
             )
         }
     }
@@ -369,6 +376,7 @@ meowdding {
     setupClocheClasspathFix()
     configureModules = true
     configureCodecs = true
+    hasAccessWideners = true
     //configureDetekt = true
 
     codecVersion = libs.versions.meowdding.ktcodecs

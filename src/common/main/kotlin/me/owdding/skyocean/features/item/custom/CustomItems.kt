@@ -1,0 +1,117 @@
+package me.owdding.skyocean.features.item.custom
+
+import com.google.common.cache.Cache
+import com.google.common.cache.CacheBuilder
+import me.owdding.ktmodules.Module
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
+import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.accessors.customize.ItemStackAccessor
+import me.owdding.skyocean.api.SkyOceanItemId
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
+import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.utils.codecs.CodecHelpers
+import me.owdding.skyocean.utils.storage.DataStorage
+import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
+import tech.thatgravyboat.skyblockapi.utils.extentions.get
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toJavaDuration
+
+@Module
+object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
+
+    private val map: MutableMap<ItemKey, CustomItemData> = mutableMapOf()
+
+    private val vanillaIntegration: Cache<ItemKey, CustomItemData> = CacheBuilder.newBuilder()
+        .expireAfterAccess(10.minutes.toJavaDuration())
+        .expireAfterWrite(10.minutes.toJavaDuration())
+        .maximumSize(500)
+        .weakKeys()
+        .build()
+
+    private val storage: DataStorage<MutableList<CustomItemData>> = DataStorage(
+        { mutableListOf() },
+        "custom_items",
+        CodecHelpers.list(),
+    )
+
+    init {
+        map.putAll(storage.get().associateBy { it.key })
+    }
+
+    fun modify(itemStack: ItemStack, init: context(ItemStack) CustomItemData.() -> Unit): Boolean {
+        val key = itemStack.createKey() ?: return false
+        context(itemStack) {
+            getOrPut(key).init()
+        }
+        storage.save()
+        return true
+    }
+
+    fun remove(itemStack: ItemStack) {
+        storage.get().remove(map.remove(itemStack.createKey()))
+    }
+
+    fun getOrPut(key: ItemKey) = map.getOrPut(key) {
+        val data = CustomItemData(key)
+        storage.get().add(data)
+        storage.save()
+        data
+    }
+
+    fun ItemStack.createKey(): ItemKey? = when {
+        this[DataTypes.UUID] != null -> UuidKey(this[DataTypes.UUID]!!)
+        this[DataTypes.TIMESTAMP] != null && this.getSkyOceanId() != null -> IdAndTimeKey(
+            this.getSkyOceanId()!!,
+            this[DataTypes.TIMESTAMP]!!.toEpochMilliseconds(),
+        )
+
+        else -> null
+    }
+
+    fun ItemStack.getKey(): ItemKey? = ItemStackAccessor.getItemKey(this)
+    fun ItemStack.getCustomData() = map[this.getKey()]
+    fun ItemStack.getVanillaIntegrationData() =
+        this.getKey()?.let { vanillaIntegration.getIfPresent(it) }?.takeIf { MiscConfig.customizationVanillaIntegration }
+
+    fun ItemStack.getOrTryCreateCustomData() = this.getKey()?.let { getOrPut(it) }
+
+    operator fun <T> ItemStack.get(component: CustomItemComponent<T>): T? {
+        return this.getCustomData()?.let { it[component] }
+    }
+
+    operator fun <T> ItemStack.set(component: CustomItemComponent<T>, value: T?) {
+        this.getOrTryCreateCustomData()?.let {
+            if (value == null) {
+                it.data.remove(component)
+                return
+            }
+            it[component] = value
+        }
+    }
+
+    fun loadVanilla(self: ItemStack, key: ItemKey?) {
+        key ?: return
+        val skin = self[DataTypes.HELMET_SKIN]?.let {
+            AnimatedSkyblockSkin(SkyOceanItemId.item(it.lowercase()))
+        }
+        val dye = self[DataTypes.APPLIED_DYE]?.let { dye ->
+            runCatching { AnimatedSkyBlockDye(dye.lowercase()) }.getOrNull()
+        }
+
+        if (skin == null && dye == null) return
+        vanillaIntegration.put(
+            key,
+            CustomItemData(key).apply {
+                if (skin != null) {
+                    this[CustomItemDataComponents.SKIN] = skin
+                }
+                if (dye != null) {
+                    this[CustomItemDataComponents.COLOR] = dye
+                }
+            },
+        )
+    }
+}

@@ -18,6 +18,7 @@ abstract class BlockModelFactory {
     abstract fun isFor(block: Block): Boolean
     abstract fun create(
         block: Block,
+        texture: Block,
         fakeBlock: ResourceLocation,
         parent: ResourceLocation?,
         generator: BlockModelGenerators,

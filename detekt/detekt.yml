@@ -53,10 +53,13 @@ formatting:
     FunctionReturnTypeSpacing:
         maxLineLength: 160
     ParameterWrapping:
+        active: true
         maxLineLength: 160
     PropertyWrapping:
+        active: true
         maxLineLength: 160
     Wrapping:
+        active: true
         maxLineLength: 160
     NoWildcardImports: # we use wildcard imports in some places
         active: false
@@ -137,4 +140,12 @@ style:
         active: false
     WildcardImport: # we use wildcard imports in some places
         active: false
-
+    ThrowsCount:
+        active: false
+    ForbiddenImport:
+        active: true
+        imports:
+            -   value: kotlinx.datetime.*
+                reason: "Kotlinx datetime is still in beta and shouldn't be used"
+    UnusedImports:
+        active: true

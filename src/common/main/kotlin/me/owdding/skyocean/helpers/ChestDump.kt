@@ -12,9 +12,9 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.CodecHelpers
 import me.owdding.skyocean.utils.Utils.containerItems
 import me.owdding.skyocean.utils.Utils.getArgument
+import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.debugToggle
 import me.owdding.skyocean.utils.storage.FolderStorage
 import net.minecraft.client.gui.screens.Screen
