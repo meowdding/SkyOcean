@@ -21,7 +21,9 @@ object SkyOceanOvergrownTunnels : SkyOceanDataGeneratorEntrypoint(DatagenTarget.
             FakeBlocksProvider(it, false) { registrar ->
                 registrar(Blocks.SNOW, Blocks.MOSS_BLOCK, GlaciteBlocks.GLACITE_SNOW)
                 registrar(Blocks.SNOW_BLOCK, Blocks.MOSS_BLOCK, GlaciteBlocks.GLACITE_SNOW_BLOCK)
-                registrar(Blocks.PACKED_ICE, Blocks.AMETHYST_BLOCK, GlaciteBlocks.GLACITE_BLOCK)
+                registrar(Blocks.AMETHYST_BLOCK, GlaciteBlocks.GLACITE_BLOCK)
+                registrar(Blocks.SMOOTH_BASALT, GlaciteBlocks.GLACITE_HARD_STONE)
+                registrar(Blocks.SMOOTH_BASALT, GlaciteBlocks.GLACITE_HARD_STONE_WOOL)
             }
         }
         overgrownTunnels.register {

@@ -32,6 +32,6 @@ object RemapFactory : BlockModelFactory() {
             error("Unhandled block $block")
         }
 
-        DefaultModelFactory.create(actualBlock, texture, fakeBlock, parent, generator, modelGenContext)
+        DefaultModelFactory.create(actualBlock, texture.takeUnless { it == block } ?: actualBlock, fakeBlock, parent, generator, modelGenContext)
     }
 }
