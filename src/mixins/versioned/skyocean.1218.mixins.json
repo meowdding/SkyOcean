@@ -5,6 +5,7 @@
   "client": [
     "GuiRendererMixin",
     "GuiRenderStateMixin",
-    "features.customize.PlayerHeadSpecialRendererMixin"
+    "features.customize.PlayerHeadSpecialRendererMixin",
+    "BakedGlyphMixin"
   ]
 }
