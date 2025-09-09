@@ -8,14 +8,10 @@ import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.gui.font.glyphs.BakedGlyph;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(BakedGlyph.class)
 public abstract class BakedGlyphMixin {
-
-    @Shadow
-    protected abstract void render(boolean italic, float x, float y, float z, Matrix4f pose, VertexConsumer buffer, int color, boolean bold, int packedLight);
 
     @WrapOperation(
         method = "renderChar",
@@ -25,12 +21,12 @@ public abstract class BakedGlyphMixin {
         BakedGlyph instance, boolean italic, float x, float y, float z, Matrix4f pose, VertexConsumer buffer, int color, boolean bold, int packedLight, Operation<Void> original, @Local(argsOnly = true) BakedGlyph.GlyphInstance glyph
     ) {
         if (MiscConfig.INSTANCE.getFullTextShadow()) {
-            for(int j = -1; j <= 1; ++j) {
+            for (int j = -1; j <= 1; ++j) {
                 for (int k = -1; k <= 1; ++k) {
                     if (j != 0 || k != 0) {
                         float xShadowOffset = glyph.shadowOffset() * j;
                         float yShadowOffset = glyph.shadowOffset() * k;
-                        this.render(italic, glyph.x() + xShadowOffset, glyph.y() + yShadowOffset, 0.0F, pose, buffer, color, bold, packedLight);
+                        original.call(instance, italic, glyph.x() + xShadowOffset, glyph.y() + yShadowOffset, z, pose, buffer, color, bold, packedLight);
                     }
                 }
             }
@@ -47,12 +43,22 @@ public abstract class BakedGlyphMixin {
         BakedGlyph instance, boolean italic, float x, float y, float z, Matrix4f pose, VertexConsumer buffer, int color, boolean bold, int packedLight, Operation<Void> original, @Local(argsOnly = true) BakedGlyph.GlyphInstance glyph
     ) {
         if (MiscConfig.INSTANCE.getFullTextShadow()) {
-            for(int j = -1; j <= 1; ++j) {
+            for (int j = -1; j <= 1; ++j) {
                 for (int k = -1; k <= 1; ++k) {
                     if (j != 0 || k != 0) {
                         float xShadowOffset = glyph.shadowOffset() * j;
                         float yShadowOffset = glyph.shadowOffset() * k;
-                        this.render(italic, glyph.x() + glyph.boldOffset() + xShadowOffset, glyph.y() + yShadowOffset, 0.001F, pose, buffer, color, bold, packedLight);
+                        original.call(
+                            instance,
+                            italic,
+                            glyph.x() + glyph.boldOffset() + xShadowOffset,
+                            glyph.y() + yShadowOffset,
+                            z,
+                            pose,
+                            buffer,
+                            color,
+                            bold,
+                            packedLight);
                     }
                 }
             }
