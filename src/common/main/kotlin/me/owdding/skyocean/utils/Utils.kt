@@ -316,6 +316,12 @@ object Utils {
             logger.debug(message, it)
         }
     }
+
+    fun <T> T.applyCatching(init: T.() -> Unit) = apply {
+        runCatching {
+            this.init()
+        }
+    }
 }
 
 

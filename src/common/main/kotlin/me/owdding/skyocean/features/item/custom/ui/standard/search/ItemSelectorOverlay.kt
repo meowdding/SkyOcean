@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.item.custom.ui.standard.search
 import com.google.common.primitives.Ints
 import com.teamresourceful.resourcefullib.common.utils.TriState
 import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
@@ -13,14 +14,17 @@ import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.overlays.Rect
+import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
+import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
-class ItemSearchOverlay(
+class ItemSelectorOverlay(
     screen: Screen?,
     widget: AbstractWidget,
     private val base: ItemStack,
@@ -61,6 +65,7 @@ class ItemSearchOverlay(
         }.let(this::addRenderableWidget)
 
         this.addRenderableWidget(this.entries)
+        update(query.get())
     }
 
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -76,23 +81,14 @@ class ItemSearchOverlay(
         val entries = ItemSearchEntries.ENTRIES.stream()
             .filter { it.matches(query) }
             .map { entry ->
-                val item = Displays.center(
-                    16, 16,
-                    Displays.item(entry.resolve(this.base), 12, 12)
-                )
                 Widgets.button {
                     it.withSize(bounds.width - 2, 16)
                     it.withTexture(UIConstants.LIST_ENTRY)
-                    it.withRenderer(
-                        WidgetRenderers.layered(
-                            { graphics, ctx, _ -> item.render(graphics, ctx.x, ctx.y) },
-                            WidgetRenderers.text<Button>(entry.name)
-                                .withColor(MinecraftColors.WHITE)
-                                .withPaddingLeft(16),
-                        ),
-                    )
+                    it.withRenderer(resolveRenderer(entry.resolve(this.base), entry.name))
                     it.withCallback {
-                        // TODO apply some how?
+                        base.getOrCreateStaticData()?.apply {
+                            this[CustomItemDataComponents.MODEL] = entry.toItemDataComponent()
+                        }
                         this.onClose()
                     }
                 }
@@ -105,6 +101,24 @@ class ItemSearchOverlay(
             for ((index, value) in entries.withIndex()) {
                 layout.addChild(value, index, 0)
             }
+        }
+    }
+
+    companion object {
+        fun resolveRenderer(itemStack: ItemStack, itemModelEntry: ModelSearchEntry, size: Int = 16) =
+            resolveRenderer(itemModelEntry.resolve(itemStack), itemModelEntry.name, size)
+
+        fun resolveRenderer(itemStack: ItemStack, name: Component, size: Int = 16): WidgetRenderer<Button?>? {
+            val item = Displays.center(
+                size, size,
+                Displays.item(itemStack, size - 4, size - 4),
+            )
+            return WidgetRenderers.layered(
+                { graphics, ctx, _ -> item.render(graphics, ctx.x, ctx.y) },
+                WidgetRenderers.text<Button>(name)
+                    .withColor(MinecraftColors.WHITE)
+                    .withPaddingLeft(size),
+            )
         }
     }
 }
