@@ -26,11 +26,11 @@ object SkyOceanOvergrownTunnels : SkyOceanDataGeneratorEntrypoint(DatagenTarget.
         }
         overgrownTunnels.register {
             PackMcMetaProvider(it) {
-                description = !"Converts all stone textures to deepslate in the crystal hollows"
+                description = !"Makes the glacite tunnels overgrown instead of frozen!"
             }
         }
         overgrownTunnels.register {
-            CopyProvider(it, "pack.png", "pack.png", "data/skyocean/textures/deep_hollows_small.png")
+            CopyProvider(it, "pack.png", "pack.png", "data/skyocean/textures/overgrown_tunnels_small.png")
         }
     }
 
