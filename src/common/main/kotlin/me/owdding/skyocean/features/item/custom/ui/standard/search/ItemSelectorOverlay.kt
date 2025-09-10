@@ -16,6 +16,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.overlays.Rect
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -90,6 +91,7 @@ class ItemSelectorOverlay(
                             this[CustomItemDataComponents.MODEL] = entry.toItemDataComponent()
                         }
                         this.onClose()
+                        StandardCustomizationUi.anyUpdated = true
                     }
                 }
             }

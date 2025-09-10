@@ -126,4 +126,6 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
             },
         )
     }
+
+    fun save() = storage.save()
 }

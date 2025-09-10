@@ -115,10 +115,15 @@ class ItemSelectorModal(val builder: ItemCustomizationModalBuilder, parent: Scre
     }
 
     override fun resize(mc: Minecraft, width: Int, height: Int) {
-
         this.width = width
         this.height = height
         this.repositionElements()
+    }
+
+    override fun onClose() {
+        if (builder.closeCallback()) {
+            super.onClose()
+        }
     }
 }
 
@@ -128,10 +133,15 @@ class ItemCustomizationModalBuilder {
     internal var title: Component? = null
     internal var minWidth = 150
     internal var minHeight = 100
+    internal var closeCallback: () -> Boolean = { true }
 
     fun withTitle(title: Component?): ItemCustomizationModalBuilder {
         this.title = title
         return this
+    }
+
+    fun withCloseCallback(callback: () -> Boolean) {
+        closeCallback = callback
     }
 
     fun withMinWidth(minWidth: Int): ItemCustomizationModalBuilder {
