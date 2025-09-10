@@ -68,8 +68,13 @@ object RecipeModifier {
     fun onKeybind(event: ScreenKeyReleasedEvent) {
         if (!SET_CRAFTHELPER_KEYBIND.matches(event)) return
         ChatUtils.chat(Component.literal("Keybind pressed"))
-        val item = REIRuntimeCompatability.getReiHoveredItemStack()
-            ?: McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
+        val reiOverlayStuff = REIRuntimeCompatability.getOverlayStuff()?.takeUnless { it.isEmpty || it.item.equals(Items.AIR) }
+        val hoveredItemStack = REIRuntimeCompatability.getReiHoveredItemStack()
+        val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
+        ChatUtils.chat(Component.literal("Overlay: ${reiOverlayStuff?.cleanName}, Hovered: ${hoveredItemStack?.cleanName}, MC: ${mcScreenHovered?.cleanName}"))
+        val item = reiOverlayStuff
+            ?: hoveredItemStack
+            ?: mcScreenHovered
             ?: return
         ChatUtils.chat(Component.literal(item.cleanName))
         setSelected(SkyOceanItemId.fromItem(item))
