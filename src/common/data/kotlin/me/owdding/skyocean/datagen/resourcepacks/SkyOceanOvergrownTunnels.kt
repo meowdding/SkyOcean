@@ -21,16 +21,18 @@ object SkyOceanOvergrownTunnels : SkyOceanDataGeneratorEntrypoint(DatagenTarget.
             FakeBlocksProvider(it, false) { registrar ->
                 registrar(Blocks.SNOW, Blocks.MOSS_BLOCK, GlaciteBlocks.GLACITE_SNOW)
                 registrar(Blocks.SNOW_BLOCK, Blocks.MOSS_BLOCK, GlaciteBlocks.GLACITE_SNOW_BLOCK)
-                registrar(Blocks.PACKED_ICE, Blocks.AMETHYST_BLOCK, GlaciteBlocks.GLACITE_BLOCK)
+                registrar(Blocks.AMETHYST_BLOCK, GlaciteBlocks.GLACITE_BLOCK)
+                registrar(Blocks.SMOOTH_BASALT, GlaciteBlocks.GLACITE_HARD_STONE)
+                registrar(Blocks.SMOOTH_BASALT, GlaciteBlocks.GLACITE_HARD_STONE_WOOL)
             }
         }
         overgrownTunnels.register {
             PackMcMetaProvider(it) {
-                description = !"Converts all stone textures to deepslate in the crystal hollows"
+                description = !"Makes the glacite tunnels overgrown instead of frozen!"
             }
         }
         overgrownTunnels.register {
-            CopyProvider(it, "pack.png", "pack.png", "data/skyocean/textures/deep_hollows_small.png")
+            CopyProvider(it, "pack.png", "pack.png", "data/skyocean/textures/overgrown_tunnels_small.png")
         }
     }
 
