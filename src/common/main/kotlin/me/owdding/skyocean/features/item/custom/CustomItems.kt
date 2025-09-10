@@ -70,7 +70,10 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     @OptIn(ExperimentalUuidApi::class)
     fun ItemStack.createKey(): ItemKey? = when {
         this.getTag("skyocean:customization_item") != null -> UuidKey(Uuid.fromLongs(0, 0).toJavaUuid())
-        this.getTag("skyocean:static_item") != null -> UuidKey(UUID.randomUUID())
+        this.getTag("skyocean:static_item") != null -> UuidKey(
+            this.getTag("skyocean:static_item")!!.asString().map { UUID.fromString(it) }.orElseGet { UUID.randomUUID() },
+        )
+
         this[DataTypes.UUID] != null -> UuidKey(this[DataTypes.UUID]!!)
         this[DataTypes.TIMESTAMP] != null && this.getSkyOceanId() != null -> IdAndTimeKey(
             this.getSkyOceanId()!!,
@@ -107,7 +110,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     fun loadVanilla(self: ItemStack, key: ItemKey?) {
         key ?: return
         val skin = self[DataTypes.HELMET_SKIN]?.let {
-            AnimatedSkyblockSkin(SkyOceanItemId.item(it.lowercase()))
+            runCatching { AnimatedSkyblockSkin(SkyOceanItemId.item(it.lowercase())) }.getOrNull()
         }
         val dye = self[DataTypes.APPLIED_DYE]?.let { dye ->
             runCatching { AnimatedSkyBlockDye(dye.lowercase()) }.getOrNull()

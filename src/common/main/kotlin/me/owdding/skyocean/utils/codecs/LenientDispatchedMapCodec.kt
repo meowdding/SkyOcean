@@ -5,7 +5,6 @@ import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.*
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import me.owdding.lib.utils.MeowddingLogger
-import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import java.util.function.Function
@@ -28,7 +27,7 @@ class LenientDispatchedMapCodec<K, V>(
         return builder.build(prefix)
     }
 
-    companion object : MeowddingLogger by SkyOcean.featureLogger()
+    companion object : MeowddingLogger by SkyOcean.featureLogger("LenientDispatchedMapCodec")
 
     override fun <T : Any> decode(
         ops: DynamicOps<T>,

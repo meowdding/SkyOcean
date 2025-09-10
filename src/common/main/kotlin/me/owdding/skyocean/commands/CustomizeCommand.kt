@@ -258,9 +258,11 @@ object CustomizeCommand {
                 val item = mainHandItemOrNull() ?: return@thenCallback
                 val skin = getArgument<SkyOceanItemId>("animated_skull")!!
 
-                val success = CustomItems.modify(item) {
-                    this[CustomItemDataComponents.SKIN] = AnimatedSkyblockSkin(skin)
-                }
+                val success = runCatching {
+                    CustomItems.modify(item) {
+                        this[CustomItemDataComponents.SKIN] = AnimatedSkyblockSkin(skin)
+                    }
+                }.getOrDefault(false)
                 if (success) {
                     text("Successfully set skin texture!").sendWithPrefix()
                 } else {

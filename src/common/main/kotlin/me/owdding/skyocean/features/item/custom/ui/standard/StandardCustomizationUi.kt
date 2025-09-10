@@ -27,6 +27,8 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object StandardCustomizationUi : SkyOceanScreen() {
 
@@ -110,6 +112,12 @@ object StandardCustomizationUi : SkyOceanScreen() {
             if (showCloseWarning && anyUpdated) {
                 Modals.action().apply {
                     withTitle(!"Save changes?")
+                    withContent(
+                        text {
+                            append("Are you sure you want to exit? You currently have unsaved changes that would be lost!")
+                            this.color = TextColor.WHITE
+                        },
+                    )
                     withAction(
                         Widgets.button().apply {
                             withTexture(UIConstants.DANGER_BUTTON)

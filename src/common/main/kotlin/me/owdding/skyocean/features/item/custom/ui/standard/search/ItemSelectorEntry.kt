@@ -7,6 +7,7 @@ import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.utils.Utils.applyCatching
+import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.itemBuilder
 import me.owdding.skyocean.utils.Utils.set
 import net.minecraft.core.component.DataComponents
@@ -14,12 +15,15 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 object ItemSearchEntries {
 
@@ -41,7 +45,8 @@ interface ModelSearchEntry {
     fun matches(query: String): Boolean {
         return this.name.stripped.contains(query, true)
     }
-    fun toItemDataComponent(): ItemModel
+
+    fun CustomItemData.applyToData()
 
     fun resolve(parent: ItemStack): ItemStack
 }
@@ -56,7 +61,9 @@ data class ItemModelSearchEntry(
         Text.of(this.model.toString())
     }
 
-    override fun toItemDataComponent(): ItemModel = StaticModel(model)
+    override fun CustomItemData.applyToData() {
+        this[CustomItemDataComponents.MODEL] = StaticModel(model)
+    }
 
     override fun resolve(parent: ItemStack): ItemStack = itemBuilder(parent) {
         this[DataComponents.ITEM_MODEL] = model
@@ -67,25 +74,36 @@ data class ItemModelSearchEntry(
 data class SkyBlockModelEntry(
     val model: SkyOceanItemId,
 ) : ModelSearchEntry {
+    val animatedSkin = runCatching { AnimatedSkyblockSkin(model) }.getOrNull()
+    val normalSkin = runCatching { SkyblockSkin(model) }.getOrNull()
+    val skin = animatedSkin ?: normalSkin
     override val name: Component = model.toItem().hoverName
-    override fun toItemDataComponent(): ItemModel = SkyblockModel(model)
+
+    override fun CustomItemData.applyToData() {
+        this[CustomItemDataComponents.MODEL] = SkyblockModel(model)
+        if (model.toItem() in Items.PLAYER_HEAD) {
+            this[CustomItemDataComponents.SKIN] = skin
+        }
+    }
+
+    @OptIn(ExperimentalUuidApi::class)
+    val uuidString = Uuid.random().toHexDashString()
 
     override fun resolve(parent: ItemStack): ItemStack = itemBuilder(parent) {
         val item = model.toItem()
         set(DataComponents.ITEM_MODEL, BuiltInRegistries.ITEM.getKey(item.getItemModel()))
-        set(DataComponents.PROFILE, item[DataComponents.PROFILE])
         set(
             DataComponents.CUSTOM_DATA,
             CustomData.of(
                 compoundTag {
-                    putBoolean("skyocean:static_item", true)
+                    putString("skyocean:static_item", uuidString)
                 },
             ),
         )
     }.applyCatching {
         this.getKey()?.let {
             CustomItems.staticMap[it] = CustomItemData(it).apply {
-                this[CustomItemDataComponents.SKIN] = AnimatedSkyblockSkin(model)
+                this[CustomItemDataComponents.SKIN] = skin
             }
         }
     }

@@ -15,7 +15,6 @@ import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.overlays.Rect
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
-import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -87,8 +86,8 @@ class ItemSelectorOverlay(
                     it.withTexture(UIConstants.LIST_ENTRY)
                     it.withRenderer(resolveRenderer(entry.resolve(this.base), entry.name))
                     it.withCallback {
-                        base.getOrCreateStaticData()?.apply {
-                            this[CustomItemDataComponents.MODEL] = entry.toItemDataComponent()
+                        entry.apply {
+                            base.getOrCreateStaticData()?.applyToData()
                         }
                         this.onClose()
                         StandardCustomizationUi.anyUpdated = true
