@@ -175,6 +175,7 @@ object Utils {
 
     operator fun <T> ItemBuilder.set(type: DataComponentType<T>, value: T) = this.set(type, value)
     fun itemBuilder(item: ItemLike, init: ItemBuilder.() -> Unit) = ItemBuilder().also { it.item = item.asItem() }.apply(init).build()
+    fun itemBuilder(item: ItemStack, init: ItemBuilder.() -> Unit) = ItemBuilder().apply { copyFrom(item) }.apply(init).build()
 
     private val validChars = listOf(' ', '_', '-', ':')
     fun String.sanitizeForCommandInput() = this.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()

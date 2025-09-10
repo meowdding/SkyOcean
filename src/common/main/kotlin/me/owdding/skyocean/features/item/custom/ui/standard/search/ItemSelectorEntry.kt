@@ -6,8 +6,9 @@ import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.mixins.ModelManagerAccessor
-import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.applyCatching
+import me.owdding.skyocean.utils.Utils.itemBuilder
+import me.owdding.skyocean.utils.Utils.set
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
@@ -57,8 +58,9 @@ data class ItemModelSearchEntry(
 
     override fun toItemDataComponent(): ItemModel = StaticModel(model)
 
-    override fun resolve(parent: ItemStack): ItemStack = parent.copy().apply {
+    override fun resolve(parent: ItemStack): ItemStack = itemBuilder(parent) {
         this[DataComponents.ITEM_MODEL] = model
+        set(DataComponents.CUSTOM_DATA, null)
     }
 }
 
@@ -68,9 +70,8 @@ data class SkyBlockModelEntry(
     override val name: Component = model.toItem().hoverName
     override fun toItemDataComponent(): ItemModel = SkyblockModel(model)
 
-    override fun resolve(parent: ItemStack): ItemStack = Utils.itemBuilder(parent.item) {
+    override fun resolve(parent: ItemStack): ItemStack = itemBuilder(parent) {
         val item = model.toItem()
-        copyFrom(parent)
         set(DataComponents.ITEM_MODEL, BuiltInRegistries.ITEM.getKey(item.getItemModel()))
         set(DataComponents.PROFILE, item[DataComponents.PROFILE])
         set(
