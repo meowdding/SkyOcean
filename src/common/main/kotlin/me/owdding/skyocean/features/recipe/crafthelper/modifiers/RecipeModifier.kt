@@ -65,11 +65,9 @@ object RecipeModifier {
     @Subscription
     fun onKeybind(event: ScreenKeyReleasedEvent) {
         if (!SET_CRAFTHELPER_KEYBIND.matches(event)) return
-        val reiOverlayStuff = REIRuntimeCompatability.getOverlayStuff()?.takeUnless { it.isEmpty || it.item.equals(Items.AIR) }
         val hoveredItemStack = REIRuntimeCompatability.getReiHoveredItemStack()
         val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
-        val item = reiOverlayStuff
-            ?: hoveredItemStack
+        val item = hoveredItemStack
             ?: mcScreenHovered
             ?: return
         setSelected(SkyOceanItemId.fromItem(item))
