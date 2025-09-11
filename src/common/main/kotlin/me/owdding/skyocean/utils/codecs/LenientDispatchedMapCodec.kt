@@ -21,7 +21,11 @@ class LenientDispatchedMapCodec<K, V>(
         val builder: RecordBuilder<T> = ops.mapBuilder()
 
         input.forEach { (key, value) ->
-            builder.add(keyCodec.encodeStart(ops, key), valueCodecFunction(key).encodeStart(ops, value.unsafeCast()))
+            try {
+                builder.add(keyCodec.encodeStart(ops, key), valueCodecFunction(key).encodeStart(ops, value.unsafeCast()))
+            } catch (e: Exception) {
+                error("Failed to encode field $key -> $value", e)
+            }
         }
 
         return builder.build(prefix)
@@ -67,7 +71,7 @@ class LenientDispatchedMapCodec<K, V>(
                 warn("Failed to parse lenient dispatched map entry (key: ${keyResult.result()}, value: ${valueResult.result()})")
             }
         } catch (e: Exception) {
-            error("Caught exception while trying to decode lenient dispatched map", e)
+            error("Caught exception while trying to decode lenient dispatched map ($input)", e)
         }
     }
 }

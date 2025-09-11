@@ -34,7 +34,7 @@ object ItemSearchEntries {
                 .keys
                 .map { ItemModelSearchEntry(it) },
             SimpleItemApi.getAllIds().map { SkyBlockModelEntry(it) },
-        ).flatten()
+        ).flatten().sortedBy { it.name.stripped }
     }
 }
 
