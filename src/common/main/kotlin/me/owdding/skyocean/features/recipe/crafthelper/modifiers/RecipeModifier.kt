@@ -9,6 +9,7 @@ import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Utils.contains
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.Items
@@ -75,14 +76,12 @@ object RecipeModifier {
         setSelected(SkyOceanItemId.fromItem(item))
         McScreen.self?.let { it.resize(McClient.self, it.width, it.height) }
 
-        ChatUtils.chat(
-            Text.of("Set Crafthelper selected item to ") {
-                append(item.cleanName) {
-                    this.color = TextColor.GOLD
-                    this.bold = true
-                }
+        Text.of("Set Crafthelper selected item to ") {
+            append(item.cleanName) {
+                this.color = TextColor.GOLD
+                this.bold = true
             }
-        )
+        }.sendWithPrefix()
     }
 
 }
