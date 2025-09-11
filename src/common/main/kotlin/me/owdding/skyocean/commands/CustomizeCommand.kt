@@ -1,6 +1,7 @@
 package me.owdding.skyocean.commands
 
 import com.mojang.brigadier.arguments.BoolArgumentType
+import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
@@ -21,7 +22,7 @@ import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
 import me.owdding.skyocean.utils.commands.HexColorArgumentType
 import me.owdding.skyocean.utils.commands.SkyOceanItemIdArgument
 import me.owdding.skyocean.utils.commands.VirtualResourceArgument
-import net.minecraft.commands.arguments.ComponentArgument
+import me.owdding.skyocean.utils.components.TagComponentSerialization
 import net.minecraft.commands.arguments.ResourceKeyArgument
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
@@ -100,8 +101,8 @@ object CustomizeCommand {
                     }
                 }
             }
-            thenCallback("name name", ComponentArgument.textComponent(context())) {
-                val name = getArgument<Component>("name")!!
+            thenCallback("name name", StringArgumentType.greedyString()) {
+                val name = TagComponentSerialization.deserialize(getArgument<String>("name")!!)
                 val item = mainHandItemOrNull() ?: return@thenCallback
 
                 val success = CustomItems.modify(item) {

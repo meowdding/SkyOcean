@@ -26,6 +26,13 @@ val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
 
 object CodecHelpers {
 
+    internal inline fun <reified K, reified V> map(): Codec<Map<K, V>> =
+        Codec.unboundedMap(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
+
+    internal inline fun <reified K, reified V> mutableMap(): Codec<MutableMap<K, V>> =
+        Codec.unboundedMap(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
+            .xmap({ it.toMutableMap() }, { it })
+
     internal inline fun <reified T> list() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
 
     fun <T> copyOnWriteList(original: Codec<T>): Codec<CopyOnWriteArrayList<T>> = original.listOf().xmap(

@@ -12,6 +12,8 @@ import com.mojang.serialization.DataResult
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
 import me.owdding.ktmodules.AutoCollect
+import me.owdding.lib.displays.Display
+import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
@@ -19,6 +21,7 @@ import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
+import net.fabricmc.fabric.api.tag.client.v1.ClientTags
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -33,10 +36,12 @@ import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
@@ -298,10 +303,12 @@ object Utils {
         return value ?: default()
     }
 
+    fun <T> TagKey<T>.listEntries() = ClientTags.getOrCreateLocalTag(this).map { this.registry().get(it) }.unwrap()
+    fun <T> ResourceKey<out Registry<T>>.list(): List<T> = this.lookup().listElements().map { it.value() }.toList()
     fun <T> ResourceKey<T>.get(): Holder<T>? = SkyOcean.registryLookup.get(this).getOrNull()
-    fun <T> ResourceKey<Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
-    fun <T> ResourceKey<Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
-    fun <T> ResourceKey<Registry<T>>.get(value: ResourceLocation): Holder<T> = runCatching {
+    fun <T> ResourceKey<out Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
+    fun <T> ResourceKey<out Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
+    fun <T> ResourceKey<out Registry<T>>.get(value: ResourceLocation): Holder<T> = runCatching {
         this.lookup().listElements().filter {
             it.unwrapKey().get().location() == value
         }.findFirst().orElseThrow()
@@ -323,6 +330,10 @@ object Utils {
             this.init()
         }
     }
+
+    fun Component.asDisplay(): Display = Displays.text(this)
+    fun Iterable<Item>.filterNotAir() = this.filterNot { item -> item == Items.AIR }
+    fun <T> Iterable<Holder<T>>.unwrap() = this.map { it.value() }
 }
 
 
@@ -335,6 +346,5 @@ annotation class LateInitModule
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class PreInitModule
-
 
 
