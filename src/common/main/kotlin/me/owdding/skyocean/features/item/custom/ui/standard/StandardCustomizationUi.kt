@@ -27,6 +27,7 @@ import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
+import me.owdding.skyocean.utils.rendering.StyledItemWidget
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.ItemStack
@@ -97,7 +98,7 @@ object StandardCustomizationUi : SkyOceanScreen() {
         )
         buttons.forEach { it.active = false }
         withContent {
-            LayoutFactory.horizontal(alignment = MIDDLE) {
+            LayoutFactory.horizontal(alignment = MIDDLE, spacing = 5) {
                 vertical {
                     val name = CustomItemsHelper.getData(copiedItem, DataComponents.CUSTOM_NAME) ?: copiedItem.hoverName
                     val nameState = ListenableState.of(TagComponentSerialization.serialize(name))
@@ -121,7 +122,7 @@ object StandardCustomizationUi : SkyOceanScreen() {
                     }.add()
 
                     Widgets.button {
-                        it.withTexture(UIConstants.LIST_ENTRY)
+                        it.withTexture(UIConstants.DARK_BUTTON)
                         it.withSize(160, 20)
                         fun update() {
                             val entry = CustomItems.staticMap[copiedItem.getKey()]?.get(CustomItemDataComponents.MODEL)?.toModelSearchEntry()
@@ -145,9 +146,8 @@ object StandardCustomizationUi : SkyOceanScreen() {
                         }
                     }.add()
                 }
-                val width = 50
-                val height = width * 1.1f
-                display(Displays.entity(McPlayer.self!!, width, height.toInt(), (width / 3f).floor()))
+
+                widget(StyledItemWidget(copiedItem).withSize(50, 65))
             }.asWidget()
         }
 

@@ -28,6 +28,7 @@ object CustomItemsHelper {
         DataComponents.TRIM -> this[CustomItemDataComponents.ARMOR_TRIM]?.trim
         DataComponents.PROFILE -> this[CustomItemDataComponents.SKIN]?.getResolvableProfile()
         DataComponents.DYED_COLOR -> this[CustomItemDataComponents.COLOR]?.getDyeColor()
+        DataComponents.EQUIPPABLE -> this[CustomItemDataComponents.MODEL]?.resolveToItem()?.components()[DataComponents.EQUIPPABLE]
         else -> null
     }.unsafeCast()
 

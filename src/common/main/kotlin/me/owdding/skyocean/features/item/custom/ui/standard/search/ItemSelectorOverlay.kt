@@ -44,7 +44,7 @@ class ItemSelectorOverlay(
                     bounds.width,
                     Ints.min(
                         layout.height,
-                        this.height - (bounds.y + bounds.height),
+                        this.height - (bounds.y + bounds.height) - 4,
                         10 * 16
                     )
                 )
@@ -118,6 +118,7 @@ class ItemSelectorOverlay(
                 { graphics, ctx, _ -> item.render(graphics, ctx.x, ctx.y) },
                 WidgetRenderers.text<Button>(name)
                     .withColor(MinecraftColors.WHITE)
+                    .withLeftAlignment()
                     .withPaddingLeft(size),
             )
         }
