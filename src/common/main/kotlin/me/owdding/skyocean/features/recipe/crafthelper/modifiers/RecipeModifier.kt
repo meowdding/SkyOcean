@@ -23,7 +23,9 @@ import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
@@ -63,15 +65,24 @@ object RecipeModifier {
     }
 
     @Subscription
-    fun onKeybind(event: ScreenKeyReleasedEvent) {
+    fun onKeybind(event: ScreenKeyReleasedEvent.Pre) {
         if (!SET_CRAFTHELPER_KEYBIND.matches(event)) return
-        val hoveredItemStack = REIRuntimeCompatability.getReiHoveredItemStack()
+
+        val reiHovered = REIRuntimeCompatability.getReiHoveredItemStack()
         val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
-        val item = hoveredItemStack
-            ?: mcScreenHovered
-            ?: return
+        val item = mcScreenHovered ?: reiHovered ?: return
+
         setSelected(SkyOceanItemId.fromItem(item))
         McScreen.self?.let { it.resize(McClient.self, it.width, it.height) }
+
+        ChatUtils.chat(
+            Text.of("Set Crafthelper selected item to ") {
+                append(item.cleanName) {
+                    this.color = TextColor.GOLD
+                    this.bold = true
+                }
+            }
+        )
     }
 
 }
