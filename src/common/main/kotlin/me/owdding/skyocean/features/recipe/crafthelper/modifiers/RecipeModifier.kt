@@ -2,7 +2,6 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
-import me.owdding.lib.compat.REICompatability
 import me.owdding.lib.compat.REIRuntimeCompatability
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
@@ -12,7 +11,6 @@ import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.contains
 import net.minecraft.core.component.DataComponents
-import net.minecraft.network.chat.Component
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.TooltipDisplay
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -67,16 +65,13 @@ object RecipeModifier {
     @Subscription
     fun onKeybind(event: ScreenKeyReleasedEvent) {
         if (!SET_CRAFTHELPER_KEYBIND.matches(event)) return
-        ChatUtils.chat(Component.literal("Keybind pressed"))
         val reiOverlayStuff = REIRuntimeCompatability.getOverlayStuff()?.takeUnless { it.isEmpty || it.item.equals(Items.AIR) }
         val hoveredItemStack = REIRuntimeCompatability.getReiHoveredItemStack()
         val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
-        ChatUtils.chat(Component.literal("Overlay: ${reiOverlayStuff?.cleanName}, Hovered: ${hoveredItemStack?.cleanName}, MC: ${mcScreenHovered?.cleanName}"))
         val item = reiOverlayStuff
             ?: hoveredItemStack
             ?: mcScreenHovered
             ?: return
-        ChatUtils.chat(Component.literal(item.cleanName))
         setSelected(SkyOceanItemId.fromItem(item))
         McScreen.self?.let { it.resize(McClient.self, it.width, it.height) }
     }
