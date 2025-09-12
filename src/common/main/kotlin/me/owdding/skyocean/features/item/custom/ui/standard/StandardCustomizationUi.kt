@@ -14,6 +14,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.layouts.asWidget
+import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
@@ -34,6 +35,7 @@ import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.components.TagComponentSerialization
+import me.owdding.skyocean.utils.debugToggle
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
 import me.owdding.skyocean.utils.items.ItemCache
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
@@ -41,6 +43,7 @@ import me.owdding.skyocean.utils.rendering.StyledItemWidget
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
@@ -56,12 +59,16 @@ import kotlin.jvm.optionals.getOrNull
 
 object StandardCustomizationUi : SkyOceanScreen() {
 
+    private val debug by debugToggle("customization/ui/debug")
+
     val buttons: MutableList<Button> = mutableListOf()
     var anyUpdated: Boolean = false
         set(value) {
             buttons.forEach { it.active = value }
             field = value
         }
+
+    fun buttonClick() = McClient.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0f, 1f)
 
     fun open(item: ItemStack) = ItemCustomizationModalBuilder().apply {
         anyUpdated = false
@@ -162,6 +169,7 @@ object StandardCustomizationUi : SkyOceanScreen() {
                         update()
                         it.withCallback {
                             update()
+                            buttonClick()
                             McClient.setScreen(ItemSelectorOverlay(McScreen.self, it, copiedItem))
                         }
                     }.add()
@@ -174,16 +182,27 @@ object StandardCustomizationUi : SkyOceanScreen() {
                             val trimData = CustomItemsHelper.getData(copiedItem, DataComponents.TRIM)
                             val trimPattern: ListenableState<TrimPattern?> = ListenableState.of(trimData?.pattern()?.value())
                             val trimMaterial: ListenableState<TrimMaterial?> = ListenableState.of(trimData?.material()?.value())
+                            val hasTrim = trimData != null
 
                             fun updateTrimData() {
-                                // todo clear and highlight current selected :3
-                                text {
-                                    append(trimPattern.get()?.assetId().toString())
-                                    append(" | ")
-                                    append(trimMaterial.get()?.description().toString())
-                                }.sendWithPrefix()
-                                val pattern = trimPattern.get() ?: return
-                                val material = trimMaterial.get() ?: return
+                                if (debug) {
+                                    text {
+                                        append(trimPattern.get()?.assetId().toString())
+                                        append(" | ")
+                                        append(trimMaterial.get()?.description().toString())
+                                    }.sendWithPrefix()
+                                }
+                                val pattern = trimPattern.get()
+                                val material = trimMaterial.get()
+                                if (pattern == null || material == null) {
+                                    if (hasTrim) {
+                                        anyUpdated = true
+                                    }
+                                    copiedItem.getOrCreateStaticData()?.let {
+                                        it[CustomItemDataComponents.ARMOR_TRIM] = null
+                                    }
+                                    return
+                                }
                                 anyUpdated = true
 
                                 copiedItem.getOrCreateStaticData()?.let {
@@ -193,8 +212,10 @@ object StandardCustomizationUi : SkyOceanScreen() {
                             trimPattern.registerListener { updateTrimData() }
                             trimMaterial.registerListener { updateTrimData() }
                             TrimPatternMap.map.trimButton(trimPattern)
-                                .chunked(7).asWidgetTable()
-                                .asScrollableWidget(140, 60)
+                                .chunked(7)
+                                .asWidgetTable()
+                                .asLayoutWidget()
+                                .withStretchToContentSize()
                                 .withTexture(UIConstants.MODAL_INSET)
                                 .add()
                             spacer(PADDING)
@@ -208,7 +229,8 @@ object StandardCustomizationUi : SkyOceanScreen() {
                             }.trimButton(trimMaterial)
                                 .chunked(4)
                                 .asWidgetTable()
-                                .asScrollableWidget(80, 60)
+                                .asLayoutWidget()
+                                .withStretchToContentSize()
                                 .withTexture(UIConstants.MODAL_INSET)
                                 .add()
                         }
@@ -266,7 +288,7 @@ object StandardCustomizationUi : SkyOceanScreen() {
 
     fun <V> Map<Item, V>.trimButton(state: State<V>): List<AbstractWidget> = this.map { (item, value) ->
         Widgets.button {
-            val display = Displays.item(item).withPadding(2)
+            val display = Displays.item(item).withPadding(3, top = 2, left = 2, bottom = 4)
             it.withTexture(null)
             it.withSize(display.getWidth(), display.getHeight())
             it.withRenderer(
@@ -279,9 +301,10 @@ object StandardCustomizationUi : SkyOceanScreen() {
                 ),
             )
             it.withCallback {
+                buttonClick()
                 state.set(value.takeUnless { state.get() == value })
             }
-        }
+        }.withPadding(1)
     }
 
     fun reset(copy: ItemStack) {

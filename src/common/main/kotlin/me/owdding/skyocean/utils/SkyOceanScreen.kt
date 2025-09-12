@@ -89,6 +89,12 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         return widget.asScrollable(width, height, init, alwaysShowScrollBar)
     }
 
+    fun Layout.asLayoutWidget(init: LayoutWidget<Layout>.() -> Unit = {}) = LayoutWidget(this).apply {
+        visible = true
+        withAutoFocus(false)
+        init()
+    }
+
     fun AbstractWidget.asScrollable(
         width: Int,
         height: Int,

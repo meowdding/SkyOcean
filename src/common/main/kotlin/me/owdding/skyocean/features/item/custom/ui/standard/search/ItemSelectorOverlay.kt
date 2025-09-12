@@ -89,6 +89,7 @@ class ItemSelectorOverlay(
                         entry.apply {
                             base.getOrCreateStaticData()?.applyToData()
                         }
+                        StandardCustomizationUi.buttonClick()
                         this.onClose()
                         StandardCustomizationUi.anyUpdated = true
                     }
@@ -103,6 +104,13 @@ class ItemSelectorOverlay(
                 layout.addChild(value, index, 0)
             }
         }
+    }
+
+    override fun mouseClicked(p0: Double, p1: Double, p2: Int): Boolean {
+        if (!super.mouseClicked(p0, p1, p2)) {
+            onClose()
+        }
+        return true
     }
 
     companion object {
