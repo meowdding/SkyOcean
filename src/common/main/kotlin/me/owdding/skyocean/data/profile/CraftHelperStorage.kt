@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.NormalCraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsMethod
+import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsRecipe
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.storage.ProfileStorage
@@ -62,6 +64,11 @@ object CraftHelperStorage {
         }
 
         if (changed) save()
+    }
+
+    fun setSkyShards(recipe: SkyShardsMethod) {
+        storage.set(SkyShardsRecipe(recipe))
+        save()
     }
 
     fun clear() {

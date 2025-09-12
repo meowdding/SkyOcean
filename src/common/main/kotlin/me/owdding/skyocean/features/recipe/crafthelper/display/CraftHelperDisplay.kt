@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.recipe.crafthelper.display
 
+import com.google.gson.JsonObject
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.lib.builder.LayoutFactory
@@ -24,6 +25,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Icons
@@ -44,12 +46,18 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
+import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import java.util.zip.GZIPInputStream
+import kotlin.io.encoding.Base64
 import kotlin.math.max
 
 @LateInitModule
@@ -84,6 +92,23 @@ object CraftHelperDisplay {
                         append("$amount") { color = TextColor.GREEN }
                         append("!").sendWithPrefix()
                     }
+                }
+            }
+            thenCallback("skyshards") {
+                val clipboard = McClient.clipboard
+                val base = Base64.decode(clipboard.split(":")[1].trim())
+                val data = GZIPInputStream(base.inputStream()).use { it.readBytes() }.decodeToString()
+                    .readJson<JsonObject>().toData(SkyOceanCodecs.SkyShardsMethodCodec.codec())
+
+                data?.let {
+                    CraftHelperStorage.setSkyShards(it)
+                    Text.of("Set current recipe to SkyShards Tree for ") {
+                        append(it.shardId.toItem().hoverName)
+                        append(" ${it.quantity.toFormattedString()}x") { color = TextColor.GREEN }
+                        append("!")
+                    }.sendWithPrefix()
+                } ?: run {
+                    Text.of("Failed to read SkyShards data from clipboard!") { this.color = TextColor.RED }.sendWithPrefix()
                 }
             }
             then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
