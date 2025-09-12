@@ -18,7 +18,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @JvmInline
-@Deprecated("Use SkyBlockItemId", ReplaceWith("SkyBlockItemId"))
+@Deprecated("Use SkyBlockId instead", ReplaceWith("tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId"))
 value class SkyOceanItemId private constructor(val id: String) {
     companion object {
         private val amountRegex = Regex(".*?x[\\d,]+")
