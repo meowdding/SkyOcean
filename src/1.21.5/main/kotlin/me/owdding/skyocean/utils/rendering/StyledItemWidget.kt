@@ -3,9 +3,7 @@ package me.owdding.skyocean.utils.rendering
 import com.mojang.authlib.GameProfile
 import com.mojang.math.Axis
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen
-import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.base.BaseWidget
-import earth.terrarium.olympus.client.layouts.Layouts
 import earth.terrarium.olympus.client.ui.UIConstants
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.Minecraft

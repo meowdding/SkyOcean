@@ -1,23 +1,31 @@
 package me.owdding.skyocean.utils.rendering
 
 import com.mojang.authlib.GameProfile
+import com.mojang.blaze3d.platform.Lighting
+import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen
 import earth.terrarium.olympus.client.components.base.BaseWidget
 import earth.terrarium.olympus.client.ui.UIConstants
+import me.owdding.lib.rendering.MeowddingPipState
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.WidgetSprites
+import net.minecraft.client.gui.navigation.ScreenRectangle
+import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.client.player.RemotePlayer
 import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.item.TrackingItemStackRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.component.DataComponents
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
+import org.joml.Matrix3x2f
 import org.joml.Matrix4f
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -28,12 +36,52 @@ import tech.thatgravyboat.skyblockapi.platform.showTooltip
 import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.*
+import java.util.function.Function
 
 private const val BUTTON_SIZE = 5
 
+data class ItemWidgetItemState(
+    override val x0: Int, override val y0: Int, override val x1: Int, override val y1: Int,
+    override val scissorArea: ScreenRectangle?,
+    override val pose: Matrix3x2f,
+    val rotation: Float,
+    val item: TrackingItemStackRenderState,
+) : MeowddingPipState<ItemWidgetItemState>() {
+    override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<ItemWidgetItemState>> =
+        Function { buffer -> ItemWidgetRenderer(buffer) }
+
+    override val shrinkToScissor: Boolean = false
+}
+
+class ItemWidgetRenderer(source: MultiBufferSource.BufferSource) : PictureInPictureRenderer<ItemWidgetItemState>(source) {
+
+    override fun getRenderStateClass(): Class<ItemWidgetItemState> = ItemWidgetItemState::class.java
+    override fun getTextureLabel(): String = "skyocean_item_widget"
+
+    override fun renderToTexture(state: ItemWidgetItemState, stack: PoseStack) {
+        val bounds = state.bounds ?: return
+
+
+        stack.pushPose()
+        stack.translate(0f, bounds.height() / -2f - 5f, 0f)
+        stack.scale(40f, 40f, 40f)
+        stack.mulPose(Axis.ZN.rotationDegrees(180f))
+        stack.mulPose(Axis.YN.rotationDegrees(state.rotation))
+
+        McClient.self.gameRenderer.lighting.setupFor(if (state.item.usesBlockLight()) Lighting.Entry.ITEMS_3D else Lighting.Entry.ITEMS_FLAT)
+
+        state.item.render(stack, this.bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY)
+
+        stack.popPose()
+    }
+
+}
+
 actual class StyledItemWidget actual constructor(val stack: ItemStack) : BaseWidget() {
 
-    private val AUTO_ROTATE_ICON = WidgetSprites(SkyOcean.id("auto_rotate"), SkyOcean.id("auto_rotate_hovered"))
+    private val AUTO_ROTATE_ICON = WidgetSprites(SkyOcean.id("auto_rotate"), SkyOcean.id("auto_rotate_disabled"), SkyOcean.id("auto_rotate_hovered"))
+    private val LEFT_ARROW_ICON = SkyOcean.id("left_arrow")
+    private val RIGHT_ARROW_ICON = SkyOcean.id("right_arrow")
 
     private var isAutoRotating = true
     private var rotation: Float = 0f
@@ -45,8 +93,7 @@ actual class StyledItemWidget actual constructor(val stack: ItemStack) : BaseWid
 
     private val entity = RemotePlayer(Minecraft.getInstance().level, GameProfile(UUID.randomUUID(), "Item Preview"))
 
-
-    private val buttonX get() = this.x + 2
+    private val buttonX get() = this.x + (this.width - BUTTON_SIZE) / 2
     private val buttonY get() = this.y + this.height - BUTTON_SIZE - 2
 
     private var isButtonHovered = false
@@ -77,38 +124,30 @@ actual class StyledItemWidget actual constructor(val stack: ItemStack) : BaseWid
                     this.entity,
                 )
             } else {
-//                 val pose = graphics.pose()
-//                 pose.pushPose()
-//                 pose.translate(this.x + width / 2f, this.y + height / 2f + 10f, 150f)
-//                 pose.mulPose(Matrix4f().scaling(1.0F, -1.0F, 1.0F))
-//                 pose.scale(40f, 40f, 40f)
-//                 pose.translate(0f, 0.25f, 0f)
-//                 pose.mulPose(Axis.YN.rotationDegrees(this.rotation))
-//
-//                 graphics.drawSpecial { buffer ->
-//                     McClient.self.itemRenderer.renderStatic(
-//                         null,
-//                         this.stack,
-//                         ItemDisplayContext.NONE,
-//                         pose,
-//                         buffer,
-//                         McLevel.self,
-//                         LightTexture.FULL_BRIGHT,
-//                         OverlayTexture.NO_OVERLAY,
-//                         0,
-//                     )
-//                 }
-//
-//                 pose.popPose()
+                val itemState = TrackingItemStackRenderState()
+                McClient.self.itemModelResolver.updateForTopItem(itemState, this.stack, ItemDisplayContext.NONE, McLevel.self, null, 0)
+                graphics.guiRenderState.submitPicturesInPictureState(ItemWidgetItemState(
+                    x, y, x + width, y + height,
+                    graphics.scissorStack.peek(),
+                    Matrix3x2f(graphics.pose()),
+                    this.rotation,
+                    itemState
+                ))
             }
         }
 
         this.isButtonHovered = isMouseOverButton(mouseX, mouseY)
-        if (!this.isAutoRotating) {
-            graphics.drawSprite(AUTO_ROTATE_ICON.get(false, this.isButtonHovered), buttonX, buttonY, BUTTON_SIZE, BUTTON_SIZE)
-            if (this.isButtonHovered) {
-                graphics.showTooltip(Text.of("Enable Auto Rotate"), mouseX, mouseY)
-            }
+        graphics.drawSprite(LEFT_ARROW_ICON, buttonX - 1 - 7, buttonY, 7, BUTTON_SIZE)
+        graphics.drawSprite(
+            AUTO_ROTATE_ICON.get(!this.isAutoRotating, !this.isAutoRotating && this.isButtonHovered),
+            buttonX,
+            buttonY,
+            BUTTON_SIZE,
+            BUTTON_SIZE,
+        )
+        graphics.drawSprite(RIGHT_ARROW_ICON, buttonX + BUTTON_SIZE + 1, buttonY, 7, BUTTON_SIZE)
+        if (!this.isAutoRotating && this.isButtonHovered) {
+            graphics.showTooltip(Text.of("Enable Auto Rotate"), mouseX, mouseY)
         }
     }
 
@@ -126,7 +165,7 @@ actual class StyledItemWidget actual constructor(val stack: ItemStack) : BaseWid
     }
 
     override fun getCursor(): CursorScreen.Cursor? = when {
-        this.isButtonHovered -> CursorScreen.Cursor.POINTER
+        this.isButtonHovered && !this.isAutoRotating -> CursorScreen.Cursor.POINTER
         this.isHovered -> CursorScreen.Cursor.RESIZE_EW
         else -> super.cursor
     }
