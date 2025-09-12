@@ -14,6 +14,6 @@ object TrimPatternMap {
     val idMap: Map<ResourceLocation, ResourceLocation> = Utils.loadRepoData("customization/trim_pattern_map", CodecHelpers.map())
     val map = idMap.map { (key, value) ->
         BuiltInRegistries.ITEM.get(key).get().value() to Registries.TRIM_PATTERN.get(value).value()
-    }
+    }.toMap()
 
 }

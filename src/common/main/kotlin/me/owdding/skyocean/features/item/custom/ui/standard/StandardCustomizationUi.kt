@@ -2,13 +2,15 @@ package me.owdding.skyocean.features.item.custom.ui.standard
 
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.buttons.Button
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.ui.modals.Modals
 import earth.terrarium.olympus.client.utils.ListenableState
+import earth.terrarium.olympus.client.utils.State
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
+import me.owdding.lib.displays.DisplayWidget
 import me.owdding.lib.displays.Displays
-import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.layouts.asWidget
@@ -32,11 +34,14 @@ import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.components.TagComponentSerialization
+import me.owdding.skyocean.utils.extensions.associateWithNotNull
 import me.owdding.skyocean.utils.items.ItemCache
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import me.owdding.skyocean.utils.rendering.StyledItemWidget
+import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.equipment.trim.TrimMaterial
@@ -131,14 +136,14 @@ object StandardCustomizationUi : SkyOceanScreen() {
                         )
                     }
                     Widgets.textInput(nameState) {
-                        it.withSize(160, 20)
+                        it.withSize(225, 20)
                     }.add()
                     spacer(0, PADDING)
 
                     this.display(text("Model").withoutShadow().asDisplay())
                     Widgets.button {
                         it.withTexture(UIConstants.DARK_BUTTON)
-                        it.withSize(160, 20)
+                        it.withSize(225, 20)
                         fun update() {
                             val entry = CustomItems.staticMap[copiedItem.getKey()]?.get(CustomItemDataComponents.MODEL)?.toModelSearchEntry()
                             if (entry != null) {
@@ -161,46 +166,52 @@ object StandardCustomizationUi : SkyOceanScreen() {
                         }
                     }.add()
 
-                    spacer(0, PADDING)
-                    this.display(text("Trim").withoutShadow().asDisplay())
-                    horizontal {
-                        val trimData = CustomItemsHelper.getData(copiedItem, DataComponents.TRIM)
-                        val trimPattern: ListenableState<TrimPattern?> = ListenableState.of(trimData?.pattern()?.value())
-                        val trimMaterial: ListenableState<TrimMaterial?> = ListenableState.of(trimData?.material()?.value())
 
-                        fun updateTrimData() {
-                            // todo clear and highlight current selected :3
-                            text {
-                                append(trimPattern.get()?.assetId().toString())
-                                append(" | ")
-                                append(trimMaterial.get()?.description().toString())
-                            }.sendWithPrefix()
-                            val pattern = trimPattern.get() ?: return
-                            val material = trimMaterial.get() ?: return
-                            anyUpdated = true
+                    if (copiedItem.has(DataComponents.EQUIPPABLE)) {
+                        spacer(0, PADDING)
+                        this.display(text("Trim").withoutShadow().asDisplay())
+                        horizontal {
+                            val trimData = CustomItemsHelper.getData(copiedItem, DataComponents.TRIM)
+                            val trimPattern: ListenableState<TrimPattern?> = ListenableState.of(trimData?.pattern()?.value())
+                            val trimMaterial: ListenableState<TrimMaterial?> = ListenableState.of(trimData?.material()?.value())
 
-                            copiedItem.getOrCreateStaticData()?.let {
-                                it[CustomItemDataComponents.ARMOR_TRIM] = ArmorTrim(material, pattern)
+                            fun updateTrimData() {
+                                // todo clear and highlight current selected :3
+                                text {
+                                    append(trimPattern.get()?.assetId().toString())
+                                    append(" | ")
+                                    append(trimMaterial.get()?.description().toString())
+                                }.sendWithPrefix()
+                                val pattern = trimPattern.get() ?: return
+                                val material = trimMaterial.get() ?: return
+                                anyUpdated = true
+
+                                copiedItem.getOrCreateStaticData()?.let {
+                                    it[CustomItemDataComponents.ARMOR_TRIM] = ArmorTrim(material, pattern)
+                                }
                             }
+                            trimPattern.registerListener { updateTrimData() }
+                            trimMaterial.registerListener { updateTrimData() }
+                            TrimPatternMap.map.trimButton(trimPattern)
+                                .chunked(7).asWidgetTable()
+                                .asScrollableWidget(140, 60)
+                                .withTexture(UIConstants.MODAL_INSET)
+                                .add()
+                            spacer(PADDING)
+                            ItemCache.trimMaterials.associateWithNotNull {
+                                it.components()
+                                    .get(DataComponents.PROVIDES_TRIM_MATERIAL)
+                                    ?.material()
+                                    ?.unwrap(SkyOcean.registryLookup)
+                                    ?.getOrNull()
+                                    ?.value()
+                            }.trimButton(trimMaterial)
+                                .chunked(4)
+                                .asWidgetTable()
+                                .asScrollableWidget(80, 60)
+                                .withTexture(UIConstants.MODAL_INSET)
+                                .add()
                         }
-                        trimPattern.registerListener { updateTrimData() }
-                        trimMaterial.registerListener { updateTrimData() }
-                        TrimPatternMap.map.map { (item, pattern) ->
-                            Displays.item(item).withPadding(2).asButtonLeft {
-                                trimPattern.set(pattern.takeUnless { trimPattern.get() == pattern })
-                            }
-                        }.chunked(5).asWidgetTable().asScrollableWidget(120, 60).add()
-                        ItemCache.trimMaterials.map { item ->
-                            Displays.item(item).withPadding(2).asButtonLeft {
-                                val material =
-                                    item.components().get(DataComponents.PROVIDES_TRIM_MATERIAL)?.material()?.unwrap(SkyOcean.registryLookup)?.getOrNull()
-                                        ?.value() ?: run {
-                                        (!"meow :(((((").sendWithPrefix()
-                                        return@asButtonLeft
-                                    }
-                                trimMaterial.set(material.takeUnless { trimMaterial.get() == material })
-                            }
-                        }.chunked(2).asWidgetTable().asScrollableWidget(45, 60).add()
                     }
                 }
 
@@ -252,6 +263,26 @@ object StandardCustomizationUi : SkyOceanScreen() {
             true
         }
     }.open()
+
+    fun <V> Map<Item, V>.trimButton(state: State<V>): List<AbstractWidget> = this.map { (item, value) ->
+        Widgets.button {
+            val display = Displays.item(item).withPadding(2)
+            it.withTexture(null)
+            it.withSize(display.getWidth(), display.getHeight())
+            it.withRenderer(
+                WidgetRenderers.layered(
+                    ExtraWidgetRenderers.conditional(
+                        WidgetRenderers.sprite(UIConstants.PRIMARY_BUTTON),
+                        WidgetRenderers.sprite(UIConstants.DARK_BUTTON),
+                    ) { state.get() == value },
+                    DisplayWidget.displayRenderer(display),
+                ),
+            )
+            it.withCallback {
+                state.set(value.takeUnless { state.get() == value })
+            }
+        }
+    }
 
     fun reset(copy: ItemStack) {
         buttons.clear()

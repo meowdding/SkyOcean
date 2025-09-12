@@ -18,4 +18,10 @@ object ExtraWidgetRenderers {
         return WidgetRenderers.text<T>(!component).withColor(color)
     }
 
+    fun <T : AbstractWidget> conditional(onTrue: WidgetRenderer<T>, onFalse: WidgetRenderer<T>, supplier: () -> Boolean): WidgetRenderer<T> =
+        WidgetRenderer<T> { graphics, context, partial ->
+            val widget = if (supplier()) onTrue else onFalse
+            widget.render(graphics, context, partial)
+        }
+
 }
