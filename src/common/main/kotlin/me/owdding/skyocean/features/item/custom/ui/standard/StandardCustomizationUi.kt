@@ -195,7 +195,8 @@ object StandardCustomizationUi : SkyOceanScreen() {
                                         DisplayWidget.displayRenderer(
                                             ExtraDisplays.passthrough(20, 20) {
                                                 val color = customData?.get(CustomItemDataComponents.COLOR)?.getColor() ?: 0xFFFFFF
-                                                fill(2, 2, 18, 16, ARGB.opaque(color))
+                                                val actualColor = if (it.isHoveredOrFocused) ARGB.scaleRGB(color, 2 / 3f) else color
+                                                fill(2, 2, 18, 16, ARGB.opaque(actualColor))
                                             },
                                         ),
                                     ),
