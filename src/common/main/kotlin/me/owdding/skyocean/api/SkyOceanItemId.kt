@@ -18,6 +18,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @JvmInline
+@Deprecated("Use SkyBlockItemId", ReplaceWith("SkyBlockItemId"))
 value class SkyOceanItemId private constructor(val id: String) {
     companion object {
         private val amountRegex = Regex(".*?x[\\d,]+")
@@ -73,9 +74,9 @@ value class SkyOceanItemId private constructor(val id: String) {
 
         fun unsafe(id: String) = SkyOceanItemId("$UNSAFE$id".lowercase())
 
-        @IncludedCodec
         val CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap(::SkyOceanItemId, SkyOceanItemId::id)
 
+        @IncludedCodec
         val UNKNOWN_CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap({ it.lowercase() }, { it })
             .xmap({ unknownType(it) ?: SkyOceanItemId(it) }, { it.id })
 

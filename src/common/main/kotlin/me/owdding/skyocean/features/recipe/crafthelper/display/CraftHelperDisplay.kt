@@ -103,7 +103,7 @@ object CraftHelperDisplay {
                 data?.let {
                     CraftHelperStorage.setSkyShards(it)
                     Text.of("Set current recipe to SkyShards Tree for ") {
-                        append(it.shardId.toItem().hoverName)
+                        append(it.shard.toItem().hoverName)
                         append(" ${it.quantity.toFormattedString()}x") { color = TextColor.GREEN }
                         append("!")
                     }.sendWithPrefix()

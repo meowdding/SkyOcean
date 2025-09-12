@@ -33,15 +33,13 @@ enum class CraftHelperRecipeType(override val type: KClass<out CraftHelperRecipe
 
 abstract class SkyShardsMethod(
     val type: SkyShardsMethodType,
-    open val shard: String,
+    open val shard: SkyOceanItemId,
     open val quantity: Int,
-) {
-    val shardId by lazy { SkyOceanItemId.attribute(shard) }
-}
+)
 
 @GenerateCodec
 data class SkyShardsRecipeElement(
-    override val shard: String,
+    override val shard: SkyOceanItemId,
     override val quantity: Int,
     val craftsExpected: Int,
     val outputQuantity: Int,
@@ -51,15 +49,31 @@ data class SkyShardsRecipeElement(
 
 @GenerateCodec
 data class SkyShardsDirectElement(
-    override val shard: String,
+    override val shard: SkyOceanItemId,
     override val quantity: Int,
 ) : SkyShardsMethod(SkyShardsMethodType.DIRECT, shard, quantity)
+
+@GenerateCodec
+data class SkyShardsCycleElement(
+    override val shard: SkyOceanItemId,
+    override val quantity: Int,
+    val craftsExpected: Int,
+    val outputQuantity: Int,
+    val pureReptile: Int,
+    val steps: List<SkyShardsCycleStep>,
+) : SkyShardsMethod(SkyShardsMethodType.CYCLE, shard, quantity)
+
+@GenerateCodec
+data class SkyShardsCycleStep(
+    val shard: SkyOceanItemId,
+    val inputs: List<SkyOceanItemId>,
+)
 
 @GenerateDispatchCodec(SkyShardsMethod::class, "method")
 enum class SkyShardsMethodType(override val type: KClass<out SkyShardsMethod>) : DispatchHelper<SkyShardsMethod> {
     RECIPE(SkyShardsRecipeElement::class),
     DIRECT(SkyShardsDirectElement::class),
-    // TODO what the fuck is cycle
+    CYCLE(SkyShardsCycleElement::class)
     ;
 
     companion object {
