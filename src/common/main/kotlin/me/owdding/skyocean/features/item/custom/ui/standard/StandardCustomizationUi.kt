@@ -38,12 +38,14 @@ import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.debugToggle
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
 import me.owdding.skyocean.utils.items.ItemCache
+import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import me.owdding.skyocean.utils.rendering.StyledItemWidget
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.util.ARGB
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
@@ -100,6 +102,7 @@ object StandardCustomizationUi : SkyOceanScreen() {
                 it.withRenderer(ExtraWidgetRenderers.text(!"Cancel"))
                 it.withCallback {
                     showCloseWarning = false
+                    buttonClick()
                     reset(copiedItem)
                     McScreen.self?.onClose()
                 }
@@ -111,6 +114,7 @@ object StandardCustomizationUi : SkyOceanScreen() {
                 it.withSize(80, 24)
                 it.withRenderer(ExtraWidgetRenderers.text(!"Save"))
                 it.withCallback {
+                    buttonClick()
                     showCloseWarning = false
                     McScreen.self?.onClose()
                     save(item, copiedItem)
@@ -120,6 +124,8 @@ object StandardCustomizationUi : SkyOceanScreen() {
         buttons.forEach { it.active = false }
         withContent {
             LayoutFactory.horizontal(alignment = MIDDLE, spacing = 5) {
+                val canBeEquipped = copiedItem.has(DataComponents.EQUIPPABLE)
+
                 vertical {
                     val name = CustomItemsHelper.getData(copiedItem, DataComponents.CUSTOM_NAME) ?: copiedItem.hoverName
                     val nameState = ListenableState.of(TagComponentSerialization.serialize(name))
@@ -142,40 +148,64 @@ object StandardCustomizationUi : SkyOceanScreen() {
                             },
                         )
                     }
+                    val totalWidth = 258
                     Widgets.textInput(nameState) {
-                        it.withSize(225, 20)
+                        it.withSize(totalWidth, 20)
                     }.add()
                     spacer(0, PADDING)
 
-                    this.display(text("Model").withoutShadow().asDisplay())
-                    Widgets.button {
-                        it.withTexture(UIConstants.DARK_BUTTON)
-                        it.withSize(225, 20)
-                        fun update() {
-                            val entry = CustomItems.staticMap[copiedItem.getKey()]?.get(CustomItemDataComponents.MODEL)?.toModelSearchEntry()
-                            if (entry != null) {
-                                it.withRenderer(ItemSelectorOverlay.resolveRenderer(copiedItem, entry, 20))
-                            } else {
+                    horizontal parent@{
+                        vertical {
+                            this.display(text("Model").withoutShadow().asDisplay())
+                            Widgets.button {
+                                it.withTexture(UIConstants.DARK_BUTTON)
+                                it.withSize(totalWidth - (if (canBeEquipped) 25 else 0), 20)
+                                fun update() {
+                                    val entry = CustomItems.staticMap[copiedItem.getKey()]?.get(CustomItemDataComponents.MODEL)?.toModelSearchEntry()
+                                    if (entry != null) {
+                                        it.withRenderer(ItemSelectorOverlay.resolveRenderer(copiedItem, entry, 20))
+                                    } else {
+                                        it.withRenderer(
+                                            ItemSelectorOverlay.resolveRenderer(
+                                                copiedItem,
+                                                !BuiltInRegistries.ITEM.getKey(item.getItemModel()).path,
+                                                20,
+                                            ),
+                                        )
+                                    }
+                                }
+
+                                update()
+                                it.withCallback {
+                                    update()
+                                    buttonClick()
+                                    McClient.setScreen(ItemSelectorOverlay(McScreen.self, it, copiedItem))
+                                }
+                            }.add()
+                        }
+                        if (canBeEquipped) vertical {
+                            this@parent.spacer(PADDING)
+                            display(text("Dye").withoutShadow().asDisplay())
+                            val customData = copiedItem.getOrCreateStaticData()
+                            Widgets.button {
+                                it.withSize(20, 20)
                                 it.withRenderer(
-                                    ItemSelectorOverlay.resolveRenderer(
-                                        copiedItem,
-                                        !BuiltInRegistries.ITEM.getKey(item.getItemModel()).path,
-                                        20,
+                                    WidgetRenderers.layered(
+                                        WidgetRenderers.sprite(UIConstants.DARK_BUTTON),
+                                        DisplayWidget.displayRenderer(
+                                            ExtraDisplays.passthrough(20, 20) {
+                                                val color = customData?.get(CustomItemDataComponents.COLOR)?.getColor() ?: 0xFFFFFF
+                                                fill(2, 2, 18, 16, ARGB.opaque(color))
+                                            },
+                                        ),
                                     ),
                                 )
-                            }
+                            }.add()
                         }
-
-                        update()
-                        it.withCallback {
-                            update()
-                            buttonClick()
-                            McClient.setScreen(ItemSelectorOverlay(McScreen.self, it, copiedItem))
-                        }
-                    }.add()
+                    }
 
 
-                    if (copiedItem.has(DataComponents.EQUIPPABLE)) {
+                    if (canBeEquipped) {
                         spacer(0, PADDING)
                         this.display(text("Trim").withoutShadow().asDisplay())
                         horizontal {
@@ -209,6 +239,7 @@ object StandardCustomizationUi : SkyOceanScreen() {
                                     it[CustomItemDataComponents.ARMOR_TRIM] = ArmorTrim(material, pattern)
                                 }
                             }
+
                             trimPattern.registerListener { updateTrimData() }
                             trimMaterial.registerListener { updateTrimData() }
                             TrimPatternMap.map.trimButton(trimPattern)
@@ -257,6 +288,7 @@ object StandardCustomizationUi : SkyOceanScreen() {
                             withSize(80, 24)
                             withRenderer(ExtraWidgetRenderers.text("No"))
                             withCallback {
+                                buttonClick()
                                 @Suppress("AssignedValueIsNeverRead") // it's a lie
                                 showCloseWarning = false
                                 reset(copiedItem)
@@ -270,6 +302,7 @@ object StandardCustomizationUi : SkyOceanScreen() {
                             withSize(80, 24)
                             withRenderer(ExtraWidgetRenderers.text("Yes"))
                             withCallback {
+                                buttonClick()
                                 @Suppress("AssignedValueIsNeverRead") // it's a lie
                                 showCloseWarning = false
                                 save(item, copiedItem)

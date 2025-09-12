@@ -11,6 +11,7 @@ import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.ui.UITexts
 import earth.terrarium.olympus.client.utils.Orientation
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttonClick
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -51,7 +52,10 @@ class ItemSelectorModal(val builder: ItemCustomizationModalBuilder, parent: Scre
         val closeButton = Widgets.button()
             .withTexture(null)
             .withRenderer(WidgetRenderers.sprite<Button?>(UIConstants.MODAL_CLOSE))
-            .withCallback { this.onClose() }
+            .withCallback {
+                buttonClick()
+                this.onClose()
+            }
             .withTooltip(UITexts.BACK)
             .withSize(11, 11)
 
