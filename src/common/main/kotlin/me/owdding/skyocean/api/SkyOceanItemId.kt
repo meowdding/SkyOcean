@@ -76,6 +76,9 @@ value class SkyOceanItemId private constructor(val id: String) {
         @IncludedCodec
         val CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap(::SkyOceanItemId, SkyOceanItemId::id)
 
+        val UNKNOWN_CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap({ it.lowercase() }, { it })
+            .xmap({ unknownType(it) ?: SkyOceanItemId(it) }, { it.id })
+
         fun ItemStack.getSkyOceanId() = fromItem(this) ?: fromName(this.hoverName.stripped)
 
     }
