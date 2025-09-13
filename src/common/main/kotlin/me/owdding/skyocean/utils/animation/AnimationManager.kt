@@ -93,7 +93,7 @@ data class AnimationManager(val screen: Screen, val time: Duration, var current:
         toAdd.clear()
         interpolated.clear()
         current = next
-        current.getLayout().arrangeElements()
+        current.apply()
         timeStarted = Instant.DISTANT_PAST
     }
 
