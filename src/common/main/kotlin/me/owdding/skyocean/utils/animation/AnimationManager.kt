@@ -51,11 +51,12 @@ data class AnimationManager(val screen: Screen, val time: Duration, var current:
             applyImmediately.clear()
             value.apply()
             val nextStates = commonElements.withStates()
-            current.apply()
-
-            toAdd.removeAll(applyImmediately)
             applyImmediately.forEach { accessor.`skyocean$addRenderableWidget`(it) }
+            toAdd.removeAll(applyImmediately)
+
+            current.apply()
             applyImmediately.clear()
+
 
             interpolated.putAll(currentStates.mapValues { (key, value) -> value to nextStates[key]!! })
         }
