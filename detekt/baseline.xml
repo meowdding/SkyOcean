@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
-  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>ClassOrdering:AccessoryBagItemSource.kt$AccessoryBagItemContext$override val source = ItemSources.ACCESSORY_BAG</ID>
     <ID>ClassOrdering:AccessoryBagItemSource.kt$AccessoryBagItemSource$override val type = ItemSources.ACCESSORY_BAG</ID>
@@ -10,7 +10,6 @@
     <ID>ClassOrdering:ChestTracker.kt$ChestTracker$private val Slot.savableIndex get() = this.index % 27</ID>
     <ID>ClassOrdering:CodecHelpers.kt$CodecHelpers$fun &lt;T&gt; copyOnWriteList(original: Codec&lt;T&gt;): Codec&lt;CopyOnWriteArrayList&lt;T&gt;&gt;</ID>
     <ID>ClassOrdering:CompoundPatch.kt$CompoundPatch$Companion</ID>
-    <ID>ClassOrdering:ConfigPatches.kt$ConfigPatches$init { register(MovePatch.ID, MovePatch.CODEC) register(CompoundPatch.ID, CompoundPatch.CODEC) }</ID>
     <ID>ClassOrdering:CraftHelperStorage.kt$CraftHelperStorage$val data get() = storage.get()</ID>
     <ID>ClassOrdering:CrystalHollowsBB.kt$CrystalHollowsBB$private fun create(pos1: Vec3i, pos2: Vec3i): BoundingBox</ID>
     <ID>ClassOrdering:DataStorage.kt$DataStorage$Companion</ID>
@@ -27,7 +26,6 @@
     <ID>ClassOrdering:ItemHighlighter.kt$ItemHighlighter$private val backpack = Regex("Backpack Slot (\\d+)")</ID>
     <ID>ClassOrdering:ItemHighlighter.kt$ItemHighlighter$private val enderchest = Regex("Ender Chest Page (\\d)")</ID>
     <ID>ClassOrdering:ItemSource.kt$ItemSource$val type: ItemSources</ID>
-    <ID>ClassOrdering:ItemTracker.kt$ItemTracker$constructor(vararg sources: ItemSources) : this(sources.toList())</ID>
     <ID>ClassOrdering:MovePatch.kt$MovePatch$Companion</ID>
     <ID>ClassOrdering:MuseumItemSource.kt$MuseumItemContext$override val source = ItemSources.MUSEUM</ID>
     <ID>ClassOrdering:MuseumItemSource.kt$MuseumItemSource$override val type = ItemSources.MUSEUM</ID>
@@ -50,19 +48,11 @@
     <ID>ClassOrdering:StorageItemSource.kt$StorageItemSource$override val type = ItemSources.STORAGE</ID>
     <ID>ClassOrdering:StoragePreview.kt$StoragePreview$private var storageInstance: PlayerStorageInstance? = null</ID>
     <ID>ClassOrdering:TrackedItemBundle.kt$BundledItemContext$override val source = ItemSources.BUNDLE</ID>
-    <ID>ClassOrdering:Utils.kt$Utils$private val validChars = listOf(' ', '_', '-', ':')</ID>
-    <ID>ClassOrdering:Utils.kt$Utils$val ItemLike.id get() = BuiltInRegistries.ITEM.getKey(this.asItem())</ID>
     <ID>ClassOrdering:VaultItemSource.kt$VaultItemSource$override val type = ItemSources.VAULT</ID>
     <ID>ClassOrdering:WardrobeItemSource.kt$WardrobeItemSource$override val type = ItemSources.WARDROBE</ID>
-    <ID>CyclomaticComplexMethod:HotfHelper.kt$HotfHelper$@Subscription @OnlyOnSkyBlock fun onInventoryUpdate(event: InventoryChangeEvent)</ID>
-    <ID>CyclomaticComplexMethod:HotmHelper.kt$HotmHelper$@Subscription @OnlyOnSkyBlock fun onInventoryUpdate(event: InventoryChangeEvent)</ID>
-    <ID>CyclomaticComplexMethod:SourceToWidget.kt$SourceToWidget$fun CalculationEntry.asWidget(callback: () -&gt; Unit): LayoutElement</ID>
-    <ID>CyclomaticComplexMethod:TreeFormatter.kt$TreeFormatter$fun append(state: CraftHelperState, widget: WidgetBuilder, widgetConsumer: (AbstractWidget) -&gt; Unit, depth: Int = 0, prefix: String = "")</ID>
     <ID>Deprecation:PuzzlerSolver.kt$PuzzlerSolver$LOCATION_BLOCKS</ID>
     <ID>EmptyFunctionBlock:ButtonConfigScreen.kt$ButtonConfigScreen${ }</ID>
     <ID>EmptyFunctionBlock:ButtonConfigScreen.kt$ButtonConfigScreen${}</ID>
-    <ID>EnumWrapping:ItemSource.kt$ItemSources</ID>
-    <ID>EnumWrapping:MinecraftColor.kt$MinecraftColor</ID>
     <ID>Filename:const.kt$me.owdding.skyocean.helpers.const.kt</ID>
     <ID>FunctionNaming:EntityHelper.kt$EntityAccessor$fun `ocean$getNameTagScale`(): Float</ID>
     <ID>FunctionNaming:EntityHelper.kt$EntityAccessor$fun `ocean$glowTime`(time: Long)</ID>
@@ -101,8 +91,9 @@
     <ID>PrintStackTrace:DataStorage.kt$DataStorage$e</ID>
     <ID>PrintStackTrace:ProfileStorage.kt$ProfileStorage$e</ID>
     <ID>ReturnCount:SkyOceanItemId.kt$SkyOceanItemId.Companion$fun unknownType(input: String): SkyOceanItemId?</ID>
+    <ID>SpacingAroundColon:MuseumDonationHelper.kt$MuseumDonationHelper$:</ID>
+    <ID>SpacingAroundColon:Utils.kt$Utils$:</ID>
     <ID>SpreadOperator:CombinedSuggestionProvider.kt$CombinedSuggestionProvider$(*futures.toTypedArray())</ID>
-    <ID>UnsafeCallOnNullableType:AttributeApi.kt$AttributeApi$attribute.texture()!!</ID>
     <ID>UnsafeCallOnNullableType:ButtonConfigScreen.kt$ButtonConfigScreen$selectedButton!!</ID>
     <ID>UnsafeCallOnNullableType:CalcCommand.kt$CalcCommand$getArgument&lt;Int&gt;("maxLevel")!!</ID>
     <ID>UnsafeCallOnNullableType:CalcCommand.kt$CalcCommand$getArgument&lt;String&gt;("expression")!!</ID>

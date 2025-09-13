@@ -1,19 +1,31 @@
 package me.owdding.skyocean.utils
 
+import com.mojang.serialization.MapCodec
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
+import me.owdding.lib.events.RegisterTextShaderEvent
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
+import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
+import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.time.since
+import kotlin.time.Duration
+import kotlin.time.Instant
 
 internal object Icons {
 
@@ -43,7 +55,7 @@ internal object ChatUtils {
     val ICON_COMPONENT = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
     val ICON_SPACE_COMPONENT = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
 
-    val prefix by CachedValue {
+    val prefixDelegate = CachedValue {
         Text.of {
             append("[")
             append("SkyOcean") {
@@ -53,6 +65,7 @@ internal object ChatUtils {
             this.color = TextColor.GRAY
         }.withPotentialShadow()
     }
+    val prefix: MutableComponent by prefixDelegate
 
     fun MutableComponent.withPotentialShadow(): MutableComponent {
         return if (Config.disableMessageTextShadow) {
@@ -80,8 +93,10 @@ internal object ChatUtils {
 
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))
     fun chat(text: Component) = Text.join(prefix, text).withPotentialShadow().send()
+    fun chat(text: Component, id: String) = Text.join(prefix, text).withPotentialShadow().send(id)
 
     fun Component.sendWithPrefix() = chat(this)
+    fun Component.sendWithPrefix(id: String) = chat(this, id)
 }
 
 object OceanColors {
@@ -93,7 +108,7 @@ object OceanColors {
     const val BETTER_GOLD = 0xfc6f03
 }
 
-enum class OceanGradients(val colors: List<Int>) : TextShader by GradientTextShader(colors), Translatable {
+enum class OceanGradients(val colors: List<Int>, private val shader: GradientTextShader = GradientTextShader(colors)) : TextShader by shader, Translatable {
     DEFAULT(0x87CEEB, 0x7FFFD4, 0x87CEEB),
     RAINBOW("#FF0000 #FF7F00 #FFFF00 #00FF00 #0000FF #4B0082 #8B00FF"),
     BISEXUAL("#D60270 #9B4F96 #0038A8"),
@@ -106,10 +121,52 @@ enum class OceanGradients(val colors: List<Int>) : TextShader by GradientTextSha
     DISABLED(0),
     ;
 
+    override val id: ResourceLocation = id("named_gradient")
     val isDisabled = this.colors.size == 1
 
     constructor(vararg colors: Int) : this(colors.toList())
     constructor(colors: String) : this(colors.split(Regex("\\s+")).map { it.removePrefix("#").toInt(16) }.toMutableList().apply { addLast(first()) })
 
     override fun getTranslationKey() = "skyocean.gradients.${name.lowercase()}"
+
+    @PreInitModule
+    companion object {
+        val ID = id("named_gradient")
+        val CODEC: MapCodec<OceanGradients> = SkyOceanCodecs.getCodec<OceanGradients>().fieldOf("name")
+
+        @Subscription
+        fun registerShaders(event: RegisterTextShaderEvent) {
+            event.register(ID, CODEC)
+        }
+    }
+}
+
+data class ReplaceMessage(val message: Component) {
+    private val stripped = message.stripped
+
+    constructor(message: String) : this(Text.of(message))
+
+    fun send() {
+        message.sendWithPrefix(stripped)
+    }
+}
+
+data class StaticMessageWithCooldown(val duration: Duration, val message: Component) {
+    var lastSend: Instant = Instant.DISTANT_PAST
+
+    fun send() {
+        if (lastSend.since() < duration) return
+        message.sendWithPrefix()
+        lastSend = currentInstant()
+    }
+}
+
+data class DynamicMessageCooldown(val duration: Duration) {
+    var lastSend: Instant = Instant.DISTANT_PAST
+
+    fun send(message: Component) {
+        if (lastSend.since() < duration) return
+        message.sendWithPrefix()
+        lastSend = currentInstant()
+    }
 }

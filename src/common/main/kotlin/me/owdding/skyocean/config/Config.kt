@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulconfigkt.api.ConfigKt
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.chat.ChatConfig
 import me.owdding.skyocean.config.features.combat.SlayerConfig
+import me.owdding.skyocean.config.features.dungeons.DungeonsConfig
 import me.owdding.skyocean.config.features.fishing.FishingConfig
 import me.owdding.skyocean.config.features.foraging.ForagingConfig
 import me.owdding.skyocean.config.features.foraging.GalateaConfig
@@ -44,6 +45,7 @@ object Config : ConfigKt("skyocean/config") {
             category(MiningRetexture)
             category(MineshaftConfig)
         }
+        category(DungeonsConfig)
         category(MiscConfig) {
             category(MobIconsConfig)
         }
@@ -56,14 +58,14 @@ object Config : ConfigKt("skyocean/config") {
         boolean(true) {
             translation = "skyocean.config.main.text_shadow"
         },
-        ChatUtils::prefix,
+        ChatUtils.prefixDelegate,
     )
 
     val prefixGradient: OceanGradients by invalidProperty(
         enum(OceanGradients.DEFAULT) {
             translation = "skyocean.config.main.prefix_gradient"
         },
-        ChatUtils::prefix,
+        ChatUtils.prefixDelegate,
     )
 
     override val patches: Map<Int, UnaryOperator<JsonObject>> = ConfigPatches.loadPatches()

@@ -83,6 +83,7 @@ object SimpleRecipeApi {
                 .mapValues { (_, v) -> v.map { it.first } }
                 .filter { (_, v) -> v.isNotEmpty() },
         )
+        idToRecipes.putAll(idToRecipes.entries.associate { (key, value) -> SkyOceanItemId.unsafe(key.cleanId) to value })
     }
 
     fun hasRecipe(id: SkyOceanItemId) = idToRecipes.containsKey(id)

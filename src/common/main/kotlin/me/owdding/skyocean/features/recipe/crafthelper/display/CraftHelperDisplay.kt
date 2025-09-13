@@ -19,6 +19,7 @@ import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
+import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi.getBestRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
@@ -51,6 +52,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import kotlin.math.max
 
 @LateInitModule
 object CraftHelperDisplay {
@@ -60,8 +62,7 @@ object CraftHelperDisplay {
     private var craftHelperLayout: LayoutElement? = null
 
     fun clear() {
-        data?.item = null
-        data?.amount = 1
+        CraftHelperStorage.clear()
         CraftHelperStorage.save()
     }
 
@@ -79,7 +80,7 @@ object CraftHelperDisplay {
                         Text.of("Amount must be greater than 0!").withColor(TextColor.RED).sendWithPrefix()
                         return@callback
                     }
-                    data?.amount = amount
+                    CraftHelperStorage.setAmount(amount)
                     CraftHelperStorage.save()
                     Text.of("Set current recipe amount to ") {
                         append("$amount") { color = TextColor.GREEN }
@@ -90,17 +91,18 @@ object CraftHelperDisplay {
             then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
                 callback {
                     val input = this.getArgument("recipe", String::class.java)
-                    data?.amount = 1
-                    data?.item = SkyOceanItemId.fromName(input, dropLast = false) ?: SkyOceanItemId.unknownType(input) ?: run {
+                    var amount = 1
+                    val item = SkyOceanItemId.fromName(input, dropLast = false) ?: SkyOceanItemId.unknownType(input) ?: run {
                         val splitName = input.substringBeforeLast(" ")
-                        val amount = input.substringAfterLast(" ").toIntOrNull() ?: 1
-                        data?.amount = amount
+                        amount = input.substringAfterLast(" ").toIntOrNull() ?: 1
                         SkyOceanItemId.fromName(splitName) ?: SkyOceanItemId.unknownType(splitName)
                     }
+                    CraftHelperStorage.setSelected(item)
+                    CraftHelperStorage.setAmount(amount)
                     CraftHelperStorage.save()
                     Text.of("Set current recipe to ") {
-                        append("${data?.amount ?: 1}x ") { color = TextColor.GREEN }
-                        append(data?.item?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
+                        append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }
+                        append(CraftHelperStorage.selectedItem?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
                         append("!")
                     }.sendWithPrefix()
                 }
@@ -123,7 +125,7 @@ object CraftHelperDisplay {
             layout.visitWidgets { event.widgets.remove(it) }
         }
         callback = callback@{ save ->
-            val currentRecipe = data?.item ?: run {
+            val currentRecipe = CraftHelperStorage.selectedItem ?: run {
                 resetLayout()
                 return@callback
             }
@@ -143,7 +145,7 @@ object CraftHelperDisplay {
 
             resetLayout()
             (layout as? FrameLayoutAccessor)?.children()?.clear()
-            val tree = ContextAwareRecipeTree(recipe, output, data?.amount?.coerceAtLeast(1) ?: 1)
+            val tree = ContextAwareRecipeTree(recipe, output, CraftHelperStorage.selectedAmount.coerceAtLeast(1))
             layout.addChild(ScalableWidget(visualize(tree, output) { callback }))
             layout.arrangeElements()
 
@@ -175,7 +177,8 @@ object CraftHelperDisplay {
     }
 
     private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
-        val tracker = ItemTracker()
+        val sources = ItemSources.entries - MiscConfig.disallowedCraftHelperSources.toList()
+        val tracker = ItemTracker(sources)
         val callback = callback()
 
         return LayoutFactory.vertical(2) {
@@ -217,13 +220,13 @@ object CraftHelperDisplay {
                                     this.color = TextColor.RED
                                 },
                             ).asButtonLeft {
-                                val value = data?.amount ?: 1
+                                val value = CraftHelperStorage.selectedAmount
                                 val newValue = if (Screen.hasShiftDown()) {
                                     value - 10
                                 } else {
                                     value - 1
                                 }
-                                data?.amount = maxOf(1, newValue)
+                                CraftHelperStorage.setAmount(max(1, newValue))
                                 callback(true)
                             }.withTooltip(
                                 Text.multiline(
@@ -232,7 +235,7 @@ object CraftHelperDisplay {
                                 ).apply { this.color = TextColor.GRAY },
                             ).withoutTooltipDelay(),
                         )
-                        textDisplay(" ${data?.amount ?: 1} ", shadow = true) {
+                        textDisplay(" ${CraftHelperStorage.selectedAmount} ", shadow = true) {
                             this.color = TextColor.DARK_GRAY
                         }
                         widget(
@@ -242,13 +245,13 @@ object CraftHelperDisplay {
                                     this.color = TextColor.GREEN
                                 },
                             ).asButtonLeft {
-                                val value = data?.amount ?: 1
+                                val value = CraftHelperStorage.selectedAmount
                                 val newValue = if (Screen.hasShiftDown()) {
                                     value + 10
                                 } else {
                                     value + 1
                                 }
-                                data?.amount = newValue
+                                CraftHelperStorage.setAmount(newValue)
                                 callback(true)
                             }.withTooltip(
                                 Text.multiline(

@@ -3,7 +3,7 @@ package me.owdding.skyocean.data.profile
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.CodecHelpers
+import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.ItemStack
@@ -24,11 +24,13 @@ object IslandChestStorage {
         return storage.get() ?: mutableListOf()
     }
 
+    fun hasBlock(position: BlockPos) = storage.get()?.any { (_, _, pos) -> pos == position } == true
+
     fun removeBlock(position: BlockPos) {
         val list = storage.get() ?: return
         list.removeAll { (_, _, pos) -> pos == position }
         val filter = list.filter { (_, _, _, pos2) -> pos2 == position }
-        list.removeAll(filter)
+        list.removeAll(filter.toSet())
         list.addAll(filter.map { (itemStack, slot, pos) -> ChestItem(itemStack, slot, pos, null) })
     }
 

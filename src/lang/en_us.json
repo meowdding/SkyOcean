@@ -74,7 +74,7 @@
         "glacite": {
           "@value": "Retexture Glacite Tunnel blocks",
           "desc": [
-            "Allows resource packs to change the appearance of glacite tunnel blocks."
+            "Allows resource packs to change the appearance of tungsten, umber and glacite tunnel blocks."
           ]
         },
         "mist": {
@@ -88,6 +88,10 @@
           "desc": [
             "Allows resource packs to change the appearance of gemstones."
           ]
+        },
+        "hollows": {
+          "@value": "Retexture Hollows",
+          "desc": "Allows resource packs to change the appearance of most hardstone blocks and ores in the hollows."
         }
       },
       "mineshaft": {
@@ -139,6 +143,21 @@
       "puzzler": {
         "@value": "Puzzler Solver",
         "desc": "Highlights the correct block for the puzzler."
+      },
+      "metal_detector": {
+        "@value": "Metal Detector Solver",
+        "metalDetector": {
+          "@value": "Enable Metal Detector Solver",
+          "desc": "Enables the metal detector solver, which helps you find treasures in the Mines of Divan."
+        },
+        "playDingOnFind": {
+          "@value": "Play Ding on Find",
+          "desc": "Plays a sound when the metal detector finds a treasure."
+        },
+        "showTitleOnFind": {
+          "@value": "Show Title on Find",
+          "desc": "Shows a title when the metal detector finds a treasure."
+        }
       }
     },
     "inventory": {
@@ -227,6 +246,14 @@
         "@value": "Hide Lightning",
         "desc": "Hides lightning bolts and sky flash effect."
       },
+      "fullTextShadow": {
+        "@value": "Full Text Shadow",
+        "desc": [
+          "Makes text shadow render as \"full\" all around the glyph.",
+          "",
+          "<red>May Significantly impact performance.</red>"
+        ]
+      },
       "showHiddenPetCandy": {
         "@value": "Show Hidden Pet Candy",
         "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
@@ -238,6 +265,14 @@
           "Useful for islands like the Dwarven Mines where clouds can be annoying."
         ],
         "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
+      },
+      "customization_vanilla_integration": {
+        "@value": "Animate dyes and skins in inventories",
+        "desc": [
+          "Will always animate dyed armors and helmet skins even in inventories or menus.",
+          "",
+          "<yellow>(Doesn't currently work with skins that allow variant selection or pets)</yellow>"
+        ]
       },
       "hideEntityFire": {
         "@value": "Hide entity fire",
@@ -253,7 +288,19 @@
         "preserve_search": {
           "@value": "Preserve Search",
           "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
+        },
+        "museumIntegration": {
+          "@value": "Museum integration",
+          "desc": "Changes the museum to highlight items that are found on your profile, furthermore it also tells you which items you can craft and which ones are not craftable at all."
+        },
+        "warp_to_island": {
+          "@value": "Warp to island",
+          "desc": "Automatically warp to island if you click an item that is on it."
         }
+      },
+      "museumArmourPieces": {
+        "@value": "Show museum armour pieces",
+        "desc": "Displays all pieces required to finish an armor set in the tooltip in the museum."
       },
       "crafthelper": {
         "@value": "Craft Helper",
@@ -273,6 +320,10 @@
         "disableRootItems": {
           "@value": "Disable tracking for target",
           "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
+        },
+        "disallowedItemSources": {
+          "@value": "Disallowed item sources",
+          "desc": "Select sources from which the craft helper will ignore."
         },
         "position": {
           "@value": "Position",
@@ -583,6 +634,15 @@
         "shulkerOverwrite": {
           "@value": "Retexture shulker",
           "desc": "Recolors the shulkers to make them more visible."
+        }
+      }
+    },
+    "dungeons": {
+      "@value": "Dungeons",
+      "gambling": {
+        "enabled": {
+          "@value": "CSGO Case Opening",
+          "desc": "Shows a CSGO case opening animation when opening a dungeon chest."
         }
       }
     }
