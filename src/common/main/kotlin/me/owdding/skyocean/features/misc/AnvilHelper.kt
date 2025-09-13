@@ -2,8 +2,8 @@ package me.owdding.skyocean.features.misc
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
-import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.contains
+import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 @Module
 object AnvilHelper {
 
-    val slots = intArrayOf(29, 33)
+    private val slots = intArrayOf(29, 33)
 
     @Subscription
     fun onInventoryChange(event: InventoryChangeEvent) {
@@ -28,20 +28,18 @@ object AnvilHelper {
             .filter { it.item in Items.ENCHANTED_BOOK }
             .mapNotNull { it.item }
             .takeUnless { it.isEmpty() } ?: return
-        if (event.slot.item !in Items.ENCHANTED_BOOK) return
+        if (event.item !in Items.ENCHANTED_BOOK) return
         val enchants = itemStacks.map { it.getData(DataTypes.ENCHANTMENTS) }
             .mapNotNull { it?.entries?.map { (key, value) -> key to value } }.flatten().distinct().takeIf { it.size == 1 }?.first() ?: return
-        val itemEnchants = event.slot.item.getData(DataTypes.ENCHANTMENTS) ?: return
+        val itemEnchants = event.item.getData(DataTypes.ENCHANTMENTS) ?: return
         if (itemEnchants[enchants.first] != enchants.second) return
-        event.slot.item.replaceVisually {
-            copyFrom(event.item)
-            namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
+        event.item.skyoceanReplace {
             this.item = Items.KNOWLEDGE_BOOK
         }
     }
 
-    @Subscription
-    fun onInventoryClose(event: ContainerCloseEvent) {
+    @Subscription(ContainerCloseEvent::class)
+    fun onInventoryClose() {
         if (!MiscConfig.anvilHelper) return
         McPlayer.inventory.forEach { itemStack -> itemStack.replaceVisually(null) }
     }
