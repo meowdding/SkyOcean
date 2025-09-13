@@ -31,7 +31,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
 object RecipeModifier {
-    val SET_CRAFTHELPER_KEYBIND = SkyOceanKeybind("skyocean.crafthelper.keybind", InputConstants.KEY_V)
+    val SET_CRAFTHELPER_KEYBIND = SkyOceanKeybind("skyocean.keybind.crafthelper", InputConstants.KEY_V)
 
     @Subscription
     fun onInventoryChange(event: InventoryChangeEvent) {
