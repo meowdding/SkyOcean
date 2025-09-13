@@ -13,3 +13,5 @@ fun List<List<LayoutElement>>.asWidgetTable(spacing: Int = 0): Layout {
         }.forEach(::widget)
     }
 }
+
+fun LayoutElement.setPosition(position: Pair<Int, Int>) = this.setPosition(position.first, position.second)

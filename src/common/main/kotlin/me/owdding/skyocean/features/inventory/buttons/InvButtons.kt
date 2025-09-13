@@ -43,7 +43,7 @@ object InvButtons {
                 val posY = (y * screen.containerHeight) + screen.top + yOffset
 
                 val button = Buttons.buttons[x + y * 7]
-                if (button.disabled && screen !is ButtonConfigScreen) return
+                if (button.disabled && screen !is ButtonConfigScreen) continue
                 event.widgets.add(
                     InvButton(button, x, y == 1, screen, x + y * 7, posX, posY, 26, buttonHeight)
                         .withSize(26, buttonHeight)

@@ -10,14 +10,12 @@ import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import kotlin.reflect.KProperty
-import kotlin.reflect.KProperty0
-import kotlin.reflect.jvm.isAccessible
 
 fun <T> CategoryBuilder.observable(entry: ConfigDelegateProvider<RConfigKtEntry<T>>, onChange: () -> Unit) =
     this.observable(entry) { _, _ -> onChange() }
 
 fun CategoryBuilder.requiresChunkRebuild(entry: ConfigDelegateProvider<RConfigKtEntry<Boolean>>) = observable(entry) {
-    McClient.self.levelRenderer.allChanged()
+    runCatching { McClient.self.levelRenderer.allChanged() }
 }
 
 var SeparatorBuilder.translation: String
@@ -79,6 +77,8 @@ class CachedValue<T>(private val supplier: () -> T) {
         return value
     }
 
+    fun hasValue() = value != null
+
     fun invalidate() {
         value = null
     }
@@ -86,15 +86,9 @@ class CachedValue<T>(private val supplier: () -> T) {
 
 fun <T> CategoryBuilder.invalidProperty(
     entry: ConfigDelegateProvider<RConfigKtEntry<T>>,
-    property: KProperty0<Any>,
+    property: CachedValue<*>,
 ): ConfigDelegateProvider<RConfigKtEntry<T>> {
-    property.isAccessible = true
-    val delegate = property.getDelegate()
-    return if (delegate is CachedValue<*>) {
-        this.observable(entry) {
-            delegate.invalidate()
-        }
-    } else {
-        entry
+    return this.observable(entry) {
+        property.invalidate()
     }
 }

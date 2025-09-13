@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
+import tech.thatgravyboat.skyblockapi.api.remote.api.RepoAttributeAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.stripColor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -17,6 +18,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @JvmInline
+@Deprecated("Use SkyBlockId instead", ReplaceWith("tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId"))
 value class SkyOceanItemId private constructor(val id: String) {
     companion object {
         private val amountRegex = Regex(".*?x[\\d,]+")
@@ -70,10 +72,13 @@ value class SkyOceanItemId private constructor(val id: String) {
             return null
         }
 
-        fun unsafe(id: String) = SkyOceanItemId("$UNSAFE$id")
+        fun unsafe(id: String) = SkyOceanItemId("$UNSAFE$id".lowercase())
 
         @IncludedCodec
         val CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap(::SkyOceanItemId, SkyOceanItemId::id)
+
+        val UNKNOWN_CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap({ it.lowercase() }, { it })
+            .xmap({ unknownType(it) ?: SkyOceanItemId(it) }, { it.id })
 
         fun ItemStack.getSkyOceanId() = fromItem(this) ?: fromName(this.hoverName.stripped)
 
@@ -94,7 +99,7 @@ value class SkyOceanItemId private constructor(val id: String) {
                 "ENCHANTED_BOOK_${cleanId.substringBeforeLast(DELIMITER)}_${cleanId.substringAfterLast(DELIMITER)}"
             }
             isAttribute -> {
-                "${AttributeApi.getAttributeDataById(cleanId)?.shardName()}_SHARD"
+                "${RepoAttributeAPI.getAttributeDataById(cleanId)?.shardName()}_SHARD"
             }
 
             else -> cleanId

@@ -10,8 +10,15 @@ import net.minecraft.world.level.block.Block
 object DefaultModelFactory : BlockModelFactory() {
     override fun isFor(block: Block) = true
 
-    override fun create(block: Block, fakeBlock: ResourceLocation, generator: BlockModelGenerators, modelGenContext: ModelGenContext) {
-        val multiVariant = BlockModelGenerators.plainVariant(SkyOcean.id(createCopy(block, fakeBlock).path))
+    override fun create(
+        block: Block,
+        texture: Block,
+        fakeBlock: ResourceLocation,
+        parent: ResourceLocation?,
+        generator: BlockModelGenerators,
+        modelGenContext: ModelGenContext,
+    ) {
+        val multiVariant = BlockModelGenerators.plainVariant(SkyOcean.id(createCopy(texture, fakeBlock, parent).path))
         modelGenContext.collectState(fakeBlock, BlockModelGenerators.createSimpleBlock(block, multiVariant))
     }
 }

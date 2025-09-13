@@ -15,7 +15,11 @@ object HotfData {
     val perks = mutableListOf<HotfPerk>()
 
     init {
-        perks.addAll(Utils.loadFromRepo<JsonArray>("hotf").toDataOrThrow(SkyOceanCodecs.HotfPerkCodec.codec().listOf()))
+        runCatching {
+            perks.addAll(Utils.loadFromRepo<JsonArray>("hotf").toDataOrThrow(SkyOceanCodecs.HotfPerkCodec.codec().listOf()))
+        }.onFailure {
+            throw RuntimeException("Failed to load hotf data!", it)
+        }
     }
 
     @GenerateCodec

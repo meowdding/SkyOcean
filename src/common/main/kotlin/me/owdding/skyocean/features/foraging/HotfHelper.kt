@@ -36,7 +36,7 @@ object HotfHelper {
     @OnlyOnSkyBlock
     fun onInventoryUpdate(event: InventoryChangeEvent) {
         val config = ForagingConfig
-        if (!config.hotfDisplayTotalLeft && config.hotfDisplayShiftCost && !config.hotfTotalProgress && !config.hotfStackSize) return
+        if (!config.hotfDisplayTotalLeft && !config.hotfDisplayShiftCost && !config.hotfTotalProgress && !config.hotfStackSize) return
         if (event.title != "Heart of the Forest") return
         if (event.isInPlayerInventory) return
         if (event.item !in ItemModelTagKey.HOTM_PERK_ITEMS) return

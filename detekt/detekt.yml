@@ -53,10 +53,13 @@ formatting:
     FunctionReturnTypeSpacing:
         maxLineLength: 160
     ParameterWrapping:
+        active: true
         maxLineLength: 160
     PropertyWrapping:
+        active: true
         maxLineLength: 160
     Wrapping:
+        active: true
         maxLineLength: 160
     NoWildcardImports: # we use wildcard imports in some places
         active: false
@@ -72,10 +75,14 @@ naming:
         variablePattern: "[a-z][A-Za-z0-9]*|[a-z]+$[a-z][A-Za-z0-9]*"
 
 performance:
+    SpreadOperator:
+        active: false
     UnnecessaryPartOfBinaryExpression:
         active: true
 
 potential-bugs:
+    UnreachableCode: # TODO broken with kt 2.2
+        active: false
     DoubleMutabilityForCollection: # went crazy about all the mutable collections
         active: false
     HasPlatformType: # false positives on config get() methods
@@ -133,4 +140,12 @@ style:
         active: false
     WildcardImport: # we use wildcard imports in some places
         active: false
-
+    ThrowsCount:
+        active: false
+    ForbiddenImport:
+        active: true
+        imports:
+            -   value: kotlinx.datetime.*
+                reason: "Kotlinx datetime is still in beta and shouldn't be used"
+    UnusedImports:
+        active: true

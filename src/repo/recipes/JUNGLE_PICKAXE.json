@@ -1,0 +1,14 @@
+{
+  "output": {
+    "id": "item:jungle_pickaxe",
+    "amount": 1,
+    "type": "ITEM"
+  },
+  "inputs": [
+    {
+      "id": "item:sludge_juice",
+      "amount": 200,
+      "type": "ITEM"
+    }
+  ]
+}

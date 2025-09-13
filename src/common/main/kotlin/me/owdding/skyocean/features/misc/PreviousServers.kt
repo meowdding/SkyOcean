@@ -1,7 +1,5 @@
 package me.owdding.skyocean.features.misc
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import me.owdding.ktmodules.Module
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.skyocean.config.features.misc.MiscConfig
@@ -9,8 +7,10 @@ import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.time.since
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 @Module
 object PreviousServers {
@@ -23,7 +23,7 @@ object PreviousServers {
 
         // Update time of the last server because we still want to alert about being in it,
         // even when one joined it ages ago.
-        lastServers.maxByOrNull { it.lastTimeInServer }?.let { it.lastTimeInServer = Clock.System.now().minus(1.seconds) }
+        lastServers.maxByOrNull { it.lastTimeInServer }?.let { it.lastTimeInServer = currentInstant().minus(1.seconds) }
 
         lastServers.removeIf { it.lastTimeInServer.since() > MiscConfig.previousServerTime.seconds }
 
@@ -33,9 +33,9 @@ object PreviousServers {
                 append(it.lastTimeInServer.since().toReadableTime())
                 append(" ago")
             }.sendWithPrefix()
-            it.lastTimeInServer = Clock.System.now()
+            it.lastTimeInServer = currentInstant()
         } ?: run {
-            lastServers.add(Server(event.name, Clock.System.now()))
+            lastServers.add(Server(event.name, currentInstant()))
         }
     }
 

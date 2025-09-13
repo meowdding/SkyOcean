@@ -7,8 +7,8 @@ import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 @Module
 object FmlApi {
     init {
-        ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
-            RegisterSkyOceanCommandEvent(dispatcher).post(SkyBlockAPI.eventBus)
+        ClientCommandRegistrationCallback.EVENT.register { dispatcher, context ->
+            RegisterSkyOceanCommandEvent(dispatcher, context).post(SkyBlockAPI.eventBus)
         }
     }
 }

@@ -50,5 +50,5 @@ interface BaseSkyblockItemTagKey : SkyblockTagKey<ItemStack> {
         value.getApiId()?.lowercase() in this.tag ||
         value.getSkyOceanId()?.let { it.cleanId in this.tag || it.skyblockId in this.tag } == true
 
-    operator fun contains(id: String) = id in this.tag
+    operator fun contains(id: String?) = id in this.tag
 }
