@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.item.custom.ui.standard
 
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.buttons.Button
+import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.layouts.Layouts
 import earth.terrarium.olympus.client.ui.Overlay
@@ -22,7 +23,6 @@ import me.owdding.skyocean.features.item.custom.CustomItemsHelper
 import me.owdding.skyocean.features.item.custom.data.ArmorTrim
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.anyUpdated
-import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.asLayoutWidget
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttonClick
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttons
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.reset
@@ -44,6 +44,7 @@ import me.owdding.skyocean.utils.animation.EasingFunctions
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
+import me.owdding.skyocean.utils.extensions.clear
 import me.owdding.skyocean.utils.items.ItemCache
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
@@ -156,6 +157,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             it.withTexture(UIConstants.DARK_BUTTON)
             it.withSize(totalWidth - (if (canBeEquipped) 25 else 0), 20)
         }
+
         fun updateModelSelection(withText: Boolean = true) {
             val entry = CustomItems.staticMap[copiedItem.getKey()]?.get(CustomItemDataComponents.MODEL)?.toModelSearchEntry()
             if (!withText) {
@@ -175,16 +177,6 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             }
         }
         updateModelSelection()
-        modelSelection.withCallback {
-            buttonClick()
-            if (animationManager?.current == colorLayout) {
-                animationManager?.next = defaultLayout
-                return@withCallback
-            }
-
-            updateModelSelection()
-            McClient.setScreen(ItemSelectorOverlay(McScreen.self, modelSelection, copiedItem))
-        }
 
         val dyeLabel = text("Dye").withoutShadow().asDisplay().asWidget()
         val dye = Widgets.button {
@@ -201,20 +193,17 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                     ),
                 ),
             )
-            it.withCallback {
-                buttonClick()
-                if (animationManager?.current == defaultLayout) {
-                    animationManager?.next = colorLayout
-                    return@withCallback
-                }
-            }
         }
 
         val trimLabel = text("Trim").withoutShadow().asDisplay().asWidget()
         val trimPatternWidget = TrimPatternMap.map.trimButton(trimPattern)
             .chunked(7)
             .asWidgetTable()
-            .asLayoutWidget()
+
+        val trimPatternOrDyeWidget = LayoutWidget(FrameLayout())
+            .withStretchToContentSize()
+            .withTexture(UIConstants.MODAL_INSET)
+        val trimMaterialOrRecentDyeWidget = LayoutWidget(FrameLayout())
             .withStretchToContentSize()
             .withTexture(UIConstants.MODAL_INSET)
         val trimMaterialWidget = ItemCache.trimMaterials.associateWithNotNull {
@@ -227,9 +216,45 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         }.trimButton(trimMaterial)
             .chunked(4)
             .asWidgetTable()
-            .asLayoutWidget()
-            .withStretchToContentSize()
-            .withTexture(UIConstants.MODAL_INSET)
+
+        fun swapToDyes() {
+            if (this.animationManager?.current != colorLayout) {
+                this.animationManager?.next = colorLayout
+            }
+            trimPatternOrDyeWidget.clear().withContents {
+
+            }
+        }
+
+        fun swapToTrims() {
+            if (this.animationManager?.current != defaultLayout) {
+                this.animationManager?.next = defaultLayout
+            }
+            trimPatternOrDyeWidget.clear().withContents {
+                it.addChild(trimPatternWidget)
+            }
+            trimMaterialOrRecentDyeWidget.clear().withContents {
+                it.addChild(trimMaterialWidget)
+            }
+        }
+        swapToTrims()
+        dye.withCallback {
+            buttonClick()
+            if (animationManager?.current == defaultLayout) {
+                swapToDyes()
+                return@withCallback
+            }
+        }
+        modelSelection.withCallback {
+            buttonClick()
+            if (animationManager?.current == colorLayout) {
+                swapToTrims()
+                return@withCallback
+            }
+
+            updateModelSelection()
+            McClient.setScreen(ItemSelectorOverlay(McScreen.self, modelSelection, copiedItem))
+        }
 
         defaultLayout.vertical {
             addDeferred(name)
@@ -261,9 +286,9 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 spacer(height = PADDING)
                 add(trimLabel)
                 horizontal {
-                    add(trimPatternWidget)
+                    add(trimPatternOrDyeWidget)
                     spacer(PADDING)
-                    add(trimMaterialWidget)
+                    add(trimMaterialOrRecentDyeWidget)
                 }
             }
         }
@@ -286,25 +311,22 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                     }
                 }
 
-                if (canBeEquipped) {
-                    spacer(PADDING)
-                    vertical {
-                        add(dyeLabel)
-                        add(dye) {
-                            withSize(totalWidth - 25, 20)
-                        }
+                spacer(PADDING)
+                vertical {
+                    add(dyeLabel)
+                    add(dye) {
+                        withSize(totalWidth - 25, 20)
                     }
                 }
             }
-            if (canBeEquipped) {
-                spacer(height = PADDING)
-                add(trimLabel)
-                horizontal {
-                    add(trimPatternWidget)
-                    spacer(PADDING)
-                    add(trimMaterialWidget)
-                }
+            spacer(height = PADDING)
+            add(trimLabel)
+            horizontal {
+                add(trimPatternOrDyeWidget)
+                spacer(PADDING)
+                add(trimMaterialOrRecentDyeWidget)
             }
+
         }
         colorLayout.spacer(PADDING)
         colorLayout.add(itemPreviewWidget) {
