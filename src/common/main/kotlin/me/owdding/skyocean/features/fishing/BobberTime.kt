@@ -21,11 +21,13 @@ object BobberTime {
         val rod = McPlayer.self?.fishing ?: return
         val time = rod.tickCount / 20.0
 
+        val bobberTextScaleOffset = McFont.height * FishingConfig.hookTextScale
+
         event.renderTextInWorld(
             rod.position().add(-0.5, -0.3, -0.5),
             Text.of("${"%.2f".format(time)}s").withColor(TextColor.GRAY),
             center = true,
-            yOffset = -McFont.height.toFloat(),
+            yOffset = -bobberTextScaleOffset,
         )
     }
 
