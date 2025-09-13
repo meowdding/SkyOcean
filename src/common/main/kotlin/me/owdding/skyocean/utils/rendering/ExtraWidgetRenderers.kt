@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefullib.common.color.Color
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.constants.MinecraftColors
+import me.owdding.lib.displays.Display
 import me.owdding.skyocean.utils.Utils.not
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.network.chat.Component
@@ -24,4 +25,5 @@ object ExtraWidgetRenderers {
             widget.render(graphics, context, partial)
         }
 
+    fun <T : AbstractWidget> display(display: Display): WidgetRenderer<T> = WidgetRenderer<T> { graphics, ctx, _ -> display.render(graphics, ctx.x, ctx.y) }
 }

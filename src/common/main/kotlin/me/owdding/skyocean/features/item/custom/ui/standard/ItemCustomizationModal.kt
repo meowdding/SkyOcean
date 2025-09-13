@@ -38,6 +38,7 @@ import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
 import me.owdding.skyocean.utils.animation.AnimationManager
 import me.owdding.skyocean.utils.animation.AnimationManager.Companion.addImmediately
+import me.owdding.skyocean.utils.animation.AnimationManager.Companion.onPercentage
 import me.owdding.skyocean.utils.animation.DeferredLayoutFactory
 import me.owdding.skyocean.utils.animation.EasingFunctions
 import me.owdding.skyocean.utils.asWidgetTable
@@ -154,32 +155,35 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         val modelSelection = Widgets.button {
             it.withTexture(UIConstants.DARK_BUTTON)
             it.withSize(totalWidth - (if (canBeEquipped) 25 else 0), 20)
-            fun update() {
-                val entry = CustomItems.staticMap[copiedItem.getKey()]?.get(CustomItemDataComponents.MODEL)?.toModelSearchEntry()
-                if (entry != null) {
-                    it.withRenderer(ItemSelectorOverlay.resolveRenderer(copiedItem, entry, 20))
-                } else {
-                    it.withRenderer(
-                        ItemSelectorOverlay.resolveRenderer(
-                            copiedItem,
-                            !BuiltInRegistries.ITEM.getKey(item.getItemModel()).path,
-                            20,
-                        ),
-                    )
-                }
+        }
+        fun updateModelSelection(withText: Boolean = true) {
+            val entry = CustomItems.staticMap[copiedItem.getKey()]?.get(CustomItemDataComponents.MODEL)?.toModelSearchEntry()
+            if (!withText) {
+                modelSelection.withRenderer(ExtraWidgetRenderers.display(ItemSelectorOverlay.getItemDisplay(copiedItem, 20)))
+                return
+            }
+            if (entry != null) {
+                modelSelection.withRenderer(ItemSelectorOverlay.resolveRenderer(copiedItem, entry, 20))
+            } else {
+                modelSelection.withRenderer(
+                    ItemSelectorOverlay.resolveRenderer(
+                        copiedItem,
+                        !BuiltInRegistries.ITEM.getKey(item.getItemModel()).path,
+                        20,
+                    ),
+                )
+            }
+        }
+        updateModelSelection()
+        modelSelection.withCallback {
+            buttonClick()
+            if (animationManager?.current == colorLayout) {
+                animationManager?.next = defaultLayout
+                return@withCallback
             }
 
-            update()
-            it.withCallback {
-                buttonClick()
-                if (animationManager?.current == colorLayout) {
-                    animationManager?.next = defaultLayout
-                    return@withCallback
-                }
-
-                update()
-                McClient.setScreen(ItemSelectorOverlay(McScreen.self, it, copiedItem))
-            }
+            updateModelSelection()
+            McClient.setScreen(ItemSelectorOverlay(McScreen.self, modelSelection, copiedItem))
         }
 
         val dyeLabel = text("Dye").withoutShadow().asDisplay().asWidget()
@@ -232,9 +236,14 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             spacer(height = PADDING)
             horizontal {
                 vertical {
-                    add(text("Model").asDisplay().asWidget()) { addImmediately() }
+                    add(text("Model").asDisplay().asWidget()) {
+                        addImmediately()
+                    }
                     add(modelSelection) {
                         withSize(totalWidth - (if (canBeEquipped) 25 else 0), 20)
+                        onPercentage(0.1) {
+                            updateModelSelection()
+                        }
                     }
                 }
 
@@ -268,9 +277,12 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             spacer(height = PADDING)
             horizontal {
                 vertical {
-                    add(text("M..").asDisplay().asWidget()) { addImmediately() }
+                    add(text("Mo..").asDisplay().asWidget()) { addImmediately() }
                     add(modelSelection) {
                         withSize(20, 20)
+                        onPercentage(0.9) {
+                            updateModelSelection(false)
+                        }
                     }
                 }
 

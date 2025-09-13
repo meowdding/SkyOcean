@@ -16,6 +16,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.overlays.Rect
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
+import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -45,8 +46,8 @@ class ItemSelectorOverlay(
                     Ints.min(
                         layout.height,
                         this.height - (bounds.y + bounds.height) - 4,
-                        10 * 16
-                    )
+                        10 * 16,
+                    ),
                 )
             }
         }
@@ -117,13 +118,14 @@ class ItemSelectorOverlay(
         fun resolveRenderer(itemStack: ItemStack, itemModelEntry: ModelSearchEntry, size: Int = 16) =
             resolveRenderer(itemModelEntry.resolve(itemStack), itemModelEntry.name, size)
 
+        fun getItemDisplay(itemStack: ItemStack, size: Int) = Displays.center(size, size, Displays.item(itemStack, size - 4, size - 4))
         fun resolveRenderer(itemStack: ItemStack, name: Component, size: Int = 16): WidgetRenderer<Button?>? {
             val item = Displays.center(
                 size, size,
                 Displays.item(itemStack, size - 4, size - 4),
             )
             return WidgetRenderers.layered(
-                { graphics, ctx, _ -> item.render(graphics, ctx.x, ctx.y) },
+                ExtraWidgetRenderers.display(item),
                 WidgetRenderers.text<Button>(name)
                     .withColor(MinecraftColors.WHITE)
                     .withLeftAlignment()

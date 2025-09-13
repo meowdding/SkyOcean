@@ -2,6 +2,7 @@ package me.owdding.skyocean.utils.animation
 
 import me.owdding.skyocean.mixins.ScreenAccessor
 import me.owdding.skyocean.utils.MathUtils
+import me.owdding.skyocean.utils.extensions.removeIf
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
 import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
@@ -27,6 +28,7 @@ data class AnimationManager(val screen: Screen, val time: Duration, var current:
     val interpolated: MutableMap<AbstractWidget, Pair<State, State>> = mutableMapOf()
     var next: DeferredLayout<*>? = null
         set(value) {
+            if (field != null && value != null) return
             field = value
             value ?: run {
                 toAdd.clear()
@@ -50,21 +52,35 @@ data class AnimationManager(val screen: Screen, val time: Duration, var current:
 
             applyImmediately.clear()
             value.apply()
+            val onPercentage = LinkedHashMap(onPercentage)
+            val onFinish = ArrayList(onFinish)
             val nextStates = commonElements.withStates()
             applyImmediately.forEach { accessor.`skyocean$addRenderableWidget`(it) }
             toAdd.removeAll(applyImmediately)
 
             current.apply()
             applyImmediately.clear()
+            this.onPercentage = onPercentage
+            this.onFinish = onFinish
 
 
             interpolated.putAll(currentStates.mapValues { (key, value) -> value to nextStates[key]!! })
         }
     private var applyImmediately: MutableList<AbstractWidget> = mutableListOf()
+    private var onFinish: MutableList<() -> Unit> = mutableListOf()
+    private var onPercentage: MutableMap<Double, MutableList<() -> Unit>> = mutableMapOf()
 
     companion object {
         context(manager: AnimationManager) fun <T : AbstractWidget> T.addImmediately() {
             manager.applyImmediately.add(this)
+        }
+
+        context(manager: AnimationManager) fun <T : AbstractWidget> T.onFinish(runnable: T.() -> Unit) {
+            manager.onFinish.add { this.runnable() }
+        }
+
+        context(manager: AnimationManager) fun <T : AbstractWidget> T.onPercentage(percentage: Double, runnable: T.() -> Unit) {
+            manager.onPercentage.getOrPut(percentage) { mutableListOf() }.add { runnable() }
         }
     }
 
@@ -76,6 +92,12 @@ data class AnimationManager(val screen: Screen, val time: Duration, var current:
         if (delta >= 1) {
             finish()
             return
+        }
+        onPercentage.removeIf { (percentage, entries) ->
+            if (percentage <= delta) {
+                entries.forEach { it() }
+                true
+            } else false
         }
         val easedDelta = easingFunction(delta)
         interpolated.forEach { widget, (current, next) ->
@@ -93,7 +115,10 @@ data class AnimationManager(val screen: Screen, val time: Duration, var current:
         toAdd.clear()
         interpolated.clear()
         current = next
+        this.next = null
         current.apply()
+        onPercentage.forEach { (_, entries) -> entries.forEach { it() } }
+        onFinish.forEach { it() }
         timeStarted = Instant.DISTANT_PAST
     }
 
