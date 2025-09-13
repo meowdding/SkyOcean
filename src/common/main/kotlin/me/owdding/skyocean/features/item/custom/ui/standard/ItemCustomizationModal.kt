@@ -1,17 +1,52 @@
 package me.owdding.skyocean.features.item.custom.ui.standard
 
 import earth.terrarium.olympus.client.components.Widgets
-import earth.terrarium.olympus.client.components.base.BaseWidget
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
-import earth.terrarium.olympus.client.components.string.MultilineTextWidget
 import earth.terrarium.olympus.client.layouts.Layouts
 import earth.terrarium.olympus.client.ui.Overlay
 import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.ui.UITexts
+import earth.terrarium.olympus.client.ui.modals.Modals
+import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.Orientation
-import it.unimi.dsi.fastutil.ints.Int2ObjectFunction
+import earth.terrarium.olympus.client.utils.State
+import me.owdding.lib.displays.*
+import me.owdding.lib.layouts.withPadding
+import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.features.item.custom.CustomItems
+import me.owdding.skyocean.features.item.custom.CustomItems.getKey
+import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
+import me.owdding.skyocean.features.item.custom.CustomItems.getOrTryCreateCustomData
+import me.owdding.skyocean.features.item.custom.CustomItemsHelper
+import me.owdding.skyocean.features.item.custom.data.ArmorTrim
+import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.anyUpdated
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.asLayoutWidget
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttonClick
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttons
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.reset
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.save
+import me.owdding.skyocean.features.item.custom.ui.standard.search.ItemSelectorOverlay
+import me.owdding.skyocean.repo.customization.TrimPatternMap
+import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.ChatUtils.withoutShadow
+import me.owdding.skyocean.utils.Utils.asDisplay
+import me.owdding.skyocean.utils.Utils.itemBuilder
+import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
+import me.owdding.skyocean.utils.animation.AnimationManager
+import me.owdding.skyocean.utils.animation.AnimationManager.Companion.addImmediately
+import me.owdding.skyocean.utils.animation.DeferredLayoutFactory
+import me.owdding.skyocean.utils.animation.EasingFunctions
+import me.owdding.skyocean.utils.asWidgetTable
+import me.owdding.skyocean.utils.components.TagComponentSerialization
+import me.owdding.skyocean.utils.extensions.associateWithNotNull
+import me.owdding.skyocean.utils.items.ItemCache
+import me.owdding.skyocean.utils.rendering.ExtraDisplays
+import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
+import me.owdding.skyocean.utils.rendering.StyledItemWidget
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -19,33 +54,287 @@ import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.SpacerElement
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.core.component.DataComponents
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
+import net.minecraft.util.ARGB
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.CustomData
+import net.minecraft.world.item.equipment.trim.TrimMaterial
+import net.minecraft.world.item.equipment.trim.TrimPattern
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
+import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
+import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.max
+import kotlin.time.Duration.Companion.seconds
 
 const val PADDING: Int = 5
 const val BUTTON_GAP: Int = 5
 const val CONTENT_GAP: Int = 5
 const val HEADER_HEIGHT: Int = 11
 
-class ItemSelectorModal(val builder: ItemCustomizationModalBuilder, parent: Screen?) : Overlay(parent) {
+class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(parent) {
+    var animationManager: AnimationManager? = null
     private var layout: Layout? = null
+    var showCloseWarning = true
+
+    val copiedItem = itemBuilder(item.item) {
+        copyFrom(this@ItemCustomizationModal.item)
+        this.set(
+            DataComponents.CUSTOM_DATA,
+            CustomData.of(
+                compoundTag {
+                    putBoolean("skyocean:customization_item", true)
+                },
+            ),
+        )
+    }
+
+    override fun rebuildWidgets() {
+        animationManager = null
+        super.rebuildWidgets()
+    }
+
+    init {
+        CustomItems.staticMap[copiedItem.getKey()!!] = item.getOrTryCreateCustomData()!!.let { it.copy(key = copiedItem.getKey()!!, data = HashMap(it.data)) }
+    }
+
+    val customData = copiedItem.getOrCreateStaticData()
+    val canBeEquipped = copiedItem.has(DataComponents.EQUIPPABLE)
+    val name: Component = CustomItemsHelper.getData(copiedItem, DataComponents.CUSTOM_NAME) ?: copiedItem.hoverName
+    val nameState: ListenableState<String> = ListenableState.of(TagComponentSerialization.serialize(name)).apply {
+        registerListener { newName ->
+            anyUpdated = true
+            copiedItem.getOrCreateStaticData()?.let {
+                if (newName.isBlank()) {
+                    it[CustomItemDataComponents.NAME] = null
+                    return@let
+                }
+                it[CustomItemDataComponents.NAME] = TagComponentSerialization.deserialize(newName).wrapWithNotItalic()
+            }
+        }
+    }
+    val trimData = CustomItemsHelper.getData(copiedItem, DataComponents.TRIM)
+    val trimPattern: ListenableState<TrimPattern?> = ListenableState.of(trimData?.pattern()?.value())
+    val trimMaterial: ListenableState<TrimMaterial?> = ListenableState.of(trimData?.material()?.value())
+    val hasTrim = trimData != null
 
     override fun init() {
         super.init()
+        anyUpdated = false
+        buttons.clear()
+        val defaultLayout = DeferredLayoutFactory.horizontal(0.5f)
+        val colorLayout = DeferredLayoutFactory.horizontal(0.5f)
+        animationManager = AnimationManager(this, 0.25.seconds, defaultLayout, EasingFunctions.easeInOutQuad)
 
-        val actions = this.builder.actions
+        val itemPreviewWidget = StyledItemWidget(copiedItem)
+        val totalWidth = 258
+        val name = DeferredLayoutFactory.vertical {
+            add(
+                DisplayWidget(
+                    Displays.row(
+                        Displays.text((!"Name ").withoutShadow()),
+                        Displays.sprite(SkyOcean.id("info"), 7, 7).withTooltip {
+                            add("meow")
+                        },
+                    ),
+                ),
+            )
+            add(Widgets.textInput(nameState)) {
+                withSize(totalWidth, 20)
+            }
+        }
+
+        val modelSelection = Widgets.button {
+            it.withTexture(UIConstants.DARK_BUTTON)
+            it.withSize(totalWidth - (if (canBeEquipped) 25 else 0), 20)
+            fun update() {
+                val entry = CustomItems.staticMap[copiedItem.getKey()]?.get(CustomItemDataComponents.MODEL)?.toModelSearchEntry()
+                if (entry != null) {
+                    it.withRenderer(ItemSelectorOverlay.resolveRenderer(copiedItem, entry, 20))
+                } else {
+                    it.withRenderer(
+                        ItemSelectorOverlay.resolveRenderer(
+                            copiedItem,
+                            !BuiltInRegistries.ITEM.getKey(item.getItemModel()).path,
+                            20,
+                        ),
+                    )
+                }
+            }
+
+            update()
+            it.withCallback {
+                buttonClick()
+                if (animationManager?.current == colorLayout) {
+                    animationManager?.next = defaultLayout
+                    return@withCallback
+                }
+
+                update()
+                McClient.setScreen(ItemSelectorOverlay(McScreen.self, it, copiedItem))
+            }
+        }
+
+        val dyeLabel = text("Dye").withoutShadow().asDisplay().asWidget()
+        val dye = Widgets.button {
+            it.withSize(20, 20)
+            it.withRenderer(
+                WidgetRenderers.layered(
+                    WidgetRenderers.sprite(UIConstants.DARK_BUTTON),
+                    DisplayWidget.displayRenderer(
+                        ExtraDisplays.passthrough(20, 20) {
+                            val color = customData?.get(CustomItemDataComponents.COLOR)?.getColor() ?: 0xFFFFFF
+                            val actualColor = if (it.isHoveredOrFocused) ARGB.scaleRGB(color, 2 / 3f) else color
+                            fill(2, 2, 18, 16, ARGB.opaque(actualColor))
+                        },
+                    ),
+                ),
+            )
+            it.withCallback {
+                buttonClick()
+                if (animationManager?.current == defaultLayout) {
+                    animationManager?.next = colorLayout
+                    return@withCallback
+                }
+            }
+        }
+
+        val trimLabel = text("Trim").withoutShadow().asDisplay().asWidget()
+        val trimPatternWidget = TrimPatternMap.map.trimButton(trimPattern)
+            .chunked(7)
+            .asWidgetTable()
+            .asLayoutWidget()
+            .withStretchToContentSize()
+            .withTexture(UIConstants.MODAL_INSET)
+        val trimMaterialWidget = ItemCache.trimMaterials.associateWithNotNull {
+            it.components()
+                .get(DataComponents.PROVIDES_TRIM_MATERIAL)
+                ?.material()
+                ?.unwrap(SkyOcean.registryLookup)
+                ?.getOrNull()
+                ?.value()
+        }.trimButton(trimMaterial)
+            .chunked(4)
+            .asWidgetTable()
+            .asLayoutWidget()
+            .withStretchToContentSize()
+            .withTexture(UIConstants.MODAL_INSET)
+
+        defaultLayout.vertical {
+            addDeferred(name)
+            spacer(height = PADDING)
+            horizontal {
+                vertical {
+                    add(text("Model").asDisplay().asWidget()) { addImmediately() }
+                    add(modelSelection) {
+                        withSize(totalWidth - (if (canBeEquipped) 25 else 0), 20)
+                    }
+                }
+
+                if (canBeEquipped) {
+                    spacer(PADDING)
+                    vertical {
+                        add(dyeLabel)
+                        add(dye) {
+                            withSize(20, 20)
+                        }
+                    }
+                }
+            }
+            if (canBeEquipped) {
+                spacer(height = PADDING)
+                add(trimLabel)
+                horizontal {
+                    add(trimPatternWidget)
+                    spacer(PADDING)
+                    add(trimMaterialWidget)
+                }
+            }
+        }
+        defaultLayout.spacer(PADDING)
+        defaultLayout.add(itemPreviewWidget) {
+            withSize(50, 65)
+        }
+
+        colorLayout.vertical {
+            addDeferred(name)
+            spacer(height = PADDING)
+            horizontal {
+                vertical {
+                    add(text("M..").asDisplay().asWidget()) { addImmediately() }
+                    add(modelSelection) {
+                        withSize(20, 20)
+                    }
+                }
+
+                if (canBeEquipped) {
+                    spacer(PADDING)
+                    vertical {
+                        add(dyeLabel)
+                        add(dye) {
+                            withSize(totalWidth - 25, 20)
+                        }
+                    }
+                }
+            }
+            if (canBeEquipped) {
+                spacer(height = PADDING)
+                add(trimLabel)
+                horizontal {
+                    add(trimPatternWidget)
+                    spacer(PADDING)
+                    add(trimMaterialWidget)
+                }
+            }
+        }
+        colorLayout.spacer(PADDING)
+        colorLayout.add(itemPreviewWidget) {
+            withSize(50, 65)
+        }
+
+
+        val actions = listOf(
+            Widgets.button {
+                it.withTexture(UIConstants.DANGER_BUTTON)
+                it.withSize(80, 24)
+                it.withRenderer(ExtraWidgetRenderers.text(!"Cancel"))
+                it.withCallback {
+                    showCloseWarning = false
+                    buttonClick()
+                    reset(copiedItem)
+                    McScreen.self?.onClose()
+                }
+            }.apply { buttons.add(this) },
+
+            Widgets.button {
+                it.withTexture(UIConstants.PRIMARY_BUTTON)
+                it.withSize(80, 24)
+                it.withRenderer(ExtraWidgetRenderers.text(!"Save"))
+                it.withCallback {
+                    buttonClick()
+                    showCloseWarning = false
+                    McScreen.self?.onClose()
+                    save(item, copiedItem)
+                }
+            }.apply { buttons.add(this) },
+        )
         val actionsHeight: Int = actions.stream().mapToInt(AbstractWidget::getHeight).max().orElse(20)
         val actionsWidth: Int = max(
             actions.sumOf { it.width } + (actions.size - 1) * BUTTON_GAP,
-            this.builder.minWidth,
+            150,
         )
 
-        val content = this.builder.content.stream().map { f -> f.apply(actionsWidth) }.toList()
-        val minContentHeight: Int = this.builder.minHeight - HEADER_HEIGHT - actionsHeight - PADDING * 4
-        val contentHeight: Int = content.stream().mapToInt(AbstractWidget::getHeight).sum() + content.size * CONTENT_GAP
-        val contentWidth: Int = content.stream().mapToInt(AbstractWidget::getWidth).max().orElse(10)
+        defaultLayout.applyDefault(animationManager!!)
+        val minContentHeight: Int = 100 - HEADER_HEIGHT - actionsHeight - PADDING * 4
+        val contentHeight: Int = defaultLayout.getLayout().height + CONTENT_GAP
+        val contentWidth: Int = defaultLayout.getLayout().width
 
         val modalWidth: Int = max(contentWidth, actionsWidth) + PADDING * 2
 
@@ -60,14 +349,13 @@ class ItemSelectorModal(val builder: ItemCustomizationModalBuilder, parent: Scre
             .withSize(11, 11)
 
         val contentLayout = Layouts.column().withGap(CONTENT_GAP)
-        content.forEach { widget ->
-            contentLayout.withChild(
-                Layouts.row()
-                    .withChild(SpacerElement.width(PADDING))
-                    .withChild(widget)
-                    .withChild(SpacerElement.width(PADDING)),
-            )
-        }
+        contentLayout.withChild(
+            Layouts.row()
+                .withChild(SpacerElement.width(PADDING))
+                .withChild(defaultLayout.getLayout())
+                .withChild(SpacerElement.width(PADDING)),
+        )
+
         if (contentHeight < minContentHeight) {
             contentLayout.withChild(SpacerElement.height(minContentHeight - contentHeight - CONTENT_GAP))
         }
@@ -80,7 +368,13 @@ class ItemSelectorModal(val builder: ItemCustomizationModalBuilder, parent: Scre
                     .withTexture(UIConstants.MODAL_HEADER)
                     .withContents {
                         it.addChild(
-                            Widgets.labelled(this.font, this.builder.title, closeButton).withEqualSpacing(Orientation.HORIZONTAL),
+                            Widgets.labelled(
+                                this.font,
+                                text("Editing ") {
+                                    append(item.hoverName)
+                                },
+                                closeButton,
+                            ).withEqualSpacing(Orientation.HORIZONTAL),
                         )
                     }
                     .withContentFill()
@@ -106,6 +400,11 @@ class ItemSelectorModal(val builder: ItemCustomizationModalBuilder, parent: Scre
         FrameLayout.centerInRectangle(this.layout!!, this.rectangle)
     }
 
+    override fun render(p0: GuiGraphics, p1: Int, p2: Int, p3: Float) {
+        animationManager?.update()
+        super.render(p0, p1, p2, p3)
+    }
+
     override fun renderBackground(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         val layout = layout ?: return
         super.renderBackground(graphics, mouseX, mouseY, partialTick)
@@ -125,60 +424,101 @@ class ItemSelectorModal(val builder: ItemCustomizationModalBuilder, parent: Scre
     }
 
     override fun onClose() {
-        if (builder.closeCallback()) {
+        if (canClose()) {
             super.onClose()
         }
     }
-}
 
-class ItemCustomizationModalBuilder {
-    internal val actions: MutableList<AbstractWidget> = ArrayList()
-    internal val content: MutableList<Int2ObjectFunction<AbstractWidget>> = ArrayList()
-    internal var title: Component? = null
-    internal var minWidth = 150
-    internal var minHeight = 100
-    internal var closeCallback: () -> Boolean = { true }
+    fun canClose(): Boolean {
+        if (showCloseWarning && anyUpdated) {
+            Modals.action().apply {
+                withTitle(!"Save changes?")
+                withContent(
+                    text {
+                        append("Are you sure you want to exit? You currently have unsaved changes that would be lost!")
+                        this.color = TextColor.WHITE
+                    },
+                )
+                withAction(
+                    Widgets.button().apply {
+                        withTexture(UIConstants.DANGER_BUTTON)
+                        withSize(80, 24)
+                        withRenderer(ExtraWidgetRenderers.text("No"))
+                        withCallback {
+                            buttonClick()
+                            showCloseWarning = false
+                            reset(copiedItem)
+                            McClient.setScreen(null)
+                        }
+                    },
+                )
+                withAction(
+                    Widgets.button().apply {
+                        withTexture(UIConstants.PRIMARY_BUTTON)
+                        withSize(80, 24)
+                        withRenderer(ExtraWidgetRenderers.text("Yes"))
+                        withCallback {
+                            buttonClick()
+                            showCloseWarning = false
+                            save(item, copiedItem)
+                            McClient.setScreen(null)
+                        }
+                    },
+                )
 
-    fun withTitle(title: Component?): ItemCustomizationModalBuilder {
-        this.title = title
-        return this
+            }.open()
+            return false
+        }
+
+        return true
     }
 
-    fun withCloseCallback(callback: () -> Boolean) {
-        closeCallback = callback
+    fun <V> Map<Item, V>.trimButton(state: State<V>): List<AbstractWidget> = this.map { (item, value) ->
+        Widgets.button {
+            val display = Displays.item(item).withPadding(3, top = 2, left = 2, bottom = 4)
+            it.withTexture(null)
+            it.withSize(display.getWidth(), display.getHeight())
+            it.withRenderer(
+                WidgetRenderers.layered(
+                    ExtraWidgetRenderers.conditional(
+                        WidgetRenderers.sprite(UIConstants.PRIMARY_BUTTON),
+                        WidgetRenderers.sprite(UIConstants.DARK_BUTTON),
+                    ) { state.get() == value },
+                    DisplayWidget.displayRenderer(display),
+                ),
+            )
+            it.withCallback {
+                buttonClick()
+                state.set(value.takeUnless { state.get() == value })
+                updateTrimData()
+            }
+        }.withPadding(1)
     }
 
-    fun withMinWidth(minWidth: Int): ItemCustomizationModalBuilder {
-        this.minWidth = minWidth
-        return this
-    }
 
-    fun withMinHeight(minHeight: Int): ItemCustomizationModalBuilder {
-        this.minHeight = minHeight
-        return this
-    }
+    fun updateTrimData() {
+        if (StandardCustomizationUi.debug) {
+            text {
+                append(trimPattern.get()?.assetId().toString())
+                append(" | ")
+                append(trimMaterial.get()?.description().toString())
+            }.sendWithPrefix()
+        }
+        val pattern = trimPattern.get()
+        val material = trimMaterial.get()
+        if (pattern == null || material == null) {
+            if (hasTrim) {
+                anyUpdated = true
+            }
+            copiedItem.getOrCreateStaticData()?.let {
+                it[CustomItemDataComponents.ARMOR_TRIM] = null
+            }
+            return
+        }
+        anyUpdated = true
 
-    fun withContent(widget: Int2ObjectFunction<AbstractWidget>): ItemCustomizationModalBuilder {
-        this.content.add(widget)
-        return this
-    }
-
-    fun withContent(widget: BaseWidget): ItemCustomizationModalBuilder {
-        this.content.add(Int2ObjectFunction { width: Int -> widget.withSize(width, widget.getHeight()) })
-        return this
-    }
-
-    fun withContent(text: Component?): ItemCustomizationModalBuilder {
-        this.content.add(Int2ObjectFunction { i: Int -> (MultilineTextWidget(i, text, Minecraft.getInstance().font)).alignLeft() })
-        return this
-    }
-
-    fun withAction(widget: AbstractWidget): ItemCustomizationModalBuilder {
-        this.actions.add(widget)
-        return this
-    }
-
-    fun open() {
-        Minecraft.getInstance().setScreen(ItemSelectorModal(this, McScreen.self))
+        copiedItem.getOrCreateStaticData()?.let {
+            it[CustomItemDataComponents.ARMOR_TRIM] = ArmorTrim(material, pattern)
+        }
     }
 }
