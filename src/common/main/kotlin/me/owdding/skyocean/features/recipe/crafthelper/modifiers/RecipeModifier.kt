@@ -76,7 +76,7 @@ object RecipeModifier {
         setSelected(SkyOceanItemId.fromItem(item))
         McScreen.self?.let { it.resize(McClient.self, it.width, it.height) }
 
-        Text.of("Set Crafthelper selected item to ") {
+        Text.of("Set selected Crafthelper item to ") {
             append(item.cleanName) {
                 this.color = TextColor.GOLD
                 this.bold = true
