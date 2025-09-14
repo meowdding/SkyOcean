@@ -212,6 +212,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
 
         val trimLabel = text("Trim").withoutShadow().asDisplay().asWidget()
         val dyeCategoryLabel = text("Dyes").withoutShadow().asDisplay().asWidget()
+        val recentDyeLabel = text("Recent Dyes").withoutShadow().asDisplay().asWidget()
         val trimPatternWidget = TrimPatternMap.map.trimButton(trimPattern)
             .chunked(7)
             .asWidgetTable()
@@ -362,21 +363,28 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 }
             }
             spacer(height = PADDING)
-            add(dyeCategoryLabel) {
-                addImmediately()
-            }
             horizontal {
-                add(dyeCategories)
-                spacer(3)
-                add(trimPatternOrDyeWidget) {
-                    onAnimationStart {
-                        trimPatternOrDyeWidget.setFrameContent(dyeSelectionWidget)
+                vertical {
+                    add(dyeCategoryLabel) {
+                        addImmediately()
+                    }
+                    horizontal {
+                        add(dyeCategories)
+                        spacer(3)
+                        add(trimPatternOrDyeWidget) {
+                            onAnimationStart {
+                                trimPatternOrDyeWidget.setFrameContent(dyeSelectionWidget)
+                            }
+                        }
                     }
                 }
                 spacer(3)
-                add(trimMaterialOrRecentDyeWidget) {
-                    onAnimationStart {
-                        trimMaterialOrRecentDyeWidget.setFrameContent(recentDyeWidget)
+                vertical {
+                    add(recentDyeLabel)
+                    add(trimMaterialOrRecentDyeWidget) {
+                        onAnimationStart {
+                            trimMaterialOrRecentDyeWidget.setFrameContent(recentDyeWidget)
+                        }
                     }
                 }
             }
