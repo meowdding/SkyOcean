@@ -44,7 +44,6 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
-import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -135,7 +134,7 @@ object CraftHelperDisplay {
     @Subscription
     fun onScreenInit(event: ScreenInitializedEvent) {
         if (!MiscConfig.craftHelperEnabled) return
-        if (!LocationAPI.isOnSkyBlock) return
+        //if (!LocationAPI.isOnSkyBlock) return
         if (event.screen !is AbstractContainerScreen<*>) return
 
         val layout = LayoutFactory.empty() as FrameLayout
@@ -207,7 +206,6 @@ object CraftHelperDisplay {
                     spacer(maxLine - item.getWidth() - 10)
                     display(Displays.component(output.itemName))
                     horizontal {
-                        if (CraftHelperStorage.canModifyCount)
                         widget(
                             Displays.component(
                                 Text.of {
