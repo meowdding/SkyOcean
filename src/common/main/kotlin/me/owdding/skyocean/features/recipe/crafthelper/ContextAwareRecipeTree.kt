@@ -11,7 +11,7 @@ interface ChildlessNode : StandardRecipeNode {
 interface NodeWithChildren : StandardRecipeNode {
     override val amountPerCraft: Int
     val nodes: MutableList<StandardRecipeNode>
-    override val recipe: Recipe
+    override val recipe: Recipe?
 
     fun addChild(node: StandardRecipeNode) {
         this.nodes.add(node)
@@ -36,7 +36,7 @@ interface StandardRecipeNode {
     fun evaluateChildren(amount: Int, context: RecipeRemainder) {
         if (this !is NodeWithChildren) return
 
-        recipe.inputs.mergeSameTypes().forEach {
+        recipe?.inputs?.mergeSameTypes()?.forEach {
             val recipe = SimpleRecipeApi.getBestRecipe(it)
             val recipeOutput = recipe?.output?.amount ?: 1
             val totalRequired = it.amount * amount
@@ -84,9 +84,8 @@ data class RecipeNode(
 
 }
 
-class ContextAwareRecipeTree(override val recipe: Recipe, override val output: ItemLikeIngredient, val amount: Int) :
-    NodeWithChildren {
-    override val amountPerCraft: Int = recipe.output?.amount ?: 1
+open class ContextAwareRecipeTree(override val recipe: Recipe?, override val output: ItemLikeIngredient, val amount: Int) : NodeWithChildren {
+    override val amountPerCraft: Int = recipe?.output?.amount ?: 1
     override val nodes: MutableList<StandardRecipeNode> = mutableListOf()
 
     val context = RecipeRemainder()

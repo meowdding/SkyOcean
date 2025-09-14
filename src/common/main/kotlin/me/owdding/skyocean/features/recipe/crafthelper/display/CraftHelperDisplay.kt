@@ -20,7 +20,6 @@ import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScroll
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
-import me.owdding.skyocean.features.recipe.SimpleRecipeApi.getBestRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
@@ -146,27 +145,9 @@ object CraftHelperDisplay {
             layout.visitWidgets { event.widgets.remove(it) }
         }
         callback = callback@{ save ->
-            val currentRecipe = CraftHelperStorage.selectedItem ?: run {
-                resetLayout()
-                return@callback
-            }
-
-            val recipe = getBestRecipe(currentRecipe) ?: run {
-                Text.of("No recipe found for $currentRecipe!") { this.color = TextColor.RED }.sendWithPrefix()
-                resetLayout()
-                clear()
-                return@callback
-            }
-            val output = recipe.output ?: run {
-                Text.of("Recipe output is null!") { this.color = TextColor.RED }.sendWithPrefix()
-                resetLayout()
-                clear()
-                return@callback
-            }
-
+            val (tree, output) = CraftHelperStorage.data?.resolve(::resetLayout, ::clear) ?: return@callback
             resetLayout()
-            (layout as? FrameLayoutAccessor)?.children()?.clear()
-            val tree = ContextAwareRecipeTree(recipe, output, CraftHelperStorage.selectedAmount.coerceAtLeast(1))
+            (layout as? FrameLayoutAccessor)?.children()?.clear()// todo use clearable layout once #108 is merged
             layout.addChild(visualize(tree, output) { callback })
             layout.arrangeElements()
             layout.setPosition(MiscConfig.craftHelperPosition.position(layout.width, layout.height))
@@ -190,7 +171,7 @@ object CraftHelperDisplay {
     }
 
     private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
-        val sources = ItemSources.entries - MiscConfig.disallowedCraftHelperSources.toList()
+        val sources = ItemSources.entries - MiscConfig.disallowedCraftHelperSources.toSet()
         val tracker = ItemTracker(sources)
         val callback = callback()
 
@@ -226,13 +207,16 @@ object CraftHelperDisplay {
                     spacer(maxLine - item.getWidth() - 10)
                     display(Displays.component(output.itemName))
                     horizontal {
+                        if (CraftHelperStorage.canModifyCount)
                         widget(
                             Displays.component(
                                 Text.of {
                                     append("-")
-                                    this.color = TextColor.RED
+                                    this.color = if (CraftHelperStorage.canModifyCount) TextColor.RED else TextColor.GRAY
                                 },
                             ).asButtonLeft {
+                                if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
+
                                 val value = CraftHelperStorage.selectedAmount
                                 val newValue = if (Screen.hasShiftDown()) {
                                     value - 10
@@ -255,9 +239,10 @@ object CraftHelperDisplay {
                             Displays.component(
                                 Text.of {
                                     append("+")
-                                    this.color = TextColor.GREEN
+                                    this.color = if (CraftHelperStorage.canModifyCount) TextColor.GREEN else TextColor.GRAY
                                 },
                             ).asButtonLeft {
+                                if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
                                 val value = CraftHelperStorage.selectedAmount
                                 val newValue = if (Screen.hasShiftDown()) {
                                     value + 10

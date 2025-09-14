@@ -35,6 +35,9 @@ object CraftHelperStorage {
         }
     }
 
+    val canModifyCount: Boolean get() = storage.get()?.canModifyCount == true
+    val recipeType get() = storage.get()?.type
+
     val data get() = storage.get()
     val selectedItem
         get() = when (data) {
@@ -54,16 +57,13 @@ object CraftHelperStorage {
 
     fun setAmount(amount: Int) {
         val amount = amount.coerceAtLeast(1)
-        val changed = when (val current = data) {
-            is NormalCraftHelperRecipe -> {
-                storage.set(NormalCraftHelperRecipe(current.item, amount))
-                true
-            }
+        when (val current = data) {
+            is NormalCraftHelperRecipe -> storage.set(NormalCraftHelperRecipe(current.item, amount))
 
-            else -> false
+            else -> return
         }
 
-        if (changed) save()
+        save()
     }
 
     fun setSkyShards(recipe: SkyShardsMethod) {
