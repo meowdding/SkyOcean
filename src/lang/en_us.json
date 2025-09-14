@@ -17,7 +17,7 @@
         "desc": [
           "The mod may change the appearance of an item (or other visual components), by for example manipulating it's tooltip.",
           "",
-          "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix (or whatever modify indicator is selected), this is done to help identify the origin of any changes and therefore is discouraged to be disabled."
+          "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix (or whatever modify indicator is selected), this is done to help identify the origin of any changes and therefore we advise against disabling it."
         ]
       },
       "text_shadow": {
