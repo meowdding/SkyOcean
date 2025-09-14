@@ -1,7 +1,9 @@
 package me.owdding.skyocean.utils.extensions
 
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
+import me.owdding.lib.layouts.PaddedWidget
 import me.owdding.skyocean.accessors.ClearableLayout
+import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
@@ -15,3 +17,11 @@ fun <T : Layout> LayoutWidget<T>.clear() = apply { withContents { it.tryClear() 
 
 fun LayoutWidget<FrameLayout>.setFrameContent(content: LayoutElement) = apply { clear().withContents { it.addChild(content) } }
 fun LayoutWidget<LinearLayout>.setLayoutContent(content: LayoutElement) = apply { clear().withContents { it.addChild(content) } }
+
+fun LayoutElement.withPadding(
+    padding: Int,
+    top: Int = padding,
+    right: Int = padding,
+    bottom: Int = padding,
+    left: Int = padding,
+): AbstractWidget = PaddedWidget(this, top, right, bottom, left)

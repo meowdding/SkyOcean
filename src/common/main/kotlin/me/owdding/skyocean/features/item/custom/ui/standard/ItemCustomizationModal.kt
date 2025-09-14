@@ -13,7 +13,6 @@ import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.Orientation
 import earth.terrarium.olympus.client.utils.State
 import me.owdding.lib.displays.*
-import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.data.RecentColorStorage
@@ -51,6 +50,7 @@ import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
 import me.owdding.skyocean.utils.extensions.setFrameContent
+import me.owdding.skyocean.utils.extensions.withPadding
 import me.owdding.skyocean.utils.items.ItemCache
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.rendering.ExtraUiConstants
@@ -194,7 +194,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         updateModelSelection()
 
         val dyeLabel = text("Dye").withoutShadow().asDisplay().asWidget()
-        val dye = Widgets.button {
+        val dyeButton = Widgets.button {
             it.withSize(20, 20)
             it.withRenderer(
                 WidgetRenderers.layered(
@@ -232,7 +232,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
 
         val dyeSelectionWidget = LayoutWidget(FrameLayout())
             .withStretchToContentSize()
-            .withTexture(UIConstants.MODAL_INSET)
+        //.withTexture(UIConstants.MODAL_INSET)
 
         val staticDyeSelection = DyeData.staticDyes.map { (key, _) -> SkyOceanItemId.item(key) to SkyBlockDye(key) }.toMap().toDyeList()
         val animatedDyeSelection = DyeData.animatedDyes.map { (key, _) -> SkyOceanItemId.item(key) to AnimatedSkyBlockDye(key) }.toMap().toDyeList()
@@ -241,7 +241,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             when (it) {
                 DyeTab.STATIC -> dyeSelectionWidget.setFrameContent(staticDyeSelection)
                 DyeTab.ANIMATED -> dyeSelectionWidget.setFrameContent(animatedDyeSelection)
-                DyeTab.GRADIENT -> dyeSelectionWidget.setFrameContent(TODO())
+                DyeTab.GRADIENT -> {}
             }
         }
         dyeSelectionWidget.setFrameContent(staticDyeSelection)
@@ -271,7 +271,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             }
         }
         swapToTrims()
-        dye.withCallback {
+        dyeButton.withCallback {
             buttonClick()
             if (animationManager?.current == defaultLayout) {
                 swapToDyes()
@@ -309,7 +309,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                     spacer(PADDING)
                     vertical {
                         add(dyeLabel)
-                        add(dye) {
+                        add(dyeButton) {
                             withSize(20, 20)
                         }
                     }
@@ -357,7 +357,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 spacer(PADDING)
                 vertical {
                     add(dyeLabel)
-                    add(dye) {
+                    add(dyeButton) {
                         withSize(totalWidth - 25, 20)
                     }
                 }
@@ -380,7 +380,9 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 }
                 spacer(3)
                 vertical {
-                    add(recentDyeLabel)
+                    add(recentDyeLabel) {
+                        addImmediately()
+                    }
                     add(trimMaterialOrRecentDyeWidget) {
                         onAnimationStart {
                             trimMaterialOrRecentDyeWidget.setFrameContent(recentDyeWidget)
@@ -612,6 +614,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         )
         it.withTooltip(dyeTab.tooltip)
         it.withCallback {
+            if (dyeTab.disabled) return@withCallback
             buttonClick()
             state.set(dyeTab)
         }
@@ -722,9 +725,13 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
     }
 }
 
-enum class DyeTab(val id: SkyOceanItemId?, val tooltip: Component) {
+enum class DyeTab(val id: SkyOceanItemId?, val tooltip: Component, val disabled: Boolean = false) {
     STATIC(SkyOceanItemId.item("dye_aquamarine"), !"Static dyes"),
     ANIMATED(SkyOceanItemId.item("dye_snowflake"), !"Animated dyes"),
-    GRADIENT(null, !"Custom colors"),
+    GRADIENT(
+        null,
+        !"Custom colors\nNot currently available in the ui! Use §a/skyocean customize (color/gradient)§f to set it!\n§7Coming soon in the ui!",
+        true,
+    ),
     ;
 }

@@ -15,6 +15,7 @@ import kotlin.time.toJavaDuration
 @GenerateDispatchCodec(ItemColor::class)
 enum class ItemColorType(override val type: KClass<out ItemColor>) : DispatchHelper<ItemColor> {
     STATIC(StaticItemColor::class),
+    GRADIENT(GradientItemColor::class),
     SKYBLOCK_DYE(SkyBlockDye::class),
     ANIMATED_SKYBLOCK_DYE(AnimatedSkyBlockDye::class)
     ;
@@ -30,12 +31,32 @@ val colorCache: LoadingCache<Int, DyedItemColor> = CacheBuilder.newBuilder()
     .expireAfterWrite(10.minutes.toJavaDuration())
     .build(simpleCacheLoader(::DyedItemColor))
 
+interface NonSkyblockItemColor : ItemColor
+
 @GenerateCodec
-data class StaticItemColor(val colorCode: Int) : ItemColor {
+data class StaticItemColor(val colorCode: Int) : NonSkyblockItemColor {
     override val type: ItemColorType = ItemColorType.STATIC
 
     override fun getColor() = colorCode
 }
+
+@GenerateCodec
+data class GradientItemColor(
+    val gradient: List<GradientEntry>,
+    val time: Int,
+) : NonSkyblockItemColor {
+    override val type: ItemColorType = ItemColorType.GRADIENT
+
+    override fun getColor(): Int {
+        return 1
+    }
+}
+
+@GenerateCodec
+data class GradientEntry(
+    val color: Int,
+    val progress: Double,
+)
 
 @GenerateCodec
 data class SkyBlockDye(val id: String) : ItemColor {
