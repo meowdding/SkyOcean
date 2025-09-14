@@ -17,19 +17,35 @@ object DeferredLayoutFactory {
 
 abstract class DeferredLayout<Type : Layout> {
     protected abstract val _backing: Type
-    protected val deferred: MutableList<context(AnimationManager) () -> Unit> = mutableListOf()
+    protected val deferred: MutableList<context(AnimationManager) (MutableList<() -> Unit>) -> Unit> = mutableListOf()
+    var onAnimationStart: MutableList<() -> Unit> = mutableListOf()
     abstract fun <T : LayoutElement> add(widget: T)
 
-    open fun <T : AbstractWidget> add(widget: T, init: context(AnimationManager) T.() -> Unit) {
-        add(widget)
-        deferred.add { widget.init() }
+    companion object {
+        context(onAnimationStart: MutableList<() -> Unit>) fun <T : AbstractWidget> T.onAnimationStart(runnable: () -> Unit) {
+            onAnimationStart.add(runnable)
+        }
     }
 
-    fun applyDefault(manager: AnimationManager) = context(manager) { apply() }
+    open fun <T : AbstractWidget> add(widget: T, init: context(AnimationManager, DeferredLayout<Type>, MutableList<() -> Unit>) T.() -> Unit) {
+        add(widget)
+        deferred.add {
+            context(it) {
+                widget.init()
+            }
+        }
 
-    context(_: AnimationManager) fun apply() {
-        deferred.forEach { runnable -> runnable() }
+    }
+
+    fun applyDefault(manager: AnimationManager) = context(manager) { apply(true) }
+
+    context(_: AnimationManager) fun apply(animationStart: Boolean = false) {
+        deferred.forEach { runnable -> runnable(onAnimationStart) }
+        if (animationStart) {
+            onAnimationStart.forEach { it() }
+        }
         _backing.arrangeElements()
+        onAnimationStart.clear()
     }
 
     fun getLayout() = _backing
@@ -69,7 +85,7 @@ data class DeferredGridLayout(
     override val _backing: GridLayout,
 ) : DeferredLayout<GridLayout>() {
     override fun <T : LayoutElement> add(widget: T) = throw UnsupportedOperationException("Can't be used with grid layout!")
-    override fun <T : AbstractWidget> add(widget: T, init: context(AnimationManager) T.() -> Unit) =
+    override fun <T : AbstractWidget> add(widget: T, init: context(AnimationManager, DeferredLayout<GridLayout>, MutableList<() -> Unit>) T.() -> Unit) =
         throw UnsupportedOperationException("Can't be used with grid layout!")
 
     fun <T : LayoutElement> add(widget: T, row: Int, column: Int) {

@@ -15,19 +15,21 @@ import earth.terrarium.olympus.client.utils.State
 import me.owdding.lib.displays.*
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrTryCreateCustomData
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper
-import me.owdding.skyocean.features.item.custom.data.ArmorTrim
-import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.anyUpdated
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.asScrollableWidget
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttonClick
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttons
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.reset
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.save
 import me.owdding.skyocean.features.item.custom.ui.standard.search.ItemSelectorOverlay
+import me.owdding.skyocean.repo.customization.DyeData
 import me.owdding.skyocean.repo.customization.TrimPatternMap
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
@@ -39,12 +41,14 @@ import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
 import me.owdding.skyocean.utils.animation.AnimationManager
 import me.owdding.skyocean.utils.animation.AnimationManager.Companion.addImmediately
 import me.owdding.skyocean.utils.animation.AnimationManager.Companion.onPercentage
+import me.owdding.skyocean.utils.animation.DeferredLayout.Companion.onAnimationStart
 import me.owdding.skyocean.utils.animation.DeferredLayoutFactory
 import me.owdding.skyocean.utils.animation.EasingFunctions
+import me.owdding.skyocean.utils.asColumn
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
-import me.owdding.skyocean.utils.extensions.clear
+import me.owdding.skyocean.utils.extensions.setFrameContent
 import me.owdding.skyocean.utils.items.ItemCache
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
@@ -125,12 +129,20 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
     val trimData = CustomItemsHelper.getData(copiedItem, DataComponents.TRIM)
     val trimPattern: ListenableState<TrimPattern?> = ListenableState.of(trimData?.pattern()?.value())
     val trimMaterial: ListenableState<TrimMaterial?> = ListenableState.of(trimData?.material()?.value())
+    val dye: ListenableState<ItemColor?> = ListenableState.of<ItemColor?>(State.of(null)).apply {
+        registerListener { dye ->
+            copiedItem.getOrCreateStaticData()?.let {
+                it[CustomItemDataComponents.COLOR] = dye
+            }
+        }
+    }
     val hasTrim = trimData != null
-
+    val dyeTabState: State<DyeTab> = State.of(DyeTab.STATIC)
     override fun init() {
         super.init()
         anyUpdated = false
         buttons.clear()
+        val dyeTabState = ListenableState(dyeTabState)
         val defaultLayout = DeferredLayoutFactory.horizontal(0.5f)
         val colorLayout = DeferredLayoutFactory.horizontal(0.5f)
         animationManager = AnimationManager(this, 0.25.seconds, defaultLayout, EasingFunctions.easeInOutQuad)
@@ -185,7 +197,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 WidgetRenderers.layered(
                     WidgetRenderers.sprite(UIConstants.DARK_BUTTON),
                     DisplayWidget.displayRenderer(
-                        ExtraDisplays.passthrough(20, 20) {
+                        ExtraDisplays.passthrough(20, 22) {
                             val color = customData?.get(CustomItemDataComponents.COLOR)?.getColor() ?: 0xFFFFFF
                             val actualColor = if (it.isHoveredOrFocused) ARGB.scaleRGB(color, 2 / 3f) else color
                             fill(2, 2, 18, 16, ARGB.opaque(actualColor))
@@ -196,9 +208,16 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         }
 
         val trimLabel = text("Trim").withoutShadow().asDisplay().asWidget()
+        val dyeCategoryLabel = text("Dyes").withoutShadow().asDisplay().asWidget()
         val trimPatternWidget = TrimPatternMap.map.trimButton(trimPattern)
             .chunked(7)
             .asWidgetTable()
+
+        val dyeCategories = listOf(
+            dyeTabButton(dyeTabState, DyeTab.STATIC),
+            dyeTabButton(dyeTabState, DyeTab.ANIMATED),
+            dyeTabButton(dyeTabState, DyeTab.GRADIENT),
+        ).asColumn()
 
         val trimPatternOrDyeWidget = LayoutWidget(FrameLayout())
             .withStretchToContentSize()
@@ -206,6 +225,23 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         val trimMaterialOrRecentDyeWidget = LayoutWidget(FrameLayout())
             .withStretchToContentSize()
             .withTexture(UIConstants.MODAL_INSET)
+
+        val dyeSelectionWidget = LayoutWidget(FrameLayout())
+            .withStretchToContentSize()
+            .withTexture(UIConstants.MODAL_INSET)
+
+        val staticDyeSelection = DyeData.staticDyes.map { (key, _) -> SkyOceanItemId.item(key) to SkyBlockDye(key) }.toMap().toDyeList()
+        val animatedDyeSelection = DyeData.animatedDyes.map { (key, _) -> SkyOceanItemId.item(key) to AnimatedSkyBlockDye(key) }.toMap().toDyeList()
+
+        dyeTabState.registerListener {
+            when (it) {
+                DyeTab.STATIC -> dyeSelectionWidget.setFrameContent(staticDyeSelection)
+                DyeTab.ANIMATED -> dyeSelectionWidget.setFrameContent(animatedDyeSelection)
+                DyeTab.GRADIENT -> dyeSelectionWidget.setFrameContent(TODO())
+            }
+        }
+        dyeSelectionWidget.setFrameContent(staticDyeSelection)
+
         val trimMaterialWidget = ItemCache.trimMaterials.associateWithNotNull {
             it.components()
                 .get(DataComponents.PROVIDES_TRIM_MATERIAL)
@@ -221,20 +257,11 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             if (this.animationManager?.current != colorLayout) {
                 this.animationManager?.next = colorLayout
             }
-            trimPatternOrDyeWidget.clear().withContents {
-
-            }
         }
 
         fun swapToTrims() {
             if (this.animationManager?.current != defaultLayout) {
                 this.animationManager?.next = defaultLayout
-            }
-            trimPatternOrDyeWidget.clear().withContents {
-                it.addChild(trimPatternWidget)
-            }
-            trimMaterialOrRecentDyeWidget.clear().withContents {
-                it.addChild(trimMaterialWidget)
             }
         }
         swapToTrims()
@@ -284,11 +311,21 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             }
             if (canBeEquipped) {
                 spacer(height = PADDING)
-                add(trimLabel)
+                add(trimLabel) {
+                    addImmediately()
+                }
                 horizontal {
-                    add(trimPatternOrDyeWidget)
+                    add(trimPatternOrDyeWidget) {
+                        onAnimationStart {
+                            trimPatternOrDyeWidget.setFrameContent(trimPatternWidget)
+                        }
+                    }
                     spacer(PADDING)
-                    add(trimMaterialOrRecentDyeWidget)
+                    add(trimMaterialOrRecentDyeWidget) {
+                        onAnimationStart {
+                            trimMaterialOrRecentDyeWidget.setFrameContent(trimMaterialWidget)
+                        }
+                    }
                 }
             }
         }
@@ -320,11 +357,23 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 }
             }
             spacer(height = PADDING)
-            add(trimLabel)
+            add(dyeCategoryLabel) {
+                addImmediately()
+            }
             horizontal {
-                add(trimPatternOrDyeWidget)
-                spacer(PADDING)
-                add(trimMaterialOrRecentDyeWidget)
+                add(trimPatternOrDyeWidget) {
+                    onAnimationStart {
+                        trimPatternOrDyeWidget.setFrameContent(dyeCategories)
+                    }
+                }
+                spacer(3)
+                add(dyeSelectionWidget)
+                spacer(3)
+                add(trimMaterialOrRecentDyeWidget) {
+                    onAnimationStart {
+                        trimMaterialOrRecentDyeWidget.setFrameContent(trimMaterialWidget)
+                    }
+                }
             }
 
         }
@@ -509,7 +558,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
 
     fun <V> Map<Item, V>.trimButton(state: State<V>): List<AbstractWidget> = this.map { (item, value) ->
         Widgets.button {
-            val display = Displays.item(item).withPadding(3, top = 2, left = 2, bottom = 4)
+            val display = Displays.item(item).withPadding(2, bottom = 4)
             it.withTexture(null)
             it.withSize(display.getWidth(), display.getHeight())
             it.withRenderer(
@@ -529,6 +578,51 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         }.withPadding(1)
     }
 
+    fun dyeTabButton(state: State<DyeTab>, dyeTab: DyeTab): AbstractWidget = Widgets.button {
+        val display = if (dyeTab.id != null)
+            Displays.item(dyeTab.id.toItem()).withPadding(2, bottom = 4)
+        else
+            ExtraDisplays.passthrough(20, 22) {
+                fill(2, 2, 18, 16, ARGB.opaque(0xFFFFFF))
+            }
+        it.withTexture(null)
+        it.withSize(display.getWidth(), display.getHeight())
+        it.withRenderer(
+            WidgetRenderers.layered(
+                ExtraWidgetRenderers.conditional(
+                    WidgetRenderers.sprite(UIConstants.PRIMARY_BUTTON),
+                    WidgetRenderers.sprite(UIConstants.DARK_BUTTON),
+                ) { state.get() == dyeTab },
+                DisplayWidget.displayRenderer(display),
+            ),
+        )
+        it.withCallback {
+            buttonClick()
+            state.set(dyeTab)
+        }
+    }.withPadding(1)
+
+    private fun Map<SkyOceanItemId, ItemColor>.toDyeList(): AbstractWidget = this.map { (id, color) ->
+        Widgets.button {
+            val display = Displays.item(id.toItem()).withPadding(2, bottom = 4)
+
+            it.withTexture(null)
+            it.withSize(display.getWidth(), display.getHeight())
+            it.withRenderer(
+                WidgetRenderers.layered(
+                    ExtraWidgetRenderers.conditional(
+                        WidgetRenderers.sprite(UIConstants.PRIMARY_BUTTON),
+                        WidgetRenderers.sprite(UIConstants.DARK_BUTTON),
+                    ) { dye.get() == color },
+                    DisplayWidget.displayRenderer(display),
+                ),
+            )
+            it.withCallback {
+                buttonClick()
+                dye.set(color.takeUnless { dye.get() == color })
+            }
+        }.withPadding(1)
+    }.chunked(6).asWidgetTable().asScrollableWidget(22 * 6 + 9, 24 * 3, alwaysShowScrollBar = true)
 
     fun updateTrimData() {
         if (StandardCustomizationUi.debug) {
@@ -555,4 +649,11 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             it[CustomItemDataComponents.ARMOR_TRIM] = ArmorTrim(material, pattern)
         }
     }
+}
+
+enum class DyeTab(val id: SkyOceanItemId?, val tooltip: Component) {
+    STATIC(SkyOceanItemId.item("dye_aquamarine"), !"Static dye"),
+    ANIMATED(SkyOceanItemId.item("dye_snowflake"), !"Animated dye"),
+    GRADIENT(null, !"Custom colors"),
+    ;
 }

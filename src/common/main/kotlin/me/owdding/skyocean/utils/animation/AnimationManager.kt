@@ -13,7 +13,7 @@ import kotlin.time.isDistantPast
 
 data class AnimationManager(val screen: Screen, val time: Duration, var current: DeferredLayout<*>, val easingFunction: EasingFunction) {
     init {
-        current.apply()
+        current.apply(true)
         current.getLayout().visitWidgets {
             (screen as ScreenAccessor).`skyocean$addRenderableWidget`(it)
         }
@@ -51,7 +51,7 @@ data class AnimationManager(val screen: Screen, val time: Duration, var current:
             value.getLayout().setPosition(currentLayoutElement.x, currentLayoutElement.y)
 
             applyImmediately.clear()
-            value.apply()
+            value.apply(true)
             val onPercentage = LinkedHashMap(onPercentage)
             val onFinish = ArrayList(onFinish)
             val nextStates = commonElements.withStates()
@@ -116,7 +116,7 @@ data class AnimationManager(val screen: Screen, val time: Duration, var current:
         interpolated.clear()
         current = next
         this.next = null
-        current.apply()
+        current.apply(true)
         onPercentage.forEach { (_, entries) -> entries.forEach { it() } }
         onFinish.forEach { it() }
         timeStarted = Instant.DISTANT_PAST

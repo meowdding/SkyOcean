@@ -14,4 +14,16 @@ fun List<List<LayoutElement>>.asWidgetTable(spacing: Int = 0): Layout {
     }
 }
 
+fun List<LayoutElement>.asRow(spacing: Int = 0): Layout {
+    return LayoutFactory.horizontal(spacing) {
+        this@asRow.forEach(::widget)
+    }
+}
+
+fun List<LayoutElement>.asColumn(spacing: Int = 0): Layout {
+    return LayoutFactory.vertical(spacing) {
+        this@asColumn.forEach(::widget)
+    }
+}
+
 fun LayoutElement.setPosition(position: Pair<Int, Int>) = this.setPosition(position.first, position.second)
