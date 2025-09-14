@@ -34,7 +34,6 @@ abstract class DeferredLayout<Type : Layout> {
                 widget.init()
             }
         }
-
     }
 
     fun applyDefault(manager: AnimationManager) = context(manager) { apply(true) }

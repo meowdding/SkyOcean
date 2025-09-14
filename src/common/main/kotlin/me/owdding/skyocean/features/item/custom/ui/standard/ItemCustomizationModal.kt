@@ -16,6 +16,7 @@ import me.owdding.lib.displays.*
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
+import me.owdding.skyocean.data.RecentColorStorage
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
@@ -45,12 +46,14 @@ import me.owdding.skyocean.utils.animation.DeferredLayout.Companion.onAnimationS
 import me.owdding.skyocean.utils.animation.DeferredLayoutFactory
 import me.owdding.skyocean.utils.animation.EasingFunctions
 import me.owdding.skyocean.utils.asColumn
+import me.owdding.skyocean.utils.asLayoutWidget
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
 import me.owdding.skyocean.utils.extensions.setFrameContent
 import me.owdding.skyocean.utils.items.ItemCache
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
+import me.owdding.skyocean.utils.rendering.ExtraUiConstants
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import me.owdding.skyocean.utils.rendering.StyledItemWidget
 import net.minecraft.client.Minecraft
@@ -217,7 +220,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             dyeTabButton(dyeTabState, DyeTab.STATIC),
             dyeTabButton(dyeTabState, DyeTab.ANIMATED),
             dyeTabButton(dyeTabState, DyeTab.GRADIENT),
-        ).asColumn()
+        ).asColumn().asLayoutWidget().withTexture(UIConstants.MODAL_INSET)
 
         val trimPatternOrDyeWidget = LayoutWidget(FrameLayout())
             .withStretchToContentSize()
@@ -241,6 +244,8 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             }
         }
         dyeSelectionWidget.setFrameContent(staticDyeSelection)
+
+        val recentDyeWidget = getRecentDyes()
 
         val trimMaterialWidget = ItemCache.trimMaterials.associateWithNotNull {
             it.components()
@@ -361,17 +366,17 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 addImmediately()
             }
             horizontal {
+                add(dyeCategories)
+                spacer(3)
                 add(trimPatternOrDyeWidget) {
                     onAnimationStart {
-                        trimPatternOrDyeWidget.setFrameContent(dyeCategories)
+                        trimPatternOrDyeWidget.setFrameContent(dyeSelectionWidget)
                     }
                 }
                 spacer(3)
-                add(dyeSelectionWidget)
-                spacer(3)
                 add(trimMaterialOrRecentDyeWidget) {
                     onAnimationStart {
-                        trimMaterialOrRecentDyeWidget.setFrameContent(trimMaterialWidget)
+                        trimMaterialOrRecentDyeWidget.setFrameContent(recentDyeWidget)
                     }
                 }
             }
@@ -619,10 +624,65 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             )
             it.withCallback {
                 buttonClick()
-                dye.set(color.takeUnless { dye.get() == color })
+                val shouldRemove = color == dye.get()
+
+                dye.set(color.takeUnless { shouldRemove })
+                if (!shouldRemove) {
+                    RecentColorStorage.addColor(color)
+                }
             }
         }.withPadding(1)
     }.chunked(6).asWidgetTable().asScrollableWidget(22 * 6 + 9, 24 * 3, alwaysShowScrollBar = true)
+
+    private fun getRecentDyes() = buildList {
+        val displayCache: MutableMap<ItemColor?, Display> = mutableMapOf()
+        repeat(12) { index ->
+            add(
+                Widgets.button {
+                    val display = Displays.supplied {
+                        val color = RecentColorStorage.getColorAt(index)
+                        displayCache.getOrPut(color) { createColorVisualizer(color) }
+                    }
+
+                    it.withTexture(null)
+                    it.withSize(display.getWidth(), display.getHeight())
+                    it.withRenderer(
+                        WidgetRenderers.layered(
+                            ExtraWidgetRenderers.conditional(
+                                WidgetRenderers.sprite(UIConstants.PRIMARY_BUTTON),
+                                ExtraWidgetRenderers.conditional(
+                                    WidgetRenderers.sprite(UIConstants.DARK_BUTTON),
+                                    WidgetRenderers.sprite(ExtraUiConstants.alwaysDisabledDarkButton),
+                                ) { RecentColorStorage.getColorAt(index) != null },
+                            ) { dye.get() == RecentColorStorage.getColorAt(index) && dye.get() != null },
+                            DisplayWidget.displayRenderer(display),
+                        ),
+                    )
+                    it.withCallback {
+                        val color = RecentColorStorage.getColorAt(index) ?: return@withCallback
+                        buttonClick()
+                        val shouldRemove = color == dye.get()
+
+                        dye.set(color.takeUnless { shouldRemove })
+                        if (!shouldRemove) {
+                            RecentColorStorage.addColor(color)
+                        }
+                    }
+                }.withPadding(1),
+            )
+        }
+    }.chunked(4).asWidgetTable()
+
+    private fun createColorVisualizer(color: ItemColor?): Display = when (color) {
+        is StaticItemColor ->
+            ExtraDisplays.passthrough(20, 22) {
+                fill(2, 2, 18, 16, ARGB.opaque(color.getColor()))
+            }
+
+        is SkyBlockDye -> Displays.item(SkyOceanItemId.item(color.id).toItem()).withPadding(2, bottom = 4)
+        is AnimatedSkyBlockDye -> Displays.item(SkyOceanItemId.item(color.id).toItem()).withPadding(2, bottom = 4)
+        else -> Displays.empty(20, 22)
+    }
 
     fun updateTrimData() {
         if (StandardCustomizationUi.debug) {

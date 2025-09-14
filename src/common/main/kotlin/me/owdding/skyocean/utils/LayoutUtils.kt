@@ -1,5 +1,6 @@
 package me.owdding.skyocean.utils
 
+import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import me.owdding.lib.builder.LayoutFactory
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
@@ -25,5 +26,7 @@ fun List<LayoutElement>.asColumn(spacing: Int = 0): Layout {
         this@asColumn.forEach(::widget)
     }
 }
+
+fun <T : Layout> T.asLayoutWidget(): LayoutWidget<T> = LayoutWidget(this).withStretchToContentSize()
 
 fun LayoutElement.setPosition(position: Pair<Int, Int>) = this.setPosition(position.first, position.second)
