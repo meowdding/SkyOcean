@@ -403,6 +403,10 @@
         "@value": "Bobber Fix",
         "desc": "Fixes bobbers rubberbanding when fishing."
       },
+      "bobber_time": {
+        "@value": "Bobber Time",
+        "desc": "Shows the time your bobber has existed."
+      },
       "hide_other_bobbers": {
         "@value": "Hide Other Bobbers",
         "desc": "Hides other players' bobbers, making it easier to see your own."
