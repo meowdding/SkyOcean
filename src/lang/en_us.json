@@ -681,11 +681,10 @@
       "reset": "Reset"
     }
   },
-  "item_search": {
-    "keybind": "Item Search"
-  },
-  "item_value": {
-    "keybind": "Item Value"
+  "keybind": {
+    "item_search": "Open Item Search",
+    "item_value": "Open Item Value",
+    "craft_helper": "Set as active Craft Helper Item"
   },
   "gradients": {
     "default": "Default",

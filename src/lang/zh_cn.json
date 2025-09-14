@@ -547,10 +547,8 @@
         "reset": "重置"
       }
     },
-    "item_search": {
-      "keybind": "物品搜索"
-    },
-    "item_value": {
-      "keybind": "物品价值"
+    "keybind": {
+      "item_search": "物品搜索",
+      "item_value": "物品价值"
     }
   }
