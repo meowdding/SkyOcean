@@ -203,7 +203,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                         ExtraDisplays.passthrough(20, 22) {
                             val color = customData?.get(CustomItemDataComponents.COLOR)?.getColor() ?: 0xFFFFFF
                             val actualColor = if (it.isHoveredOrFocused) ARGB.scaleRGB(color, 2 / 3f) else color
-                            fill(2, 2, 18, 16, ARGB.opaque(actualColor))
+                            fill(2, 2, 18, 18, ARGB.opaque(actualColor))
                         },
                     ),
                 ),
@@ -588,6 +588,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 state.set(value.takeUnless { state.get() == value })
                 updateTrimData()
             }
+            it.withTooltip(item.defaultInstance.hoverName)
         }.withPadding(1)
     }
 
@@ -596,7 +597,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             Displays.item(dyeTab.id.toItem()).withPadding(2, bottom = 4)
         else
             ExtraDisplays.passthrough(20, 22) {
-                fill(2, 2, 18, 16, ARGB.opaque(0xFFFFFF))
+                fill(2, 2, 18, 18, ARGB.opaque(0xFFFFFF))
             }
         it.withTexture(null)
         it.withSize(display.getWidth(), display.getHeight())
@@ -609,6 +610,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 DisplayWidget.displayRenderer(display),
             ),
         )
+        it.withTooltip(dyeTab.tooltip)
         it.withCallback {
             buttonClick()
             state.set(dyeTab)
@@ -639,6 +641,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                     RecentColorStorage.addColor(color)
                 }
             }
+            it.withTooltip(id.toItem().hoverName)
         }.withPadding(1)
     }.chunked(6).asWidgetTable().asScrollableWidget(22 * 6 + 9, 24 * 3, alwaysShowScrollBar = true)
 
@@ -684,7 +687,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
     private fun createColorVisualizer(color: ItemColor?): Display = when (color) {
         is StaticItemColor ->
             ExtraDisplays.passthrough(20, 22) {
-                fill(2, 2, 18, 16, ARGB.opaque(color.getColor()))
+                fill(2, 2, 18, 18, ARGB.opaque(color.getColor()))
             }
 
         is SkyBlockDye -> Displays.item(SkyOceanItemId.item(color.id).toItem()).withPadding(2, bottom = 4)
@@ -720,8 +723,8 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
 }
 
 enum class DyeTab(val id: SkyOceanItemId?, val tooltip: Component) {
-    STATIC(SkyOceanItemId.item("dye_aquamarine"), !"Static dye"),
-    ANIMATED(SkyOceanItemId.item("dye_snowflake"), !"Animated dye"),
+    STATIC(SkyOceanItemId.item("dye_aquamarine"), !"Static dyes"),
+    ANIMATED(SkyOceanItemId.item("dye_snowflake"), !"Animated dyes"),
     GRADIENT(null, !"Custom colors"),
     ;
 }
