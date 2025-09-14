@@ -1,9 +1,13 @@
 package me.owdding.skyocean.commands
 
 import com.mojang.brigadier.arguments.BoolArgumentType
+import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
+import me.owdding.lib.rendering.text.builtin.GradientTextShader
+import me.owdding.lib.rendering.text.textShader
 import me.owdding.skyocean.api.SkyOceanItemId
+import me.owdding.skyocean.events.ArgumentCommandBuilder
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
@@ -23,6 +27,7 @@ import me.owdding.skyocean.utils.commands.HexColorArgumentType
 import me.owdding.skyocean.utils.commands.SkyOceanItemIdArgument
 import me.owdding.skyocean.utils.commands.VirtualResourceArgument
 import me.owdding.skyocean.utils.components.TagComponentSerialization
+import me.owdding.skyocean.utils.extensions.copy
 import net.minecraft.commands.arguments.ResourceKeyArgument
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
@@ -196,7 +201,6 @@ object CustomizeCommand {
                         unableToCustomize()
                     }
                 }
-
                 thenCallback("static_color", SkyOceanItemIdArgument(DyeData.staticDyes.keys.map { SkyOceanItemId.item(it.lowercase()) })) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
                     val color = getArgument<SkyOceanItemId>("static_color")!!
@@ -269,6 +273,46 @@ object CustomizeCommand {
                 } else {
                     unableToCustomize()
                 }
+            }
+
+            then("gradient time", IntegerArgumentType.integer(1)) {
+                fun <T> ArgumentCommandBuilder<T>.add(depth: Int, maxDepth: Int) {
+                    if (maxDepth < depth) return
+                    then("color$depth", HexColorArgumentType()) {
+
+                        callback {
+                            val item = mainHandItemOrNull() ?: return@callback
+                            val time = getArgument<Int>("time")!!
+                            val colors: MutableList<Int> = mutableListOf()
+
+                            repeat(depth) {
+                                val color = getArgument<Int>("color$it") ?: return@repeat
+                                colors.add(color)
+                            }
+
+                            val success = CustomItems.modify(item) {
+                                this[CustomItemDataComponents.COLOR] = GradientItemColor(colors, time)
+                            }
+                            if (success) {
+                                text("Successfully set color ") {
+                                    append("gradient") {
+                                        this.textShader = GradientTextShader(
+                                            colors.copy().apply {
+                                                addLast(first())
+                                            },
+                                        )
+                                    }
+                                    append("!")
+                                }.sendWithPrefix()
+                            } else {
+                                unableToCustomize()
+                            }
+                        }
+                        add(depth + 1, maxDepth)
+                    }
+                }
+
+                add(0, 10)
             }
         }
     }
