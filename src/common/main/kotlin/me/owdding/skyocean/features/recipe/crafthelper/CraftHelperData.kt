@@ -9,6 +9,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.resolver.DefaultTreeResol
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.SkyShardsTreeResolver
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.TreeResolver
 import me.owdding.skyocean.generated.DispatchHelper
+import me.owdding.skyocean.repo.attributes.SkyShardsAttributeRepoData
 import kotlin.reflect.KClass
 
 abstract class CraftHelperRecipe(val type: CraftHelperRecipeType, val canModifyCount: Boolean) {
@@ -82,7 +83,7 @@ data class SkyShardsDirectElement(
     override val quantity: Int,
 ) : SkyShardsMethod(SkyShardsMethodType.DIRECT, shard, quantity) {
     override val inputs: List<Ingredient> = emptyList()
-    override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, 1)
+    override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, SkyShardsAttributeRepoData.data[shard]?.fuseAmount ?: 1)
     override fun getRecipe(ingredient: Ingredient): Recipe? = null
 }
 
