@@ -1,8 +1,8 @@
 package me.owdding.skyocean.utils.animation
 
+import me.owdding.lib.extensions.removeIf
 import me.owdding.skyocean.mixins.ScreenAccessor
 import me.owdding.skyocean.utils.MathUtils
-import me.owdding.skyocean.utils.extensions.removeIf
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
 import tech.thatgravyboat.skyblockapi.utils.time.currentInstant

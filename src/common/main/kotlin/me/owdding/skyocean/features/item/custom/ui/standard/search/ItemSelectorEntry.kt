@@ -22,8 +22,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
+import java.util.*
 
 object ItemSearchEntries {
 
@@ -86,8 +85,7 @@ data class SkyBlockModelEntry(
         }
     }
 
-    @OptIn(ExperimentalUuidApi::class)
-    val uuidString = Uuid.random().toHexDashString()
+    val uuidString = UUID.randomUUID().toString()
 
     override fun resolve(parent: ItemStack): ItemStack = itemBuilder(parent) {
         val item = model.toItem()

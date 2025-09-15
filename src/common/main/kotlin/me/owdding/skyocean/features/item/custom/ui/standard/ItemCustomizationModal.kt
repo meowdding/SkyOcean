@@ -25,7 +25,6 @@ import me.owdding.skyocean.features.item.custom.CustomItems.getOrTryCreateCustom
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper
 import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.anyUpdated
-import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.asScrollableWidget
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttonClick
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttons
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.reset
@@ -48,6 +47,7 @@ import me.owdding.skyocean.utils.animation.DeferredLayout.Companion.onAnimationS
 import me.owdding.skyocean.utils.animation.DeferredLayoutFactory
 import me.owdding.skyocean.utils.animation.EasingFunctions
 import me.owdding.skyocean.utils.components.TagComponentSerialization
+import me.owdding.skyocean.utils.extensions.asScrollableWidget
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
 import me.owdding.skyocean.utils.extensions.setFrameContent
 import me.owdding.skyocean.utils.extensions.withPadding

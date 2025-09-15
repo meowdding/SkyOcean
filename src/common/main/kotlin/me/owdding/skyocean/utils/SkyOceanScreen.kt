@@ -1,7 +1,6 @@
 package me.owdding.skyocean.utils
 
 import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen
-import com.teamresourceful.resourcefullib.common.utils.TriState
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.buttons.Button
@@ -9,13 +8,11 @@ import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
-import me.owdding.lib.builder.LayoutFactory
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
-import net.minecraft.client.gui.layouts.LayoutSettings
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -62,58 +59,11 @@ abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : BaseC
         }
     }
 
-    fun Layout.asScrollable(width: Int, height: Int, init: LayoutWidget<FrameLayout>.() -> Unit = {}, alwaysShowScrollBar: Boolean = false): Layout {
-        this.arrangeElements()
-        val widget = LayoutWidget(this).apply {
-            visible = true
-            withAutoFocus(false)
-        }.withStretchToContentSize()
-
-        return LayoutFactory.frame(width, height) {
-            widget(widget.asScrollable(width, height, init, alwaysShowScrollBar))
-        }
-    }
-
-    fun Layout.asScrollableWidget(
-        width: Int,
-        height: Int,
-        init: LayoutWidget<FrameLayout>.() -> Unit = {},
-        alwaysShowScrollBar: Boolean = false,
-    ): LayoutWidget<FrameLayout> {
-        this.arrangeElements()
-        val widget = LayoutWidget(this).apply {
-            visible = true
-            withAutoFocus(false)
-        }.withStretchToContentSize()
-
-        return widget.asScrollable(width, height, init, alwaysShowScrollBar)
-    }
 
     fun Layout.asLayoutWidget(init: LayoutWidget<Layout>.() -> Unit = {}) = LayoutWidget(this).apply {
         visible = true
         withAutoFocus(false)
         init()
-    }
-
-    fun AbstractWidget.asScrollable(
-        width: Int,
-        height: Int,
-        init: LayoutWidget<FrameLayout>.() -> Unit = {},
-        alwaysShowScrollBar: Boolean = false,
-    ): LayoutWidget<FrameLayout> {
-        val scrollable = Widgets.frame { frame ->
-            frame.withScrollableY(TriState.of(alwaysShowScrollBar.takeIf { it }))
-                .withSize(width, this.height.coerceAtMost(height))
-                .withAutoFocus(false)
-                .withContents { contents ->
-                    contents.setMinWidth(width - 10)
-                    contents.addChild(this, LayoutSettings.defaults().alignHorizontallyCenter())
-                }
-                .withAutoFocus(false)
-                .init()
-        }
-
-        return scrollable
     }
 
     fun <T> dropdown(

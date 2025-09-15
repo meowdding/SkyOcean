@@ -4,14 +4,13 @@ import earth.terrarium.olympus.client.components.buttons.Button
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrTryCreateCustomData
-import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.debugToggle
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
-object StandardCustomizationUi : SkyOceanScreen() {
+object StandardCustomizationUi {
 
     val debug by debugToggle("customization/ui/debug")
 
