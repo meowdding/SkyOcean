@@ -148,7 +148,7 @@ private fun ItemStack.getSkyOceanItemId(): SkyOceanItemId? {
         }
 
         "ATTRIBUTE_SHARD" -> {
-            this.getData(DataTypes.ATTRIBUTES)?.entries?.firstOrNull()?.let { (key, _) -> key }
+            this.getData(DataTypes.ATTRIBUTES)?.entries?.firstOrNull()?.let { (key, _) -> RepoAttributeAPI.getAttributeDataById(key)?.attributeId }
                 .let { it ?: UNKNOWN }.let(SkyOceanItemId::attribute)
         }
 
