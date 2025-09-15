@@ -7,7 +7,6 @@ import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.recipe.*
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.DefaultTreeResolver
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.SkyShardsTreeResolver
-import me.owdding.skyocean.features.recipe.crafthelper.resolver.TreeResolver
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.repo.attributes.SkyShardsAttributeRepoData
 import kotlin.reflect.KClass
@@ -42,10 +41,10 @@ data class SkyShardsRecipe(
 }
 
 @GenerateDispatchCodec(CraftHelperRecipe::class)
-enum class CraftHelperRecipeType(override val type: KClass<out CraftHelperRecipe>, val resolver: TreeResolver<out CraftHelperRecipe>) :
+enum class CraftHelperRecipeType(override val type: KClass<out CraftHelperRecipe>) :
     DispatchHelper<CraftHelperRecipe> {
-    NORMAL(NormalCraftHelperRecipe::class, DefaultTreeResolver),
-    SKY_SHARDS(SkyShardsRecipe::class, SkyShardsTreeResolver)
+    NORMAL(NormalCraftHelperRecipe::class),
+    SKY_SHARDS(SkyShardsRecipe::class)
     ;
 
     companion object {
@@ -60,7 +59,10 @@ abstract class SkyShardsMethod(
     open val quantity: Int,
 ) : ParentRecipe() {
     override val recipeType: RecipeType get() = RecipeType.SKY_SHARDS
+    abstract fun visitElements(visitor: (SkyShardsMethod) -> Unit)
 }
+
+private val unknownId = SkyOceanItemId.attribute(SkyOceanItemId.UNKNOWN)
 
 @GenerateCodec
 data class SkyShardsRecipeElement(
@@ -75,6 +77,13 @@ data class SkyShardsRecipeElement(
     override val inputs: List<Ingredient> = _inputs.mapNotNull { it.output }
     override fun getRecipe(ingredient: Ingredient): Recipe? =
         _inputs.find { it.shard == (ingredient as? SkyOceanItemIngredient)?.id }?.takeUnless { it is SkyShardsDirectElement }
+
+    override fun visitElements(visitor: (SkyShardsMethod) -> Unit) {
+        visitor(this)
+        _inputs.forEach {
+            it.visitElements(visitor)
+        }
+    }
 }
 
 @GenerateCodec
@@ -85,6 +94,7 @@ data class SkyShardsDirectElement(
     override val inputs: List<Ingredient> = emptyList()
     override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, SkyShardsAttributeRepoData.data[shard]?.fuseAmount ?: 1)
     override fun getRecipe(ingredient: Ingredient): Recipe? = null
+    override fun visitElements(visitor: (SkyShardsMethod) -> Unit) = visitor(this)
 }
 
 @GenerateCodec
@@ -96,11 +106,10 @@ data class SkyShardsCycleElement(
     val pureReptile: Int,
     val steps: List<SkyShardsCycleStep>,
 ) : SkyShardsMethod(SkyShardsMethodType.CYCLE, shard, quantity) {
-    override val inputs: List<Ingredient> = TODO("Not yet implemented")
-    override val output: ItemLikeIngredient = TODO("Not yet implemented")
-    override fun getRecipe(ingredient: Ingredient): Recipe? {
-        TODO("Not yet implemented")
-    }
+    override val inputs: List<Ingredient> = emptyList()
+    override val output: ItemLikeIngredient = SkyOceanItemIngredient(unknownId, -1)
+    override fun getRecipe(ingredient: Ingredient): Recipe? = null
+    override fun visitElements(visitor: (SkyShardsMethod) -> Unit) = visitor(this)
 }
 
 @GenerateCodec

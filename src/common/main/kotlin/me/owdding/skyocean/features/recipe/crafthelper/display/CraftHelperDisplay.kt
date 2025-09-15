@@ -11,6 +11,8 @@ import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.asWidget
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
@@ -21,6 +23,8 @@ import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutT
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsCycleElement
+import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
@@ -29,6 +33,7 @@ import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.OceanColors
 import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.setPosition
@@ -59,7 +64,7 @@ import kotlin.io.encoding.Base64
 import kotlin.math.max
 
 @LateInitModule
-object CraftHelperDisplay {
+object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
 
     val data get() = CraftHelperStorage.data
 
@@ -94,19 +99,34 @@ object CraftHelperDisplay {
             }
             thenCallback("skyshards") {
                 val clipboard = McClient.clipboard
-                val base = Base64.decode(clipboard.split(":")[1].trim())
-                val data = GZIPInputStream(base.inputStream()).use { it.readBytes() }.decodeToString()
-                    .readJson<JsonObject>().toData(SkyOceanCodecs.SkyShardsMethodCodec.codec())
+                try {
+                    val base = Base64.decode(clipboard.split(":")[1].trim())
+                    val data = GZIPInputStream(base.inputStream()).use { it.readBytes() }.decodeToString()
+                        .readJson<JsonObject>().toData(SkyOceanCodecs.SkyShardsMethodCodec.codec())
 
-                data?.let {
-                    CraftHelperStorage.setSkyShards(it)
-                    Text.of("Set current recipe to SkyShards Tree for ") {
-                        append(it.shard.toItem().hoverName)
-                        append(" ${it.quantity.toFormattedString()}x") { color = TextColor.GREEN }
-                        append("!")
-                    }.sendWithPrefix()
-                } ?: run {
-                    Text.of("Failed to read SkyShards data from clipboard!") { this.color = TextColor.RED }.sendWithPrefix()
+                    data?.let {
+                        val list = mutableListOf<SkyShardsMethod>()
+                        it.visitElements(list::add)
+
+                        val containsCycle = list.filterIsInstance<SkyShardsCycleElement>().any()
+                        CraftHelperStorage.setSkyShards(it)
+                        if (containsCycle) {
+                            Text.of("The imported tree contains a cycle, these are currently not supported in skyocean! The tree might not look complete!") {
+                                this.color = OceanColors.WARNING
+                            }.sendWithPrefix()
+                        } else {
+                            Text.of("Set current recipe to SkyShards Tree for ") {
+                                append("${it.quantity.toFormattedString()}x ") { color = TextColor.GREEN }
+                                append(it.shard.toItem().hoverName)
+                                append("!")
+                            }.sendWithPrefix()
+                        }
+                    } ?: run {
+                        Text.of("Failed to read SkyShards data from clipboard!") { this.color = OceanColors.WARNING }.sendWithPrefix()
+                    }
+                } catch (e: Exception) {
+                    Text.of("Failed to read SkyShards data from clipboard!") { this.color = OceanColors.WARNING }.sendWithPrefix()
+                    error("Failed to decode SkyShards tree!", e)
                 }
             }
             then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
