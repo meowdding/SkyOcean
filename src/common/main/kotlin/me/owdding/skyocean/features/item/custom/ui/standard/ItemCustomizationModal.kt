@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.item.custom.ui.standard
 
 import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
@@ -199,13 +200,11 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             it.withRenderer(
                 WidgetRenderers.layered(
                     WidgetRenderers.sprite(UIConstants.DARK_BUTTON),
-                    DisplayWidget.displayRenderer(
-                        ExtraDisplays.passthrough(20, 22) {
-                            val color = customData?.get(CustomItemDataComponents.COLOR)?.getColor() ?: 0xFFFFFF
-                            val actualColor = if (it.isHoveredOrFocused) ARGB.scaleRGB(color, 2 / 3f) else color
-                            fill(2, 2, 18, 18, ARGB.opaque(actualColor))
-                        },
-                    ),
+                    WidgetRenderer<Button> { graphics, context, _ ->
+                        val color = customData?.get(CustomItemDataComponents.COLOR)?.getColor() ?: 0xFFFFFF
+                        val actualColor = if (it.isHoveredOrFocused) ARGB.scaleRGB(color, 2 / 3f) else color
+                        graphics.fill(context.left, context.top, context.right, context.bottom, ARGB.opaque(actualColor))
+                    }.withPadding(2, 2, 4, 2),
                 ),
             )
         }
