@@ -63,7 +63,7 @@ data class SkyblockSkin(
 data class AnimatedSkyblockSkin(
     val id: SkyOceanItemId,
 ) : ItemSkin {
-    val skin = runCatching { AnimatedSkulls.skins[id]!! }.getOrElse { throw RuntimeException("Failed to get animated skyblock skin $id", it) }
+    val skin = AnimatedSkulls.skins[id] ?: throw RuntimeException("Failed to get animated skyblock skin $id", NullPointerException())
     override val type: ItemSkinType = ItemSkinType.ANIMATED_SKYBLOCK_SKIN
 
     override fun getResolvableProfile(): ResolvableProfile? = skin.let { skinCache[it.getTexture()] }
