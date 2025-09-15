@@ -684,7 +684,7 @@
   "keybind": {
     "item_search": "Open Item Search",
     "item_value": "Open Item Value",
-    "craft_helper": "Set as active Craft Helper Item"
+    "crafthelper": "Set as active Craft Helper Item"
   },
   "gradients": {
     "default": "Default",
