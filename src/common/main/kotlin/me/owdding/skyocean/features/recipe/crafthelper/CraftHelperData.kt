@@ -2,15 +2,15 @@ package me.owdding.skyocean.features.recipe.crafthelper
 
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.DispatchHelper
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import kotlin.reflect.KClass
 
 abstract class CraftHelperRecipe(val type: CraftHelperRecipeType)
 
 @GenerateCodec
 data class NormalCraftHelperRecipe(
-    var item: SkyOceanItemId?,
+    var item: SkyBlockId?,
     var amount: Int = 1,
 ) : CraftHelperRecipe(CraftHelperRecipeType.NORMAL)
 

@@ -1,11 +1,11 @@
 package me.owdding.skyocean.features.item.sources
 
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.item.sources.system.ParentItemContext
 import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -21,7 +21,7 @@ object RodUpgradesItemSource : ItemSource {
                     itemStack.getData(DataTypes.SINKER),
                     itemStack.getData(DataTypes.HOOK),
                     itemStack.getData(DataTypes.LINE),
-                ).map { (_, id) -> SkyOceanItemId.item(id) }
+                ).map { (_, id) -> SkyBlockId.item(id) }
                     .map { SimpleTrackedItem(it.toItem(), RodUpgradeItemContext(item)) }
             }
     }

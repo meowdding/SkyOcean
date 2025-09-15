@@ -8,7 +8,6 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.InventoryBuilder
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.lib.extensions.withTooltip
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
@@ -26,6 +25,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoRecipeAPI
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -37,7 +37,7 @@ import java.util.concurrent.CompletableFuture
 import kotlin.time.Duration.Companion.seconds
 
 class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
-    val skyoceanid = SkyOceanItemId.fromName(input) ?: SkyOceanItemId.unknownType(input)
+    val skyoceanid = SkyBlockId.fromName(input) ?: SkyBlockId.unknownType(input)
     val recipe = skyoceanid?.cleanId?.uppercase()?.let(RepoRecipeAPI::getForgeRecipe)
     val forgeItemStack = skyoceanid?.toItem() ?: itemBuilder(Items.BARRIER) {
         name("null")

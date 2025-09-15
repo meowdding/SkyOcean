@@ -1,7 +1,6 @@
 package me.owdding.skyocean.features.recipe.crafthelper.eval
 
 import me.owdding.lib.extensions.floor
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.item.sources.system.ItemContext
 import me.owdding.skyocean.features.recipe.CurrencyType
@@ -13,6 +12,7 @@ import tech.thatgravyboat.skyblockapi.api.area.farming.TrapperAPI
 import tech.thatgravyboat.skyblockapi.api.area.hub.FarmhouseAPI
 import tech.thatgravyboat.skyblockapi.api.area.rift.RiftAPI
 import tech.thatgravyboat.skyblockapi.api.profile.CurrencyAPI
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import kotlin.math.min
 
@@ -63,7 +63,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
     }
 
     fun takeN(ingredient: Ingredient, amount: Int = ingredient.amount): List<TrackedItem> = takeN(ingredient.serialize().lowercase(), amount)
-    fun takeN(itemId: SkyOceanItemId, amount: Int) = takeN(itemId.cleanId, amount)
+    fun takeN(itemId: SkyBlockId, amount: Int) = takeN(itemId.cleanId, amount)
 
     fun takeN(itemId: String, amount: Int): List<TrackedItem> {
         val items = items[itemId] ?: return emptyList()

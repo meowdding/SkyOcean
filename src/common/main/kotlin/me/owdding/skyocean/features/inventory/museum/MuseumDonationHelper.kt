@@ -5,7 +5,6 @@ import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
@@ -49,6 +48,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
@@ -205,7 +205,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
         }
     }
 
-    fun ItemTracker.toState(id: SkyOceanItemId): CraftHelperState? {
+    fun ItemTracker.toState(id: SkyBlockId): CraftHelperState? {
         val recipe = SimpleRecipeApi.getBestRecipe(id) ?: return null
         val tree = ContextAwareRecipeTree(recipe, SkyOceanItemIngredient(id, 1), 1)
         val context = CraftHelperContext.create(tree, this)
@@ -218,7 +218,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
 
     private fun MuseumArmour.handleMuseumArmourData(event: InventoryChangeEvent) = context(event.item) {
         val data = this
-        val items = data.armorIds.map { SkyOceanItemId.item(it) }
+        val items = data.armorIds.map { SkyBlockId.item(it) }
         val copy = itemTracker.snapshot()
 
         val itemList = items.map { it to it.toItem() }.sortedBy { (_, item) -> item.getPriority() }

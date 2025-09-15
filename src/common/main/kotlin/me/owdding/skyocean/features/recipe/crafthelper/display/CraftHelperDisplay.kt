@@ -11,7 +11,6 @@ import me.owdding.lib.displays.withPadding
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
@@ -44,6 +43,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -90,10 +90,10 @@ object CraftHelperDisplay {
                 callback {
                     val input = this.getArgument("recipe", String::class.java)
                     var amount = 1
-                    val item = SkyOceanItemId.fromName(input, dropLast = false) ?: SkyOceanItemId.unknownType(input) ?: run {
+                    val item = SkyBlockId.fromName(input, dropLast = false) ?: SkyBlockId.unknownType(input) ?: run {
                         val splitName = input.substringBeforeLast(" ")
                         amount = input.substringAfterLast(" ").toIntOrNull() ?: 1
-                        SkyOceanItemId.fromName(splitName) ?: SkyOceanItemId.unknownType(splitName)
+                        SkyBlockId.fromName(splitName) ?: SkyBlockId.unknownType(splitName)
                     }
                     CraftHelperStorage.setSelected(item)
                     CraftHelperStorage.setAmount(amount)
