@@ -57,7 +57,7 @@ abstract class SkyShardsMethod(
     val type: SkyShardsMethodType,
     open val shard: SkyOceanItemId,
     open val quantity: Int,
-) : Recipe() {
+) : ParentRecipe() {
     override val recipeType: RecipeType get() = RecipeType.SKY_SHARDS
 }
 
@@ -70,8 +70,10 @@ data class SkyShardsRecipeElement(
     val pureReptile: Int,
     @FieldName("inputs") val _inputs: List<SkyShardsMethod>,
 ) : SkyShardsMethod(SkyShardsMethodType.RECIPE, shard, quantity) {
-    override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, quantity)
+    override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, outputQuantity)
     override val inputs: List<Ingredient> = _inputs.mapNotNull { it.output }
+    override fun getRecipe(ingredient: Ingredient): Recipe? =
+        _inputs.find { it.shard == (ingredient as? SkyOceanItemIngredient)?.id }?.takeUnless { it is SkyShardsDirectElement }
 }
 
 @GenerateCodec
@@ -80,8 +82,8 @@ data class SkyShardsDirectElement(
     override val quantity: Int,
 ) : SkyShardsMethod(SkyShardsMethodType.DIRECT, shard, quantity) {
     override val inputs: List<Ingredient> = emptyList()
-    override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, quantity)
-
+    override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, 1)
+    override fun getRecipe(ingredient: Ingredient): Recipe? = null
 }
 
 @GenerateCodec
@@ -93,8 +95,11 @@ data class SkyShardsCycleElement(
     val pureReptile: Int,
     val steps: List<SkyShardsCycleStep>,
 ) : SkyShardsMethod(SkyShardsMethodType.CYCLE, shard, quantity) {
-    override val inputs: List<Ingredient> = steps.map { SkyOceanItemIngredient(shard, 1) }
-    override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, quantity)
+    override val inputs: List<Ingredient> = TODO("Not yet implemented")
+    override val output: ItemLikeIngredient = TODO("Not yet implemented")
+    override fun getRecipe(ingredient: Ingredient): Recipe? {
+        TODO("Not yet implemented")
+    }
 }
 
 @GenerateCodec

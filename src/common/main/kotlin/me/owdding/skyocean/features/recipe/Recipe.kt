@@ -11,6 +11,10 @@ abstract class Recipe {
 
 }
 
+abstract class ParentRecipe : Recipe() {
+    abstract fun getRecipe(ingredient: Ingredient): Recipe?
+}
+
 data class RepoApiRecipe(val recipe: RepoRecipe<*>, override val recipeType: RecipeType) : Recipe() {
     override val inputs: List<Ingredient> by lazy { RecipeVisitor.getInputs(recipe) }
     override val output: ItemLikeIngredient? by lazy { RecipeVisitor.getOutput(recipe) }

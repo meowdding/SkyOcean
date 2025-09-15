@@ -37,7 +37,7 @@ interface StandardRecipeNode {
         if (this !is NodeWithChildren) return
 
         recipe?.inputs?.mergeSameTypes()?.forEach {
-            val recipe = SimpleRecipeApi.getBestRecipe(it)
+            val recipe = (recipe as? ParentRecipe)?.getRecipe(it) ?: SimpleRecipeApi.getBestRecipe(it)
             val recipeOutput = recipe?.output?.amount ?: 1
             val totalRequired = it.amount * amount
             val carriedOver = context[it].coerceAtMost(totalRequired)
@@ -92,7 +92,7 @@ open class ContextAwareRecipeTree(override val recipe: Recipe?, override val out
     override val outputWithAmount: Ingredient by lazy { output.withAmount(amount) }
 
     init {
-        evaluateChildren(amount, context)
+        evaluateChildren(amount / amountPerCraft, context)
     }
 
 }

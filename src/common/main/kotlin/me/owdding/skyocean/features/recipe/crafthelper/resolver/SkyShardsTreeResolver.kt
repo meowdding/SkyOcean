@@ -13,6 +13,6 @@ object SkyShardsTreeResolver : TreeResolver<SkyShardsRecipe> {
         val root = recipe.tree
         val output = SkyOceanItemIngredient(root.shard, root.quantity)
 
-        return ContextAwareRecipeTree(null, output, root.quantity) to output
+        return ContextAwareRecipeTree(recipe.tree, output, root.quantity) to output
     }
 }
