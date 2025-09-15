@@ -1,9 +1,10 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
+import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.skyocean.api.SkyOceanItemId
-import me.owdding.skyocean.features.recipe.ItemLikeIngredient
+import me.owdding.skyocean.features.recipe.*
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.DefaultTreeResolver
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.SkyShardsTreeResolver
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.TreeResolver
@@ -56,7 +57,9 @@ abstract class SkyShardsMethod(
     val type: SkyShardsMethodType,
     open val shard: SkyOceanItemId,
     open val quantity: Int,
-)
+) : Recipe() {
+    override val recipeType: RecipeType get() = RecipeType.SKY_SHARDS
+}
 
 @GenerateCodec
 data class SkyShardsRecipeElement(
@@ -65,14 +68,21 @@ data class SkyShardsRecipeElement(
     val craftsExpected: Int,
     val outputQuantity: Int,
     val pureReptile: Int,
-    val inputs: List<SkyShardsMethod>,
-) : SkyShardsMethod(SkyShardsMethodType.RECIPE, shard, quantity)
+    @FieldName("inputs") val _inputs: List<SkyShardsMethod>,
+) : SkyShardsMethod(SkyShardsMethodType.RECIPE, shard, quantity) {
+    override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, quantity)
+    override val inputs: List<Ingredient> = _inputs.mapNotNull { it.output }
+}
 
 @GenerateCodec
 data class SkyShardsDirectElement(
     override val shard: SkyOceanItemId,
     override val quantity: Int,
-) : SkyShardsMethod(SkyShardsMethodType.DIRECT, shard, quantity)
+) : SkyShardsMethod(SkyShardsMethodType.DIRECT, shard, quantity) {
+    override val inputs: List<Ingredient> = emptyList()
+    override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, quantity)
+
+}
 
 @GenerateCodec
 data class SkyShardsCycleElement(
@@ -82,7 +92,10 @@ data class SkyShardsCycleElement(
     val outputQuantity: Int,
     val pureReptile: Int,
     val steps: List<SkyShardsCycleStep>,
-) : SkyShardsMethod(SkyShardsMethodType.CYCLE, shard, quantity)
+) : SkyShardsMethod(SkyShardsMethodType.CYCLE, shard, quantity) {
+    override val inputs: List<Ingredient> = steps.map { SkyOceanItemIngredient(shard, 1) }
+    override val output: ItemLikeIngredient = SkyOceanItemIngredient(shard, quantity)
+}
 
 @GenerateCodec
 data class SkyShardsCycleStep(
