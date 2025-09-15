@@ -55,7 +55,7 @@ import me.owdding.skyocean.utils.items.ItemCache
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.rendering.ExtraUiConstants
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
-import me.owdding.skyocean.utils.rendering.StyledItemWidget
+import me.owdding.skyocean.utils.rendering.createStyledItemWidget
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -150,7 +150,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         val colorLayout = DeferredLayoutFactory.horizontal(0.5f)
         animationManager = AnimationManager(this, 0.25.seconds, defaultLayout, EasingFunctions.easeInOutQuad)
 
-        val itemPreviewWidget = StyledItemWidget(copiedItem)
+        val itemPreviewWidget = createStyledItemWidget(copiedItem)
         val totalWidth = 258
         val name = DeferredLayoutFactory.vertical {
             add(
