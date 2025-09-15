@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.eval
 
 import me.owdding.lib.extensions.floor
 import me.owdding.skyocean.api.SkyOceanItemId
+import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.item.sources.system.ItemContext
 import me.owdding.skyocean.features.recipe.CurrencyType
@@ -13,7 +14,6 @@ import tech.thatgravyboat.skyblockapi.api.area.farming.TrapperAPI
 import tech.thatgravyboat.skyblockapi.api.area.hub.FarmhouseAPI
 import tech.thatgravyboat.skyblockapi.api.area.rift.RiftAPI
 import tech.thatgravyboat.skyblockapi.api.profile.CurrencyAPI
-import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import kotlin.math.min
 
 data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries) {
@@ -32,7 +32,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         CurrencyType.GEM to CurrencyAPI.gems,
     ).mapValues { (_, number) -> number.toInt() }.toMutableMap()
 
-    val items = sources.mapNotNull { source -> source.itemSource?.getAll() }.flatten()
+    val items = sources.mapNotNull { source -> source.itemSource?.getAll() }.flatten().filterNot { (item) -> item.isEmpty }
         .let { items ->
 
             buildList {
@@ -40,10 +40,11 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
                 addAll(sources.mapNotNull { it.itemSource?.postProcess(items) }.flatten())
             }
         }.mapNotNull { item ->
-            item.itemStack.getSkyBlockId()?.let {
-                TrackedItem(it, item.itemStack, item.itemStack.count, item.context, item.context.source)
+            item.itemStack.getSkyOceanId()?.let {
+                TrackedItem(it.id, item.itemStack, item.itemStack.count, item.context, item.context.source)
             }
-        }.groupBy { it.id.lowercase() }
+        }
+        .groupBy { it.id }
         .mapValues { (_, values) -> values.sortedBy { sourceToPriority(it.source) }.toMutableList() }.toMutableMap()
 
     constructor(vararg sources: ItemSources) : this(sources.toList())
@@ -96,7 +97,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
 
         items.addFirst(last.withAmount(last.amount - lastNeeded))
         if (items.size == 1) {
-            this.items.put(itemId, items)
+            this.items[itemId] = items
         }
 
         list.add(last.withAmount(lastNeeded))
