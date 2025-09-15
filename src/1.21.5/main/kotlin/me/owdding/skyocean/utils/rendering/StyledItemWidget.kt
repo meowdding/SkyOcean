@@ -1,21 +1,19 @@
 package me.owdding.skyocean.utils.rendering
 
-import com.mojang.authlib.GameProfile
 import com.mojang.math.Axis
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen
 import earth.terrarium.olympus.client.components.base.BaseWidget
 import earth.terrarium.olympus.client.ui.UIConstants
 import me.owdding.skyocean.SkyOcean
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
-import net.minecraft.client.player.RemotePlayer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.component.DataComponents
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import org.joml.Matrix4f
@@ -27,11 +25,12 @@ import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.platform.showTooltip
 import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import java.util.*
 
 private const val BUTTON_SIZE = 5
 
-actual class StyledItemWidget actual constructor(val stack: ItemStack) : BaseWidget() {
+actual fun createStyledItemWidget(stack: ItemStack): BaseWidget = StyledItemWidget(stack)
+
+class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
 
     private val AUTO_ROTATE_ICON = WidgetSprites(SkyOcean.id("auto_rotate"), SkyOcean.id("auto_rotate_disabled"), SkyOcean.id("auto_rotate_hovered"))
     private val LEFT_ARROW_ICON = SkyOcean.id("left_arrow")
@@ -45,7 +44,7 @@ actual class StyledItemWidget actual constructor(val stack: ItemStack) : BaseWid
             field
         }
 
-    private val entity = RemotePlayer(Minecraft.getInstance().level, GameProfile(UUID.randomUUID(), "Item Preview"))
+    private val entity = ArmorStand(McClient.self.level!!, .0, .0, .0)
 
     private val buttonX get() = this.x + (this.width - BUTTON_SIZE) / 2
     private val buttonY get() = this.y + this.height - BUTTON_SIZE - 2
@@ -104,7 +103,13 @@ actual class StyledItemWidget actual constructor(val stack: ItemStack) : BaseWid
 
         this.isButtonHovered = isMouseOverButton(mouseX, mouseY)
         graphics.drawSprite(LEFT_ARROW_ICON, buttonX - 1 - 7, buttonY, 7, BUTTON_SIZE)
-        graphics.drawSprite(AUTO_ROTATE_ICON.get(!this.isAutoRotating, !this.isAutoRotating && this.isButtonHovered), buttonX, buttonY, BUTTON_SIZE, BUTTON_SIZE)
+        graphics.drawSprite(
+            AUTO_ROTATE_ICON.get(!this.isAutoRotating, !this.isAutoRotating && this.isButtonHovered),
+            buttonX,
+            buttonY,
+            BUTTON_SIZE,
+            BUTTON_SIZE,
+        )
         graphics.drawSprite(RIGHT_ARROW_ICON, buttonX + BUTTON_SIZE + 1, buttonY, 7, BUTTON_SIZE)
         if (!this.isAutoRotating && this.isButtonHovered) {
             graphics.showTooltip(Text.of("Enable Auto Rotate"), mouseX, mouseY)

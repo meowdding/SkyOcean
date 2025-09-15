@@ -1,6 +1,5 @@
 package me.owdding.skyocean.utils.rendering
 
-import com.mojang.authlib.GameProfile
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
@@ -9,13 +8,11 @@ import earth.terrarium.olympus.client.components.base.BaseWidget
 import earth.terrarium.olympus.client.ui.UIConstants
 import me.owdding.lib.rendering.MeowddingPipState
 import me.owdding.skyocean.SkyOcean
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
-import net.minecraft.client.player.RemotePlayer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
@@ -23,10 +20,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.component.DataComponents
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import org.joml.Matrix3x2f
-import org.joml.Matrix4f
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -35,7 +32,6 @@ import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.platform.showTooltip
 import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import java.util.*
 import java.util.function.Function
 
 private const val BUTTON_SIZE = 5
@@ -77,7 +73,9 @@ class ItemWidgetRenderer(source: MultiBufferSource.BufferSource) : PictureInPict
 
 }
 
-actual class StyledItemWidget actual constructor(val stack: ItemStack) : BaseWidget() {
+actual fun createStyledItemWidget(stack: ItemStack): BaseWidget = StyledItemWidget(stack)
+
+class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
 
     private val AUTO_ROTATE_ICON = WidgetSprites(SkyOcean.id("auto_rotate"), SkyOcean.id("auto_rotate_disabled"), SkyOcean.id("auto_rotate_hovered"))
     private val LEFT_ARROW_ICON = SkyOcean.id("left_arrow")
@@ -91,8 +89,7 @@ actual class StyledItemWidget actual constructor(val stack: ItemStack) : BaseWid
             field
         }
 
-    private val entity = RemotePlayer(Minecraft.getInstance().level, GameProfile(UUID.randomUUID(), "Item Preview"))
-
+    private val entity = ArmorStand(McClient.self.level!!, 0.0, 0.0, 0.0)
     private val buttonX get() = this.x + (this.width - BUTTON_SIZE) / 2
     private val buttonY get() = this.y + this.height - BUTTON_SIZE - 2
 

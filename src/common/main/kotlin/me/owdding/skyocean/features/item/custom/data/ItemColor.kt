@@ -51,7 +51,7 @@ data class GradientItemColor(
 ) : NonSkyblockItemColor {
     val actualTime = max(time, gradient.size)
     val colors = buildList {
-        val colors = gradient.map { HsbColor.fromRgb(it) }.toMutableList()
+        val colors = gradient.mapTo(mutableListOf()) { HsbColor.fromRgb(it) }
 
         val timeForEach = time / colors.size
         colors.addLast(colors.first())

@@ -5,6 +5,4 @@ import net.minecraft.world.item.ItemStack
 import net.msrandom.stub.Stub
 
 @Stub
-expect class StyledItemWidget : BaseWidget {
-    constructor(stack: ItemStack)
-}
+expect fun createStyledItemWidget(stack: ItemStack): BaseWidget
