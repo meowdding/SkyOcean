@@ -8,6 +8,8 @@ import me.owdding.lib.layouts.PaddedWidget
 import me.owdding.skyocean.accessors.ClearableLayout
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.*
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 fun Layout.tryClear() = apply {
     (this as? ClearableLayout)?.`skyocean$clear`()
@@ -72,4 +74,10 @@ fun Layout.asScrollable(width: Int, height: Int, init: LayoutWidget<FrameLayout>
     return LayoutFactory.frame(width, height) {
         widget(widget.asScrollable(width, height, init, alwaysShowScrollBar))
     }
+}
+
+private val zeroDelay = (-1).seconds.toJavaDuration()
+
+fun <T : AbstractWidget> T.withoutTooltipDelay(): T = apply {
+    this.setTooltipDelay(zeroDelay)
 }

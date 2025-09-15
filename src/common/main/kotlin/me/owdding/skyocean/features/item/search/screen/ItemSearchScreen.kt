@@ -31,6 +31,7 @@ import me.owdding.skyocean.features.item.sources.system.TrackedItem
 import me.owdding.skyocean.features.item.sources.system.TrackedItemBundle
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidgetTable
+import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
