@@ -122,7 +122,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
 
     @Module
     companion object {
-        val ITEM_VALUE_KEY = SkyOceanKeybind("skyocean.item_value.keybind", InputConstants.KEY_J)
+        val ITEM_VALUE_KEY = SkyOceanKeybind("skyocean.keybind.item_value", InputConstants.KEY_J)
 
         @Subscription
         fun onKeypress(event: ScreenKeyReleasedEvent) {

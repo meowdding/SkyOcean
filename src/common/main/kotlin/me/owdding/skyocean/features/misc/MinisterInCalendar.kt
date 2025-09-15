@@ -5,18 +5,16 @@ import com.mojang.authlib.properties.Property
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.misc.MiscConfig
-import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.ResolvableProfile
 import tech.thatgravyboat.skyblockapi.api.area.hub.ElectionAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
-import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.api.remote.RepoMobsAPI
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
@@ -38,7 +36,7 @@ object MinisterInCalendar {
         val minister = ElectionAPI.currentMinister ?: return
         val texture = RepoMobsAPI.getMobOrNull("${minister.name}_MAYOR")?.texture() ?: return
 
-        event.item.replaceVisually {
+        event.item.skyoceanReplace {
             item = Items.PLAYER_HEAD
 
             set(
@@ -51,9 +49,8 @@ object MinisterInCalendar {
             )
 
             name(
-                Text.of {
-                    append(ChatUtils.ICON_SPACE_COMPONENT)
-                    append("Minister ${minister.candidateName}") { color = TextColor.ORANGE }
+                Text.of("Minister ${minister.candidateName}") {
+                    color = TextColor.ORANGE
                 },
             )
 

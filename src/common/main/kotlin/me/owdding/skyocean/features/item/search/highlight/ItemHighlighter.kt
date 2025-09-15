@@ -9,6 +9,7 @@ import me.owdding.skyocean.events.ItemStackCreateEvent
 import me.owdding.skyocean.features.item.search.search.ItemFilter
 import me.owdding.skyocean.repo.SackData
 import me.owdding.skyocean.repo.SackData.sackRegex
+import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderBox
 import net.minecraft.core.BlockPos
 import net.minecraft.util.ARGB
@@ -58,9 +59,7 @@ object ItemHighlighter {
     fun resetSearch() = setHighlight(null)
 
     private fun ItemStack.highlight() {
-        this.replaceVisually {
-            copyFrom(this@highlight)
-
+        this.skyoceanReplace(false) {
             if (this@highlight in ItemTag.GLASS_PANES) {
                 item = MiscConfig.itemSearchItemHighlight.paneItem
             } else {
