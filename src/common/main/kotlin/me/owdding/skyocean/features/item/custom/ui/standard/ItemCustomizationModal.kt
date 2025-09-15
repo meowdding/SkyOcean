@@ -14,6 +14,7 @@ import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.Orientation
 import earth.terrarium.olympus.client.utils.State
 import me.owdding.lib.displays.*
+import me.owdding.lib.rendering.text.textShader
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.data.RecentColorStorage
@@ -32,6 +33,7 @@ import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizatio
 import me.owdding.skyocean.features.item.custom.ui.standard.search.ItemSelectorOverlay
 import me.owdding.skyocean.repo.customization.DyeData
 import me.owdding.skyocean.repo.customization.TrimPatternMap
+import me.owdding.skyocean.utils.*
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
 import me.owdding.skyocean.utils.Utils.asDisplay
@@ -45,9 +47,6 @@ import me.owdding.skyocean.utils.animation.AnimationManager.Companion.onPercenta
 import me.owdding.skyocean.utils.animation.DeferredLayout.Companion.onAnimationStart
 import me.owdding.skyocean.utils.animation.DeferredLayoutFactory
 import me.owdding.skyocean.utils.animation.EasingFunctions
-import me.owdding.skyocean.utils.asColumn
-import me.owdding.skyocean.utils.asLayoutWidget
-import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
 import me.owdding.skyocean.utils.extensions.setFrameContent
@@ -57,6 +56,7 @@ import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.rendering.ExtraUiConstants
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import me.owdding.skyocean.utils.rendering.createStyledItemWidget
+import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -78,8 +78,14 @@ import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import kotlin.jvm.optionals.getOrNull
 import kotlin.math.max
 import kotlin.time.Duration.Companion.seconds
@@ -159,7 +165,61 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                     Displays.row(
                         Displays.text((!"Name ").withoutShadow()),
                         Displays.sprite(SkyOcean.id("info"), 7, 7).withTooltip {
-                            add("meow")
+                            add("The text field below supports a some formatting tags!")
+                            space()
+                            add("The basic formatting tags include the following")
+                            add {
+                                append(" • ")
+                                append("<bold>") { this.bold = true }
+                                append(", ")
+                                append("<italic>") { this.italic = true }
+                                append(", ")
+                                append("<strikethrough>") { this.strikethrough = true }
+                                append(", ")
+                                append("<underlined>") { this.underlined = true }
+                                append(" and <obfuscated>")
+                            }
+                            ChatFormatting.entries.filter { it.isColor }.map {
+                                text("<${it.serializedName}>") {
+                                    this.color = it.color!!
+                                }
+                            }.chunked(5).forEach {
+                                add {
+                                    append(" • ")
+                                    append(Text.join(it, separator = text(", ")))
+                                }
+                            }
+                            add(" • ") {
+                                append("<color #f38ba8>") {
+                                    this.color = OceanColors.PINK
+                                }
+                            }
+                            space()
+                            add("The \"complex\" style tags include the following")
+                            OceanGradients.entries.filterNot { it.isDisabled }.map {
+                                text("<${it.name.lowercase()}>") {
+                                    this.textShader = it
+                                }
+                            }.chunked(5).forEach {
+                                add {
+                                    append(" • ")
+                                    append(Text.join(it, separator = text(", ")))
+                                }
+                            }
+                            add {
+                                append(" • ")
+                                append("<gradient ")
+                                append("#color1 ") { this.color = TextColor.BLUE }
+                                append("#color2 ") { this.color = TextColor.GREEN }
+                                append("... ") { this.color = TextColor.GRAY }
+                                append("#colorN ") { this.color = TextColor.MAGENTA }
+                                append("#color1") { this.color = TextColor.BLUE }
+                                append(">")
+                            }
+                            space()
+                            add("Note! To get a gradient that loops perfectly you\n must include the start color at the end again!") {
+                                this.color = TextColor.YELLOW
+                            }
                         },
                     ),
                 ),
