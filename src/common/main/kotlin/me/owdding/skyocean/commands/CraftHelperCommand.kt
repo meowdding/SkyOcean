@@ -4,7 +4,6 @@ import com.google.gson.JsonObject
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
@@ -21,6 +20,7 @@ import me.owdding.skyocean.utils.suggestions.RecipeIdSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeNameSuggestionProvider
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
@@ -101,10 +101,10 @@ object CraftHelperCommand {
                 callback {
                     val input = this.getArgument("recipe", String::class.java)
                     var amount = 1
-                    val item = SkyOceanItemId.fromName(input, dropLast = false) ?: SkyOceanItemId.unknownType(input) ?: run {
+                    val item = SkyBlockId.fromName(input, dropLast = false) ?: SkyBlockId.unknownType(input) ?: run {
                         val splitName = input.substringBeforeLast(" ")
                         amount = input.substringAfterLast(" ").toIntOrNull() ?: 1
-                        SkyOceanItemId.fromName(splitName) ?: SkyOceanItemId.unknownType(splitName)
+                        SkyBlockId.fromName(splitName) ?: SkyBlockId.unknownType(splitName)
                     }
                     CraftHelperStorage.setSelected(item)
                     CraftHelperStorage.setAmount(amount)

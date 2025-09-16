@@ -11,7 +11,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.TooltipDisplay
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
