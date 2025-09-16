@@ -62,7 +62,7 @@ object InvButtons {
         }
     }
 
-    fun onScreenBackground(screen: AbstractContainerScreen<*>, graphics: GuiGraphics) {
+    fun onScreenBackgroundAfter(screen: AbstractContainerScreen<*>, graphics: GuiGraphics) {
         if (!shouldShowButtons(screen)) return
         Screens.getButtons(screen).forEach {
             if (it is InvButton && !it.highlight) {
@@ -72,7 +72,7 @@ object InvButtons {
     }
 
     @Subscription
-    fun onScreenBackgroundEvent(event: RenderScreenBackgroundEvent) {
+    fun onScreenBackground(event: RenderScreenBackgroundEvent) {
         if (!shouldShowButtons(event.screen)) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && !it.highlight) {
