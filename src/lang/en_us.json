@@ -315,7 +315,11 @@
       },
       "crafthelper": {
         "@value": "Craft Helper",
-        "desc": "Craft helper is a feature that lets you see all the steps in a recipe and how much progress you have made towards completing it.",
+        "desc": [
+          "Craft helper is a feature that lets you see all the steps in a recipe and how much progress you have made towards completing it.",
+          "",
+          "<gray>Pro Tip:</gray> You can also import SkyShard Trees into your CraftHelper by pressing <gray>\"Copy Tree\"</gray>, then <gray>\"SkyOcean Format\"</gray> on the Website and running <gray>/skyocean recipe skyshards</gray> in-game!"
+        ],
         "enabled": {
           "@value": "Enable Craft Helper",
           "desc": "Whether the craft helper is enabled or not, this is the main switch."
