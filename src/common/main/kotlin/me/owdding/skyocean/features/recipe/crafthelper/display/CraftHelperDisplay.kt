@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.recipe.crafthelper.display
 
+import com.google.gson.JsonObject
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.lib.builder.LayoutFactory
@@ -10,6 +11,8 @@ import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.asWidget
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
@@ -17,17 +20,21 @@ import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
-import me.owdding.skyocean.features.recipe.SimpleRecipeApi.getBestRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsCycleElement
+import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
-import me.owdding.skyocean.mixins.FrameLayoutAccessor
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.OceanColors
 import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.extensions.asScrollable
+import me.owdding.skyocean.utils.extensions.tryClear
 import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.setPosition
@@ -44,16 +51,22 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
+import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toData
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import java.util.zip.GZIPInputStream
+import kotlin.io.encoding.Base64
 import kotlin.math.max
 
 @LateInitModule
-object CraftHelperDisplay {
+object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
 
     val data get() = CraftHelperStorage.data
 
@@ -84,6 +97,47 @@ object CraftHelperDisplay {
                         append("$amount") { color = TextColor.GREEN }
                         append("!").sendWithPrefix()
                     }
+                }
+            }
+            thenCallback("skyshards") {
+                val clipboard = McClient.clipboard
+                try {
+                    val split = clipboard.split(":")
+                    val prefix = split.first()
+                    val suffix = split.getOrNull(1)
+                    if (!prefix.equals("<SkyOceanRecipe>(V1)", true) || suffix == null) {
+                        text("Your clipboard does not contain any known tree format!") {
+                            this.color = OceanColors.WARNING
+                        }.sendWithPrefix()
+                        return@thenCallback
+                    }
+                    val base = Base64.decode(suffix.trim())
+                    val data = GZIPInputStream(base.inputStream()).use { it.readBytes() }.decodeToString()
+                        .readJson<JsonObject>().toData(SkyOceanCodecs.SkyShardsMethodCodec.codec())
+
+                    data?.let {
+                        val list = mutableListOf<SkyShardsMethod>()
+                        it.visitElements(list::add)
+
+                        val containsCycle = list.any { it is SkyShardsCycleElement }
+                        CraftHelperStorage.setSkyShards(it)
+                        if (containsCycle) {
+                            Text.of("The imported tree contains a cycle, these are currently not supported in skyocean! The tree might not look complete!") {
+                                this.color = OceanColors.WARNING
+                            }.sendWithPrefix()
+                        } else {
+                            Text.of("Set current recipe to SkyShards Tree for ") {
+                                append("${it.quantity.toFormattedString()}x ") { color = TextColor.GREEN }
+                                append(it.shard.toItem().hoverName)
+                                append("!")
+                            }.sendWithPrefix()
+                        }
+                    } ?: run {
+                        Text.of("Failed to read SkyShards data from clipboard!") { this.color = OceanColors.WARNING }.sendWithPrefix()
+                    }
+                } catch (e: Exception) {
+                    Text.of("Failed to read SkyShards data from clipboard!") { this.color = OceanColors.WARNING }.sendWithPrefix()
+                    error("Failed to decode SkyShards tree!", e)
                 }
             }
             then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
@@ -121,27 +175,9 @@ object CraftHelperDisplay {
             layout.visitWidgets { event.widgets.remove(it) }
         }
         callback = callback@{ save ->
-            val currentRecipe = CraftHelperStorage.selectedItem ?: run {
-                resetLayout()
-                return@callback
-            }
-
-            val recipe = getBestRecipe(currentRecipe) ?: run {
-                Text.of("No recipe found for $currentRecipe!") { this.color = TextColor.RED }.sendWithPrefix()
-                resetLayout()
-                clear()
-                return@callback
-            }
-            val output = recipe.output ?: run {
-                Text.of("Recipe output is null!") { this.color = TextColor.RED }.sendWithPrefix()
-                resetLayout()
-                clear()
-                return@callback
-            }
-
+            val (tree, output) = CraftHelperStorage.data?.resolve(::resetLayout, ::clear) ?: return@callback
             resetLayout()
-            (layout as? FrameLayoutAccessor)?.children()?.clear()
-            val tree = ContextAwareRecipeTree(recipe, output, CraftHelperStorage.selectedAmount.coerceAtLeast(1))
+            layout.tryClear()
             layout.addChild(visualize(tree, output) { callback })
             layout.arrangeElements()
             layout.setPosition(MiscConfig.craftHelperPosition.position(layout.width, layout.height))
@@ -165,7 +201,7 @@ object CraftHelperDisplay {
     }
 
     private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
-        val sources = ItemSources.entries - MiscConfig.disallowedCraftHelperSources.toList()
+        val sources = ItemSources.craftHelperSources - MiscConfig.disallowedCraftHelperSources.toSet()
         val tracker = ItemTracker(sources)
         val callback = callback()
 
@@ -205,9 +241,11 @@ object CraftHelperDisplay {
                             Displays.component(
                                 Text.of {
                                     append("-")
-                                    this.color = TextColor.RED
+                                    this.color = if (CraftHelperStorage.canModifyCount) TextColor.RED else TextColor.GRAY
                                 },
                             ).asButtonLeft {
+                                if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
+
                                 val value = CraftHelperStorage.selectedAmount
                                 val newValue = if (Screen.hasShiftDown()) {
                                     value - 10
@@ -230,9 +268,10 @@ object CraftHelperDisplay {
                             Displays.component(
                                 Text.of {
                                     append("+")
-                                    this.color = TextColor.GREEN
+                                    this.color = if (CraftHelperStorage.canModifyCount) TextColor.GREEN else TextColor.GRAY
                                 },
                             ).asButtonLeft {
+                                if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
                                 val value = CraftHelperStorage.selectedAmount
                                 val newValue = if (Screen.hasShiftDown()) {
                                     value + 10

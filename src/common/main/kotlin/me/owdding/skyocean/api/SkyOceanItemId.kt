@@ -74,9 +74,9 @@ value class SkyOceanItemId private constructor(val id: String) {
 
         fun unsafe(id: String) = SkyOceanItemId("$UNSAFE$id".lowercase())
 
-        @IncludedCodec
         val CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap(::SkyOceanItemId, SkyOceanItemId::id)
 
+        @IncludedCodec
         val UNKNOWN_CODEC: Codec<SkyOceanItemId> = Codec.STRING.xmap({ it.lowercase() }, { it })
             .xmap({ unknownType(it) ?: SkyOceanItemId(it) }, { it.id })
 
@@ -148,7 +148,7 @@ private fun ItemStack.getSkyOceanItemId(): SkyOceanItemId? {
         }
 
         "ATTRIBUTE_SHARD" -> {
-            this.getData(DataTypes.ATTRIBUTES)?.entries?.firstOrNull()?.let { (key, _) -> key }
+            this.getData(DataTypes.ATTRIBUTES)?.entries?.firstOrNull()?.let { (key, _) -> RepoAttributeAPI.getAttributeDataById(key)?.attributeId }
                 .let { it ?: UNKNOWN }.let(SkyOceanItemId::attribute)
         }
 

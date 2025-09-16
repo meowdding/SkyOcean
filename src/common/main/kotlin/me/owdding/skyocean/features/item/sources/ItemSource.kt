@@ -15,7 +15,7 @@ interface ItemSource {
 
 }
 
-enum class ItemSources(val itemSource: ItemSource?) {
+enum class ItemSources(val itemSource: ItemSource?, vararg val disabledIn: ItemSourceTag) {
     BUNDLE(null),
     CHEST(ChestItemSource),
     STORAGE(StorageItemSource),
@@ -26,12 +26,13 @@ enum class ItemSources(val itemSource: ItemSource?) {
     INVENTORY(InventoryItemSource),
     VAULT(VaultItemSource),
     MUSEUM(MuseumItemSource),
-    RIFT(RiftItemSource),
+    RIFT(RiftItemSource, ItemSourceTag.ITEM_SEARCH),
     DRILL_UPGRADE(DrillUpgradeItemSource),
     ROD_UPGRADE(RodUpgradesItemSource),
     HUNT_AXE(HuntaxeItemSource),
     TOOLKIT(ToolkitItemSource),
     SACK_OF_SACKS(SackOfSacksItemSource),
+    HUNTING_BOX(HuntingBoxItemSource, ItemSourceTag.ITEM_SEARCH),
     ;
     // todo SACK_OF_SACKS(TODO()),
     // todo POTION_BAG(TODO()),
@@ -53,5 +54,15 @@ enum class ItemSources(val itemSource: ItemSource?) {
                 addAll(entries.mapNotNull { it.itemSource?.postProcess(list) }.flatten())
             }
         }
+
+        fun getMatching(vararg disabledTags: ItemSourceTag) = entries.filterNot { itemSource -> itemSource.disabledIn.any { disabledTags.contains(it) } }
+        val craftHelperSources = getMatching(ItemSourceTag.CRAFT_HELPER)
+        val itemSearchSources = getMatching(ItemSourceTag.ITEM_SEARCH)
     }
+}
+
+enum class ItemSourceTag {
+    ITEM_SEARCH,
+    CRAFT_HELPER,
+    ;
 }
