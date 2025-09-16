@@ -14,7 +14,7 @@ data class MuseumItem(
     @FieldName("parent") override val parentId: String?,
     @FieldName("mapped_item_ids") val mappedIds: List<String> = emptyList(),
 ) : MuseumRepoEntry {
-    val skyoceanId = SkyBlockId.unknownType(id) ?: SkyBlockId.unsafe(id)
+    val skyblockId = SkyBlockId.unknownType(id) ?: SkyBlockId.unsafe(id)
 
     companion object {
         private val COMPACT_MUSEUM_ITEM_CODEC = Codec.STRING.xmap(

@@ -31,7 +31,7 @@ object IdDebug {
     fun debug(event: ItemDebugTooltipEvent) = ifEnabled {
         event.add(
             Text.of {
-                append("SkyOceanId: ")
+                append("SkyBlockId: ")
                 append(event.item.getSkyBlockId()?.id ?: "null")
                 this.color = TextColor.GRAY
             },

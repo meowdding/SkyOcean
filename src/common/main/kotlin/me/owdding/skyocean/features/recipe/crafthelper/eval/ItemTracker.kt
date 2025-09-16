@@ -13,7 +13,7 @@ import tech.thatgravyboat.skyblockapi.api.area.hub.FarmhouseAPI
 import tech.thatgravyboat.skyblockapi.api.area.rift.RiftAPI
 import tech.thatgravyboat.skyblockapi.api.profile.CurrencyAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
-import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import kotlin.math.min
 
 data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries) {
@@ -40,7 +40,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
                 addAll(sources.mapNotNull { it.itemSource?.postProcess(items) }.flatten())
             }
         }.mapNotNull { item ->
-            item.itemStack.getSkyOceanId()?.let {
+            item.itemStack.getSkyBlockId()?.let {
                 TrackedItem(it.id, item.itemStack, item.itemStack.count, item.context, item.context.source)
             }
         }

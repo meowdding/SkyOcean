@@ -142,7 +142,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
 
     private fun MuseumItem.handleMuseumItemData(event: InventoryChangeEvent) {
         val data = this
-        val id = data.skyoceanId
+        val id = data.skyblockId
         val copy = itemTracker.snapshot()
         val items = copy.takeN(id, 1)
         val amount = items.sumOf { it.amount }

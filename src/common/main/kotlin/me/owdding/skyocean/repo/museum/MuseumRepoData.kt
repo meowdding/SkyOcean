@@ -74,7 +74,7 @@ object MuseumRepoData {
 
         val id = SkyBlockId.fromName(name, true) ?: throw MuseumDataError(MuseumDataError.Type.ITEM_NOT_FOUND, name)
 
-        return allItems.find { it.skyoceanId.cleanId == id.cleanId || it.mappedIds.contains(id.cleanId.uppercase()) }
+        return allItems.find { it.skyblockId.cleanId == id.cleanId || it.mappedIds.contains(id.cleanId.uppercase()) }
             ?: throw MuseumDataError(MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM, "$name - ${id.cleanId}")
     }
 
