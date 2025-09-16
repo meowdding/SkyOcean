@@ -45,7 +45,7 @@ class HexColorArgumentType : ArgumentType<Int> {
         val offsetBuilder = builder.createOffset(builder.start + builder.remainingLowerCase.length)
         if (builder.remainingLowerCase.isEmpty()) {
             offsetBuilder.suggest("#")
-        } else if (builder.remainingLowerCase.length <= 6) {
+        } else if (builder.remainingLowerCase.startsWith('#') && builder.remainingLowerCase.length <= 6) {
             for (char in allChars) {
                 offsetBuilder.suggest("$char")
             }

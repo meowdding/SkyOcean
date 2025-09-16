@@ -16,13 +16,19 @@ import me.owdding.skyocean.utils.storage.DataStorage
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
+import tech.thatgravyboat.skyblockapi.utils.extentions.getTag
+import java.util.*
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+import kotlin.uuid.toJavaUuid
 
 @Module
 object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
 
     private val map: MutableMap<ItemKey, CustomItemData> = mutableMapOf()
+    val staticMap: MutableMap<ItemKey, CustomItemData> = mutableMapOf()
 
     private val vanillaIntegration: Cache<ItemKey, CustomItemData> = CacheBuilder.newBuilder()
         .expireAfterAccess(10.minutes.toJavaDuration())
@@ -42,7 +48,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     }
 
     fun modify(itemStack: ItemStack, init: context(ItemStack) CustomItemData.() -> Unit): Boolean {
-        val key = itemStack.createKey() ?: return false
+        val key = itemStack.getKey() ?: return false
         context(itemStack) {
             getOrPut(key).init()
         }
@@ -51,7 +57,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     }
 
     fun remove(itemStack: ItemStack) {
-        storage.get().remove(map.remove(itemStack.createKey()))
+        storage.get().remove(map.remove(itemStack.getKey()))
     }
 
     fun getOrPut(key: ItemKey) = map.getOrPut(key) {
@@ -61,7 +67,13 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
         data
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     fun ItemStack.createKey(): ItemKey? = when {
+        this.getTag("skyocean:customization_item") != null -> UuidKey(Uuid.fromLongs(0, 0).toJavaUuid())
+        this.getTag("skyocean:static_item") != null -> UuidKey(
+            this.getTag("skyocean:static_item")!!.asString().map { UUID.fromString(it) }.orElseGet { UUID.randomUUID() },
+        )
+
         this[DataTypes.UUID] != null -> UuidKey(this[DataTypes.UUID]!!)
         this[DataTypes.TIMESTAMP] != null && this.getSkyOceanId() != null -> IdAndTimeKey(
             this.getSkyOceanId()!!,
@@ -76,7 +88,10 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     fun ItemStack.getVanillaIntegrationData() =
         this.getKey()?.let { vanillaIntegration.getIfPresent(it) }?.takeIf { MiscConfig.customizationVanillaIntegration }
 
+    fun ItemStack.getStaticCustomData() = staticMap[this.getKey()]
+
     fun ItemStack.getOrTryCreateCustomData() = this.getKey()?.let { getOrPut(it) }
+    fun ItemStack.getOrCreateStaticData() = this.getKey()?.let { staticMap.getOrPut(it) { CustomItemData(it) } }
 
     operator fun <T> ItemStack.get(component: CustomItemComponent<T>): T? {
         return this.getCustomData()?.let { it[component] }
@@ -95,7 +110,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     fun loadVanilla(self: ItemStack, key: ItemKey?) {
         key ?: return
         val skin = self[DataTypes.HELMET_SKIN]?.let {
-            AnimatedSkyblockSkin(SkyOceanItemId.item(it.lowercase()))
+            runCatching { AnimatedSkyblockSkin(SkyOceanItemId.item(it.lowercase())) }.getOrNull()
         }
         val dye = self[DataTypes.APPLIED_DYE]?.let { dye ->
             runCatching { AnimatedSkyBlockDye(dye.lowercase()) }.getOrNull()
@@ -114,4 +129,6 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
             },
         )
     }
+
+    fun save() = storage.save()
 }

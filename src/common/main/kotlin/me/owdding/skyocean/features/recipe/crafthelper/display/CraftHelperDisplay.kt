@@ -15,8 +15,6 @@ import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
-import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.asScrollable
-import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi.getBestRecipe
@@ -29,6 +27,8 @@ import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.extensions.asScrollable
+import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.setPosition
 import me.owdding.skyocean.utils.suggestions.CombinedSuggestionProvider
