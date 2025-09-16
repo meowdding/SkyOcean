@@ -102,8 +102,10 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             thenCallback("skyshards") {
                 val clipboard = McClient.clipboard
                 try {
-                    val (prefix, suffix) = clipboard.split(":", limit = 2)
-                    if (!prefix.equals("<SkyOceanRecipe>(V1)", true)) {
+                    val split = clipboard.split(":")
+                    val prefix = split.first()
+                    val suffix = split.getOrNull(1)
+                    if (!prefix.equals("<SkyOceanRecipe>(V1)", true) || suffix == null) {
                         text("Your clipboard does not contain any known tree format!") {
                             this.color = OceanColors.WARNING
                         }.sendWithPrefix()
