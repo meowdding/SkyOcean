@@ -33,14 +33,19 @@ class InvButton(
                 SELECTED_TOP_TABS[rowIndex]
             }
             renderPrevious(graphics, mouseX, mouseY, partialTicks, sprite)
-            val itemX = baseWidth / 2 - 8 + this@InvButton.x
-            val itemY = if (bottom) {
-                baseHeight + this@InvButton.y - (baseWidth / 2) - 8
-            } else {
-                baseWidth / 2 - 8 + this@InvButton.y
-            }
-            graphics.renderItem(button.itemStack, itemX, itemY)
+
         }
+    }
+
+    fun renderItem(graphics: GuiGraphics) {
+        val itemX = baseWidth / 2 - 8 + this@InvButton.x
+        val itemY = if (bottom) {
+            baseHeight + this@InvButton.y - (baseWidth / 2) - 8
+        } else {
+            baseWidth / 2 - 8 + this@InvButton.y
+        }
+        graphics.renderItem(button.itemStack, itemX, itemY)
+
     }
 
     override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
@@ -67,9 +72,10 @@ class InvButton(
     fun renderPrevious(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float, sprite: ResourceLocation) {
         graphics.drawSprite(
             sprite,
-            this.x, this.y,
-            baseWidth, baseHeight,
-            -1,
+            this.x,
+            this.y,
+            baseWidth,
+            baseHeight,
         )
 
         WidgetRenderer.empty<Button>().render(graphics, WidgetRendererContext(this, mouseX, mouseY), partialTick)
@@ -78,5 +84,7 @@ class InvButton(
     companion object {
         val SELECTED_TOP_TABS = Array(7) { minecraft("container/creative_inventory/tab_top_selected_${it + 1}") }
         val SELECTED_BOTTOM_TABS = Array(7) { minecraft("container/creative_inventory/tab_bottom_selected_${it + 1}") }
+        val UNSELECTED_TOP_TABS = Array(7) { minecraft("container/creative_inventory/tab_top_unselected_${it + 1}") }
+        val UNSELECTED_BOTTOM_TABS = Array(7) { minecraft("container/creative_inventory/tab_bottom_unselected_${it + 1}") }
     }
 }
