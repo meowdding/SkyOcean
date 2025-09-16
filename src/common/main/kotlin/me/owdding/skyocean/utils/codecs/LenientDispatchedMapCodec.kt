@@ -5,7 +5,6 @@ import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.*
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import me.owdding.lib.utils.MeowddingLogger
-import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import java.util.function.Function
@@ -22,13 +21,17 @@ class LenientDispatchedMapCodec<K, V>(
         val builder: RecordBuilder<T> = ops.mapBuilder()
 
         input.forEach { (key, value) ->
-            builder.add(keyCodec.encodeStart(ops, key), valueCodecFunction(key).encodeStart(ops, value.unsafeCast()))
+            try {
+                builder.add(keyCodec.encodeStart(ops, key), valueCodecFunction(key).encodeStart(ops, value.unsafeCast()))
+            } catch (e: Exception) {
+                error("Failed to encode field $key -> $value", e)
+            }
         }
 
         return builder.build(prefix)
     }
 
-    companion object : MeowddingLogger by SkyOcean.featureLogger()
+    companion object : MeowddingLogger by SkyOcean.featureLogger("LenientDispatchedMapCodec")
 
     override fun <T : Any> decode(
         ops: DynamicOps<T>,
@@ -68,7 +71,7 @@ class LenientDispatchedMapCodec<K, V>(
                 warn("Failed to parse lenient dispatched map entry (key: ${keyResult.result()}, value: ${valueResult.result()})")
             }
         } catch (e: Exception) {
-            error("Caught exception while trying to decode lenient dispatched map", e)
+            error("Caught exception while trying to decode lenient dispatched map ($input)", e)
         }
     }
 }

@@ -15,6 +15,7 @@ import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.features.item.value.SourceToWidget.asWidget
 import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.SkyOceanScreen
+import me.owdding.skyocean.utils.extensions.asScrollable
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.layouts.LayoutSettings

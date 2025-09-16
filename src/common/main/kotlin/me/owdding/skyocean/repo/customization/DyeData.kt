@@ -27,8 +27,8 @@ object DyeData {
         }
     }
 
-    fun getAnimated(id: String): Int {
+    fun getAnimated(id: String, offset: Int): Int {
         val colors = animatedDyes[id]!!
-        return colors[(TickEvent.ticks / 2) % colors.size]
+        return colors[(TickEvent.ticks / 2 + offset) % colors.size]
     }
 }

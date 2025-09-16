@@ -6,7 +6,6 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.misc.MiscConfig
-import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
 import me.owdding.skyocean.features.item.sources.ForgeItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.RecipeType
@@ -20,6 +19,7 @@ import me.owdding.skyocean.utils.ChatUtils.append
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.network.chat.CommonComponents

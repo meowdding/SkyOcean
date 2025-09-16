@@ -1,10 +1,17 @@
 package me.owdding.skyocean.commands
 
 import com.mojang.brigadier.arguments.BoolArgumentType
+import com.mojang.brigadier.arguments.IntegerArgumentType
+import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
+import me.owdding.lib.rendering.text.builtin.GradientTextShader
+import me.owdding.lib.rendering.text.textShader
+import me.owdding.skyocean.events.ArgumentCommandBuilder
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
+import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.repo.customization.AnimatedSkulls
 import me.owdding.skyocean.repo.customization.DyeData
@@ -18,7 +25,8 @@ import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
 import me.owdding.skyocean.utils.commands.HexColorArgumentType
 import me.owdding.skyocean.utils.commands.SkyBlockIdArgument
 import me.owdding.skyocean.utils.commands.VirtualResourceArgument
-import net.minecraft.commands.arguments.ComponentArgument
+import me.owdding.skyocean.utils.components.TagComponentSerialization
+import me.owdding.skyocean.utils.extensions.copy
 import net.minecraft.commands.arguments.ResourceKeyArgument
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
@@ -31,6 +39,8 @@ import net.minecraft.world.item.equipment.trim.TrimPattern
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -41,6 +51,26 @@ object CustomizeCommand {
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("customize") {
+            callback {
+                val item = McPlayer.heldItem
+                if (item.isEmpty) {
+                    Text.of("You aren't holding an item!").sendWithPrefix()
+                    return@callback
+                }
+
+                if (item.getKey() == null) {
+                    text {
+                        append(item.hoverName)
+                        append(" can't be customized!")
+                    }.sendWithPrefix()
+                    return@callback
+                }
+
+                McClient.runNextTick {
+                    StandardCustomizationUi.open(item)
+                }
+            }
+
             then("reset") {
                 thenCallback("name") {
                     remove(CustomItemDataComponents.NAME) { item ->
@@ -76,8 +106,8 @@ object CustomizeCommand {
                     }
                 }
             }
-            thenCallback("name name", ComponentArgument.textComponent(context())) {
-                val name = getArgument<Component>("name")!!
+            thenCallback("name name", StringArgumentType.greedyString()) {
+                val name = TagComponentSerialization.deserialize(getArgument<String>("name")!!)
                 val item = mainHandItemOrNull() ?: return@thenCallback
 
                 val success = CustomItems.modify(item) {
@@ -171,7 +201,6 @@ object CustomizeCommand {
                         unableToCustomize()
                     }
                 }
-
                 thenCallback("static_color", SkyBlockIdArgument(DyeData.staticDyes.keys.map { SkyBlockId.item(it.lowercase()) })) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
                     val color = getArgument<SkyBlockId>("static_color")!!
@@ -234,14 +263,56 @@ object CustomizeCommand {
                 val item = mainHandItemOrNull() ?: return@thenCallback
                 val skin = getArgument<SkyBlockId>("animated_skull")!!
 
-                val success = CustomItems.modify(item) {
-                    this[CustomItemDataComponents.SKIN] = AnimatedSkyblockSkin(skin)
-                }
+                val success = runCatching {
+                    CustomItems.modify(item) {
+                        this[CustomItemDataComponents.SKIN] = AnimatedSkyblockSkin(skin)
+                    }
+                }.getOrDefault(false)
                 if (success) {
                     text("Successfully set skin texture!").sendWithPrefix()
                 } else {
                     unableToCustomize()
                 }
+            }
+
+            then("gradient time", IntegerArgumentType.integer(1)) {
+                fun <T> ArgumentCommandBuilder<T>.add(depth: Int, maxDepth: Int) {
+                    if (maxDepth < depth) return
+                    then("color$depth", HexColorArgumentType()) {
+
+                        callback {
+                            val item = mainHandItemOrNull() ?: return@callback
+                            val time = getArgument<Int>("time")!!
+                            val colors: MutableList<Int> = mutableListOf()
+
+                            repeat(depth) {
+                                val color = getArgument<Int>("color$it") ?: return@repeat
+                                colors.add(color)
+                            }
+
+                            val success = CustomItems.modify(item) {
+                                this[CustomItemDataComponents.COLOR] = GradientItemColor(colors, time)
+                            }
+                            if (success) {
+                                text("Successfully set color ") {
+                                    append("gradient") {
+                                        this.textShader = GradientTextShader(
+                                            colors.copy().apply {
+                                                addLast(first())
+                                            },
+                                        )
+                                    }
+                                    append("!")
+                                }.sendWithPrefix()
+                            } else {
+                                unableToCustomize()
+                            }
+                        }
+                        add(depth + 1, maxDepth)
+                    }
+                }
+
+                add(0, 10)
             }
         }
     }
