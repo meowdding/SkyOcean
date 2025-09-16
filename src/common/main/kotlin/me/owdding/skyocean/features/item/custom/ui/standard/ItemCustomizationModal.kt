@@ -16,7 +16,6 @@ import earth.terrarium.olympus.client.utils.State
 import me.owdding.lib.displays.*
 import me.owdding.lib.rendering.text.textShader
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.data.RecentColorStorage
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
@@ -73,6 +72,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.equipment.trim.TrimMaterial
 import net.minecraft.world.item.equipment.trim.TrimPattern
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
@@ -293,8 +293,8 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
             .withStretchToContentSize()
         //.withTexture(UIConstants.MODAL_INSET)
 
-        val staticDyeSelection = DyeData.staticDyes.map { (key, _) -> SkyOceanItemId.item(key) to SkyBlockDye(key) }.toMap().toDyeList()
-        val animatedDyeSelection = DyeData.animatedDyes.map { (key, _) -> SkyOceanItemId.item(key) to AnimatedSkyBlockDye(key) }.toMap().toDyeList()
+        val staticDyeSelection = DyeData.staticDyes.map { (key, _) -> SkyBlockId.item(key) to SkyBlockDye(key) }.toMap().toDyeList()
+        val animatedDyeSelection = DyeData.animatedDyes.map { (key, _) -> SkyBlockId.item(key) to AnimatedSkyBlockDye(key) }.toMap().toDyeList()
 
         dyeTabState.registerListener {
             when (it) {
@@ -679,7 +679,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         }
     }.withPadding(1)
 
-    private fun Map<SkyOceanItemId, ItemColor>.toDyeList(): AbstractWidget = this.map { (id, color) ->
+    private fun Map<SkyBlockId, ItemColor>.toDyeList(): AbstractWidget = this.map { (id, color) ->
         Widgets.button {
             val display = Displays.item(id.toItem()).withPadding(2, bottom = 4)
 
@@ -752,8 +752,8 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 fill(2, 2, 18, 18, ARGB.opaque(color.getColor()))
             }
 
-        is SkyBlockDye -> Displays.item(SkyOceanItemId.item(color.id).toItem()).withPadding(2, bottom = 4)
-        is AnimatedSkyBlockDye -> Displays.item(SkyOceanItemId.item(color.id).toItem()).withPadding(2, bottom = 4)
+        is SkyBlockDye -> Displays.item(SkyBlockId.item(color.id).toItem()).withPadding(2, bottom = 4)
+        is AnimatedSkyBlockDye -> Displays.item(SkyBlockId.item(color.id).toItem()).withPadding(2, bottom = 4)
         else -> Displays.empty(20, 22)
     }
 
@@ -784,9 +784,9 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
     }
 }
 
-enum class DyeTab(val id: SkyOceanItemId?, val tooltip: Component, val disabled: Boolean = false) {
-    STATIC(SkyOceanItemId.item("dye_aquamarine"), !"Static dyes"),
-    ANIMATED(SkyOceanItemId.item("dye_snowflake"), !"Animated dyes"),
+enum class DyeTab(val id: SkyBlockId?, val tooltip: Component, val disabled: Boolean = false) {
+    STATIC(SkyBlockId.item("dye_aquamarine"), !"Static dyes"),
+    ANIMATED(SkyBlockId.item("dye_snowflake"), !"Animated dyes"),
     GRADIENT(
         null,
         !"Custom colors\nNot currently available in the ui! Use §a/skyocean customize (color/gradient)§f to set it!\n§7Coming soon in the ui!",

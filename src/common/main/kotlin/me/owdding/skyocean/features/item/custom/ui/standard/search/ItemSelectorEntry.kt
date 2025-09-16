@@ -1,7 +1,6 @@
 package me.owdding.skyocean.features.item.custom.ui.standard.search
 
 import me.owdding.skyocean.api.SimpleItemApi
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.data.*
@@ -17,6 +16,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
@@ -71,7 +71,7 @@ data class ItemModelSearchEntry(
 }
 
 data class SkyBlockModelEntry(
-    val model: SkyOceanItemId,
+    val model: SkyBlockId,
 ) : ModelSearchEntry {
     val animatedSkin = runCatching { AnimatedSkyblockSkin(model) }.getOrNull()
     val normalSkin = runCatching { SkyblockSkin(model) }.getOrNull()

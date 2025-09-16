@@ -7,8 +7,8 @@ import me.owdding.skyocean.features.recipe.*
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.DefaultTreeResolver
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.SkyShardsTreeResolver
 import me.owdding.skyocean.generated.DispatchHelper
-import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import me.owdding.skyocean.repo.attributes.SkyShardsAttributeRepoData
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import kotlin.reflect.KClass
 
 abstract class CraftHelperRecipe(val type: CraftHelperRecipeType, val canModifyCount: Boolean) {
@@ -61,7 +61,7 @@ abstract class SkyShardsMethod(
     abstract fun visitElements(visitor: (SkyShardsMethod) -> Unit)
 }
 
-private val unknownId = SkyOceanItemId.attribute(SkyOceanItemId.UNKNOWN)
+private val unknownId = SkyBlockId.attribute(SkyBlockId.UNKNOWN)
 
 @GenerateCodec
 data class SkyShardsRecipeElement(
@@ -114,7 +114,7 @@ data class SkyShardsCycleElement(
 @GenerateCodec
 data class SkyShardsCycleStep(
     val shard: SkyBlockId,
-    val inputs: List<SkyOceanItemId>,
+    val inputs: List<SkyBlockId>,
 )
 
 @GenerateDispatchCodec(SkyShardsMethod::class, "method")
