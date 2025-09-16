@@ -107,6 +107,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                         text("Your clipboard does not contain any known tree format!") {
                             this.color = OceanColors.WARNING
                         }.sendWithPrefix()
+                        return@thenCallback
                     }
                     val base = Base64.decode(suffix.trim())
                     val data = GZIPInputStream(base.inputStream()).use { it.readBytes() }.decodeToString()
