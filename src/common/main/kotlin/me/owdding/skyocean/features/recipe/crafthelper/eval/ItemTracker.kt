@@ -32,7 +32,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
         CurrencyType.GEM to CurrencyAPI.gems,
     ).mapValues { (_, number) -> number.toInt() }.toMutableMap()
 
-    val items = sources.mapNotNull { source -> source.itemSource?.getAll() }.flatten()
+    val items = sources.mapNotNull { source -> source.itemSource?.getAll() }.flatten().filterNot { (item) -> item.isEmpty }
         .let { items ->
 
             buildList {
@@ -40,10 +40,11 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
                 addAll(sources.mapNotNull { it.itemSource?.postProcess(items) }.flatten())
             }
         }.mapNotNull { item ->
-            item.itemStack.getSkyBlockId()?.let {
-                TrackedItem(it, item.itemStack, item.itemStack.count, item.context, item.context.source)
+            item.itemStack.getSkyOceanId()?.let {
+                TrackedItem(it.id, item.itemStack, item.itemStack.count, item.context, item.context.source)
             }
-        }.groupBy { it.id.lowercase() }
+        }
+        .groupBy { it.id }
         .mapValues { (_, values) -> values.sortedBy { sourceToPriority(it.source) }.toMutableList() }.toMutableMap()
 
     constructor(vararg sources: ItemSources) : this(sources.toList())
@@ -96,7 +97,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
 
         items.addFirst(last.withAmount(last.amount - lastNeeded))
         if (items.size == 1) {
-            this.items.put(itemId, items)
+            this.items[itemId] = items
         }
 
         list.add(last.withAmount(lastNeeded))

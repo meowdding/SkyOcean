@@ -3,6 +3,8 @@ package me.owdding.skyocean.data.profile
 import com.mojang.serialization.Codec
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.NormalCraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsMethod
+import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsRecipe
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.storage.ProfileStorage
@@ -33,6 +35,9 @@ object CraftHelperStorage {
         }
     }
 
+    val canModifyCount: Boolean get() = storage.get()?.canModifyCount == true
+    val recipeType get() = storage.get()?.type
+
     val data get() = storage.get()
     val selectedItem
         get() = when (data) {
@@ -42,6 +47,7 @@ object CraftHelperStorage {
     val selectedAmount
         get() = when (data) {
             is NormalCraftHelperRecipe -> (data as NormalCraftHelperRecipe).amount
+            is SkyShardsRecipe -> (data as SkyShardsRecipe).tree.quantity
             else -> 1
         }
 
@@ -52,16 +58,18 @@ object CraftHelperStorage {
 
     fun setAmount(amount: Int) {
         val amount = amount.coerceAtLeast(1)
-        val changed = when (val current = data) {
-            is NormalCraftHelperRecipe -> {
-                storage.set(NormalCraftHelperRecipe(current.item, amount))
-                true
-            }
+        when (val current = data) {
+            is NormalCraftHelperRecipe -> storage.set(NormalCraftHelperRecipe(current.item, amount))
 
-            else -> false
+            else -> return
         }
 
-        if (changed) save()
+        save()
+    }
+
+    fun setSkyShards(recipe: SkyShardsMethod) {
+        storage.set(SkyShardsRecipe(recipe))
+        save()
     }
 
     fun clear() {
