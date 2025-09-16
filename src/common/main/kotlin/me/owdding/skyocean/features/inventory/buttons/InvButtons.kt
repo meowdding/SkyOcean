@@ -8,10 +8,10 @@ import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.OceanColors
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.fabricmc.fabric.api.client.screen.v1.Screens
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.render.RenderScreenBackgroundEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderScreenForegroundEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
@@ -61,12 +61,11 @@ object InvButtons {
         }
     }
 
-    @Subscription
-    fun onScreenBackground(event: RenderScreenBackgroundEvent) {
-        if (!shouldShowButtons(event.screen)) return
-        Screens.getButtons(event.screen).forEach {
+    fun onScreenBackground(screen: AbstractContainerScreen<*>, graphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        if (!shouldShowButtons(screen)) return
+        Screens.getButtons(screen).forEach {
             if (it is InvButton && !it.highlight) {
-                it.renderButtons(event.graphics, 0, 0, 0F)
+                it.renderButtons(graphics, mouseX, mouseY, delta, true)
             }
         }
     }
@@ -76,7 +75,7 @@ object InvButtons {
         if (!shouldShowButtons(event.screen)) return
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && it.highlight) {
-                it.renderButtons(event.graphics, 0, 0, 0F)
+                it.renderButtons(event.graphics, 0, 0, 0F, false)
             }
         }
     }

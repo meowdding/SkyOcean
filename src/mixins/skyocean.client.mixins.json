@@ -21,6 +21,7 @@
     "MutableComponentMixin",
     "PlayerRendererMixin",
     "PlayerRenderStateMixin",
-    "ScreenAccessor"
+    "ScreenAccessor",
+    "AbstractContainerScreenMixin"
   ]
 }
