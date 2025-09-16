@@ -27,13 +27,14 @@ import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.mixins.FrameLayoutAccessor
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.OceanColors
 import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.extensions.asScrollable
+import me.owdding.skyocean.utils.extensions.tryClear
 import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.setPosition
@@ -49,6 +50,7 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -100,7 +102,13 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             thenCallback("skyshards") {
                 val clipboard = McClient.clipboard
                 try {
-                    val base = Base64.decode(clipboard.split(":")[1].trim())
+                    val (prefix, suffix) = clipboard.split(":", limit = 2)
+                    if (!prefix.equals("<SkyOceanRecipe>(V1)", true)) {
+                        text("Your clipboard does not contain any known tree format!") {
+                            this.color = OceanColors.WARNING
+                        }.sendWithPrefix()
+                    }
+                    val base = Base64.decode(suffix.trim())
                     val data = GZIPInputStream(base.inputStream()).use { it.readBytes() }.decodeToString()
                         .readJson<JsonObject>().toData(SkyOceanCodecs.SkyShardsMethodCodec.codec())
 
@@ -154,7 +162,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
     @Subscription
     fun onScreenInit(event: ScreenInitializedEvent) {
         if (!MiscConfig.craftHelperEnabled) return
-        //if (!LocationAPI.isOnSkyBlock) return
+        if (!LocationAPI.isOnSkyBlock) return
         if (event.screen !is AbstractContainerScreen<*>) return
 
         val layout = LayoutFactory.empty() as FrameLayout
@@ -166,7 +174,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
         callback = callback@{ save ->
             val (tree, output) = CraftHelperStorage.data?.resolve(::resetLayout, ::clear) ?: return@callback
             resetLayout()
-            (layout as? FrameLayoutAccessor)?.children()?.clear()// todo use clearable layout once #108 is merged
+            layout.tryClear()
             layout.addChild(visualize(tree, output) { callback })
             layout.arrangeElements()
             layout.setPosition(MiscConfig.craftHelperPosition.position(layout.width, layout.height))
