@@ -119,7 +119,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                         val list = mutableListOf<SkyShardsMethod>()
                         it.visitElements(list::add)
 
-                        val containsCycle = list.filterIsInstance<SkyShardsCycleElement>().any()
+                        val containsCycle = list.any { it is SkyShardsCycleElement }
                         CraftHelperStorage.setSkyShards(it)
                         if (containsCycle) {
                             Text.of("The imported tree contains a cycle, these are currently not supported in skyocean! The tree might not look complete!") {
