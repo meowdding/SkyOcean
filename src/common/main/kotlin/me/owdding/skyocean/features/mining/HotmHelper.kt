@@ -7,8 +7,8 @@ import me.owdding.lib.extensions.applyToTooltip
 import me.owdding.lib.extensions.round
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.repo.HotmData
-import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.exclusiveInclusive
+import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.tags.ItemTagKey
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
@@ -16,7 +16,6 @@ import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
-import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
@@ -50,9 +49,7 @@ object HotmHelper {
             return
         }
 
-        event.item.replaceVisually {
-            copyFrom(event.item)
-            namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
+        event.item.skyoceanReplace {
             if (MiningConfig.hotmStackSize && !isLocked) {
                 customSlotText = level.toString()
             }

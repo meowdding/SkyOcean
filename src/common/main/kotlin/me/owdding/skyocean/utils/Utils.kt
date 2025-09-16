@@ -9,22 +9,28 @@ import com.google.gson.JsonParser
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import kotlinx.coroutines.runBlocking
 import me.owdding.ktmodules.AutoCollect
+import me.owdding.lib.displays.Display
+import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
+import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.ChatUtils.withoutShadow
+import net.fabricmc.fabric.api.tag.client.v1.ClientTags
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.CommonComponents
@@ -33,11 +39,14 @@ import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
+import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
@@ -51,6 +60,7 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -175,6 +185,7 @@ object Utils {
 
     operator fun <T> ItemBuilder.set(type: DataComponentType<T>, value: T) = this.set(type, value)
     fun itemBuilder(item: ItemLike, init: ItemBuilder.() -> Unit) = ItemBuilder().also { it.item = item.asItem() }.apply(init).build()
+    fun itemBuilder(item: ItemStack, init: ItemBuilder.() -> Unit) = ItemBuilder().apply { copyFrom(item) }.apply(init).build()
 
     private val validChars = listOf(' ', '_', '-', ':')
     fun String.sanitizeForCommandInput() = this.filter { it.isDigit() || it.isLetter() || it in validChars }.trim()
@@ -210,14 +221,33 @@ object Utils {
 
     fun TooltipBuilder.copyFrom(itemStack: ItemStack) = lines().addAll(itemStack.getLore())
     fun MutableComponent.wrap(wrap: String) = this.wrap(wrap, wrap)
-    fun ItemBuilder.skyOceanPrefix() = this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
+
+    context(_: ItemStack) fun ItemBuilder.skyOceanIndicator() = when (Config.modifyIndicator) {
+        SkyOceanModifyIndicator.PREFIX -> this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
+        SkyOceanModifyIndicator.SUFFIX -> this.nameSuffix(ChatUtils.SPACE_ICON_COMPONENT)
+        SkyOceanModifyIndicator.LORE -> this.alterTooltip {
+            lines().add(0, Text.of("Modified by SkyOcean").withColor(TextColor.DARK_GRAY))
+            lines().add(1, CommonComponents.EMPTY)
+        }
+
+        SkyOceanModifyIndicator.NOTHING -> {}
+    }
 
     fun <T, Z> List<T>.mapToMutableList(converter: (T) -> Z) = this.map(converter).toMutableList()
 
-    inline fun ItemStack.skyoceanReplace(prependIcon: Boolean = true, crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
+    inline fun ItemStack.skyoceanReplace(addIndicator: Boolean = true, crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
         this.replaceVisually {
             copyFrom(this@skyoceanReplace)
-            if (prependIcon) skyOceanPrefix()
+            init()
+            if (addIndicator) skyOceanIndicator()
+
+            set(DataComponents.TOOLTIP_DISPLAY, this@skyoceanReplace.get(DataComponents.TOOLTIP_DISPLAY)?.hiddenComponents()?.let { TooltipDisplay(false, it) })
+        }
+    }
+
+    context(_: ItemStack) inline fun ItemBuilder.alterTooltip(crossinline init: TooltipBuilder.() -> Unit) {
+        this.tooltip {
+            lines().addAll(this@alterTooltip.build().getLore())
             init()
         }
     }
@@ -277,7 +307,7 @@ object Utils {
         override fun load(key: T): V = constructor(key)
     }
 
-    fun text(text: String, init: MutableComponent.() -> Unit = {}) = Text.of(text, init)
+    fun text(text: String = "", init: MutableComponent.() -> Unit = {}) = Text.of(text, init)
 
     fun Component.wrapWithNotItalic() = Text.of {
         append(this@wrapWithNotItalic)
@@ -297,10 +327,12 @@ object Utils {
         return value ?: default()
     }
 
+    fun <T> TagKey<T>.listEntries() = ClientTags.getOrCreateLocalTag(this).map { this.registry().get(it) }.unwrap()
+    fun <T> ResourceKey<out Registry<T>>.list(): List<T> = this.lookup().listElements().map { it.value() }.toList()
     fun <T> ResourceKey<T>.get(): Holder<T>? = SkyOcean.registryLookup.get(this).getOrNull()
-    fun <T> ResourceKey<Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
-    fun <T> ResourceKey<Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
-    fun <T> ResourceKey<Registry<T>>.get(value: ResourceLocation): Holder<T> = runCatching {
+    fun <T> ResourceKey<out Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
+    fun <T> ResourceKey<out Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
+    fun <T> ResourceKey<out Registry<T>>.get(value: ResourceLocation): Holder<T> = runCatching {
         this.lookup().listElements().filter {
             it.unwrapKey().get().location() == value
         }.findFirst().orElseThrow()
@@ -316,8 +348,26 @@ object Utils {
             logger.debug(message, it)
         }
     }
+
+    fun <T> T.applyCatching(init: T.() -> Unit) = apply {
+        runCatching {
+            this.init()
+        }
+    }
+
+    fun Component.asDisplay(): Display = Displays.text(this)
+    fun Iterable<Item>.filterNotAir() = this.filterNot { item -> item == Items.AIR }
+    fun <T> Iterable<Holder<T>>.unwrap() = this.map { it.value() }
 }
 
+enum class SkyOceanModifyIndicator : Translatable {
+    PREFIX,
+    SUFFIX,
+    LORE,
+    NOTHING;
+
+    override fun getTranslationKey() = "skyocean.config.main.modify_indicator.${name.lowercase()}"
+}
 
 @AutoCollect("LateInitModules")
 @Target(AnnotationTarget.CLASS)
@@ -328,6 +378,5 @@ annotation class LateInitModule
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class PreInitModule
-
 
 

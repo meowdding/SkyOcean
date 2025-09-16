@@ -26,6 +26,10 @@ object FishingConfig : CategoryKt("fishing") {
         this.translation = "skyocean.config.fishing.bobber_fix"
     }
 
+    var bobberTime by boolean(false) {
+        this.translation = "skyocean.config.fishing.bobber_time"
+    }
+
     var hideOtherBobbers by boolean(false) {
         this.translation = "skyocean.config.fishing.hide_other_bobbers"
     }

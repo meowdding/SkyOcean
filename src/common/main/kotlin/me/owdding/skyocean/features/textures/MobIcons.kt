@@ -53,7 +53,6 @@ object MobIcons {
     fun attachmentModifyEvent(event: EntityInfoLineEvent) {
         if (!MobIconsConfig.enabled) return
         val stripped = event.literalComponent
-        if (!stripped.matches(Regex("(?:﴾ )?\\[Lv.*"))) return
         if (!stripped.contains(MOB_TYPES)) return
         event.component.visitSiblings {
             val stripped = it.stripped.trim()
