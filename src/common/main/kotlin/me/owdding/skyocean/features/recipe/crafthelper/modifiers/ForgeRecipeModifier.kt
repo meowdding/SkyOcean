@@ -3,7 +3,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.SkyOceanItemId
-import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
@@ -23,7 +23,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object ForgeRecipeModifier {
     @Subscription
     fun onInventoryChange(event: InventoryChangeEvent) {
-        if (!MiscConfig.craftHelperEnabled) return
+        if (!CraftHelperConfig.enabled) return
         if (event.title != "Confirm Process") return
         if (event.slot.index != 22 && event.slot.index != 23) return
 

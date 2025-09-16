@@ -18,6 +18,7 @@ import me.owdding.skyocean.config.features.lorecleanup.LoreCleanupConfig
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.config.features.mining.MiningRetexture
+import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.misc.MobIconsConfig
 import me.owdding.skyocean.config.patcher.ConfigPatches
@@ -49,6 +50,7 @@ object Config : ConfigKt("skyocean/config") {
         category(DungeonsConfig)
         category(MiscConfig) {
             category(MobIconsConfig)
+            category(CraftHelperConfig)
         }
         category(Buttons)
 

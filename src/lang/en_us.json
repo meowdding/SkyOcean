@@ -347,6 +347,10 @@
         "margin": {
           "@value": "Margin",
           "desc": "How much space to leave between the inventory/screen edges and the craft helper element."
+        },
+        "done_message": {
+          "@value": "Send a message when your recipe is complete",
+          "desc": "Sends a chat message whenever the mod detects your recipe tree as completed."
         }
       },
       "transparentArmor": {

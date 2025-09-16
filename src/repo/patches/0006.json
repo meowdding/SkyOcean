@@ -1,0 +1,40 @@
+{
+  "type": "skyocean:compound",
+  "patches": [
+    {
+      "type": "skyocean:move",
+      "from": "misc.craftHelperEnabled",
+      "to": "misc.crafthelper.enabled"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "misc.craftHelperHideCompleted",
+      "to": "misc.crafthelper.hideCompleted"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "misc.craftHelperParentAmount",
+      "to": "misc.crafthelper.parentAmount"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "misc.craftHelperNoRootItems",
+      "to": "misc.crafthelper.noRootItems"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "misc.disallowedCraftHelperSources",
+      "to": "misc.crafthelper.disallowedSources"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "misc.craftHelperPosition",
+      "to": "misc.crafthelper.position"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "misc.craftHelperMargin",
+      "to": "misc.crafthelper.margin"
+    }
+  ]
+}
