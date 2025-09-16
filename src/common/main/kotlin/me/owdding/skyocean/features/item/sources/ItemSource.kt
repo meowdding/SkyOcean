@@ -1,9 +1,9 @@
 package me.owdding.skyocean.features.item.sources
 
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen
 import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
 import net.minecraft.world.item.ItemStack
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 
 interface ItemSource {
 
@@ -11,7 +11,7 @@ interface ItemSource {
     fun postProcess(items: List<SimpleTrackedItem>): List<SimpleTrackedItem> = emptyList()
     val type: ItemSources
 
-    fun createFromIdAndAmount(id: String, amount: Int): ItemStack? = RepoItemsAPI.getItemOrNull(id)?.copyWithCount(amount)
+    fun createFromIdAndAmount(id: SkyOceanItemId?, amount: Int): ItemStack? = id?.toItem()?.copyWithCount(amount)
 
 }
 

@@ -3,8 +3,6 @@ package me.owdding.skyocean.config.features.misc
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.config.separator
-import me.owdding.skyocean.features.item.sources.ItemSources
-import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperLocation
 import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.transparency
@@ -84,38 +82,6 @@ object MiscConfig : CategoryKt("misc") {
 
     var itemSearchMuseumIntegration by boolean(false) {
         translation = "skyocean.config.misc.itemSearch.museumIntegration"
-    }
-
-    init {
-        separator("skyocean.config.misc.crafthelper")
-    }
-
-    var craftHelperEnabled by boolean(true) {
-        translation = "skyocean.config.misc.crafthelper.enabled"
-    }
-
-    var craftHelperHideCompleted by boolean(true) {
-        translation = "skyocean.config.misc.crafthelper.hideCompleted"
-    }
-
-    var craftHelperParentAmount by boolean(true) {
-        translation = "skyocean.config.misc.crafthelper.parentAmount"
-    }
-
-    var craftHelperNoRootItems by boolean(false) {
-        translation = "skyocean.config.misc.crafthelper.disableRootItems"
-    }
-
-    var disallowedCraftHelperSources by select<ItemSources> {
-        translation = "skyocean.config.misc.crafthelper.disallowedItemSources"
-    }
-
-    var craftHelperPosition by enum(CraftHelperLocation.LEFT_OF_INVENTORY) {
-        translation = "skyocean.config.misc.crafthelper.position"
-    }
-
-    var craftHelperMargin by int(10) {
-        translation = "skyocean.config.misc.crafthelper.margin"
     }
 
     init {

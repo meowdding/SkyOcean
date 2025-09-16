@@ -40,14 +40,14 @@ object CraftHelperStorage {
 
     val data get() = storage.get()
     val selectedItem
-        get() = when (data) {
-            is NormalCraftHelperRecipe -> (data as NormalCraftHelperRecipe).item
+        get() = when (val data = data) {
+            is NormalCraftHelperRecipe -> data.item
             else -> null
         }
     val selectedAmount
-        get() = when (data) {
-            is NormalCraftHelperRecipe -> (data as NormalCraftHelperRecipe).amount
-            is SkyShardsRecipe -> (data as SkyShardsRecipe).tree.quantity
+        get() = when (val data = data) {
+            is NormalCraftHelperRecipe -> data.amount
+            is SkyShardsRecipe -> data.tree.quantity
             else -> 1
         }
 
@@ -58,9 +58,8 @@ object CraftHelperStorage {
 
     fun setAmount(amount: Int) {
         val amount = amount.coerceAtLeast(1)
-        when (val current = data) {
-            is NormalCraftHelperRecipe -> storage.set(NormalCraftHelperRecipe(current.item, amount))
-
+        when (val data = data) {
+            is NormalCraftHelperRecipe -> storage.set(data.copy(amount = amount))
             else -> return
         }
 
