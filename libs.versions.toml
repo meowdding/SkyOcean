@@ -21,7 +21,7 @@ meowdding-repo = "1.0.18"
 meowdding-resources = "1.0.15"
 meowdding-ktmodules = "1.0.5"
 meowdding-ktcodecs = "1.0.32"
-meowdding-gradle = "1.0.4"
+meowdding-gradle = "1.0.8"
 
 terrarium-cloche = "0.13.2"
 
