@@ -8,6 +8,7 @@ import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.OceanColors
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.fabricmc.fabric.api.client.screen.v1.Screens
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -61,6 +62,15 @@ object InvButtons {
         }
     }
 
+    fun onScreenBackgroundAfter(screen: AbstractContainerScreen<*>, graphics: GuiGraphics) {
+        if (!shouldShowButtons(screen)) return
+        Screens.getButtons(screen).forEach {
+            if (it is InvButton && !it.highlight) {
+                it.renderItem(graphics)
+            }
+        }
+    }
+
     @Subscription
     fun onScreenBackground(event: RenderScreenBackgroundEvent) {
         if (!shouldShowButtons(event.screen)) return
@@ -77,6 +87,7 @@ object InvButtons {
         Screens.getButtons(event.screen).forEach {
             if (it is InvButton && it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
+                it.renderItem(event.graphics)
             }
         }
     }
