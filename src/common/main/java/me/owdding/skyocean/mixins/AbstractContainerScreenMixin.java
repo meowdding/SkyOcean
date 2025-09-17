@@ -18,6 +18,6 @@ public class AbstractContainerScreenMixin {
         )
     )
     public void onBackgroundDrawEnd(GuiGraphics graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        InvButtons.INSTANCE.onScreenBackground((AbstractContainerScreen<?>) (Object) this, graphics);
+        InvButtons.INSTANCE.onScreenBackgroundAfter((AbstractContainerScreen<?>) (Object) this, graphics);
     }
 }
