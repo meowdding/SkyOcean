@@ -3,7 +3,7 @@ package me.owdding.skyocean.features.fishing
 import me.owdding.ktmodules.Module
 import me.owdding.lib.extensions.ordinal
 import me.owdding.skyocean.config.features.fishing.FishingConfig
-import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.CommonComponents
 import tech.thatgravyboat.skyblockapi.api.area.isle.trophyfish.TrophyFishTier
 import tech.thatgravyboat.skyblockapi.api.area.isle.trophyfish.TrophyFishType

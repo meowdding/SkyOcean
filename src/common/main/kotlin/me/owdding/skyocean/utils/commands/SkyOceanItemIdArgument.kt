@@ -8,7 +8,7 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.owdding.skyocean.api.SimpleItemApi
 import me.owdding.skyocean.api.SkyOceanItemId
-import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.suggestions.SkyOceanSuggestionProvider
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append

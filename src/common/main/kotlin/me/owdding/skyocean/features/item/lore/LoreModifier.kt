@@ -5,8 +5,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.extensions.ListMerger
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanLoreModifiers
-import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.SkyOceanModifyIndicator
+import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.network.chat.CommonComponents
