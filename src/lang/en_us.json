@@ -630,7 +630,6 @@
         "@value": "Museum Donation",
         "desc": "Shows what items haven't been donated to museum in the tooltip."
       }
-
     },
     "foraging": {
       "@value": "Foraging",
