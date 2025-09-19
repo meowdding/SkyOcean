@@ -14,7 +14,7 @@ import me.owdding.skyocean.config.features.foraging.GalateaConfig
 import me.owdding.skyocean.config.features.garden.GardenConfig
 import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
-import me.owdding.skyocean.config.features.lorecleanup.LoreCleanupConfig
+import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.config.features.mining.MiningRetexture
@@ -42,7 +42,7 @@ object Config : ConfigKt("skyocean/config") {
         }
         category(GardenConfig)
         category(InventoryConfig)
-        category(LoreCleanupConfig)
+        category(LoreModifierConfig)
         category(MiningConfig) {
             category(MiningRetexture)
             category(MineshaftConfig)
