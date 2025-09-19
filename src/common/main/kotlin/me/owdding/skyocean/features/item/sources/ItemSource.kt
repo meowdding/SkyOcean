@@ -1,9 +1,9 @@
 package me.owdding.skyocean.features.item.sources
 
+import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen
 import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
 import net.minecraft.world.item.ItemStack
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 
 interface ItemSource {
 
@@ -11,11 +11,11 @@ interface ItemSource {
     fun postProcess(items: List<SimpleTrackedItem>): List<SimpleTrackedItem> = emptyList()
     val type: ItemSources
 
-    fun createFromIdAndAmount(id: String, amount: Int): ItemStack? = RepoItemsAPI.getItemOrNull(id)?.copyWithCount(amount)
+    fun createFromIdAndAmount(id: SkyOceanItemId?, amount: Int): ItemStack? = id?.toItem()?.copyWithCount(amount)
 
 }
 
-enum class ItemSources(val itemSource: ItemSource?) {
+enum class ItemSources(val itemSource: ItemSource?, vararg val disabledIn: ItemSourceTag) {
     BUNDLE(null),
     CHEST(ChestItemSource),
     STORAGE(StorageItemSource),
@@ -26,12 +26,13 @@ enum class ItemSources(val itemSource: ItemSource?) {
     INVENTORY(InventoryItemSource),
     VAULT(VaultItemSource),
     MUSEUM(MuseumItemSource),
-    RIFT(RiftItemSource),
+    RIFT(RiftItemSource, ItemSourceTag.ITEM_SEARCH),
     DRILL_UPGRADE(DrillUpgradeItemSource),
     ROD_UPGRADE(RodUpgradesItemSource),
     HUNT_AXE(HuntaxeItemSource),
     TOOLKIT(ToolkitItemSource),
     SACK_OF_SACKS(SackOfSacksItemSource),
+    HUNTING_BOX(HuntingBoxItemSource, ItemSourceTag.ITEM_SEARCH),
     ;
     // todo SACK_OF_SACKS(TODO()),
     // todo POTION_BAG(TODO()),
@@ -53,5 +54,15 @@ enum class ItemSources(val itemSource: ItemSource?) {
                 addAll(entries.mapNotNull { it.itemSource?.postProcess(list) }.flatten())
             }
         }
+
+        fun getMatching(vararg disabledTags: ItemSourceTag) = entries.filterNot { itemSource -> itemSource.disabledIn.any { disabledTags.contains(it) } }
+        val craftHelperSources = getMatching(ItemSourceTag.CRAFT_HELPER)
+        val itemSearchSources = getMatching(ItemSourceTag.ITEM_SEARCH)
     }
+}
+
+enum class ItemSourceTag {
+    ITEM_SEARCH,
+    CRAFT_HELPER,
+    ;
 }

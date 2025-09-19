@@ -9,7 +9,7 @@ import me.owdding.lib.builder.InventoryBuilder
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.lib.extensions.withTooltip
 import me.owdding.skyocean.api.SkyOceanItemId
-import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import me.owdding.skyocean.helpers.ClientSideInventory
@@ -70,7 +70,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
                 add(index, item)
             }
 
-            if (MiscConfig.craftHelperEnabled && skyoceanid != null) {
+            if (CraftHelperConfig.enabled && skyoceanid != null) {
                 add(32, Items.DIAMOND_PICKAXE) {
                     add(
                         Text.join(ChatUtils.ICON_SPACE_COMPONENT, "Craft Helper") {
@@ -116,7 +116,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
         }.build()
 
         addItems(items)
-        if (MiscConfig.craftHelperEnabled) {
+        if (CraftHelperConfig.enabled) {
             slots[32].onClick = {
                 CraftHelperStorage.setSelected(skyoceanid)
                 McScreen.self?.onClose()

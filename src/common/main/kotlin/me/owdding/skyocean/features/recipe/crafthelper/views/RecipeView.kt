@@ -3,7 +3,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.views
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.extensions.floor
-import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.*
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
@@ -148,7 +148,7 @@ data class CraftHelperContext(
     fun getMax() = node.outputWithAmount.amount
 
     private fun amount(): Pair<Int, MutableList<TrackedItem>> {
-        if (parent == null && MiscConfig.craftHelperNoRootItems) return 0 to mutableListOf()
+        if (parent == null && CraftHelperConfig.noRootItems) return 0 to mutableListOf()
 
         var amount = amountThroughParents()
 
@@ -164,6 +164,10 @@ data class CraftHelperContext(
 }
 
 class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
+    companion object {
+        val noOp = WidgetBuilder {}
+    }
+
     fun createLine(state: CraftHelperState): AbstractWidget {
         val widget = Widgets.text(state.ingredient.serializeWithAmount())
         return widget

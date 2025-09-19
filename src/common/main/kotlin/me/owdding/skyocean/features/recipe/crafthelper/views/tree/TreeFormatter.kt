@@ -5,8 +5,7 @@ import me.owdding.lib.displays.DisplayWidget
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.config.features.misc.MiscConfig
-import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen.withoutTooltipDelay
+import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.features.item.sources.ForgeItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.RecipeType
@@ -20,6 +19,7 @@ import me.owdding.skyocean.utils.ChatUtils.append
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.network.chat.CommonComponents
@@ -50,19 +50,15 @@ object TreeFormatter : RecipeView {
     ) = append(state, widget, widgetConsumer)
 
     fun append(state: CraftHelperState, widget: WidgetBuilder, widgetConsumer: (AbstractWidget) -> Unit, depth: Int = 0, prefix: String = "") {
-        val parentAmount = if (MiscConfig.craftHelperParentAmount) {
+        val parentAmount = if (CraftHelperConfig.parentAmount) {
             state.amountThroughParents
         } else 0
 
-
-        val multiplier = if (state.parent == null) {
-            state.recipeOutputAmount.coerceAtLeast(1)
-        } else 1
-        val needed = (state.required + parentAmount) * multiplier
+        val needed = (state.required + parentAmount)
         val available = state.amount + parentAmount
 
         val name = widget.name(state.ingredient)
-        if (state.required == 0 && MiscConfig.craftHelperHideCompleted) {
+        if (state.required == 0 && CraftHelperConfig.hideCompleted) {
             return
         }
 

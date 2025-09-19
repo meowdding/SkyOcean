@@ -17,7 +17,7 @@
         "desc": [
           "The mod may change the appearance of an item (or other visual components), by for example manipulating it's tooltip.",
           "",
-          "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix, this is done to help identify the origin of any changes and therefore can't be disabled."
+          "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix (or whatever modify indicator is selected), this is done to help identify the origin of any changes and therefore we advise against disabling it."
         ]
       },
       "text_shadow": {
@@ -27,6 +27,17 @@
       "prefix_gradient": {
         "@value": "Prefix Gradient",
         "desc": "Changes the gradient that is used for the prefix."
+      },
+      "modify_indicator": {
+        "@value": "SkyOcean Modify Indicator",
+        "desc": [
+          "Items modified or added by SkyOcean will have a small indicator (normally <color #355AA0>\uD83C\uDF0A</color>) in their name.",
+          "This indicator can be customized here."
+        ],
+        "prefix": "Prefix in name",
+        "suffix": "Suffix in name",
+        "lore": "First line in lore",
+        "nothing": "No indicator"
       },
       "debug": {
         "@value": "Enable Debug Mode",
@@ -304,7 +315,11 @@
       },
       "crafthelper": {
         "@value": "Craft Helper",
-        "desc": "Craft helper is a feature that lets you see all the steps in a recipe and how much progress you have made towards completing it.",
+        "desc": [
+          "Craft helper is a feature that lets you see all the steps in a recipe and how much progress you have made towards completing it.",
+          "",
+          "<gray>Pro Tip:</gray> You can also import SkyShard Trees into your CraftHelper by pressing <gray>\"Copy Tree\"</gray>, then <gray>\"SkyOcean Format\"</gray> on the Website and running <gray>/skyocean recipe skyshards</gray> in-game!"
+        ],
         "enabled": {
           "@value": "Enable Craft Helper",
           "desc": "Whether the craft helper is enabled or not, this is the main switch."
@@ -332,6 +347,10 @@
         "margin": {
           "@value": "Margin",
           "desc": "How much space to leave between the inventory/screen edges and the craft helper element."
+        },
+        "done_message": {
+          "@value": "Send a message when your recipe is complete",
+          "desc": "Sends a chat message whenever the mod detects your recipe tree as completed."
         }
       },
       "transparentArmor": {
@@ -392,6 +411,10 @@
         "@value": "Bobber Fix",
         "desc": "Fixes bobbers rubberbanding when fishing."
       },
+      "bobber_time": {
+        "@value": "Bobber Time",
+        "desc": "Shows the time your bobber has existed."
+      },
       "hide_other_bobbers": {
         "@value": "Hide Other Bobbers",
         "desc": "Hides other players' bobbers, making it easier to see your own."
@@ -432,7 +455,7 @@
       "modifications": {
         "@value": "Lore Modifications",
         "desc": [
-          "All items that have any modification present in the lore are prefixed with <color #355AA0>\uD83C\uDF0A</color>",
+          "All items that have any modification present in the lore are indicated with the selected modify indicator.",
           "To list all modifications that are present press <gray>shift</gray>.",
           "",
           "Some of the settings may include examples, <italic><gray>hover</gray></italic> them to see them."
@@ -643,6 +666,10 @@
         "enabled": {
           "@value": "CSGO Case Opening",
           "desc": "Shows a CSGO case opening animation when opening a dungeon chest."
+        },
+        "croesus": {
+          "@value": "Also Show Case Opening in Croesus",
+          "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
         }
       }
     }
@@ -666,11 +693,10 @@
       "reset": "Reset"
     }
   },
-  "item_search": {
-    "keybind": "Item Search"
-  },
-  "item_value": {
-    "keybind": "Item Value"
+  "keybind": {
+    "item_search": "Open Item Search",
+    "item_value": "Open Item Value",
+    "crafthelper": "Set as active Craft Helper Item"
   },
   "gradients": {
     "default": "Default",

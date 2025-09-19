@@ -89,7 +89,7 @@ data class CurrencyIngredient(override val amount: Int, val currency: CurrencyTy
 }
 
 fun Ingredient.serialize(): String = when (this) {
-    is ItemLikeIngredient -> this.skyblockId
+    is ItemLikeIngredient -> this.id.id
     is CurrencyIngredient -> "ocean:${currency.name.lowercase()}"
     else -> throw UnsupportedOperationException("Can't serialize $this")
 }

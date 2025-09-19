@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.recipe.crafthelper.display
 
-import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 enum class CraftHelperLocation(val position: (Int, Int) -> Pair<Int, Int>) {
@@ -39,6 +39,6 @@ enum class CraftHelperLocation(val position: (Int, Int) -> Pair<Int, Int>) {
     companion object {
         private val screenWidth get() = McClient.window.guiScaledWidth
         private val screenHeight get() = McClient.window.guiScaledHeight
-        private val margin get() = MiscConfig.craftHelperMargin
+        private val margin get() = CraftHelperConfig.margin
     }
 }

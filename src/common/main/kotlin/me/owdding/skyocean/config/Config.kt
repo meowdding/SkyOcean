@@ -18,11 +18,13 @@ import me.owdding.skyocean.config.features.lorecleanup.LoreCleanupConfig
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.config.features.mining.MiningRetexture
+import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.misc.MobIconsConfig
 import me.owdding.skyocean.config.patcher.ConfigPatches
 import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.OceanGradients
+import me.owdding.skyocean.utils.SkyOceanModifyIndicator
 import java.util.function.UnaryOperator
 
 object Config : ConfigKt("skyocean/config") {
@@ -48,6 +50,7 @@ object Config : ConfigKt("skyocean/config") {
         category(DungeonsConfig)
         category(MiscConfig) {
             category(MobIconsConfig)
+            category(CraftHelperConfig)
         }
         category(Buttons)
 
@@ -67,6 +70,10 @@ object Config : ConfigKt("skyocean/config") {
         },
         ChatUtils.prefixDelegate,
     )
+
+    val modifyIndicator by enum(SkyOceanModifyIndicator.PREFIX) {
+        translation = "skyocean.config.main.modify_indicator"
+    }
 
     override val patches: Map<Int, UnaryOperator<JsonObject>> = ConfigPatches.loadPatches()
     override val version: Int = patches.size + 1

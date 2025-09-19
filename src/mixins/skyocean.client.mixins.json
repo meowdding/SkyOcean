@@ -13,11 +13,15 @@
     "EntityRenderStateMixin",
     "FabricDataGenHelperMixin",
     "FrameLayoutAccessor",
+    "FrameLayoutMixin",
     "GameRendererAccessor",
+    "GridLayoutMixin",
+    "LinearLayoutMixin",
     "ModelManagerAccessor",
     "MutableComponentMixin",
     "PlayerRendererMixin",
     "PlayerRenderStateMixin",
-    "ScreenAccessor"
+    "ScreenAccessor",
+    "AbstractContainerScreenMixin"
   ]
 }

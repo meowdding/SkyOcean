@@ -39,4 +39,13 @@ object ExtraDisplays {
         }
     }
 
+    fun passthrough(width: Int, height: Int, draw: GuiGraphics.() -> Unit) = object : Display {
+        override fun getWidth() = width
+        override fun getHeight() = height
+
+        override fun render(graphics: GuiGraphics) {
+            graphics.draw()
+        }
+    }
+
 }

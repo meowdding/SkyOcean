@@ -51,9 +51,11 @@ internal object ChatUtils {
     const val ICON = Icons.WAVE
 
     const val ICON_WITH_SPACE = "$ICON "
+    const val SPACE_WITH_ICON = " $ICON"
     const val DARK_OCEAN_BLUE = OceanColors.DARK_CYAN_BLUE
     val ICON_COMPONENT = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
     val ICON_SPACE_COMPONENT = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
+    val SPACE_ICON_COMPONENT = Text.of(SPACE_WITH_ICON) { this.color = DARK_OCEAN_BLUE }
 
     val prefixDelegate = CachedValue {
         Text.of {

@@ -35,7 +35,7 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
     private val unobtainableIds = Utils.loadRepoData("unobtainable_ids", SkyOceanItemId.CODEC.listOf())
     private val cache: MutableMap<SkyOceanItemId, ItemStack?> = mutableMapOf()
     private val nameCache: MutableMap<String, SkyOceanItemId> = mutableMapOf()
-    private val allIds: MutableList<SkyOceanItemId> = mutableListOf()
+    private val allIds: MutableSet<SkyOceanItemId> = mutableSetOf()
 
     fun Iterable<Pair<String, SkyOceanItemId>>.saveIds() = this.apply {
         allIds.addAll(this.map { (_, id) -> id })
@@ -192,6 +192,6 @@ object SimpleItemApi : MeowddingLogger by SkyOcean.featureLogger() {
         name("Unknown attribute: $id")
     }
 
-    fun getAllIds(): List<SkyOceanItemId> = allIds
+    fun getAllIds(): Set<SkyOceanItemId> = allIds
 
 }

@@ -16,15 +16,11 @@ import tech.thatgravyboat.skyblockapi.api.area.dungeon.DungeonFloor
 import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderScreenBackgroundEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyPressedEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenMouseClickEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenMouseReleasedEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.*
 import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.contains
+import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.findGroup
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
@@ -33,7 +29,7 @@ object DungeonGambling {
 
     private val regex = "(?<type>\\w+) Chest".toRegex()
 
-    private val allowedChests = listOf(DungeonChestType.OBSIDIAN, DungeonChestType.BEDROCK)
+    val allowedDungeonGamblingChests = listOf(DungeonChestType.OBSIDIAN, DungeonChestType.BEDROCK)
 
     private var rendering = false
     private var menu = -1
@@ -46,17 +42,27 @@ object DungeonGambling {
     @Subscription
     fun onScreenChange(event: InventoryChangeEvent) {
         if (!DungeonsConfig.gamblingScreenEnabled) return
-        if (event.item !in Items.BARRIER) return
+        val floor = when (event.item) {
+            in Items.BARRIER -> DungeonAPI.dungeonFloor ?: return
+            in Items.ARROW -> if (DungeonsConfig.gamblingInCroesus) {
+                event.item.getRawLore().firstOrNull { it.startsWith("To ") }?.let { line ->
+                    CroesusImpl.croesusLoreToFloor[line.substring(3)]
+                } ?: return
+            } else return
+
+            else -> return
+        }
         val chest = event.screen as? ContainerScreen ?: return
         val items = chest.menu.slots.containerItems()
+
+        // Remove these lines when using ChestDumps to test
         val id = chest.menu.containerId
         if (id == menu) return
         menu = id
 
-        val floor = DungeonAPI.dungeonFloor ?: DungeonFloor.M7
         val stringType = regex.findGroup(event.screen.title.stripped, "type") ?: return
         val type = DungeonChestType.getByName(stringType) ?: return
-        if (type !in allowedChests) return
+        if (type !in allowedDungeonGamblingChests) return
 
         val winner = items.sortedByDescending { itemStack -> itemStack.getItemValue().price }.first { it.getSkyOceanId() != null }
 
