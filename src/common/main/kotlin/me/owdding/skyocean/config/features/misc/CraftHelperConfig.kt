@@ -36,7 +36,7 @@ object CraftHelperConfig : CategoryKt("crafthelper") {
     }
 
     var doneMessage by boolean(false) {
-        translation = "skyocean.confi.misc.crafthelper.done_message"
+        translation = "skyocean.config.misc.crafthelper.done_message"
     }
 
 }
