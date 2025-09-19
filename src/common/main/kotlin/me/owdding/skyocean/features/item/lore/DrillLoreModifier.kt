@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.item.lore
 
-import me.owdding.skyocean.config.features.lorecleanup.LoreCleanupConfig
+import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.tags.SkyblockItemTagKey
 import net.minecraft.network.chat.Component
@@ -17,7 +17,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @LoreModifier
 object DrillLoreModifier : AbstractLoreModifier() {
     override val displayName: Component = +"skyocean.config.lore_modifiers.drill_modifications"
-    override val isEnabled: Boolean get() = LoreCleanupConfig.enableDrillCleanup
+    override val isEnabled: Boolean get() = LoreModifierConfig.enableDrillCleanup
 
     override fun appliesTo(item: ItemStack) = item in SkyblockItemTagKey.DRILLS
 

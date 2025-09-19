@@ -1,0 +1,5 @@
+{
+  "type": "skyocean:move",
+  "from": "loreCleanup",
+  "to": "lore_modifiers"
+}

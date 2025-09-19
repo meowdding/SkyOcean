@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.item.lore
 
-import me.owdding.skyocean.config.features.lorecleanup.LoreCleanupConfig
+import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
@@ -17,7 +17,7 @@ private const val MAX_DUNGEON_TIER = 10
 @LoreModifier
 object DungeonQualityLoreModifier : AbstractLoreModifier() {
     override val displayName: Component = +"skyocean.config.lore_modifiers.dungeon_quality"
-    override val isEnabled: Boolean get() = LoreCleanupConfig.dungeonQuality
+    override val isEnabled: Boolean get() = LoreModifierConfig.dungeonQuality
 
     override fun appliesTo(item: ItemStack) = item.getData(DataTypes.DUNGEON_QUALITY) != null
 
