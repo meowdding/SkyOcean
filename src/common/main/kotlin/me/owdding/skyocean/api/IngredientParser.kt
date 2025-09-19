@@ -6,6 +6,7 @@ import me.owdding.skyocean.features.recipe.CurrencyType
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -70,7 +71,7 @@ object IngredientParser {
         val amount = ingredient.replace(itemRegex, "$2")
             .replace(item, "").toIntValue().coerceAtLeast(1)
 
-        val id = SkyOceanItemId.fromName(item) ?: run {
+        val id = SkyBlockId.fromName(item) ?: run {
             Text.of("Unable to parse item information for line $ingredient") { this.color = TextColor.RED }.send()
             return null
         }

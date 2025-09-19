@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.item.sources
 
-import me.owdding.skyocean.api.SkyOceanItemId
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import me.owdding.skyocean.features.item.sources.system.ParentItemContext
 import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
 import me.owdding.skyocean.utils.tags.SkyblockItemTagKey
@@ -22,7 +22,7 @@ object DrillUpgradeItemSource : ItemSource {
                     itemStack.getData(DataTypes.FUEL_TANK),
                     itemStack.getData(DataTypes.ENGINE),
                     itemStack.getData(DataTypes.UPGRADE_MODULE),
-                ).map { SkyOceanItemId.item(it) }
+                ).map { SkyBlockId.item(it) }
                     .map { SimpleTrackedItem(it.toItem(), DrillItemContext(item)) }
             }
     }

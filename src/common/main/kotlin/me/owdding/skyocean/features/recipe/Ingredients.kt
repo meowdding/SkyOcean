@@ -4,11 +4,11 @@ import com.mojang.serialization.Codec
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.ktcodecs.IncludedCodec
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.repolib.api.recipes.ingredient.CraftingIngredient
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.id
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -45,7 +45,7 @@ interface Ingredient {
 
 interface ItemLikeIngredient : Ingredient {
     val skyblockId: String
-    val id: SkyOceanItemId
+    val id: SkyBlockId
     val item: ItemStack
     val itemName: Component
 
@@ -53,7 +53,7 @@ interface ItemLikeIngredient : Ingredient {
 }
 
 @GenerateCodec
-data class SkyOceanItemIngredient(override val id: SkyOceanItemId, override val amount: Int) : ItemLikeIngredient {
+data class SkyOceanItemIngredient(override val id: SkyBlockId, override val amount: Int) : ItemLikeIngredient {
     override val skyblockId: String = id.skyblockId
     override val item: ItemStack by lazy { id.toItem() }
     override val itemName: Component by lazy { item.hoverName }
@@ -105,10 +105,10 @@ fun CraftingIngredient.toSkyOceanIngredient(): Ingredient? {
     val id = this.id()?.replace(reverseNeuStuff, "$1:$2") ?: return null
 
     return when (this) {
-        is RepoItemIngredient -> SkyOceanItemIngredient(SkyOceanItemId.item(id), this.count())
-        is RepoPetIngredient -> SkyOceanItemIngredient(SkyOceanItemId.pet(id, this.tier()), this.count())
-        is RepoEnchantmentIngredient -> SkyOceanItemIngredient(SkyOceanItemId.enchantment(id, this.level()), this.count())
-        is RepoAttributeIngredient -> SkyOceanItemIngredient(SkyOceanItemId.attribute(id), this.count())
+        is RepoItemIngredient -> SkyOceanItemIngredient(SkyBlockId.item(id), this.count())
+        is RepoPetIngredient -> SkyOceanItemIngredient(SkyBlockId.pet(id, this.tier()), this.count())
+        is RepoEnchantmentIngredient -> SkyOceanItemIngredient(SkyBlockId.enchantment(id, this.level()), this.count())
+        is RepoAttributeIngredient -> SkyOceanItemIngredient(SkyBlockId.attribute(id), this.count())
         else -> null
     }
 }

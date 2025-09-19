@@ -5,8 +5,8 @@ import com.mojang.serialization.Codec
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
 @GenerateCodec
 data class MuseumItem(
@@ -14,7 +14,7 @@ data class MuseumItem(
     @FieldName("parent") override val parentId: String?,
     @FieldName("mapped_item_ids") val mappedIds: List<String> = emptyList(),
 ) : MuseumRepoEntry {
-    val skyoceanId = SkyOceanItemId.unknownType(id) ?: SkyOceanItemId.unsafe(id)
+    val skyblockId = SkyBlockId.unknownType(id) ?: SkyBlockId.unsafe(id)
 
     companion object {
         private val COMPACT_MUSEUM_ITEM_CODEC = Codec.STRING.xmap(

@@ -6,12 +6,12 @@ import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.repo.customization.AnimatedSkulls
 import me.owdding.skyocean.utils.Utils.simpleCacheLoader
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.component.ResolvableProfile
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.time.Duration.Companion.minutes
@@ -52,7 +52,7 @@ data class StaticSkin(
 
 @GenerateCodec
 data class SkyblockSkin(
-    val item: SkyOceanItemId,
+    val item: SkyBlockId,
 ) : ItemSkin {
     override val type: ItemSkinType = ItemSkinType.SKYBLOCK_SKIN
 
@@ -61,7 +61,7 @@ data class SkyblockSkin(
 
 @GenerateCodec
 data class AnimatedSkyblockSkin(
-    val id: SkyOceanItemId,
+    val id: SkyBlockId,
 ) : ItemSkin {
     val skin = AnimatedSkulls.skins[id] ?: throw RuntimeException("Failed to get animated skyblock skin $id", NullPointerException())
     override val type: ItemSkinType = ItemSkinType.ANIMATED_SKYBLOCK_SKIN

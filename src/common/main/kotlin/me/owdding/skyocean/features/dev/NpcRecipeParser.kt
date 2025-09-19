@@ -2,7 +2,6 @@ package me.owdding.skyocean.features.dev
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.api.IngredientParser
-import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.custom.CustomRecipe
 import me.owdding.skyocean.generated.SkyOceanCodecs
@@ -17,6 +16,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenMouseClickEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
@@ -59,7 +59,7 @@ object NpcRecipeParser {
     private fun InventoryChangeEvent.inventory() = ifEnabled {
         if (isSkyBlockFiller) return
         val lore = item.getRawLore().joinToString("\n")
-        val id = item.getSkyOceanId() ?: return
+        val id = item.getSkyBlockId() ?: return
 
         val output = IngredientParser.parse(item.hoverName.stripped)?.amount ?: 1
 

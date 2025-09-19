@@ -2,13 +2,13 @@ package me.owdding.skyocean.features.item.custom.data
 
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.item.custom.ui.standard.search.ItemModelSearchEntry
 import me.owdding.skyocean.features.item.custom.ui.standard.search.ModelSearchEntry
 import me.owdding.skyocean.features.item.custom.ui.standard.search.SkyBlockModelEntry
 import me.owdding.skyocean.generated.DispatchHelper
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import net.minecraft.world.item.Item
 import kotlin.reflect.KClass
 
@@ -37,7 +37,7 @@ data class StaticModel(
 
 @GenerateCodec
 data class SkyblockModel(
-    val location: SkyOceanItemId,
+    val location: SkyBlockId,
 ) : ItemModel {
     override val type: ItemModelType = ItemModelType.SKYBLOCK_MODEL
     override fun toModelSearchEntry() = SkyBlockModelEntry(location)
