@@ -4,10 +4,10 @@ import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.chat.ChatConfig
-import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.get
 import me.owdding.skyocean.utils.Utils.set
 import me.owdding.skyocean.utils.Utils.visitSiblings
+import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription

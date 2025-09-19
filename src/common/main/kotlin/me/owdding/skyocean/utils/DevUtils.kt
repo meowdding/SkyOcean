@@ -7,6 +7,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
+import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.commands.VirtualResourceArgument
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.SharedSuggestionProvider

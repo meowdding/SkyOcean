@@ -1,7 +1,7 @@
 package me.owdding.skyocean.features.item.sources.system
 
 import me.owdding.skyocean.features.item.sources.ItemSources
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.profile.effects.EffectsAPI

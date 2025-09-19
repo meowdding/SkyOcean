@@ -6,8 +6,8 @@ import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
-import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderTextInWorld
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.phys.Vec3
