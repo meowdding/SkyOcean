@@ -4,7 +4,10 @@ import com.teamresourceful.resourcefullib.common.color.Color
 import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.fishing.HotspotHighlightConfig
+import me.owdding.skyocean.events.fishing.FishCatchEvent
 import me.owdding.skyocean.utils.Utils.roundToHalf
+import me.owdding.skyocean.utils.extensions.toBlockPos
+import me.owdding.skyocean.utils.extensions.toVector3d
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderCircle
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderCylinder
 import net.minecraft.core.BlockPos
@@ -27,8 +30,13 @@ import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.utils.extentions.forEachBelow
+import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.time.since
+import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 @Module
 object HotspotHighlighter {
@@ -36,6 +44,7 @@ object HotspotHighlighter {
     private val PARTICLE_COLOR = Vector3f(1.0f, 0.4117647f, 0.7058824f)
 
     private val hotspots = mutableMapOf<Vector2d, HotspotData>()
+    private var lastHotspotFish = Instant.DISTANT_PAST
 
     private fun isEnabled() = HotspotHighlightConfig.circleOutline || HotspotHighlightConfig.circleSurface
 
@@ -57,6 +66,19 @@ object HotspotHighlighter {
         }
     }
 
+    @Subscription
+    fun onCatch(event: FishCatchEvent) {
+        val hookY = event.hookPos.y
+        val hookPosD = event.hookPos.toVector3d()
+        hotspots.values.filter {
+            val y = it.pos?.y ?: return@filter false
+            abs(hookY - y) < 3
+        }.minByOrNull { it.pos?.distanceSquared(hookPosD) ?: Double.MAX_VALUE }?.let {
+            it.fishedIn = true
+            lastHotspotFish = currentInstant()
+        }
+    }
+
     @Subscription(event = [ServerChangeEvent::class])
     fun onServerChange() {
         hotspots.clear()
@@ -67,6 +89,9 @@ object HotspotHighlighter {
         val pos = event.entity.position().toVec2d()
         val hotspot = hotspots[pos] ?: return
         if (hotspot.id == event.entity.id) {
+            if (hotspot.fishedIn && lastHotspotFish.since() < 30.seconds) {
+                // warn
+            }
             hotspots.remove(pos)
         }
     }
@@ -138,6 +163,7 @@ data class HotspotData(
     val type: HotspotType,
     var pos: Vector3d? = null,
     var radius: Double? = null,
+    var fishedIn: Boolean = false,
 )
 
 enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
