@@ -42,6 +42,15 @@ seamless way.
         - Drill & Rod upgrades (upgrade parts that are applied)
         - and way more...
   - Using Right Click on any sack item will open an input to get that item from the sack.
+- Item Customisation Screen
+    - Run `/skyocean customize` while having an item selected to either customize it with subcommands or a gui
+    - Allows you to customize the following attributes:
+        - Name (with custom colors and gradients)
+        - Item Model
+        - Item Color (static or gradients)
+        - Armor Trim
+        - Enchantment Glint
+        - Skins (static and animated)
 
 </details>
 
