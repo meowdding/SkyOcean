@@ -10,7 +10,15 @@ import me.owdding.skyocean.accessors.customize.ItemStackAccessor
 import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
 import me.owdding.skyocean.config.features.misc.MiscConfig
-import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.features.item.custom.data.AnimatedSkyBlockDye
+import me.owdding.skyocean.features.item.custom.data.AnimatedSkyblockSkin
+import me.owdding.skyocean.features.item.custom.data.CustomItemComponent
+import me.owdding.skyocean.features.item.custom.data.CustomItemData
+import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.IdAndTimeKey
+import me.owdding.skyocean.features.item.custom.data.IdKey
+import me.owdding.skyocean.features.item.custom.data.ItemKey
+import me.owdding.skyocean.features.item.custom.data.UuidKey
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.DataStorage
 import net.minecraft.world.item.ItemStack
@@ -79,6 +87,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
             this.getSkyOceanId()!!,
             this[DataTypes.TIMESTAMP]!!.toEpochMilliseconds(),
         )
+        this.getSkyOceanId() != null -> IdKey(this.getSkyOceanId()!!)
 
         else -> null
     }
