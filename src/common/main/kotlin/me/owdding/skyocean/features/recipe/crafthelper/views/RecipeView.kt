@@ -5,14 +5,20 @@ import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.extensions.floor
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.features.item.sources.ItemSources
-import me.owdding.skyocean.features.recipe.*
+import me.owdding.skyocean.features.recipe.CurrencyIngredient
+import me.owdding.skyocean.features.recipe.Ingredient
+import me.owdding.skyocean.features.recipe.ItemLikeIngredient
+import me.owdding.skyocean.features.recipe.RecipeType
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.NodeWithChildren
 import me.owdding.skyocean.features.recipe.crafthelper.RecipeNode
 import me.owdding.skyocean.features.recipe.crafthelper.StandardRecipeNode
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
-import me.owdding.skyocean.utils.Icons
+import me.owdding.skyocean.features.recipe.serialize
+import me.owdding.skyocean.features.recipe.serializeWithAmount
+import me.owdding.skyocean.utils.chat.ComponentIcons
+import me.owdding.skyocean.utils.chat.Icons
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
@@ -183,13 +189,14 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
 
     fun getIcons(sources: List<ItemSources>): Component = Text.of {
         this.color = TextColor.GRAY
-        if (ItemSources.WARDROBE in sources) append(Icons.WARDROBE)
+        if (ItemSources.WARDROBE in sources) append(ComponentIcons.WARDROBE)
         if (ItemSources.VAULT in sources) append(Icons.VAULT)
-        if (ItemSources.ACCESSORY_BAG in sources) append(Icons.ACCESSORIES)
-        if (ItemSources.FORGE in sources) append(Icons.FORGE)
-        if (ItemSources.CHEST in sources) append(Icons.CHESTS)
+        if (ItemSources.ACCESSORY_BAG in sources) append(ComponentIcons.ACCESSORIES)
+        if (ItemSources.FORGE in sources) append(ComponentIcons.FORGE)
+        if (ItemSources.CHEST in sources) append(ComponentIcons.CHESTS)
         if (ItemSources.RIFT in sources) append(Icons.RIFT) { this.color = TextColor.DARK_PURPLE }
-        if (ItemSources.DRILL_UPGRADE in sources || ItemSources.ROD_UPGRADE in sources) append(Icons.ITEM_IN_ITEM)
+        if (ItemSources.DRILL_UPGRADE in sources || ItemSources.ROD_UPGRADE in sources) append(ComponentIcons.ITEM_IN_ITEM)
+        if (ItemSources.HUNTING_BOX in sources) append(ComponentIcons.BOX)
     }
 
     fun reload() = refreshCallback(false)

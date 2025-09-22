@@ -15,10 +15,12 @@ import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeView
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
-import me.owdding.skyocean.utils.ChatUtils.append
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.chat.ChatUtils.append
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.ComponentIcons
+import me.owdding.skyocean.utils.chat.Icons
 import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Tooltip
@@ -71,14 +73,15 @@ object TreeFormatter : RecipeView {
                 add(CommonComponents.EMPTY)
             }
 
-            fun addSimple(source: ItemSources, name: String) {
+            fun addSimple(source: ItemSources, name: Component) {
                 if (!sources.containsKey(source)) return
                 addUsedSources()
                 if (state.amountCarryOver != 0 || state.amountThroughParents != 0) {
                     add(CommonComponents.EMPTY)
                 }
                 add(
-                    Text.of(name) {
+                    Text.of {
+                        append(name)
                         append(": ")
                         append(sources.getValue(source).sumOf { it.amount }.toFormattedString())
                     },
@@ -94,16 +97,53 @@ object TreeFormatter : RecipeView {
                 add(!"Carry over from previous recipe: ${state.amountCarryOver.toFormattedString()}")
             }
 
-            addSimple(ItemSources.INVENTORY, "Inventory")
-            addSimple(ItemSources.SACKS, "Sacks")
-            addSimple(ItemSources.STORAGE, "Storage")
-            addSimple(ItemSources.WARDROBE, "${Icons.WARDROBE} Wardrobe")
-            addSimple(ItemSources.CHEST, "${Icons.CHESTS} Chest")
-            addSimple(ItemSources.ACCESSORY_BAG, "${Icons.ACCESSORIES} Accessory Bag")
-            addSimple(ItemSources.VAULT, "${Icons.VAULT} Vault")
-            addSimple(ItemSources.RIFT, "${Icons.RIFT} Rift")
-            addSimple(ItemSources.DRILL_UPGRADE, "${Icons.ITEM_IN_ITEM} Drill Upgrade")
-            addSimple(ItemSources.ROD_UPGRADE, "${Icons.ITEM_IN_ITEM} Rod Upgrade")
+            addSimple(ItemSources.INVENTORY, !"Inventory")
+            addSimple(ItemSources.SACKS, !"Sacks")
+            addSimple(ItemSources.STORAGE, !"Storage")
+            addSimple(
+                ItemSources.WARDROBE,
+                text {
+                    append(ComponentIcons.WARDROBE)
+                    append(" Wardrobe")
+                },
+            )
+            addSimple(
+                ItemSources.CHEST,
+                text {
+                    append(ComponentIcons.CHESTS)
+                    append(" Chest")
+                },
+            )
+            addSimple(
+                ItemSources.ACCESSORY_BAG,
+                text {
+                    append(ComponentIcons.ACCESSORIES)
+                    append(" Accessory Bag")
+                },
+            )
+            addSimple(ItemSources.VAULT, !"${Icons.VAULT} Vault")
+            addSimple(ItemSources.RIFT, !"${Icons.RIFT} Rift")
+            addSimple(
+                ItemSources.DRILL_UPGRADE,
+                text {
+                    append(ComponentIcons.ITEM_IN_ITEM)
+                    append(" Drill Upgrade")
+                },
+            )
+            addSimple(
+                ItemSources.ROD_UPGRADE,
+                text {
+                    append(ComponentIcons.ITEM_IN_ITEM)
+                    append(" Drill Upgrade")
+                },
+            )
+            addSimple(
+                ItemSources.HUNTING_BOX,
+                text {
+                    append(ComponentIcons.BOX)
+                    append(" Hunting Box")
+                },
+            )
 
             if (sources.containsKey(ItemSources.FORGE)) {
                 addUsedSources()

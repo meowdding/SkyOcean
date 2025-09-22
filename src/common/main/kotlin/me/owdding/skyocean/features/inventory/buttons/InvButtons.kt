@@ -4,9 +4,9 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.OceanColors
 import me.owdding.skyocean.utils.Utils.unaryPlus
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.OceanColors
 import net.fabricmc.fabric.api.client.screen.v1.Screens
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen

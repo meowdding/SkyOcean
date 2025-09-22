@@ -3,7 +3,7 @@ package me.owdding.skyocean.features.mining.mineshaft
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
-import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.chat.ChatUtils
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.Corpse
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.CorpseType
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
