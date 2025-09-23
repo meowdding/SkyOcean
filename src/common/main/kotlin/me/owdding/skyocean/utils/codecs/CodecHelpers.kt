@@ -10,12 +10,24 @@ import me.owdding.lib.rendering.text.TextShaders
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.PackMetadata
+import me.owdding.skyocean.utils.extensions.toNamedPosition
+import me.owdding.skyocean.utils.extensions.toVec3
 import net.minecraft.core.BlockPos
-import net.minecraft.network.chat.*
-import net.minecraft.network.chat.contents.*
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentContents
+import net.minecraft.network.chat.ComponentSerialization
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
+import net.minecraft.network.chat.contents.KeybindContents
+import net.minecraft.network.chat.contents.NbtContents
+import net.minecraft.network.chat.contents.PlainTextContents
+import net.minecraft.network.chat.contents.ScoreContents
+import net.minecraft.network.chat.contents.SelectorContents
+import net.minecraft.network.chat.contents.TranslatableContents
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.concurrent.CopyOnWriteArrayList
@@ -54,6 +66,12 @@ object CodecHelpers {
 
     @IncludedCodec(keyable = true, named = "str_low")
     val STRING_LOWER: Codec<String> = Codec.STRING.xmap({ it.lowercase() }, { it })
+
+    @IncludedCodec(named = "named_vec3")
+    val NAMED_VEC3_CODEC: MapCodec<Vec3> = SkyOceanCodecs.NamedPositionCodec.xmap({ it.toVec3() }, { it.toNamedPosition() })
+
+    @IncludedCodec(named = "named_block_pos")
+    val NAMED_BLOCK_POS_CODEC: Codec<Vec3> = SkyOceanCodecs.NamedPositionCodec.codec().xmap({ it.toVec3() }, { it.toNamedPosition() })
 
     val STYLE_WITH_SHADER_CODEC: MapCodec<Style> = RecordCodecBuilder.mapCodec {
         it.group(

@@ -40,6 +40,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
+import net.minecraft.util.ARGB
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
@@ -358,6 +359,10 @@ object Utils {
     fun Component.asDisplay(): Display = Displays.text(this)
     fun Iterable<Item>.filterNotAir() = this.filterNot { item -> item == Items.AIR }
     fun <T> Iterable<Holder<T>>.unwrap() = this.map { it.value() }
+
+    fun color(alpha: Float, color: Int): Int {
+        return ARGB.as8BitChannel(alpha) shl 24 or (color and 16777215)
+    }
 }
 
 enum class SkyOceanModifyIndicator : Translatable {
