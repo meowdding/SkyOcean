@@ -68,7 +68,7 @@ data class IdAndTimeKey(
 
 @GenerateCodec
 data class IdKey(
-    val key: SkyOceanItemId,
+    val key: SkyBlockId,
 ) : ItemKey {
     override val type: ItemKeyType get() = ItemKeyType.ID
 }
