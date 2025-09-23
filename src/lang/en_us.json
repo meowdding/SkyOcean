@@ -666,6 +666,10 @@
         "enabled": {
           "@value": "CSGO Case Opening",
           "desc": "Shows a CSGO case opening animation when opening a dungeon chest."
+        },
+        "croesus": {
+          "@value": "Also Show Case Opening in Croesus",
+          "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
         }
       }
     }

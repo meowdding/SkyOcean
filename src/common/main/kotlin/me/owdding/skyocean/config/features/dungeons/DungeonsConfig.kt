@@ -8,4 +8,8 @@ object DungeonsConfig : CategoryKt("dungeons") {
     var gamblingScreenEnabled by boolean(false) {
         this.translation = "skyocean.config.dungeons.gambling.enabled"
     }
+
+    var gamblingInCroesus by boolean(true) {
+        this.translation = "skyocean.config.dungeons.gambling.croesus"
+    }
 }

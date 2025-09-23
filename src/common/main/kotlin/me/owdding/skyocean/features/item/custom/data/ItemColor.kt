@@ -61,7 +61,7 @@ data class GradientItemColor(
             val progress = it % timeForEach
 
             if (progress == 0) {
-                add(colors[current].toRgba())
+                add(colors[current].withAlpha(255).toRgba())
                 return@repeat
             }
 
@@ -70,9 +70,9 @@ data class GradientItemColor(
             val nextColor = colors.getOrNull(current + 1) ?: currentColor
 
             val hue = Mth.lerp(delta, currentColor.hue(), nextColor.hue())
-            val brightness = Mth.lerp(delta, currentColor.brightness(), nextColor.brightness())
             val saturation = Mth.lerp(delta, currentColor.saturation(), nextColor.saturation())
-            add(HsbColor.of(hue, brightness, saturation, 255).toRgba())
+            val brightness = Mth.lerp(delta, currentColor.brightness(), nextColor.brightness())
+            add(HsbColor.of(hue, saturation, brightness, 255).toRgba())
         }
     }
 
