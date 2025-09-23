@@ -3,7 +3,7 @@ package me.owdding.skyocean.config.features.fishing
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
 import me.owdding.skyocean.utils.transparency
 
-object HotspotHighlightConfig : ObjectKt() {
+object HotspotFeaturesConfig : ObjectKt() {
 
     var circleSurface by boolean(true) {
         this.translation = "skyocean.config.fishing.hotspot.circle_surface"
@@ -19,5 +19,9 @@ object HotspotHighlightConfig : ObjectKt() {
 
     var outlineTransparency by transparency(100) {
         this.translation = "skyocean.config.fishing.hotspot.outline_transparency"
+    }
+
+    var warning by boolean(false) {
+        this.translation = "skyocean.config.fishing.hotspot.warning"
     }
 }

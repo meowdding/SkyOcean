@@ -35,7 +35,7 @@ object FishingConfig : CategoryKt("fishing") {
     }
 
     init {
-        obj("hotspot", HotspotHighlightConfig) {
+        obj("hotspot", HotspotFeaturesConfig) {
             this.translation = "skyocean.config.fishing.hotspot"
         }
     }
