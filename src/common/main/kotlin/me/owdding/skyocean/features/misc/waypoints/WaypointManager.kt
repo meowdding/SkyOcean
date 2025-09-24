@@ -22,7 +22,7 @@ object WaypointManager {
                     withRenderCondition { _ ->
                         val distanceToPlayer = McPlayer.position.orZero().distanceToSqr(position).toFloat()
 
-                        if (abs(currentIndex - index) <= 1) {
+                        if (abs(currentIndex - index) <= 1 || (currentIndex == entries.size && index == 0)) {
                             if (distanceToPlayer < 12 && currentIndex != index) {
                                 currentIndex = index
                             }
@@ -42,7 +42,7 @@ object WaypointManager {
                                         ?: if (index < currentIndex) {
                                             OceanColors.WARNING
                                         } else {
-                                            OceanColors.LIGHT_GRAYISH_CYAN
+                                            OceanColors.DARK_CYAN_BLUE
                                         },
                                 ),
                             )
@@ -53,7 +53,7 @@ object WaypointManager {
                             return@withRenderCondition false
                         }
 
-                        if (distanceToPlayer <= 2) {
+                        if (distanceToPlayer <= 1) {
                             currentIndex = index
                         }
 
