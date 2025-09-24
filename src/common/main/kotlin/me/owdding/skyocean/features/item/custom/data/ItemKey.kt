@@ -12,6 +12,7 @@ import kotlin.reflect.KClass
 enum class ItemKeyType(override val type: KClass<out ItemKey>) : DispatchHelper<ItemKey> {
     UUID(UuidKey::class),
     ID_AND_TIME(IdAndTimeKey::class),
+    ID(IdKey::class)
     ;
 
     companion object {
@@ -63,4 +64,11 @@ data class IdAndTimeKey(
         result = 31 * result + item.hashCode()
         return result
     }
+}
+
+@GenerateCodec
+data class IdKey(
+    val key: SkyOceanItemId,
+) : ItemKey {
+    override val type: ItemKeyType get() = ItemKeyType.ID
 }

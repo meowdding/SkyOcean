@@ -11,7 +11,18 @@ import me.owdding.skyocean.events.ArgumentCommandBuilder
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
-import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.features.item.custom.data.AnimatedSkyBlockDye
+import me.owdding.skyocean.features.item.custom.data.AnimatedSkyblockSkin
+import me.owdding.skyocean.features.item.custom.data.ArmorTrim
+import me.owdding.skyocean.features.item.custom.data.CustomItemComponent
+import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.GradientItemColor
+import me.owdding.skyocean.features.item.custom.data.IdKey
+import me.owdding.skyocean.features.item.custom.data.SkyBlockDye
+import me.owdding.skyocean.features.item.custom.data.SkyblockModel
+import me.owdding.skyocean.features.item.custom.data.SkyblockSkin
+import me.owdding.skyocean.features.item.custom.data.StaticItemColor
+import me.owdding.skyocean.features.item.custom.data.StaticModel
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.repo.customization.AnimatedSkulls
@@ -64,6 +75,13 @@ object CustomizeCommand {
                         append(" can't be customized!")
                     }.sendWithPrefix()
                     return@callback
+                }
+
+                if (item.getKey() is IdKey) {
+                    text {
+                        append("Modification will be visible on all variants of this item!")
+                        this.color = OceanColors.WARNING
+                    }.sendWithPrefix()
                 }
 
                 McClient.runNextTick {
