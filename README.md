@@ -211,7 +211,8 @@ seamless way.
 <summary>Misc Config</summary>
 
 - Craft Helper
-    - 
+    - Creates a Tree of the item you want to craft, showing the progress of each sub item.
+    - Also accessible through `/skyocean recipe <recipe> [<amount>]`
 - Mob Icons
     - Replaces the default hypixel mob icons with a custom texture, also has texturepack support.
 - Minister in Calendar
