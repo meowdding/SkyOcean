@@ -1,7 +1,13 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
 import me.owdding.lib.extensions.ceil
-import me.owdding.skyocean.features.recipe.*
+import me.owdding.skyocean.features.recipe.Ingredient
+import me.owdding.skyocean.features.recipe.ItemLikeIngredient
+import me.owdding.skyocean.features.recipe.ParentRecipe
+import me.owdding.skyocean.features.recipe.Recipe
+import me.owdding.skyocean.features.recipe.SimpleRecipeApi
+import me.owdding.skyocean.features.recipe.mergeSameTypes
+import me.owdding.skyocean.features.recipe.serialize
 
 interface ChildlessNode : StandardRecipeNode {
     override val recipe: Recipe?
@@ -15,6 +21,7 @@ interface NodeWithChildren : StandardRecipeNode {
 
     fun addChild(node: StandardRecipeNode) {
         this.nodes.add(node)
+        this.nodes.sortBy { it.totalChildren }
     }
 
     fun visit(visitor: (node: StandardRecipeNode, depth: Int) -> Boolean) = visit(0, false, visitor)
@@ -32,6 +39,7 @@ interface StandardRecipeNode {
         get() = 1
     val recipe: Recipe?
         get() = null
+    val totalChildren: Int
 
     fun evaluateChildren(amount: Int, context: RecipeRemainder) {
         if (this !is NodeWithChildren) return
@@ -63,6 +71,7 @@ interface StandardRecipeNode {
 data class LeafNode(override val output: Ingredient) : ChildlessNode {
     override val outputWithAmount: Ingredient
         get() = output
+    override val totalChildren: Int = 0
 }
 
 data class RecipeNode(
@@ -76,10 +85,12 @@ data class RecipeNode(
 ) : NodeWithChildren {
     override val amountPerCraft: Int = recipe.output?.amount ?: 1
     override val nodes: MutableList<StandardRecipeNode> = mutableListOf()
+    override val totalChildren: Int
     override val outputWithAmount: Ingredient by lazy { output.withAmount(requiredAmount) }
 
     init {
         evaluateChildren(requiredCrafts, context)
+        totalChildren = nodes.size + nodes.sumOf { it.totalChildren }
     }
 
 }
@@ -87,6 +98,7 @@ data class RecipeNode(
 open class ContextAwareRecipeTree(override val recipe: Recipe?, override val output: ItemLikeIngredient, val amount: Int) : NodeWithChildren {
     override val amountPerCraft: Int = recipe?.output?.amount ?: 1
     override val nodes: MutableList<StandardRecipeNode> = mutableListOf()
+    override val totalChildren: Int get() = nodes.size + nodes.sumOf { it.totalChildren }
 
     val context = RecipeRemainder()
     override val outputWithAmount: Ingredient by lazy { output.withAmount(amount) }
