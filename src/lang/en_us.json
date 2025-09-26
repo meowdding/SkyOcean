@@ -625,6 +625,10 @@
       "storage_preview": {
         "@value": "Storage Preview",
         "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
+      },
+      "museum_donation": {
+        "@value": "Museum Donation",
+        "desc": "Shows what items haven't been donated to museum in the tooltip."
       }
     },
     "foraging": {
