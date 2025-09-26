@@ -58,7 +58,7 @@ object CompactLevelBarsModifier : AbstractLoreModifier() {
                 append(")")
             }
 
-            addAllTillSpace()
+            skipUntilAfterSpace()
         }
 
         space()
