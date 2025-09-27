@@ -3,7 +3,7 @@ package me.owdding.skyocean.features.dungeons.gambling
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.type.EnumArgumentType
-import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import me.owdding.skyocean.config.features.dungeons.DungeonsConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
@@ -64,7 +64,7 @@ object DungeonGambling {
         val type = DungeonChestType.getByName(stringType) ?: return
         if (type !in allowedDungeonGamblingChests) return
 
-        val winner = items.sortedByDescending { itemStack -> itemStack.getItemValue().price }.first { it.getSkyOceanId() != null }
+        val winner = items.sortedByDescending { itemStack -> itemStack.getItemValue().price }.first { it.getSkyBlockId() != null }
 
         DungeonGamblingRenderer.init(floor, type, winner)
     }

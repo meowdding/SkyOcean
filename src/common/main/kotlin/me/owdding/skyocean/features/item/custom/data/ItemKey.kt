@@ -2,8 +2,8 @@ package me.owdding.skyocean.features.item.custom.data
 
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.DispatchHelper
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -44,7 +44,7 @@ data class UuidKey(val uuid: UUID) : ItemKey {
 
 @GenerateCodec
 data class IdAndTimeKey(
-    val item: SkyOceanItemId,
+    val item: SkyBlockId,
     val time: Long,
 ) : ItemKey {
     override val type: ItemKeyType = ItemKeyType.ID_AND_TIME
@@ -68,7 +68,7 @@ data class IdAndTimeKey(
 
 @GenerateCodec
 data class IdKey(
-    val key: SkyOceanItemId,
+    val key: SkyBlockId,
 ) : ItemKey {
     override val type: ItemKeyType get() = ItemKeyType.ID
 }

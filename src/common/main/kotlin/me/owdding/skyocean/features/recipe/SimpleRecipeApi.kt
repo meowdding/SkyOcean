@@ -1,12 +1,12 @@
 package me.owdding.skyocean.features.recipe
 
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import me.owdding.skyocean.features.recipe.RepoApiRecipe as RepoApiRecipeWrapper
 import tech.thatgravyboat.repolib.api.recipes.Recipe as RepoApiRecipe
@@ -42,7 +42,7 @@ object SimpleRecipeApi {
     )
 
     internal val recipes = mutableListOf<Recipe>()
-    internal val idToRecipes: MutableMap<SkyOceanItemId, List<Recipe>> = mutableMapOf()
+    internal val idToRecipes: MutableMap<SkyBlockId, List<Recipe>> = mutableMapOf()
 
     init {
         supportedTypes.forEach { (recipe, type) ->
@@ -90,22 +90,22 @@ object SimpleRecipeApi {
                 .mapValues { (_, v) -> v.map { it.first } }
                 .filter { (_, v) -> v.isNotEmpty() },
         )
-        idToRecipes.putAll(idToRecipes.entries.associate { (key, value) -> SkyOceanItemId.unsafe(key.cleanId) to value })
+        idToRecipes.putAll(idToRecipes.entries.associate { (key, value) -> SkyBlockId.unsafe(key.cleanId) to value })
     }
 
-    fun hasRecipe(id: SkyOceanItemId) = idToRecipes.containsKey(id)
+    fun hasRecipe(id: SkyBlockId) = idToRecipes.containsKey(id)
 
     fun getBestRecipe(ingredient: Ingredient) = (ingredient as? ItemLikeIngredient)?.id?.takeIf(::hasRecipe)?.let { getBestRecipe(it) }
 
-    fun getBestRecipe(id: SkyOceanItemId): Recipe? {
+    fun getBestRecipe(id: SkyBlockId): Recipe? {
 
         return runCatching {
             idToRecipes[id]?.firstOrNull()?.let { return@runCatching it }
 
             val variants = when {
-                id.isPet -> SkyBlockRarity.entries.reversed().map { SkyOceanItemId.pet(id.cleanId, it.name) }
-                id.isRune -> (3 downTo 0).map { SkyOceanItemId.rune(id.cleanId, it) }
-                id.isEnchantment -> (10 downTo 0).map { SkyOceanItemId.enchantment(id.cleanId, it) }
+                id.isPet -> SkyBlockRarity.entries.reversed().map { SkyBlockId.pet(id.cleanId, it.name) }
+                id.isRune -> (3 downTo 0).map { SkyBlockId.rune(id.cleanId, it) }
+                id.isEnchantment -> (10 downTo 0).map { SkyBlockId.enchantment(id.cleanId, it) }
                 else -> emptyList()
             }
             variants.mapNotNull { idToRecipes[it] }.firstNotNullOfOrNull { it.firstOrNull() }?.let { return@runCatching it }

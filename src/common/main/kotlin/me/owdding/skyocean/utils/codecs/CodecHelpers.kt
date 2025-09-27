@@ -16,6 +16,7 @@ import net.minecraft.network.chat.contents.*
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.concurrent.CopyOnWriteArrayList
@@ -54,6 +55,9 @@ object CodecHelpers {
 
     @IncludedCodec(keyable = true, named = "str_low")
     val STRING_LOWER: Codec<String> = Codec.STRING.xmap({ it.lowercase() }, { it })
+
+    @IncludedCodec
+    val SKYBLOCK_ID_UNKNOWN: Codec<SkyBlockId> = SkyBlockId.UNKNOWN_CODEC
 
     val STYLE_WITH_SHADER_CODEC: MapCodec<Style> = RecordCodecBuilder.mapCodec {
         it.group(
