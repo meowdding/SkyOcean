@@ -672,7 +672,7 @@
           "desc": [
             "Shows a CSGO case opening animation when opening a dungeon chest.",
             "",
-            "<light_gray>This feature is from the 1.8 mod Bedrock Chest Case Opening <blue>https://modrinth.com/mod/bcco</blue>.</light_gray>"
+            "This feature is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>."
           ]
         },
         "croesus": {
