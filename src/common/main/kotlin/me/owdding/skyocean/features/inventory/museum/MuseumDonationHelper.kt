@@ -274,7 +274,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
         "necklace" -> 5
         "cloak" -> 6
         "belt" -> 7
-        "bracelet" -> 8
+        "bracelet", "gloves" -> 8
         else -> {
             logger.info("Unknown category ${this[DataTypes.CATEGORY]?.name?.lowercase()}")
             Int.MAX_VALUE

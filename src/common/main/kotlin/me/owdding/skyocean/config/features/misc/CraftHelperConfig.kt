@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.features.item.sources.ItemSources
+import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperFormat
 import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperLocation
 
 object CraftHelperConfig : CategoryKt("crafthelper") {
@@ -39,4 +40,7 @@ object CraftHelperConfig : CategoryKt("crafthelper") {
         translation = "skyocean.config.misc.crafthelper.done_message"
     }
 
+    var formatter by enum(CraftHelperFormat.TREE) {
+        translation = "skyocean.config.misc.crafthelper.tree_formatter"
+    }
 }
