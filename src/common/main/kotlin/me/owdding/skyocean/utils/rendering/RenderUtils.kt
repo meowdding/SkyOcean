@@ -29,6 +29,7 @@ import kotlin.math.sin
 @Stub
 expect fun GuiGraphics.applyPostEffect(id: ResourceLocation)
 
+@Stub
 internal expect fun renderFace(
     poseStack: PoseStack,
     buffer: MultiBufferSource,

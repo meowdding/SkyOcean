@@ -157,7 +157,7 @@ cloche {
                 dependency("olympus", olympus.map { it.version!! })
                 dependency("placeholder-api", libs.versions.placeholders)
                 dependency("resourcefulconfigkt", libs.versions.rconfigkt)
-                dependency("resourcefulconfig", rconfig.map { it.version!! })
+                //dependency("resourcefulconfig", rconfig.map { it.version!! })
                 dependency("meowdding-lib", libs.versions.meowdding.lib)
             }
 
@@ -297,7 +297,7 @@ tasks {
         options.release.set(21)
     }
 
-    withType<KotlinCompile>().configureEach {
+    withType<KotlinCompile>().all {
         compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
         compilerOptions {
             languageVersion = KotlinVersion.KOTLIN_2_2

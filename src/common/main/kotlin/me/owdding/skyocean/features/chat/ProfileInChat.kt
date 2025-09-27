@@ -17,6 +17,7 @@ import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.info.TabListChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.platform.name
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped

@@ -1,5 +1,3 @@
-@file:Suppress("ACTUAL_WITHOUT_EXPECT")
-
 package me.owdding.skyocean.helpers
 
 import com.google.gson.JsonParser
