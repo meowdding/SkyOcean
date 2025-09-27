@@ -34,7 +34,7 @@ val skinCache: LoadingCache<String, ResolvableProfile> = CacheBuilder.newBuilder
     .expireAfterWrite(10.minutes.toJavaDuration())
     .build(
         simpleCacheLoader { skin ->
-            ResolvableProfile(null, null) {
+            ResolvableProfile {
                 put("textures", Property("textures", skin))
             }
         },

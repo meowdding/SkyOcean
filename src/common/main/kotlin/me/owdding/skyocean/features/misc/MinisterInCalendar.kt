@@ -39,9 +39,7 @@ object MinisterInCalendar {
 
             set(
                 DataComponents.PROFILE,
-                ResolvableProfile(
-                    null, null,
-                ) {
+                ResolvableProfile {
                     put("textures", Property("textures", texture))
                 },
             )
