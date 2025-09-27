@@ -30,7 +30,6 @@ import me.owdding.skyocean.utils.setPosition
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LayoutElement
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
@@ -133,7 +132,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
 
                                 val value = CraftHelperStorage.selectedAmount
-                                val newValue = if (Screen.hasShiftDown()) {
+                                val newValue = if (McScreen.isShiftDown) {
                                     value - 10
                                 } else {
                                     value - 1
@@ -159,7 +158,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                             ).asButtonLeft {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
                                 val value = CraftHelperStorage.selectedAmount
-                                val newValue = if (Screen.hasShiftDown()) {
+                                val newValue = if (McScreen.isShiftDown) {
                                     value + 10
                                 } else {
                                     value + 1

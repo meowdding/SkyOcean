@@ -95,7 +95,7 @@ object LoreModifiers {
             SkyOceanModifyIndicator.NOTHING -> {}
         }
 
-        if (Screen.hasShiftDown()) {
+        if (McScreen.isShiftDown) {
             this.tooltip.addAll(
                 TooltipBuilder().apply {
                     space()

@@ -1,9 +1,13 @@
 package me.owdding.skyocean.helpers
 
+import me.owdding.lib.platform.screens.KeyEvent
+import me.owdding.lib.platform.screens.MouseButtonEvent
+import me.owdding.lib.utils.matches
 import me.owdding.skyocean.helpers.ClientSideInventory.Slot.Companion.asSlots
+import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.rendering.RenderUtils
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.CommonComponents
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -20,7 +24,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
-abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) : Screen(titleComponent?.let { Text.of(it) }) {
+abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) : SkyOceanScreen(titleComponent?.let { Text.of(it) } ?: CommonComponents.EMPTY) {
     val backgroundHeight = 114 + rows * 18
     val backgroundWidth = 176
     val x get() = (this.width - backgroundWidth) / 2
@@ -101,15 +105,16 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
         }
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (McClient.options.keyInventory.matches(keyCode, scanCode)) {
+    override fun keyPressed(keyEvent: KeyEvent): Boolean {
+        if (McClient.options.keyInventory.matches(keyEvent)) {
             this.onClose()
             return true
         }
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(keyEvent)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean {
+        val (mouseX, mouseY) = mouseEvent
         val offsetX = this.x + 8
         val offsetY = this.y + 18
         val localX = mouseX - offsetX
@@ -121,13 +126,13 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
 
             val index = slotX + slotY * 9
             if (index < 0 || index >= slots.size) {
-                return super.mouseClicked(mouseX, mouseY, button)
+                return super.mouseClicked(mouseEvent, doubleClicked)
             }
 
             slots[index].onClick(index)
         }
 
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(mouseEvent, doubleClicked)
     }
 
     companion object {

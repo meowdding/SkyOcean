@@ -11,11 +11,15 @@ import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.PackMetadata
 import net.minecraft.core.BlockPos
-import net.minecraft.network.chat.*
-import net.minecraft.network.chat.contents.*
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentContents
+import net.minecraft.network.chat.ComponentSerialization
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
+import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.concurrent.CopyOnWriteArrayList
@@ -23,6 +27,9 @@ import java.util.function.Function
 import kotlin.jvm.optionals.getOrNull
 
 val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
+
+@Stub
+internal expect fun createContentCodec(): MapCodec<ComponentContents>
 
 object CodecHelpers {
 
@@ -64,21 +71,8 @@ object CodecHelpers {
         }
     }
 
-    private val componentTypes = arrayOf(
-        PlainTextContents.TYPE,
-        TranslatableContents.TYPE,
-        KeybindContents.TYPE,
-        ScoreContents.TYPE,
-        SelectorContents.TYPE,
-        NbtContents.TYPE,
-    )
     val CUSTOM_COMPONENT_CODEC: Codec<Component> = Codec.recursive("SkyOceanComponentCodec") { self ->
-        val componentMatcher = ComponentSerialization.createLegacyComponentMatcher(
-            componentTypes,
-            ComponentContents.Type<*>::codec,
-            { it!!.type() },
-            "type",
-        )
+        val componentMatcher = createContentCodec()
 
         val codec: Codec<Component> = RecordCodecBuilder.create {
             it.group(

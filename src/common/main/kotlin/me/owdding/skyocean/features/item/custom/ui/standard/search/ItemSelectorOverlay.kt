@@ -9,11 +9,12 @@ import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.constants.MinecraftColors
 import earth.terrarium.olympus.client.ui.ClearableGridLayout
-import earth.terrarium.olympus.client.ui.Overlay
 import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.overlays.Rect
+import me.owdding.lib.platform.screens.MouseButtonEvent
+import me.owdding.lib.platform.screens.Overlay
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
@@ -107,8 +108,8 @@ class ItemSelectorOverlay(
         }
     }
 
-    override fun mouseClicked(p0: Double, p1: Double, p2: Int): Boolean {
-        if (!super.mouseClicked(p0, p1, p2)) {
+    override fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean {
+        if (!super.mouseClicked(mouseEvent, doubleClicked)) {
             onClose()
         }
         return true

@@ -1,6 +1,6 @@
 package me.owdding.skyocean.utils.rendering
 
-import earth.terrarium.olympus.client.components.base.BaseWidget
+import me.owdding.lib.platform.screens.BaseWidget
 import net.minecraft.world.item.ItemStack
 import net.msrandom.stub.Stub
 

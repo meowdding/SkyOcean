@@ -235,6 +235,13 @@ cloche {
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
     }
+    createVersion("1.21.9", "1.21.9-rc1", fabricApiVersion = provider { "0.133.7" }, minecraftVersionRange = {
+        start = "1.21.0-rc.1"
+    }) {
+        this["resourcefullib"] = libs.resourceful.lib1219
+        this["resourcefulconfig"] = libs.resourceful.config1219
+        this["olympus"] = libs.olympus.lib1219
+    }
 
     mappings { official() }
 }
@@ -307,7 +314,7 @@ tasks {
     }
 }
 
-fun registerMeowdding(name: String, init: Task.() -> Unit = {}) = tasks.register(name).apply { configure { group = "meowdding"; init() } }
+fun registerMeowdding(name: String, init: Task.() -> Unit = {}): TaskProvider<Task> = tasks.register(name).apply { configure { group = "meowdding"; init() } }
 val createResourcePacks = registerMeowdding("createResourcePacks")
 val runAllDatagen = registerMeowdding("runAllDatagen")
 val mergePackOutputs = tasks.register("mergePackOutputs", JavaExec::class) {
