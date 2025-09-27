@@ -669,7 +669,11 @@
       "gambling": {
         "enabled": {
           "@value": "CSGO Case Opening",
-          "desc": "Shows a CSGO case opening animation when opening a dungeon chest."
+          "desc": [
+            "Shows a CSGO case opening animation when opening a dungeon chest.",
+            "",
+            "<light_gray>This feature is from the 1.8 mod Bedrock Chest Case Opening <blue>https://modrinth.com/mod/bcco</blue>.</light_gray>"
+          ]
         },
         "croesus": {
           "@value": "Also Show Case Opening in Croesus",
