@@ -23,7 +23,7 @@ meowdding-ktmodules = "1.0.5"
 meowdding-ktcodecs = "1.0.32"
 meowdding-gradle = "1.1.0"
 
-terrarium-cloche = "0.13.2"
+terrarium-cloche = "0.13.5"
 
 [libraries]
 

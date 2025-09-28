@@ -116,14 +116,14 @@ cloche {
         val olympus = dependencies["olympus"]!!
         val rlib = dependencies["resourcefullib"]!!
         val rconfig = dependencies["resourcefulconfig"]!!
-        val accesswidener = project.layout.projectDirectory.file("src/${name}/skyocean.accesswidener")
+        val accesswidener = project.layout.projectDirectory.file("src/versions/${name}/skyocean.accesswidener")
 
-        fabric(name) {
+        fabric("versions:$name") {
             includedClient()
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
 
-            mixins.from("src/mixins/versioned/skyocean.${sourceSet.name}.mixins.json")
+            mixins.from("src/mixins/versioned/skyocean.${name.replace(".", "")}.mixins.json")
 
             println("Acceswidener: " + accesswidener.toPath().toAbsolutePath().toString())
             if (accesswidener.toPath().exists()) {
@@ -211,7 +211,7 @@ cloche {
                     }
                 }
 
-                project.layout.projectDirectory.toPath().resolve("run/${sourceSet.name}Mods").takeIf { it.exists() }
+                project.layout.projectDirectory.toPath().resolve("run/${name}Mods").takeIf { it.exists() }
                     ?.listDirectoryEntries()?.filter { it.isRegularFile() }?.forEach { file ->
                         extractMods(file)
                     }
