@@ -13,6 +13,7 @@ import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.minecraft.ui.GatherItemTooltipComponentsEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ItemTooltipEvent
@@ -24,6 +25,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.reflect.full.findAnnotation
+import kotlin.text.contains
 
 abstract class AbstractLoreModifier {
 
@@ -55,11 +57,19 @@ abstract class AbstractLoreModifier {
 
     open fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>) {}
 
-    protected fun ListMerger<Component>.addAllTillSpace() {
+    protected fun ListMerger<Component>.skipUntilAfterSpace() {
         while (index + 1 < original.size && peek().stripped.isNotBlank()) {
             read()
         }
         if (index + 1 < original.size) read()
+    }
+
+    protected fun ListMerger<Component>.addUntilRarityLine(rarity: SkyBlockRarity): Boolean {
+        val name = rarity.displayName.uppercase()
+        val index = original.indexOfLast { it.stripped.contains(name) }
+        if (index == -1) return false
+        repeat(index + 1) { copy() }
+        return true
     }
 
     protected fun ListMerger<Component>.space() = add(CommonComponents.EMPTY)

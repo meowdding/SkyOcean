@@ -23,6 +23,7 @@ private val illegalIngredients = listOf(
     "SLIME_BLOCK",
     "LEATHER",
     "BLAZE_POWDER",
+    "MAGMA_CREAM",
     "STICK",
     "WOOD_SWORD",
     "WOOD_PICKAXE",

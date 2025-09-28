@@ -40,7 +40,17 @@ seamless way.
         - Museum
         - Rift (Inventory/Enderchest)
         - Drill & Rod upgrades (upgrade parts that are applied)
+        - and way more...
   - Using Right Click on any sack item will open an input to get that item from the sack.
+- Item Customisation Screen
+    - Run `/skyocean customize` while having an item selected to either customize it with subcommands or a gui
+    - Allows you to customize the following attributes:
+        - Name (with custom colors and gradients)
+        - Item Model
+        - Item Color (static or gradients)
+        - Armor Trim
+        - Enchantment Glint
+        - Skins (static and animated)
 
 </details>
 
@@ -50,7 +60,10 @@ seamless way.
 - /skyocean calc \<equation> - performs a mathematical equation and prints the result
 - /skyocean sendcoords - sends the current coordinates in all chat
 - /skyocean search - opens the item search screen
-- /skyocean recipe \<recipe> [\<amount>]
+- /skyocean recipe \<recipe> [\<amount>] - Sets the selected recipe as the active Craft Helper Item.
+    - /skyocean recipe amount \<amount> -  Sets the amount of items to craft for the Craft Helper.
+    - /skyocean recipe skyshards - Sets the [SkyShards](https://skyshards.com/) Tree as the active Craft Helper Tree from your clipboard.
+    - /skyocean recipe clear
 
 </details>
 
@@ -58,8 +71,9 @@ seamless way.
 <details>
 <summary>General config</summary>
 
-- Option to disable text shadows for all skyocean messages.
+- Option to disable text shadows for all SkyOcean messages.
 - Prefix gradient
+- SkyOcean Item Modify Indicator
 </details>
 
 <details>
@@ -98,6 +112,8 @@ seamless way.
     - Visually replace lava with water in the Crimson Isle.
 - Bobber Fix
     - Fixes fishing bobbers rubberbanding when fishing.
+- Bobber Timer
+    - Shows a timer above your bobber to indicate how long it has been in the liquid.
 - Hide other Bobbers
     - Hides other players' fishing bobbers, so you can see your own bobber more clearly.
 - Hotspot Highlight
@@ -172,9 +188,10 @@ seamless way.
     - Corpse key information
 - Retexture
     - Retexture carpets
-    - Retexture glacite tunnel blocks
+    - Retexture Glacite Tunnel blocks
     - Retexture mist
     - Retexture gemstones
+    - Retexture Crystal Hollows blocks
 - Crystal Hollows Area Walls
 - Puzzler Solver
 - Metal detector solver
@@ -182,15 +199,27 @@ seamless way.
 </details>
 
 <details>
+<summary>Dungeon Config</summary>
+
+- CSGO Gambling Screen
+  - Plays the CSGO Gambling animation when opening any Obsidian and Bedrock Chest.
+  - Also works in Croesus.
+
+</details>
+
+<details>
 <summary>Misc Config</summary>
 
 - Craft Helper
+    - Creates a Tree of the item you want to craft, showing the progress of each sub item.
     - Also accessible through `/skyocean recipe <recipe> [<amount>]`
-- Mute the phantoms
+- Mob Icons
+    - Replaces the default hypixel mob icons with a custom texture, also has texturepack support.
 - Minister in Calendar
 - Previous server notifications
 - Anvil helper
 - Hide lightning bolts and flashes
+- Full Text Shadow
 - Show Hidden Pet Candy
     - Readds pet candy that Hypixel hides for pets that are level 100.
 - Transparent armour
@@ -198,7 +227,5 @@ seamless way.
 - Hide entity fire
     - Removes the fire effect from all entities
 - Cloud hider for specific islands
-- Mob icoons
-    - Replaces the default hypixel mob icons with a custom texture, also has texturepack support.
 
 </details>

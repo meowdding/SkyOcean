@@ -27,4 +27,8 @@ object LoreCleanupConfig : CategoryKt("loreCleanup") {
     var enableStoragePreview by boolean(false) {
         this.translation = "skyocean.config.lore_modifiers.storage_preview"
     }
+
+    var museumDonation by boolean(false) {
+        this.translation = "skyocean.config.lore_modifiers.museum_donation"
+    }
 }

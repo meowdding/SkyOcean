@@ -40,19 +40,19 @@ object DrillLoreModifier : AbstractLoreModifier() {
             append("Fuel Tank: ") { this.color = TextColor.GRAY }
             addOrNotInstalled(fuelTank)
         }
-        addAllTillSpace()
+        skipUntilAfterSpace()
 
         add {
             append("Drill Engine: ") { this.color = TextColor.GRAY }
             addOrNotInstalled(engine)
         }
-        addAllTillSpace()
+        skipUntilAfterSpace()
 
         add {
             append("Upgrade Module: ") { this.color = TextColor.GRAY }
             addOrNotInstalled(upgradeModule)
         }
-        addAllTillSpace()
+        skipUntilAfterSpace()
         space()
 
         true
