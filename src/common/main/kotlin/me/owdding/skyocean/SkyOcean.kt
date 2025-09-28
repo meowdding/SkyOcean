@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.RemoteConfig
-import me.owdding.lib.utils.DataPatcher
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.skyocean.config.Config
@@ -31,7 +30,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.url
-import java.net.URI
 
 @Module
 object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
@@ -42,18 +40,7 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     val MOD_ID: String = SELF.metadata.id
     val VERSION: String = SELF.metadata.version.friendlyString
 
-    val repoPatcher: DataPatcher?
-
     init {
-        var patch: DataPatcher?
-        try {
-            patch = DataPatcher(URI.create("https://patches.owdding.me/${McClient.version.replace(".", "_")}.json").toURL(), SELF)
-        } catch (e: Exception) {
-            error("Failed to load patches!", e)
-            patch = null
-        }
-        repoPatcher = patch
-
         SkyOceanPreInitModules.init {
             SkyBlockAPI.eventBus.register(it)
         }
