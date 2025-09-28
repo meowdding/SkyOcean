@@ -3,12 +3,12 @@ package me.owdding.skyocean.features.recipe.crafthelper
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.recipe.*
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.DefaultTreeResolver
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.SkyShardsTreeResolver
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.repo.attributes.SkyShardsAttributeRepoData
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import kotlin.reflect.KClass
 
 abstract class CraftHelperRecipe(val type: CraftHelperRecipeType, val canModifyCount: Boolean) {
@@ -17,7 +17,7 @@ abstract class CraftHelperRecipe(val type: CraftHelperRecipeType, val canModifyC
 
 @GenerateCodec
 data class NormalCraftHelperRecipe(
-    var item: SkyOceanItemId?,
+    var item: SkyBlockId?,
     var amount: Int = 1,
 ) : CraftHelperRecipe(CraftHelperRecipeType.NORMAL, true) {
     override fun resolve(
@@ -54,18 +54,18 @@ enum class CraftHelperRecipeType(override val type: KClass<out CraftHelperRecipe
 
 abstract class SkyShardsMethod(
     val type: SkyShardsMethodType,
-    open val shard: SkyOceanItemId,
+    open val shard: SkyBlockId,
     open val quantity: Int,
 ) : ParentRecipe() {
     override val recipeType: RecipeType get() = RecipeType.SKY_SHARDS
     abstract fun visitElements(visitor: (SkyShardsMethod) -> Unit)
 }
 
-private val unknownId = SkyOceanItemId.attribute(SkyOceanItemId.UNKNOWN)
+private val unknownId = SkyBlockId.attribute(SkyBlockId.UNKNOWN)
 
 @GenerateCodec
 data class SkyShardsRecipeElement(
-    override val shard: SkyOceanItemId,
+    override val shard: SkyBlockId,
     override val quantity: Int,
     val craftsExpected: Int,
     val outputQuantity: Int,
@@ -87,7 +87,7 @@ data class SkyShardsRecipeElement(
 
 @GenerateCodec
 data class SkyShardsDirectElement(
-    override val shard: SkyOceanItemId,
+    override val shard: SkyBlockId,
     override val quantity: Int,
 ) : SkyShardsMethod(SkyShardsMethodType.DIRECT, shard, quantity) {
     override val inputs: List<Ingredient> = emptyList()
@@ -98,7 +98,7 @@ data class SkyShardsDirectElement(
 
 @GenerateCodec
 data class SkyShardsCycleElement(
-    override val shard: SkyOceanItemId,
+    override val shard: SkyBlockId,
     override val quantity: Int,
     val craftsExpected: Int,
     val outputQuantity: Int,
@@ -113,8 +113,8 @@ data class SkyShardsCycleElement(
 
 @GenerateCodec
 data class SkyShardsCycleStep(
-    val shard: SkyOceanItemId,
-    val inputs: List<SkyOceanItemId>,
+    val shard: SkyBlockId,
+    val inputs: List<SkyBlockId>,
 )
 
 @GenerateDispatchCodec(SkyShardsMethod::class, "method")

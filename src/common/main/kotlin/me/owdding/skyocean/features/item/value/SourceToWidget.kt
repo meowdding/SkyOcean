@@ -6,7 +6,6 @@ import me.owdding.lib.builder.LayoutBuilder
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ClickToExpandWidget
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.utils.OceanColors.BETTER_GOLD
 import me.owdding.skyocean.utils.Utils.not
 import net.minecraft.client.gui.layouts.Layout
@@ -16,6 +15,7 @@ import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.api.item.calculator.*
 import tech.thatgravyboat.skyblockapi.api.item.calculator.ItemValueSource.*
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.CoinCost
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.EssenceCost
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemCost
@@ -46,7 +46,7 @@ object SourceToWidget {
                 } else if (this.itemId.startsWith("rune:")) {
                     id = id.substringAfter(":")
                 }
-                val name = SkyOceanItemId.unknownType(id.lowercase())?.toItem()?.hoverName ?: !id
+                val name = SkyBlockId.unknownType(id.lowercase())?.toItem()?.hoverName ?: !id
                 text {
                     color = TextColor.DARK_GRAY
                     append(name.string)

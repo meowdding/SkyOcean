@@ -7,22 +7,14 @@ import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.customize.ItemStackAccessor
-import me.owdding.skyocean.api.SkyOceanItemId
-import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
 import me.owdding.skyocean.config.features.misc.MiscConfig
-import me.owdding.skyocean.features.item.custom.data.AnimatedSkyBlockDye
-import me.owdding.skyocean.features.item.custom.data.AnimatedSkyblockSkin
-import me.owdding.skyocean.features.item.custom.data.CustomItemComponent
-import me.owdding.skyocean.features.item.custom.data.CustomItemData
-import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
-import me.owdding.skyocean.features.item.custom.data.IdAndTimeKey
-import me.owdding.skyocean.features.item.custom.data.IdKey
-import me.owdding.skyocean.features.item.custom.data.ItemKey
-import me.owdding.skyocean.features.item.custom.data.UuidKey
+import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.DataStorage
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.extentions.getTag
 import java.util.*
@@ -83,11 +75,11 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
         )
 
         this[DataTypes.UUID] != null -> UuidKey(this[DataTypes.UUID]!!)
-        this[DataTypes.TIMESTAMP] != null && this.getSkyOceanId() != null -> IdAndTimeKey(
-            this.getSkyOceanId()!!,
+        this[DataTypes.TIMESTAMP] != null && this.getSkyBlockId() != null -> IdAndTimeKey(
+            this.getSkyBlockId()!!,
             this[DataTypes.TIMESTAMP]!!.toEpochMilliseconds(),
         )
-        this.getSkyOceanId() != null -> IdKey(this.getSkyOceanId()!!)
+        this.getSkyBlockId() != null -> IdKey(this.getSkyBlockId()!!)
 
         else -> null
     }
@@ -119,7 +111,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     fun loadVanilla(self: ItemStack, key: ItemKey?) {
         key ?: return
         val skin = self[DataTypes.HELMET_SKIN]?.let {
-            runCatching { AnimatedSkyblockSkin(SkyOceanItemId.item(it.lowercase())) }.getOrNull()
+            runCatching { AnimatedSkyblockSkin(SkyBlockId.item(it.lowercase())) }.getOrNull()
         }
         val dye = self[DataTypes.APPLIED_DYE]?.let { dye ->
             runCatching { AnimatedSkyBlockDye(dye.lowercase()) }.getOrNull()

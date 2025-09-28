@@ -74,6 +74,14 @@
         "@value": "Modify Commissions",
         "desc": "Modifies commission items to be visually different when you started or finished it."
       },
+      "forge_reminder": {
+        "@value": "Forge Reminder",
+        "desc": "Sends a reminder if you have unclaimed expired forge items"
+      },
+      "forge_reminder_delay": {
+        "@value": "Reminder Delay",
+        "desc": "The delay between reminders in minutes."
+      },
       "retexture": {
         "@value": "Retexture",
         "carpets": {
@@ -128,6 +136,7 @@
         }
       },
       "hotm": {
+        "@value": "Heart of the Mountain Perk Modifier",
         "shiftCost": {
           "@value": "Show shift click cost",
           "desc": "Shows the amount of powder that will be consumed on shift click."
