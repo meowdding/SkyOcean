@@ -6,19 +6,19 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.gui.font.glyphs.BakedGlyph;
+import net.minecraft.client.gui.font.glyphs.BakedSheetGlyph;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(BakedGlyph.class)
+@Mixin(BakedSheetGlyph.class)
 public abstract class BakedGlyphMixin {
-/*
     @WrapOperation(
         method = "renderChar",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedGlyph;render(ZFFFLorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", ordinal = 0)
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedSheetGlyph;render(ZFFFLorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", ordinal = 0)
     )
     public void onRenderShadow(
-        BakedGlyph instance, boolean italic, float x, float y, float z, Matrix4f pose, VertexConsumer buffer, int color, boolean bold, int packedLight, Operation<Void> original, @Local(argsOnly = true) BakedGlyph.GlyphInstance glyph
+        BakedSheetGlyph instance, boolean italic, float x, float y, float z, Matrix4f pose, VertexConsumer buffer, int color, boolean bold, int packedLight, Operation<Void> original, @Local(argsOnly = true) BakedSheetGlyph.GlyphInstance glyph
     ) {
         if (MiscConfig.INSTANCE.getFullTextShadow()) {
             for (int j = -1; j <= 1; ++j) {
@@ -37,10 +37,10 @@ public abstract class BakedGlyphMixin {
 
     @WrapOperation(
         method = "renderChar",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedGlyph;render(ZFFFLorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", ordinal = 1)
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedSheetGlyph;render(ZFFFLorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", ordinal = 1)
     )
     public void onRenderShadowBold(
-        BakedGlyph instance, boolean italic, float x, float y, float z, Matrix4f pose, VertexConsumer buffer, int color, boolean bold, int packedLight, Operation<Void> original, @Local(argsOnly = true) BakedGlyph.GlyphInstance glyph
+        BakedSheetGlyph instance, boolean italic, float x, float y, float z, Matrix4f pose, VertexConsumer buffer, int color, boolean bold, int packedLight, Operation<Void> original, @Local(argsOnly = true) BakedSheetGlyph.GlyphInstance glyph
     ) {
         if (MiscConfig.INSTANCE.getFullTextShadow()) {
             for (int j = -1; j <= 1; ++j) {
@@ -66,6 +66,4 @@ public abstract class BakedGlyphMixin {
             original.call(instance, italic, x, y, z, pose, buffer, color, bold, packedLight);
         }
     }
-
- */
 }

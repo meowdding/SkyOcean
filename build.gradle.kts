@@ -116,6 +116,7 @@ cloche {
         val olympus = dependencies["olympus"]!!
         val rlib = dependencies["resourcefullib"]!!
         val rconfig = dependencies["resourcefulconfig"]!!
+        val accesswidener = project.layout.projectDirectory.file("src/${name}/skyocean.accesswidener")
 
         fabric(name) {
             includedClient()
@@ -123,6 +124,11 @@ cloche {
             this.loaderVersion = loaderVersion.get()
 
             mixins.from("src/mixins/versioned/skyocean.${sourceSet.name}.mixins.json")
+
+            println("Acceswidener: " + accesswidener.toPath().toAbsolutePath().toString())
+            if (accesswidener.toPath().exists()) {
+                accessWideners.from(accesswidener)
+            }
 
             // include(libs.hypixelapi) - included in sbapi
 
