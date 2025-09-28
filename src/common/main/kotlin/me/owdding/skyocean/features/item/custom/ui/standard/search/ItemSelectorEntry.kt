@@ -62,6 +62,7 @@ data class ItemModelSearchEntry(
 
     override fun CustomItemData.applyToData() {
         this[CustomItemDataComponents.MODEL] = StaticModel(model)
+        this[CustomItemDataComponents.SKIN] = null
     }
 
     override fun resolve(parent: ItemStack): ItemStack = itemBuilder(parent) {
@@ -80,9 +81,7 @@ data class SkyBlockModelEntry(
 
     override fun CustomItemData.applyToData() {
         this[CustomItemDataComponents.MODEL] = SkyblockModel(model)
-        if (model.toItem() in Items.PLAYER_HEAD) {
-            this[CustomItemDataComponents.SKIN] = skin
-        }
+        this[CustomItemDataComponents.SKIN] = skin
     }
 
     val uuidString = UUID.randomUUID().toString()

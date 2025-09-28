@@ -25,7 +25,9 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
-import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.*
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ARMOR_NOT_FOUND
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ITEM_NOT_FOUND
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM
 import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.addAll
@@ -209,7 +211,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
         val recipe = SimpleRecipeApi.getBestRecipe(id) ?: return null
         val tree = ContextAwareRecipeTree(recipe, SkyOceanItemIngredient(id, 1), 1)
         val context = CraftHelperContext.create(tree, this)
-        create(context)
+        evaluateNode(context)
         return context.toState()
     }
 

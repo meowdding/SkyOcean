@@ -5,13 +5,18 @@ import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.extensions.floor
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.features.item.sources.ItemSources
-import me.owdding.skyocean.features.recipe.*
+import me.owdding.skyocean.features.recipe.CurrencyIngredient
+import me.owdding.skyocean.features.recipe.Ingredient
+import me.owdding.skyocean.features.recipe.ItemLikeIngredient
+import me.owdding.skyocean.features.recipe.RecipeType
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.NodeWithChildren
 import me.owdding.skyocean.features.recipe.crafthelper.RecipeNode
 import me.owdding.skyocean.features.recipe.crafthelper.StandardRecipeNode
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
+import me.owdding.skyocean.features.recipe.serialize
+import me.owdding.skyocean.features.recipe.serializeWithAmount
 import me.owdding.skyocean.utils.Icons
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.network.chat.CommonComponents
@@ -31,22 +36,22 @@ fun interface RecipeView {
         widgetConsumer: (AbstractWidget) -> Unit,
     ) {
         val context = CraftHelperContext.create(tree, itemTracker)
-        create(context)
+        evaluateNode(context)
         visitor.create(context.toState(), widget, widgetConsumer)
     }
 
-    fun create(context: CraftHelperContext) {
+    fun evaluateNode(context: CraftHelperContext) {
         val state = context.toState()
 
         if (context.node is NodeWithChildren) {
-            for (node in context.node.nodes) {
+            for (node in context.node.nodes.reversed()) {
                 state.hasChildren = true
 
                 val childContext = context.push(node)
-                create(childContext)
+                evaluateNode(childContext)
                 val childState = childContext.toState()
                 state.childStates.add(childState)
-                childState.isLast = context.node.nodes.last() == node
+                childState.isLast = context.node.nodes.first() == node
                 state.childrenDone = state.childrenDone && (childState.isDone() || childState.childrenDone)
             }
         } else {

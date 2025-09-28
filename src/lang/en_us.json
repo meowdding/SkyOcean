@@ -629,6 +629,10 @@
       "storage_preview": {
         "@value": "Storage Preview",
         "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
+      },
+      "museum_donation": {
+        "@value": "Museum Donation",
+        "desc": "Shows what items haven't been donated to museum in the tooltip."
       }
     },
     "foraging": {
@@ -669,7 +673,11 @@
       "gambling": {
         "enabled": {
           "@value": "CSGO Case Opening",
-          "desc": "Shows a CSGO case opening animation when opening a dungeon chest."
+          "desc": [
+            "Shows a CSGO case opening animation when opening a dungeon chest.",
+            "",
+            "This feature is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>."
+          ]
         },
         "croesus": {
           "@value": "Also Show Case Opening in Croesus",

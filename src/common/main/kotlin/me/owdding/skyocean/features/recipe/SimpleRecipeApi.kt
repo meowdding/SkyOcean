@@ -23,6 +23,13 @@ private val illegalIngredients = listOf(
     "SLIME_BLOCK",
     "LEATHER",
     "BLAZE_POWDER",
+    "MAGMA_CREAM",
+    "STICK",
+    "WOOD_SWORD",
+    "WOOD_PICKAXE",
+    "WOOD_SPADE",
+    "WOOD_HOE",
+    "WOOD_AXE",
 )
 
 @LateInitModule
