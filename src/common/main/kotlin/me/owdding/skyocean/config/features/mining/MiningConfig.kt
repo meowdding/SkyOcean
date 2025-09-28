@@ -11,6 +11,28 @@ object MiningConfig : CategoryKt("mining") {
         translation = "skyocean.config.mining.modifyCommissions"
     }
 
+    var chAreaWalls by boolean(false) {
+        translation = "skyocean.config.mining.ch.area_walls"
+    }
+
+    var puzzlerSolver by boolean(true) {
+        translation = "skyocean.config.mining.puzzler"
+    }
+
+    var forgeReminder by boolean(true) {
+        translation = "skyocean.config.mining.forge_reminder"
+    }
+
+    var forgeReminderDelay by int(1) {
+        translation = "skyocean.config.mining.forge_reminder_delay"
+        slider = true
+        range = 1..30
+    }
+
+    init {
+        separator("skyocean.config.mining.hotm")
+    }
+
     var hotmStackSize by boolean(true) {
         translation = "skyocean.config.mining.hotm.stackSize"
     }
@@ -25,14 +47,6 @@ object MiningConfig : CategoryKt("mining") {
 
     var hotmDisplayTotalLeft by boolean(true) {
         translation = "skyocean.config.mining.hotm.totalLeft"
-    }
-
-    var chAreaWalls by boolean(false) {
-        translation = "skyocean.config.mining.ch.area_walls"
-    }
-
-    var puzzlerSolver by boolean(true) {
-        translation = "skyocean.config.mining.puzzler"
     }
 
     init {
