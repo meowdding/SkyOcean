@@ -9,8 +9,8 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.withPadding
 import me.owdding.skyocean.config.features.garden.GardenConfig
 import me.owdding.skyocean.helpers.InventorySideGui
-import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.unaryMinus
+import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.client.gui.layouts.Layout
 import tech.thatgravyboat.skyblockapi.api.area.farming.garden.pests.Pest
 import tech.thatgravyboat.skyblockapi.api.area.farming.garden.pests.Spray

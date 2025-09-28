@@ -7,9 +7,9 @@ import me.owdding.lib.waypoints.MeowddingWaypoint
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
 import me.owdding.skyocean.features.item.lore.LoreModifier
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.ReplaceMessage
 import me.owdding.skyocean.utils.Utils.unaryPlus
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.ReplaceMessage
 import me.owdding.skyocean.utils.extensions.toVec3LowerUpperY
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i

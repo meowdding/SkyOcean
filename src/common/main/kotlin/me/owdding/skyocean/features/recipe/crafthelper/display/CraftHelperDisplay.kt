@@ -19,9 +19,10 @@ import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
+import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
-import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.chat.Icons
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.extensions.tryClear
 import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
@@ -80,8 +81,8 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
         }
     }
 
-    @Subscription
-    fun onScreenClose(event: ContainerCloseEvent) {
+    @Subscription(ContainerCloseEvent::class)
+    fun onScreenClose() {
         craftHelperLayout = null
     }
 
@@ -96,7 +97,12 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             val body = LayoutFactory.vertical {
                 val list = mutableListOf<AbstractWidget>()
                 runCatching {
-                    TreeFormatter.format(tree, tracker, WidgetBuilder(callback)) {
+                    val formatter = when (CraftHelperConfig.formatter) {
+                        CraftHelperFormat.RAW -> RawFormatter
+                        CraftHelperFormat.TREE -> TreeFormatter
+                    }
+
+                    formatter.format(tree, tracker, WidgetBuilder(callback)) {
                         lines++
                         maxLine = maxOf(maxLine, it.width + 10)
                         list.add(it)

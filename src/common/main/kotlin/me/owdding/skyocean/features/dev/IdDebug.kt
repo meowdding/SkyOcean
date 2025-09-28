@@ -1,10 +1,10 @@
 package me.owdding.skyocean.features.dev
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
 import me.owdding.skyocean.utils.debugToggle
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ItemDebugTooltipEvent
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -31,8 +31,8 @@ object IdDebug {
     fun debug(event: ItemDebugTooltipEvent) = ifEnabled {
         event.add(
             Text.of {
-                append("SkyOceanId: ")
-                append(event.item.getSkyOceanId()?.id ?: "null")
+                append("SkyBlockId: ")
+                append(event.item.getSkyBlockId()?.id ?: "null")
                 this.color = TextColor.GRAY
             },
         )

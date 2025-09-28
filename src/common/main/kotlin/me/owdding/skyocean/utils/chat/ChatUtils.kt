@@ -1,4 +1,4 @@
-package me.owdding.skyocean.utils
+package me.owdding.skyocean.utils.chat
 
 import com.mojang.serialization.MapCodec
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
@@ -6,11 +6,14 @@ import me.owdding.lib.events.RegisterTextShaderEvent
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.PreInitModule
+import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
@@ -21,11 +24,46 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.font
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.time.since
 import kotlin.time.Duration
 import kotlin.time.Instant
+
+enum class ComponentIcon(val image: String) {
+    WARDROBE("wardrobe"),
+    ACCESSORIES("accessory"),
+    FORGE("anvil"),
+    CHESTS("chest"),
+    ITEM_IN_ITEM("item_in_item"),
+    BOX("box"),
+    ;
+
+    val icon = Character.toChars(0xE000 + (ordinal + 1)).first()
+    val text = text(icon.toString()) {
+        this.font = ComponentIcons.ID
+    }
+
+}
+
+object ComponentIcons {
+    val WAVE = text(Icons.WAVE) { this.color = OceanColors.DARK_CYAN_BLUE }
+    val CHECKMARK = text(Icons.CHECKMARK)
+    val CROSS = text(Icons.CROSS)
+    val WARNING = text(Icons.WARNING)
+    val HOLLOW_FLAG = text(Icons.HOLLOW_FLAG)
+    val FILLED_FLAG = text(Icons.FILLED_FLAG)
+
+    val ID = SkyOcean.id("font_icons")
+
+    val WARDROBE = ComponentIcon.WARDROBE.text
+    val ACCESSORIES = ComponentIcon.ACCESSORIES.text
+    val FORGE = ComponentIcon.FORGE.text
+    val CHESTS = ComponentIcon.CHESTS.text
+    val ITEM_IN_ITEM = ComponentIcon.ITEM_IN_ITEM.text
+    val BOX = ComponentIcon.BOX.text
+}
 
 internal object Icons {
 

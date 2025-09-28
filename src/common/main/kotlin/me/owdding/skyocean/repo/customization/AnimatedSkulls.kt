@@ -6,12 +6,12 @@ import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import kotlin.math.max
 
@@ -19,7 +19,7 @@ import kotlin.math.max
 object AnimatedSkulls {
 
     val ids: MutableList<String> = mutableListOf()
-    val skins: MutableMap<SkyOceanItemId, AnimatedSkullData> = mutableMapOf()
+    val skins: MutableMap<SkyBlockId, AnimatedSkullData> = mutableMapOf()
 
     @IncludedCodec(named = "min_1")
     val minOne: Codec<Int> = Codec.INT.xmap({ max(it, 1) }, { it })
@@ -37,7 +37,7 @@ object AnimatedSkulls {
                         CodecHelpers.STRING_LOWER,
                         SkyOceanCodecs.AnimatedSkullDataCodec.codec(),
                     ),
-                ).mapKeys { (key) -> SkyOceanItemId.item(key) },
+                ).mapKeys { (key) -> SkyBlockId.item(key) },
             )
         }.onFailure {
             throw RuntimeException("Failed to load animated skulls!", it)

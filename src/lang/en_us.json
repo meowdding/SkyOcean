@@ -74,6 +74,14 @@
         "@value": "Modify Commissions",
         "desc": "Modifies commission items to be visually different when you started or finished it."
       },
+      "forge_reminder": {
+        "@value": "Forge Reminder",
+        "desc": "Sends a reminder if you have unclaimed expired forge items"
+      },
+      "forge_reminder_delay": {
+        "@value": "Reminder Delay",
+        "desc": "The delay between reminders in minutes."
+      },
       "retexture": {
         "@value": "Retexture",
         "carpets": {
@@ -128,6 +136,7 @@
         }
       },
       "hotm": {
+        "@value": "Heart of the Mountain Perk Modifier",
         "shiftCost": {
           "@value": "Show shift click cost",
           "desc": "Shows the amount of powder that will be consumed on shift click."
@@ -342,7 +351,13 @@
         },
         "position": {
           "@value": "Position",
-          "desc": "Craft helper position inside the inventory."
+          "desc": "Craft helper position inside the inventory.",
+          "top_left": "Top Left",
+          "top_right": "Top Right",
+          "bottom_left": "Bottom Left",
+          "bottom_right": "Bottom Right",
+          "left_of_inventory": "Left of Inventory",
+          "right_of_inventory": "Right of Inventory"
         },
         "margin": {
           "@value": "Margin",
@@ -351,6 +366,12 @@
         "done_message": {
           "@value": "Send a message when your recipe is complete",
           "desc": "Sends a chat message whenever the mod detects your recipe tree as completed."
+        },
+        "tree_formatter": {
+          "@value": "Craft helper formatter",
+          "desc": "Changes the appearance of the craft helper tree.",
+          "raw": "Raw",
+          "tree": "Tree"
         }
       },
       "transparentArmor": {
@@ -622,9 +643,17 @@
           "<yellow>Click to view tasks!</yellow>'>Off</hover></red>"
         ]
       },
+      "armadillo_blocks_walked": {
+        "@value": "Prehistoric egg blocks walked",
+        "desc": "Shows how many blocks you have walked so far on a prehistory egg."
+      },
       "storage_preview": {
         "@value": "Storage Preview",
         "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
+      },
+      "museum_donation": {
+        "@value": "Museum Donation",
+        "desc": "Shows what items haven't been donated to museum in the tooltip."
       }
     },
     "foraging": {
@@ -665,7 +694,11 @@
       "gambling": {
         "enabled": {
           "@value": "CSGO Case Opening",
-          "desc": "Shows a CSGO case opening animation when opening a dungeon chest."
+          "desc": [
+            "Shows a CSGO case opening animation when opening a dungeon chest.",
+            "",
+            "This feature is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>."
+          ]
         },
         "croesus": {
           "@value": "Also Show Case Opening in Croesus",
