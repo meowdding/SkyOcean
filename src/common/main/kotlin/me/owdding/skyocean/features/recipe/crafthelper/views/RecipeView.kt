@@ -24,14 +24,12 @@ import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
 import me.owdding.skyocean.features.recipe.serialize
 import me.owdding.skyocean.features.recipe.serializeWithAmount
-import me.owdding.skyocean.utils.ChatUtils.append
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.Utils.not
-import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
-import me.owdding.skyocean.features.recipe.serialize
-import me.owdding.skyocean.features.recipe.serializeWithAmount
+import me.owdding.skyocean.utils.chat.ChatUtils.append
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.ComponentIcons
 import me.owdding.skyocean.utils.chat.Icons
+import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.network.chat.CommonComponents
@@ -40,12 +38,12 @@ import net.minecraft.util.ARGB
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.join
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.time.until
-import kotlin.time.Duration.Companion.seconds
 
 fun interface RecipeView {
 
@@ -252,14 +250,15 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
             add(CommonComponents.EMPTY)
         }
 
-        fun addSimple(source: ItemSources, name: String) {
+        fun addSimple(source: ItemSources, name: Component) {
             if (!sources.containsKey(source)) return
             addUsedSources()
             if (state.amountCarryOver != 0 || state.amountThroughParents != 0) {
                 add(CommonComponents.EMPTY)
             }
             add(
-                Text.of(name) {
+                Text.of {
+                    append(name)
                     append(": ")
                     append(sources.getValue(source).sumOf { it.amount }.toFormattedString())
                 },
@@ -275,16 +274,35 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
             add(!"Carry over from previous recipe: ${state.amountCarryOver.toFormattedString()}")
         }
 
-        addSimple(ItemSources.INVENTORY, "Inventory")
-        addSimple(ItemSources.SACKS, "Sacks")
-        addSimple(ItemSources.STORAGE, "Storage")
-        addSimple(ItemSources.WARDROBE, "${Icons.WARDROBE} Wardrobe")
-        addSimple(ItemSources.CHEST, "${Icons.CHESTS} Chest")
-        addSimple(ItemSources.ACCESSORY_BAG, "${Icons.ACCESSORIES} Accessory Bag")
-        addSimple(ItemSources.VAULT, "${Icons.VAULT} Vault")
-        addSimple(ItemSources.RIFT, "${Icons.RIFT} Rift")
-        addSimple(ItemSources.DRILL_UPGRADE, "${Icons.ITEM_IN_ITEM} Drill Upgrade")
-        addSimple(ItemSources.ROD_UPGRADE, "${Icons.ITEM_IN_ITEM} Rod Upgrade")
+        addSimple(ItemSources.INVENTORY, !"Inventory")
+        addSimple(ItemSources.SACKS, !"Sacks")
+        addSimple(ItemSources.STORAGE, !"Storage")
+        addSimple(
+            ItemSources.WARDROBE,
+            join(ComponentIcons.WARDROBE, " Wardrobe"),
+        )
+        addSimple(
+            ItemSources.CHEST,
+            join(ComponentIcons.CHESTS, " Chest"),
+        )
+        addSimple(
+            ItemSources.ACCESSORY_BAG,
+            join(ComponentIcons.ACCESSORIES, " Accessory Bag"),
+        )
+        addSimple(ItemSources.VAULT, !"${Icons.VAULT} Vault")
+        addSimple(ItemSources.RIFT, !"${Icons.RIFT} Rift")
+        addSimple(
+            ItemSources.DRILL_UPGRADE,
+            join(ComponentIcons.ITEM_IN_ITEM, " Drill Upgrade"),
+        )
+        addSimple(
+            ItemSources.ROD_UPGRADE,
+            join(ComponentIcons.ITEM_IN_ITEM, "Rod Upgrade"),
+        )
+        addSimple(
+            ItemSources.HUNTING_BOX,
+            join(ComponentIcons.BOX, " Hunting Box"),
+        )
 
         if (sources.containsKey(ItemSources.FORGE)) {
             addUsedSources()
