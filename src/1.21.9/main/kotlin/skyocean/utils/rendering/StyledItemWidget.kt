@@ -6,9 +6,8 @@ import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen
+import earth.terrarium.olympus.client.components.base.BaseWidget
 import earth.terrarium.olympus.client.ui.UIConstants
-import me.owdding.lib.platform.screens.BaseWidget
-import me.owdding.lib.platform.screens.MouseButtonEvent
 import me.owdding.lib.rendering.MeowddingPipState
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.GuiGraphics
@@ -16,6 +15,7 @@ import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
