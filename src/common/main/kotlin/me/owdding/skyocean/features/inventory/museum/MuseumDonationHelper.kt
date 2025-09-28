@@ -27,7 +27,6 @@ import me.owdding.skyocean.repo.museum.MuseumRepoData
 import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ARMOR_NOT_FOUND
 import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ITEM_NOT_FOUND
 import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM
-import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.Utils.contains

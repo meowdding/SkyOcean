@@ -6,7 +6,6 @@ import me.owdding.lib.builder.LayoutBuilder
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ClickToExpandWidget
-import me.owdding.skyocean.utils.OceanColors.BETTER_GOLD
 import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.chat.OceanColors.BETTER_GOLD
 import net.minecraft.client.gui.layouts.Layout
