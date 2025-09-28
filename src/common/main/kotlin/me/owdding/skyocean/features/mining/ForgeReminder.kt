@@ -39,6 +39,7 @@ object ForgeReminder {
     }
 
     @Subscription(TickEvent::class)
+    @TimePassed("5s")
     fun onTick() {
         if (!MiningConfig.forgeReminder) return
         if (lastReminder.since() <= MiningConfig.forgeReminderDelay.minutes) return
