@@ -2,7 +2,7 @@ package me.owdding.skyocean.config.features.lorecleanup
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 
-object LoreCleanupConfig : CategoryKt("loreCleanup") {
+object LoreModifierConfig : CategoryKt("lore_modifiers") {
     override val name = Translated("skyocean.config.lore_modifiers")
 
     init {
@@ -22,6 +22,10 @@ object LoreCleanupConfig : CategoryKt("loreCleanup") {
 
     var compactLevelBars by boolean(false) {
         this.translation = "skyocean.config.lore_modifiers.compact_level_bars"
+    }
+
+    var prehistoryEggBlocksWalked by boolean(false) {
+        this.translation = "skyocean.config.lore_modifiers.armadillo_blocks_walked"
     }
 
     var enableStoragePreview by boolean(false) {

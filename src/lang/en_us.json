@@ -643,6 +643,10 @@
           "<yellow>Click to view tasks!</yellow>'>Off</hover></red>"
         ]
       },
+      "armadillo_blocks_walked": {
+        "@value": "Prehistoric egg blocks walked",
+        "desc": "Shows how many blocks you have walked so far on a prehistory egg."
+      },
       "storage_preview": {
         "@value": "Storage Preview",
         "desc": "Previews the contents of your backpacks and ender chest in the tooltip."

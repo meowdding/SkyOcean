@@ -76,7 +76,11 @@ abstract class AbstractLoreModifier {
     protected fun ListMerger<Component>.add(init: MutableComponent.() -> Unit) = add(Text.of(init))
     protected fun ListMerger<Component>.addUntilAfter(predicate: (Component) -> Boolean) {
         addUntil(predicate)
-        copy()
+        read()
+    }
+
+    protected fun ListMerger<Component>.copyAll() {
+        while (canRead()) copy()
     }
 }
 
