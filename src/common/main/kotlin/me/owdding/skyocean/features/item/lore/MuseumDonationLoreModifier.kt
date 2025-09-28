@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.item.lore
 
-import me.owdding.skyocean.config.features.lorecleanup.LoreCleanupConfig
+import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.network.chat.Component
@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @LoreModifier
 object MuseumDonationLoreModifier : AbstractLoreModifier() {
     override val displayName: Component = +"skyocean.config.lore_modifiers.museum_donation"
-    override val isEnabled: Boolean get() = LoreCleanupConfig.museumDonation
+    override val isEnabled: Boolean get() = LoreModifierConfig.museumDonation
 
     override fun appliesTo(item: ItemStack): Boolean {
         val id = item.getSkyBlockId() ?: return false
