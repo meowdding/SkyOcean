@@ -47,7 +47,6 @@ public class EquipmentLayerRendererMixin {
         ResourceLocation texture,
         Operation<Void> original
     ) {
-        //noinspection DataFlowIssue
         var equippable = Optionull.map(
             CustomItemsHelper.getData(stack, DataComponents.EQUIPPABLE),
             it -> it.assetId().orElse(null)
