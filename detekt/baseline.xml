@@ -40,8 +40,6 @@
     <ID>ClassOrdering:SackData.kt$SackData$val data: List&lt;Sack&gt; = Utils.loadRepoData("sacks", CodecUtils::list)</ID>
     <ID>ClassOrdering:SackValueConfig.kt$SackValueConfig$override fun getTranslationKey(): String</ID>
     <ID>ClassOrdering:SacksItemSource.kt$SacksItemSource$override val type = ItemSources.SACKS</ID>
-    <ID>ClassOrdering:SkyOceanItemId.kt$SkyOceanItemId$Companion</ID>
-    <ID>ClassOrdering:SkyOceanItemId.kt$SkyOceanItemId.Companion$@IncludedCodec val CODEC: Codec&lt;SkyOceanItemId&gt; = Codec.STRING.xmap(::SkyOceanItemId, SkyOceanItemId::id)</ID>
     <ID>ClassOrdering:SkyOceanScreen.kt$SkyOceanScreen$private val zeroDelay = (-1).seconds.toJavaDuration()</ID>
     <ID>ClassOrdering:SkyblockTagKey.kt$SkyblockTagKey$operator fun contains(value: T): Boolean</ID>
     <ID>ClassOrdering:SkyblockTagKey.kt$SkyblockTagKey$val location: ResourceLocation</ID>
@@ -90,7 +88,6 @@
     <ID>NamedArguments:RenderUtils.kt$RenderUtils$renderPlane(direction, startX.toFloat(), startY.toFloat(), endX.toFloat(), endY.toFloat(), z.toFloat(), color)</ID>
     <ID>PrintStackTrace:DataStorage.kt$DataStorage$e</ID>
     <ID>PrintStackTrace:ProfileStorage.kt$ProfileStorage$e</ID>
-    <ID>ReturnCount:SkyOceanItemId.kt$SkyOceanItemId.Companion$fun unknownType(input: String): SkyOceanItemId?</ID>
     <ID>SpacingAroundColon:MuseumDonationHelper.kt$MuseumDonationHelper$:</ID>
     <ID>SpacingAroundColon:Utils.kt$Utils$:</ID>
     <ID>SpreadOperator:CombinedSuggestionProvider.kt$CombinedSuggestionProvider$(*futures.toTypedArray())</ID>

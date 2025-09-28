@@ -3,6 +3,7 @@
   "package": "me.owdding.skyocean.mixins.features.customize",
   "parent": "skyocean.client.mixins.json",
   "client": [
+    "BlockModelWrapperMixin",
     "DyedItemColorMixin",
     "EquipmentLayerRendererMixin",
     "GuiMixin",
@@ -10,6 +11,7 @@
     "ItemModelResolverMixin",
     "ItemStackMixin",
     "LivingEntityRendererMixin",
-    "TrimMaterialPropertyMixin"
+    "TrimMaterialPropertyMixin",
+    "HumanoidArmorLayerMixin"
   ]
 }

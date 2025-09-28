@@ -1,18 +1,17 @@
 package me.owdding.skyocean.features.dungeons.gambling
 
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.api.SkyOceanItemId.Companion.getSkyOceanId
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonItems
 import me.owdding.skyocean.utils.rendering.applyPostEffect
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.area.dungeon.DungeonFloor
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.*
@@ -108,7 +107,7 @@ object DungeonGamblingRenderer {
 
         if (progress >= 0.96f) {
             val winnerItem = items[WINNER_INDEX]
-            val winner = winnerItem.getSkyOceanId()?.toItem()?.hoverName.takeIf { winnerItem.getSkyOceanId()?.isEnchantment == true } ?: winnerItem.hoverName
+            val winner = winnerItem.getSkyBlockId()?.toItem()?.hoverName.takeIf { winnerItem.getSkyBlockId()?.isEnchantment == true } ?: winnerItem.hoverName
             val length = McFont.width(winner)
 
             val scale = Mth.lerp((progress - 0.96f) / 0.04f, 1f, 3f)

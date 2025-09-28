@@ -16,8 +16,9 @@ import net.minecraft.world.item.ItemStack
 object CustomItemsHelper {
 
     @JvmStatic
-    fun <T> getData(instance: ItemStack, type: DataComponentType<T>): T? =
-        (instance.getStaticCustomData() ?: instance.getCustomData() ?: instance.getVanillaIntegrationData())?.getData(type)
+    fun <T> getData(instance: ItemStack, type: DataComponentType<T>): T? = getCustomData(instance)?.getData(type)
+
+    fun getCustomData(instance: ItemStack) = instance.getStaticCustomData() ?: instance.getCustomData() ?: instance.getVanillaIntegrationData()
 
     fun getNameReplacement(stack: ItemStack): Component? = stack[CustomItemDataComponents.NAME]
 
@@ -36,5 +37,8 @@ object CustomItemsHelper {
     fun <T> replace(itemStack: ItemStack, type: DataComponentType<T>, original: Operation<T>): T {
         return getData(itemStack, type) ?: original.call(itemStack, type)
     }
+
+    @JvmStatic
+    fun getColor(itemStack: ItemStack) = getCustomData(itemStack)?.let { it[CustomItemDataComponents.COLOR]?.getColor() }
 
 }

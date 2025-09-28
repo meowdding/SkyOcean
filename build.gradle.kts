@@ -14,7 +14,16 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.file.StandardOpenOption
 import java.util.zip.ZipFile
-import kotlin.io.path.*
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.copyTo
+import kotlin.io.path.createDirectories
+import kotlin.io.path.deleteRecursively
+import kotlin.io.path.exists
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.name
+import kotlin.io.path.writeBytes
 
 plugins {
     idea
@@ -384,4 +393,11 @@ meowdding {
     //configureDetekt = true
 
     codecVersion = libs.versions.meowdding.ktcodecs
+}
+
+gradle.startParameter.apply {
+    welcomeMessageConfiguration.welcomeMessageDisplayMode = WelcomeMessageDisplayMode.NEVER
+    setTaskNames(mutableListOf(":setupForWorkflows").apply {
+        addAll(taskNames)
+    })
 }

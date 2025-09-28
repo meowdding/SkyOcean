@@ -6,7 +6,6 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.events.ArgumentCommandBuilder
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
@@ -17,6 +16,7 @@ import me.owdding.skyocean.features.item.custom.data.ArmorTrim
 import me.owdding.skyocean.features.item.custom.data.CustomItemComponent
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
 import me.owdding.skyocean.features.item.custom.data.GradientItemColor
+import me.owdding.skyocean.features.item.custom.data.IdKey
 import me.owdding.skyocean.features.item.custom.data.SkyBlockDye
 import me.owdding.skyocean.features.item.custom.data.SkyblockModel
 import me.owdding.skyocean.features.item.custom.data.SkyblockSkin
@@ -34,7 +34,7 @@ import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.commands.HexColorArgumentType
-import me.owdding.skyocean.utils.commands.SkyOceanItemIdArgument
+import me.owdding.skyocean.utils.commands.SkyBlockIdArgument
 import me.owdding.skyocean.utils.commands.VirtualResourceArgument
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.copy
@@ -48,6 +48,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.equipment.trim.TrimMaterial
 import net.minecraft.world.item.equipment.trim.TrimPattern
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -74,6 +75,13 @@ object CustomizeCommand {
                         append(" can't be customized!")
                     }.sendWithPrefix()
                     return@callback
+                }
+
+                if (item.getKey() is IdKey) {
+                    text {
+                        append("Modification will be visible on all variants of this item!")
+                        this.color = OceanColors.WARNING
+                    }.sendWithPrefix()
                 }
 
                 McClient.runNextTick {
@@ -134,9 +142,9 @@ object CustomizeCommand {
                 }
             }
             then("model") {
-                thenCallback("skyblock_model", SkyOceanItemIdArgument()) {
+                thenCallback("skyblock_model", SkyBlockIdArgument()) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
-                    val itemId = getArgument<SkyOceanItemId>("skyblock_model")!!
+                    val itemId = getArgument<SkyBlockId>("skyblock_model")!!
 
                     val success = CustomItems.modify(item) {
                         this[CustomItemDataComponents.MODEL] = SkyblockModel(itemId)
@@ -211,9 +219,9 @@ object CustomizeCommand {
                         unableToCustomize()
                     }
                 }
-                thenCallback("static_color", SkyOceanItemIdArgument(DyeData.staticDyes.keys.map { SkyOceanItemId.item(it.lowercase()) })) {
+                thenCallback("static_color", SkyBlockIdArgument(DyeData.staticDyes.keys.map { SkyBlockId.item(it.lowercase()) })) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
-                    val color = getArgument<SkyOceanItemId>("static_color")!!
+                    val color = getArgument<SkyBlockId>("static_color")!!
 
                     val success = CustomItems.modify(item) {
                         this[CustomItemDataComponents.COLOR] = SkyBlockDye(color.cleanId)
@@ -227,9 +235,9 @@ object CustomizeCommand {
                         unableToCustomize()
                     }
                 }
-                thenCallback("animated_color", SkyOceanItemIdArgument(DyeData.animatedDyes.keys.map { SkyOceanItemId.item(it.lowercase()) })) {
+                thenCallback("animated_color", SkyBlockIdArgument(DyeData.animatedDyes.keys.map { SkyBlockId.item(it.lowercase()) })) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
-                    val color = getArgument<SkyOceanItemId>("animated_color")!!
+                    val color = getArgument<SkyBlockId>("animated_color")!!
 
                     val success = runCatching {
                         CustomItems.modify(item) {
@@ -269,9 +277,9 @@ object CustomizeCommand {
                 }
             }
 
-            thenCallback("skin animated_skull", SkyOceanItemIdArgument(AnimatedSkulls.skins.keys)) {
+            thenCallback("skin animated_skull", SkyBlockIdArgument(AnimatedSkulls.skins.keys)) {
                 val item = mainHandItemOrNull() ?: return@thenCallback
-                val skin = getArgument<SkyOceanItemId>("animated_skull")!!
+                val skin = getArgument<SkyBlockId>("animated_skull")!!
 
                 val success = runCatching {
                     CustomItems.modify(item) {
