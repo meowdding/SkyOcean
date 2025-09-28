@@ -351,7 +351,13 @@
         },
         "position": {
           "@value": "Position",
-          "desc": "Craft helper position inside the inventory."
+          "desc": "Craft helper position inside the inventory.",
+          "top_left": "Top Left",
+          "top_right": "Top Right",
+          "bottom_left": "Bottom Left",
+          "bottom_right": "Bottom Right",
+          "left_of_inventory": "Left of Inventory",
+          "right_of_inventory": "Right of Inventory"
         },
         "margin": {
           "@value": "Margin",
@@ -360,6 +366,12 @@
         "done_message": {
           "@value": "Send a message when your recipe is complete",
           "desc": "Sends a chat message whenever the mod detects your recipe tree as completed."
+        },
+        "tree_formatter": {
+          "@value": "Craft helper formatter",
+          "desc": "Changes the appearance of the craft helper tree.",
+          "raw": "Raw",
+          "tree": "Tree"
         }
       },
       "transparentArmor": {
