@@ -14,5 +14,5 @@ class FontIconsProvider(output: FabricDataOutput) : SkyOceanFontProvider(output,
         }
     }
 
-    override fun getName(): String? = "Font Icon"
+    override fun getName(): String = "Font Icon"
 }
