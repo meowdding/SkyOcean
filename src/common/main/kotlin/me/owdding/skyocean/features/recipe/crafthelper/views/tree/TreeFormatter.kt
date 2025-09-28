@@ -16,7 +16,6 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.RecipeView
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.utils.Utils.not
-import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.append
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.ComponentIcons
@@ -30,6 +29,7 @@ import net.minecraft.util.ARGB
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.join
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
@@ -102,47 +102,29 @@ object TreeFormatter : RecipeView {
             addSimple(ItemSources.STORAGE, !"Storage")
             addSimple(
                 ItemSources.WARDROBE,
-                text {
-                    append(ComponentIcons.WARDROBE)
-                    append(" Wardrobe")
-                },
+                join(ComponentIcons.WARDROBE, " Wardrobe"),
             )
             addSimple(
                 ItemSources.CHEST,
-                text {
-                    append(ComponentIcons.CHESTS)
-                    append(" Chest")
-                },
+                join(ComponentIcons.CHESTS, " Chest"),
             )
             addSimple(
                 ItemSources.ACCESSORY_BAG,
-                text {
-                    append(ComponentIcons.ACCESSORIES)
-                    append(" Accessory Bag")
-                },
+                join(ComponentIcons.ACCESSORIES, " Accessory Bag"),
             )
             addSimple(ItemSources.VAULT, !"${Icons.VAULT} Vault")
             addSimple(ItemSources.RIFT, !"${Icons.RIFT} Rift")
             addSimple(
                 ItemSources.DRILL_UPGRADE,
-                text {
-                    append(ComponentIcons.ITEM_IN_ITEM)
-                    append(" Drill Upgrade")
-                },
+                join(ComponentIcons.ITEM_IN_ITEM, " Drill Upgrade"),
             )
             addSimple(
                 ItemSources.ROD_UPGRADE,
-                text {
-                    append(ComponentIcons.ITEM_IN_ITEM)
-                    append(" Drill Upgrade")
-                },
+                join(ComponentIcons.ITEM_IN_ITEM, "Rod Upgrade"),
             )
             addSimple(
                 ItemSources.HUNTING_BOX,
-                text {
-                    append(ComponentIcons.BOX)
-                    append(" Hunting Box")
-                },
+                join(ComponentIcons.BOX, " Hunting Box"),
             )
 
             if (sources.containsKey(ItemSources.FORGE)) {
