@@ -3,8 +3,9 @@ package me.owdding.skyocean.features.mining
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import net.minecraft.network.chat.Component
+import me.owdding.skyocean.utils.Utils.joinToComponent
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.forge.ForgeAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
@@ -54,7 +55,9 @@ object ForgeReminder {
         lastReminder = currentInstant()
     }
 
-    private fun <T> Collection<T>.joinToComponent(separator: String, transform: (T) -> Component) = joinToComponent(Text.of(separator), transform)
-    private fun <T> Collection<T>.joinToComponent(separator: Component, transform: (T) -> Component) = Text.join(this.map(transform), separator = separator.copy())
+    @Subscription(ProfileChangeEvent::class)
+    fun onProfileSwitch() {
+        lastReminder = Instant.DISTANT_PAST
+    }
 
 }
