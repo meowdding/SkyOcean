@@ -3,8 +3,10 @@ package me.owdding.skyocean.features.mining
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.Utils.joinToComponent
+import me.owdding.skyocean.utils.extensions.joinToComponent
+import me.owdding.skyocean.utils.extensions.nullIfEmpty
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.forge.ForgeAPI
@@ -44,7 +46,8 @@ object ForgeReminder {
         if (!MiningConfig.forgeReminder) return
         if (lastReminder.since() <= MiningConfig.forgeReminderDelay.minutes) return
 
-        val forgeSlots = ForgeAPI.getForgeSlots().values.filter { it.expiryTime <= currentInstant() }.takeUnless { it.isEmpty() } ?: return
+        val now = currentInstant()
+        val forgeSlots = ForgeAPI.getForgeSlots().values.filter { it.expiryTime <= now }.nullIfEmpty() ?: return
         val items = forgeSlots.groupBy { it.id }.values.joinToComponent(", ") {
             Text.of {
                 append("${it.size}x ") { color = TextColor.GRAY }
@@ -53,7 +56,7 @@ object ForgeReminder {
         }
 
         Text.join(Text.translatable("skyocean.config.mining.forge_reminder"), " | ", items, clickToWarp).sendWithPrefix()
-        lastReminder = currentInstant()
+        lastReminder = now
     }
 
     @Subscription(ProfileChangeEvent::class)

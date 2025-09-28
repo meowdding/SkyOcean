@@ -200,9 +200,6 @@ object Utils {
     operator fun <Key : Any, Value : Any> Cache<Key, Value>.get(key: Key) = this.getIfPresent(key)
     operator fun <Key : Any, Value : Any> Cache<Key, Value>.set(key: Key, value: Value) = this.put(key, value)
 
-    fun <T> Collection<T>.joinToComponent(separator: String, transform: (T) -> Component) = joinToComponent(Text.of(separator), transform)
-    fun <T> Collection<T>.joinToComponent(separator: Component, transform: (T) -> Component) = Text.join(this.map(transform), separator = separator.copy())
-
     fun MutableComponent.appendSafe(other: Component): MutableComponent? = (this as? SafeMutableComponentAccessor)?.`skyocean$appendSafe`(other)
     fun MutableComponent.mutableSiblings(): MutableList<Component>? = (this as? SafeMutableComponentAccessor)?.`skyocean$mutableSiblings`()
     var MutableComponent.textContents: ComponentContents
