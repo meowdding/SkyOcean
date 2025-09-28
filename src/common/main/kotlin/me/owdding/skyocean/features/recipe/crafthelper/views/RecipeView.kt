@@ -286,7 +286,7 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
             addUsedSources()
             sources.getValue(ItemSources.FORGE).map { it.context }.filterIsInstance<ForgeItemContext>().forEach { context ->
                 val time = context.finishTime.until()
-                val timeDisplay = if (time <= 0.seconds) "Done" else time.toReadableTime()
+                val timeDisplay = if (time.isNegative()) "Done" else time.toReadableTime()
 
                 add(!"${Icons.FORGE} Forge Slot: ${context.slot} - $timeDisplay")
             }
