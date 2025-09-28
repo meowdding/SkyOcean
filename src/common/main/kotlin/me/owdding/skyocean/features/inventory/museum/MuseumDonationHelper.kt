@@ -27,7 +27,6 @@ import me.owdding.skyocean.repo.museum.MuseumRepoData
 import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ARMOR_NOT_FOUND
 import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ITEM_NOT_FOUND
 import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM
-import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.Utils.contains
@@ -37,6 +36,7 @@ import me.owdding.skyocean.utils.Utils.skipRemaining
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.Utils.wrap
+import me.owdding.skyocean.utils.chat.Icons
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent

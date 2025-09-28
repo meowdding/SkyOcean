@@ -3,7 +3,7 @@ package me.owdding.skyocean.features.mining
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.helpers.CooldownHelper
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.extensions.joinToComponent
 import me.owdding.skyocean.utils.extensions.nullIfEmpty
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription

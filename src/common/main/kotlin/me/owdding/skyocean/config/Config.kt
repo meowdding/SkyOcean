@@ -22,9 +22,9 @@ import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.misc.MobIconsConfig
 import me.owdding.skyocean.config.patcher.ConfigPatches
-import me.owdding.skyocean.utils.ChatUtils
-import me.owdding.skyocean.utils.OceanGradients
 import me.owdding.skyocean.utils.SkyOceanModifyIndicator
+import me.owdding.skyocean.utils.chat.ChatUtils
+import me.owdding.skyocean.utils.chat.OceanGradients
 import java.util.function.UnaryOperator
 
 object Config : ConfigKt("skyocean/config") {

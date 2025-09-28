@@ -5,7 +5,7 @@ import me.owdding.skyocean.features.recipe.CurrencyIngredient
 import me.owdding.skyocean.features.recipe.CurrencyType
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.text.Text

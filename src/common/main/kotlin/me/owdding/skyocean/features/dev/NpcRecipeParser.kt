@@ -5,7 +5,7 @@ import me.owdding.skyocean.api.IngredientParser
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.custom.CustomRecipe
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.debugToggle
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.item.Items

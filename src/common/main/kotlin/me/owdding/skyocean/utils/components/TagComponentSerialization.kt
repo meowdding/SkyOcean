@@ -6,7 +6,7 @@ import eu.pb4.placeholders.api.parsers.tag.TagRegistry
 import eu.pb4.placeholders.api.parsers.tag.TextTag
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
-import me.owdding.skyocean.utils.OceanGradients
+import me.owdding.skyocean.utils.chat.OceanGradients
 import me.owdding.skyocean.utils.components.tags.GradientNode
 import me.owdding.skyocean.utils.components.tags.OceanGradientNode
 import net.minecraft.ChatFormatting

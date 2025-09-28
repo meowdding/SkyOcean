@@ -22,7 +22,8 @@ import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.ChatUtils.withoutShadow
+import me.owdding.skyocean.utils.chat.ChatUtils
+import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos

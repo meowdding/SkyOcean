@@ -12,8 +12,8 @@ import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import me.owdding.skyocean.helpers.ClientSideInventory
-import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.itemBuilder
+import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.suggestions.SkyOceanSuggestionProvider
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.world.item.Items

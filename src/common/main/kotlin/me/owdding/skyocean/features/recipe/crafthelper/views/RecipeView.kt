@@ -24,10 +24,11 @@ import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
 import me.owdding.skyocean.features.recipe.serialize
 import me.owdding.skyocean.features.recipe.serializeWithAmount
-import me.owdding.skyocean.utils.ChatUtils.append
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.chat.ChatUtils.append
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.ComponentIcons
+import me.owdding.skyocean.utils.chat.Icons
 import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Tooltip
@@ -37,12 +38,12 @@ import net.minecraft.util.ARGB
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.join
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.time.until
-import kotlin.time.Duration.Companion.seconds
 
 fun interface RecipeView {
 
@@ -228,13 +229,14 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
     context(state: CraftHelperState)
     fun getIcons(sources: List<ItemSources> = state.usedItems.map { it.source }): Component = Text.of {
         this.color = TextColor.GRAY
-        if (ItemSources.WARDROBE in sources) append(Icons.WARDROBE)
+        if (ItemSources.WARDROBE in sources) append(ComponentIcons.WARDROBE)
         if (ItemSources.VAULT in sources) append(Icons.VAULT)
-        if (ItemSources.ACCESSORY_BAG in sources) append(Icons.ACCESSORIES)
-        if (ItemSources.FORGE in sources) append(Icons.FORGE)
-        if (ItemSources.CHEST in sources) append(Icons.CHESTS)
+        if (ItemSources.ACCESSORY_BAG in sources) append(ComponentIcons.ACCESSORIES)
+        if (ItemSources.FORGE in sources) append(ComponentIcons.FORGE)
+        if (ItemSources.CHEST in sources) append(ComponentIcons.CHESTS)
         if (ItemSources.RIFT in sources) append(Icons.RIFT) { this.color = TextColor.DARK_PURPLE }
-        if (ItemSources.DRILL_UPGRADE in sources || ItemSources.ROD_UPGRADE in sources) append(Icons.ITEM_IN_ITEM)
+        if (ItemSources.DRILL_UPGRADE in sources || ItemSources.ROD_UPGRADE in sources) append(ComponentIcons.ITEM_IN_ITEM)
+        if (ItemSources.HUNTING_BOX in sources) append(ComponentIcons.BOX)
     }
 
     fun reload() = refreshCallback(false)
@@ -248,14 +250,15 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
             add(CommonComponents.EMPTY)
         }
 
-        fun addSimple(source: ItemSources, name: String) {
+        fun addSimple(source: ItemSources, name: Component) {
             if (!sources.containsKey(source)) return
             addUsedSources()
             if (state.amountCarryOver != 0 || state.amountThroughParents != 0) {
                 add(CommonComponents.EMPTY)
             }
             add(
-                Text.of(name) {
+                Text.of {
+                    append(name)
                     append(": ")
                     append(sources.getValue(source).sumOf { it.amount }.toFormattedString())
                 },
@@ -271,16 +274,35 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
             add(!"Carry over from previous recipe: ${state.amountCarryOver.toFormattedString()}")
         }
 
-        addSimple(ItemSources.INVENTORY, "Inventory")
-        addSimple(ItemSources.SACKS, "Sacks")
-        addSimple(ItemSources.STORAGE, "Storage")
-        addSimple(ItemSources.WARDROBE, "${Icons.WARDROBE} Wardrobe")
-        addSimple(ItemSources.CHEST, "${Icons.CHESTS} Chest")
-        addSimple(ItemSources.ACCESSORY_BAG, "${Icons.ACCESSORIES} Accessory Bag")
-        addSimple(ItemSources.VAULT, "${Icons.VAULT} Vault")
-        addSimple(ItemSources.RIFT, "${Icons.RIFT} Rift")
-        addSimple(ItemSources.DRILL_UPGRADE, "${Icons.ITEM_IN_ITEM} Drill Upgrade")
-        addSimple(ItemSources.ROD_UPGRADE, "${Icons.ITEM_IN_ITEM} Rod Upgrade")
+        addSimple(ItemSources.INVENTORY, !"Inventory")
+        addSimple(ItemSources.SACKS, !"Sacks")
+        addSimple(ItemSources.STORAGE, !"Storage")
+        addSimple(
+            ItemSources.WARDROBE,
+            join(ComponentIcons.WARDROBE, " Wardrobe"),
+        )
+        addSimple(
+            ItemSources.CHEST,
+            join(ComponentIcons.CHESTS, " Chest"),
+        )
+        addSimple(
+            ItemSources.ACCESSORY_BAG,
+            join(ComponentIcons.ACCESSORIES, " Accessory Bag"),
+        )
+        addSimple(ItemSources.VAULT, !"${Icons.VAULT} Vault")
+        addSimple(ItemSources.RIFT, !"${Icons.RIFT} Rift")
+        addSimple(
+            ItemSources.DRILL_UPGRADE,
+            join(ComponentIcons.ITEM_IN_ITEM, " Drill Upgrade"),
+        )
+        addSimple(
+            ItemSources.ROD_UPGRADE,
+            join(ComponentIcons.ITEM_IN_ITEM, "Rod Upgrade"),
+        )
+        addSimple(
+            ItemSources.HUNTING_BOX,
+            join(ComponentIcons.BOX, " Hunting Box"),
+        )
 
         if (sources.containsKey(ItemSources.FORGE)) {
             addUsedSources()

@@ -26,13 +26,13 @@ import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizatio
 import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.repo.customization.AnimatedSkulls
 import me.owdding.skyocean.repo.customization.DyeData
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.OceanColors
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.get
 import me.owdding.skyocean.utils.Utils.getArgument
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.commands.HexColorArgumentType
 import me.owdding.skyocean.utils.commands.SkyBlockIdArgument
 import me.owdding.skyocean.utils.commands.VirtualResourceArgument

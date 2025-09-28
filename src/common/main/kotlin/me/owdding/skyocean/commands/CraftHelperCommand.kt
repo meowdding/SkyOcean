@@ -11,10 +11,10 @@ import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsCycleElement
 import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperDisplay
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.OceanColors
 import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.suggestions.CombinedSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeIdSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeNameSuggestionProvider

@@ -21,8 +21,8 @@ import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
-import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.chat.Icons
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.extensions.tryClear
 import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
