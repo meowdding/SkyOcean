@@ -45,8 +45,8 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
         if (state instanceof EntityRenderStateAccessor stateAccessor) {
             float scale = stateAccessor.ocean$getNameTagScale();
             poseStack.pushPose();
-            poseStack.translate(0, 0.5 * scale - 0.5, 0);
-            poseStack.scale(1 * scale, 1, 1 * scale);
+            poseStack.translate(0, -0.7, 0);
+            poseStack.scale(1 * scale, 1 * scale, 1 * scale);
             original.call(instance, poseStack, vec3, i, component, b, i2, v, cameraRenderState);
             poseStack.popPose();
         } else {
