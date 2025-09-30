@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityRenderDispatcher.class)
 public class HideFireMixin {
 
-    @Inject(method = "renderFlame", at = @At("HEAD"), cancellable = true)
+    @Inject(method = {"renderFlame"}, at = @At("HEAD"), cancellable = true)
     public void renderFlame(CallbackInfo ci) {
         if (MiscConfig.INSTANCE.getHideEntityFire()) {
             ci.cancel();
