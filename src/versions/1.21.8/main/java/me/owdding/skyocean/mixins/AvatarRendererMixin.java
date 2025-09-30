@@ -27,7 +27,7 @@ public class AvatarRendererMixin {
         playerRenderState.skin = new PlayerSkin(
             skin.texture(),
             skin.textureUrl(),
-            contributor.getCape(),
+            contributor.getCape().id(),
             skin.elytraTexture(),
             skin.model(),
             skin.secure()

@@ -27,7 +27,7 @@ public class AvatarRendererMixin {
         var skin = playerRenderState.skin;
         playerRenderState.skin = new PlayerSkin(
             skin.body(),
-            new ClientAsset.Texture.ResourceTexture(contributor.getCape()),
+            (ClientAsset.Texture) contributor.getCape(),
             skin.elytra(),
             skin.model(),
             skin.secure()
