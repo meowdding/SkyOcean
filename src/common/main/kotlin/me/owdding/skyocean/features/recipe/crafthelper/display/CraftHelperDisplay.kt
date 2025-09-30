@@ -35,7 +35,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
-import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -51,7 +50,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
     @Subscription
     fun onScreenInit(event: ScreenInitializedEvent) {
         if (!CraftHelperConfig.enabled) return
-        if (!LocationAPI.isOnSkyBlock) return
+        //if (!LocationAPI.isOnSkyBlock) return
         if (event.screen !is AbstractContainerScreen<*>) return
 
         val layout = LayoutFactory.empty() as FrameLayout

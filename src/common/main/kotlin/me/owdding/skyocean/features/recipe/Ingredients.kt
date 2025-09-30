@@ -5,6 +5,7 @@ import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.extensions.sanitizeNeu
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.repolib.api.recipes.ingredient.CraftingIngredient
@@ -99,10 +100,9 @@ fun Iterable<Ingredient>.mergeSameTypes(): Iterable<Ingredient> = this.groupBy {
     .mapValues { (_, ingredient) -> ingredient.first().withAmount(ingredient.sumOf { it.amount }) }
     .values
 
-private val reverseNeuStuff = Regex("(\\w)-(\\d{1,2})")
 
 fun CraftingIngredient.toSkyOceanIngredient(): Ingredient? {
-    val id = this.id()?.replace(reverseNeuStuff, "$1:$2") ?: return null
+    val id = this.id()?.sanitizeNeu() ?: return null
 
     return when (this) {
         is RepoItemIngredient -> SkyOceanItemIngredient(SkyBlockId.item(id), this.count())
