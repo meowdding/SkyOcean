@@ -11,11 +11,12 @@ import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.PackMetadata
 import net.minecraft.core.BlockPos
+import net.minecraft.core.ClientAsset
 import net.minecraft.network.chat.*
-import net.minecraft.network.chat.contents.*
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
+import net.msrandom.stub.Stub
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -24,6 +25,15 @@ import java.util.function.Function
 import kotlin.jvm.optionals.getOrNull
 
 val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
+
+@Stub
+internal expect fun createContentCodec(): MapCodec<ComponentContents>
+
+@Stub
+internal expect fun toClientAsset(resourceLocation: ResourceLocation): ClientAsset
+
+@Stub
+internal expect fun fromClientAsset(asset: ClientAsset): ResourceLocation
 
 object CodecHelpers {
 
@@ -59,6 +69,9 @@ object CodecHelpers {
     @IncludedCodec
     val SKYBLOCK_ID_UNKNOWN: Codec<SkyBlockId> = SkyBlockId.UNKNOWN_CODEC
 
+    @IncludedCodec
+    val CLIENT_ASSET_CODEC: Codec<ClientAsset> = ResourceLocation.CODEC.xmap({ toClientAsset(it) }, { fromClientAsset(it) })
+
     val STYLE_WITH_SHADER_CODEC: MapCodec<Style> = RecordCodecBuilder.mapCodec {
         it.group(
             Style.Serializer.MAP_CODEC.forGetter(Function.identity()),
@@ -68,21 +81,8 @@ object CodecHelpers {
         }
     }
 
-    private val componentTypes = arrayOf(
-        PlainTextContents.TYPE,
-        TranslatableContents.TYPE,
-        KeybindContents.TYPE,
-        ScoreContents.TYPE,
-        SelectorContents.TYPE,
-        NbtContents.TYPE,
-    )
     val CUSTOM_COMPONENT_CODEC: Codec<Component> = Codec.recursive("SkyOceanComponentCodec") { self ->
-        val componentMatcher = ComponentSerialization.createLegacyComponentMatcher(
-            componentTypes,
-            ComponentContents.Type<*>::codec,
-            { it!!.type() },
-            "type",
-        )
+        val componentMatcher = createContentCodec()
 
         val codec: Codec<Component> = RecordCodecBuilder.create {
             it.group(

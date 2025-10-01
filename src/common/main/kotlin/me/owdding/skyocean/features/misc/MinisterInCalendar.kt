@@ -1,6 +1,5 @@
 package me.owdding.skyocean.features.misc
 
-import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
@@ -8,18 +7,17 @@ import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.component.ResolvableProfile
 import tech.thatgravyboat.skyblockapi.api.area.hub.ElectionAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.remote.RepoMobsAPI
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
+import tech.thatgravyboat.skyblockapi.platform.ResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
 import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitToWidth
-import java.util.*
 
 @Module
 object MinisterInCalendar {
@@ -41,11 +39,9 @@ object MinisterInCalendar {
 
             set(
                 DataComponents.PROFILE,
-                ResolvableProfile(
-                    GameProfile(UUID.randomUUID(), "a").apply {
-                        this.properties.put("textures", Property("textures", texture))
-                    },
-                ),
+                ResolvableProfile {
+                    put("textures", Property("textures", texture))
+                },
             )
 
             name(

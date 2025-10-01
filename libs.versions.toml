@@ -2,12 +2,12 @@
 
 fabric-loader = "0.16.10"
 fabric-language-kotlin = "1.13.4+kotlin.2.2.0"
-fabric-api = "0.128.1"
+fabric-api = "0.133.4"
 
 kotlin = "2.2.0"
 kotlin-symbol-processor = "2.2.0-2.0.2"
 gson = "2.12.1"
-skyblockapi = "2.3.6"
+skyblockapi = "3.0.0"
 skyblockapi-repo = "3.0.0"
 placeholders = "2.6.1+1.21.5"
 keval = "1.1.1"
@@ -16,14 +16,14 @@ rconfigkt = "3.5.13"
 
 detekt = "1.23.8"
 
-meowdding-lib = "2.2.21"
+meowdding-lib = "3.0.1"
 meowdding-repo = "1.0.18"
 meowdding-resources = "1.0.15"
 meowdding-ktmodules = "1.0.5"
 meowdding-ktcodecs = "1.0.32"
-meowdding-gradle = "1.0.8"
+meowdding-gradle = "1.1.0"
 
-terrarium-cloche = "0.13.2"
+terrarium-cloche = "0.13.5"
 
 [libraries]
 
@@ -39,11 +39,14 @@ meowdding-resources = { module = "me.owdding.repo:compacting-resources", version
 
 resourceful-lib1215 = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.5", version = "3.5.0" }
 resourceful-lib1218 = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.6", version = "3.6.0" }
+resourceful-lib1219 = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-1.21.9", version = "3.9.0" }
 resourceful-config1215 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.5", version = "3.5.15" }
 resourceful-config1218 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.7", version = "3.7.2" }
+resourceful-config1219 = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.21.9", version = "3.9.0" }
 resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-fabric-1.21.5", version.ref = "rconfigkt" }
 olympus-lib1215 = { module = "earth.terrarium.olympus:olympus-fabric-1.21.5", version = "1.3.6" }
 olympus-lib1218 = { module = "earth.terrarium.olympus:olympus-fabric-1.21.7", version = "1.5.2" }
+olympus-lib1219 = { module = "earth.terrarium.olympus:olympus-fabric-1.21.9", version = "1.6.1" }
 
 meowdding-lib = { module = "me.owdding.meowdding-lib:meowdding-lib", version.ref = "meowdding-lib" }
 

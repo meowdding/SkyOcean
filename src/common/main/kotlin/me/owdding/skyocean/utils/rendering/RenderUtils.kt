@@ -1,9 +1,11 @@
 package me.owdding.skyocean.utils.rendering
 
+import com.mojang.blaze3d.vertex.PoseStack
 import me.owdding.skyocean.utils.rendering.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.core.BlockPos
@@ -26,6 +28,15 @@ import kotlin.math.sin
 
 @Stub
 expect fun GuiGraphics.applyPostEffect(id: ResourceLocation)
+
+@Stub
+internal expect fun renderFace(
+    poseStack: PoseStack,
+    buffer: MultiBufferSource,
+    direction: Direction,
+    vec6: RenderUtils.Vec6f,
+    color: Int,
+)
 
 object RenderUtils {
 
@@ -96,7 +107,7 @@ object RenderUtils {
     private val SLOT_HIGHLIGHT_BACK_SPRITE = ResourceLocation.withDefaultNamespace("container/slot_highlight_back")
     private val SLOT_HIGHLIGHT_FRONT_TEXTURE = ResourceLocation.withDefaultNamespace("container/slot_highlight_front")
 
-    private data class Vec6f(var a: Float, var b: Float, var c: Float, var d: Float, var e: Float, var f: Float)
+    data class Vec6f(var a: Float, var b: Float, var c: Float, var d: Float, var e: Float, var f: Float)
 
     fun RenderWorldEvent.renderPlane(
         direction: Direction,
@@ -122,20 +133,12 @@ object RenderUtils {
             Direction.NORTH, Direction.SOUTH -> Vec6f(startX, startY, z, endX, endY, z)
             Direction.EAST, Direction.WEST -> Vec6f(z, startX, startY, z, endX, endY)
         }
-        ShapeRenderer.renderFace(
+        renderFace(
             poseStack,
-            buffer.getBuffer(RenderTypes.BLOCK_FILL),
+            buffer,
             direction,
-            vec6.a,
-            vec6.b,
-            vec6.c,
-            vec6.d,
-            vec6.e,
-            vec6.f,
-            ARGB.redFloat(color),
-            ARGB.greenFloat(color),
-            ARGB.blueFloat(color),
-            ARGB.alphaFloat(color),
+            vec6,
+            color,
         )
     }
 

@@ -18,7 +18,6 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.SkyOcean.repoPatcher
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
@@ -124,15 +123,6 @@ object Utils {
         }
     }
 
-    fun applyPatch(json: JsonElement, file: String): JsonElement {
-        try {
-            repoPatcher?.patch(json, file)
-        } catch (e: Exception) {
-            SkyOcean.error("Failed to apply patches for file $file", e)
-        }
-        return json
-    }
-
     fun loadFromResourcesAsStream(path: String): InputStream = runBlocking {
         SkyOcean.SELF.findPath(path).orElseThrow().inputStream()
     }
@@ -142,7 +132,6 @@ object Utils {
     inline fun <reified T : Any> loadFromRepo(file: String): T? = runBlocking {
         try {
             val json = SkyOcean.SELF.findPath("repo/$file.json").orElseThrow()?.let(Files::readString)?.readJson<JsonElement>() ?: return@runBlocking null
-            applyPatch(json, file)
             if (T::class == JsonElement::class) {
                 return@runBlocking json as T
             }

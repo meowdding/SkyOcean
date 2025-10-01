@@ -36,7 +36,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
     val widgetHeight get() = (height / 3).coerceAtLeast(100) + 50
 
     override fun init() {
-        val (_, price, _, tree) = item.getItemValue()
+        val (_, price, tree) = item.getItemValue()
 
         val width = widgetWidth
         val height = widgetHeight

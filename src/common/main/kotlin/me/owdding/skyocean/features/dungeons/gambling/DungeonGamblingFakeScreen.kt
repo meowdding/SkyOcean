@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.dungeons.gambling
 
 import com.mojang.blaze3d.platform.InputConstants
+import me.owdding.lib.platform.screens.KeyEvent
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
 import me.owdding.skyocean.utils.SkyOceanScreen
 import net.minecraft.client.gui.GuiGraphics
@@ -23,13 +24,13 @@ class DungeonGamblingFakeScreen(
         DungeonGamblingRenderer.render(graphics)
     }
 
-    override fun keyPressed(keycode: Int, scancode: Int, modifiers: Int): Boolean {
-        return when (keycode) {
+    override fun keyPressed(keyEvent: KeyEvent): Boolean {
+        return when (keyEvent.key) {
             InputConstants.KEY_R -> {
                 setup()
                 true
             }
-            else -> super.keyPressed(keycode, scancode, modifiers)
+            else -> super.keyPressed(keyEvent)
         }
     }
 }

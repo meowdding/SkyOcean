@@ -2,7 +2,6 @@ package me.owdding.skyocean.utils.boundingboxes
 
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.renderer.RenderType
-import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
@@ -19,15 +18,15 @@ data class OctreeDebugRenderer(val octree: Octree) {
         val camZ = event.camera.position.z
         octree.boxes.forEach {
             val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderType.lines())
-            ShapeRenderer.renderLineBox(
-                event.poseStack,
-                vertexConsumer,
-                AABB.of(it).move(-camX, -camY, -camZ),
-                1.0f,
-                1.0f,
-                1.0f,
-                1f,
-            )
+            //ShapeRenderer.renderLineBox(
+            //    event.poseStack,
+            //    vertexConsumer,
+            //    AABB.of(it).move(-camX, -camY, -camZ),
+            //    1.0f,
+            //    1.0f,
+            //    1.0f,
+            //    1f,
+            //)
         }
 
         val nodesRendered = MutableInt()
@@ -46,15 +45,15 @@ data class OctreeDebugRenderer(val octree: Octree) {
         val camX = event.camera.position.x
         val camY = event.camera.position.y
         val camZ = event.camera.position.z
-        ShapeRenderer.renderLineBox(
-            event.poseStack,
-            vertexConsumer,
-            aABB.move(-camX, -camY, -camZ),
-            getColorComponent(colorValue, 0.3f),
-            getColorComponent(colorValue, 0.8f),
-            getColorComponent(colorValue, 0.5f),
-            if (node != playerNode) 0.4f else 1.0f,
-        )
+        //ShapeRenderer.renderLineBox(
+        //    event.poseStack,
+        //    vertexConsumer,
+        //    aABB.move(-camX, -camY, -camZ),
+        //    getColorComponent(colorValue, 0.3f),
+        //    getColorComponent(colorValue, 0.8f),
+        //    getColorComponent(colorValue, 0.5f),
+        //    if (node != playerNode) 0.4f else 1.0f,
+        //)
     }
 
     private fun getColorComponent(value: Long, multiplier: Float): Float {
