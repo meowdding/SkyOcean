@@ -281,6 +281,10 @@ repo {
 }
 
 tasks {
+    configureEach {
+        notCompatibleWithConfigurationCache("Configuration cache causes various errors in the build")
+    }
+
     withType<ProcessResources>().configureEach {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
