@@ -5,6 +5,8 @@ import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.profile.effects.EffectsAPI
+import tech.thatgravyboat.skyblockapi.api.profile.profile.ProfileAPI
+import tech.thatgravyboat.skyblockapi.api.profile.profile.ProfileType
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -26,8 +28,9 @@ interface ItemContext {
         requiresRift { add("Not currently in overworld!") { color = TextColor.RED } }
     }
 
-    fun requiresCookie(runnable: () -> Unit) {
-        if (!EffectsAPI.isBoosterCookieActive) {
+    fun requiresCookie(allowOnBingo: Boolean = false, runnable: () -> Unit) {
+        if (!(EffectsAPI.isBoosterCookieActive ||
+                (allowOnBingo && ProfileAPI.profileType == ProfileType.BINGO))) {
             Text.of("Requires a booster cookie!").sendWithPrefix()
             return
         }
