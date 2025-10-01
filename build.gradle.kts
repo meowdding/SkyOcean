@@ -282,7 +282,7 @@ repo {
 
 tasks {
     configureEach {
-        notCompatibleWithConfigurationCache("Configuration cache causes various errors in the build")
+        notCompatibleWithConfigurationCache("Configuration cache causes various build errors")
     }
 
     withType<ProcessResources>().configureEach {
