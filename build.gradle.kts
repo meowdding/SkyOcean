@@ -162,8 +162,9 @@ cloche {
 
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
-                implementation(olympus)
-                implementation(rconfig)
+                implementation(olympus) { isTransitive = false }
+                implementation(rconfig) { isTransitive = false }
+                implementation(rlib) { isTransitive = false }
 
                 include(libs.resourceful.config.kotlin) { isTransitive = false }
                 include(libs.keval) { isTransitive = false }
