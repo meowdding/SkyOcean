@@ -31,6 +31,8 @@ private val illegalIngredients = listOf(
     "WOOD_HOE",
     "WOOD_AXE",
     "FISHING_ROD",
+    "GOLDEN_CARROT",
+    "JACK_O_LANTERN",
 )
 
 @LateInitModule
