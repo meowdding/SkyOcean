@@ -154,7 +154,7 @@ cloche {
                 dependency("olympus", olympus.map { it.version!! })
                 dependency("placeholder-api", libs.versions.placeholders)
                 dependency("resourcefulconfigkt", libs.versions.rconfigkt)
-                //dependency("resourcefulconfig", rconfig.map { it.version!! })
+                dependency("resourcefulconfig", rconfig.map { it.version!! })
                 dependency("meowdding-lib", libs.versions.meowdding.lib)
             }
 

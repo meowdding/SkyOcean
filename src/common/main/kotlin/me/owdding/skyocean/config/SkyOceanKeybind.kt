@@ -3,7 +3,7 @@ package me.owdding.skyocean.config
 import me.owdding.lib.utils.MeowddingKeybind
 import me.owdding.skyocean.SkyOcean
 
-public class SkyOceanKeybind(
+class SkyOceanKeybind(
     translationKey: String,
     keyCode: Int,
     allowMultipleExecutions: Boolean = false,

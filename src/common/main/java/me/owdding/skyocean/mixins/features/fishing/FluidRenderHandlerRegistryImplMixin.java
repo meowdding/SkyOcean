@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland;
 
 import java.util.Map;
 
@@ -24,7 +25,9 @@ public class FluidRenderHandlerRegistryImplMixin {
 
     @Inject(method = "get", at = @At("HEAD"), cancellable = true)
     private void skyocean$redirectLavaRendering(Fluid fluid, CallbackInfoReturnable<FluidRenderHandler> cir) {
-        //if (!SkyBlockIsland.CRIMSON_ISLE.inIsland()) return;
+        if (!SkyBlockIsland.CRIMSON_ISLE.inIsland()) {
+            return;
+        }
         if (!FishingConfig.INSTANCE.getLavaReplacement()) return;
         if (fluid == Fluids.LAVA) cir.setReturnValue(handlers.get(Fluids.WATER));
         else if (fluid == Fluids.FLOWING_LAVA) cir.setReturnValue(handlers.get(Fluids.FLOWING_WATER));

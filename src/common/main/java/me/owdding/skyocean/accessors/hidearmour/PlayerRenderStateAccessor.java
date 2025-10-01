@@ -1,32 +1,30 @@
 package me.owdding.skyocean.accessors.hidearmour;
 
-//import net.minecraft.client.renderer.entity.state.PlayerRenderState;
-
 public interface PlayerRenderStateAccessor {
     static boolean isSelf(Object renderState) {
-       if (renderState instanceof PlayerRenderStateAccessor accessor) {
-           return accessor.skyocean$isSelf();
-       }
-       return false;
+        if (renderState instanceof PlayerRenderStateAccessor accessor) {
+            return accessor.skyocean$isSelf();
+        }
+        return false;
     }
 
     static void isSelf(Object renderState, boolean isSelf) {
-       if (renderState instanceof PlayerRenderStateAccessor accessor) {
-           accessor.skyocean$setSelf(isSelf);
-       }
+        if (renderState instanceof PlayerRenderStateAccessor accessor) {
+            accessor.skyocean$setSelf(isSelf);
+        }
     }
 
     static boolean isNpc(Object renderState) {
-       if (renderState instanceof PlayerRenderStateAccessor accessor) {
-           return accessor.skyocean$isNpc();
-       }
-       return false;
+        if (renderState instanceof PlayerRenderStateAccessor accessor) {
+            return accessor.skyocean$isNpc();
+        }
+        return false;
     }
 
     static void setNpc(Object renderState, boolean isNpc) {
-       if (renderState instanceof PlayerRenderStateAccessor accessor) {
-           accessor.skyocean$setNpc(isNpc);
-       }
+        if (renderState instanceof PlayerRenderStateAccessor accessor) {
+            accessor.skyocean$setNpc(isNpc);
+        }
     }
 
     void skyocean$setSelf(boolean isSelf);
