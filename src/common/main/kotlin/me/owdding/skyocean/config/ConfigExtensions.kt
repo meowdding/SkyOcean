@@ -1,8 +1,6 @@
 package me.owdding.skyocean.config
 
-import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
-import com.teamresourceful.resourcefulconfigkt.api.ConfigDelegateProvider
-import com.teamresourceful.resourcefulconfigkt.api.RConfigKtEntry
+import com.teamresourceful.resourcefulconfigkt.api.*
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
@@ -10,6 +8,10 @@ import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import kotlin.reflect.KProperty
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.DurationUnit
+import kotlin.time.toTimeUnit
 
 fun <T> CategoryBuilder.observable(entry: ConfigDelegateProvider<RConfigKtEntry<T>>, onChange: () -> Unit) =
     this.observable(entry) { _, _ -> onChange() }
@@ -32,6 +34,16 @@ fun CategoryBuilder.category(category: CategoryKt, init: CategoryKt.() -> Unit) 
 
 fun CategoryBuilder.separator(translation: String) = this.separator { this.translation = translation }
 
+fun ConfigDelegateProvider<RConfigKtEntry<Long>>.duration(unit: DurationUnit): TransformedEntry<Long, Duration> {
+    val timeUnit = unit.toTimeUnit()
+    return transform({ it.toLong(unit) }) { timeUnit.toMillis(it).milliseconds }
+}
+
+fun <T, R> ConfigDelegateProvider<RConfigKtEntry<T>>.transform(from: (R) -> T, to: (T) -> R) = TransformedEntry(this, from, to)
+
+fun <T> ConfigDelegateProvider<RConfigKtEntry<T>>.observable(onChange: (T, T) -> Unit) = ObservableEntry(this, onChange)
+
+@Suppress("UnusedReceiverParameter")
 fun <T> CategoryBuilder.defaultEnabledMessage(
     entry: ConfigDelegateProvider<RConfigKtEntry<T>>,
     messageProvider: () -> Component,

@@ -242,6 +242,14 @@
       "desk_pest_highlight": {
         "@value": "Desk Pest Highlight",
         "desc": "Highlights on what Plot how many pests are on in the 'Configure Plots' menu."
+      },
+      "pest_warning": {
+        "@value": "Pest Warning",
+        "desc": "Warns you when you reach 4 or more pests while farming."
+      },
+      "pest_warning_delay": {
+        "@value": "Pest Warning Delay",
+        "desc": "The delay between reminders in seconds."
       }
     },
     "misc": {
