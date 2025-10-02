@@ -62,16 +62,19 @@ object ProfileInChat {
     @OnlyOnSkyBlock
     @Subscription(priority = LOWEST)
     fun onChat(event: ChatReceivedEvent.Post) {
-        if (!ChatConfig.enableProfileInChat) return
-        val index = event.component.siblings.indexOfFirst { sibling -> sibling.stripped.startsWith(": ") } - 1
-        if (index < 0) return
-        val name = event.component.siblings[index].stripped.trim().substringAfterLast(" ")
-        val targetIndex = if (name.equals(McPlayer.name, true)) {
-            event.component.siblings.indexOfFirst { sibling -> sibling.style.hoverEvent == null }
-        } else index
-        val profileType = usernameToProfileTypeCache[name] ?: return
-        val modified = event.component.copy()
-        modified.siblings.add(targetIndex, profileType)
-        event.component = modified
+        try {
+            if (!ChatConfig.enableProfileInChat) return
+            val index = event.component.siblings.indexOfFirst { sibling -> sibling.stripped.startsWith(": ") } - 1
+            if (index < 0) return
+            val name = event.component.siblings[index].stripped.trim().substringAfterLast(" ")
+            val targetIndex = if (name.equals(McPlayer.name, true)) {
+                event.component.siblings.indexOfFirst { sibling -> sibling.style.hoverEvent == null }
+            } else index
+            val profileType = usernameToProfileTypeCache[name] ?: return
+            val modified = event.component.copy()
+            modified.siblings.add(targetIndex, profileType)
+            event.component = modified
+        } catch (_: IndexOutOfBoundsException) {
+        }
     }
 }
