@@ -6,6 +6,7 @@ import com.google.gson.JsonObject
 import earth.terrarium.cloche.api.metadata.FabricMetadata
 import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
+import net.msrandom.minecraftcodev.core.utils.lowerCamelCaseGradleName
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.runs.MinecraftRunConfiguration
 import net.msrandom.stubs.GenerateStubApi
@@ -96,10 +97,13 @@ cloche {
         version: String = name,
         loaderVersion: Provider<String> = libs.versions.fabric.loader,
         fabricApiVersion: Provider<String> = libs.versions.fabric.api,
+        endAtSameVersion: Boolean = true,
         minecraftVersionRange: ModMetadata.VersionRange.() -> Unit = {
             start = version
-            end = version
-            endExclusive = false
+            if (endAtSameVersion) {
+                end = version
+                endExclusive = false
+            }
         },
         dependencies: MutableMap<String, Provider<MinimalExternalModuleDependency>>.() -> Unit = { },
     ) {
@@ -110,8 +114,12 @@ cloche {
         val accesswidener = project.layout.projectDirectory.file("src/versions/${name}/skyocean.accesswidener")
 
         fabric("versions:$name") {
+            tasks.named<Jar>(lowerCamelCaseGradleName(this.sourceSet.name, "includeJar")) {
+                archiveClassifier = name
+            }
             includedClient()
             minecraftVersion = version
+
             this.loaderVersion = loaderVersion.get()
 
             mixins.from("src/mixins/versioned/skyocean.${name.replace(".", "")}.mixins.json")
@@ -235,7 +243,7 @@ cloche {
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
     }
-    createVersion("1.21.9", fabricApiVersion = provider { "0.133.7" }) {
+    createVersion("1.21.9", endAtSameVersion = false, fabricApiVersion = provider { "0.133.7" }) {
         this["resourcefullib"] = libs.resourceful.lib1219
         this["resourcefulconfig"] = libs.resourceful.config1219
         this["olympus"] = libs.olympus.lib1219
@@ -408,5 +416,8 @@ gradle.startParameter.apply {
     welcomeMessageConfiguration.welcomeMessageDisplayMode = WelcomeMessageDisplayMode.NEVER
     setTaskNames(mutableListOf(":setupForWorkflows").apply {
         addAll(taskNames)
+        if (taskNames.contains("clean")) {
+            taskNames.filter { it.contains("clean") }.forEach(::addFirst)
+        }
     })
 }
