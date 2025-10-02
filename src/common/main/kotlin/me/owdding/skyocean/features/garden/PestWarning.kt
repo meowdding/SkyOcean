@@ -11,12 +11,10 @@ import net.minecraft.world.level.block.Blocks
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
-import tech.thatgravyboat.skyblockapi.api.events.info.ScoreboardUpdateEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.LeftClickBlockEvent
+import tech.thatgravyboat.skyblockapi.api.profile.garden.PlotAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
-import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
-import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.anyMatch
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
@@ -30,9 +28,6 @@ object PestWarning {
 
     private const val PEST_AMOUNT = 4
     private var lastWarning = Instant.DISTANT_PAST
-    private var pests = 0
-
-    private val pestRegex = " ⏣ The Garden ൠ x(?<amount>\\d+)".toRegex()
 
     // TODO: Maybe move to Crop enum in sbapi
     private val cropBlocks = setOf(
@@ -40,19 +35,11 @@ object PestWarning {
         Blocks.COCOA, Blocks.CARVED_PUMPKIN, Blocks.PUMPKIN, Blocks.MELON, Blocks.SUGAR_CANE, Blocks.CACTUS,
     )
 
-    // TODO: replace with PlotAPI when that one gets fixed
-    @Subscription
-    @OnlyIn(GARDEN)
-    fun onScoreboardUpdate(event: ScoreboardUpdateEvent) {
-        pestRegex.anyMatch(event.added, "amount") { (amount) ->
-            pests = amount.toIntValue()
-        }
-    }
-
     @Subscription
     @OnlyIn(GARDEN)
     fun onBlockClick(event: LeftClickBlockEvent) {
         if (McLevel[event.pos].block !in cropBlocks) return
+        val pests = PlotAPI.currentPestAmount
         if (pests < PEST_AMOUNT) return
         if (GardenConfig.pestWarning && lastWarning.since() > GardenConfig.pestWarningDelay) {
             lastWarning = currentInstant()
@@ -77,7 +64,6 @@ object PestWarning {
     @Subscription(ServerChangeEvent::class)
     fun onWorldChange() {
         lastWarning = Instant.DISTANT_PAST
-        pests = 0
     }
 
 }
