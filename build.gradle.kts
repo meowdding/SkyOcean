@@ -14,16 +14,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.file.StandardOpenOption
 import java.util.zip.ZipFile
-import kotlin.io.path.ExperimentalPathApi
-import kotlin.io.path.absolutePathString
-import kotlin.io.path.copyTo
-import kotlin.io.path.createDirectories
-import kotlin.io.path.deleteRecursively
-import kotlin.io.path.exists
-import kotlin.io.path.isRegularFile
-import kotlin.io.path.listDirectoryEntries
-import kotlin.io.path.name
-import kotlin.io.path.writeBytes
+import kotlin.io.path.*
 
 plugins {
     idea
@@ -116,13 +107,19 @@ cloche {
         val olympus = dependencies["olympus"]!!
         val rlib = dependencies["resourcefullib"]!!
         val rconfig = dependencies["resourcefulconfig"]!!
+        val accesswidener = project.layout.projectDirectory.file("src/versions/${name}/skyocean.accesswidener")
 
-        fabric(name) {
+        fabric("versions:$name") {
             includedClient()
             minecraftVersion = version
             this.loaderVersion = loaderVersion.get()
 
-            mixins.from("src/mixins/versioned/skyocean.${sourceSet.name}.mixins.json")
+            mixins.from("src/mixins/versioned/skyocean.${name.replace(".", "")}.mixins.json")
+
+            println("Acceswidener: " + accesswidener.toPath().toAbsolutePath().toString())
+            if (accesswidener.toPath().exists()) {
+                accessWideners.from(accesswidener)
+            }
 
             // include(libs.hypixelapi) - included in sbapi
 
@@ -165,8 +162,9 @@ cloche {
 
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
-                implementation(olympus)
-                implementation(rconfig)
+                implementation(olympus) { isTransitive = false }
+                implementation(rconfig) { isTransitive = false }
+                implementation(rlib) { isTransitive = false }
 
                 include(libs.resourceful.config.kotlin) { isTransitive = false }
                 include(libs.keval) { isTransitive = false }
@@ -205,7 +203,7 @@ cloche {
                     }
                 }
 
-                project.layout.projectDirectory.toPath().resolve("run/${sourceSet.name}Mods").takeIf { it.exists() }
+                project.layout.projectDirectory.toPath().resolve("run/${name}Mods").takeIf { it.exists() }
                     ?.listDirectoryEntries()?.filter { it.isRegularFile() }?.forEach { file ->
                         extractMods(file)
                     }
@@ -230,10 +228,17 @@ cloche {
     }
     createVersion("1.21.8", minecraftVersionRange = {
         start = "1.21.6"
+        end = "1.21.8"
+        endExclusive = false
     }) {
         this["resourcefullib"] = libs.resourceful.lib1218
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
+    }
+    createVersion("1.21.9", fabricApiVersion = provider { "0.133.7" }) {
+        this["resourcefullib"] = libs.resourceful.lib1219
+        this["resourcefulconfig"] = libs.resourceful.config1219
+        this["olympus"] = libs.olympus.lib1219
     }
 
     mappings { official() }
@@ -281,6 +286,10 @@ repo {
 }
 
 tasks {
+    configureEach {
+        notCompatibleWithConfigurationCache("Configuration cache causes various build errors")
+    }
+
     withType<ProcessResources>().configureEach {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
@@ -290,7 +299,7 @@ tasks {
         options.release.set(21)
     }
 
-    withType<KotlinCompile>().configureEach {
+    withType<KotlinCompile>().all {
         compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
         compilerOptions {
             languageVersion = KotlinVersion.KOTLIN_2_2
@@ -307,7 +316,7 @@ tasks {
     }
 }
 
-fun registerMeowdding(name: String, init: Task.() -> Unit = {}) = tasks.register(name).apply { configure { group = "meowdding"; init() } }
+fun registerMeowdding(name: String, init: Task.() -> Unit = {}): TaskProvider<Task> = tasks.register(name).apply { configure { group = "meowdding"; init() } }
 val createResourcePacks = registerMeowdding("createResourcePacks")
 val runAllDatagen = registerMeowdding("runAllDatagen")
 val mergePackOutputs = tasks.register("mergePackOutputs", JavaExec::class) {

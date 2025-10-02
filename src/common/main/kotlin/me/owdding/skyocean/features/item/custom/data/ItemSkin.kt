@@ -2,7 +2,6 @@ package me.owdding.skyocean.features.item.custom.data
 
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.LoadingCache
-import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
@@ -12,7 +11,7 @@ import me.owdding.skyocean.utils.Utils.simpleCacheLoader
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.component.ResolvableProfile
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
-import java.util.*
+import tech.thatgravyboat.skyblockapi.platform.ResolvableProfile
 import kotlin.reflect.KClass
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
@@ -35,9 +34,9 @@ val skinCache: LoadingCache<String, ResolvableProfile> = CacheBuilder.newBuilder
     .expireAfterWrite(10.minutes.toJavaDuration())
     .build(
         simpleCacheLoader { skin ->
-            val profile = GameProfile(UUID.randomUUID(), "a")
-            profile.properties.put("textures", Property("textures", skin))
-            ResolvableProfile(profile)
+            ResolvableProfile {
+                put("textures", Property("textures", skin))
+            }
         },
     )
 

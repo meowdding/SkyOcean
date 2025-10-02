@@ -8,8 +8,8 @@
     "HumanoidArmorLayerMixin",
     "ItemRendererMixin",
     "ItemStackMixin",
-    "PlayerRendererMixin",
-    "PlayerRenderStateMixin",
+    "AvatarRendererMixin",
+    "AvatarRenderStateMixin",
     "SkullBlockRendererMixin"
   ]
 }

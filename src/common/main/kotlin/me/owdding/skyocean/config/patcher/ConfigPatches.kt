@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.Utils
 import net.minecraft.resources.ResourceLocation
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
@@ -37,7 +36,7 @@ object ConfigPatches {
         for (path in Files.walk(orElseThrow)) {
             if (Files.isRegularFile(path)) {
                 val id = path.nameWithoutExtension.filter { c -> c.isDigit() }.toInt()
-                val patcher = Utils.applyPatch(path.readText().readJson<JsonObject>(), "patches/${path.nameWithoutExtension}").toDataOrThrow(CODEC)
+                val patcher = path.readText().readJson<JsonObject>().toDataOrThrow(CODEC)
                 patches.add(id to patcher)
             }
         }

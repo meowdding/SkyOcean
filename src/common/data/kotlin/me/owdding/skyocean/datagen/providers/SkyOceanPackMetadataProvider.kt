@@ -36,6 +36,7 @@ class PackMcMetaProvider(val output: FabricDataOutput, val init: PackBuilder.() 
 val versions = mutableMapOf(
     McVersionGroup.MC_1_21_5 to (55 to 55),
     McVersionGroup.MC_1_21_6 to (63 to 64),
+    McVersionGroup.MC_1_21_9 to (69 to 69),
 )
 
 fun minVersion(): Int = versions[McClient.mcVersionGroup]!!.first

@@ -3,8 +3,8 @@ package me.owdding.skyocean.utils
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.generated.CodecUtils
+import net.minecraft.core.ClientAsset
 import net.minecraft.core.UUIDUtil
-import net.minecraft.resources.ResourceLocation
 import java.util.*
 
 @Module
@@ -15,6 +15,6 @@ object ContributorHandler {
 
     @GenerateCodec
     data class ContributorData(
-        val cape: ResourceLocation,
+        val cape: ClientAsset,
     )
 }

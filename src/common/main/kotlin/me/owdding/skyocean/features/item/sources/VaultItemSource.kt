@@ -21,5 +21,9 @@ object VaultItemContext : ItemContext {
         riftWarning()
     }
 
-    override fun open() = requiresOverworld(true) { requiresCookie { McClient.sendCommand("/bank") } }
+    override fun open() = requiresOverworld(sendMessage = true) {
+        requiresCookie(allowOnBingo = true) {
+            McClient.sendCommand("/bank")
+        }
+    }
 }

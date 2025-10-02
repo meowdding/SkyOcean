@@ -19,8 +19,8 @@
     "LinearLayoutMixin",
     "ModelManagerAccessor",
     "MutableComponentMixin",
-    "PlayerRendererMixin",
-    "PlayerRenderStateMixin",
+    "AvatarRendererMixin",
+    "AvatarRenderStateMixin",
     "ScreenAccessor",
     "AbstractContainerScreenMixin"
   ]
