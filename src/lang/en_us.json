@@ -249,7 +249,7 @@
       },
       "pest_warning_delay": {
         "@value": "Pest Warning Delay",
-        "desc": "The delay between reminders in seconds"
+        "desc": "The delay between reminders in seconds."
       }
     },
     "misc": {
