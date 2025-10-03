@@ -353,7 +353,7 @@ cloche.targets.forEach { target ->
                 this.environment = parentRun.environment
                 this.workingDirectory = parentRun.workingDirectory
                 jvmArgs("-Dskyocean.datagen.target=RESOURCE_PACKS")
-                jvmArgs("-Dskyocean.datagen.dir=${project.layout.buildDirectory.dir("resourcepacks/${target.name}").get().toPath().absolutePathString()}")
+                jvmArgs("-Dskyocean.datagen.dir=${project.layout.buildDirectory.dir("resourcepacks/${target.name.substringAfter(":")}").get().toPath().absolutePathString()}")
                 jvmArgs("-Dskyocean.datagen.output=${project.layout.buildDirectory.dir("libs").get().toPath().absolutePathString()}")
                 createResourcePacks.get().dependsOn(this.runTask)
                 createResourcePacks.get().mustRunAfter(this.runTask)
