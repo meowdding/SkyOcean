@@ -5,6 +5,7 @@ import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.utils.boundingboxes.CrystalHollowsBB
+import me.owdding.skyocean.utils.extensions.toBlockPos
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderPlane
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -38,7 +39,7 @@ object AreaWalls {
         if (!MiningConfig.chAreaWalls) return
 
         atCamera {
-            val blockPosition = camera.blockPosition
+            val blockPosition = cameraPosition.toBlockPos()
             when (blockPosition) {
                 in Area.NUCLEUS -> renderNucleus()
                 in Area.MAGMA_FIELDS -> renderMagmaFields()

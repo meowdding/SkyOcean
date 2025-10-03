@@ -13,9 +13,9 @@ import kotlin.math.roundToInt
 data class OctreeDebugRenderer(val octree: Octree) {
 
     fun render(event: RenderWorldEvent) {
-        val camX = event.camera.position.x
-        val camY = event.camera.position.y
-        val camZ = event.camera.position.z
+        val camX = event.cameraPosition.x
+        val camY = event.cameraPosition.y
+        val camZ = event.cameraPosition.z
         octree.boxes.forEach {
             val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderType.lines())
             //ShapeRenderer.renderLineBox(
@@ -42,9 +42,9 @@ data class OctreeDebugRenderer(val octree: Octree) {
         val color = (size / 16.0).roundToInt()
         val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderType.lines())
         val colorValue = color + 5L
-        val camX = event.camera.position.x
-        val camY = event.camera.position.y
-        val camZ = event.camera.position.z
+        val camX = event.cameraPosition.x
+        val camY = event.cameraPosition.y
+        val camZ = event.cameraPosition.z
         //ShapeRenderer.renderLineBox(
         //    event.poseStack,
         //    vertexConsumer,
