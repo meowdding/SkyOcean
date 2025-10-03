@@ -243,7 +243,7 @@ cloche {
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
     }
-    createVersion("1.21.9", endAtSameVersion = false, fabricApiVersion = provider { "0.133.7" }) {
+    createVersion("1.21.9", endAtSameVersion = false, fabricApiVersion = provider { "0.134.0" }) {
         this["resourcefullib"] = libs.resourceful.lib1219
         this["resourcefulconfig"] = libs.resourceful.config1219
         this["olympus"] = libs.olympus.lib1219

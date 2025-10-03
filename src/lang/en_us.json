@@ -4,750 +4,752 @@
     "allowReferences": true,
     "allowTags": true,
     "objectAsKeys": true,
-    "prefix": "skyocean",
     "@references": {
       "transparency": "Values range from 0-100%, 100% means it is fully visible."
     }
   },
-  "@value": "SkyOcean",
-  "config": {
-    "main": {
-      "modifications": {
-        "@value": "Visual Changes",
-        "desc": [
-          "The mod may change the appearance of an item (or other visual components), by for example manipulating it's tooltip.",
-          "",
-          "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix (or whatever modify indicator is selected), this is done to help identify the origin of any changes and therefore we advise against disabling it."
-        ]
-      },
-      "text_shadow": {
-        "@value": "Disable Text Shadow",
-        "desc": "Disables text shadows for all messages sent by SkyOcean."
-      },
-      "prefix_gradient": {
-        "@value": "Prefix Gradient",
-        "desc": "Changes the gradient that is used for the prefix."
-      },
-      "modify_indicator": {
-        "@value": "SkyOcean Modify Indicator",
-        "desc": [
-          "Items modified or added by SkyOcean will have a small indicator (normally <color #355AA0>\uD83C\uDF0A</color>) in their name.",
-          "This indicator can be customized here."
-        ],
-        "prefix": "Prefix in name",
-        "suffix": "Suffix in name",
-        "lore": "First line in lore",
-        "nothing": "No indicator"
-      },
-      "debug": {
-        "@value": "Enable Debug Mode",
-        "desc": [
-          "Enables a few different debugs, throughout the mod",
-          "<red>May lead to crashes or unexpected/undefined behaviour"
-        ]
-      }
-    },
-    "slayer": {
-      "@value": "Slayer",
-      "highlights": {
-        "blaze": {
-          "@value": "Blaze Slayer Highlight",
-          "desc": "Highlights the blaze slayer in the color of the current attunement"
+  "key.category.skyocean.main": "SkyOcean",
+  "skyocean": {
+    "@value": "SkyOcean",
+    "config": {
+      "main": {
+        "modifications": {
+          "@value": "Visual Changes",
+          "desc": [
+            "The mod may change the appearance of an item (or other visual components), by for example manipulating it's tooltip.",
+            "",
+            "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix (or whatever modify indicator is selected), this is done to help identify the origin of any changes and therefore we advise against disabling it."
+          ]
         },
-        "own_boss": {
-          "@value": "Highlight own slayer boss",
-          "desc": "Adds glow highlights to your slayer boss"
+        "text_shadow": {
+          "@value": "Disable Text Shadow",
+          "desc": "Disables text shadows for all messages sent by SkyOcean."
         },
-        "minis": {
-          "@value": "Highlight minis",
-          "desc": "Highlights all minibosses with a <red>red</red> glow effect.",
-          "big_boys": {
-            "@value": "Highlight high tier minis",
-            "desc": "Highlight higher tier mini bosses in <dark_red>dark red</dark_red>."
+        "prefix_gradient": {
+          "@value": "Prefix Gradient",
+          "desc": "Changes the gradient that is used for the prefix."
+        },
+        "modify_indicator": {
+          "@value": "SkyOcean Modify Indicator",
+          "desc": [
+            "Items modified or added by SkyOcean will have a small indicator (normally <color #355AA0>\uD83C\uDF0A</color>) in their name.",
+            "This indicator can be customized here."
+          ],
+          "prefix": "Prefix in name",
+          "suffix": "Suffix in name",
+          "lore": "First line in lore",
+          "nothing": "No indicator"
+        },
+        "debug": {
+          "@value": "Enable Debug Mode",
+          "desc": [
+            "Enables a few different debugs, throughout the mod",
+            "<red>May lead to crashes or unexpected/undefined behaviour"
+          ]
+        }
+      },
+      "slayer": {
+        "@value": "Slayer",
+        "highlights": {
+          "blaze": {
+            "@value": "Blaze Slayer Highlight",
+            "desc": "Highlights the blaze slayer in the color of the current attunement"
+          },
+          "own_boss": {
+            "@value": "Highlight own slayer boss",
+            "desc": "Adds glow highlights to your slayer boss"
+          },
+          "minis": {
+            "@value": "Highlight minis",
+            "desc": "Highlights all minibosses with a <red>red</red> glow effect.",
+            "big_boys": {
+              "@value": "Highlight high tier minis",
+              "desc": "Highlight higher tier mini bosses in <dark_red>dark red</dark_red>."
+            }
+          }
+        }
+      },
+      "mining": {
+        "@value": "Mining",
+        "modifyCommissions": {
+          "@value": "Modify Commissions",
+          "desc": "Modifies commission items to be visually different when you started or finished it."
+        },
+        "forge_reminder": {
+          "@value": "Forge Reminder",
+          "desc": "Sends a reminder if you have unclaimed expired forge items"
+        },
+        "forge_reminder_delay": {
+          "@value": "Reminder Delay",
+          "desc": "The delay between reminders in minutes."
+        },
+        "retexture": {
+          "@value": "Retexture",
+          "carpets": {
+            "@value": "Retexture carpets",
+            "desc": [
+              "Turns most carpets in the dwarven mines <red>red</red> to make them more visible."
+            ]
+          },
+          "glacite": {
+            "@value": "Retexture Glacite Tunnel blocks",
+            "desc": [
+              "Allows resource packs to change the appearance of tungsten, umber and glacite tunnel blocks."
+            ]
+          },
+          "mist": {
+            "@value": "Retexture Mist",
+            "desc": [
+              "Allows resource packs to change the appearance of blocks in the mist."
+            ]
+          },
+          "gemstone": {
+            "@value": "Retexture Gemstones",
+            "desc": [
+              "Allows resource packs to change the appearance of gemstones."
+            ]
+          },
+          "hollows": {
+            "@value": "Retexture Hollows",
+            "desc": "Allows resource packs to change the appearance of most hardstone blocks and ores in the hollows."
+          }
+        },
+        "mineshaft": {
+          "@value": "Mineshaft",
+          "announce": {
+            "@value": "Announce Mineshaft Enter",
+            "desc": [
+              "Send a chat or party message when you enter a Mineshaft.",
+              "Will send in chat if not in a party."
+            ]
+          },
+          "announce-type": {
+            "@value": "Announcement Type",
+            "desc": "The type of message to send when you enter a Mineshaft."
+          },
+          "waypoint": {
+            "@value": "Corpse Waypoint",
+            "desc": "Show a waypoint on all possible Corpse Locations in a Mineshaft."
+          },
+          "key-announce": {
+            "@value": "Key Announce",
+            "desc": "Send a chat message how many keys of the current mineshaft corpses you have in your sacks."
+          }
+        },
+        "hotm": {
+          "@value": "Heart of the Mountain Perk Modifier",
+          "shiftCost": {
+            "@value": "Show shift click cost",
+            "desc": "Shows the amount of powder that will be consumed on shift click."
+          },
+          "totalProgress": {
+            "@value": "Show total progress",
+            "desc": "Shows your total progress to maxing a perk."
+          },
+          "stackSize": {
+            "@value": "Show level as amount",
+            "desc": "Shows the perk level as item stack count."
+          },
+          "totalLeft": {
+            "@value": "Show total amount left",
+            "desc": "Displays the total amount that is still required to max a perk."
+          }
+        },
+        "ch": {
+          "area_walls": {
+            "@value": "Area Walls",
+            "desc": "Adds walls between the areas in the crystal hollows."
+          }
+        },
+        "puzzler": {
+          "@value": "Puzzler Solver",
+          "desc": "Highlights the correct block for the puzzler."
+        },
+        "metal_detector": {
+          "@value": "Metal Detector Solver",
+          "metalDetector": {
+            "@value": "Enable Metal Detector Solver",
+            "desc": "Enables the metal detector solver, which helps you find treasures in the Mines of Divan."
+          },
+          "playDingOnFind": {
+            "@value": "Play Ding on Find",
+            "desc": "Plays a sound when the metal detector finds a treasure."
+          },
+          "showTitleOnFind": {
+            "@value": "Show Title on Find",
+            "desc": "Shows a title when the metal detector finds a treasure."
+          }
+        }
+      },
+      "inventory": {
+        "@value": "Inventory",
+        "sack_value": {
+          "@value": "Sack Value",
+          "desc": "Shows the value of all items in your sacks.",
+          "edit": "Edit Sack Value",
+          "price_source": {
+            "@value": "Price Source",
+            "desc": "The source to use for the price of items in sacks.",
+            "bazaar": "BZ",
+            "npc": "NPC"
+          }
+        },
+        "inventory_buttons": {
+          "@value": "Inventory Buttons",
+          "desc": "Settings to configure and change inventory buttons.",
+          "enabled": {
+            "@value": "Inventory Buttons",
+            "desc": "Whether to show the Inventory Buttons."
+          },
+          "edit": {
+            "@value": "Edit Buttons",
+            "desc": [
+              "Configure Buttons in a separate UI.",
+              "<italic>Also accessible through <gray>/skyocean buttons</gray></italic>"
+            ]
+          }
+        }
+      },
+      "chat": {
+        "@value": "Chat",
+        "profile_in_chat": {
+          "@value": "Profile in Chat",
+          "desc": "Show the profile icon in chat messages.",
+          "warning": "<yellow>SkyOcean by default adds the profile emblem into chat messages, if you wish to change this open the config and search for <gold>Profile in Chat</gold>!"
+        },
+        "white_non_message": {
+          "@value": "Consistent Player Message Colour",
+          "desc": "Changes the color of messages sent by unranked players from gray to white."
+        },
+        "piggy_repair_helper": {
+          "@value": "Piggy Repair Helper",
+          "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."
+        },
+        "sack_notification": {
+          "@value": "Sack Notification",
+          "desc": "Show a notification when you gain specific sack items."
+        },
+        "sack_notification_items": {
+          "@value": "Sack Notification Items",
+          "desc": "The items to show notifications for."
+        }
+      },
+      "garden": {
+        "@value": "Garden",
+        "pest_bait_type": {
+          "@value": "Pest Bait Type",
+          "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
+        },
+        "desk_pest_highlight": {
+          "@value": "Desk Pest Highlight",
+          "desc": "Highlights on what Plot how many pests are on in the 'Configure Plots' menu."
+        },
+        "pest_warning": {
+          "@value": "Pest Warning",
+          "desc": "Warns you when you reach 4 or more pests while farming."
+        },
+        "pest_warning_delay": {
+          "@value": "Pest Warning Delay",
+          "desc": "The delay between reminders in seconds."
+        }
+      },
+      "misc": {
+        "@value": "Miscellaneous",
+        "ministerInCalendar": {
+          "@value": "Minister in Calendar",
+          "desc": "Adds a current minister next to the mayor in the calendar."
+        },
+        "anvilHelper": {
+          "@value": "Anvil helper",
+          "desc": "Highlights books that have the same enchantment as the ones in the anvil."
+        },
+        "previousServer": {
+          "@value": "Previous Server",
+          "desc": "Sends a chat message when you join a server you were previously in."
+        },
+        "previousServerTime": {
+          "@value": "Previous Server Time",
+          "desc": "The time a server is cached and shows up as previously joined."
+        },
+        "hideLightning": {
+          "@value": "Hide Lightning",
+          "desc": "Hides lightning bolts and sky flash effect."
+        },
+        "fullTextShadow": {
+          "@value": "Full Text Shadow",
+          "desc": [
+            "Makes text shadow render as \"full\" all around the glyph.",
+            "",
+            "<red>May Significantly impact performance.</red>"
+          ]
+        },
+        "showHiddenPetCandy": {
+          "@value": "Show Hidden Pet Candy",
+          "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
+        },
+        "islandCloudHider": {
+          "@value": "Island Cloud Hider",
+          "desc": [
+            "Specify what island shouldn't render Clouds.",
+            "Useful for islands like the Dwarven Mines where clouds can be annoying."
+          ],
+          "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
+        },
+        "customization_vanilla_integration": {
+          "@value": "Animate dyes and skins in inventories",
+          "desc": [
+            "Will always animate dyed armors and helmet skins even in inventories or menus.",
+            "",
+            "<yellow>(Doesn't currently work with skins that allow variant selection or pets)</yellow>"
+          ]
+        },
+        "hideEntityFire": {
+          "@value": "Hide entity fire",
+          "desc": "Removes the fire effect from all entities."
+        },
+        "itemSearch": {
+          "@value": "Item Search",
+          "desc": "Item Search is a feature that allows you to search for items in your inventory, backpacks, storage, sacks, island chests and more.",
+          "itemHighlight": {
+            "@value": "Item Highlight",
+            "desc": "Choose what color the searched item will be highlighted with."
+          },
+          "preserve_search": {
+            "@value": "Preserve Search",
+            "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
+          },
+          "museumIntegration": {
+            "@value": "Museum integration",
+            "desc": "Changes the museum to highlight items that are found on your profile, furthermore it also tells you which items you can craft and which ones are not craftable at all."
+          },
+          "warp_to_island": {
+            "@value": "Warp to island",
+            "desc": "Automatically warp to island if you click an item that is on it."
+          }
+        },
+        "museumArmourPieces": {
+          "@value": "Show museum armour pieces",
+          "desc": "Displays all pieces required to finish an armor set in the tooltip in the museum."
+        },
+        "crafthelper": {
+          "@value": "Craft Helper",
+          "desc": [
+            "Craft helper is a feature that lets you see all the steps in a recipe and how much progress you have made towards completing it.",
+            "",
+            "<gray>Pro Tip:</gray> You can also import SkyShard Trees into your CraftHelper by pressing <gray>\"Copy Tree\"</gray>, then <gray>\"SkyOcean Format\"</gray> on the Website and running <gray>/skyocean recipe skyshards</gray> in-game!"
+          ],
+          "enabled": {
+            "@value": "Enable Craft Helper",
+            "desc": "Whether the craft helper is enabled or not, this is the main switch."
+          },
+          "hideCompleted": {
+            "@value": "Hide completed",
+            "desc": "Whether to hide completed parts of the tree or not."
+          },
+          "parentAmount": {
+            "@value": "Add parent amount",
+            "desc": "Includes the amount that is already present through parents."
+          },
+          "disableRootItems": {
+            "@value": "Disable tracking for target",
+            "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
+          },
+          "disallowedItemSources": {
+            "@value": "Disallowed item sources",
+            "desc": "Select sources from which the craft helper will ignore."
+          },
+          "position": {
+            "@value": "Position",
+            "desc": "Craft helper position inside the inventory.",
+            "top_left": "Top Left",
+            "top_right": "Top Right",
+            "bottom_left": "Bottom Left",
+            "bottom_right": "Bottom Right",
+            "left_of_inventory": "Left of Inventory",
+            "right_of_inventory": "Right of Inventory"
+          },
+          "margin": {
+            "@value": "Margin",
+            "desc": "How much space to leave between the inventory/screen edges and the craft helper element."
+          },
+          "done_message": {
+            "@value": "Send a message when your recipe is complete",
+            "desc": "Sends a chat message whenever the mod detects your recipe tree as completed."
+          },
+          "tree_formatter": {
+            "@value": "Craft helper formatter",
+            "desc": "Changes the appearance of the craft helper tree.",
+            "raw": "Raw",
+            "tree": "Tree"
+          }
+        },
+        "transparentArmor": {
+          "@value": "Transparent Armour",
+          "desc": [
+            "Settings to change the appearance of armours on either yourself or others.",
+            {
+              "@id": "transparency"
+            },
+            "<italic>Does not apply to npcs.</italic>"
+          ],
+          "self": {
+            "@value": "Self",
+            "desc": "Only applies to your armour."
+          },
+          "others": {
+            "@value": "Others",
+            "desc": "Only applies to other players."
+          }
+        },
+        "mob_icons": {
+          "@value": "Mob Icons",
+          "enabled": {
+            "@value": "Enable Mob Icons",
+            "desc": [
+              "Replaces the hypixel mob icons with a spelled out version.",
+              "<red>This requires a nametag update, meaning it doesn't refresh instantly!</red>"
+            ]
+          },
+          "display_type": {
+            "@value": "Display type",
+            "desc": "Changes the way the mob icons are displayed."
+          },
+          "colors": {
+            "@value": "Individual colors",
+            "desc": [
+              "Overwrites the colors for the different mob icons.",
+              "The default <white>#FFFFFF</white> means that it doesn't get changed at all."
+            ]
+          }
+        }
+      },
+      "fishing": {
+        "@value": "Fishing",
+        "trophy_numbers": {
+          "@value": "Trophy Numbers",
+          "desc": "Displays the amount of trophy fishes you caught upon catching one."
+        },
+        "hook_text_scale": {
+          "@value": "Hook Text Scale",
+          "desc": "Changes the scale of the text above your fishing hook/bobber."
+        },
+        "lava_replacement": {
+          "@value": "Lava Replacement",
+          "desc": "Replaces the lava texture with the water texture while in the Crimson Isle."
+        },
+        "bobber_fix": {
+          "@value": "Bobber Fix",
+          "desc": "Fixes bobbers rubberbanding when fishing."
+        },
+        "bobber_time": {
+          "@value": "Bobber Time",
+          "desc": "Shows the time your bobber has existed."
+        },
+        "hide_other_bobbers": {
+          "@value": "Hide Other Bobbers",
+          "desc": "Hides other players' bobbers, making it easier to see your own."
+        },
+        "hotspot": {
+          "@value": "Hotspot Highlight",
+          "desc": "All settings for the hotspot highlight.",
+          "circle_surface": {
+            "@value": "Surface",
+            "desc": "Render a \"solid\" circle instead of the particle outline."
+          },
+          "surface_transparency": {
+            "@value": "Surface Transparency",
+            "desc": [
+              "Changes the transparency of the surface.",
+              {
+                "@id": "transparency"
+              }
+            ]
+          },
+          "circle_outline": {
+            "@value": "Outline",
+            "desc": "Render a \"solid\" outline instead of the particle outline."
+          },
+          "outline_transparency": {
+            "@value": "Surface Transparency",
+            "desc": [
+              "Changes the transparency of the outline.",
+              {
+                "@id": "transparency"
+              }
+            ]
+          }
+        }
+      },
+      "lore_modifiers": {
+        "@value": "Lore Modifiers",
+        "modifications": {
+          "@value": "Lore Modifications",
+          "desc": [
+            "All items that have any modification present in the lore are indicated with the selected modify indicator.",
+            "To list all modifications that are present press <gray>shift</gray>.",
+            "",
+            "Some of the settings may include examples, <italic><gray>hover</gray></italic> them to see them."
+          ]
+        },
+        "drill_modifications": {
+          "@value": "Compact drill modifications",
+          "desc": [
+            "Compacts the installed upgrade parts into one line each.",
+            "",
+            "Example: <green><hover show_text '<color #355AA0>\uD83C\uDF0A</color><aqua> Heated Divans Drill</aqua>",
+            "<dark_gray>Breaking Power 10</dark_gray>",
+            "",
+            "<gray>Damage: <red>+75</red></gray>",
+            "<gray>Mining Speed: <green>+7,320</green> <gold>[+500]</gold> <blue>[+50] (+70)</blue> <light_purple>(+240)</light_purple></gray>",
+            "<gray>Pristine: <green>+4.7</green> <light_purple>(+2.2)</light_purple></gray>",
+            "<gray>Mining Fortune: <green>+340</green> <blue>[+5] (+25)</blue> <light_purple>(+120)</light_purple></gray>",
+            "<gray>Gemstone Fortune: <green>+50</green></gray>",
+            "<gray>Mining Wisdom: <green>+10</green></gray>",
+            "<gold>[⸕] [⸕] [<green>☘</green>] [<green>☘</green>] [<yellow>✦</yellow>]</gold>",
+            "",
+            "<light_purple><bold>Flowstate III</bold></light_purple>",
+            "<blue>Compact X</blue>",
+            "<blue>Efficiency X</blue>",
+            "<blue>Experience IV</blue>",
+            "<blue>Fortune IV</blue>",
+            "<blue>Lapidary V</blue>",
+            "<blue>Paleontologist V</blue>",
+            "<blue>Prismatic V</blue>",
+            "",
+            "<gray>Fuel Tank: <blue>Perfectly-Cut Fuel Tank</blue></gray>",
+            "<gray>Drill Engine: <blue>Amber-Polished Drill Engine</blue></gray>",
+            "<gray>Upgrade Module: <blue>Blue Cheese Goblin Omelette</blue></gray>",
+            "",
+            "<gray>Fuel: </gray><dark_green>69,801</dark_green><dark_gray>/100k</dark_gray>",
+            "",
+            "<blue>Heated Bonus</blue>",
+            "<gray>Grants <gold>+1☘ Mining Fortune</gold> and <gold>+4⸕</gold></gray>",
+            "<gray><gold>Mining Speed</gold> per <red>1♨ Heat</red> you have.</gray>",
+            "",
+            "<dark_gray><bold>*</bold> Co-op Soulbound <bold>*</bold></dark_gray>",
+            "<aqua><bold><obfuscated>a</obfuscated> DIVINE DRILL <obfuscated>a</obfuscated></bold></aqua>'>On</hover></green>/<hover show_text '<aqua>Heated Divans Drill</aqua>",
+            "<dark_gray>Breaking Power 10</dark_gray>",
+            "",
+            "<gray>Damage: <red>+75</red></gray>",
+            "<gray>Mining Speed: <green>+7,320</green> <gold>[+500]</gold> <blue>[+50] (+70)</blue> <light_purple>(+240)</light_purple></gray>",
+            "<gray>Pristine: <green>+4.7</green> <light_purple>(+2.2)</light_purple></gray>",
+            "<gray>Mining Fortune: <green>+340</green> <blue>[+5] (+25)</blue> <light_purple>(+120)</light_purple></gray>",
+            "<gray>Gemstone Fortune: <green>+50</green></gray>",
+            "<gray>Mining Wisdom: <green>+10</green></gray>",
+            "<gold>[⸕] [⸕] [<green>☘</green>] [<green>☘</green>] [<yellow>✦</yellow>]</gold>",
+            "",
+            "<light_purple><bold>Flowstate III</bold></light_purple>",
+            "<blue>Compact X</blue>",
+            "<blue>Efficiency X</blue>",
+            "<blue>Experience IV</blue>",
+            "<blue>Fortune IV</blue>",
+            "<blue>Lapidary V</blue>",
+            "<blue>Paleontologist V</blue>",
+            "<blue>Prismatic V</blue>",
+            "",
+            "<green>Perfectly-Cut Fuel Tank</green>",
+            "<dark_green>100,000 Max Fuel Capacity<dark_green>",
+            "<green>-10% Pickaxe Ability Cooldown</green>",
+            "",
+            "<green>Amber-Polished Drill Engine</green>",
+            "<gold>+600⸕ Mining Speed</gold>",
+            "<gold>+100☘ Mining Fortune</gold>",
+            "",
+            "<green>Blue Cheese Goblin Omelette Part</green>",
+            "<gray>Adds <green>+1 Level</green> to all of your unlocked <purple>Heart of</purple></gray>",
+            "<gray><purple>the Mountain</purple> perks.</gray>",
+            "",
+            "<gray>Fuel: </gray><dark_green>69,801</dark_green><dark_gray>/100k</dark_gray>",
+            "",
+            "<blue>Heated Bonus</blue>",
+            "<gray>Grants <gold>+1☘ Mining Fortune</gold> and <gold>+4⸕</gold></gray>",
+            "<gray><gold>Mining Speed</gold> per <red>1♨ Heat</red> you have.</gray>",
+            "",
+            "<dark_gray><bold>*</bold> Co-op Soulbound <bold>*</bold></dark_gray>",
+            "<aqua><bold><obfuscated>a</obfuscated> DIVINE DRILL <obfuscated>a</obfuscated></bold></aqua>'><red>Off</red></hover>"
+          ]
+        },
+        "dungeon_quality": {
+          "@value": "Dungeon Quality",
+          "desc": [
+            "Adds the dungeon quality to the lore.",
+            "",
+            "Example: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <gold>Smart Skeleton Master Leggings</gold>",
+            "<gray>Item Quality: <red>50<gray>/</gray>50</red></gray>",
+            "<gray>Tier: <light_purple>8<gray>/</gray>10</light_purple></gray>",
+            "<gray>Gear Score: <light_purple>555</light_purple> <dark_gray>(2543)</dark_gray></gray>",
+            "<gray>Crit Chance: <red>+5%</red> <dark_gray>(+5.25%)</dark_gray></gray>",
+            "<gray>Crit Damage: <red>+57%</red> <dark_gray>(+271.32%)</dark_gray></gray>",
+            "<gray>Health: <green>+155</green> <blue>(+15)</blue> <dark_gray>(+737.8)</dark_gray></gray>",
+            "<gray>Defense: <green>+139</green> <blue>(+15)</blue> <dark_gray>(+661.64)</dark_gray></gray>",
+            "<gray>Intelligence: <green>+100</green> <blue>(+100)</blue> <dark_gray>(+476)</dark_gray></gray>",
+            "",
+            "<blue>Growth V, Protection V, Thorns III</blue>",
+            "",
+            "<gray>Increase the damage you deal with",
+            "arrows by <red>5%</red>.</gray>",
+            "<gold>Full Set Bonus: Skeleton Master</gold><gray> (0/4)</gray>",
+            "<gray>Increase the damage you deal with",
+            "arrows by <red>25%</red>.",
+            "",
+            "<green>This item is Undead ༕!<green>",
+            "",
+            "<gold><bold>LEGENDARY DUNGEON LEGGINGS</bold></gold>'>On</hover></green>/<red><hover '<gold>Smart Skeleton Master Leggings</gold>",
+            "<gray>Gear Score: <light_purple>555</light_purple> <dark_gray>(2543)</dark_gray></gray>",
+            "<gray>Crit Chance: <red>+5%</red> <dark_gray>(+5.25%)</dark_gray></gray>",
+            "<gray>Crit Damage: <red>+57%</red> <dark_gray>(+271.32%)</dark_gray></gray>",
+            "<gray>Health: <green>+155</green> <blue>(+15)</blue> <dark_gray>(+737.8)</dark_gray></gray>",
+            "<gray>Defense: <green>+139</green> <blue>(+15)</blue> <dark_gray>(+661.64)</dark_gray></gray>",
+            "<gray>Intelligence: <green>+100</green> <blue>(+100)</blue> <dark_gray>(+476)</dark_gray></gray>",
+            "",
+            "<blue>Growth V, Protection V, Thorns III</blue>",
+            "",
+            "<gray>Increase the damage you deal with",
+            "arrows by <red>5%</red>.</gray>",
+            "<gold>Full Set Bonus: Skeleton Master</gold><gray> (0/4)</gray>",
+            "<gray>Increase the damage you deal with",
+            "arrows by <red>25%</red>.",
+            "",
+            "<green>This item is Undead ༕!<green>",
+            "",
+            "<gold><bold>LEGENDARY DUNGEON LEGGINGS</bold></gold>'>Off</red>"
+          ]
+        },
+        "compact_level_bars": {
+          "@value": "Compact Level Bars",
+          "desc": [
+            "Compacts the bars in the skyblock levels menu into one line, making them fit on smaller screens.",
+            "",
+            "Example: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <dark_aqua>Dungeon Tasks</dark_aqua>",
+            "<dark_gray>3 Tasks</dark_gray>",
+            "",
+            "<gray>All Dungeon related XP Tasks</gray>",
+            "",
+            "<yellow>▶ Catacombs Level Up</yellow> <dark_gray>(<red>980</red>/<green>1.220</green> <aqua>XP</aqua>)</dark_gray>",
+            "<yellow>▶ Class Level Up</yellow> <dark_gray>(<red>768</red>/<green>1.000</green> <aqua>XP</aqua>)</dark_gray>",
+            "<yellow>▶ Complete Dungeons</yellow> <dark_gray>(<green>540</green>/<green>540</green> <aqua>XP</aqua>)</dark_gray>",
+            "",
+            "<gray>Progress to Complete Category:</gray> <gold>82.9%</gold>",
+            "<gold><strikethrough>                     <white>    </white></strikethrough> <yellow>2,288</yellow>/<yellow>2,760 XP</yellow></gold>",
+            "",
+            "<yellow>Click to view tasks!</yellow>'>On</hover></green>/<red><hover '<dark_aqua>Dungeon Tasks</dark_aqua>",
+            "<dark_gray>3 Tasks</dark_gray>",
+            "",
+            "<gray>All Dungeon related XP Tasks</gray>",
+            "",
+            "<yellow>▶ Catacombs Level Up</yellow>",
+            "<strikethrough><green>                     </green><white>    </white></strikethrough> <green>980<dark_gray>/</dark_gray>1,120 XP</green>",
+            "",
+            "<yellow>▶ Class Level Up</yellow>",
+            "<strikethrough><green>                    </green><white>     </white></strikethrough> <green>768<dark_gray>/</dark_gray>1,000 XP</green>",
+            "",
+            "<yellow>▶ Complete Dungeons</yellow>",
+            "<strikethrough><green>                         </green></strikethrough> <green>540<dark_gray>/</dark_gray>540 XP</green>",
+            "",
+            "<gray>Progress to Complete Category:</gray> <gold>82.9%</gold>",
+            "<gold><strikethrough>                     <white>    </white></strikethrough> <yellow>2,288</yellow>/<yellow>2,760 XP</yellow></gold>",
+            "",
+            "<yellow>Click to view tasks!</yellow>'>Off</hover></red>"
+          ]
+        },
+        "armadillo_blocks_walked": {
+          "@value": "Prehistoric egg blocks walked",
+          "desc": "Shows how many blocks you have walked so far on a prehistory egg."
+        },
+        "storage_preview": {
+          "@value": "Storage Preview",
+          "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
+        },
+        "museum_donation": {
+          "@value": "Museum Donation",
+          "desc": "Shows what items haven't been donated to museum in the tooltip."
+        }
+      },
+      "foraging": {
+        "@value": "Foraging",
+        "hotf": {
+          "shiftCost": {
+            "@value": "Show shift click cost",
+            "desc": "Shows the amount of powder that will be consumed on shift click."
+          },
+          "totalProgress": {
+            "@value": "Show total progress",
+            "desc": "Shows your total progress to maxing a perk."
+          },
+          "stackSize": {
+            "@value": "Show level as amount",
+            "desc": "Shows the perk level as item stack count."
+          },
+          "totalLeft": {
+            "@value": "Show total amount left",
+            "desc": "Displays the total amount that is still required to max a perk."
+          }
+        },
+        "galatea": {
+          "@value": "Galatea",
+          "muteThePhantoms": {
+            "@value": "Mute the Phantoms",
+            "desc": "Mutes all phantoms making them not induce ear pain.",
+            "warning": "<yellow>SkyOcean mutes the phantom sounds by default, if you wish to change this open the config and search for <gold>Mute the Phantoms</gold>!"
+          },
+          "shulkerOverwrite": {
+            "@value": "Retexture shulker",
+            "desc": "Recolors the shulkers to make them more visible."
+          }
+        }
+      },
+      "dungeons": {
+        "@value": "Dungeons",
+        "gambling": {
+          "enabled": {
+            "@value": "CSGO Case Opening",
+            "desc": [
+              "Shows a CSGO case opening animation when opening a dungeon chest.",
+              "",
+              "This feature is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>."
+            ]
+          },
+          "croesus": {
+            "@value": "Also Show Case Opening in Croesus",
+            "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
           }
         }
       }
     },
-    "mining": {
-      "@value": "Mining",
-      "modifyCommissions": {
-        "@value": "Modify Commissions",
-        "desc": "Modifies commission items to be visually different when you started or finished it."
-      },
-      "forge_reminder": {
-        "@value": "Forge Reminder",
-        "desc": "Sends a reminder if you have unclaimed expired forge items"
-      },
-      "forge_reminder_delay": {
-        "@value": "Reminder Delay",
-        "desc": "The delay between reminders in minutes."
-      },
-      "retexture": {
-        "@value": "Retexture",
-        "carpets": {
-          "@value": "Retexture carpets",
-          "desc": [
-            "Turns most carpets in the dwarven mines <red>red</red> to make them more visible."
-          ]
-        },
-        "glacite": {
-          "@value": "Retexture Glacite Tunnel blocks",
-          "desc": [
-            "Allows resource packs to change the appearance of tungsten, umber and glacite tunnel blocks."
-          ]
-        },
-        "mist": {
-          "@value": "Retexture Mist",
-          "desc": [
-            "Allows resource packs to change the appearance of blocks in the mist."
-          ]
-        },
-        "gemstone": {
-          "@value": "Retexture Gemstones",
-          "desc": [
-            "Allows resource packs to change the appearance of gemstones."
-          ]
-        },
-        "hollows": {
-          "@value": "Retexture Hollows",
-          "desc": "Allows resource packs to change the appearance of most hardstone blocks and ores in the hollows."
-        }
-      },
-      "mineshaft": {
-        "@value": "Mineshaft",
-        "announce": {
-          "@value": "Announce Mineshaft Enter",
-          "desc": [
-            "Send a chat or party message when you enter a Mineshaft.",
-            "Will send in chat if not in a party."
-          ]
-        },
-        "announce-type": {
-          "@value": "Announcement Type",
-          "desc": "The type of message to send when you enter a Mineshaft."
-        },
-        "waypoint": {
-          "@value": "Corpse Waypoint",
-          "desc": "Show a waypoint on all possible Corpse Locations in a Mineshaft."
-        },
-        "key-announce": {
-          "@value": "Key Announce",
-          "desc": "Send a chat message how many keys of the current mineshaft corpses you have in your sacks."
-        }
-      },
-      "hotm": {
-        "@value": "Heart of the Mountain Perk Modifier",
-        "shiftCost": {
-          "@value": "Show shift click cost",
-          "desc": "Shows the amount of powder that will be consumed on shift click."
-        },
-        "totalProgress": {
-          "@value": "Show total progress",
-          "desc": "Shows your total progress to maxing a perk."
-        },
-        "stackSize": {
-          "@value": "Show level as amount",
-          "desc": "Shows the perk level as item stack count."
-        },
-        "totalLeft": {
-          "@value": "Show total amount left",
-          "desc": "Displays the total amount that is still required to max a perk."
-        }
-      },
-      "ch": {
-        "area_walls": {
-          "@value": "Area Walls",
-          "desc": "Adds walls between the areas in the crystal hollows."
-        }
-      },
-      "puzzler": {
-        "@value": "Puzzler Solver",
-        "desc": "Highlights the correct block for the puzzler."
-      },
-      "metal_detector": {
-        "@value": "Metal Detector Solver",
-        "metalDetector": {
-          "@value": "Enable Metal Detector Solver",
-          "desc": "Enables the metal detector solver, which helps you find treasures in the Mines of Divan."
-        },
-        "playDingOnFind": {
-          "@value": "Play Ding on Find",
-          "desc": "Plays a sound when the metal detector finds a treasure."
-        },
-        "showTitleOnFind": {
-          "@value": "Show Title on Find",
-          "desc": "Shows a title when the metal detector finds a treasure."
-        }
-      }
+    "garden": {
+      "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>",
+      "open_sack": "<dark_gray>Open Sack</dark_gray>"
     },
     "inventory": {
-      "@value": "Inventory",
-      "sack_value": {
-        "@value": "Sack Value",
-        "desc": "Shows the value of all items in your sacks.",
-        "edit": "Edit Sack Value",
-        "price_source": {
-          "@value": "Price Source",
-          "desc": "The source to use for the price of items in sacks.",
-          "bazaar": "BZ",
-          "npc": "NPC"
-        }
-      },
-      "inventory_buttons": {
-        "@value": "Inventory Buttons",
-        "desc": "Settings to configure and change inventory buttons.",
-        "enabled": {
-          "@value": "Inventory Buttons",
-          "desc": "Whether to show the Inventory Buttons."
-        },
-        "edit": {
-          "@value": "Edit Buttons",
-          "desc": [
-            "Configure Buttons in a separate UI.",
-            "<italic>Also accessible through <gray>/skyocean buttons</gray></italic>"
-          ]
-        }
+      "sack_value": "<dark_gray>Sack Value</dark_gray>",
+      "buttons": {
+        "configuration": "<white>Button Configuration",
+        "item": "Item ID / Skyblock ID",
+        "command": "Command",
+        "screen_title": "Screen Title",
+        "tooltip": "Button Tooltip",
+        "select_button": "<color #cff8ff>Select Button to Edit",
+        "enable_first": "Enable inventory buttons in the Config first!",
+        "disable": "Disable",
+        "enable": "Enable",
+        "reset": "Reset"
       }
     },
-    "chat": {
-      "@value": "Chat",
-      "profile_in_chat": {
-        "@value": "Profile in Chat",
-        "desc": "Show the profile icon in chat messages.",
-        "warning": "<yellow>SkyOcean by default adds the profile emblem into chat messages, if you wish to change this open the config and search for <gold>Profile in Chat</gold>!"
-      },
-      "white_non_message": {
-        "@value": "Consistent Player Message Colour",
-        "desc": "Changes the color of messages sent by unranked players from gray to white."
-      },
-      "piggy_repair_helper": {
-        "@value": "Piggy Repair Helper",
-        "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."
-      },
-      "sack_notification": {
-        "@value": "Sack Notification",
-        "desc": "Show a notification when you gain specific sack items."
-      },
-      "sack_notification_items": {
-        "@value": "Sack Notification Items",
-        "desc": "The items to show notifications for."
-      }
+    "keybind": {
+      "item_search": "Open Item Search",
+      "item_value": "Open Item Value",
+      "crafthelper": "Set as active Craft Helper Item"
     },
-    "garden": {
-      "@value": "Garden",
-      "pest_bait_type": {
-        "@value": "Pest Bait Type",
-        "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
-      },
-      "desk_pest_highlight": {
-        "@value": "Desk Pest Highlight",
-        "desc": "Highlights on what Plot how many pests are on in the 'Configure Plots' menu."
-      },
-      "pest_warning": {
-        "@value": "Pest Warning",
-        "desc": "Warns you when you reach 4 or more pests while farming."
-      },
-      "pest_warning_delay": {
-        "@value": "Pest Warning Delay",
-        "desc": "The delay between reminders in seconds."
-      }
-    },
-    "misc": {
-      "@value": "Miscellaneous",
-      "ministerInCalendar": {
-        "@value": "Minister in Calendar",
-        "desc": "Adds a current minister next to the mayor in the calendar."
-      },
-      "anvilHelper": {
-        "@value": "Anvil helper",
-        "desc": "Highlights books that have the same enchantment as the ones in the anvil."
-      },
-      "previousServer": {
-        "@value": "Previous Server",
-        "desc": "Sends a chat message when you join a server you were previously in."
-      },
-      "previousServerTime": {
-        "@value": "Previous Server Time",
-        "desc": "The time a server is cached and shows up as previously joined."
-      },
-      "hideLightning": {
-        "@value": "Hide Lightning",
-        "desc": "Hides lightning bolts and sky flash effect."
-      },
-      "fullTextShadow": {
-        "@value": "Full Text Shadow",
-        "desc": [
-          "Makes text shadow render as \"full\" all around the glyph.",
-          "",
-          "<red>May Significantly impact performance.</red>"
-        ]
-      },
-      "showHiddenPetCandy": {
-        "@value": "Show Hidden Pet Candy",
-        "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
-      },
-      "islandCloudHider": {
-        "@value": "Island Cloud Hider",
-        "desc": [
-          "Specify what island shouldn't render Clouds.",
-          "Useful for islands like the Dwarven Mines where clouds can be annoying."
-        ],
-        "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
-      },
-      "customization_vanilla_integration": {
-        "@value": "Animate dyes and skins in inventories",
-        "desc": [
-          "Will always animate dyed armors and helmet skins even in inventories or menus.",
-          "",
-          "<yellow>(Doesn't currently work with skins that allow variant selection or pets)</yellow>"
-        ]
-      },
-      "hideEntityFire": {
-        "@value": "Hide entity fire",
-        "desc": "Removes the fire effect from all entities."
-      },
-      "itemSearch": {
-        "@value": "Item Search",
-        "desc": "Item Search is a feature that allows you to search for items in your inventory, backpacks, storage, sacks, island chests and more.",
-        "itemHighlight": {
-          "@value": "Item Highlight",
-          "desc": "Choose what color the searched item will be highlighted with."
-        },
-        "preserve_search": {
-          "@value": "Preserve Search",
-          "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
-        },
-        "museumIntegration": {
-          "@value": "Museum integration",
-          "desc": "Changes the museum to highlight items that are found on your profile, furthermore it also tells you which items you can craft and which ones are not craftable at all."
-        },
-        "warp_to_island": {
-          "@value": "Warp to island",
-          "desc": "Automatically warp to island if you click an item that is on it."
-        }
-      },
-      "museumArmourPieces": {
-        "@value": "Show museum armour pieces",
-        "desc": "Displays all pieces required to finish an armor set in the tooltip in the museum."
-      },
-      "crafthelper": {
-        "@value": "Craft Helper",
-        "desc": [
-          "Craft helper is a feature that lets you see all the steps in a recipe and how much progress you have made towards completing it.",
-          "",
-          "<gray>Pro Tip:</gray> You can also import SkyShard Trees into your CraftHelper by pressing <gray>\"Copy Tree\"</gray>, then <gray>\"SkyOcean Format\"</gray> on the Website and running <gray>/skyocean recipe skyshards</gray> in-game!"
-        ],
-        "enabled": {
-          "@value": "Enable Craft Helper",
-          "desc": "Whether the craft helper is enabled or not, this is the main switch."
-        },
-        "hideCompleted": {
-          "@value": "Hide completed",
-          "desc": "Whether to hide completed parts of the tree or not."
-        },
-        "parentAmount": {
-          "@value": "Add parent amount",
-          "desc": "Includes the amount that is already present through parents."
-        },
-        "disableRootItems": {
-          "@value": "Disable tracking for target",
-          "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
-        },
-        "disallowedItemSources": {
-          "@value": "Disallowed item sources",
-          "desc": "Select sources from which the craft helper will ignore."
-        },
-        "position": {
-          "@value": "Position",
-          "desc": "Craft helper position inside the inventory.",
-          "top_left": "Top Left",
-          "top_right": "Top Right",
-          "bottom_left": "Bottom Left",
-          "bottom_right": "Bottom Right",
-          "left_of_inventory": "Left of Inventory",
-          "right_of_inventory": "Right of Inventory"
-        },
-        "margin": {
-          "@value": "Margin",
-          "desc": "How much space to leave between the inventory/screen edges and the craft helper element."
-        },
-        "done_message": {
-          "@value": "Send a message when your recipe is complete",
-          "desc": "Sends a chat message whenever the mod detects your recipe tree as completed."
-        },
-        "tree_formatter": {
-          "@value": "Craft helper formatter",
-          "desc": "Changes the appearance of the craft helper tree.",
-          "raw": "Raw",
-          "tree": "Tree"
-        }
-      },
-      "transparentArmor": {
-        "@value": "Transparent Armour",
-        "desc": [
-          "Settings to change the appearance of armours on either yourself or others.",
-          {
-            "@id": "transparency"
-          },
-          "<italic>Does not apply to npcs.</italic>"
-        ],
-        "self": {
-          "@value": "Self",
-          "desc": "Only applies to your armour."
-        },
-        "others": {
-          "@value": "Others",
-          "desc": "Only applies to other players."
-        }
-      },
-      "mob_icons": {
-        "@value": "Mob Icons",
-        "enabled": {
-          "@value": "Enable Mob Icons",
-          "desc": [
-            "Replaces the hypixel mob icons with a spelled out version.",
-            "<red>This requires a nametag update, meaning it doesn't refresh instantly!</red>"
-          ]
-        },
-        "display_type": {
-          "@value": "Display type",
-          "desc": "Changes the way the mob icons are displayed."
-        },
-        "colors": {
-          "@value": "Individual colors",
-          "desc": [
-            "Overwrites the colors for the different mob icons.",
-            "The default <white>#FFFFFF</white> means that it doesn't get changed at all."
-          ]
-        }
-      }
-    },
-    "fishing": {
-      "@value": "Fishing",
-      "trophy_numbers": {
-        "@value": "Trophy Numbers",
-        "desc": "Displays the amount of trophy fishes you caught upon catching one."
-      },
-      "hook_text_scale": {
-        "@value": "Hook Text Scale",
-        "desc": "Changes the scale of the text above your fishing hook/bobber."
-      },
-      "lava_replacement": {
-        "@value": "Lava Replacement",
-        "desc": "Replaces the lava texture with the water texture while in the Crimson Isle."
-      },
-      "bobber_fix": {
-        "@value": "Bobber Fix",
-        "desc": "Fixes bobbers rubberbanding when fishing."
-      },
-      "bobber_time": {
-        "@value": "Bobber Time",
-        "desc": "Shows the time your bobber has existed."
-      },
-      "hide_other_bobbers": {
-        "@value": "Hide Other Bobbers",
-        "desc": "Hides other players' bobbers, making it easier to see your own."
-      },
-      "hotspot": {
-        "@value": "Hotspot Highlight",
-        "desc": "All settings for the hotspot highlight.",
-        "circle_surface": {
-          "@value": "Surface",
-          "desc": "Render a \"solid\" circle instead of the particle outline."
-        },
-        "surface_transparency": {
-          "@value": "Surface Transparency",
-          "desc": [
-            "Changes the transparency of the surface.",
-            {
-              "@id": "transparency"
-            }
-          ]
-        },
-        "circle_outline": {
-          "@value": "Outline",
-          "desc": "Render a \"solid\" outline instead of the particle outline."
-        },
-        "outline_transparency": {
-          "@value": "Surface Transparency",
-          "desc": [
-            "Changes the transparency of the outline.",
-            {
-              "@id": "transparency"
-            }
-          ]
-        }
-      }
-    },
-    "lore_modifiers": {
-      "@value": "Lore Modifiers",
-      "modifications": {
-        "@value": "Lore Modifications",
-        "desc": [
-          "All items that have any modification present in the lore are indicated with the selected modify indicator.",
-          "To list all modifications that are present press <gray>shift</gray>.",
-          "",
-          "Some of the settings may include examples, <italic><gray>hover</gray></italic> them to see them."
-        ]
-      },
-      "drill_modifications": {
-        "@value": "Compact drill modifications",
-        "desc": [
-          "Compacts the installed upgrade parts into one line each.",
-          "",
-          "Example: <green><hover show_text '<color #355AA0>\uD83C\uDF0A</color><aqua> Heated Divans Drill</aqua>",
-          "<dark_gray>Breaking Power 10</dark_gray>",
-          "",
-          "<gray>Damage: <red>+75</red></gray>",
-          "<gray>Mining Speed: <green>+7,320</green> <gold>[+500]</gold> <blue>[+50] (+70)</blue> <light_purple>(+240)</light_purple></gray>",
-          "<gray>Pristine: <green>+4.7</green> <light_purple>(+2.2)</light_purple></gray>",
-          "<gray>Mining Fortune: <green>+340</green> <blue>[+5] (+25)</blue> <light_purple>(+120)</light_purple></gray>",
-          "<gray>Gemstone Fortune: <green>+50</green></gray>",
-          "<gray>Mining Wisdom: <green>+10</green></gray>",
-          "<gold>[⸕] [⸕] [<green>☘</green>] [<green>☘</green>] [<yellow>✦</yellow>]</gold>",
-          "",
-          "<light_purple><bold>Flowstate III</bold></light_purple>",
-          "<blue>Compact X</blue>",
-          "<blue>Efficiency X</blue>",
-          "<blue>Experience IV</blue>",
-          "<blue>Fortune IV</blue>",
-          "<blue>Lapidary V</blue>",
-          "<blue>Paleontologist V</blue>",
-          "<blue>Prismatic V</blue>",
-          "",
-          "<gray>Fuel Tank: <blue>Perfectly-Cut Fuel Tank</blue></gray>",
-          "<gray>Drill Engine: <blue>Amber-Polished Drill Engine</blue></gray>",
-          "<gray>Upgrade Module: <blue>Blue Cheese Goblin Omelette</blue></gray>",
-          "",
-          "<gray>Fuel: </gray><dark_green>69,801</dark_green><dark_gray>/100k</dark_gray>",
-          "",
-          "<blue>Heated Bonus</blue>",
-          "<gray>Grants <gold>+1☘ Mining Fortune</gold> and <gold>+4⸕</gold></gray>",
-          "<gray><gold>Mining Speed</gold> per <red>1♨ Heat</red> you have.</gray>",
-          "",
-          "<dark_gray><bold>*</bold> Co-op Soulbound <bold>*</bold></dark_gray>",
-          "<aqua><bold><obfuscated>a</obfuscated> DIVINE DRILL <obfuscated>a</obfuscated></bold></aqua>'>On</hover></green>/<hover show_text '<aqua>Heated Divans Drill</aqua>",
-          "<dark_gray>Breaking Power 10</dark_gray>",
-          "",
-          "<gray>Damage: <red>+75</red></gray>",
-          "<gray>Mining Speed: <green>+7,320</green> <gold>[+500]</gold> <blue>[+50] (+70)</blue> <light_purple>(+240)</light_purple></gray>",
-          "<gray>Pristine: <green>+4.7</green> <light_purple>(+2.2)</light_purple></gray>",
-          "<gray>Mining Fortune: <green>+340</green> <blue>[+5] (+25)</blue> <light_purple>(+120)</light_purple></gray>",
-          "<gray>Gemstone Fortune: <green>+50</green></gray>",
-          "<gray>Mining Wisdom: <green>+10</green></gray>",
-          "<gold>[⸕] [⸕] [<green>☘</green>] [<green>☘</green>] [<yellow>✦</yellow>]</gold>",
-          "",
-          "<light_purple><bold>Flowstate III</bold></light_purple>",
-          "<blue>Compact X</blue>",
-          "<blue>Efficiency X</blue>",
-          "<blue>Experience IV</blue>",
-          "<blue>Fortune IV</blue>",
-          "<blue>Lapidary V</blue>",
-          "<blue>Paleontologist V</blue>",
-          "<blue>Prismatic V</blue>",
-          "",
-          "<green>Perfectly-Cut Fuel Tank</green>",
-          "<dark_green>100,000 Max Fuel Capacity<dark_green>",
-          "<green>-10% Pickaxe Ability Cooldown</green>",
-          "",
-          "<green>Amber-Polished Drill Engine</green>",
-          "<gold>+600⸕ Mining Speed</gold>",
-          "<gold>+100☘ Mining Fortune</gold>",
-          "",
-          "<green>Blue Cheese Goblin Omelette Part</green>",
-          "<gray>Adds <green>+1 Level</green> to all of your unlocked <purple>Heart of</purple></gray>",
-          "<gray><purple>the Mountain</purple> perks.</gray>",
-          "",
-          "<gray>Fuel: </gray><dark_green>69,801</dark_green><dark_gray>/100k</dark_gray>",
-          "",
-          "<blue>Heated Bonus</blue>",
-          "<gray>Grants <gold>+1☘ Mining Fortune</gold> and <gold>+4⸕</gold></gray>",
-          "<gray><gold>Mining Speed</gold> per <red>1♨ Heat</red> you have.</gray>",
-          "",
-          "<dark_gray><bold>*</bold> Co-op Soulbound <bold>*</bold></dark_gray>",
-          "<aqua><bold><obfuscated>a</obfuscated> DIVINE DRILL <obfuscated>a</obfuscated></bold></aqua>'><red>Off</red></hover>"
-        ]
-      },
-      "dungeon_quality": {
-        "@value": "Dungeon Quality",
-        "desc": [
-          "Adds the dungeon quality to the lore.",
-          "",
-          "Example: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <gold>Smart Skeleton Master Leggings</gold>",
-          "<gray>Item Quality: <red>50<gray>/</gray>50</red></gray>",
-          "<gray>Tier: <light_purple>8<gray>/</gray>10</light_purple></gray>",
-          "<gray>Gear Score: <light_purple>555</light_purple> <dark_gray>(2543)</dark_gray></gray>",
-          "<gray>Crit Chance: <red>+5%</red> <dark_gray>(+5.25%)</dark_gray></gray>",
-          "<gray>Crit Damage: <red>+57%</red> <dark_gray>(+271.32%)</dark_gray></gray>",
-          "<gray>Health: <green>+155</green> <blue>(+15)</blue> <dark_gray>(+737.8)</dark_gray></gray>",
-          "<gray>Defense: <green>+139</green> <blue>(+15)</blue> <dark_gray>(+661.64)</dark_gray></gray>",
-          "<gray>Intelligence: <green>+100</green> <blue>(+100)</blue> <dark_gray>(+476)</dark_gray></gray>",
-          "",
-          "<blue>Growth V, Protection V, Thorns III</blue>",
-          "",
-          "<gray>Increase the damage you deal with",
-          "arrows by <red>5%</red>.</gray>",
-          "<gold>Full Set Bonus: Skeleton Master</gold><gray> (0/4)</gray>",
-          "<gray>Increase the damage you deal with",
-          "arrows by <red>25%</red>.",
-          "",
-          "<green>This item is Undead ༕!<green>",
-          "",
-          "<gold><bold>LEGENDARY DUNGEON LEGGINGS</bold></gold>'>On</hover></green>/<red><hover '<gold>Smart Skeleton Master Leggings</gold>",
-          "<gray>Gear Score: <light_purple>555</light_purple> <dark_gray>(2543)</dark_gray></gray>",
-          "<gray>Crit Chance: <red>+5%</red> <dark_gray>(+5.25%)</dark_gray></gray>",
-          "<gray>Crit Damage: <red>+57%</red> <dark_gray>(+271.32%)</dark_gray></gray>",
-          "<gray>Health: <green>+155</green> <blue>(+15)</blue> <dark_gray>(+737.8)</dark_gray></gray>",
-          "<gray>Defense: <green>+139</green> <blue>(+15)</blue> <dark_gray>(+661.64)</dark_gray></gray>",
-          "<gray>Intelligence: <green>+100</green> <blue>(+100)</blue> <dark_gray>(+476)</dark_gray></gray>",
-          "",
-          "<blue>Growth V, Protection V, Thorns III</blue>",
-          "",
-          "<gray>Increase the damage you deal with",
-          "arrows by <red>5%</red>.</gray>",
-          "<gold>Full Set Bonus: Skeleton Master</gold><gray> (0/4)</gray>",
-          "<gray>Increase the damage you deal with",
-          "arrows by <red>25%</red>.",
-          "",
-          "<green>This item is Undead ༕!<green>",
-          "",
-          "<gold><bold>LEGENDARY DUNGEON LEGGINGS</bold></gold>'>Off</red>"
-        ]
-      },
-      "compact_level_bars": {
-        "@value": "Compact Level Bars",
-        "desc": [
-          "Compacts the bars in the skyblock levels menu into one line, making them fit on smaller screens.",
-          "",
-          "Example: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <dark_aqua>Dungeon Tasks</dark_aqua>",
-          "<dark_gray>3 Tasks</dark_gray>",
-          "",
-          "<gray>All Dungeon related XP Tasks</gray>",
-          "",
-          "<yellow>▶ Catacombs Level Up</yellow> <dark_gray>(<red>980</red>/<green>1.220</green> <aqua>XP</aqua>)</dark_gray>",
-          "<yellow>▶ Class Level Up</yellow> <dark_gray>(<red>768</red>/<green>1.000</green> <aqua>XP</aqua>)</dark_gray>",
-          "<yellow>▶ Complete Dungeons</yellow> <dark_gray>(<green>540</green>/<green>540</green> <aqua>XP</aqua>)</dark_gray>",
-          "",
-          "<gray>Progress to Complete Category:</gray> <gold>82.9%</gold>",
-          "<gold><strikethrough>                     <white>    </white></strikethrough> <yellow>2,288</yellow>/<yellow>2,760 XP</yellow></gold>",
-          "",
-          "<yellow>Click to view tasks!</yellow>'>On</hover></green>/<red><hover '<dark_aqua>Dungeon Tasks</dark_aqua>",
-          "<dark_gray>3 Tasks</dark_gray>",
-          "",
-          "<gray>All Dungeon related XP Tasks</gray>",
-          "",
-          "<yellow>▶ Catacombs Level Up</yellow>",
-          "<strikethrough><green>                     </green><white>    </white></strikethrough> <green>980<dark_gray>/</dark_gray>1,120 XP</green>",
-          "",
-          "<yellow>▶ Class Level Up</yellow>",
-          "<strikethrough><green>                    </green><white>     </white></strikethrough> <green>768<dark_gray>/</dark_gray>1,000 XP</green>",
-          "",
-          "<yellow>▶ Complete Dungeons</yellow>",
-          "<strikethrough><green>                         </green></strikethrough> <green>540<dark_gray>/</dark_gray>540 XP</green>",
-          "",
-          "<gray>Progress to Complete Category:</gray> <gold>82.9%</gold>",
-          "<gold><strikethrough>                     <white>    </white></strikethrough> <yellow>2,288</yellow>/<yellow>2,760 XP</yellow></gold>",
-          "",
-          "<yellow>Click to view tasks!</yellow>'>Off</hover></red>"
-        ]
-      },
-      "armadillo_blocks_walked": {
-        "@value": "Prehistoric egg blocks walked",
-        "desc": "Shows how many blocks you have walked so far on a prehistory egg."
-      },
-      "storage_preview": {
-        "@value": "Storage Preview",
-        "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
-      },
-      "museum_donation": {
-        "@value": "Museum Donation",
-        "desc": "Shows what items haven't been donated to museum in the tooltip."
-      }
-    },
-    "foraging": {
-      "@value": "Foraging",
-      "hotf": {
-        "shiftCost": {
-          "@value": "Show shift click cost",
-          "desc": "Shows the amount of powder that will be consumed on shift click."
-        },
-        "totalProgress": {
-          "@value": "Show total progress",
-          "desc": "Shows your total progress to maxing a perk."
-        },
-        "stackSize": {
-          "@value": "Show level as amount",
-          "desc": "Shows the perk level as item stack count."
-        },
-        "totalLeft": {
-          "@value": "Show total amount left",
-          "desc": "Displays the total amount that is still required to max a perk."
-        }
-      },
-      "galatea": {
-        "@value": "Galatea",
-        "muteThePhantoms": {
-          "@value": "Mute the Phantoms",
-          "desc": "Mutes all phantoms making them not induce ear pain.",
-          "warning": "<yellow>SkyOcean mutes the phantom sounds by default, if you wish to change this open the config and search for <gold>Mute the Phantoms</gold>!"
-        },
-        "shulkerOverwrite": {
-          "@value": "Retexture shulker",
-          "desc": "Recolors the shulkers to make them more visible."
-        }
-      }
-    },
-    "dungeons": {
-      "@value": "Dungeons",
-      "gambling": {
-        "enabled": {
-          "@value": "CSGO Case Opening",
-          "desc": [
-            "Shows a CSGO case opening animation when opening a dungeon chest.",
-            "",
-            "This feature is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>."
-          ]
-        },
-        "croesus": {
-          "@value": "Also Show Case Opening in Croesus",
-          "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
-        }
-      }
+    "gradients": {
+      "default": "Default",
+      "rainbow": "Rainbow",
+      "bisexual": "Bisexual",
+      "gay": "Gay",
+      "lesbian": "Lesbian",
+      "pansexual": "Pansexual",
+      "asexual": "Asexual",
+      "non_binary": "Non Binary",
+      "trans": "Transgender"
     }
-  },
-  "garden": {
-    "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>",
-    "open_sack": "<dark_gray>Open Sack</dark_gray>"
-  },
-  "inventory": {
-    "sack_value": "<dark_gray>Sack Value</dark_gray>",
-    "buttons": {
-      "configuration": "<white>Button Configuration",
-      "item": "Item ID / Skyblock ID",
-      "command": "Command",
-      "screen_title": "Screen Title",
-      "tooltip": "Button Tooltip",
-      "select_button": "<color #cff8ff>Select Button to Edit",
-      "enable_first": "Enable inventory buttons in the Config first!",
-      "disable": "Disable",
-      "enable": "Enable",
-      "reset": "Reset"
-    }
-  },
-  "keybind": {
-    "item_search": "Open Item Search",
-    "item_value": "Open Item Value",
-    "crafthelper": "Set as active Craft Helper Item"
-  },
-  "gradients": {
-    "default": "Default",
-    "rainbow": "Rainbow",
-    "bisexual": "Bisexual",
-    "gay": "Gay",
-    "lesbian": "Lesbian",
-    "pansexual": "Pansexual",
-    "asexual": "Asexual",
-    "non_binary": "Non Binary",
-    "trans": "Transgender"
   }
 }

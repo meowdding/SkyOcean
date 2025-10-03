@@ -1,3 +1,4 @@
+@file:Suppress("ACTUAL_WITHOUT_EXPECT")
 package me.owdding.skyocean.helpers
 
 import com.google.gson.JsonParser
@@ -9,7 +10,7 @@ import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlu
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.FileToIdConverter
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.packs.resources.ResourceManager
+import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
@@ -40,17 +41,17 @@ actual object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, Fa
         fakeBlocks.getOrPut(block, ::mutableListOf).add(FakeBlockEntry(definition, predicate))
     }
 
-    fun init(manager: ResourceManager, executor: Executor): CompletableFuture<Map<ResourceLocation, FakeBlockStateDefinition>> {
+    fun init(manager: PreparableReloadListener.SharedState, executor: Executor): CompletableFuture<Map<ResourceLocation, FakeBlockStateDefinition>> {
         fakeBlocks.clear()
         RegisterFakeBlocksEvent(this::register).post(SkyBlockAPI.eventBus)
 
-        return CompletableFuture.supplyAsync<Map<ResourceLocation, FakeBlockStateDefinition>>(
+        return CompletableFuture.supplyAsync(
             {
                 val output = mutableMapOf<ResourceLocation, FakeBlockStateDefinition>()
 
-                for ((file, resource) in path.listMatchingResources(manager)) {
+                for ((file, resource) in path.listMatchingResources(manager.resourceManager())) {
                     runCatching {
-                        val definition = resource.openAsReader()?.use { reader ->
+                        val definition = resource.openAsReader().use { reader ->
                             FakeBlockStateDefinition.CODEC.parse(JsonOps.INSTANCE, JsonParser.parseReader(reader)).orThrow
                         }
 
