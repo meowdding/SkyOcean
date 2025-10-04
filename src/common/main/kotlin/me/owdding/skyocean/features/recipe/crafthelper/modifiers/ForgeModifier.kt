@@ -9,7 +9,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 
 @CraftHelperModifier
-object ForgeRecipeModifier : AbstractCraftHelperModifier() {
+object ForgeModifier : AbstractCraftHelperModifier() {
 
     override fun applies(event: InventoryChangeEvent): SkyOceanItemIngredient? {
         if (event.title != "Confirm Process") return null
