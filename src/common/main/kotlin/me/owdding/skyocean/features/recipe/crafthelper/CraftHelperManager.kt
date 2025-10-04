@@ -10,6 +10,7 @@ import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.SimpleRecipeView
+import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -17,7 +18,6 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
@@ -68,7 +68,7 @@ object CraftHelperManager {
         val item = mcScreenHovered ?: reiHovered ?: return
 
         setSelected(SkyBlockId.fromItem(item))
-        McScreen.self?.let { it.resize(McClient.self, it.width, it.height) }
+        McScreen.refreshScreen()
 
         Text.of("Set selected Crafthelper item to ") {
             append(item.cleanName) {
