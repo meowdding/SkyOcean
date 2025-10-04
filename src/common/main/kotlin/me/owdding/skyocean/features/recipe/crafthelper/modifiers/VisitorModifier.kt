@@ -12,6 +12,9 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 @CraftHelperModifier
 object VisitorModifier : AbstractCraftHelperModifier() {
 
+    // TODO
+    //  "Shift to add to list" so we can have multiple recipes on one list (for multiple visitors)
+
     override fun applies(event: InventoryChangeEvent): SkyOceanItemIngredient? {
         if (!SkyBlockIsland.GARDEN.inIsland()) return null
         if (event.slot.index != 22) return null
