@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.IngredientParser
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.utils.Utils.contains
@@ -7,6 +8,7 @@ import me.owdding.skyocean.utils.extensions.indexOfOrNull
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
+import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 
 @CraftHelperModifier
@@ -22,6 +24,11 @@ object VisitorModifier : AbstractCraftHelperModifier() {
         val acceptOffer = event.itemStacks[29]
         if (acceptOffer !in Items.GREEN_TERRACOTTA) return null
         if (event.itemStacks[33] !in Items.RED_TERRACOTTA) return null
+
+        if (event.item !in ItemTag.GLASS_PANES) {
+            SkyOcean.warn("Failed to place craft helper item in forge recipe, item is not a glass pane")
+            return null
+        }
 
         val lore = acceptOffer.getRawLore()
         val index = lore.indexOfOrNull("Items Required:") ?: return null
