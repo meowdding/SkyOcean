@@ -26,7 +26,7 @@ object VisitorModifier : AbstractCraftHelperModifier() {
         if (event.itemStacks[33] !in Items.RED_TERRACOTTA) return null
 
         if (event.item !in ItemTag.GLASS_PANES) {
-            SkyOcean.warn("Failed to place craft helper item in forge recipe, item is not a glass pane")
+            SkyOcean.warn("Failed to place craft helper item in visitor, item is not a glass pane")
             return null
         }
 

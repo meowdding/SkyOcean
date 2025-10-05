@@ -22,6 +22,10 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 abstract class AbstractCraftHelperModifier {
     abstract fun applies(event: InventoryChangeEvent): SkyOceanItemIngredient?
 
+    fun tryModify(event: InventoryChangeEvent) {
+        applies(event)?.let { modify(event, it) }
+    }
+
     fun modify(event: InventoryChangeEvent, ingredient: SkyOceanItemIngredient) {
         event.item.skyoceanReplace {
             this.item = Items.DIAMOND_PICKAXE
@@ -53,11 +57,7 @@ object CraftHelperModifiers {
     @Subscription
     private fun InventoryChangeEvent.onInventory() {
         if (!CraftHelperConfig.enabled) return
-        modifiers.forEach { modifier ->
-            modifier.applies(this)?.let {
-                modifier.modify(this, it)
-            }
-        }
+        modifiers.forEach { it.tryModify(this) }
     }
 }
 
