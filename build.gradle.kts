@@ -6,6 +6,7 @@ import com.google.gson.JsonObject
 import earth.terrarium.cloche.api.metadata.FabricMetadata
 import earth.terrarium.cloche.api.metadata.ModMetadata
 import earth.terrarium.cloche.api.target.compilation.ClocheDependencyHandler
+import net.msrandom.minecraftcodev.core.utils.lowerCamelCaseGradleName
 import net.msrandom.minecraftcodev.core.utils.toPath
 import net.msrandom.minecraftcodev.runs.MinecraftRunConfiguration
 import net.msrandom.stubs.GenerateStubApi
@@ -96,10 +97,13 @@ cloche {
         version: String = name,
         loaderVersion: Provider<String> = libs.versions.fabric.loader,
         fabricApiVersion: Provider<String> = libs.versions.fabric.api,
+        endAtSameVersion: Boolean = true,
         minecraftVersionRange: ModMetadata.VersionRange.() -> Unit = {
             start = version
-            end = version
-            endExclusive = false
+            if (endAtSameVersion) {
+                end = version
+                endExclusive = false
+            }
         },
         dependencies: MutableMap<String, Provider<MinimalExternalModuleDependency>>.() -> Unit = { },
     ) {
@@ -107,13 +111,23 @@ cloche {
         val olympus = dependencies["olympus"]!!
         val rlib = dependencies["resourcefullib"]!!
         val rconfig = dependencies["resourcefulconfig"]!!
+        val accesswidener = project.layout.projectDirectory.file("src/versions/${name}/skyocean.accesswidener")
 
-        fabric(name) {
+        fabric("versions:$name") {
+            tasks.named<Jar>(lowerCamelCaseGradleName(this.sourceSet.name, "includeJar")) {
+                archiveClassifier = name
+            }
             includedClient()
             minecraftVersion = version
+
             this.loaderVersion = loaderVersion.get()
 
-            mixins.from("src/mixins/versioned/skyocean.${sourceSet.name}.mixins.json")
+            mixins.from("src/mixins/versioned/skyocean.${name.replace(".", "")}.mixins.json")
+
+            println("Acceswidener: " + accesswidener.toPath().toAbsolutePath().toString())
+            if (accesswidener.toPath().exists()) {
+                accessWideners.from(accesswidener)
+            }
 
             // include(libs.hypixelapi) - included in sbapi
 
@@ -156,8 +170,9 @@ cloche {
 
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
-                implementation(olympus)
-                implementation(rconfig)
+                implementation(olympus) { isTransitive = false }
+                implementation(rconfig) { isTransitive = false }
+                implementation(rlib) { isTransitive = false }
 
                 include(libs.resourceful.config.kotlin) { isTransitive = false }
                 include(libs.keval) { isTransitive = false }
@@ -196,7 +211,7 @@ cloche {
                     }
                 }
 
-                project.layout.projectDirectory.toPath().resolve("run/${sourceSet.name}Mods").takeIf { it.exists() }
+                project.layout.projectDirectory.toPath().resolve("run/${name}Mods").takeIf { it.exists() }
                     ?.listDirectoryEntries()?.filter { it.isRegularFile() }?.forEach { file ->
                         extractMods(file)
                     }
@@ -221,10 +236,17 @@ cloche {
     }
     createVersion("1.21.8", minecraftVersionRange = {
         start = "1.21.6"
+        end = "1.21.8"
+        endExclusive = false
     }) {
         this["resourcefullib"] = libs.resourceful.lib1218
         this["resourcefulconfig"] = libs.resourceful.config1218
         this["olympus"] = libs.olympus.lib1218
+    }
+    createVersion("1.21.9", endAtSameVersion = false, fabricApiVersion = provider { "0.134.0" }) {
+        this["resourcefullib"] = libs.resourceful.lib1219
+        this["resourcefulconfig"] = libs.resourceful.config1219
+        this["olympus"] = libs.olympus.lib1219
     }
 
     mappings { official() }
@@ -272,6 +294,10 @@ repo {
 }
 
 tasks {
+    configureEach {
+        notCompatibleWithConfigurationCache("Configuration cache causes various build errors")
+    }
+
     withType<ProcessResources>().configureEach {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
@@ -281,7 +307,7 @@ tasks {
         options.release.set(21)
     }
 
-    withType<KotlinCompile>().configureEach {
+    withType<KotlinCompile>().all {
         compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
         compilerOptions {
             languageVersion = KotlinVersion.KOTLIN_2_2
@@ -298,7 +324,7 @@ tasks {
     }
 }
 
-fun registerMeowdding(name: String, init: Task.() -> Unit = {}) = tasks.register(name).apply { configure { group = "meowdding"; init() } }
+fun registerMeowdding(name: String, init: Task.() -> Unit = {}): TaskProvider<Task> = tasks.register(name).apply { configure { group = "meowdding"; init() } }
 val createResourcePacks = registerMeowdding("createResourcePacks")
 val runAllDatagen = registerMeowdding("runAllDatagen")
 val mergePackOutputs = tasks.register("mergePackOutputs", JavaExec::class) {
@@ -327,7 +353,7 @@ cloche.targets.forEach { target ->
                 this.environment = parentRun.environment
                 this.workingDirectory = parentRun.workingDirectory
                 jvmArgs("-Dskyocean.datagen.target=RESOURCE_PACKS")
-                jvmArgs("-Dskyocean.datagen.dir=${project.layout.buildDirectory.dir("resourcepacks/${target.name}").get().toPath().absolutePathString()}")
+                jvmArgs("-Dskyocean.datagen.dir=${project.layout.buildDirectory.dir("resourcepacks/${target.name.substringAfter(":")}").get().toPath().absolutePathString()}")
                 jvmArgs("-Dskyocean.datagen.output=${project.layout.buildDirectory.dir("libs").get().toPath().absolutePathString()}")
                 createResourcePacks.get().dependsOn(this.runTask)
                 createResourcePacks.get().mustRunAfter(this.runTask)
@@ -384,4 +410,14 @@ meowdding {
     //configureDetekt = true
 
     codecVersion = libs.versions.meowdding.ktcodecs
+}
+
+gradle.startParameter.apply {
+    welcomeMessageConfiguration.welcomeMessageDisplayMode = WelcomeMessageDisplayMode.NEVER
+    setTaskNames(mutableListOf(":setupForWorkflows").apply {
+        addAll(taskNames)
+        if (taskNames.contains("clean")) {
+            taskNames.filter { it.contains("clean") }.forEach(::addFirst)
+        }
+    })
 }

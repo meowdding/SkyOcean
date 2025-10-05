@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "package": "me.owdding.skyocean.mixins",
+  "parent": "skyocean.client.mixins.json",
+  "client": [
+    "GuiRendererMixin",
+    "GuiRenderStateMixin",
+    "features.customize.PlayerHeadSpecialRendererMixin"
+  ]
+}

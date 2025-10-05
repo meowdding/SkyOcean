@@ -7,9 +7,9 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.shorten
 import me.owdding.skyocean.config.features.inventory.SackValueConfig
 import me.owdding.skyocean.helpers.InventorySideGui
-import me.owdding.skyocean.utils.ChatUtils
-import me.owdding.skyocean.utils.OceanColors.BETTER_GOLD
 import me.owdding.skyocean.utils.Utils.unaryMinus
+import me.owdding.skyocean.utils.chat.ChatUtils
+import me.owdding.skyocean.utils.chat.OceanColors.BETTER_GOLD
 import me.owdding.skyocean.utils.extensions.asScrollable
 import net.minecraft.client.gui.layouts.Layout
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent

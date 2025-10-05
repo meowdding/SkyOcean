@@ -5,7 +5,6 @@ import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
@@ -25,8 +24,9 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
-import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.*
-import me.owdding.skyocean.utils.Icons
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ARMOR_NOT_FOUND
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ITEM_NOT_FOUND
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.Utils.contains
@@ -36,6 +36,7 @@ import me.owdding.skyocean.utils.Utils.skipRemaining
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.Utils.wrap
+import me.owdding.skyocean.utils.chat.Icons
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
@@ -49,6 +50,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
@@ -142,7 +144,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
 
     private fun MuseumItem.handleMuseumItemData(event: InventoryChangeEvent) {
         val data = this
-        val id = data.skyoceanId
+        val id = data.skyblockId
         val copy = itemTracker.snapshot()
         val items = copy.takeN(id, 1)
         val amount = items.sumOf { it.amount }
@@ -205,11 +207,11 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
         }
     }
 
-    fun ItemTracker.toState(id: SkyOceanItemId): CraftHelperState? {
+    fun ItemTracker.toState(id: SkyBlockId): CraftHelperState? {
         val recipe = SimpleRecipeApi.getBestRecipe(id) ?: return null
         val tree = ContextAwareRecipeTree(recipe, SkyOceanItemIngredient(id, 1), 1)
         val context = CraftHelperContext.create(tree, this)
-        create(context)
+        evaluateNode(context)
         return context.toState()
     }
 
@@ -218,7 +220,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
 
     private fun MuseumArmour.handleMuseumArmourData(event: InventoryChangeEvent) = context(event.item) {
         val data = this
-        val items = data.armorIds.map { SkyOceanItemId.item(it) }
+        val items = data.armorIds.map { SkyBlockId.item(it) }
         val copy = itemTracker.snapshot()
 
         val itemList = items.map { it to it.toItem() }.sortedBy { (_, item) -> item.getPriority() }
@@ -272,7 +274,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
         "necklace" -> 5
         "cloak" -> 6
         "belt" -> 7
-        "bracelet" -> 8
+        "bracelet", "gloves" -> 8
         else -> {
             logger.info("Unknown category ${this[DataTypes.CATEGORY]?.name?.lowercase()}")
             Int.MAX_VALUE

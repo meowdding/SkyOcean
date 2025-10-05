@@ -2,7 +2,7 @@ package me.owdding.skyocean.features.chat
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.chat.ChatConfig
-import me.owdding.skyocean.utils.ChatUtils
+import me.owdding.skyocean.utils.chat.ChatUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.SacksChangeEvent
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI

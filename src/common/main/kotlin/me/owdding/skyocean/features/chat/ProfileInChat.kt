@@ -4,10 +4,10 @@ import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.chat.ChatConfig
-import me.owdding.skyocean.utils.ChatUtils
 import me.owdding.skyocean.utils.Utils.get
 import me.owdding.skyocean.utils.Utils.set
 import me.owdding.skyocean.utils.Utils.visitSiblings
+import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -17,6 +17,7 @@ import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.info.TabListChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.platform.name
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -61,16 +62,19 @@ object ProfileInChat {
     @OnlyOnSkyBlock
     @Subscription(priority = LOWEST)
     fun onChat(event: ChatReceivedEvent.Post) {
-        if (!ChatConfig.enableProfileInChat) return
-        val index = event.component.siblings.indexOfFirst { sibling -> sibling.stripped.startsWith(": ") } - 1
-        if (index < 0) return
-        val name = event.component.siblings[index].stripped.trim().substringAfterLast(" ")
-        val targetIndex = if (name.equals(McPlayer.name, true)) {
-            event.component.siblings.indexOfFirst { sibling -> sibling.style.hoverEvent == null }
-        } else index
-        val profileType = usernameToProfileTypeCache[name] ?: return
-        val modified = event.component.copy()
-        modified.siblings.add(targetIndex, profileType)
-        event.component = modified
+        try {
+            if (!ChatConfig.enableProfileInChat) return
+            val index = event.component.siblings.indexOfFirst { sibling -> sibling.stripped.startsWith(": ") } - 1
+            if (index < 0) return
+            val name = event.component.siblings[index].stripped.trim().substringAfterLast(" ")
+            val targetIndex = if (name.equals(McPlayer.name, true)) {
+                event.component.siblings.indexOfFirst { sibling -> sibling.style.hoverEvent == null }
+            } else index
+            val profileType = usernameToProfileTypeCache[name] ?: return
+            val modified = event.component.copy()
+            modified.siblings.add(targetIndex, profileType)
+            event.component = modified
+        } catch (_: IndexOutOfBoundsException) {
+        }
     }
 }

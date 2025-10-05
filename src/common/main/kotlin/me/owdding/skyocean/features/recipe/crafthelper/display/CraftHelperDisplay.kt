@@ -19,9 +19,10 @@ import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
+import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
-import me.owdding.skyocean.utils.Icons
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.chat.Icons
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.extensions.tryClear
 import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
@@ -30,7 +31,6 @@ import me.owdding.skyocean.utils.setPosition
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LayoutElement
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
@@ -81,8 +81,8 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
         }
     }
 
-    @Subscription
-    fun onScreenClose(event: ContainerCloseEvent) {
+    @Subscription(ContainerCloseEvent::class)
+    fun onScreenClose() {
         craftHelperLayout = null
     }
 
@@ -97,7 +97,12 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             val body = LayoutFactory.vertical {
                 val list = mutableListOf<AbstractWidget>()
                 runCatching {
-                    TreeFormatter.format(tree, tracker, WidgetBuilder(callback)) {
+                    val formatter = when (CraftHelperConfig.formatter) {
+                        CraftHelperFormat.RAW -> RawFormatter
+                        CraftHelperFormat.TREE -> TreeFormatter
+                    }
+
+                    formatter.format(tree, tracker, WidgetBuilder(callback)) {
                         lines++
                         maxLine = maxOf(maxLine, it.width + 10)
                         list.add(it)
@@ -133,7 +138,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
 
                                 val value = CraftHelperStorage.selectedAmount
-                                val newValue = if (Screen.hasShiftDown()) {
+                                val newValue = if (McScreen.isShiftDown) {
                                     value - 10
                                 } else {
                                     value - 1
@@ -159,7 +164,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                             ).asButtonLeft {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
                                 val value = CraftHelperStorage.selectedAmount
-                                val newValue = if (Screen.hasShiftDown()) {
+                                val newValue = if (McScreen.isShiftDown) {
                                     value + 10
                                 } else {
                                     value + 1

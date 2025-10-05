@@ -3,11 +3,11 @@ package me.owdding.skyocean.repo.museum
 import com.mojang.serialization.Codec
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.NamedCodec
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.replaceTrim
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
 @LateInitModule
 object MuseumRepoData {
@@ -72,9 +72,9 @@ object MuseumRepoData {
             return armor.firstOrNull { it.id == id || it.id == secondaryId } ?: throw MuseumDataError(MuseumDataError.Type.ARMOR_NOT_FOUND, name)
         }
 
-        val id = SkyOceanItemId.fromName(name, true) ?: throw MuseumDataError(MuseumDataError.Type.ITEM_NOT_FOUND, name)
+        val id = SkyBlockId.fromName(name, true) ?: throw MuseumDataError(MuseumDataError.Type.ITEM_NOT_FOUND, name)
 
-        return allItems.find { it.skyoceanId.cleanId == id.cleanId || it.mappedIds.contains(id.cleanId.uppercase()) }
+        return allItems.find { it.skyblockId.cleanId == id.cleanId || it.mappedIds.contains(id.cleanId.uppercase()) }
             ?: throw MuseumDataError(MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM, "$name - ${id.cleanId}")
     }
 

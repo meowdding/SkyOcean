@@ -9,7 +9,7 @@ class SimpleRecipeView(val stateVisitor: (CraftHelperState) -> Unit) : RecipeVie
     fun visit(
         tree: ContextAwareRecipeTree,
         itemTracker: ItemTracker,
-    ) = format(tree, itemTracker, this, WidgetBuilder.noOp) {}
+    ) = format(tree, itemTracker, WidgetBuilder.noOp) {}
 
     override fun create(
         state: CraftHelperState,

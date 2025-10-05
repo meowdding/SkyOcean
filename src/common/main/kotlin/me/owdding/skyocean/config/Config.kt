@@ -14,7 +14,7 @@ import me.owdding.skyocean.config.features.foraging.GalateaConfig
 import me.owdding.skyocean.config.features.garden.GardenConfig
 import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
-import me.owdding.skyocean.config.features.lorecleanup.LoreCleanupConfig
+import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.config.features.mining.MiningRetexture
@@ -22,9 +22,9 @@ import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.misc.MobIconsConfig
 import me.owdding.skyocean.config.patcher.ConfigPatches
-import me.owdding.skyocean.utils.ChatUtils
-import me.owdding.skyocean.utils.OceanGradients
 import me.owdding.skyocean.utils.SkyOceanModifyIndicator
+import me.owdding.skyocean.utils.chat.ChatUtils
+import me.owdding.skyocean.utils.chat.OceanGradients
 import java.util.function.UnaryOperator
 
 object Config : ConfigKt("skyocean/config") {
@@ -42,7 +42,7 @@ object Config : ConfigKt("skyocean/config") {
         }
         category(GardenConfig)
         category(InventoryConfig)
-        category(LoreCleanupConfig)
+        category(LoreModifierConfig)
         category(MiningConfig) {
             category(MiningRetexture)
             category(MineshaftConfig)

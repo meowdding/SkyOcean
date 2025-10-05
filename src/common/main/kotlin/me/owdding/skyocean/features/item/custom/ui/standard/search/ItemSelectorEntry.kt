@@ -1,13 +1,15 @@
 package me.owdding.skyocean.features.item.custom.ui.standard.search
 
-import me.owdding.skyocean.api.SimpleItemApi
-import me.owdding.skyocean.api.SkyOceanItemId
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
-import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.features.item.custom.data.AnimatedSkyblockSkin
+import me.owdding.skyocean.features.item.custom.data.CustomItemData
+import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.SkyblockModel
+import me.owdding.skyocean.features.item.custom.data.SkyblockSkin
+import me.owdding.skyocean.features.item.custom.data.StaticModel
 import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.utils.Utils.applyCatching
-import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.itemBuilder
 import me.owdding.skyocean.utils.Utils.set
 import net.minecraft.core.component.DataComponents
@@ -15,8 +17,9 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
+import tech.thatgravyboat.skyblockapi.api.remote.api.SimpleItemAPI
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
@@ -25,14 +28,13 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import java.util.*
 
 object ItemSearchEntries {
-
     val ENTRIES by lazy {
         listOf(
             (McClient.self.modelManager as ModelManagerAccessor)
                 .bakedItemModels()
                 .keys
                 .map { ItemModelSearchEntry(it) },
-            SimpleItemApi.getAllIds().map { SkyBlockModelEntry(it) },
+            SimpleItemAPI.getAllIds().map { SkyBlockModelEntry(it) },
         ).flatten().sortedBy { it.name.stripped }
     }
 }
@@ -62,6 +64,7 @@ data class ItemModelSearchEntry(
 
     override fun CustomItemData.applyToData() {
         this[CustomItemDataComponents.MODEL] = StaticModel(model)
+        this[CustomItemDataComponents.SKIN] = null
     }
 
     override fun resolve(parent: ItemStack): ItemStack = itemBuilder(parent) {
@@ -71,7 +74,7 @@ data class ItemModelSearchEntry(
 }
 
 data class SkyBlockModelEntry(
-    val model: SkyOceanItemId,
+    val model: SkyBlockId,
 ) : ModelSearchEntry {
     val animatedSkin = runCatching { AnimatedSkyblockSkin(model) }.getOrNull()
     val normalSkin = runCatching { SkyblockSkin(model) }.getOrNull()
@@ -80,9 +83,7 @@ data class SkyBlockModelEntry(
 
     override fun CustomItemData.applyToData() {
         this[CustomItemDataComponents.MODEL] = SkyblockModel(model)
-        if (model.toItem() in Items.PLAYER_HEAD) {
-            this[CustomItemDataComponents.SKIN] = skin
-        }
+        this[CustomItemDataComponents.SKIN] = skin
     }
 
     val uuidString = UUID.randomUUID().toString()

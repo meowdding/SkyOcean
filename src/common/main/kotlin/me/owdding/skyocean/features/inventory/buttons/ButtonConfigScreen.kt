@@ -127,28 +127,28 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
         itemWidget.withSize(width, height)
         itemWidget.withPlaceholder((+"skyocean.inventory.buttons.item").string)
         itemWidget.active = false
-        itemWidget.withEnterCallback {
+        itemWidget.withChangeCallback {
             selectedButton?.item = it
         }
 
         commandWidget.withSize(width, height)
         commandWidget.withPlaceholder((+"skyocean.inventory.buttons.command").string)
         commandWidget.active = false
-        commandWidget.withEnterCallback {
+        commandWidget.withChangeCallback {
             selectedButton?.command = it
         }
 
         titleWidget.withSize(width, height)
         titleWidget.withPlaceholder((+"skyocean.inventory.buttons.screen_title").string)
         titleWidget.active = false
-        titleWidget.withEnterCallback {
+        titleWidget.withChangeCallback {
             selectedButton?.title = it
         }
 
         tooltipWidget.withSize(width, height)
         tooltipWidget.withPlaceholder((+"skyocean.inventory.buttons.tooltip").string)
         tooltipWidget.active = false
-        tooltipWidget.withEnterCallback {
+        tooltipWidget.withChangeCallback {
             selectedButton?.tooltip = it
         }
 
