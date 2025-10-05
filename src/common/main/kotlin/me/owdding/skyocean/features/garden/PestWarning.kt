@@ -32,7 +32,7 @@ object PestWarning {
     // TODO: Maybe move to Crop enum in sbapi
     private val cropBlocks = setOf(
         Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.CARROTS, Blocks.POTATOES, Blocks.WHEAT,
-        Blocks.COCOA, Blocks.CARVED_PUMPKIN, Blocks.PUMPKIN, Blocks.MELON, Blocks.SUGAR_CANE, Blocks.CACTUS,
+        Blocks.COCOA, Blocks.CARVED_PUMPKIN, Blocks.PUMPKIN, Blocks.MELON, Blocks.SUGAR_CANE, Blocks.CACTUS, Blocks.NETHER_WART
     )
 
     @Subscription
