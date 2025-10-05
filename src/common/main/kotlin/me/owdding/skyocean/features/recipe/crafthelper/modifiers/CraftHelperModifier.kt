@@ -26,7 +26,7 @@ abstract class AbstractCraftHelperModifier {
         applies(event)?.let { modify(event, it) }
     }
 
-    fun modify(event: InventoryChangeEvent, ingredient: SkyOceanItemIngredient) {
+    private fun modify(event: InventoryChangeEvent, ingredient: SkyOceanItemIngredient) {
         event.item.skyoceanReplace {
             this.item = Items.DIAMOND_PICKAXE
             set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT.withHidden(DataComponents.ATTRIBUTE_MODIFIERS, true))
