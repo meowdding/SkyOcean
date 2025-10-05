@@ -172,7 +172,7 @@ cloche {
                 fabricApi(fabricApiVersion, minecraftVersion)
                 implementation(olympus) { isTransitive = false }
                 implementation(rconfig) { isTransitive = false }
-                implementation(rlib) { isTransitive = false }
+                implementation(rlib)
 
                 include(libs.resourceful.config.kotlin) { isTransitive = false }
                 include(libs.keval) { isTransitive = false }

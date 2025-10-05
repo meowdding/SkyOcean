@@ -4,7 +4,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.api.HotspotAPI
 import me.owdding.skyocean.config.features.fishing.HotspotFeaturesConfig
 import me.owdding.skyocean.events.fishing.HotspotEvent
-import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderCircle
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderCylinder
 import net.minecraft.util.ARGB
@@ -12,7 +13,6 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.time.since
 import kotlin.time.Duration.Companion.seconds
 
@@ -28,7 +28,7 @@ object HotspotFeatures {
     fun onRenderWorldEvent(event: RenderWorldEvent.AfterTranslucent) {
         if (!isEnabled()) return
 
-        HotspotAPI.getHotspots().forEach { (_, type, pos, radius) ->
+        HotspotAPI.hotspots.forEach { (_, type, pos, radius) ->
             val radius = radius ?: return@forEach
             val pos = pos ?: return@forEach
 
@@ -59,7 +59,10 @@ object HotspotFeatures {
         val playerPos = McPlayer.position ?: return
         val distance = hotspot.pos?.distance(playerPos.toVector3f()) ?: return
         if (distance > MIN_DISTANCE) return
-        Text.of("Hotspot despawned!").sendWithPrefix()
+        text {
+            append(hotspot.type.displayComponent)
+            append(" Hotspot despawned!")
+        }.sendWithPrefix()
     }
 
 }

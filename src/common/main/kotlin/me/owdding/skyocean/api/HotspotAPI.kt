@@ -10,6 +10,7 @@ import me.owdding.skyocean.utils.Utils.roundToHalf
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.DustParticleOptions
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket
 import net.minecraft.world.phys.Vec3
 import org.intellij.lang.annotations.Language
@@ -26,6 +27,9 @@ import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.utils.extentions.forEachBelow
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
+import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
 import kotlin.math.abs
 import kotlin.math.pow
@@ -37,9 +41,8 @@ object HotspotAPI {
 
     private val PARTICLE_COLOR = Vector3f(1.0f, 0.4117647f, 0.7058824f)
 
-    private val hotspots = mutableMapOf<Vector2d, HotspotData>()
-
-    fun getHotspots(): Collection<HotspotData> = hotspots.values
+    private val _hotspots = mutableMapOf<Vector2d, HotspotData>()
+    val hotspots: Collection<HotspotData> get() = _hotspots.values
 
     var lastHotspotFish = Instant.DISTANT_PAST
         private set
@@ -49,7 +52,7 @@ object HotspotAPI {
     fun onNameChanged(event: NameChangedEvent) {
         val pos = event.infoLineEntity.position()
         val type = HotspotType.getType(event.literalComponent) ?: return
-        val hotspot = hotspots.getOrPut(pos.toVec2d()) {
+        val hotspot = _hotspots.getOrPut(pos.toVec2d()) {
             HotspotData(id = event.infoLineEntity.id, type = type)
         }
 
@@ -68,7 +71,7 @@ object HotspotAPI {
     fun onCatch(event: FishCatchEvent) {
         val hookY = event.hookPos.y
         val hookPosD = event.hookPos.toVector3f()
-        hotspots.values.filter {
+        _hotspots.values.filter {
             val y = it.pos?.y ?: return@filter false
             abs(hookY - y) < 3
         }.minByOrNull { it.pos?.distanceSquared(hookPosD) ?: Float.MAX_VALUE }?.let {
@@ -78,15 +81,15 @@ object HotspotAPI {
     }
 
     @Subscription(ServerChangeEvent::class)
-    fun onServerChange() = hotspots.clear()
+    fun onServerChange() = _hotspots.clear()
 
     @Subscription
     @OnlyOnSkyBlock
     fun onEntityRemoved(event: EntityRemovedEvent) {
         val pos = event.entity.position().toVec2d()
-        val hotspot = hotspots[pos] ?: return
+        val hotspot = _hotspots[pos] ?: return
         if (hotspot.id == event.entity.id) {
-            hotspots.remove(pos)
+            _hotspots.remove(pos)
             HotspotEvent.Despawn(hotspot).post(SkyBlockAPI.eventBus)
         }
     }
@@ -103,12 +106,13 @@ object HotspotAPI {
             else -> 9.0
         }
 
-        for (entry in hotspots.values) {
+        for (entry in _hotspots.values) {
             if (entry.pos == null) continue
 
             val distance = ((packet.x - entry.pos!!.x).pow(2) + (packet.z - entry.pos!!.z).pow(2))
             if (distance <= maxHotspotSize + 0.5) {
                 entry.radius = sqrt(distance).roundToHalf()
+                // Hotspot particles are cancelled here to avoid having to check them again inside the HotspotFeatures object.
                 if (HotspotFeatures.isEnabled()) event.cancel()
                 return
             }
@@ -142,6 +146,10 @@ enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
     TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Fish Chance"),
     UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
     ;
+
+    private val displayName = toFormattedName()
+    val displayComponent: Component = displayName.asComponent { this.color = this@HotspotType.color.value }
+    override fun toString(): String = displayName
 
     val regex: Regex = Regex(regex)
 
