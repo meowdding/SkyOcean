@@ -19,6 +19,10 @@ object MiningConfig : CategoryKt("mining") {
         translation = "skyocean.config.mining.puzzler"
     }
 
+    var fetchurHelper by boolean(true) {
+        translation = "skyocean.config.mining.fetchur"
+    }
+
     var forgeReminder by boolean(true) {
         translation = "skyocean.config.mining.forge_reminder"
     }
