@@ -24,7 +24,6 @@ import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
@@ -269,10 +268,6 @@ object Utils {
     fun ListMerger<Component>.addAll(iterable: Collection<Component>) = this.destination.addAll(iterable)
     fun ListMerger<*>.skipRemaining() {
         while (this.canRead()) read()
-    }
-
-    fun Screen?.rebuild() {
-        this?.resize(McClient.self, this.width, this.height)
     }
 
     fun jsonObject(init: context(JsonObject) () -> Unit) = JsonObject().apply(init)
