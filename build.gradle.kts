@@ -75,7 +75,7 @@ cloche {
         compileOnly(libs.skyblockapi.repo)
         implementation(libs.keval)
         implementation(libs.placeholders)
-        implementation(libs.resourceful.config.kotlin) { isTransitive = false }
+        implementation(libs.resourceful.config.kotlin)
 
         implementation(libs.fabric.language.kotlin)
     }
@@ -170,9 +170,9 @@ cloche {
 
             dependencies {
                 fabricApi(fabricApiVersion, minecraftVersion)
-                implementation(olympus) { isTransitive = false }
-                implementation(rconfig) { isTransitive = false }
-                implementation(rlib) { isTransitive = false }
+                implementation(olympus)
+                implementation(rconfig)
+                implementation(rlib)
 
                 include(libs.resourceful.config.kotlin) { isTransitive = false }
                 include(libs.keval) { isTransitive = false }

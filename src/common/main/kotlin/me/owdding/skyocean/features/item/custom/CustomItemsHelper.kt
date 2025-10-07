@@ -39,6 +39,6 @@ object CustomItemsHelper {
     }
 
     @JvmStatic
-    fun getColor(itemStack: ItemStack) = getCustomData(itemStack)?.let { it[CustomItemDataComponents.COLOR]?.getColor() }
+    fun getColor(itemStack: ItemStack) = getCustomData(itemStack)?.let { it[CustomItemDataComponents.COLOR]?.getColor(itemStack) }
 
 }
