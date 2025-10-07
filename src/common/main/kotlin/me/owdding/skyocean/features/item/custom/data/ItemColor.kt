@@ -8,9 +8,8 @@ import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.repo.customization.DyeData
 import me.owdding.skyocean.utils.Utils.simpleCacheLoader
-import net.minecraft.core.component.DataComponents
+import me.owdding.skyocean.utils.extensions.getEquipmentSlot
 import net.minecraft.util.Mth
-import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.DyedItemColor
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
@@ -81,7 +80,7 @@ data class GradientItemColor(
 
     override val type: ItemColorType = ItemColorType.GRADIENT
 
-    override fun getColor(itemStack: ItemStack?): Int = colors[(TickEvent.ticks + 1) % colors.size]
+    override fun getColor(itemStack: ItemStack?): Int = colors[(TickEvent.ticks + getArmorOffset(itemStack)) % colors.size]
 }
 
 @GenerateCodec
@@ -116,24 +115,17 @@ data class AnimatedSkyBlockDye(val id: String) : ItemColor {
     }
 
     override fun getColor(itemStack: ItemStack?): Int = DyeData.getAnimated(id, getArmorOffset(itemStack))
-
-    private fun getArmorOffset(itemStack: ItemStack?): Int {
-        val item = itemStack?.item ?: return 1
-        val armorItem = item.components().get(DataComponents.EQUIPPABLE)
-
-        return when {
-            armorItem?.slot() == EquipmentSlot.HEAD -> 16
-            armorItem?.slot() == EquipmentSlot.CHEST -> 11
-            armorItem?.slot() == EquipmentSlot.LEGS -> 6
-            armorItem?.slot() == EquipmentSlot.FEET -> 1
-            else -> 1
-        }
-    }
 }
 
 
 interface ItemColor {
     val type: ItemColorType
-    fun getDyeColor(): DyedItemColor = colorCache[getColor()]
+    fun getDyeColor(itemStack: ItemStack? = null): DyedItemColor = colorCache[getColor(itemStack)]
     fun getColor(itemStack: ItemStack? = null): Int
+
+    fun getArmorOffset(itemStack: ItemStack?): Int {
+        val item = itemStack?.item ?: return 1
+
+        return item.getEquipmentSlot()?.let { (it.ordinal - 2) * 5 }?.coerceIn(0..20) ?: 0
+    }
 }
