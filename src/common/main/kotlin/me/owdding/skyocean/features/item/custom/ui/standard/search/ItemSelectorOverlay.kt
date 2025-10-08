@@ -64,6 +64,7 @@ class ItemSelectorOverlay(
         Widgets.textInput(query) {
             it.withSize(bounds.width, bounds.height)
             it.withPosition(bounds.x, bounds.y)
+            it.isFocused = true
         }.let(this::addRenderableWidget)
 
         this.addRenderableWidget(this.entries)
