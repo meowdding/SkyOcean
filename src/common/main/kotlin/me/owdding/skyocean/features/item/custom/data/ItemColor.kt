@@ -8,7 +8,9 @@ import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.repo.customization.DyeData
 import me.owdding.skyocean.utils.Utils.simpleCacheLoader
+import me.owdding.skyocean.utils.extensions.getEquipmentSlot
 import net.minecraft.util.Mth
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.DyedItemColor
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import kotlin.math.max
@@ -41,7 +43,7 @@ interface NonSkyblockItemColor : ItemColor
 data class StaticItemColor(val colorCode: Int) : NonSkyblockItemColor {
     override val type: ItemColorType = ItemColorType.STATIC
 
-    override fun getColor() = colorCode
+    override fun getColor(itemStack: ItemStack?): Int = colorCode
 }
 
 @GenerateCodec
@@ -78,7 +80,7 @@ data class GradientItemColor(
 
     override val type: ItemColorType = ItemColorType.GRADIENT
 
-    override fun getColor(): Int = colors[(TickEvent.ticks + 1) % colors.size]
+    override fun getColor(itemStack: ItemStack?): Int = colors[(TickEvent.ticks + getArmorOffset(itemStack)) % colors.size]
 }
 
 @GenerateCodec
@@ -99,7 +101,7 @@ data class SkyBlockDye(val id: String) : ItemColor {
 
     val dye = DyeData.staticDyes[id]!!
 
-    override fun getColor(): Int = dye
+    override fun getColor(itemStack: ItemStack?): Int = dye
 }
 
 @GenerateCodec
@@ -112,13 +114,18 @@ data class AnimatedSkyBlockDye(val id: String) : ItemColor {
         }
     }
 
-    override fun getColor(): Int = DyeData.getAnimated(id, 1)
+    override fun getColor(itemStack: ItemStack?): Int = DyeData.getAnimated(id, getArmorOffset(itemStack))
 }
 
 
 interface ItemColor {
     val type: ItemColorType
+    fun getDyeColor(itemStack: ItemStack? = null): DyedItemColor = colorCache[getColor(itemStack)]
+    fun getColor(itemStack: ItemStack? = null): Int
 
-    fun getDyeColor(): DyedItemColor = colorCache[getColor()]
-    fun getColor(): Int
+    fun getArmorOffset(itemStack: ItemStack?): Int {
+        val item = itemStack?.item ?: return 1
+
+        return item.getEquipmentSlot()?.let { (it.ordinal - 2) * 5 }?.coerceIn(0..20) ?: 0
+    }
 }

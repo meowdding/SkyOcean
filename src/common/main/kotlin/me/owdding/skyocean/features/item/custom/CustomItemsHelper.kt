@@ -16,19 +16,19 @@ import net.minecraft.world.item.ItemStack
 object CustomItemsHelper {
 
     @JvmStatic
-    fun <T> getData(instance: ItemStack, type: DataComponentType<T>): T? = getCustomData(instance)?.getData(type)
+    fun <T> getData(instance: ItemStack, type: DataComponentType<T>): T? = context(instance) { getCustomData(instance)?.getData(type) }
 
     fun getCustomData(instance: ItemStack) = instance.getStaticCustomData() ?: instance.getCustomData() ?: instance.getVanillaIntegrationData()
 
     fun getNameReplacement(stack: ItemStack): Component? = stack[CustomItemDataComponents.NAME]
 
-    fun <T> CustomItemData.getData(type: DataComponentType<T>): T? = when (type) {
+    context(item: ItemStack) fun <T> CustomItemData.getData(type: DataComponentType<T>): T? = when (type) {
         DataComponents.ITEM_MODEL -> this[CustomItemDataComponents.MODEL]?.getModel()
         DataComponents.CUSTOM_NAME -> this[CustomItemDataComponents.NAME]
         DataComponents.ENCHANTMENT_GLINT_OVERRIDE -> this[CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE]
         DataComponents.TRIM -> this[CustomItemDataComponents.ARMOR_TRIM]?.trim
         DataComponents.PROFILE -> this[CustomItemDataComponents.SKIN]?.getResolvableProfile()
-        DataComponents.DYED_COLOR -> this[CustomItemDataComponents.COLOR]?.getDyeColor()
+        DataComponents.DYED_COLOR -> this[CustomItemDataComponents.COLOR]?.getDyeColor(item)
         DataComponents.EQUIPPABLE -> this[CustomItemDataComponents.MODEL]?.resolveToItem()?.components()[DataComponents.EQUIPPABLE]
         else -> null
     }.unsafeCast()
@@ -39,6 +39,6 @@ object CustomItemsHelper {
     }
 
     @JvmStatic
-    fun getColor(itemStack: ItemStack) = getCustomData(itemStack)?.let { it[CustomItemDataComponents.COLOR]?.getColor() }
+    fun getColor(itemStack: ItemStack) = getCustomData(itemStack)?.let { it[CustomItemDataComponents.COLOR]?.getColor(itemStack) }
 
 }
