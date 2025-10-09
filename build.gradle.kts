@@ -75,7 +75,7 @@ cloche {
         compileOnly(libs.skyblockapi.repo)
         implementation(libs.keval)
         implementation(libs.placeholders)
-        implementation(libs.resourceful.config.kotlin) { isTransitive = false }
+        implementation(libs.resourceful.config.kotlin)
 
         implementation(libs.fabric.language.kotlin)
     }

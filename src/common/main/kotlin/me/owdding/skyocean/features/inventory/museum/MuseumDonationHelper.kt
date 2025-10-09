@@ -24,14 +24,12 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
-import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ARMOR_NOT_FOUND
-import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ITEM_NOT_FOUND
-import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.*
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.modifyTooltip
-import me.owdding.skyocean.utils.Utils.rebuild
+import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.skipRemaining
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.Utils.unaryPlus
@@ -202,7 +200,7 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
                 CraftHelperStorage.setSelected(id)
                 CraftHelperStorage.setAmount(1)
                 CraftHelperStorage.save()
-                McScreen.self.rebuild()
+                McScreen.refreshScreen()
             }
         }
     }

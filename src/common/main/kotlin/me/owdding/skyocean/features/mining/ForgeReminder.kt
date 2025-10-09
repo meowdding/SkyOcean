@@ -49,7 +49,7 @@ object ForgeReminder {
                 }
             }
 
-            Text.join(Text.translatable("skyocean.config.mining.forge_reminder"), " | ", items, clickToWarp).sendWithPrefix()
+            Text.join(Text.translatable("skyocean.config.mining.forge_reminder"), " | ", items, clickToWarp).sendWithPrefix("SKYOCEAN_FORGE_REMINDER")
         },
     )
 

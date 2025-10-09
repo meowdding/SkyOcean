@@ -54,7 +54,7 @@ interface ItemLikeIngredient : Ingredient {
 }
 
 @GenerateCodec
-data class SkyOceanItemIngredient(override val id: SkyBlockId, override val amount: Int) : ItemLikeIngredient {
+data class SkyOceanItemIngredient(override val id: SkyBlockId, override val amount: Int = 1) : ItemLikeIngredient {
     override val skyblockId: String = id.skyblockId
     override val item: ItemStack by lazy { id.toItem() }
     override val itemName: Component by lazy { item.hoverName }

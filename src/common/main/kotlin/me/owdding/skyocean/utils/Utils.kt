@@ -24,7 +24,6 @@ import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
@@ -51,6 +50,7 @@ import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
@@ -83,6 +83,11 @@ object Utils {
 
     fun Double.roundToHalf(): Double {
         return (this * 2).roundToInt() / 2.0
+    }
+
+    // todo: better idk someone is hater number 1
+    fun McScreen.refreshScreen() {
+        self?.let { it.resize(McClient.self, it.width, it.height) }
     }
 
     operator fun Item.contains(stack: ItemStack): Boolean = stack.item == this
@@ -228,10 +233,9 @@ object Utils {
     inline fun ItemStack.skyoceanReplace(addIndicator: Boolean = true, crossinline init: context(ItemStack) ItemBuilder.() -> Unit) {
         this.replaceVisually {
             copyFrom(this@skyoceanReplace)
+            set(DataComponents.TOOLTIP_DISPLAY, this@skyoceanReplace.get(DataComponents.TOOLTIP_DISPLAY)?.hiddenComponents()?.let { TooltipDisplay(false, it) })
             init()
             if (addIndicator) skyOceanIndicator()
-
-            set(DataComponents.TOOLTIP_DISPLAY, this@skyoceanReplace.get(DataComponents.TOOLTIP_DISPLAY)?.hiddenComponents()?.let { TooltipDisplay(false, it) })
         }
     }
 
@@ -264,10 +268,6 @@ object Utils {
     fun ListMerger<Component>.addAll(iterable: Collection<Component>) = this.destination.addAll(iterable)
     fun ListMerger<*>.skipRemaining() {
         while (this.canRead()) read()
-    }
-
-    fun Screen?.rebuild() {
-        this?.resize(McClient.self, this.width, this.height)
     }
 
     fun jsonObject(init: context(JsonObject) () -> Unit) = JsonObject().apply(init)
