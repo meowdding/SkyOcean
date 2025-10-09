@@ -8,9 +8,9 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
-import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
 import me.owdding.skyocean.features.item.lore.InventoryTooltipComponent
-import me.owdding.skyocean.features.item.lore.LoreModifier
+import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
+import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
@@ -29,6 +29,7 @@ import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.modifyTooltip
+import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.skipRemaining
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
@@ -59,8 +60,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
-@LoreModifier
-object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
+@ItemModifier
+object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
 
     private val logger: MeowddingLogger = SkyOcean.featureLogger()
     private val modifierCache: MutableMap<String, Pair<ComponentModifier?, TooltipComponentModifier?>> = mutableMapOf()
@@ -70,8 +71,8 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
     private val itemCache = CachedValue { ItemTracker() }
     private val itemTracker by itemCache
 
-    override val displayName: Component? = null
-    override val extraNames: List<Component>
+    override val displayName: Component get() = !""
+    override val displayNames: List<Component>
         get() = buildList {
             if (MiscConfig.itemSearchMuseumIntegration) {
                 add(+"skyocean.config.misc.itemSearch.museumIntegration")
@@ -293,21 +294,20 @@ object MuseumDonationHelper : RecipeView, AbstractLoreModifier() {
 
     override fun appliesTo(item: ItemStack): Boolean = itemCache.hasValue()
 
-    override fun modify(item: ItemStack, list: MutableList<Component>): Boolean {
-        if (item.cleanName !in modifierCache) return false
+    override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?): Result {
+        if (item.cleanName !in modifierCache) return Result.unmodified
         return withMerger(list) {
             modifierCache[item.cleanName]?.first?.publicMerge(this)
-            true
+            Result.modified
         }
     }
 
-    override fun appendComponents(
-        item: ItemStack,
-        list: MutableList<ClientTooltipComponent>,
-    ) {
-        if (item.cleanName !in modifierCache) return
+
+    override fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>): Result {
+        if (item.cleanName !in modifierCache) return Result.unmodified
         return withComponentMerger(list) {
             modifierCache[item.cleanName]?.second?.publicMerge(this)
+            Result.modified
         }
     }
 }

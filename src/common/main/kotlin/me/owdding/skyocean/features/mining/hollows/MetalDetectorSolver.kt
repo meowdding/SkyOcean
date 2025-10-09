@@ -5,8 +5,8 @@ import me.owdding.lib.waypoints.ExpellingWaypoint
 import me.owdding.lib.waypoints.ExpellingWaypointList
 import me.owdding.lib.waypoints.MeowddingWaypoint
 import me.owdding.skyocean.config.features.mining.MiningConfig
-import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
-import me.owdding.skyocean.features.item.lore.LoreModifier
+import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
+import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.ReplaceMessage
@@ -260,14 +260,14 @@ object MetalDetectorSolver {
         }
     }
 
-    @LoreModifier
-    object MetalDetectorLoreModifier : AbstractLoreModifier() {
+    @ItemModifier
+    object MetalDetectorLoreModifier : AbstractItemModifier() {
         override val displayName: Component = +"skyocean.config.mining.metal_detector.metalDetector"
         override val isEnabled: Boolean get() = MiningConfig.metalDetectorSolver
 
-        override fun appliesTo(item: ItemStack): Boolean = item.isDetector()
+        override fun appliesTo(itemStack: ItemStack): Boolean = itemStack.isDetector()
 
-        override fun modify(item: ItemStack, list: MutableList<Component>): Boolean = withMerger(list) {
+        override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {
             addUntil { it.stripped == "SPECIAL" }
             add(
                 Text.of {
@@ -285,7 +285,7 @@ object MetalDetectorSolver {
                 },
             )
             space()
-            true
+            Result.modified
         }
     }
 }

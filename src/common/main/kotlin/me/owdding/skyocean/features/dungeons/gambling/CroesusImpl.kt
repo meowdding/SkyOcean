@@ -3,8 +3,8 @@ package me.owdding.skyocean.features.dungeons.gambling
 import me.owdding.skyocean.config.features.dungeons.DungeonsConfig
 import me.owdding.skyocean.features.dungeons.gambling.DungeonGambling.allowedDungeonGamblingChests
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
-import me.owdding.skyocean.features.item.lore.AbstractLoreModifier
-import me.owdding.skyocean.features.item.lore.LoreModifier
+import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
+import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.skipRemaining
 import net.minecraft.client.gui.screens.Screen
@@ -20,8 +20,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.obfuscated
 
-@LoreModifier
-object CroesusImpl : AbstractLoreModifier() {
+@ItemModifier
+object CroesusImpl : AbstractItemModifier() {
     private val enabled get() = DungeonsConfig.gamblingScreenEnabled && DungeonsConfig.gamblingInCroesus
     val croesusLoreToFloor = mapOf(
         "The Catacombs - Floor I" to DungeonFloor.F1,
@@ -51,7 +51,7 @@ object CroesusImpl : AbstractLoreModifier() {
         return screen.title.stripped.let { it.startsWith("The Catacombs - ") || it.startsWith("Master Mode The Catacombs - ") }
     }
 
-    override fun modify(item: ItemStack, list: MutableList<Component>) = withMerger(list) {
+    override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {
         addUntilAfter { it.stripped == "Contents" }
         skipRemaining()
 
@@ -83,6 +83,6 @@ object CroesusImpl : AbstractLoreModifier() {
             color = TextColor.YELLOW
         }
 
-        true
+        Result.modified
     }
 }
