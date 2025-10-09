@@ -25,6 +25,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.font
+import java.util.concurrent.atomic.AtomicBoolean
 
 @Module
 object MobIcons {
@@ -54,11 +55,14 @@ object MobIcons {
         if (!MobIconsConfig.enabled) return
         val stripped = event.literalComponent
         if (!stripped.contains(MOB_TYPES)) return
+        val hasFoundEnd = AtomicBoolean()
         event.component.visitSiblings {
-            val stripped = it.stripped.trim()
-            if (stripped.matches(MOB_TYPES)) {
+            if (hasFoundEnd.get()) return@visitSiblings
+            val stripped = it.stripped
+            val trimmed = stripped.trim()
+            if (trimmed.matches(MOB_TYPES)) {
                 val text = (it as? MutableComponent) ?: return@visitSiblings
-                val icon = KnownMobIcon.getByIcon(stripped) ?: return@visitSiblings
+                val icon = KnownMobIcon.getByIcon(trimmed) ?: return@visitSiblings
                 text.font = MobIconsConfig.style.font
 
                 val settings = getSetting(icon)
@@ -67,6 +71,9 @@ object MobIcons {
                     icon.color?.let { color -> text.color = color }
                 } else {
                     text.color = TextColor.WHITE
+                }
+                if (stripped.endsWith(" ")) {
+                    hasFoundEnd.set(true)
                 }
             }
         }

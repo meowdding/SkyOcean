@@ -316,9 +316,10 @@ tasks {
                 "-Xmulti-platform",
                 "-Xno-check-actual",
                 "-Xexpect-actual-classes",
-                "-Xopt-in=kotlin.time.ExperimentalTime",
+                "-opt-in=kotlin.time.ExperimentalTime",
                 "-Xcontext-parameters",
-                "-Xcontext-sensitive-resolution"
+                "-Xcontext-sensitive-resolution",
+                "-Xdont-warn-on-error-suppression"
             )
         }
     }
