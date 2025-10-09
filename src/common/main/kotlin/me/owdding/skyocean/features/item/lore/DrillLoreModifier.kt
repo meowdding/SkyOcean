@@ -1,6 +1,8 @@
 package me.owdding.skyocean.features.item.lore
 
 import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
+import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
+import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.tags.SkyblockItemTagKey
 import net.minecraft.network.chat.Component
@@ -14,14 +16,14 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
-@LoreModifier
-object DrillLoreModifier : AbstractLoreModifier() {
+@ItemModifier
+object DrillLoreModifier : AbstractItemModifier() {
     override val displayName: Component = +"skyocean.config.lore_modifiers.drill_modifications"
     override val isEnabled: Boolean get() = LoreModifierConfig.enableDrillCleanup
 
-    override fun appliesTo(item: ItemStack) = item in SkyblockItemTagKey.DRILLS
+    override fun appliesTo(itemStack: ItemStack) = itemStack in SkyblockItemTagKey.DRILLS
 
-    override fun modify(item: ItemStack, list: MutableList<Component>) = withMerger(list) {
+    override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {
         val fuelTank = item.getData(DataTypes.FUEL_TANK)
         val engine = item.getData(DataTypes.ENGINE)
         val upgradeModule = item.getData(DataTypes.UPGRADE_MODULE)
@@ -55,7 +57,7 @@ object DrillLoreModifier : AbstractLoreModifier() {
         skipUntilAfterSpace()
         space()
 
-        true
+        Result.modified
     }
 
 }
