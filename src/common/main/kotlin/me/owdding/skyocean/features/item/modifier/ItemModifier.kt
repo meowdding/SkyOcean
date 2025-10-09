@@ -40,19 +40,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.*
 
-@ItemModifier
-object Test : AbstractItemModifier() {
-    override val displayName: Component = !"meow"
-    override val isEnabled: Boolean = true
-
-    override fun appliesTo(itemStack: ItemStack): Boolean = true
-
-    override fun itemCountOverride(itemStack: ItemStack): Component? {
-        return !"!"
-    }
-
-}
-
 abstract class AbstractItemModifier {
 
     companion object {
