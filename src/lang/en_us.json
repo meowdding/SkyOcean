@@ -456,9 +456,7 @@
             "@value": "Warning",
             "desc": "Sends a chat warning when a hotspot you recently fished at disappears."
           },
-          "highlight": {
-            "@value": "Highlight"
-          },
+          "highlight": "Highlight",
           "circle_surface": {
             "@value": "Surface",
             "desc": "Render a \"solid\" circle instead of the particle outline."
