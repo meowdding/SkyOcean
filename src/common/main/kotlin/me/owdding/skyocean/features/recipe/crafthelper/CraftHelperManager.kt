@@ -9,6 +9,7 @@ import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
+import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.SimpleRecipeView
 import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.text
@@ -26,13 +27,14 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import java.util.concurrent.atomic.AtomicReference
 
 @Module
 object CraftHelperManager {
     var lastData: CraftHelperRecipe? = null
     var hasBeenNotified = false
     private val keybind = SkyOceanKeybind("skyocean.keybind.crafthelper", InputConstants.KEY_V)
-
+    var lastEvaluatedRoot: AtomicReference<CraftHelperState?> = AtomicReference()
 
     fun clear() {
         CraftHelperStorage.clear()
@@ -45,14 +47,15 @@ object CraftHelperManager {
         if (lastData != CraftHelperStorage.data) {
             this.lastData = CraftHelperStorage.data
             hasBeenNotified = false
+            lastEvaluatedRoot.set(null)
         }
-        if (hasBeenNotified) return
-
         val (tree) = CraftHelperStorage.data?.resolve({}, ::clear) ?: return
         SimpleRecipeView {
-            if (!CraftHelperConfig.doneMessage) return@SimpleRecipeView
             if (it.path != "root") return@SimpleRecipeView
+            lastEvaluatedRoot.set(it)
+            if (!CraftHelperConfig.doneMessage) return@SimpleRecipeView
             if (!it.childrenDone) return@SimpleRecipeView
+            if (hasBeenNotified) return@SimpleRecipeView
             hasBeenNotified = true
             text("You have all materials to craft your selected craft helper tree!").sendWithPrefix()
         }.visit(tree, ItemTracker(ItemSources.craftHelperSources))

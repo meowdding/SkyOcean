@@ -7,10 +7,12 @@ import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
 import kotlin.reflect.KProperty
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
+import kotlin.time.Instant
 import kotlin.time.toTimeUnit
 
 fun <T> CategoryBuilder.observable(entry: ConfigDelegateProvider<RConfigKtEntry<T>>, onChange: () -> Unit) =
@@ -82,10 +84,14 @@ class DefaultEnabledMessageEntryDelegate<T> internal constructor(
 
 class CachedValue<T>(private val supplier: () -> T) {
     private var value: T? = null
+    var lastUpdated: Instant = Instant.DISTANT_PAST
 
     operator fun getValue(thisRef: Any?, property: Any?): T {
         val value = value ?: supplier()
-        if (this.value != value) this.value = value
+        if (this.value != value) {
+            this.value = value
+            lastUpdated = currentInstant()
+        }
         return value
     }
 

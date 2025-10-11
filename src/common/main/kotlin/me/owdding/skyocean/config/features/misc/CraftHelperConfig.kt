@@ -43,4 +43,16 @@ object CraftHelperConfig : CategoryKt("crafthelper") {
     var formatter by enum(CraftHelperFormat.TREE) {
         translation = "skyocean.config.misc.crafthelper.tree_formatter"
     }
+
+    var rawFormatterHideCompleted by boolean(false) {
+        translation = "skyocean.config.misc.crafthelper.raw_formatter_hide_completed"
+    }
+
+    var enableOverlay by boolean(false) {
+        translation = "skyocean.config.misc.crafthelper.enable_hud_overlay"
+    }
+
+    var overlayBackground by boolean(false) {
+        translation = "skyocean.config.misc.crafthelper.overlay_background"
+    }
 }

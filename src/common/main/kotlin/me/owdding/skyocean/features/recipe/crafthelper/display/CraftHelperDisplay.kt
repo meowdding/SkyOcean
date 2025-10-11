@@ -102,7 +102,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                         CraftHelperFormat.TREE -> TreeFormatter
                     }
 
-                    formatter.format(tree, tracker, WidgetBuilder(callback)) {
+                    formatter.format(tree, tracker, WidgetBuilder(refreshCallback = callback)) {
                         lines++
                         maxLine = maxOf(maxLine, it.width + 10)
                         list.add(it)

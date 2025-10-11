@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.RemoteConfig
+import me.owdding.lib.overlays.EditOverlaysScreen
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.skyocean.config.Config
@@ -93,6 +94,10 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         event.register("skyocean") {
             thenCallback("version") {
                 Text.of("Version: $VERSION").withColor(TextColor.GRAY).sendWithPrefix()
+            }
+
+            thenCallback("overlays") {
+                McClient.setScreenAsync { EditOverlaysScreen(MOD_ID) }
             }
 
             callback {
