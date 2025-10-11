@@ -12,7 +12,7 @@ skyblockapi-repo = "3.0.0"
 placeholders = "2.6.1+1.21.5"
 keval = "1.1.1"
 
-rconfigkt = "3.5.13"
+rconfigkt = "3.5.15"
 
 detekt = "1.23.8"
 

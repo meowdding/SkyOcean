@@ -15,7 +15,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @Module
 object ItemSearch {
 
-    val key = SkyOceanKeybind("skyocean.keybind.item_search", InputConstants.KEY_O) keybind@{
+    val key = SkyOceanKeybind("item_search", InputConstants.KEY_O) keybind@{
         if (!LocationAPI.isOnSkyBlock) return@keybind
         McClient.setScreen(ItemSearchScreen)
     }
