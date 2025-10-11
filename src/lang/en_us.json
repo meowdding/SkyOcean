@@ -450,8 +450,13 @@
           "desc": "Hides other players' bobbers, making it easier to see your own."
         },
         "hotspot": {
-          "@value": "Hotspot Highlight",
-          "desc": "All settings for the hotspot highlight.",
+          "@value": "Hotspot Features",
+          "desc": "All settings for the hotspot Features.",
+          "warning": {
+            "@value": "Warning",
+            "desc": "Sends a chat warning when a hotspot you recently fished at disappears."
+          },
+          "highlight": "Highlight",
           "circle_surface": {
             "@value": "Surface",
             "desc": "Render a \"solid\" circle instead of the particle outline."
