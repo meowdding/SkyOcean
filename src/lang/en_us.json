@@ -316,7 +316,7 @@
           },
           "highlightTime": {
             "@value": "Highlight Time",
-            "desc": "Amount of time that item will be highlighted for, in seconds."
+            "desc": "Amount of time that items will be highlighted for, in seconds."
           },
           "preserve_search": {
             "@value": "Preserve Search",
