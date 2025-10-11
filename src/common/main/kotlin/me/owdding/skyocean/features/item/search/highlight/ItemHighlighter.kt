@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefullib.common.color.Color
 import kotlinx.coroutines.*
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
-import me.owdding.skyocean.events.ItemSearchComponent
 import me.owdding.skyocean.events.ItemStackCreateEvent
 import me.owdding.skyocean.features.item.search.search.ItemFilter
 import me.owdding.skyocean.repo.SackData
@@ -70,7 +69,6 @@ object ItemHighlighter {
     }
 
     @Subscription
-    @OptIn(ItemSearchComponent::class)
     fun onItem(event: ItemStackCreateEvent) {
         val filter = currentSearch ?: return
         if (filter.test(event.itemStack)) {

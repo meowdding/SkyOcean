@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.defaultEnabledMessage
+import me.owdding.skyocean.config.objT
 import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
@@ -12,6 +13,10 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.Companion.inAn
 object MiscConfig : CategoryKt("misc") {
     private val defaultCloudIslands = listOf(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS, SkyBlockIsland.THE_CATACOMBS)
     override val name get() = Translated("skyocean.config.misc")
+
+    init {
+        objT("models", ModelsConfig)
+    }
 
     var ministerInCalendar by boolean(true) {
         translation = "skyocean.config.misc.ministerInCalendar"
