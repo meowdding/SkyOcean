@@ -1,9 +1,11 @@
 package me.owdding.skyocean.config
 
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import com.teamresourceful.resourcefulconfigkt.api.*
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
+import com.teamresourceful.resourcefulconfigkt.api.builders.TypeBuilder
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -16,9 +18,23 @@ import kotlin.time.toTimeUnit
 fun <T> CategoryBuilder.observable(entry: ConfigDelegateProvider<RConfigKtEntry<T>>, onChange: () -> Unit) =
     this.observable(entry) { _, _ -> onChange() }
 
-fun CategoryBuilder.requiresChunkRebuild(entry: ConfigDelegateProvider<RConfigKtEntry<Boolean>>) = observable(entry) {
-    runCatching { McClient.self.levelRenderer.allChanged() }
+fun CategoryBuilder.requiresChunkRebuild(entry: ConfigDelegateProvider<RConfigKtEntry<Boolean>>) = entry.withRequiresChunkRebuild()
+
+fun <T> CategoryBuilder.objT(id: String, obj: T, builder: TypeBuilder.() -> Unit = {}): T where T : ObjectKt, T : Translatable {
+    return obj(id, obj) {
+        builder()
+        this.translation = obj.translationKey
+    }
 }
+
+fun <T> CategoryBuilder.obj(obj: T, builder: TypeBuilder.() -> Unit = {}): ObjectProperty<T> where T : ObjectKt, T : Translatable {
+    return obj(obj) {
+        builder()
+        this.translation = obj.translationKey
+    }
+}
+
+fun ConfigDelegateProvider<RConfigKtEntry<Boolean>>.withRequiresChunkRebuild() = observable { runCatching { McClient.self.levelRenderer.allChanged() } }
 
 var SeparatorBuilder.translation: String
     get() = ""
@@ -43,6 +59,8 @@ fun <T, R> ConfigDelegateProvider<RConfigKtEntry<T>>.transform(from: (R) -> T, t
 
 fun <T> ConfigDelegateProvider<RConfigKtEntry<T>>.observable(onChange: (T, T) -> Unit) = ObservableEntry(this, onChange)
 
+fun <T> ConfigDelegateProvider<RConfigKtEntry<T>>.observable(onChange: () -> Unit) = ObservableEntry(this) { _, _ -> onChange() }
+
 @Suppress("UnusedReceiverParameter")
 fun <T> CategoryBuilder.defaultEnabledMessage(
     entry: ConfigDelegateProvider<RConfigKtEntry<T>>,
@@ -51,6 +69,11 @@ fun <T> CategoryBuilder.defaultEnabledMessage(
     predicate: () -> Boolean = { true },
 ) = DefaultEnabledMessageEntry(entry, messageProvider, id, predicate)
 
+fun <T> ConfigDelegateProvider<RConfigKtEntry<T>>.withDefaultEnabledMessage(
+    messageProvider: () -> Component,
+    id: String,
+    predicate: () -> Boolean = { true },
+) = DefaultEnabledMessageEntry(this, messageProvider, id, predicate)
 
 class DefaultEnabledMessageEntry<T>(
     private val entry: ConfigDelegateProvider<RConfigKtEntry<T>>,

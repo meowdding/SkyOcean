@@ -5,6 +5,7 @@ import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.lib.extensions.ListMerger
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.events.ItemStackCreateEvent
 import me.owdding.skyocean.generated.SkyOceanItemModifiers
 import me.owdding.skyocean.utils.SkyOceanModifyIndicator
 import me.owdding.skyocean.utils.Utils.not
@@ -25,12 +26,8 @@ import net.minecraft.world.item.ItemStack
 import org.intellij.lang.annotations.MagicConstant
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.minecraft.ui.GatherItemTooltipComponentsEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ItemTooltipEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.PlayerHotbarChangeEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.PlayerInventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
@@ -136,20 +133,7 @@ object ItemModifiers {
     val modifiedItems: WeakHashMap<ItemStack, List<Component>> = WeakHashMap()
 
     @Subscription
-    @MustBeContainer
-    fun InventoryChangeEvent.onContainerChange() {
-        tryModify(item)
-    }
-
-    @Subscription
-    fun PlayerInventoryChangeEvent.onInventoryChange() {
-        tryModify(item)
-    }
-
-    @Subscription
-    fun PlayerHotbarChangeEvent.onHotbarChange() {
-        tryModify(item)
-    }
+    private fun ItemStackCreateEvent.onItemStackCreate() = tryModify(itemStack)
 
     private fun tryModify(itemStack: ItemStack) {
         if (modifiedItems.contains(itemStack)) return
