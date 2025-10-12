@@ -93,9 +93,8 @@ class CachedValue<Type>(private val timeToLive: Duration = Duration.INFINITE, pr
     operator fun getValue(thisRef: Any?, property: Any?) = getValue()
 
     fun getValue(): Type {
-        val value = value.takeIf { hasValue() } ?: supplier()
-        if (this.value != value) {
-            this.value = value
+        if (!hasValue()) {
+            this.value = supplier()
             lastUpdated = currentInstant()
         }
         if (value === UNINITIALIZED_VALUE) throw ClassCastException("Failed to initialize value!")
