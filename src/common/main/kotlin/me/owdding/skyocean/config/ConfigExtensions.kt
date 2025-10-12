@@ -4,10 +4,12 @@ import com.teamresourceful.resourcefulconfigkt.api.*
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
+import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.time.since
 import kotlin.reflect.KProperty
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -81,24 +83,29 @@ class DefaultEnabledMessageEntryDelegate<T> internal constructor(
     }
 }
 
+@Suppress("ClassName")
+private object UNINITIALIZED_VALUE
 
-class CachedValue<T>(private val supplier: () -> T) {
-    private var value: T? = null
+class CachedValue<Type>(private val timeToLive: Duration = Duration.INFINITE, private val supplier: () -> Type) {
+    private var value: Any? = UNINITIALIZED_VALUE
     var lastUpdated: Instant = Instant.DISTANT_PAST
 
-    operator fun getValue(thisRef: Any?, property: Any?): T {
-        val value = value ?: supplier()
+    operator fun getValue(thisRef: Any?, property: Any?) = getValue()
+
+    fun getValue(): Type {
+        val value = value.takeIf { hasValue() } ?: supplier()
         if (this.value != value) {
             this.value = value
             lastUpdated = currentInstant()
         }
-        return value
+        if (value === UNINITIALIZED_VALUE) throw ClassCastException("Failed to initialize value!")
+        return value.unsafeCast()
     }
 
-    fun hasValue() = value != null
+    fun hasValue() = value !== UNINITIALIZED_VALUE || lastUpdated.since() < timeToLive
 
     fun invalidate() {
-        value = null
+        value = UNINITIALIZED_VALUE
     }
 }
 

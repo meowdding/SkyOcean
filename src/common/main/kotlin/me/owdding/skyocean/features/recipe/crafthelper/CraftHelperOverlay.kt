@@ -23,12 +23,11 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.time.since
 import kotlin.time.Duration.Companion.milliseconds
 
 @Overlay
-class CraftHelperOverlay : SkyOceanOverlay() {
-    private val layoutCache = CachedValue {
+object CraftHelperOverlay : SkyOceanOverlay() {
+    private val layoutCache = CachedValue(250.milliseconds) {
         val state = state ?: return@CachedValue null
         LayoutFactory.vertical {
             val builder = WidgetBuilder(true) {}
@@ -62,10 +61,6 @@ class CraftHelperOverlay : SkyOceanOverlay() {
     override val enabled: Boolean get() = CraftHelperConfig.enableOverlay && state != null
 
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        if (layoutCache.lastUpdated.since() > 250.milliseconds) { // the crafthelper tree is reevaluated 4/s
-            layoutCache.invalidate()
-        }
-
         if (padding != 0) {
             graphics.drawSprite(OceanTextures.overlayBackground, 0, 0, bounds.first, bounds.second)
         }
