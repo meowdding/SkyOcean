@@ -102,6 +102,8 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     }
 
     fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
+    
     fun minecraft(path: String): ResourceLocation = ResourceLocation.withDefaultNamespace(path)
+    
     fun olympus(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("olympus", path)
 }
