@@ -69,6 +69,7 @@ cloche {
         name = "SkyOcean"
         icon = "assets/skyocean/skyocean-big.png"
         description = "SkyOcean is a hypixel skyblock mod that aims to provide a better playing experience by integrating QOL elements in an unnoticeable way."
+        license = "Modified MIT"
         clientOnly = true
     }
 
