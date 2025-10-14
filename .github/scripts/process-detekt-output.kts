@@ -2,6 +2,8 @@
 
 import java.io.File
 
+val maxChars = 65536
+
 val prSha = System.getenv("PR_SHA")
     ?: error("PR_SHA environment variable not set")
 
@@ -116,4 +118,4 @@ val sb = StringBuilder().apply {
     appendLine("<!-- detekt-sarif-hash:$detektOutputHash -->")
 }
 
-File("detekt_comment.txt").writeText(sb.toString())
+File("detekt_comment.txt").writeText(sb.toString().take(maxChars))
