@@ -9,14 +9,14 @@ complexity:
         active: false
     ComplexCondition: # aggressive by default, at a complexity of 4
         active: true
-        threshold: 6
+        allowedConditions: 6
     LongMethod: # default max length of 60, caught way too much
         active: true
-        threshold: 100
+        allowedLines: 100
     NamedArguments:
         active: true
         ignoreArgumentsMatchingNames: true
-        threshold: 6
+        allowedArguments: 6
     TooManyFunctions:
         active: false
 
@@ -28,7 +28,7 @@ exceptions:
     TooGenericExceptionThrown: # we don't have our own custom exceptions
         active: false
 
-formatting:
+ktlint:
     MaximumLineLength: # ktlint - handled by detekt
         active: false
     MultiLineIfElse:
@@ -116,9 +116,9 @@ style:
     LoopWithTooManyJumpStatements:
         active: true
         maxJumpCount: 5
-    UnnecessaryAbstractClass: # gets horrendously messed up with Event classes
+    AbstractClassCanBeConcreteClass: # gets horrendously messed up with Event classes
         active: false
-    UnusedPrivateMember: # gets tripped up by API methods
+    UnusedPrivateFunction: # gets tripped up by API methods
         active: false
     UnusedPrivateProperty: # loops that don't use their iterator
         active: true
@@ -130,7 +130,7 @@ style:
     DestructuringDeclarationWithTooManyEntries: # too aggressive
         active: true
         maxDestructuringEntries: 5
-    RedundantVisibilityModifierRule:
+    RedundantVisibilityModifier:
         active: true
     UnnecessaryBracesAroundTrailingLambda:
         active: true
@@ -147,5 +147,5 @@ style:
         imports:
             -   value: kotlinx.datetime.*
                 reason: "Kotlinx datetime is still in beta and shouldn't be used"
-    UnusedImports:
+    UnusedImport:
         active: true
