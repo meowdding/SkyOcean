@@ -33,8 +33,9 @@ import java.util.concurrent.atomic.AtomicReference
 object CraftHelperManager {
     var lastData: CraftHelperRecipe? = null
     var hasBeenNotified = false
-    private val keybind = SkyOceanKeybind("skyocean.keybind.crafthelper", InputConstants.KEY_V)
     var lastEvaluatedRoot: AtomicReference<CraftHelperState?> = AtomicReference()
+    private val keybind = SkyOceanKeybind("crafthelper", InputConstants.KEY_V)
+
 
     fun clear() {
         CraftHelperStorage.clear()

@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.InventoryTitle
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
@@ -50,7 +51,7 @@ object ItemHighlighter {
     fun cancelOrScheduleClear() {
         future?.cancel(CancellationException("Item search has been canceled"))
         future = CoroutineScope(Dispatchers.Default).launch {
-            delay(10.seconds)
+            delay(MiscConfig.highlightTime)
             resetSearch()
         }
         future?.start()
@@ -125,6 +126,7 @@ object ItemHighlighter {
     }
 
     @Subscription
+    @OnlyIn(PRIVATE_ISLAND)
     private fun RenderWorldEvent.AfterTranslucent.renderWorld() {
         atCamera {
             chests.forEach { block ->

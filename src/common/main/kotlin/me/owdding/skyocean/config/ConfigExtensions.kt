@@ -38,10 +38,12 @@ fun CategoryBuilder.category(category: CategoryKt, init: CategoryKt.() -> Unit) 
 
 fun CategoryBuilder.separator(translation: String) = this.separator { this.translation = translation }
 
-fun ConfigDelegateProvider<RConfigKtEntry<Long>>.duration(unit: DurationUnit): TransformedEntry<Long, Duration> {
+fun ConfigDelegateProvider<RConfigKtEntry<Long>>.duration(unit: DurationUnit): CachedTransformedEntry<Long, Duration> {
     val timeUnit = unit.toTimeUnit()
-    return transform({ it.toLong(unit) }) { timeUnit.toMillis(it).milliseconds }
+    return cachedTransform({ it.toLong(unit) }) { timeUnit.toMillis(it).milliseconds }
 }
+
+fun <T, R> ConfigDelegateProvider<RConfigKtEntry<T>>.cachedTransform(from: (R) -> T, to: (T) -> R) = CachedTransformedEntry(this, from, to)
 
 fun <T, R> ConfigDelegateProvider<RConfigKtEntry<T>>.transform(from: (R) -> T, to: (T) -> R) = TransformedEntry(this, from, to)
 

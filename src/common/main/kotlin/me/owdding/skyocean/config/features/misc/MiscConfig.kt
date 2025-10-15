@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.defaultEnabledMessage
+import me.owdding.skyocean.config.duration
 import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
@@ -71,6 +72,12 @@ object MiscConfig : CategoryKt("misc") {
     var itemSearchItemHighlight by enum(MinecraftColor.RED) {
         translation = "skyocean.config.misc.itemSearch.itemHighlight"
     }
+
+    var highlightTime by long(10) {
+        translation = "skyocean.config.misc.itemSearch.highlightTime"
+        slider = true
+        range = 10L..60L
+    }.duration(SECONDS)
 
     var preserveLastSearch by boolean(false) {
         translation = "skyocean.config.misc.itemSearch.preserve_search"
