@@ -387,7 +387,7 @@
             "desc": "Hides completed elements from the raw formatter, <yellow>also applies to the hud element!"
           },
           "enable_hud_overlay": {
-            "@value": "Enable hud overlay",
+            "@value": "Enable HUD overlay",
             "desc": "Shows the progress to finishing the recipe on screen."
           },
           "overlay_background": {
