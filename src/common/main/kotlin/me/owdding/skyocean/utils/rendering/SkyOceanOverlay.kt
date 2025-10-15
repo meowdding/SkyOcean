@@ -28,8 +28,6 @@ object OceanOverlays {
 }
 
 @AutoCollect("Overlays")
-@Target(
-    AnnotationTarget.CLASS,
-)
+@Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class Overlay
