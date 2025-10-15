@@ -31,7 +31,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object CraftHelperManager {
     var lastData: CraftHelperRecipe? = null
     var hasBeenNotified = false
-    private val keybind = SkyOceanKeybind("skyocean.keybind.crafthelper", InputConstants.KEY_V)
+    private val keybind = SkyOceanKeybind("crafthelper", InputConstants.KEY_V)
 
 
     fun clear() {

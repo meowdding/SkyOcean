@@ -314,6 +314,10 @@
             "@value": "Item Highlight",
             "desc": "Choose what color the searched item will be highlighted with."
           },
+          "highlightTime": {
+            "@value": "Highlight Time",
+            "desc": "Amount of time that items will be highlighted for, in seconds."
+          },
           "preserve_search": {
             "@value": "Preserve Search",
             "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
@@ -743,7 +747,8 @@
     "keybind": {
       "item_search": "Open Item Search",
       "item_value": "Open Item Value",
-      "crafthelper": "Set as active Craft Helper Item"
+      "crafthelper": "Set as active Craft Helper Item",
+      "item_highlight": "Highlight matching Items"
     },
     "gradients": {
       "default": "Default",
