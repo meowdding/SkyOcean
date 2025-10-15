@@ -7,8 +7,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
-import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsCycleElement
-import me.owdding.skyocean.features.recipe.crafthelper.SkyShardsMethod
+import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsCycleElement
+import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperDisplay
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils.not
@@ -62,7 +62,7 @@ object CraftHelperCommand {
                     val split = clipboard.split(":")
                     val prefix = split.first()
                     val suffix = split.getOrNull(1)
-                    if (!prefix.equals("<SkyOceanRecipe>(V1)", true) || suffix == null) {
+                    if (!prefix.startsWith("<SkyOceanRecipe>(V", true) || suffix == null) {
                         text("Your clipboard does not contain any known tree format!") {
                             this.color = OceanColors.WARNING
                         }.sendWithPrefix()
