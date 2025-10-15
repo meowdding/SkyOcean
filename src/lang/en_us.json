@@ -385,6 +385,18 @@
             "desc": "Changes the appearance of the craft helper tree.",
             "raw": "Raw",
             "tree": "Tree"
+          },
+          "raw_formatter_hide_completed": {
+            "@value": "Hide completed elements",
+            "desc": "Hides completed elements from the raw formatter, <yellow>also applies to the hud element!"
+          },
+          "enable_hud_overlay": {
+            "@value": "Enable HUD overlay",
+            "desc": "Shows the progress to finishing the recipe on screen."
+          },
+          "overlay_background": {
+            "@value": "Enable overlay background",
+            "desc": "Adds a background behind the overlay to make it more readable."
           }
         },
         "transparentArmor": {
@@ -760,6 +772,13 @@
       "asexual": "Asexual",
       "non_binary": "Non Binary",
       "trans": "Transgender"
+    },
+    "overlays": {
+      "crafthelper": "Crafthelper",
+      "background": {
+        "disable": "Disable background",
+        "enable": "Enable background"
+      }
     }
   }
 }

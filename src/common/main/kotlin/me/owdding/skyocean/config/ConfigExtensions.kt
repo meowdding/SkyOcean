@@ -4,13 +4,17 @@ import com.teamresourceful.resourcefulconfigkt.api.*
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
+import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.time.since
 import kotlin.reflect.KProperty
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
+import kotlin.time.Instant
 import kotlin.time.toTimeUnit
 
 fun <T> CategoryBuilder.observable(entry: ConfigDelegateProvider<RConfigKtEntry<T>>, onChange: () -> Unit) =
@@ -81,20 +85,28 @@ class DefaultEnabledMessageEntryDelegate<T> internal constructor(
     }
 }
 
+@Suppress("ClassName")
+private object UNINITIALIZED_VALUE
 
-class CachedValue<T>(private val supplier: () -> T) {
-    private var value: T? = null
+class CachedValue<Type>(private val timeToLive: Duration = Duration.INFINITE, private val supplier: () -> Type) {
+    private var value: Any? = UNINITIALIZED_VALUE
+    var lastUpdated: Instant = Instant.DISTANT_PAST
 
-    operator fun getValue(thisRef: Any?, property: Any?): T {
-        val value = value ?: supplier()
-        if (this.value != value) this.value = value
-        return value
+    operator fun getValue(thisRef: Any?, property: Any?) = getValue()
+
+    fun getValue(): Type {
+        if (!hasValue()) {
+            this.value = supplier()
+            lastUpdated = currentInstant()
+        }
+        if (value === UNINITIALIZED_VALUE) throw ClassCastException("Failed to initialize value!")
+        return value.unsafeCast()
     }
 
-    fun hasValue() = value != null
+    fun hasValue() = value !== UNINITIALIZED_VALUE || lastUpdated.since() < timeToLive
 
     fun invalidate() {
-        value = null
+        value = UNINITIALIZED_VALUE
     }
 }
 

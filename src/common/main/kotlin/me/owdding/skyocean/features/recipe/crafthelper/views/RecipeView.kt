@@ -11,19 +11,13 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.features.item.sources.ForgeItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
-import me.owdding.skyocean.features.recipe.CurrencyIngredient
-import me.owdding.skyocean.features.recipe.Ingredient
-import me.owdding.skyocean.features.recipe.ItemLikeIngredient
-import me.owdding.skyocean.features.recipe.RecipeType
-import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
+import me.owdding.skyocean.features.recipe.*
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.NodeWithChildren
 import me.owdding.skyocean.features.recipe.crafthelper.RecipeNode
 import me.owdding.skyocean.features.recipe.crafthelper.StandardRecipeNode
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
-import me.owdding.skyocean.features.recipe.serialize
-import me.owdding.skyocean.features.recipe.serializeWithAmount
 import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.chat.ChatUtils.append
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
@@ -207,7 +201,7 @@ data class CraftHelperContext(
     }
 }
 
-class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
+class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallback: (save: Boolean) -> Unit) {
     companion object {
         val noOp = WidgetBuilder {}
     }
@@ -332,7 +326,7 @@ class WidgetBuilder(val refreshCallback: (save: Boolean) -> Unit) {
     context(state: CraftHelperState)
     fun text(prefix: String = "") = Displays.component(
         Text.of {
-            val parentAmount = if (CraftHelperConfig.parentAmount) {
+            val parentAmount = if ((includeParentOverride != null && includeParentOverride) || CraftHelperConfig.parentAmount) {
                 state.amountThroughParents
             } else 0
 
