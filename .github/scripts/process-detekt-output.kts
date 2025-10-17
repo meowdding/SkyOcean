@@ -70,13 +70,13 @@ fun buildCollapsedComment(): String = buildString {
     appendLine("</details>")
 }
 
-val sb = StringBuilder().apply {
+val sb = kotlin.text.StringBuilder().apply {
     append("### $totalRulesBroken Detekt Failure")
     if (totalRulesBroken != 1) append("s")
     append("\n")
 
     if (rulesBroken.size > 1) {
-        val ceilingedKeys = rulesBroken.keys.take(6)
+        val ceilingedKeys = rulesBroken.keys.take(10)
         val xMoreFormat = when (ceilingedKeys.size) {
             rulesBroken.keys.size -> ""
             else -> " (+ ${rulesBroken.size - ceilingedKeys.size} more)"
@@ -89,7 +89,7 @@ val sb = StringBuilder().apply {
     }
 
     if (violatingFiles.size > 1) {
-        val ceilingedFiles = violatingFiles.entries.take(6)
+        val ceilingedFiles = violatingFiles.entries.take(10)
         val xMoreFormat = when (ceilingedFiles.size) {
             violatingFiles.keys.size -> ""
             else -> " (+ ${violatingFiles.size - ceilingedFiles.size} more)"

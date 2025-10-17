@@ -29,6 +29,31 @@ exceptions:
         active: false
 
 ktlint:
+    BlankLineBetweenWhenConditions:
+        active: true
+    SpacingAroundSquareBrackets:
+        active: true
+    ChainMethodContinuation:
+        active: false
+    MultilineExpressionWrapping:
+        active: false
+    NoEmptyFirstLineInClassBody:
+        active: false
+    BlankLineBeforeDeclaration:
+        active: false
+    BinaryExpressionWrapping:
+        active: false
+    ClassSignature:
+        active: false
+    FunctionLiteral:
+        active: false
+    FunctionSignature:
+        active: false
+    IfElseWrapping:
+        active: false
+    FunctionExpressionBody:
+        active: true
+        maxLineLength: 160
     MaximumLineLength: # ktlint - handled by detekt
         active: false
     MultiLineIfElse:
@@ -89,6 +114,8 @@ potential-bugs:
         active: false
     Deprecation:
         active: true
+    MissingUseCall:
+        active: true
 
 style:
     AlsoCouldBeApply:
@@ -116,6 +143,12 @@ style:
     LoopWithTooManyJumpStatements:
         active: true
         maxJumpCount: 5
+    RedundantConstructorKeyword:
+        active: true
+    UnnecessaryAny:
+        active: true
+    DoubleNegativeExpression:
+        active: true
     AbstractClassCanBeConcreteClass: # gets horrendously messed up with Event classes
         active: false
     UnusedPrivateFunction: # gets tripped up by API methods
