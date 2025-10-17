@@ -115,7 +115,7 @@
     <ID>FunctionExpressionBody:ClientSideInventory.kt:ClientSideInventory.Slot.Companion${ return McPlayer.inventory.mapIndexed { index, itemStack -&gt; val slotX = index % 9 val tempY = (index / 9) - 1 val slotY = if (tempY &lt; 0) tempY + 4 else tempY Slot(slotX * 18, slotY * 18 + (if (tempY &lt; 0) 4 else 0) + rows * 18 + 13, itemStack) } }</ID>
     <ID>FunctionExpressionBody:CompactLevelBarsModifier.kt:CompactLevelBarsModifier${ return McScreen.self?.title?.stripped in list &amp;&amp; item.cleanName.endsWith(" tasks", true) }</ID>
     <ID>FunctionExpressionBody:ConfigExtensions.kt:{ return this.observable(entry) { property.invalidate() } }</ID>
-    <ID>FunctionExpressionBody:ConfigUtils.kt:{ return transform( int(value) { slider = true range = 0..100 builder.invoke(this) }, { (it / 255.0).toInt() }, { ((255 / 100.0) * it).roundToInt() }, ) }</ID>
+    <ID>FunctionExpressionBody:ConfigUtils.kt:{ return cachedTransform( int(value) { slider = true range = 0..100 builder.invoke(this) }, { (it / 255.0).toInt() }, { ((255 / 100.0) * it).roundToInt() }, ) }</ID>
     <ID>FunctionExpressionBody:CraftHelperData.kt:NormalCraftHelperRecipe${ return DefaultTreeResolver.resolve(this, resetLayout, clear) }</ID>
     <ID>FunctionExpressionBody:CraftHelperData.kt:SkyShardsRecipe${ return SkyShardsTreeResolver.resolve(this, resetLayout, clear) }</ID>
     <ID>FunctionExpressionBody:CroesusImpl.kt:CroesusImpl${ return item.`is`(Items.PLAYER_HEAD) &amp;&amp; DungeonChestType.getByNameStartsWith(item.cleanName) in allowedDungeonGamblingChests }</ID>
@@ -182,7 +182,7 @@
     <ID>IfElseBracing:MetalDetectorSolver.kt:MetalDetectorSolver$if (isNotEmpty()) { retainAll(candidates) if (size == 1) foundPosition(first().getBlockPos()) } else addAll(candidates)</ID>
     <ID>IfElseBracing:MineshaftAnnouncement.kt:MineshaftAnnouncement$if (PartyAPI.inParty) { ChatUtils.chat("Sending message into party chat...") McClient.sendCommand("/pc ${text.stripped}") } else ChatUtils.chat(text)</ID>
     <ID>IfElseBracing:ProfileInChat.kt:ProfileInChat$if (name.equals(McPlayer.name, true)) { event.component.siblings.indexOfFirst { sibling -&gt; sibling.style.hoverEvent == null } } else index</ID>
-    <ID>IfElseBracing:RecipeView.kt:WidgetBuilder$if (CraftHelperConfig.parentAmount) { state.amountThroughParents } else 0</ID>
+    <ID>IfElseBracing:RecipeView.kt:WidgetBuilder$if ((includeParentOverride != null &amp;&amp; includeParentOverride) || CraftHelperConfig.parentAmount) { state.amountThroughParents } else 0</ID>
     <ID>ImplicitDefaultLocale:BobberTime.kt:BobberTime$"%.2f".format(time)</ID>
     <ID>ImportOrdering:DrillUpgradeItemSource.kt:import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId import me.owdding.skyocean.features.item.sources.system.ParentItemContext import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem import me.owdding.skyocean.utils.tags.SkyblockItemTagKey import net.minecraft.network.chat.Component import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes import tech.thatgravyboat.skyblockapi.api.datatype.getData import tech.thatgravyboat.skyblockapi.utils.text.TextColor import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color</ID>
     <ID>ImportOrdering:DungeonGambling.kt:import com.mojang.blaze3d.platform.InputConstants import me.owdding.ktmodules.Module import me.owdding.lib.utils.type.EnumArgumentType import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId import me.owdding.skyocean.config.features.dungeons.DungeonsConfig import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType import me.owdding.skyocean.utils.Utils.containerItems import me.owdding.skyocean.utils.Utils.getArgument import net.minecraft.client.gui.screens.inventory.ContainerScreen import net.minecraft.world.item.Items import tech.thatgravyboat.skyblockapi.api.area.dungeon.DungeonAPI import tech.thatgravyboat.skyblockapi.api.area.dungeon.DungeonFloor import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent import tech.thatgravyboat.skyblockapi.api.events.base.Subscription import tech.thatgravyboat.skyblockapi.api.events.render.RenderScreenBackgroundEvent import tech.thatgravyboat.skyblockapi.api.events.screen.* import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue import tech.thatgravyboat.skyblockapi.helpers.McClient import tech.thatgravyboat.skyblockapi.utils.extentions.contains import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.findGroup import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped</ID>
@@ -243,6 +243,8 @@
     <ID>NoTrailingSpaces:CrystalHollowBlocks.kt:CrystalHollowBlocks$ </ID>
     <ID>NoTrailingSpaces:DwarvenMinesBB.kt:DwarvenMinesBB$ </ID>
     <ID>NoTrailingSpaces:GemstoneBlocks.kt:GemstoneBlocks$ </ID>
+    <ID>NoUnusedImports:ConfigUtils.kt:me.owdding.skyocean.utils.ConfigUtils.kt</ID>
+    <ID>NoUnusedImports:ItemHighlighter.kt:me.owdding.skyocean.features.item.search.highlight.ItemHighlighter.kt</ID>
     <ID>ParameterListWrapping:AnimationManager.kt:AnimationManager.State$( val x: Int, val y: Int, val width: Int, val height: Int, )</ID>
     <ID>PrintStackTrace:ProfileStorage.kt:ProfileStorage$e</ID>
     <ID>ReturnCount:VisitorModifier.kt:VisitorModifier$override fun applies(event: InventoryChangeEvent): SkyOceanItemIngredient?</ID>
@@ -307,6 +309,8 @@
     <ID>UnsafeCallOnNullableType:SourceToWidget.kt:SourceToWidget$conversionCost!!</ID>
     <ID>UnsafeCallOnNullableType:TagComponentSerialization.kt:TagComponentSerialization$color!!</ID>
     <ID>UnsafeCast:ButtonConfigScreen.kt:ButtonConfigScreen$this as AbstractRecipeBookScreenAccessor</ID>
+    <ID>UnusedImport:ConfigUtils.kt:import com.teamresourceful.resourcefulconfigkt.api.TransformedEntry</ID>
+    <ID>UnusedImport:ItemHighlighter.kt:import kotlin.time.Duration.Companion.seconds</ID>
     <ID>UnusedParameter:BlockRetexture.kt:BlockRetexture$parent: ResourceLocation? = null</ID>
     <ID>UnusedParameter:IngredientParser.kt:IngredientParser$regex: Regex</ID>
     <ID>UnusedParameter:OctreeDebugRenderer.kt:OctreeDebugRenderer$depth: Int</ID>
