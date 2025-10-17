@@ -2,6 +2,8 @@
 
 import java.io.File
 
+val maxChars = 65536
+
 val prSha = System.getenv("PR_SHA")
     ?: error("PR_SHA environment variable not set")
 
@@ -19,7 +21,8 @@ val lines = detektOutput.split('\n')
  * REGEX-TEST: ::warning file=src/main/java/at/hannibal2/skyhanni/config/features/dev/NeuRepositoryConfig.kt,line=33,title=detekt.FormattingRules.StorageVarOrVal,col=9,endColumn=93::Runnable `resetRepoLocation` should be a val
  * REGEX-TEST: ::warning file=src/main/java/at/hannibal2/skyhanni/features/foraging/ForagingTrackerLegacy.kt,line=148,title=detekt.RepoRules.RepoPatternRegexTestFailed,col=28,endColumn=6::Repo pattern `hoverRewardPattern` failed regex test: `§2Forest Essence §8x4` pattern: `(?:§.)+(?<item>.*) (?:§.)+§8x(?<amount>[\d,-]+)`.
  */
-val sarifRegex = Regex("^::warning file=(?<filePath>src\\/[^,]*\\/(?<file>[^,]+)),line=(?<line>\\d+),title=(?<wholeRule>(?<provider>[^.]+)\\.(?:(?:[\\w-]+)\\.)+(?<rule>[^.]+)),col=(?<col>\\d+),endColumn=(?<endcol>\\d+)::(?<message>(?:.|)*\\n*)\$")
+val sarifRegex =
+    Regex("^::(warning|error) file=(?<filePath>src\\/[^,]*\\/(?<file>[^,]+)),line=(?<line>\\d+),title=(?<wholeRule>(?<provider>[^.]+)\\.(?:(?:[\\w-]+)\\.)+(?<rule>[^.]+)),col=(?<col>\\d+),endColumn=(?<endcol>\\d+)::(?<message>(?:.|)*\\n*)\$")
 val sarifPattern = sarifRegex.toPattern()
 
 val urlBase = "https://github.com/$githubRepo/blob/$prSha/src/"
@@ -67,13 +70,13 @@ fun buildCollapsedComment(): String = buildString {
     appendLine("</details>")
 }
 
-val sb = StringBuilder().apply {
+val sb = kotlin.text.StringBuilder().apply {
     append("### $totalRulesBroken Detekt Failure")
     if (totalRulesBroken != 1) append("s")
     append("\n")
 
     if (rulesBroken.size > 1) {
-        val ceilingedKeys = rulesBroken.keys.take(6)
+        val ceilingedKeys = rulesBroken.keys.take(10)
         val xMoreFormat = when (ceilingedKeys.size) {
             rulesBroken.keys.size -> ""
             else -> " (+ ${rulesBroken.size - ceilingedKeys.size} more)"
@@ -86,7 +89,7 @@ val sb = StringBuilder().apply {
     }
 
     if (violatingFiles.size > 1) {
-        val ceilingedFiles = violatingFiles.entries.take(6)
+        val ceilingedFiles = violatingFiles.entries.take(10)
         val xMoreFormat = when (ceilingedFiles.size) {
             violatingFiles.keys.size -> ""
             else -> " (+ ${violatingFiles.size - ceilingedFiles.size} more)"
@@ -115,4 +118,4 @@ val sb = StringBuilder().apply {
     appendLine("<!-- detekt-sarif-hash:$detektOutputHash -->")
 }
 
-File("detekt_comment.txt").writeText(sb.toString())
+File("detekt_comment.txt").writeText(sb.toString().take(maxChars))

@@ -14,7 +14,7 @@ keval = "1.1.1"
 
 rconfigkt = "3.5.15"
 
-detekt = "1.23.8"
+detekt = "2.0.0-alpha.0"
 
 meowdding-lib = "3.0.3"
 meowdding-repo = "1.0.18"
@@ -52,6 +52,9 @@ meowdding-lib = { module = "me.owdding.meowdding-lib:meowdding-lib", version.ref
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
+detekt-plugin = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+detekt-ktlintWrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
+
 [plugins]
 
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -60,4 +63,4 @@ meowdding-resources = { id = "me.owdding.resources" }
 meowdding-repo = { id = "me.owdding.repo", version.ref = "meowdding-repo" }
 meowdding-gradle = { id = "me.owdding.gradle", version.ref = "meowdding-gradle" }
 kotlin-symbol-processor = { id = "com.google.devtools.ksp", version.ref = "kotlin-symbol-processor" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
