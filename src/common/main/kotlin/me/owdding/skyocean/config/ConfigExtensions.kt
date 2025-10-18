@@ -103,7 +103,7 @@ class CachedValue<Type>(private val timeToLive: Duration = Duration.INFINITE, pr
         return value.unsafeCast()
     }
 
-    fun hasValue() = value !== UNINITIALIZED_VALUE || lastUpdated.since() < timeToLive
+    fun hasValue() = value !== UNINITIALIZED_VALUE && lastUpdated.since() < timeToLive
 
     fun invalidate() {
         value = UNINITIALIZED_VALUE

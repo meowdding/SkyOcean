@@ -5,6 +5,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.chat.ChatUtils
+import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderTextInWorld
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3
@@ -22,24 +23,15 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.filterKeysNotNull
 object CorpseWaypoint {
 
     private val CODEC = CodecUtils.map(
-        Codec.STRING.xmap(
-            { MineshaftType.fromId(it) },
-            { it?.id },
-        ),
+        Codec.STRING.xmap({ MineshaftType.fromId(it) }, { it?.id }),
         CodecUtils.map(
-            Codec.STRING.xmap(
-                { MineshaftVariant.fromId(it) },
-                { it.id },
-            ),
-            Codec.STRING.xmap(
-                { it.split(",").map { it.toInt() }.let { BlockPos(it[0], it[1], it[2]) } },
-                { "${it.x},${it.y},${it.z}" },
-            ).listOf(),
+            Codec.STRING.xmap({ v -> MineshaftVariant.entries.find { it.name == v } }, { it?.name }),
+            CodecHelpers.BLOCK_POS_STRING_CODEC.listOf(),
         ),
     )
 
     private val mineshaftCorpses: Map<MineshaftType, Map<MineshaftVariant, List<BlockPos>>> =
-        Utils.loadRepoData("mining/shaft_corpses", CODEC).filterKeysNotNull()
+        Utils.loadRepoData("mining/shaft_corpses", CODEC).filterKeysNotNull().map { (k, v) -> k to v.filterKeysNotNull() }.toMap()
 
     @Subscription
     @OnlyIn(SkyBlockIsland.MINESHAFT)

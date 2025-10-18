@@ -72,6 +72,11 @@ object CodecHelpers {
     @IncludedCodec
     val CLIENT_ASSET_CODEC: Codec<ClientAsset> = ResourceLocation.CODEC.xmap({ toClientAsset(it) }, { fromClientAsset(it) })
 
+    val BLOCK_POS_STRING_CODEC: Codec<BlockPos> = Codec.STRING.xmap(
+        { it.split(",").map { it.toInt() }.let { BlockPos(it[0], it[1], it[2]) } },
+        { "${it.x},${it.y},${it.z}" },
+    )
+
     val STYLE_WITH_SHADER_CODEC: MapCodec<Style> = RecordCodecBuilder.mapCodec {
         it.group(
             Style.Serializer.MAP_CODEC.forGetter(Function.identity()),
