@@ -6,6 +6,10 @@ import me.owdding.skyocean.features.mining.mineshaft.MineshaftAnnouncement.Shaft
 object MineshaftConfig : CategoryKt("mineshaft") {
     override val name get() = Translated("skyocean.config.mining.mineshaft")
 
+    var mineshaftFoundPity by boolean(true) {
+        translation = "skyocean.config.mining.mineshaft.pity"
+    }
+
     init {
         separator {
             this.title = "Mineshaft Announcement"
