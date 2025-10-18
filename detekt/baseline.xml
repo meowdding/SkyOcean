@@ -31,6 +31,8 @@
     <ID>ClassOrdering:CodecHelpers.kt:CodecHelpers$internal inline fun &lt;reified K, reified V&gt; mutableMap(): Codec&lt;MutableMap&lt;K, V&gt;&gt;</ID>
     <ID>ClassOrdering:CodecHelpers.kt:CodecHelpers$internal inline fun &lt;reified T&gt; list()</ID>
     <ID>ClassOrdering:CompoundPatch.kt:CompoundPatch$Companion</ID>
+    <ID>ClassOrdering:ContextAwareRecipeTree.kt:RecipeNode$init { evaluateChildren(requiredCrafts, context) recalculateChildren() }</ID>
+    <ID>ClassOrdering:ContextAwareRecipeTree.kt:RecipeRemainder$Companion</ID>
     <ID>ClassOrdering:CooldownHelper.kt:CooldownHelper$constructor(cooldown: Duration, onReady: () -&gt; Unit) : this({ cooldown }, onReady)</ID>
     <ID>ClassOrdering:CrystalHollowsBB.kt:CrystalHollowsBB$private fun create(pos1: Vec3i, pos2: Vec3i): BoundingBox</ID>
     <ID>ClassOrdering:DataStorage.kt:DataStorage$Companion</ID>
@@ -109,6 +111,9 @@
     <ID>EnumWrapping:ChatUtils.kt:ComponentIcon</ID>
     <ID>EnumWrapping:ItemSource.kt:ItemSources</ID>
     <ID>EnumWrapping:MinecraftColor.kt:MinecraftColor</ID>
+    <ID>Filename:CraftHelperData.kt:me.owdding.skyocean.features.recipe.crafthelper.CraftHelperData.kt</ID>
+    <ID>Filename:CraftHelperTreeType.kt:me.owdding.skyocean.features.recipe.crafthelper.data.CraftHelperTreeType.kt</ID>
+    <ID>Filename:StandardCraftHelperTree.kt:me.owdding.skyocean.features.recipe.crafthelper.data.StandardCraftHelperTree.kt</ID>
     <ID>Filename:const.kt:me.owdding.skyocean.helpers.const.kt</ID>
     <ID>FunctionExpressionBody:AnimatedSkulls.kt:AnimatedSkulls.AnimatedSkullData${ return textures[(TickEvent.ticks / ticks) % textures.size] }</ID>
     <ID>FunctionExpressionBody:ChatUtils.kt:ChatUtils${ return if (Config.disableMessageTextShadow) { this.withoutShadow() } else { this } }</ID>
@@ -116,8 +121,6 @@
     <ID>FunctionExpressionBody:CompactLevelBarsModifier.kt:CompactLevelBarsModifier${ return McScreen.self?.title?.stripped in list &amp;&amp; item.cleanName.endsWith(" tasks", true) }</ID>
     <ID>FunctionExpressionBody:ConfigExtensions.kt:{ return this.observable(entry) { property.invalidate() } }</ID>
     <ID>FunctionExpressionBody:ConfigUtils.kt:{ return cachedTransform( int(value) { slider = true range = 0..100 builder.invoke(this) }, { (it / 255.0).toInt() }, { ((255 / 100.0) * it).roundToInt() }, ) }</ID>
-    <ID>FunctionExpressionBody:CraftHelperData.kt:NormalCraftHelperRecipe${ return DefaultTreeResolver.resolve(this, resetLayout, clear) }</ID>
-    <ID>FunctionExpressionBody:CraftHelperData.kt:SkyShardsRecipe${ return SkyShardsTreeResolver.resolve(this, resetLayout, clear) }</ID>
     <ID>FunctionExpressionBody:CroesusImpl.kt:CroesusImpl${ return item.`is`(Items.PLAYER_HEAD) &amp;&amp; DungeonChestType.getByNameStartsWith(item.cleanName) in allowedDungeonGamblingChests }</ID>
     <ID>FunctionExpressionBody:CroesusImpl.kt:CroesusImpl${ return screen.title.stripped.let { it.startsWith("The Catacombs - ") || it.startsWith("Master Mode The Catacombs - ") } }</ID>
     <ID>FunctionExpressionBody:CustomItems.kt:CustomItems${ return this.getCustomData()?.let { it[component] } }</ID>
@@ -157,7 +160,9 @@
     <ID>FunctionExpressionBody:RecipeVisitor.kt:RecipeVisitor.Companion${ return when (recipe) { is ForgeRecipe -&gt; ForgeRecipeVisitor is CraftingRecipe -&gt; CraftingRecipeVisitor is KatRecipe -&gt; KatRecipeVisitor else -&gt; null } }</ID>
     <ID>FunctionExpressionBody:RodUpgradesItemSource.kt:RodUpgradesItemSource${ return items.filter { (itemStack) -&gt; itemStack.getData(DataTypes.CATEGORY)?.name?.contains("rod", true) == true } .flatMap { item -&gt; val (itemStack) = item listOfNotNull( itemStack.getData(DataTypes.SINKER), itemStack.getData(DataTypes.HOOK), itemStack.getData(DataTypes.LINE), ).map { (_, id) -&gt; SkyBlockId.item(id) } .map { SimpleTrackedItem(it.toItem(), RodUpgradeItemContext(item)) } } }</ID>
     <ID>FunctionExpressionBody:SearchItemFilter.kt:SearchItemFilter${ return item.cleanName.contains(search, ignoreCase = true) &amp;&amp; item.getRawLore().any { it.contains(search, ignoreCase = true) } }</ID>
+    <ID>FunctionExpressionBody:SkyShardsRecipeTree.kt:SkyShardsRecipe${ return SkyShardsTreeResolver.resolve(this, resetLayout, clear) }</ID>
     <ID>FunctionExpressionBody:SortModes.kt:{ return comparator.reversed() }</ID>
+    <ID>FunctionExpressionBody:StandardCraftHelperTree.kt:NormalCraftHelperRecipe${ return DefaultTreeResolver.resolve(this, resetLayout, clear) }</ID>
     <ID>FunctionExpressionBody:StorageItemSource.kt:{ return this.flatMap { (index, stacks) -&gt; val context = function(index + 1) stacks.map { stack -&gt; SimpleTrackedItem(stack, context) } } }</ID>
     <ID>FunctionExpressionBody:Utils.kt:Utils${ return (this * 2).roundToInt() / 2.0 }</ID>
     <ID>FunctionExpressionBody:Utils.kt:Utils${ return loadFromRepo&lt;JsonElement&gt;(file).toDataOrThrow(SkyOceanCodecs.getCodec&lt;T&gt;().let(modifier)) }</ID>
@@ -194,6 +199,9 @@
     <ID>LongMethod:ItemSearchScreen.kt:ItemSearchScreen$override fun init()</ID>
     <ID>LongMethod:SourceToWidget.kt:SourceToWidget$fun CalculationEntry.asWidget(callback: () -&gt; Unit): LayoutElement</ID>
     <ID>MapGetWithNotNullAssertionOperator:AnimationManager.kt:AnimationManager$nextStates[key]!!</ID>
+    <ID>MatchingDeclarationName:CraftHelperData.kt:CraftHelperRecipe</ID>
+    <ID>MatchingDeclarationName:CraftHelperTreeType.kt:CraftHelperRecipeType : DispatchHelper</ID>
+    <ID>MatchingDeclarationName:StandardCraftHelperTree.kt:NormalCraftHelperRecipe : CraftHelperRecipe</ID>
     <ID>MemberNameEqualsClassName:Buttons.kt:Buttons$val buttons get() = arrayOf( button0, button1, button2, button3, button4, button5, button6, button7, button8, button9, button10, button11, button12, button13, )</ID>
     <ID>MissingUseCall:CraftHelperCommand.kt:CraftHelperCommand$inputStream()</ID>
     <ID>MissingUseCall:Utils.kt:Utils$loadFromResourcesAsStream(path)</ID>
@@ -235,6 +243,7 @@
     <ID>NamedArguments:InvButtons.kt:InvButtons$InvButton(button, x, y == 1, screen, x + y * 7, posX, posY, 26, buttonHeight)</ID>
     <ID>NamedArguments:RecipeView.kt:CraftHelperState.Companion$CraftHelperState( entries.first().ingredient, entries.first().itemTracker, entries.first().ingredient.serializeWithAmount(), entries.first().recipeType, entries.sumOf { it.recipeOutputAmount }, entries.flatMap { it.usedItems }.toMutableList(), entries.all { it.childrenDone }, entries.all { it.canSupercraft }, false, entries.sumOf { it.required }, entries.sumOf { it.amount }, entries.sumOf { it.amountThroughParents }, entries.sumOf { it.amountCarryOver }, false, entries.all { it.hasBeenInitialized }, null, )</ID>
     <ID>NamedArguments:RenderUtils.kt:RenderUtils$renderPlane(direction, startX.toFloat(), startY.toFloat(), endX.toFloat(), endY.toFloat(), z.toFloat(), color)</ID>
+    <ID>NamedArguments:SkyShardsTreeResolver.kt:SkyShardsTreeResolver$RecipeNode(null, self.quantity, self.quantity, self.quantity, 0, self.shard.toIngredient(self.quantity), RecipeRemainder.EMPTY)</ID>
     <ID>NoBlankLineInList:ClientSideInventory.kt:ClientSideInventory$ </ID>
     <ID>NoBlankLineInList:ItemCustomizationModal.kt:ItemCustomizationModal$ </ID>
     <ID>NoMultipleSpaces:GemstoneBlocks.kt:GemstoneBlocks$ </ID>
@@ -253,12 +262,10 @@
     <ID>TrailingCommaOnCallSite:FishingConfig.kt:FishingConfig$( boolean(false) { this.translation = "skyocean.config.fishing.lava_replacement" } )</ID>
     <ID>TrailingCommaOnCallSite:HighlightBoss.kt:HighlightBoss$( SlayerType.INFERNO_DEMONLORD to TextColor.GOLD, SlayerType.VOIDGLOOM_SERAPH to TextColor.DARK_PURPLE, SlayerType.RIFTSTALKER_BLOODFIEND to TextColor.DARK_AQUA, SlayerType.TARANTULA_BROODFATHER to TextColor.DARK_RED, SlayerType.SVEN_PACKMASTER to TextColor.BLUE, SlayerType.REVENANT_HORROR to TextColor.DARK_GREEN )</ID>
     <ID>TrailingCommaOnCallSite:HotspotFeatures.kt:HotspotFeatures$( text { append(ChatUtils.ICON_SPACE_COMPONENT) append("Hotspot despawned!", OceanColors.WARNING) }, stayTime = 3f, fadeOutTime = 0.5f )</ID>
-    <ID>TrailingCommaOnCallSite:MineshaftAnnouncement.kt:MineshaftAnnouncement$( "Mineshaft Entered | ", MineshaftAPI.mineshaftType?.toFormattedName() ?: "Unknown", if (MineshaftAPI.isCrystal) " Crystal" else null, " | ", MineshaftAPI.corpses.groupBy { it.type }.toSortedMap(CorpseType::compareTo).map { (type, corpses) -&gt; "${corpses.size}${type.name.first()}" }.joinToString(", ") )</ID>
     <ID>TrailingCommaOnCallSite:PestWarning.kt:PestWarning$( Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.CARROTS, Blocks.POTATOES, Blocks.WHEAT, Blocks.COCOA, Blocks.CARVED_PUMPKIN, Blocks.PUMPKIN, Blocks.MELON, Blocks.SUGAR_CANE, Blocks.CACTUS, Blocks.NETHER_WART )</ID>
     <ID>TrailingCommaOnDeclarationSite:AreaWalls.kt:AreaWalls$Area</ID>
     <ID>TrailingCommaOnDeclarationSite:Buttons.kt:ButtonConfig$( private val itemName: String, private val commandName: String, @Language("RegExp") private val titleName: String, private val tooltipName: String = "" )</ID>
-    <ID>TrailingCommaOnDeclarationSite:CraftHelperData.kt:CraftHelperRecipeType : DispatchHelper</ID>
-    <ID>TrailingCommaOnDeclarationSite:CraftHelperData.kt:SkyShardsMethodType : DispatchHelper</ID>
+    <ID>TrailingCommaOnDeclarationSite:CraftHelperTreeType.kt:CraftHelperRecipeType : DispatchHelper</ID>
     <ID>TrailingCommaOnDeclarationSite:ItemColor.kt:ItemColorType : DispatchHelper</ID>
     <ID>TrailingCommaOnDeclarationSite:ItemKey.kt:ItemKeyType : DispatchHelper</ID>
     <ID>TrailingCommaOnDeclarationSite:ItemModel.kt:ItemModelType : DispatchHelper</ID>
@@ -266,6 +273,7 @@
     <ID>TrailingCommaOnDeclarationSite:MinecraftColor.kt:MinecraftColor</ID>
     <ID>TrailingCommaOnDeclarationSite:PowderType.kt:PowderType</ID>
     <ID>TrailingCommaOnDeclarationSite:SackValueConfig.kt:SackValueConfig$PriceSource : Translatable</ID>
+    <ID>TrailingCommaOnDeclarationSite:SkyShardsRecipeTree.kt:SkyShardsMethodType : DispatchHelper</ID>
     <ID>TrailingCommaOnDeclarationSite:SkyblockItemTagKey.kt:SkyblockItemTagKey : BaseSkyblockItemTagKey</ID>
     <ID>TrailingCommaOnDeclarationSite:Utils.kt:SkyOceanModifyIndicator : Translatable</ID>
     <ID>UnnecessaryApply:FolderStorage.kt:FolderStorage$apply { save() }</ID>
