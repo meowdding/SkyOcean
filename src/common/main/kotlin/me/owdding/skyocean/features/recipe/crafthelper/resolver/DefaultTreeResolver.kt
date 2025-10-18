@@ -4,8 +4,8 @@ import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi.getBestRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipeType
-import me.owdding.skyocean.features.recipe.crafthelper.NormalCraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.data.CraftHelperRecipeType
+import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
