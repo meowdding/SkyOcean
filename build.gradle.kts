@@ -263,6 +263,7 @@ compactingResources {
         configureTask(this)
     }
 
+    substituteFromDifferentFile("mining/shaft_corpses", "shaft_corpses")
     compactToArray("recipes")
     removeComments("unobtainable_ids")
     downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/dyes.json", "dyes.json")

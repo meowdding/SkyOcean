@@ -116,6 +116,10 @@
         },
         "mineshaft": {
           "@value": "Mineshaft",
+          "pity_message": {
+            "@value": "Pity Message",
+            "desc": "Sends your current Pity when you find a mineshaft."
+          },
           "announce": {
             "@value": "Announce Mineshaft Enter",
             "desc": [

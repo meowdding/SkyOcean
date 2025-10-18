@@ -6,6 +6,10 @@ import me.owdding.skyocean.features.mining.mineshaft.MineshaftAnnouncement.Shaft
 object MineshaftConfig : CategoryKt("mineshaft") {
     override val name get() = Translated("skyocean.config.mining.mineshaft")
 
+    var mineshaftFoundPity by boolean(true) {
+        translation = "skyocean.config.mining.mineshaft.pity_message"
+    }
+
     init {
         separator {
             this.title = "Mineshaft Announcement"
@@ -16,7 +20,7 @@ object MineshaftConfig : CategoryKt("mineshaft") {
         translation = "skyocean.config.mining.mineshaft.announce"
     }
 
-    var shaftAnnounceType by enum(ShaftAnnounceType.CHAT) {
+    var shaftAnnounceType by enum(ShaftAnnounceType.PARTY) {
         translation = "skyocean.config.mining.mineshaft.announce-type"
     }
 
