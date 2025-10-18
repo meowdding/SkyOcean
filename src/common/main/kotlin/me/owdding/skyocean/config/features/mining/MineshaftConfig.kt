@@ -7,7 +7,7 @@ object MineshaftConfig : CategoryKt("mineshaft") {
     override val name get() = Translated("skyocean.config.mining.mineshaft")
 
     var mineshaftFoundPity by boolean(true) {
-        translation = "skyocean.config.mining.mineshaft.pity"
+        translation = "skyocean.config.mining.mineshaft.pity_message"
     }
 
     init {
