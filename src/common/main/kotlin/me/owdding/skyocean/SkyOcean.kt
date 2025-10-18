@@ -40,6 +40,7 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     val SBAPI by lazy { FabricLoader.getInstance().getModContainer(SkyBlockAPI.MOD_ID).get() }
     val MOD_ID: String = SELF.metadata.id
     val VERSION: String = SELF.metadata.version.friendlyString
+    const val DISCORD = "https://meowdd.ing/discord"
 
     init {
         SkyOceanPreInitModules.init {
@@ -94,6 +95,13 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         event.register("skyocean") {
             thenCallback("version") {
                 Text.of("Version: $VERSION").withColor(TextColor.GRAY).sendWithPrefix()
+            }
+
+            thenCallback("discord") {
+                Text.of("Join the Meowdding Discord!").apply {
+                    this.url = DISCORD
+                    this.hover = Text.of(DISCORD).withColor(TextColor.GRAY)
+                }.sendWithPrefix()
             }
 
             thenCallback("overlays") {
