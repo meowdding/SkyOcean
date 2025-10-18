@@ -134,8 +134,7 @@ internal class ProfileStorage<T : Any>(
             FileUtils.write(lastPath.toFile(), json.toPrettyString(), Charsets.UTF_8)
             SkyOcean.debug("saved $lastPath")
         } catch (e: Exception) {
-            SkyOcean.error("Failed to save $data to file")
-            e.printStackTrace()
+            SkyOcean.error("Failed to save $data to file", e)
         }
     }
 

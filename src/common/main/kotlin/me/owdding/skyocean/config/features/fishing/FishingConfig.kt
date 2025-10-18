@@ -19,7 +19,7 @@ object FishingConfig : CategoryKt("fishing") {
     var lavaReplacement by requiresChunkRebuild(
         boolean(false) {
             this.translation = "skyocean.config.fishing.lava_replacement"
-        }
+        },
     )
 
     var fixBobber by boolean(true) {

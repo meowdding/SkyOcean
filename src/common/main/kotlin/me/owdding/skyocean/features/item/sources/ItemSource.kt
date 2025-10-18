@@ -64,5 +64,4 @@ enum class ItemSources(val itemSource: ItemSource?, vararg val disabledIn: ItemS
 enum class ItemSourceTag {
     ITEM_SEARCH,
     CRAFT_HELPER,
-    ;
 }

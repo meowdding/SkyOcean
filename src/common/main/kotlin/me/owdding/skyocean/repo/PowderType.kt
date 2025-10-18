@@ -10,7 +10,7 @@ enum class PowderType(val formatting: ChatFormatting, val skill: HypixelSkillAPI
     GEMSTONE(ChatFormatting.LIGHT_PURPLE, HypixelSkillAPI.Skill.MINING),
     GLACITE(ChatFormatting.AQUA, HypixelSkillAPI.Skill.MINING),
 
-    WHISPER(ChatFormatting.DARK_AQUA, HypixelSkillAPI.Skill.FORAGING)
+    WHISPER(ChatFormatting.DARK_AQUA, HypixelSkillAPI.Skill.FORAGING),
     ;
 
     val displayName by lazy {

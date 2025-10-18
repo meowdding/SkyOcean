@@ -23,7 +23,8 @@ enum class MinecraftColor(val formatting: ChatFormatting, val paneItem: Item, va
     BROWN(ChatFormatting.WHITE, Items.BROWN_STAINED_GLASS_PANE, DyeColor.BROWN), // no chat color
     GREEN(ChatFormatting.DARK_GREEN, Items.GREEN_STAINED_GLASS_PANE, DyeColor.GREEN),
     RED(ChatFormatting.RED, Items.RED_STAINED_GLASS_PANE, DyeColor.RED),
-    BLACK(ChatFormatting.BLACK, Items.BLACK_STAINED_GLASS_PANE, DyeColor.BLACK);
+    BLACK(ChatFormatting.BLACK, Items.BLACK_STAINED_GLASS_PANE, DyeColor.BLACK),
+    ;
 
     val paneStack: ItemStack = paneItem.defaultInstance
 

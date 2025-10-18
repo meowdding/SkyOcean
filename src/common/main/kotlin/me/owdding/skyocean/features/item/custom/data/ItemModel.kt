@@ -8,15 +8,15 @@ import me.owdding.skyocean.features.item.custom.ui.standard.search.SkyBlockModel
 import me.owdding.skyocean.generated.DispatchHelper
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
-import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import net.minecraft.world.item.Item
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import kotlin.reflect.KClass
 
 
 @GenerateDispatchCodec(ItemModel::class)
 enum class ItemModelType(override val type: KClass<out ItemModel>) : DispatchHelper<ItemModel> {
     STATIC(StaticModel::class),
-    SKYBLOCK_MODEL(SkyblockModel::class)
+    SKYBLOCK_MODEL(SkyblockModel::class),
     ;
 
     companion object {

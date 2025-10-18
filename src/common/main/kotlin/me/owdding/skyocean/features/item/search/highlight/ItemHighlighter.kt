@@ -21,6 +21,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.PRIVATE_ISLAND
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.PlayerStorageInstance
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -28,7 +29,6 @@ import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.time.Duration.Companion.seconds
 
 @Module
 object ItemHighlighter {

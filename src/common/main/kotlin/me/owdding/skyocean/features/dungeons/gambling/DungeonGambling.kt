@@ -3,7 +3,6 @@ package me.owdding.skyocean.features.dungeons.gambling
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.type.EnumArgumentType
-import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import me.owdding.skyocean.config.features.dungeons.DungeonsConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
@@ -18,6 +17,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderScreenBackgroundEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.*
 import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.contains
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore

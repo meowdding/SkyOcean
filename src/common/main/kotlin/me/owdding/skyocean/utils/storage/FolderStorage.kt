@@ -46,9 +46,7 @@ class FolderStorage<T : Any>(
                 fileName = "$folder/$id",
                 codec = { codec },
             )
-        }.apply {
-            save()
-        }
+        }.save()
     }
 
     fun get(id: String): T? = storages[id]?.get()

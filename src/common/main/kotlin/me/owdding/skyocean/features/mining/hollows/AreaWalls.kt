@@ -25,7 +25,8 @@ object AreaWalls {
         JUNGLE(MinecraftColors.DARK_PURPLE, CrystalHollowsBB.JUNGLE),
         GOBLIN(MinecraftColors.GOLD, CrystalHollowsBB.GOBLIN),
         MAGMA_FIELDS(MinecraftColors.RED, CrystalHollowsBB.MAGMA_FIELDS),
-        NUCLEUS(MinecraftColors.WHITE, CrystalHollowsBB.NUCLEUS);
+        NUCLEUS(MinecraftColors.WHITE, CrystalHollowsBB.NUCLEUS),
+        ;
 
         operator fun component1(): Color = color.withAlpha(0x9F)
         operator fun component2() = box

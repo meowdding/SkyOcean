@@ -354,7 +354,8 @@ enum class SkyOceanModifyIndicator : Translatable {
     PREFIX,
     SUFFIX,
     LORE,
-    NOTHING;
+    NOTHING,
+    ;
 
     override fun getTranslationKey() = "skyocean.config.main.modify_indicator.${name.lowercase()}"
 }

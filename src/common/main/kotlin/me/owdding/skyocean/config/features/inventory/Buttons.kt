@@ -54,7 +54,7 @@ class ButtonConfig(
     private val itemName: String,
     private val commandName: String,
     @Language("RegExp") private val titleName: String,
-    private val tooltipName: String = ""
+    private val tooltipName: String = "",
 ) : ObjectKt() {
 
     constructor(itemLike: ItemLike, command: String, @Language("RegExp") title: String, tooltip: String = "") :

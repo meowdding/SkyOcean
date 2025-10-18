@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
 @GenerateDispatchCodec(CraftHelperRecipe::class)
 enum class CraftHelperRecipeType(override val type: KClass<out CraftHelperRecipe>) : DispatchHelper<CraftHelperRecipe> {
     NORMAL(NormalCraftHelperRecipe::class),
-    SKY_SHARDS(SkyShardsRecipe::class)
+    SKY_SHARDS(SkyShardsRecipe::class),
     ;
 
     companion object {

@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 enum class ItemKeyType(override val type: KClass<out ItemKey>) : DispatchHelper<ItemKey> {
     UUID(UuidKey::class),
     ID_AND_TIME(IdAndTimeKey::class),
-    ID(IdKey::class)
+    ID(IdKey::class),
     ;
 
     companion object {

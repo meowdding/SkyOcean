@@ -33,12 +33,10 @@ object DungeonItems {
             SkyOceanCodecs.getCodec<DungeonFloor>(),
             Codec.unboundedMap(
                 SkyOceanCodecs.getCodec<DungeonChestType>(),
-                SkyOceanCodecs.getCodec<DungeonItem>().listOf().xmap(::DungeonChestItems, DungeonChestItems::items)
-            )
+                SkyOceanCodecs.getCodec<DungeonItem>().listOf().xmap(::DungeonChestItems, DungeonChestItems::items),
+            ),
         )
     }
 
-    operator fun get(floor: DungeonFloor, type: DungeonChestType): DungeonChestItems? {
-        return items[floor]?.get(type)
-    }
+    operator fun get(floor: DungeonFloor, type: DungeonChestType): DungeonChestItems? = items[floor]?.get(type)
 }

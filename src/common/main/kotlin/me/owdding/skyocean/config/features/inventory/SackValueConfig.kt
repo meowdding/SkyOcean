@@ -17,7 +17,8 @@ object SackValueConfig : ObjectKt(), Translatable {
 
     enum class PriceSource : Translatable {
         BAZAAR,
-        NPC;
+        NPC,
+        ;
 
         override fun getTranslationKey() = "$PATH.price_source.${this.name.lowercase()}"
     }

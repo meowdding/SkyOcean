@@ -12,6 +12,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.LeftClickBlockEvent
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.GARDEN
 import tech.thatgravyboat.skyblockapi.api.profile.garden.PlotAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
@@ -32,7 +33,7 @@ object PestWarning {
     // TODO: Maybe move to Crop enum in sbapi
     private val cropBlocks = setOf(
         Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.CARROTS, Blocks.POTATOES, Blocks.WHEAT,
-        Blocks.COCOA, Blocks.CARVED_PUMPKIN, Blocks.PUMPKIN, Blocks.MELON, Blocks.SUGAR_CANE, Blocks.CACTUS, Blocks.NETHER_WART
+        Blocks.COCOA, Blocks.CARVED_PUMPKIN, Blocks.PUMPKIN, Blocks.MELON, Blocks.SUGAR_CANE, Blocks.CACTUS, Blocks.NETHER_WART,
     )
 
     @Subscription

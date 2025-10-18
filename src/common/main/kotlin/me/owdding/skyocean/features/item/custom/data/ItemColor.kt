@@ -23,7 +23,7 @@ enum class ItemColorType(override val type: KClass<out ItemColor>) : DispatchHel
     STATIC(StaticItemColor::class),
     GRADIENT(GradientItemColor::class),
     SKYBLOCK_DYE(SkyBlockDye::class),
-    ANIMATED_SKYBLOCK_DYE(AnimatedSkyBlockDye::class)
+    ANIMATED_SKYBLOCK_DYE(AnimatedSkyBlockDye::class),
     ;
 
     companion object {

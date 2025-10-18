@@ -66,7 +66,7 @@ data class AnimationManager(val screen: Screen, val time: Duration, var current:
 
             interpolated.putAll(currentStates.mapValues { (key, value) -> value to nextStates[key]!! })
         }
-    private var applyImmediately: MutableList<AbstractWidget> = mutableListOf()
+    private val applyImmediately: MutableList<AbstractWidget> = mutableListOf()
     private var onFinish: MutableList<() -> Unit> = mutableListOf()
     private var onPercentage: MutableMap<Double, MutableList<() -> Unit>> = mutableMapOf()
 

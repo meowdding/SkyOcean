@@ -10,6 +10,6 @@ import me.owdding.skyocean.features.recipe.RecipeType
 data class CustomRecipe(
     override var output: ItemLikeIngredient?,
     override val inputs: MutableList<Ingredient>,
-) : Recipe() {
+) : Recipe {
     override val recipeType: RecipeType = RecipeType.CUSTOM
 }

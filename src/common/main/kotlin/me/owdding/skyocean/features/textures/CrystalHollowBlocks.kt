@@ -25,7 +25,7 @@ object CrystalHollowBlocks : BlockRetexture() {
     val COBBLESTONE_SLAB = hollows("cobblestone_slab")
     val COBBLESTONE_STAIRS = hollows("cobblestone_stairs")
     val COBBLESTONE_WALL = hollows("cobblestone_wall")
-    
+
     private fun hollows(s: String) = id("mining/hollows/$s")
 
     @Subscription

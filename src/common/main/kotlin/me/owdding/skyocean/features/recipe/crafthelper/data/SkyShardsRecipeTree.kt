@@ -29,7 +29,7 @@ abstract class SkyShardsMethod(
     val type: SkyShardsMethodType,
     open val shard: SkyBlockId,
     open val quantity: Int,
-) : ParentRecipe() {
+) : ParentRecipe {
     override val recipeType: RecipeType get() = RecipeType.SKY_SHARDS
     abstract fun visitElements(visitor: (SkyShardsMethod) -> Unit)
     abstract fun <T> visitElements(parent: T?, visitor: (parent: T?, self: SkyShardsMethod) -> T): T
@@ -105,7 +105,8 @@ data class SkyShardsCycleStep(
 enum class SkyShardsMethodType(override val type: KClass<out SkyShardsMethod>) : DispatchHelper<SkyShardsMethod> {
     RECIPE(SkyShardsRecipeElement::class),
     DIRECT(SkyShardsDirectElement::class),
-    CYCLE(SkyShardsCycleElement::class);
+    CYCLE(SkyShardsCycleElement::class),
+    ;
 
     companion object {
         fun getType(id: String) = valueOf(id.uppercase())

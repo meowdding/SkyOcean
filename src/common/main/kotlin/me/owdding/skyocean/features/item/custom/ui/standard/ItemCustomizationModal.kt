@@ -13,12 +13,7 @@ import earth.terrarium.olympus.client.ui.modals.Modals
 import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.Orientation
 import earth.terrarium.olympus.client.utils.State
-import me.owdding.lib.displays.Display
-import me.owdding.lib.displays.DisplayWidget
-import me.owdding.lib.displays.Displays
-import me.owdding.lib.displays.asWidget
-import me.owdding.lib.displays.withPadding
-import me.owdding.lib.displays.withTooltip
+import me.owdding.lib.displays.*
 import me.owdding.lib.rendering.text.textShader
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.data.RecentColorStorage
@@ -27,12 +22,7 @@ import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrTryCreateCustomData
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper
-import me.owdding.skyocean.features.item.custom.data.AnimatedSkyBlockDye
-import me.owdding.skyocean.features.item.custom.data.ArmorTrim
-import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
-import me.owdding.skyocean.features.item.custom.data.ItemColor
-import me.owdding.skyocean.features.item.custom.data.SkyBlockDye
-import me.owdding.skyocean.features.item.custom.data.StaticItemColor
+import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.anyUpdated
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttonClick
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttons
@@ -806,5 +796,4 @@ enum class DyeTab(val id: SkyBlockId?, val tooltip: Component, val disabled: Boo
         !"Custom colors\nNot currently available in the ui! Use §a/skyocean customize (color/gradient)§f to set it!\n§7Coming soon in the ui!",
         true,
     ),
-    ;
 }

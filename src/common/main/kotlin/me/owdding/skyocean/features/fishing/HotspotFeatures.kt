@@ -73,7 +73,7 @@ object HotspotFeatures {
                 append("Hotspot despawned!", OceanColors.WARNING)
             },
             stayTime = 3f,
-            fadeOutTime = 0.5f
+            fadeOutTime = 0.5f,
         )
     }
 

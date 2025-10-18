@@ -18,7 +18,7 @@ object HighlightBoss {
         SlayerType.RIFTSTALKER_BLOODFIEND to TextColor.DARK_AQUA,
         SlayerType.TARANTULA_BROODFATHER to TextColor.DARK_RED,
         SlayerType.SVEN_PACKMASTER to TextColor.BLUE,
-        SlayerType.REVENANT_HORROR to TextColor.DARK_GREEN
+        SlayerType.REVENANT_HORROR to TextColor.DARK_GREEN,
     )
 
     @Subscription

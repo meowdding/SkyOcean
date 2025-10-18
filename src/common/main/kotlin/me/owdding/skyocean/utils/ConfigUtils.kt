@@ -1,7 +1,6 @@
 package me.owdding.skyocean.utils
 
 import com.teamresourceful.resourcefulconfigkt.api.CachedTransformedEntry
-import com.teamresourceful.resourcefulconfigkt.api.TransformedEntry
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.NumberBuilder
 import kotlin.math.roundToInt

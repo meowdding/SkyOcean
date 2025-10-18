@@ -32,7 +32,7 @@ private const val FULL_CARD_HEIGHT = (DungeonCard.HEIGHT * ITEM_SCALE)
 
 object DungeonGamblingRenderer {
 
-    private var items = mutableListOf<ItemStack>()
+    private val items = mutableListOf<ItemStack>()
     private var randomOffset = 0
     private var start = 0L
     private var lastSound = 0

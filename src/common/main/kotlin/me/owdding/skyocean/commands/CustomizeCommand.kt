@@ -10,18 +10,7 @@ import me.owdding.skyocean.events.ArgumentCommandBuilder
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
-import me.owdding.skyocean.features.item.custom.data.AnimatedSkyBlockDye
-import me.owdding.skyocean.features.item.custom.data.AnimatedSkyblockSkin
-import me.owdding.skyocean.features.item.custom.data.ArmorTrim
-import me.owdding.skyocean.features.item.custom.data.CustomItemComponent
-import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
-import me.owdding.skyocean.features.item.custom.data.GradientItemColor
-import me.owdding.skyocean.features.item.custom.data.IdKey
-import me.owdding.skyocean.features.item.custom.data.SkyBlockDye
-import me.owdding.skyocean.features.item.custom.data.SkyblockModel
-import me.owdding.skyocean.features.item.custom.data.SkyblockSkin
-import me.owdding.skyocean.features.item.custom.data.StaticItemColor
-import me.owdding.skyocean.features.item.custom.data.StaticModel
+import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.repo.customization.AnimatedSkulls
@@ -335,7 +324,7 @@ object CustomizeCommand {
         }
     }
 
-    fun remove(type: CustomItemComponent<*>, messageProvider: (item: ItemStack) -> Component) = remove(type, { item, _ -> messageProvider(item) })
+    fun remove(type: CustomItemComponent<*>, messageProvider: (item: ItemStack) -> Component) = remove(type) { item, _ -> messageProvider(item) }
 
     fun <T> remove(type: CustomItemComponent<T>, messageProvider: (item: ItemStack, oldData: T?) -> Component) {
         val item = mainHandItemOrNull() ?: return

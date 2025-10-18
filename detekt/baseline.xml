@@ -2,8 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>AbstractClassCanBeInterface:Recipe.kt:Recipe$Recipe</ID>
-    <ID>AlsoCouldBeApply:ItemSelectorOverlay.kt:ItemSelectorOverlay$also</ID>
     <ID>BackingPropertyNaming:DeferredLayout.kt:DeferredLayout$protected abstract val _backing: Type</ID>
     <ID>BlankLineBetweenWhenConditions:AreaWalls.kt:AreaWalls$when (blockPosition) { in Area.NUCLEUS -&gt; renderNucleus() in Area.MAGMA_FIELDS -&gt; renderMagmaFields() in Area.MITHRIL -&gt; { renderOutsideShape(Area.NUCLEUS, Direction.NORTH) renderOutsideShape(Area.NUCLEUS, Direction.EAST) renderOutsideShape(Area.PRECURSOR, Direction.NORTH) renderOutsideShape(Area.JUNGLE, Direction.EAST) renderMagmaFieldsTop() } in Area.GOBLIN -&gt; { renderOutsideShape(Area.NUCLEUS, Direction.WEST) renderOutsideShape(Area.NUCLEUS, Direction.SOUTH) renderOutsideShape(Area.PRECURSOR, Direction.WEST) renderOutsideShape(Area.JUNGLE, Direction.SOUTH) renderMagmaFieldsTop() } in Area.PRECURSOR -&gt; { renderOutsideShape(Area.NUCLEUS, Direction.SOUTH) renderOutsideShape(Area.NUCLEUS, Direction.EAST) renderOutsideShape(Area.MITHRIL, Direction.SOUTH) renderOutsideShape(Area.GOBLIN, Direction.EAST) renderMagmaFieldsTop() } in Area.JUNGLE -&gt; { renderOutsideShape(Area.NUCLEUS, Direction.WEST) renderOutsideShape(Area.NUCLEUS, Direction.NORTH) renderOutsideShape(Area.MITHRIL, Direction.WEST) renderOutsideShape(Area.GOBLIN, Direction.NORTH) renderMagmaFieldsTop() } }</ID>
     <ID>BlankLineBetweenWhenConditions:CraftHelperStorage.kt:CraftHelperStorage$when (version) { 0 -&gt; SkyOceanCodecs.NormalCraftHelperRecipeCodec.codec().xmap( { (item, amount) -&gt; NormalCraftHelperRecipe( item?.id?.let { SkyBlockId.unknownType(it) }, amount, ) }, { it }, ).xmap({ it as CraftHelperRecipe }, { it as NormalCraftHelperRecipe }) 1 -&gt; SkyOceanCodecs.NormalCraftHelperRecipeCodec.codec().xmap({ it as CraftHelperRecipe }, { it as NormalCraftHelperRecipe }) 2 -&gt; SkyOceanCodecs.CraftHelperRecipeCodec.codec() else -&gt; Codec.unit { NormalCraftHelperRecipe(null, 1) } }</ID>
@@ -130,7 +128,6 @@
     <ID>FunctionExpressionBody:DrillUpgradeItemSource.kt:DrillUpgradeItemSource${ return items.filter { (itemStack) -&gt; itemStack in SkyblockItemTagKey.DRILLS } .flatMap { item -&gt; val (itemStack) = item listOfNotNull( itemStack.getData(DataTypes.FUEL_TANK), itemStack.getData(DataTypes.ENGINE), itemStack.getData(DataTypes.UPGRADE_MODULE), ).map { SkyBlockId.item(it) } .map { SimpleTrackedItem(it.toItem(), DrillItemContext(item)) } } }</ID>
     <ID>FunctionExpressionBody:DungeonGamblingFakeScreen.kt:DungeonGamblingFakeScreen${ return when (keyEvent.key) { InputConstants.KEY_R -&gt; { setup() true } else -&gt; super.keyPressed(keyEvent) } }</ID>
     <ID>FunctionExpressionBody:DungeonGamblingRenderer.kt:DungeonGamblingRenderer${ return if (t &lt; 0.5) (1 - sqrt(1 - (2 * t).pow(2.0f))) / 2f else (sqrt(1 - (-2 * t + 2).pow(2.0f)) + 1) / 2f }</ID>
-    <ID>FunctionExpressionBody:DungeonItems.kt:DungeonItems${ return items[floor]?.get(type) }</ID>
     <ID>FunctionExpressionBody:ExtraDisplays.kt:ExtraDisplays${ return object : Display { override fun getWidth() = display.getWidth() override fun getHeight() = display.getHeight() override fun render(graphics: GuiGraphics) { InventoryRenderer.renderMonoInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), size, orientation, color) display.render(graphics) } } }</ID>
     <ID>FunctionExpressionBody:ExtraWidgetRenderers.kt:ExtraWidgetRenderers${ return WidgetRenderers.text&lt;T&gt;(!component).withColor(color) }</ID>
     <ID>FunctionExpressionBody:ExtraWidgetRenderers.kt:ExtraWidgetRenderers${ return WidgetRenderers.text&lt;T&gt;(component).withColor(color) }</ID>
@@ -189,9 +186,6 @@
     <ID>IfElseBracing:ProfileInChat.kt:ProfileInChat$if (name.equals(McPlayer.name, true)) { event.component.siblings.indexOfFirst { sibling -&gt; sibling.style.hoverEvent == null } } else index</ID>
     <ID>IfElseBracing:RecipeView.kt:WidgetBuilder$if ((includeParentOverride != null &amp;&amp; includeParentOverride) || CraftHelperConfig.parentAmount) { state.amountThroughParents } else 0</ID>
     <ID>ImplicitDefaultLocale:BobberTime.kt:BobberTime$"%.2f".format(time)</ID>
-    <ID>ImportOrdering:DrillUpgradeItemSource.kt:import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId import me.owdding.skyocean.features.item.sources.system.ParentItemContext import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem import me.owdding.skyocean.utils.tags.SkyblockItemTagKey import net.minecraft.network.chat.Component import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes import tech.thatgravyboat.skyblockapi.api.datatype.getData import tech.thatgravyboat.skyblockapi.utils.text.TextColor import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color</ID>
-    <ID>ImportOrdering:DungeonGambling.kt:import com.mojang.blaze3d.platform.InputConstants import me.owdding.ktmodules.Module import me.owdding.lib.utils.type.EnumArgumentType import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId import me.owdding.skyocean.config.features.dungeons.DungeonsConfig import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType import me.owdding.skyocean.utils.Utils.containerItems import me.owdding.skyocean.utils.Utils.getArgument import net.minecraft.client.gui.screens.inventory.ContainerScreen import net.minecraft.world.item.Items import tech.thatgravyboat.skyblockapi.api.area.dungeon.DungeonAPI import tech.thatgravyboat.skyblockapi.api.area.dungeon.DungeonFloor import tech.thatgravyboat.skyblockapi.api.events.base.CancellableSkyBlockEvent import tech.thatgravyboat.skyblockapi.api.events.base.Subscription import tech.thatgravyboat.skyblockapi.api.events.render.RenderScreenBackgroundEvent import tech.thatgravyboat.skyblockapi.api.events.screen.* import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue import tech.thatgravyboat.skyblockapi.helpers.McClient import tech.thatgravyboat.skyblockapi.utils.extentions.contains import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.findGroup import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped</ID>
-    <ID>ImportOrdering:ItemModel.kt:import me.owdding.ktcodecs.GenerateCodec import me.owdding.ktcodecs.GenerateDispatchCodec import me.owdding.skyocean.features.item.custom.ui.standard.search.ItemModelSearchEntry import me.owdding.skyocean.features.item.custom.ui.standard.search.ModelSearchEntry import me.owdding.skyocean.features.item.custom.ui.standard.search.SkyBlockModelEntry import me.owdding.skyocean.generated.DispatchHelper import net.minecraft.core.registries.BuiltInRegistries import net.minecraft.resources.ResourceLocation import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId import net.minecraft.world.item.Item import kotlin.reflect.KClass</ID>
     <ID>InjectDispatcher:ItemHighlighter.kt:ItemHighlighter$Default</ID>
     <ID>LongMethod:CraftHelperDisplay.kt:CraftHelperDisplay$private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -&gt; ((save: Boolean) -&gt; Unit)): AbstractWidget</ID>
     <ID>LongMethod:CustomizeCommand.kt:CustomizeCommand$@Subscription fun onCommand(event: RegisterSkyOceanCommandEvent)</ID>
@@ -246,38 +240,8 @@
     <ID>NamedArguments:SkyShardsTreeResolver.kt:SkyShardsTreeResolver$RecipeNode(null, self.quantity, self.quantity, self.quantity, 0, self.shard.toIngredient(self.quantity), RecipeRemainder.EMPTY)</ID>
     <ID>NoBlankLineInList:ClientSideInventory.kt:ClientSideInventory$ </ID>
     <ID>NoBlankLineInList:ItemCustomizationModal.kt:ItemCustomizationModal$ </ID>
-    <ID>NoMultipleSpaces:GemstoneBlocks.kt:GemstoneBlocks$ </ID>
-    <ID>NoSemicolons:ItemCustomizationModal.kt:DyeTab.GRADIENT$;</ID>
-    <ID>NoSemicolons:ItemSource.kt:ItemSourceTag.CRAFT_HELPER$;</ID>
-    <ID>NoTrailingSpaces:CrystalHollowBlocks.kt:CrystalHollowBlocks$ </ID>
-    <ID>NoTrailingSpaces:DwarvenMinesBB.kt:DwarvenMinesBB$ </ID>
-    <ID>NoTrailingSpaces:GemstoneBlocks.kt:GemstoneBlocks$ </ID>
-    <ID>NoUnusedImports:ConfigUtils.kt:me.owdding.skyocean.utils.ConfigUtils.kt</ID>
-    <ID>NoUnusedImports:ItemHighlighter.kt:me.owdding.skyocean.features.item.search.highlight.ItemHighlighter.kt</ID>
     <ID>ParameterListWrapping:AnimationManager.kt:AnimationManager.State$( val x: Int, val y: Int, val width: Int, val height: Int, )</ID>
-    <ID>PrintStackTrace:ProfileStorage.kt:ProfileStorage$e</ID>
     <ID>ReturnCount:VisitorModifier.kt:VisitorModifier$override fun applies(event: InventoryChangeEvent): SkyOceanItemIngredient?</ID>
-    <ID>TrailingCommaOnCallSite:DungeonItems.kt:DungeonItems$( SkyOceanCodecs.getCodec&lt;DungeonChestType&gt;(), SkyOceanCodecs.getCodec&lt;DungeonItem&gt;().listOf().xmap(::DungeonChestItems, DungeonChestItems::items) )</ID>
-    <ID>TrailingCommaOnCallSite:DungeonItems.kt:DungeonItems$( SkyOceanCodecs.getCodec&lt;DungeonFloor&gt;(), Codec.unboundedMap( SkyOceanCodecs.getCodec&lt;DungeonChestType&gt;(), SkyOceanCodecs.getCodec&lt;DungeonItem&gt;().listOf().xmap(::DungeonChestItems, DungeonChestItems::items) ) )</ID>
-    <ID>TrailingCommaOnCallSite:FishingConfig.kt:FishingConfig$( boolean(false) { this.translation = "skyocean.config.fishing.lava_replacement" } )</ID>
-    <ID>TrailingCommaOnCallSite:HighlightBoss.kt:HighlightBoss$( SlayerType.INFERNO_DEMONLORD to TextColor.GOLD, SlayerType.VOIDGLOOM_SERAPH to TextColor.DARK_PURPLE, SlayerType.RIFTSTALKER_BLOODFIEND to TextColor.DARK_AQUA, SlayerType.TARANTULA_BROODFATHER to TextColor.DARK_RED, SlayerType.SVEN_PACKMASTER to TextColor.BLUE, SlayerType.REVENANT_HORROR to TextColor.DARK_GREEN )</ID>
-    <ID>TrailingCommaOnCallSite:HotspotFeatures.kt:HotspotFeatures$( text { append(ChatUtils.ICON_SPACE_COMPONENT) append("Hotspot despawned!", OceanColors.WARNING) }, stayTime = 3f, fadeOutTime = 0.5f )</ID>
-    <ID>TrailingCommaOnCallSite:PestWarning.kt:PestWarning$( Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.CARROTS, Blocks.POTATOES, Blocks.WHEAT, Blocks.COCOA, Blocks.CARVED_PUMPKIN, Blocks.PUMPKIN, Blocks.MELON, Blocks.SUGAR_CANE, Blocks.CACTUS, Blocks.NETHER_WART )</ID>
-    <ID>TrailingCommaOnDeclarationSite:AreaWalls.kt:AreaWalls$Area</ID>
-    <ID>TrailingCommaOnDeclarationSite:Buttons.kt:ButtonConfig$( private val itemName: String, private val commandName: String, @Language("RegExp") private val titleName: String, private val tooltipName: String = "" )</ID>
-    <ID>TrailingCommaOnDeclarationSite:CraftHelperTreeType.kt:CraftHelperRecipeType : DispatchHelper</ID>
-    <ID>TrailingCommaOnDeclarationSite:ItemColor.kt:ItemColorType : DispatchHelper</ID>
-    <ID>TrailingCommaOnDeclarationSite:ItemKey.kt:ItemKeyType : DispatchHelper</ID>
-    <ID>TrailingCommaOnDeclarationSite:ItemModel.kt:ItemModelType : DispatchHelper</ID>
-    <ID>TrailingCommaOnDeclarationSite:ItemTagKey.kt:ItemTagKey : ItemTagKey</ID>
-    <ID>TrailingCommaOnDeclarationSite:MinecraftColor.kt:MinecraftColor</ID>
-    <ID>TrailingCommaOnDeclarationSite:PowderType.kt:PowderType</ID>
-    <ID>TrailingCommaOnDeclarationSite:SackValueConfig.kt:SackValueConfig$PriceSource : Translatable</ID>
-    <ID>TrailingCommaOnDeclarationSite:SkyShardsRecipeTree.kt:SkyShardsMethodType : DispatchHelper</ID>
-    <ID>TrailingCommaOnDeclarationSite:SkyblockItemTagKey.kt:SkyblockItemTagKey : BaseSkyblockItemTagKey</ID>
-    <ID>TrailingCommaOnDeclarationSite:Utils.kt:SkyOceanModifyIndicator : Translatable</ID>
-    <ID>UnnecessaryApply:FolderStorage.kt:FolderStorage$apply { save() }</ID>
-    <ID>UnnecessaryBracesAroundTrailingLambda:CustomizeCommand.kt:CustomizeCommand$remove</ID>
     <ID>UnsafeCallOnNullableType:AnimatedSkulls.kt:AnimatedSkulls$Utils.loadFromRepo&lt;JsonElement&gt;("skulls")!!</ID>
     <ID>UnsafeCallOnNullableType:AnimationManager.kt:AnimationManager$nextStates[key]!!</ID>
     <ID>UnsafeCallOnNullableType:ButtonConfigScreen.kt:ButtonConfigScreen$selectedButton!!</ID>
@@ -317,8 +281,6 @@
     <ID>UnsafeCallOnNullableType:SourceToWidget.kt:SourceToWidget$conversionCost!!</ID>
     <ID>UnsafeCallOnNullableType:TagComponentSerialization.kt:TagComponentSerialization$color!!</ID>
     <ID>UnsafeCast:ButtonConfigScreen.kt:ButtonConfigScreen$this as AbstractRecipeBookScreenAccessor</ID>
-    <ID>UnusedImport:ConfigUtils.kt:import com.teamresourceful.resourcefulconfigkt.api.TransformedEntry</ID>
-    <ID>UnusedImport:ItemHighlighter.kt:import kotlin.time.Duration.Companion.seconds</ID>
     <ID>UnusedParameter:BlockRetexture.kt:BlockRetexture$parent: ResourceLocation? = null</ID>
     <ID>UnusedParameter:IngredientParser.kt:IngredientParser$regex: Regex</ID>
     <ID>UnusedParameter:OctreeDebugRenderer.kt:OctreeDebugRenderer$depth: Int</ID>
@@ -331,8 +293,6 @@
     <ID>UnusedVariable:OctreeDebugRenderer.kt:OctreeDebugRenderer$val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderType.lines())</ID>
     <ID>UseRequire:ItemColor.kt:AnimatedSkyBlockDye$throw IllegalArgumentException("Unknown animated dye $id")</ID>
     <ID>UseRequire:ItemColor.kt:SkyBlockDye$throw IllegalArgumentException("Unknown dye $id")</ID>
-    <ID>VarCouldBeVal:AnimationManager.kt:AnimationManager$private var applyImmediately: MutableList&lt;AbstractWidget&gt; = mutableListOf()</ID>
-    <ID>VarCouldBeVal:DungeonGamblingRenderer.kt:DungeonGamblingRenderer$private var items = mutableListOf&lt;ItemStack&gt;()</ID>
     <ID>VariableNaming:DeferredLayout.kt:DeferredLayout$protected abstract val _backing: Type</ID>
     <ID>Wrapping:ItemContext.kt:ItemContext$(</ID>
     <ID>Wrapping:SkyOceanScreen.kt:SkyOceanScreen$(</ID>
