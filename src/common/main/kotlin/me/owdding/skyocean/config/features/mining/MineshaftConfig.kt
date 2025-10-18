@@ -16,7 +16,7 @@ object MineshaftConfig : CategoryKt("mineshaft") {
         translation = "skyocean.config.mining.mineshaft.announce"
     }
 
-    var shaftAnnounceType by enum(ShaftAnnounceType.CHAT) {
+    var shaftAnnounceType by enum(ShaftAnnounceType.PARTY) {
         translation = "skyocean.config.mining.mineshaft.announce-type"
     }
 
