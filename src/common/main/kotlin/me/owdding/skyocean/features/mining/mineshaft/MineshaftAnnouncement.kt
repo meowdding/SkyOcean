@@ -50,11 +50,12 @@ object MineshaftAnnouncement {
         val text = Text.join(
             "Mineshaft Entered | ",
             MineshaftAPI.mineshaftType?.toFormattedName() ?: "Unknown Type",
+            " ",
             MineshaftAPI.mineshaftVariant?.toFormattedName() ?: "Unknown Variant",
             " | ",
             MineshaftAPI.corpses.groupBy { it.type }.toSortedMap(CorpseType::compareTo).map { (type, corpses) ->
                 "${corpses.size}${type.name.first()}"
-            }.joinToString(", ")
+            }.joinToString(", "),
         )
 
         when (MineshaftConfig.shaftAnnounceType) {
