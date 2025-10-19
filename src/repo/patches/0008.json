@@ -1,0 +1,5 @@
+{
+  "type": "skyocean:add_list",
+  "path": "misc.islandCloudHider",
+  "inserts": ["MINESHAFT", "DUNGEON_HUB", "KUUDRA"]
+}

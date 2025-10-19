@@ -23,6 +23,7 @@ object ConfigPatches {
         register(MovePatch.ID, MovePatch.CODEC)
         register(CompoundPatch.ID, CompoundPatch.CODEC)
         register(AddPatch.ID, SkyOceanCodecs.AddPatchCodec)
+        register(AddListPatch.ID, SkyOceanCodecs.AddListPatchCodec)
     }
 
     fun register(id: ResourceLocation, codec: MapCodec<out Patch>) {

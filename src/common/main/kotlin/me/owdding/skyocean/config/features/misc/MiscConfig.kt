@@ -8,10 +8,12 @@ import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.transparency
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.*
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.Companion.inAnyIsland
+import kotlin.time.DurationUnit.SECONDS
 
 object MiscConfig : CategoryKt("misc") {
-    private val defaultCloudIslands = listOf(SkyBlockIsland.DWARVEN_MINES, SkyBlockIsland.CRYSTAL_HOLLOWS, SkyBlockIsland.THE_CATACOMBS)
+    private val defaultCloudIslands = listOf(DWARVEN_MINES, CRYSTAL_HOLLOWS, MINESHAFT, THE_CATACOMBS, DUNGEON_HUB, KUUDRA)
     override val name get() = Translated("skyocean.config.misc")
 
     var ministerInCalendar by boolean(true) {
