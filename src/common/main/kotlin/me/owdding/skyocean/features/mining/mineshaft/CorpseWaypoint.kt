@@ -68,7 +68,7 @@ object CorpseWaypoint {
         val mineshaft = mineshaftCorpses.entries.find { it.key == MineshaftAPI.mineshaftType } ?: return
         val corpses = mineshaft.value.entries.find { it.key == MineshaftAPI.mineshaftVariant }?.value ?: return
 
-        val isKnown = corpses.any { corpsePos -> corpsePos.distSqr(entity.blockPosition()) < 1.0 }
+        val isKnown = corpses.any { corpsePos -> corpsePos.distSqr(entity.blockPosition()) < 4.0 }
         if (isKnown) return
 
         Text.of {
