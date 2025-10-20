@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.mining.mineshaft
 
 import com.mojang.serialization.Codec
 import me.owdding.ktmodules.Module
+import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.utils.Utils
@@ -41,8 +42,16 @@ object CorpseWaypoint {
         ),
     )
 
-    private val mineshaftCorpses: Map<MineshaftType, Map<MineshaftVariant, List<BlockPos>>> =
-        Utils.loadRepoData("mining/shaft_corpses", CODEC).filterKeysNotNull().map { (k, v) -> k to v.filterKeysNotNull() }.toMap()
+
+    private val mineshaftCorpses: MutableMap<MineshaftType, Map<MineshaftVariant, List<BlockPos>>> = mutableMapOf()
+
+    @Subscription(FinishRepoLoadingEvent::class)
+    fun onRepoLoad() {
+        mineshaftCorpses.putAll(
+            Utils.loadRemoteRepoData("mining/mineshaft_corpses", CODEC).filterKeysNotNull().map { (k, v) -> k to v.filterKeysNotNull() }
+                .toMap(),
+        )
+    }
 
     @Subscription
     @OnlyIn(SkyBlockIsland.MINESHAFT)

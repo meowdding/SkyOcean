@@ -16,7 +16,9 @@ import me.owdding.ktmodules.AutoCollect
 import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.ListMerger
+import me.owdding.lib.repo.LevelableTreeNode
 import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.repo.RemoteRepo
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.config.Config
@@ -146,6 +148,18 @@ object Utils {
             null
         }
     }
+    inline fun <reified T : Any> loadFromRemoteRepo(file: String): T? = runBlocking {
+        try {
+            val json = RemoteRepo.getFileContentAsJson("$file.json") ?: return@runBlocking null
+            if (T::class == JsonElement::class) {
+                return@runBlocking json as T
+            }
+            return@runBlocking Json.gson.fromJson(json, typeOf<T>().javaType)
+        } catch (e: Exception) {
+            SkyOcean.error("Failed to load $file from repo", e)
+            null
+        }
+    }
 
     internal inline fun <reified T : Any> loadRepoData(file: String): T {
         return loadRepoData<T, T>(file) { it }
@@ -161,6 +175,21 @@ object Utils {
 
     internal fun <B : Any> loadRepoData(file: String, codec: Codec<B>): B {
         return loadFromRepo<JsonElement>(file).toDataOrThrow(codec)
+    }
+    internal inline fun <reified T : Any> loadRemoteRepoData(file: String): T {
+        return loadRemoteRepoData<T, T>(file) { it }
+    }
+
+    internal inline fun <reified T : Any, B : Any> loadRemoteRepoData(file: String, modifier: (Codec<T>) -> Codec<B>): B {
+        return loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(SkyOceanCodecs.getCodec<T>().let(modifier))
+    }
+
+    internal inline fun <B : Any> loadRemoteRepoData(file: String, supplier: () -> Codec<B>): B {
+        return loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(supplier())
+    }
+
+    internal fun <B : Any> loadRemoteRepoData(file: String, codec: Codec<B>): B {
+        return loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(codec)
     }
 
     val ItemLike.id get() = BuiltInRegistries.ITEM.getKey(this.asItem())
@@ -348,6 +377,9 @@ object Utils {
     fun Component.asDisplay(): Display = Displays.text(this)
     fun Iterable<Item>.filterNotAir() = this.filterNot { item -> item == Items.AIR }
     fun <T> Iterable<Holder<T>>.unwrap() = this.map { it.value() }
+
+    fun LevelableTreeNode.totalPowder() = powderForInterval(1 exclusiveInclusive maxLevel)
+    fun LevelableTreeNode.powderForInterval(intRange: IntRange) = intRange.sumOf { costForLevel(it).second }
 }
 
 enum class SkyOceanModifyIndicator : Translatable {
