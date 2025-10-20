@@ -74,7 +74,7 @@ object Config : ConfigKt("skyocean/config") {
     )
 
     val clickablePrefix: Boolean by invalidProperty(
-        boolean(false) {
+        boolean(true) {
             translation = "skyocean.config.main.clickable_prefix"
         },
         ChatUtils.prefixDelegate,
