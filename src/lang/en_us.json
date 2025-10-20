@@ -29,6 +29,10 @@
           "@value": "Prefix Gradient",
           "desc": "Changes the gradient that is used for the prefix."
         },
+        "clickable_prefix": {
+          "@value": "Clickable Chat Message Prefix",
+          "desc": "Makes SkyOceans chat message prefix clickable, opening the config screen."
+        },
         "modify_indicator": {
           "@value": "SkyOcean Modify Indicator",
           "desc": [

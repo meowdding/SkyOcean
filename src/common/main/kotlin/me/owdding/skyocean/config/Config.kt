@@ -73,6 +73,13 @@ object Config : ConfigKt("skyocean/config") {
         ChatUtils.prefixDelegate,
     )
 
+    val clickablePrefix: Boolean by invalidProperty(
+        boolean(false) {
+            translation = "skyocean.config.main.clickable_prefix"
+        },
+        ChatUtils.prefixDelegate,
+    )
+
     val modifyIndicator by enum(SkyOceanModifyIndicator.PREFIX) {
         translation = "skyocean.config.main.modify_indicator"
     }
