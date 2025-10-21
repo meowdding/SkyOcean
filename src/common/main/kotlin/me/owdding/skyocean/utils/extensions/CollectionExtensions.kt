@@ -22,3 +22,7 @@ fun <T> Collection<T>.joinToComponent(separator: Component, transform: (T) -> Co
 
 fun <T> Iterable<T>.indexOfOrNull(predicate: (T) -> Boolean) = indexOfFirst(predicate).takeUnless { it == -1 }
 fun <T> Iterable<T>.indexOfOrNull(predicate: T) = indexOf(predicate).takeUnless { it == -1 }
+
+fun <Type> MutableCollection<Type>.addAll(other: Collection<Type>?) = other?.let { this.addAll(it) }
+
+fun <Key, Value> MutableMap<Key, Value>.putAll(other: Map<Key, Value>?) = other?.let { this.putAll(it) }

@@ -9,6 +9,7 @@ import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.codecs.CodecHelpers
+import me.owdding.skyocean.utils.extensions.putAll
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderTextInWorld
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.decoration.ArmorStand
@@ -47,16 +48,12 @@ object CorpseWaypoint {
 
     @Subscription(FinishRepoLoadingEvent::class)
     fun onRepoLoad() {
-        runCatching {
-            mineshaftCorpses.putAll(
-                Utils.loadRemoteRepoData("mining/mineshaft_corpses", CODEC)
-                    .filterKeysNotNull()
-                    .map { (k, v) -> k to v.filterKeysNotNull() }
-                    .toMap(),
-            )
-        }.onFailure {
-            SkyOcean.error("Failed to load corpse data from remote repo!", it)
-        }
+        mineshaftCorpses.putAll(
+            Utils.loadRemoteRepoData("mining/mineshaft_corpses", CODEC)
+                ?.filterKeysNotNull()
+                ?.map { (k, v) -> k to v.filterKeysNotNull() }
+                ?.toMap(),
+        )
     }
 
     @Subscription

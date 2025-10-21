@@ -6,6 +6,7 @@ import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.extensions.addAll
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -36,13 +37,8 @@ object SimpleRecipeApi {
         idToRecipes.clear()
         illegalIngredients.clear()
 
-        runCatching {
-            illegalIngredients.addAll(Utils.loadRemoteRepoData("skyocean/illegal_ingredients", CodecUtils::list))
-        }.onSuccess {
-            SkyOcean.debug("Loaded ${illegalIngredients.size} illegal ingredients")
-        }.onFailure {
-            SkyOcean.error("Failed loading illegal ingredient list", it)
-        }
+        illegalIngredients.addAll(Utils.loadRemoteRepoData("skyocean/illegal_ingredients", CodecUtils::list))
+        SkyOcean.debug("Loaded ${illegalIngredients.size} illegal ingredients")
 
         supportedTypes.forEach { (recipe, type) ->
             recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe ->
@@ -63,15 +59,9 @@ object SimpleRecipeApi {
         }
 
         SkyOcean.debug("Loaded ${recipes.size} Recipes from repo api")
-        runCatching {
-            Utils.loadRemoteRepoData("skyocean/recipes", SkyOceanCodecs.CustomRecipeCodec.codec().listOf())
-        }.onFailure {
-            SkyOcean.error("Failed to load extra recipes from remote repo!", it)
-        }.onSuccess {
-            recipes.addAll(it)
-            SkyOcean.debug("Loaded ${it.size} extra from remote repo, new total is ${recipes.size}")
-        }
-
+        val extra = Utils.loadRemoteRepoData("skyocean/recipes", SkyOceanCodecs.CustomRecipeCodec.codec().listOf())
+        recipes.addAll(extra)
+        SkyOcean.debug("Loaded ${extra?.size ?: 0} extra from remote repo, new total is ${recipes.size}")
 
         rebuildRecipes()
 
