@@ -1,21 +1,31 @@
 package me.owdding.skyocean.repo
 
 import me.owdding.ktcodecs.GenerateCodec
-import me.owdding.ktmodules.Module
-import me.owdding.skyocean.generated.CodecUtils
+import me.owdding.lib.events.FinishRepoLoadingEvent
+import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.PreInitModule
 import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.extensions.setUnlessNull
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
+import java.util.concurrent.atomic.AtomicReference
 
-@Module
+@PreInitModule
 object SackData {
     val sackRegex = Regex("(LARGE|MEDIUM|SMALL)_")
+    private val _data = AtomicReference<List<Sack>>(emptyList())
+    val data: List<Sack> get() = _data.get()
+
     fun normalizedSackId(id: String) = id.replace(sackRegex, "")
 
-    val data: List<Sack> = Utils.loadRepoData("sacks", CodecUtils::list)
-
     fun getByNormalizedId(id: String) = data.find { it.normalizedId == id }
+
+    @Subscription(FinishRepoLoadingEvent::class)
+    fun onRepoLoad() {
+        _data.setUnlessNull(Utils.loadRemoteRepoData("sacks", SkyOceanCodecs.SackCodec.codec().listOf()))
+    }
 
     @GenerateCodec
     data class Sack(

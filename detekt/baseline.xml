@@ -74,7 +74,6 @@
     <ID>ClassOrdering:RecipeVisitor.kt:RecipeVisitor$Companion</ID>
     <ID>ClassOrdering:RenderUtils.kt:RenderUtils$private val SLOT_HIGHLIGHT_BACK_SPRITE = ResourceLocation.withDefaultNamespace("container/slot_highlight_back")</ID>
     <ID>ClassOrdering:RenderUtils.kt:RenderUtils$private val SLOT_HIGHLIGHT_FRONT_TEXTURE = ResourceLocation.withDefaultNamespace("container/slot_highlight_front")</ID>
-    <ID>ClassOrdering:SackData.kt:SackData$val data: List&lt;Sack&gt; = Utils.loadRepoData("sacks", CodecUtils::list)</ID>
     <ID>ClassOrdering:SackOfSacksItemSource.kt:SackOfSacksItemContext$override val source: ItemSources = ItemSources.SACK_OF_SACKS</ID>
     <ID>ClassOrdering:SackOfSacksItemSource.kt:SackOfSacksItemSource$override val type: ItemSources = ItemSources.SACK_OF_SACKS</ID>
     <ID>ClassOrdering:SackValueConfig.kt:SackValueConfig$override fun getTranslationKey(): String</ID>
@@ -134,8 +133,6 @@
     <ID>FunctionExpressionBody:GalateaSources.kt:HuntaxeItemSource${ return items.filter { (itemStack) -&gt; itemStack.getSkyBlockId() in SkyblockItemTagKey.HUNT_AXES }.mapNotNull { item -&gt; GalateaItemStorage.data?.huntaxeItem?.let { SimpleTrackedItem(it, HuntaxeItemContext(item)) } } }</ID>
     <ID>FunctionExpressionBody:GalateaSources.kt:ToolkitItemSource${ return items.filter { (itemStack) -&gt; itemStack.getSkyBlockId()?.contains("HUNTING_TOOLKIT", true) == true }.flatMap { item -&gt; GalateaItemStorage.data?.toolkitItems?.map { SimpleTrackedItem(it, ToolkitItemContext(item)) } ?: emptyList() } }</ID>
     <ID>FunctionExpressionBody:GradientNode.kt:GradientNode${ return style.withTextShader(GradientTextShader(provider)) }</ID>
-    <ID>FunctionExpressionBody:HotfData.kt:HotfData.HotfPerk${ return costFormula.keval { includeDefault() constant { name = "nextLevel" value = level.toDouble() } }.toInt() }</ID>
-    <ID>FunctionExpressionBody:HotmData.kt:HotmData.HotmPerk${ return costFormula.keval { includeDefault() constant { name = "nextLevel" value = level.toDouble() } }.toInt() }</ID>
     <ID>FunctionExpressionBody:Ingredients.kt:Ingredient${ return this.withAmount(this.amount + other.amount) }</ID>
     <ID>FunctionExpressionBody:InvButtons.kt:InvButtons${ return screen is AbstractContainerScreen&lt;*&gt; &amp;&amp; InventoryConfig.inventoryButtons &amp;&amp; (LocationAPI.isOnSkyBlock || screen is ButtonConfigScreen) }</ID>
     <ID>FunctionExpressionBody:IslandChestStorage.kt:IslandChestStorage${ return storage.get() ?: mutableListOf() }</ID>
@@ -162,6 +159,8 @@
     <ID>FunctionExpressionBody:StandardCraftHelperTree.kt:NormalCraftHelperRecipe${ return DefaultTreeResolver.resolve(this, resetLayout, clear) }</ID>
     <ID>FunctionExpressionBody:StorageItemSource.kt:{ return this.flatMap { (index, stacks) -&gt; val context = function(index + 1) stacks.map { stack -&gt; SimpleTrackedItem(stack, context) } } }</ID>
     <ID>FunctionExpressionBody:Utils.kt:Utils${ return (this * 2).roundToInt() / 2.0 }</ID>
+    <ID>FunctionExpressionBody:Utils.kt:Utils${ return loadFromRemoteRepo&lt;JsonElement&gt;(file).toDataOrThrow(SkyOceanCodecs.getCodec&lt;T&gt;().let(modifier)) }</ID>
+    <ID>FunctionExpressionBody:Utils.kt:Utils${ return loadFromRemoteRepo&lt;JsonElement&gt;(file).toDataOrThrow(supplier()) }</ID>
     <ID>FunctionExpressionBody:Utils.kt:Utils${ return loadFromRepo&lt;JsonElement&gt;(file).toDataOrThrow(SkyOceanCodecs.getCodec&lt;T&gt;().let(modifier)) }</ID>
     <ID>FunctionExpressionBody:Utils.kt:Utils${ return loadFromRepo&lt;JsonElement&gt;(file).toDataOrThrow(codec) }</ID>
     <ID>FunctionExpressionBody:Utils.kt:Utils${ return loadFromRepo&lt;JsonElement&gt;(file).toDataOrThrow(supplier()) }</ID>

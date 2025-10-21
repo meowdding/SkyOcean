@@ -5,10 +5,13 @@ import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.extensions.add
 import me.owdding.lib.extensions.applyToTooltip
 import me.owdding.lib.extensions.round
+import me.owdding.lib.repo.LevelingTreeNode
+import me.owdding.lib.repo.TreeRepoData
 import me.owdding.skyocean.config.features.mining.MiningConfig
-import me.owdding.skyocean.repo.HotmData
 import me.owdding.skyocean.utils.Utils.exclusiveInclusive
+import me.owdding.skyocean.utils.Utils.powderForInterval
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
+import me.owdding.skyocean.utils.Utils.totalPowder
 import me.owdding.skyocean.utils.tags.ItemTagKey
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
@@ -36,7 +39,7 @@ object HotmHelper {
         if (event.title != "Heart of the Mountain") return
         if (event.isInPlayerInventory) return
         if (event.item !in ItemTagKey.HOTM_PERK_ITEMS) return
-        val perkByName = HotmData.perkByName(event.item.cleanName) ?: return
+        val perkByName = TreeRepoData.hotmByName(event.item.cleanName) as? LevelingTreeNode ?: return
         val tooltipLines = event.item.getLore()
         val isLocked = event.item.item == Items.COAL
         val level = tooltipLines.firstOrNull()?.let {
@@ -80,6 +83,8 @@ object HotmHelper {
                 if (level != 0 && (MiningConfig.hotmDisplayTotalLeft || MiningConfig.hotmDisplayShiftCost) && !isLocked) {
                     listMerger.addBeforeNext({ it.stripped in listOf("ENABLED", "DISABLED") }) {
                         fun MutableList<Component>.add(levels: Int) {
+                            val name = perkByName.powderType.displayName ?: return
+                            val formatting = perkByName.powderType.formatting
                             add("Cost (") {
                                 append(levels.toFormattedString()) { this.color = TextColor.YELLOW }
                                 append(")")
@@ -87,8 +92,8 @@ object HotmHelper {
                             }
                             add(perkByName.powderForInterval(level exclusiveInclusive (level + levels)).toFormattedString()) {
                                 append(CommonComponents.SPACE)
-                                append(perkByName.powderType.displayName)
-                                this.withStyle(perkByName.powderType.formatting)
+                                append(name)
+                                this.withStyle(formatting)
                             }
                             add(CommonComponents.EMPTY)
                         }

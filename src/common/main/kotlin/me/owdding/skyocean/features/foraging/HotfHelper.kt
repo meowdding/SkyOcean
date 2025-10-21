@@ -5,10 +5,13 @@ import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.extensions.add
 import me.owdding.lib.extensions.applyToTooltip
 import me.owdding.lib.extensions.round
+import me.owdding.lib.repo.LevelingTreeNode
+import me.owdding.lib.repo.TreeRepoData
 import me.owdding.skyocean.config.features.foraging.ForagingConfig
-import me.owdding.skyocean.repo.HotfData
 import me.owdding.skyocean.utils.Utils.exclusiveInclusive
+import me.owdding.skyocean.utils.Utils.powderForInterval
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
+import me.owdding.skyocean.utils.Utils.totalPowder
 import me.owdding.skyocean.utils.tags.ItemModelTagKey
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
@@ -39,7 +42,7 @@ object HotfHelper {
         if (event.title != "Heart of the Forest") return
         if (event.isInPlayerInventory) return
         if (event.item !in ItemModelTagKey.HOTM_PERK_ITEMS) return
-        val perkByName = HotfData.perkByName(event.item.cleanName) ?: return
+        val perkByName = TreeRepoData.hotfByName(event.item.cleanName) as? LevelingTreeNode ?: return
         val tooltipLines = event.item.getLore()
         val isLocked = event.item.getItemModel() == Items.PALE_OAK_BUTTON
         val level = tooltipLines.firstOrNull()?.stripped?.substringBefore("/")?.filter { c -> c.isDigit() }?.toInt() ?: 1
@@ -78,6 +81,8 @@ object HotfHelper {
                 if (level != 0 && (config.hotfDisplayTotalLeft || config.hotfDisplayShiftCost) && !isLocked) {
                     listMerger.addBeforeNext({ it.stripped in listOf("ENABLED", "DISABLED") }) {
                         fun MutableList<Component>.add(levels: Int) {
+                            val name = perkByName.powderType.displayName ?: return
+                            val formatting = perkByName.powderType.formatting
                             add("Cost (") {
                                 append(levels.toFormattedString()) { this.color = TextColor.YELLOW }
                                 append(")")
@@ -85,8 +90,8 @@ object HotfHelper {
                             }
                             add(perkByName.powderForInterval(level exclusiveInclusive (level + levels)).toFormattedString()) {
                                 append(CommonComponents.SPACE)
-                                append(perkByName.powderType.displayName)
-                                this.withStyle(perkByName.powderType.formatting)
+                                append(name)
+                                this.withStyle(formatting)
                             }
                             add(CommonComponents.EMPTY)
                         }

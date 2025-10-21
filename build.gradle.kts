@@ -1,8 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 @file:OptIn(ExperimentalPathApi::class)
 
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import earth.terrarium.cloche.api.metadata.FabricMetadata
@@ -25,7 +23,6 @@ plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.terrarium.cloche)
     alias(libs.plugins.meowdding.resources)
-    alias(libs.plugins.meowdding.repo)
     alias(libs.plugins.kotlin.symbol.processor)
     alias(libs.plugins.detekt)
     alias(libs.plugins.meowdding.gradle)
@@ -177,6 +174,7 @@ cloche {
                 implementation(olympus)
                 implementation(rconfig)
                 implementation(rlib)
+                compileOnly(libs.meowdding.remote.repo)
 
                 include(libs.resourceful.config.kotlin) { isTransitive = false }
                 include(libs.keval) { isTransitive = false }
@@ -263,8 +261,6 @@ compactingResources {
         configureTask(this)
     }
 
-    substituteFromDifferentFile("mining/shaft_corpses", "shaft_corpses")
-    compactToArray("recipes")
     removeComments("unobtainable_ids")
     downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/dyes.json", "dyes.json")
     downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/animatedskulls.json", "skulls.json")
@@ -272,30 +268,6 @@ compactingResources {
         "https://raw.githubusercontent.com/Campionnn/SkyShards-Parser/55483450ff83e1bf1e453f31797cedb08b0c2733/shard-data.json",
         "skyshards_data.json"
     )
-}
-
-repo {
-    val predicate: (JsonElement) -> Boolean = {
-        when (it) {
-            is JsonObject -> it.size() > 1
-            else -> true
-        }
-    }
-    hotm {
-        excludeAllExcept {
-            name()
-            cost()
-        }
-        withPredicate(predicate)
-    }
-    hotf {
-        excludeAllExcept {
-            name()
-            cost()
-        }
-        withPredicate(predicate)
-    }
-    sacks { includeAll() }
 }
 
 tasks {

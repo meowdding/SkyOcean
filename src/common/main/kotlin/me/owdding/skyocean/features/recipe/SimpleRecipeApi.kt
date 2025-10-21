@@ -1,39 +1,22 @@
 package me.owdding.skyocean.features.recipe
 
+import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.extensions.addAll
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockItemId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import me.owdding.skyocean.features.recipe.RepoApiRecipe as RepoApiRecipeWrapper
 import tech.thatgravyboat.repolib.api.recipes.Recipe as RepoApiRecipe
-
-private val illegalIngredients = listOf(
-    "DIAMOND_BLOCK",
-    "IRON_BLOCK",
-    "EMERALD_BLOCK",
-    "COAL_BLOCK",
-    "REDSTONE_BLOCK",
-    "GOLD_BLOCK",
-    "LAPIS_BLOCK",
-    "HAY_BLOCK",
-    "SLIME_BLOCK",
-    "LEATHER",
-    "BLAZE_POWDER",
-    "MAGMA_CREAM",
-    "STICK",
-    "WOOD_SWORD",
-    "WOOD_PICKAXE",
-    "WOOD_SPADE",
-    "WOOD_HOE",
-    "WOOD_AXE",
-    "FISHING_ROD",
-    "GOLDEN_CARROT",
-    "JACK_O_LANTERN",
-)
 
 @LateInitModule
 object SimpleRecipeApi {
@@ -44,10 +27,19 @@ object SimpleRecipeApi {
         RepoApiRecipe.Type.KAT to RecipeType.KAT,
     )
 
-    internal val recipes = mutableListOf<Recipe>()
-    internal val idToRecipes: MutableMap<SkyBlockId, List<Recipe>> = mutableMapOf()
+    internal val illegalIngredients = CopyOnWriteArrayList<SkyBlockItemId>()
+    internal val recipes = CopyOnWriteArrayList<Recipe>()
+    internal val idToRecipes: MutableMap<SkyBlockId, List<Recipe>> = ConcurrentHashMap()
 
-    init {
+    @Subscription(FinishRepoLoadingEvent::class)
+    fun onRepoLoad() {
+        recipes.clear()
+        idToRecipes.clear()
+        illegalIngredients.clear()
+
+        illegalIngredients.addAll(Utils.loadRemoteRepoData("skyocean/illegal_ingredients", CodecUtils::list))
+        SkyOcean.debug("Loaded ${illegalIngredients.size} illegal ingredients")
+
         supportedTypes.forEach { (recipe, type) ->
             recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe ->
                 RepoApiRecipeWrapper(
@@ -59,18 +51,17 @@ object SimpleRecipeApi {
         recipes.removeIf {
             isBlacklisted(it).apply {
                 if (this) {
-                    SkyOcean.debug(
+                    SkyOcean.trace(
                         "Removing ${it.output?.skyblockId} with ${it.inputs.size} ingredients",
                     )
                 }
             }
         }
 
-        SkyOcean.trace("Loaded ${recipes.size} Recipes from repo api")
-        val extraRecipes = Utils.loadRepoData("recipes", SkyOceanCodecs.CustomRecipeCodec.codec().listOf())
-        recipes.addAll(extraRecipes)
-
-        SkyOcean.trace("Loaded ${extraRecipes.size} extra from local repo")
+        SkyOcean.debug("Loaded ${recipes.size} Recipes from repo api")
+        val extra = Utils.loadRemoteRepoData("skyocean/recipes", SkyOceanCodecs.CustomRecipeCodec.codec().listOf())
+        recipes.addAll(extra)
+        SkyOcean.debug("Loaded ${extra?.size ?: 0} extra from remote repo, new total is ${recipes.size}")
 
         rebuildRecipes()
 
@@ -81,7 +72,7 @@ object SimpleRecipeApi {
                     addAll(it.inputs)
                 }.filterIsInstance<ItemLikeIngredient>()
             }.distinct().onEach { it.itemName }.count()
-            SkyOcean.trace("Preloaded $amount items")
+            SkyOcean.debug("Preloaded $amount items")
         }
     }
 
@@ -117,12 +108,12 @@ object SimpleRecipeApi {
 
     fun isBlacklisted(recipe: Recipe): Boolean {
         val inputs = recipe.inputs
-        val itemInputs = inputs.filterIsInstance<ItemLikeIngredient>().map { it.skyblockId }.distinct()
+        val itemInputs = inputs.filterIsInstance<ItemLikeIngredient>().map { it.id }.distinct()
         if (inputs.size == itemInputs.size && itemInputs.size == 1 && illegalIngredients.containsAll(itemInputs)) {
             return true
         }
 
-        return illegalIngredients.contains(recipe.output?.skyblockId)
+        return illegalIngredients.contains(recipe.output?.id)
     }
 
     fun <K> MutableMap<K, Ingredient>.addOrPut(key: K, ingredient: Ingredient): Ingredient =

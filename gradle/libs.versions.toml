@@ -16,12 +16,12 @@ rconfigkt = "3.5.15"
 
 detekt = "2.0.0-alpha.0"
 
-meowdding-lib = "3.0.3"
-meowdding-repo = "1.0.18"
+meowdding-lib = "3.0.12"
 meowdding-resources = "1.0.15"
 meowdding-ktmodules = "1.0.5"
 meowdding-ktcodecs = "1.0.32"
 meowdding-gradle = "1.1.0"
+meowdding-remote-repo = "1.0.4"
 
 terrarium-cloche = "0.13.5"
 
@@ -49,6 +49,7 @@ olympus-lib1218 = { module = "earth.terrarium.olympus:olympus-fabric-1.21.7", ve
 olympus-lib1219 = { module = "earth.terrarium.olympus:olympus-fabric-1.21.9", version = "1.6.1" }
 
 meowdding-lib = { module = "me.owdding.meowdding-lib:meowdding-lib", version.ref = "meowdding-lib" }
+meowdding-remote-repo = { module = "me.owdding.repo:remote-repo", version.ref = "meowdding-remote-repo" }
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
@@ -60,7 +61,6 @@ detekt-ktlintWrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", vers
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 terrarium-cloche = { id = "earth.terrarium.cloche", version.ref = "terrarium-cloche" }
 meowdding-resources = { id = "me.owdding.resources" }
-meowdding-repo = { id = "me.owdding.repo", version.ref = "meowdding-repo" }
 meowdding-gradle = { id = "me.owdding.gradle", version.ref = "meowdding-gradle" }
 kotlin-symbol-processor = { id = "com.google.devtools.ksp", version.ref = "kotlin-symbol-processor" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
