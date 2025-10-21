@@ -14,17 +14,17 @@ import java.util.concurrent.atomic.AtomicReference
 @PreInitModule
 object SackData {
     val sackRegex = Regex("(LARGE|MEDIUM|SMALL)_")
-    fun normalizedSackId(id: String) = id.replace(sackRegex, "")
-
     private val _data = AtomicReference<List<Sack>>()
     val data: List<Sack> get() = _data.get()
+
+    fun normalizedSackId(id: String) = id.replace(sackRegex, "")
+
+    fun getByNormalizedId(id: String) = data.find { it.normalizedId == id }
 
     @Subscription(FinishRepoLoadingEvent::class)
     fun onRepoLoad() {
         _data.set(Utils.loadRemoteRepoData("sacks", SkyOceanCodecs.SackCodec.codec().listOf()))
     }
-
-    fun getByNormalizedId(id: String) = data.find { it.normalizedId == id }
 
     @GenerateCodec
     data class Sack(

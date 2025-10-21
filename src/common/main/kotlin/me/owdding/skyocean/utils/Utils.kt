@@ -23,6 +23,8 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.Utils.add
+import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags
@@ -176,9 +178,7 @@ object Utils {
     internal fun <B : Any> loadRepoData(file: String, codec: Codec<B>): B {
         return loadFromRepo<JsonElement>(file).toDataOrThrow(codec)
     }
-    internal inline fun <reified T : Any> loadRemoteRepoData(file: String): T {
-        return loadRemoteRepoData<T, T>(file) { it }
-    }
+    internal inline fun <reified T : Any> loadRemoteRepoData(file: String): T = loadRemoteRepoData<T, T>(file) { it }
 
     internal inline fun <reified T : Any, B : Any> loadRemoteRepoData(file: String, modifier: (Codec<T>) -> Codec<B>): B {
         return loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(SkyOceanCodecs.getCodec<T>().let(modifier))
@@ -188,9 +188,7 @@ object Utils {
         return loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(supplier())
     }
 
-    internal fun <B : Any> loadRemoteRepoData(file: String, codec: Codec<B>): B {
-        return loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(codec)
-    }
+    internal fun <B : Any> loadRemoteRepoData(file: String, codec: Codec<B>): B = loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(codec)
 
     val ItemLike.id get() = BuiltInRegistries.ITEM.getKey(this.asItem())
 
