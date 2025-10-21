@@ -47,10 +47,16 @@ object CorpseWaypoint {
 
     @Subscription(FinishRepoLoadingEvent::class)
     fun onRepoLoad() {
-        mineshaftCorpses.putAll(
-            Utils.loadRemoteRepoData("mining/mineshaft_corpses", CODEC).filterKeysNotNull().map { (k, v) -> k to v.filterKeysNotNull() }
-                .toMap(),
-        )
+        runCatching {
+            mineshaftCorpses.putAll(
+                Utils.loadRemoteRepoData("mining/mineshaft_corpses", CODEC)
+                    .filterKeysNotNull()
+                    .map { (k, v) -> k to v.filterKeysNotNull() }
+                    .toMap(),
+            )
+        }.onFailure {
+            SkyOcean.error("Failed to load corpse data from remote repo!", it)
+        }
     }
 
     @Subscription

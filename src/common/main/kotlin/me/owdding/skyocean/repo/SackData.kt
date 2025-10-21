@@ -2,6 +2,7 @@ package me.owdding.skyocean.repo
 
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.lib.events.FinishRepoLoadingEvent
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.PreInitModule
 import me.owdding.skyocean.utils.Utils
@@ -23,7 +24,11 @@ object SackData {
 
     @Subscription(FinishRepoLoadingEvent::class)
     fun onRepoLoad() {
-        _data.set(Utils.loadRemoteRepoData("sacks", SkyOceanCodecs.SackCodec.codec().listOf()))
+        runCatching {
+            _data.set(Utils.loadRemoteRepoData("sacks", SkyOceanCodecs.SackCodec.codec().listOf()))
+        }.onFailure {
+            SkyOcean.error("Failed to load sack data from remote repo!", it)
+        }
     }
 
     @GenerateCodec
