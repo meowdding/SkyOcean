@@ -23,8 +23,6 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.Utils.add
-import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags
