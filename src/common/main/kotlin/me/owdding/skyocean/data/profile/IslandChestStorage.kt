@@ -38,6 +38,11 @@ object IslandChestStorage {
         this.storage.get()?.add(ChestItem(item, slot, pos1, pos2))
     }
 
+    fun clear() {
+        this.storage.get()?.clear()
+        save()
+    }
+
     fun save() {
         this.storage.save()
     }

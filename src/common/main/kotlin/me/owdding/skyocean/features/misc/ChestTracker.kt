@@ -3,7 +3,9 @@ package me.owdding.skyocean.features.misc
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.data.profile.IslandChestStorage
+import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.utils.Utils.plus
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.tags.BlockTagKey
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -23,6 +25,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
 @Module
@@ -113,6 +116,14 @@ object ChestTracker {
         IslandChestStorage.save()
         resetCoords()
         ChestTracker.container = null
+    }
+
+    @Subscription
+    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+        event.register("reset islandchests") {
+            IslandChestStorage.clear()
+            Text.of("Successfully cleared all island chests!").sendWithPrefix()
+        }
     }
 
     private val Slot.savableIndex get() = this.index % 27
