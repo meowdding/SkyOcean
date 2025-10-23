@@ -120,7 +120,7 @@ object ChestTracker {
 
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
-        event.register("reset islandchests") {
+        event.registerWithCallback("reset islandchests") {
             IslandChestStorage.clear()
             Text.of("Successfully cleared all island chests!").sendWithPrefix()
         }
