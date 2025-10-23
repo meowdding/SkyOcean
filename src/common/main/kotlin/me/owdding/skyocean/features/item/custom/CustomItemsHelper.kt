@@ -3,15 +3,23 @@ package me.owdding.skyocean.features.item.custom
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation
 import me.owdding.skyocean.features.item.custom.CustomItems.get
 import me.owdding.skyocean.features.item.custom.CustomItems.getCustomData
+import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.CustomItems.getStaticCustomData
 import me.owdding.skyocean.features.item.custom.CustomItems.getVanillaIntegrationData
 import me.owdding.skyocean.features.item.custom.data.CustomItemData
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.IdKey
+import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
+import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.Utils.unsafeCast
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.OceanColors
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object CustomItemsHelper {
 
@@ -41,4 +49,24 @@ object CustomItemsHelper {
     @JvmStatic
     fun getColor(itemStack: ItemStack) = getCustomData(itemStack)?.let { it[CustomItemDataComponents.COLOR]?.getColor(itemStack) }
 
+    fun tryAndOpenCustomizationUi(item: ItemStack) {
+        if (item.getKey() == null) {
+            text {
+                append(item.hoverName)
+                append(" can't be customized!")
+            }.sendWithPrefix()
+            return
+        }
+
+        if (item.getKey() is IdKey) {
+            text {
+                append("Modification will be visible on all variants of this item!")
+                this.color = OceanColors.WARNING
+            }.sendWithPrefix()
+        }
+
+        McClient.runNextTick {
+            StandardCustomizationUi.open(item)
+        }
+    }
 }

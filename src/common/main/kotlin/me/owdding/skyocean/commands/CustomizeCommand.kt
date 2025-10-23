@@ -9,9 +9,8 @@ import me.owdding.lib.rendering.text.textShader
 import me.owdding.skyocean.events.ArgumentCommandBuilder
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
-import me.owdding.skyocean.features.item.custom.CustomItems.getKey
+import me.owdding.skyocean.features.item.custom.CustomItemsHelper
 import me.owdding.skyocean.features.item.custom.data.*
-import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.repo.customization.AnimatedSkulls
 import me.owdding.skyocean.repo.customization.DyeData
@@ -58,24 +57,7 @@ object CustomizeCommand {
                     return@callback
                 }
 
-                if (item.getKey() == null) {
-                    text {
-                        append(item.hoverName)
-                        append(" can't be customized!")
-                    }.sendWithPrefix()
-                    return@callback
-                }
-
-                if (item.getKey() is IdKey) {
-                    text {
-                        append("Modification will be visible on all variants of this item!")
-                        this.color = OceanColors.WARNING
-                    }.sendWithPrefix()
-                }
-
-                McClient.runNextTick {
-                    StandardCustomizationUi.open(item)
-                }
+                CustomItemsHelper.tryAndOpenCustomizationUi(item)
             }
 
             then("reset") {
