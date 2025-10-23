@@ -98,11 +98,11 @@ object ItemSearchScreen : SkyOceanScreen() {
     }
 
     override fun init() {
+        if (SkyBlockIsland.THE_RIFT.inIsland()) this.category = SearchCategory.RIFT
+
         if (requireRebuild) {
             rebuildItems()
         }
-
-        if (SkyBlockIsland.THE_RIFT.inIsland()) this.category = SearchCategory.RIFT
 
         super.init()
         val width = widgetWidth
