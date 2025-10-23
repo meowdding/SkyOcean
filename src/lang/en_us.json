@@ -350,6 +350,10 @@
             "@value": "Enable Craft Helper",
             "desc": "Whether the craft helper is enabled or not, this is the main switch."
           },
+          "quick_set": {
+            "@value": "Quick Set Crafthelper Item",
+            "desc": "Adds a clickable item into multiple different screens like recipe, forge, visitors, ... to quickly add the item into the crafthelper."
+          },
           "hideCompleted": {
             "@value": "Hide completed",
             "desc": "Whether to hide completed parts of the tree or not."

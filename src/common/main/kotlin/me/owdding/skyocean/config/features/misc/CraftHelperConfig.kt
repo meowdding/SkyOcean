@@ -12,6 +12,10 @@ object CraftHelperConfig : CategoryKt("crafthelper") {
         translation = "skyocean.config.misc.crafthelper.enabled"
     }
 
+    var quickSet by boolean(true) {
+        translation = "skyocean.config.misc.crafthelper.quick_set"
+    }
+
     var hideCompleted by boolean(true) {
         translation = "skyocean.config.misc.crafthelper.hideCompleted"
     }
