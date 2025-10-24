@@ -43,6 +43,8 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
         name("null")
     }
 
+    val shouldAddCraftHelperModifier = CraftHelperConfig.enabled && CraftHelperConfig.quickSet && skyblockId != null
+
     val sizes = mapOf(
         1 to listOf(10),
         2 to listOf(10, 11),
@@ -70,7 +72,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
                 add(index, item)
             }
 
-            if (CraftHelperConfig.enabled && skyblockId != null) {
+            if (shouldAddCraftHelperModifier) {
                 add(32, Items.DIAMOND_PICKAXE) {
                     add(
                         Text.join(ChatUtils.ICON_SPACE_COMPONENT, "Craft Helper") {
@@ -116,7 +118,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
         }.build()
 
         addItems(items)
-        if (CraftHelperConfig.enabled) {
+        if (shouldAddCraftHelperModifier) {
             slots[32].onClick = {
                 CraftHelperStorage.setSelected(skyblockId)
                 McScreen.self?.onClose()

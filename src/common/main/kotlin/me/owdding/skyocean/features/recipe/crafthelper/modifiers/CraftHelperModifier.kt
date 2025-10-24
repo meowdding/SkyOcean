@@ -56,7 +56,7 @@ object CraftHelperModifiers {
 
     @Subscription
     private fun InventoryChangeEvent.onInventory() {
-        if (!CraftHelperConfig.enabled) return
+        if (!CraftHelperConfig.enabled || !CraftHelperConfig.quickSet) return
         modifiers.forEach { it.tryModify(this) }
     }
 }
