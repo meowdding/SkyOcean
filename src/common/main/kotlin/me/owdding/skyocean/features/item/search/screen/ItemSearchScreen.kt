@@ -38,6 +38,7 @@ import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
@@ -97,6 +98,8 @@ object ItemSearchScreen : SkyOceanScreen() {
     }
 
     override fun init() {
+        if (SkyBlockIsland.THE_RIFT.inIsland()) this.category = SearchCategory.RIFT
+
         if (requireRebuild) {
             rebuildItems()
         }
