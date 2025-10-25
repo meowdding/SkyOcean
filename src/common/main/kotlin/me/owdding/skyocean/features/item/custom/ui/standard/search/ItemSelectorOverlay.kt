@@ -46,7 +46,6 @@ class ItemSelectorOverlay(
                     bounds.width,
                     Ints.min(
                         layout.height,
-                        this.height - (bounds.y + bounds.height) - 4,
                         10 * 16,
                     ),
                 )
@@ -64,8 +63,10 @@ class ItemSelectorOverlay(
         Widgets.textInput(query) {
             it.withSize(bounds.width, bounds.height)
             it.withPosition(bounds.x, bounds.y)
-            it.isFocused = true
-        }.let(this::addRenderableWidget)
+        }.also {
+            addRenderableWidget(it)
+            focused = it
+        }
 
         this.addRenderableWidget(this.entries)
         update(query.get())
