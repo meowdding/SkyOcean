@@ -13,7 +13,6 @@ import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderBox
 import net.minecraft.core.BlockPos
 import net.minecraft.util.ARGB
-import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.InventoryTitle
@@ -29,7 +28,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
-import tech.thatgravyboat.skyblockapi.mixins.accessors.ContainerScreenAccessor
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import java.util.concurrent.CopyOnWriteArrayList
