@@ -25,6 +25,8 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.PRIVATE_ISLAND
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.PlayerStorageInstance
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
@@ -92,6 +94,23 @@ object ItemHighlighter {
 
         if (sack.containingItems.any { filter.test(it) }) {
             event.item.highlight()
+        }
+    }
+
+    // TODO: add support for Sack/Storage highlighting when recalculating
+    fun recalculate() {
+        val filter = currentSearch ?: return
+        McPlayer.inventory.forEach {
+            if (filter.test(it)) it.highlight()
+        }
+        val menu = McScreen.asMenu ?: return
+        val slots = menu.menu.slots
+        for (slot in slots) {
+            val item = slot.item
+            if (filter.test(item)) {
+                item.highlight()
+                continue
+            }
         }
     }
 
