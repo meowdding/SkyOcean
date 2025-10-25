@@ -34,6 +34,7 @@ object ItemHighlightKeybind {
             IslandChestStorage.getItems().filter { filter.test(it.itemStack) }.flatMap { (_, _, pos1, pos2) ->
                 listOfNotNull(pos1, pos2)
             }.distinct().let(ItemHighlighter::addChests)
+            ItemHighlighter.recalculate()
         }
     }
 
