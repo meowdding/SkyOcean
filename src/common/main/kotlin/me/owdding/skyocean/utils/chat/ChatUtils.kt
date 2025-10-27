@@ -71,7 +71,7 @@ object ComponentIcons {
 
 internal object Icons {
 
-    const val WAVE = "\uD83C\uDF0A"
+    const val WAVE = "🌊"
 
     const val CHECKMARK = "\u2714"
     const val CROSS = "\u274C"
@@ -95,11 +95,11 @@ internal object ChatUtils {
     const val ICON_WITH_SPACE = "$ICON "
     const val SPACE_WITH_ICON = " $ICON"
     const val DARK_OCEAN_BLUE = OceanColors.DARK_CYAN_BLUE
-    val ICON_COMPONENT = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
-    val ICON_SPACE_COMPONENT = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
-    val SPACE_ICON_COMPONENT = Text.of(SPACE_WITH_ICON) { this.color = DARK_OCEAN_BLUE }
+    val ICON_COMPONENT: Component = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
+    val ICON_SPACE_COMPONENT: Component = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
+    val SPACE_ICON_COMPONENT: Component = Text.of(SPACE_WITH_ICON) { this.color = DARK_OCEAN_BLUE }
 
-    val prefixDelegate = CachedValue {
+    val prefixDelegate = CachedValue<Component> {
         Text.of {
             append("[")
             append("SkyOcean") {
@@ -113,7 +113,7 @@ internal object ChatUtils {
             this.color = TextColor.GRAY
         }.withPotentialShadow()
     }
-    val prefix: MutableComponent by prefixDelegate
+    val prefix: Component by prefixDelegate
 
     fun MutableComponent.withPotentialShadow(): MutableComponent {
         return if (Config.disableMessageTextShadow) {

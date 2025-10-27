@@ -5,43 +5,108 @@ import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.extensions.add
 import me.owdding.lib.extensions.applyToTooltip
 import me.owdding.lib.extensions.round
-import me.owdding.lib.repo.LevelingTreeNode
-import me.owdding.lib.repo.TreeRepoData
+import me.owdding.lib.repo.*
+import me.owdding.lib.repo.PowderType.*
 import me.owdding.skyocean.config.features.mining.MiningConfig
+import me.owdding.skyocean.data.profile.PerkUpgradeStorage
 import me.owdding.skyocean.utils.Utils.exclusiveInclusive
 import me.owdding.skyocean.utils.Utils.powderForInterval
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.Utils.totalPowder
+import me.owdding.skyocean.utils.chat.ChatUtils
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.tags.ItemTagKey
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
+import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
+import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
+import tech.thatgravyboat.skyblockapi.api.profile.hotm.HotmAPI
+import tech.thatgravyboat.skyblockapi.api.profile.hotm.PowderAPI
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.extentions.enumMapOf
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
+import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
+import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
 
+// TODO: merge hotm helper and hotf helper into one, or abstract them out
 @Module
 object HotmHelper {
 
-    @Subscription
+    private val reminders get() = PerkUpgradeStorage.hotm
+    private val cachedPerkCost = enumMapOf<PowderType, Int>()
+
+    private fun getNextLevelCost(perkName: String): Int? {
+        val perk = TreeRepoData.hotmByName(perkName) as? LevelingTreeNode ?: return null
+        val level = HotmAPI.perks[perkName]?.level ?: return null
+        return perk.costForLevel(level + 1).second
+    }
+
+    // The reminded perks are different per profile and the levels are different, meaning that the cache needs to be updated
+    @Subscription(ProfileChangeEvent::class)
+    fun onProfileChange() = cachedPerkCost.clear()
+
+    @Subscription(TickEvent::class)
+    @TimePassed("1s")
     @OnlyOnSkyBlock
-    fun onInventoryUpdate(event: InventoryChangeEvent) {
-        if (!MiningConfig.hotmDisplayTotalLeft && !MiningConfig.hotmDisplayShiftCost && !MiningConfig.hotmTotalProgress && !MiningConfig.hotmStackSize) return
-        if (event.title != "Heart of the Mountain") return
-        if (event.isInPlayerInventory) return
-        if (event.item !in ItemTagKey.HOTM_PERK_ITEMS) return
-        val perkByName = TreeRepoData.hotmByName(event.item.cleanName) as? LevelingTreeNode ?: return
-        val tooltipLines = event.item.getLore()
-        val isLocked = event.item.item == Items.COAL
+    fun onTick() {
+        val reminders = reminders
+        // If there's a perk we dont have the cost for, recalculate the cost
+        if (reminders.keys != cachedPerkCost.keys) {
+            reminders.forEach { (powder, perkName) ->
+                val cost = getNextLevelCost(perkName) ?: return@forEach
+                cachedPerkCost[powder] = cost
+            }
+        }
+        val powders = cachedPerkCost.filter { (powder, needed) ->
+            val current = powder.getCurrentAmount() ?: return@filter false
+            current >= needed
+        }.keys
+        if (powders.isEmpty()) return
+        val perks = reminders.filterKeys { it in powders }
+        // We remove the perks even if you have the feature disabled
+        powders.forEach {
+            PerkUpgradeStorage.remove(it)
+            cachedPerkCost.remove(it)
+        }
+        if (!MiningConfig.hotmReminder) return
+        perks.forEach { (type, perk) ->
+            Text.of {
+                append("You have enough ")
+                append(type.displayName)
+                append(" to upgrade your $perk perk!")
+
+
+                hover = Text.of("Click to open the Hotm menu")
+                onClick {
+                    McClient.sendCommand("hotm")
+                }
+            }.sendWithPrefix()
+        }
+    }
+
+    private fun tryReplaceItem(item: ItemStack) {
+        val perkName = item.cleanName
+        val perkByName = TreeRepoData.hotmByName(perkName) as? LevelingTreeNode ?: return
+        val tooltipLines = item.getLore()
+        val isLocked = item.item == Items.COAL
+        val notEnoughPowder = tooltipLines.any { it.stripped.startsWith("you don't have enough ", true) }
         val level = tooltipLines.firstOrNull()?.let {
             val isBoosted = it.siblings.any { sibling -> sibling.style.color?.serialize() == "aqua" }
             val level = it.stripped.substringBefore("/").filter { c -> c.isDigit() }.toInt()
@@ -52,7 +117,7 @@ object HotmHelper {
             return
         }
 
-        event.item.skyoceanReplace {
+        item.skyoceanReplace {
             if (MiningConfig.hotmStackSize && !isLocked) {
                 customSlotText = level.toString()
             }
@@ -114,8 +179,65 @@ object HotmHelper {
                 }
 
                 listMerger.addRemaining()
+                if (!perkByName.isMaxed(level) && !isLocked && MiningConfig.hotmReminder && notEnoughPowder) run {
+                    val (costType, amount) = perkByName.costForLevel(level + 1)
+                    if (costType.type != CostTypes.POWDER) return@run
+                    val powderType = (costType as PowderCostType).powderType
+                    val currentPerk = reminders[powderType]
+                    if (currentPerk != perkName) {
+                        Text.of {
+                            append(ChatUtils.ICON_SPACE_COMPONENT)
+                            append("Click to set a reminder when you", OceanColors.SKYOCEAN_BLUE)
+                            append(CommonText.NEWLINE)
+                            append("have enough powder to buy this perk!", OceanColors.SKYOCEAN_BLUE)
+                        }.splitLines().forEach(listMerger::add)
+                        this@skyoceanReplace.onClick {
+                            PerkUpgradeStorage[powderType] = perkName
+                            cachedPerkCost[powderType] = amount
+                            // This is needed so that the lore gets updated when we toggle the reminder
+                            tryReplaceItem(item)
+                        }
+                    } else {
+                        Text.of {
+                            append(ChatUtils.ICON_SPACE_COMPONENT)
+                            append("Click to remove reminder!", OceanColors.SKYOCEAN_BLUE)
+                        }.let(listMerger::add)
+
+                        backgroundItem = Items.BLUE_STAINED_GLASS_PANE.defaultInstance
+
+                        this@skyoceanReplace.onClick {
+                            PerkUpgradeStorage.remove(powderType)
+                            cachedPerkCost.remove(powderType)
+                            tryReplaceItem(item)
+                        }
+                    }
+                }
                 listMerger.applyToTooltip(this)
             }
         }
+    }
+
+    @Subscription
+    @OnlyOnSkyBlock
+    fun onInventoryUpdate(event: InventoryChangeEvent) {
+        if (!MiningConfig.hotmDisplayTotalLeft &&
+            !MiningConfig.hotmDisplayShiftCost &&
+            !MiningConfig.hotmTotalProgress &&
+            !MiningConfig.hotmStackSize &&
+            !MiningConfig.hotmReminder
+        ) return
+        if (event.title != "Heart of the Mountain") return
+        if (event.isInPlayerInventory) return
+        if (event.item !in ItemTagKey.HOTM_PERK_ITEMS) return
+        tryReplaceItem(event.item)
+    }
+
+    // We default to null even if the `when` statement is currently exhaustive, since hypixel could add more powder types in the future
+    @Suppress("REDUNDANT_ELSE_IN_WHEN")
+    private fun PowderType.getCurrentAmount(): Long? = when (this) {
+        MITHRIL -> PowderAPI.mithril
+        GEMSTONE -> PowderAPI.gemstone
+        GLACITE -> PowderAPI.glacite
+        else -> null
     }
 }
