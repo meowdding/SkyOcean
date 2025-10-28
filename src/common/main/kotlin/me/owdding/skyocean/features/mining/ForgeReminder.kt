@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.mining
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.helpers.CooldownHelper
+import me.owdding.skyocean.utils.CommonColors
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.extensions.joinToComponent
 import me.owdding.skyocean.utils.extensions.nullIfEmpty
@@ -49,7 +50,7 @@ object ForgeReminder {
                 }
             }
 
-            Text.join(Text.translatable("skyocean.config.mining.forge_reminder"), " | ", items, clickToWarp).sendWithPrefix("SKYOCEAN_FORGE_REMINDER")
+            Text.join(Text.translatable("skyocean.config.mining.forge_reminder"), Text.of(" | ", CommonColors.SEPARATOR), items, clickToWarp).sendWithPrefix("SKYOCEAN_FORGE_REMINDER")
         },
     )
 
