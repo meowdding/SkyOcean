@@ -49,6 +49,10 @@ object MiningConfig : CategoryKt("mining") {
         translation = "skyocean.config.mining.hotm.totalLeft"
     }
 
+    var hotmReminder by boolean(true) {
+        translation = "skyocean.config.mining.hotm.reminder"
+    }
+
     init {
         separator("skyocean.config.mining.metal_detector")
     }

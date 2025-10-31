@@ -161,6 +161,10 @@
           "totalLeft": {
             "@value": "Show total amount left",
             "desc": "Displays the total amount that is still required to max a perk."
+          },
+          "reminder": {
+            "@value": "Reminder",
+            "desc": "Lets you add reminders for when you have enough powder to buy a perk."
           }
         },
         "ch": {
@@ -716,6 +720,10 @@
           "totalLeft": {
             "@value": "Show total amount left",
             "desc": "Displays the total amount that is still required to max a perk."
+          },
+          "reminder": {
+            "@value": "Reminder",
+            "desc": "Lets you add reminders for when you have enough whispers to buy a perk."
           }
         },
         "galatea": {
