@@ -12,8 +12,6 @@ import net.minecraft.world.item.equipment.Equippable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import java.util.Objects;
-
 @Mixin(HumanoidArmorLayer.class)
 public class HumanoidArmorLayerMixin {
 
@@ -22,7 +20,11 @@ public class HumanoidArmorLayerMixin {
         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;shouldRender(Lnet/minecraft/world/item/equipment/Equippable;Lnet/minecraft/world/entity/EquipmentSlot;)Z")
     )
     private static boolean replaceArmorTrim(Equippable equippable, EquipmentSlot slot, Operation<Boolean> original, @Local(argsOnly = true) ItemStack stack) {
-        equippable = Objects.requireNonNullElse(CustomItemsHelper.getData(stack, DataComponents.EQUIPPABLE), equippable);
-        return original.call(equippable, slot) && CustomItemsHelper.getData(stack, DataComponents.PROFILE) == null;
+        var state = CustomItemsHelper.getEquippableState(stack);
+        return switch (state.getState()) {
+            case DEFAULT -> original.call(equippable, slot) && CustomItemsHelper.getData(stack, DataComponents.PROFILE) == null;
+            case TRUE -> original.call(state.getEquippable(), slot);
+            case FALSE -> false;
+        };
     }
 }
