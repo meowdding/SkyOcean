@@ -11,7 +11,7 @@ import net.minecraft.world.item.equipment.Equippable
  */
 data class EquippableModelState(
     val state: TriState,
-    val equippable: Equippable?
+    val equippable: Equippable?,
 ) {
 
     companion object {
