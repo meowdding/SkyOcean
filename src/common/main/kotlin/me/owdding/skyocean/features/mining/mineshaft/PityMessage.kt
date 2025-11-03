@@ -46,7 +46,7 @@ object PityMessage {
                 Text.of(lastPity.toString(), OceanColors.HIGHLIGHT),
                 Text.of("/", OceanColors.SEPARATOR),
                 Text.of(maxPity.toString(), OceanColors.HIGHLIGHT),
-                " Pity!"
+                " Pity!",
             ) {
                 color = OceanColors.BASE_TEXT
                 hover = Text.of("±10, Hypixel updates the Tablist every 3 seconds.").withColor(TextColor.PINK)

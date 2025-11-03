@@ -55,7 +55,7 @@ object ForgeReminder {
                 Text.translatable("skyocean.config.mining.forge_reminder"),
                 ChatUtils.SEPERATOR_COMPONENT,
                 items,
-                clickToWarp
+                clickToWarp,
             ) {
                 color = OceanColors.BASE_TEXT
             }.sendWithPrefix("SKYOCEAN_FORGE_REMINDER")
