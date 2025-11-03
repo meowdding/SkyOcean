@@ -98,7 +98,7 @@ object MineshaftAnnouncement {
                     Text.of(corpses.size.toString()),
                     Text.of(type.name.first().toString(), type.color()),
                 )
-            }.let { Text.join(it, separator = Text.of(", ")) }
+            }.let { Text.join(it, separator = Text.of(", ")) },
         ) {
             color = OceanColors.BASE_TEXT
         }
