@@ -5,8 +5,10 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
+import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.generated.SkyOceanCraftHelperModifiers
+import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import net.minecraft.core.component.DataComponents
@@ -43,7 +45,8 @@ abstract class AbstractCraftHelperModifier {
 
             onClick {
                 setSelected(ingredient.id)
-                setAmount(ingredient.amount)
+                val amount = SimpleRecipeApi.getBestRecipe(ingredient.id)?.output?.amount ?: 1
+                setAmount(Utils.nextUp(ingredient.amount, amount))
                 McScreen.refreshScreen()
             }
         }

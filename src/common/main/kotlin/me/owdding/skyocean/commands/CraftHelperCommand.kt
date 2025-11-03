@@ -6,11 +6,13 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
+import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsCycleElement
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperDisplay
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
@@ -48,7 +50,8 @@ object CraftHelperCommand {
                         text("Amount must be greater than 0!").withColor(TextColor.RED).sendWithPrefix()
                         return@callback
                     }
-                    CraftHelperStorage.setAmount(amount)
+                    val craftAmount = CraftHelperStorage.selectedItem?.let(SimpleRecipeApi::getBestRecipe)?.output?.amount ?: 1
+                    CraftHelperStorage.setAmount(Utils.nextUp(amount, craftAmount))
                     CraftHelperStorage.save()
                     text("Set current recipe amount to ") {
                         append("$amount") { color = TextColor.GREEN }
@@ -107,7 +110,8 @@ object CraftHelperCommand {
                         SkyBlockId.fromName(splitName) ?: SkyBlockId.unknownType(splitName)
                     }
                     CraftHelperStorage.setSelected(item)
-                    CraftHelperStorage.setAmount(amount)
+                    val craftAmount = item?.let(SimpleRecipeApi::getBestRecipe)?.output?.amount ?: 1
+                    CraftHelperStorage.setAmount(Utils.nextUp(amount, craftAmount))
                     CraftHelperStorage.save()
                     text("Set current recipe to ") {
                         append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }

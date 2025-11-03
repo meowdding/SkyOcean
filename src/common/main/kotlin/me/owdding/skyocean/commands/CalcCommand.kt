@@ -2,13 +2,7 @@ package me.owdding.skyocean.commands
 
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
-import com.notkamui.keval.KevalDSLException
-import com.notkamui.keval.KevalException
-import com.notkamui.keval.KevalInvalidArgumentException
-import com.notkamui.keval.KevalInvalidExpressionException
-import com.notkamui.keval.KevalInvalidSymbolException
-import com.notkamui.keval.KevalZeroDivisionException
-import com.notkamui.keval.keval
+import com.notkamui.keval.*
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.utils.Utils.exclusiveInclusive
@@ -50,6 +44,31 @@ object CalcCommand {
                     try {
                         val value = expression.keval {
                             includeDefault() // Todo maybe make some player stats available as variable
+
+                            constant {
+                                name = "s"
+                                value = 64.0
+                            }
+                            constant {
+                                name = "e"
+                                value = 160.0
+                            }
+                            constant {
+                                name = "k"
+                                value = 1000.0
+                            }
+                            constant {
+                                name = "m"
+                                value = 1_000_000.0
+                            }
+                            constant {
+                                name = "b"
+                                value = 1_000_000_000.0
+                            }
+                            constant {
+                                name = "t"
+                                value = 1_000_000_000_000.0
+                            }
                         }
                         ChatUtils.chat("$expression = $value")
                     } catch (e: KevalException) {
