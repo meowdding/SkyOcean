@@ -4,8 +4,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.mining.mineshaft.MineshaftAnnouncement.color
-import me.owdding.skyocean.utils.CommonColors
 import me.owdding.skyocean.utils.chat.ChatUtils
+import me.owdding.skyocean.utils.chat.OceanColors
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.Corpse
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.CorpseType
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
@@ -40,19 +40,19 @@ object CorpseKeyAnnouncement {
 
         val text = Text.join(
             "Corpse Keys",
-            Text.of(" | ", CommonColors.SEPARATOR),
+            ChatUtils.SEPERATOR_COMPONENT,
             keys.map { (type, pair) ->
                 val (count, keys) = pair
                 Text.join(
                     count.toString(),
                     Text.of(type.name.first().toString(), type.color()),
                     " (",
-                    Text.of(keys.toString(), CommonColors.HIGHLIGHT),
-                    " available)"
+                    Text.of(keys.toString(), OceanColors.HIGHLIGHT),
+                    " available)",
                 )
             }.let { Text.join(it, separator = Text.of(", ")) },
         ) {
-            color = CommonColors.BASE_TEXT
+            color = OceanColors.BASE_TEXT
         }
 
         ChatUtils.chat(text)

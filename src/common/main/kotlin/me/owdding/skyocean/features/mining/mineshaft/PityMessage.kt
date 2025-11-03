@@ -2,8 +2,9 @@ package me.owdding.skyocean.features.mining.mineshaft
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
-import me.owdding.skyocean.utils.CommonColors
+import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.OceanColors
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyWidget
 import tech.thatgravyboat.skyblockapi.api.events.info.TabWidget
@@ -40,14 +41,14 @@ object PityMessage {
         McClient.runNextTick {
             Text.join(
                 "Mineshaft Pity",
-                Text.of(" | ", CommonColors.SEPARATOR),
+                ChatUtils.SEPERATOR_COMPONENT,
                 "You found a mineshaft after ",
-                Text.of(lastPity.toString(), CommonColors.HIGHLIGHT),
-                Text.of("/", CommonColors.SEPARATOR),
-                Text.of(maxPity.toString(), CommonColors.HIGHLIGHT),
+                Text.of(lastPity.toString(), OceanColors.HIGHLIGHT),
+                Text.of("/", OceanColors.SEPARATOR),
+                Text.of(maxPity.toString(), OceanColors.HIGHLIGHT),
                 " Pity!"
             ) {
-                color = CommonColors.BASE_TEXT
+                color = OceanColors.BASE_TEXT
                 hover = Text.of("±10, Hypixel updates the Tablist every 3 seconds.").withColor(TextColor.PINK)
             }.sendWithPrefix()
         }
