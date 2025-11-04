@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.mining
 
+import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.extensions.add
@@ -17,6 +18,7 @@ import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.tags.ItemTagKey
+import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
@@ -27,6 +29,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
+import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
 import tech.thatgravyboat.skyblockapi.api.profile.hotm.HotmAPI
 import tech.thatgravyboat.skyblockapi.api.profile.hotm.PowderAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -105,7 +108,7 @@ object HotmHelper {
         val perkName = item.cleanName
         val perkByName = TreeRepoData.hotmByName(perkName) as? LevelingTreeNode ?: return
         val tooltipLines = item.getLore()
-        val isLocked = item.item == Items.COAL
+        val isLocked = item.getVisualItem() == Items.PALE_OAK_BUTTON
         val notEnoughPowder = tooltipLines.any { it.stripped.startsWith("you don't have enough ", true) }
         val level = tooltipLines.firstOrNull()?.let {
             val isBoosted = it.siblings.any { sibling -> sibling.style.color?.serialize() == "aqua" }
@@ -149,7 +152,7 @@ object HotmHelper {
                     listMerger.addBeforeNext({ it.stripped in listOf("ENABLED", "DISABLED") }) {
                         fun MutableList<Component>.add(levels: Int) {
                             val name = perkByName.powderType.displayName ?: return
-                            val formatting = perkByName.powderType.formatting
+                            val formatting = perkByName.powderType.formatting ?: ChatFormatting.WHITE
                             add("Cost (") {
                                 append(levels.toFormattedString()) { this.color = TextColor.YELLOW }
                                 append(")")
@@ -191,7 +194,8 @@ object HotmHelper {
                             append(CommonText.NEWLINE)
                             append("have enough powder to buy this perk!", OceanColors.SKYOCEAN_BLUE)
                         }.splitLines().forEach(listMerger::add)
-                        this@skyoceanReplace.onClick {
+                        this@skyoceanReplace.onClick { button ->
+                            if (button != InputConstants.MOUSE_BUTTON_LEFT) return@onClick null
                             PerkUpgradeStorage[powderType] = perkName
                             cachedPerkCost[powderType] = amount
                             // This is needed so that the lore gets updated when we toggle the reminder
@@ -205,7 +209,8 @@ object HotmHelper {
 
                         backgroundItem = Items.BLUE_STAINED_GLASS_PANE.defaultInstance
 
-                        this@skyoceanReplace.onClick {
+                        this@skyoceanReplace.onClick { button ->
+                            if (button != InputConstants.MOUSE_BUTTON_LEFT) return@onClick null
                             PerkUpgradeStorage.remove(powderType)
                             cachedPerkCost.remove(powderType)
                             tryReplaceItem(item)

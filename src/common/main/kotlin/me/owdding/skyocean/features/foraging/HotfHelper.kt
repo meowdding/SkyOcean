@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.foraging
 
+import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.extensions.add
@@ -17,6 +18,7 @@ import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.tags.ItemModelTagKey
+import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
@@ -143,7 +145,7 @@ object HotfHelper {
                     listMerger.addBeforeNext({ it.stripped in listOf("ENABLED", "DISABLED") }) {
                         fun MutableList<Component>.add(levels: Int) {
                             val name = perkByName.powderType.displayName ?: return
-                            val formatting = perkByName.powderType.formatting
+                            val formatting = perkByName.powderType.formatting ?: ChatFormatting.WHITE
                             add("Cost (") {
                                 append(levels.toFormattedString()) { this.color = TextColor.YELLOW }
                                 append(")")
@@ -185,7 +187,8 @@ object HotfHelper {
                             append(CommonText.NEWLINE)
                             append("have enough whispers to buy this perk!", OceanColors.SKYOCEAN_BLUE)
                         }.splitLines().forEach(listMerger::add)
-                        this@skyoceanReplace.onClick {
+                        this@skyoceanReplace.onClick { button ->
+                            if (button != InputConstants.MOUSE_BUTTON_LEFT) return@onClick null
                             PerkUpgradeStorage[whisperType] = perkName
                             cachedPerkCost[whisperType] = amount
                             // This is needed so that the lore gets updated when we toggle the reminder
@@ -199,7 +202,8 @@ object HotfHelper {
 
                         backgroundItem = Items.BLUE_STAINED_GLASS_PANE.defaultInstance
 
-                        this@skyoceanReplace.onClick {
+                        this@skyoceanReplace.onClick { button ->
+                            if (button != InputConstants.MOUSE_BUTTON_LEFT) return@onClick null
                             PerkUpgradeStorage.remove(whisperType)
                             cachedPerkCost.remove(whisperType)
                             tryReplaceItem(item)
