@@ -270,7 +270,7 @@ object ItemModifiers {
                     append(message)
                     this.color = OceanColors.DARK_CYAN_BLUE
                 }
-                modifiers.flatMap { it.displayNames } .forEach {
+                modifiers.flatMap { it.displayNames }.forEach {
                     add {
                         append("- ")
                         append(it)

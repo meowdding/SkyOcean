@@ -11,7 +11,7 @@ object PerkUpgradeStorage {
     private val STORAGE = ProfileStorage(
         defaultData = ::StoredPerkData,
         fileName = "perk_upgrade",
-        codec = { SkyOceanCodecs.getCodec<StoredPerkData>() }
+        codec = { SkyOceanCodecs.getCodec<StoredPerkData>() },
     )
 
     private inline val data get() = STORAGE.get()
