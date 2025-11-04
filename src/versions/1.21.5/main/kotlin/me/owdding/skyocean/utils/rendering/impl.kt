@@ -3,6 +3,7 @@
 package me.owdding.skyocean.utils.rendering
 
 import com.mojang.blaze3d.vertex.PoseStack
+import me.owdding.lib.rendering.world.RenderTypes
 import me.owdding.skyocean.mixins.GameRendererAccessor
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.LevelTargetBundle
@@ -30,7 +31,7 @@ internal actual fun renderFace(
 ) {
     ShapeRenderer.renderFace(
         poseStack,
-        buffer.getBuffer(RenderTypes.BLOCK_FILL),
+        buffer.getBuffer(RenderTypes.BLOCK_FILL_QUAD),
         direction,
         vec6.a,
         vec6.b,

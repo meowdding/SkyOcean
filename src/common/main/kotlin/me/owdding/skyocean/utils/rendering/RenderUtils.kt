@@ -1,7 +1,7 @@
 package me.owdding.skyocean.utils.rendering
 
 import com.mojang.blaze3d.vertex.PoseStack
-import me.owdding.skyocean.utils.rendering.RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS
+import me.owdding.lib.rendering.world.RenderTypes
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.LightTexture
@@ -44,7 +44,7 @@ object RenderUtils {
         val color = color.toInt()
         ShapeRenderer.addChainedFilledBoxVertices(
             poseStack,
-            buffer.getBuffer(BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
+            buffer.getBuffer(RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
             pos.x.toDouble(),
             pos.y.toDouble(),
             pos.z.toDouble(),
