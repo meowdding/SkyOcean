@@ -34,7 +34,7 @@ object PityMessage {
 
     @Subscription
     fun onMineshaftFound(event: MineshaftFoundEvent) {
-        if (!MineshaftConfig.mineshaftFoundPity) return
+        if (!MineshaftConfig.mineshaftFoundPity || lastPity == -1) return
         McClient.runNextTick {
             Text.of("Mineshaft Pity | You found a mineshaft after $lastPity/$maxPity Pity!") {
                 hover = Text.of("±10, Hypixel updates the Tablist every 3 seconds.").withColor(TextColor.PINK)

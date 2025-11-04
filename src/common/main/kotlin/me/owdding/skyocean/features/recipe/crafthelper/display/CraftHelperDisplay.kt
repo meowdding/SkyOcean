@@ -137,13 +137,13 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                             ).asButtonLeft {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
 
-                                val value = CraftHelperStorage.selectedAmount
+                                val value = CraftHelperStorage.selectedAmount / (tree.amountPerCraft)
                                 val newValue = if (McScreen.isShiftDown) {
                                     value - 10
                                 } else {
                                     value - 1
                                 }
-                                CraftHelperStorage.setAmount(max(1, newValue))
+                                CraftHelperStorage.setAmount(max(1, newValue) * tree.amountPerCraft)
                                 callback(true)
                             }.withTooltip(
                                 Text.multiline(
@@ -163,13 +163,13 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                                 },
                             ).asButtonLeft {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
-                                val value = CraftHelperStorage.selectedAmount
+                                val value = CraftHelperStorage.selectedAmount / tree.amountPerCraft
                                 val newValue = if (McScreen.isShiftDown) {
                                     value + 10
                                 } else {
                                     value + 1
                                 }
-                                CraftHelperStorage.setAmount(newValue)
+                                CraftHelperStorage.setAmount(newValue * tree.amountPerCraft)
                                 callback(true)
                             }.withTooltip(
                                 Text.multiline(

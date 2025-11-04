@@ -7,10 +7,12 @@ import me.owdding.skyocean.features.item.custom.CustomItems.getStaticCustomData
 import me.owdding.skyocean.features.item.custom.CustomItems.getVanillaIntegrationData
 import me.owdding.skyocean.features.item.custom.data.CustomItemData
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.EquippableModelState
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
+import net.minecraft.util.TriState
 import net.minecraft.world.item.ItemStack
 
 object CustomItemsHelper {
@@ -21,6 +23,13 @@ object CustomItemsHelper {
     fun getCustomData(instance: ItemStack) = instance.getStaticCustomData() ?: instance.getCustomData() ?: instance.getVanillaIntegrationData()
 
     fun getNameReplacement(stack: ItemStack): Component? = stack[CustomItemDataComponents.NAME]
+
+    @JvmStatic
+    fun getEquippableState(instance: ItemStack): EquippableModelState {
+        val model = getCustomData(instance)?.get(CustomItemDataComponents.MODEL) ?: return EquippableModelState.VANILLA
+        val modelEquippable = model.resolveToItem()?.components()[DataComponents.EQUIPPABLE] ?: return EquippableModelState.NON_EQUIPPABLE
+        return EquippableModelState(TriState.TRUE, modelEquippable)
+    }
 
     context(item: ItemStack) fun <T> CustomItemData.getData(type: DataComponentType<T>): T? = when (type) {
         DataComponents.ITEM_MODEL -> this[CustomItemDataComponents.MODEL]?.getModel()

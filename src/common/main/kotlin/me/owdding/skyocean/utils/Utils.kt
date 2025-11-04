@@ -381,6 +381,8 @@ object Utils {
 
     fun LevelableTreeNode.totalPowder() = powderForInterval(1 exclusiveInclusive maxLevel)
     fun LevelableTreeNode.powderForInterval(intRange: IntRange) = intRange.sumOf { costForLevel(it).second }
+
+    fun nextUp(amount: Int, divider: Int) = if (amount % divider == 0) amount else amount - (amount % divider) + divider
 }
 
 enum class SkyOceanModifyIndicator : Translatable {
