@@ -79,6 +79,22 @@ object CustomizeCommand {
             }
 
             then("reset") {
+                callback {
+                    val item = mainHandItemOrNull() ?: return@callback
+                    val key = item.getKey()
+                    if (key == null) unableToCustomize()
+                    else if (CustomItems.remove(key)) {
+                        text("Removed customization from ") {
+                            append(item.hoverName)
+                            append("!")
+                        }.sendWithPrefix()
+                    } else {
+                        Text.join(
+                            item.hoverName,
+                            " doesn't have any customization!"
+                        ).sendWithPrefix()
+                    }
+                }
                 thenCallback("name") {
                     remove(CustomItemDataComponents.NAME) { item ->
                         text("Removed custom name from ") {
