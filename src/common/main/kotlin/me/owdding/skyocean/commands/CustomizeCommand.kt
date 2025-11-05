@@ -91,7 +91,7 @@ object CustomizeCommand {
                     } else {
                         Text.join(
                             item.hoverName,
-                            " doesn't have any customization!"
+                            " doesn't have any customization!",
                         ).sendWithPrefix()
                     }
                 }
