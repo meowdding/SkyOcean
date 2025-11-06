@@ -98,6 +98,7 @@ internal object ChatUtils {
     val ICON_COMPONENT = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
     val ICON_SPACE_COMPONENT = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
     val SPACE_ICON_COMPONENT = Text.of(SPACE_WITH_ICON) { this.color = DARK_OCEAN_BLUE }
+    val SEPERATOR_COMPONENT = Text.of(" | ", OceanColors.SEPARATOR)
 
     val prefixDelegate = CachedValue {
         Text.of {
@@ -154,6 +155,10 @@ object OceanColors {
     const val SKYOCEAN_BLUE = 0x87CEEB
     const val LIGHT_GRAYISH_CYAN = 0xcff8ff
     const val BETTER_GOLD = 0xfc6f03
+
+    const val BASE_TEXT = 0xcdd6f4
+    const val SEPARATOR = 0x585b70
+    const val HIGHLIGHT = 0xcba6f7
 }
 
 enum class OceanGradients(val colors: List<Int>, private val shader: GradientTextShader = GradientTextShader(colors)) : TextShader by shader, Translatable {
