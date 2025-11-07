@@ -165,6 +165,10 @@
           "reminder": {
             "@value": "Reminder",
             "desc": "Lets you add reminders for when you have enough powder to buy a perk."
+          },
+          "reminderTitle": {
+            "@value": "Reminder Title",
+            "desc": "Shows a title when the reminder triggers."
           }
         },
         "ch": {
@@ -724,6 +728,10 @@
           "reminder": {
             "@value": "Reminder",
             "desc": "Lets you add reminders for when you have enough whispers to buy a perk."
+          },
+          "reminderTitle": {
+            "@value": "Reminder Title",
+            "desc": "Shows a title when the reminder triggers."
           }
         },
         "galatea": {

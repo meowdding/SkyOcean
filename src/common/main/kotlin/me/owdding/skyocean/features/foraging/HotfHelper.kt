@@ -39,6 +39,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
@@ -100,6 +101,15 @@ object HotfHelper {
                 }
             }.sendWithPrefix()
         }
+        if (!config.reminderTitle) return
+        val title = Text.of {
+            append(ChatUtils.ICON_SPACE_COMPONENT)
+            append("Hotf perk upgrade!") {
+                color = OceanColors.WARNING
+                bold = true
+            }
+        }
+        McClient.setTitle(title)
     }
 
     private fun tryReplaceItem(item: ItemStack) {

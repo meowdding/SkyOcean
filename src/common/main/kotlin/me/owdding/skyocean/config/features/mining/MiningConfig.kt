@@ -53,6 +53,10 @@ object MiningConfig : CategoryKt("mining") {
         translation = "skyocean.config.mining.hotm.reminder"
     }
 
+    var reminderTitle by boolean(true) {
+        translation = "skyocean.config.mining.hotm.reminderTitle"
+    }
+
     init {
         separator("skyocean.config.mining.metal_detector")
     }
