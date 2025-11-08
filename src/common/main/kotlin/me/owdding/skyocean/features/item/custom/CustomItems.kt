@@ -56,8 +56,10 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
         return true
     }
 
-    fun remove(itemStack: ItemStack) {
-        storage.get().remove(map.remove(itemStack.getKey()))
+    fun remove(key: ItemKey): Boolean {
+        val removed = storage.get().remove(map.remove(key))
+        if (removed) save()
+        return removed
     }
 
     fun getOrPut(key: ItemKey) = map.getOrPut(key) {

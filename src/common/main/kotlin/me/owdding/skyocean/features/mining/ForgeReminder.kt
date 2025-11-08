@@ -3,7 +3,9 @@ package me.owdding.skyocean.features.mining
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.helpers.CooldownHelper
+import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.extensions.joinToComponent
 import me.owdding.skyocean.utils.extensions.nullIfEmpty
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -49,7 +51,14 @@ object ForgeReminder {
                 }
             }
 
-            Text.join(Text.translatable("skyocean.config.mining.forge_reminder"), " | ", items, clickToWarp).sendWithPrefix("SKYOCEAN_FORGE_REMINDER")
+            Text.join(
+                Text.translatable("skyocean.config.mining.forge_reminder"),
+                ChatUtils.SEPERATOR_COMPONENT,
+                items,
+                clickToWarp,
+            ) {
+                color = OceanColors.BASE_TEXT
+            }.sendWithPrefix("SKYOCEAN_FORGE_REMINDER")
         },
     )
 
