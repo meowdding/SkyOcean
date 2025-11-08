@@ -88,7 +88,8 @@ ktlint:
         maxLineLength: 160
     NoWildcardImports: # we use wildcard imports in some places
         active: false
-
+    IfElseBracing:
+        active: false
 naming:
     NoNameShadowing:
         active: false
