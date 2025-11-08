@@ -73,19 +73,19 @@ internal object Icons {
 
     const val WAVE = "🌊"
 
-    const val CHECKMARK = "\u2714"
-    const val CROSS = "\u274C"
-    const val WARNING = "\u26A0"
-    const val HOLLOW_FLAG = "\u2690"
-    const val FILLED_FLAG = "\u2691"
+    const val CHECKMARK = "✔"
+    const val CROSS = "❌"
+    const val WARNING = "⚠"
+    const val HOLLOW_FLAG = "⚐"
+    const val FILLED_FLAG = "⚑"
 
-    const val WARDROBE = "\u2602"
-    const val VAULT = "\u00a5"
-    const val ACCESSORIES = "\u16f0"
-    const val FORGE = "\u16dd"
-    const val CHESTS = "\u2302"
-    const val RIFT = "\u0444"
-    const val ITEM_IN_ITEM = "\u29c9"
+    const val WARDROBE = "☂"
+    const val VAULT = "¥"
+    const val ACCESSORIES = "ᛰ"
+    const val FORGE = "ᛝ"
+    const val CHESTS = "⌂"
+    const val RIFT = "ф"
+    const val ITEM_IN_ITEM = "⧉"
 
 }
 
