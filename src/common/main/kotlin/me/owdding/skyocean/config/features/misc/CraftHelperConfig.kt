@@ -1,12 +1,17 @@
 package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperFormat
 import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperLocation
 
 object CraftHelperConfig : CategoryKt("crafthelper") {
     override val name get() = Translated("skyocean.config.misc.crafthelper")
+
+    init {
+        separator("skyocean.config.misc.crafthelper")
+    }
 
     var enabled by boolean(true) {
         translation = "skyocean.config.misc.crafthelper.enabled"
