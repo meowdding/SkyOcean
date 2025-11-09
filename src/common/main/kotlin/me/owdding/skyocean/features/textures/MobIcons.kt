@@ -124,7 +124,7 @@ enum class KnownMobIcon(val icon: String, short: String? = null) {
     PEST('ൠ'),
     ANIMAL('☮', "ANI"),
     MAGMATIC('♆', "MAGM"),
-    ELUSIVE('♣', "ELUS"),
+    ELUSIVE('❃', "ELUS"),
     CONSTRUCT('⚙', "CONST"),
     ARCANE('♃', "ARC"),
     SHIELDED('⛨', "SHIE"),
