@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.foraging.galatea
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.foraging.GalateaConfig
+import me.owdding.skyocean.repo.misc.GalateaRepoData
 import net.minecraft.core.BlockPos
 import net.minecraft.util.ARGB
 import net.minecraft.world.level.block.entity.BeaconBeamOwner
@@ -38,8 +39,7 @@ object MoongladeBeacon   {
         return SkyBlockIsland.GALATEA.inIsland() && pos == beaconPos && GalateaConfig.moongladeBeaconColor
     }
 
-    // TODO: get from repo
-    private val beaconPos: BlockPos = BlockPos(-688, 128, 65)
+    private val beaconPos: BlockPos = GalateaRepoData.data?.moongladeBeaconPos ?: BlockPos(-688, 128, 65)
 
     @JvmStatic
     fun getSection(): List<BeaconBeamOwner.Section> {
