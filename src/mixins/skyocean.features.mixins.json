@@ -3,6 +3,7 @@
   "package": "me.owdding.skyocean.mixins.features",
   "parent": "skyocean.client.mixins.json",
   "client": [
+    "moongladebeacon.BeaconBlockEntityMixin",
     "shulker.ShulkerRendererMixin"
   ]
 }

@@ -18,6 +18,10 @@ object GalateaConfig : CategoryKt("galatea") {
         predicate = { SkyBlockIsland.GALATEA.inIsland() },
     )
 
+    var moongladeBeaconColor by boolean(true) {
+        translation = "skyocean.config.foraging.galatea.moongladeBeaconColor"
+    }
+
     var shulkerOverwrite by enum(MinecraftColor.GREEN) {
         translation = "skyocean.config.foraging.galatea.shulkerOverwrite"
     }
