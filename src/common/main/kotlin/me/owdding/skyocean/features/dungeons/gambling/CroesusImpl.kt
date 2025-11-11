@@ -24,20 +24,20 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.obfuscated
 object CroesusImpl : AbstractItemModifier() {
     private val enabled get() = DungeonsConfig.gamblingScreenEnabled && DungeonsConfig.gamblingInCroesus
     val croesusLoreToFloor = mapOf(
-        "The Catacombs - Floor I" to DungeonFloor.F1,
-        "The Catacombs - Floor II" to DungeonFloor.F2,
-        "The Catacombs - Floor III" to DungeonFloor.F3,
-        "The Catacombs - Floor IV" to DungeonFloor.F4,
-        "The Catacombs - Floor V" to DungeonFloor.F5,
-        "The Catacombs - Floor VI" to DungeonFloor.F6,
-        "The Catacombs - Floor VII" to DungeonFloor.F7,
-        "Master Mode The Catacombs - Floor I" to DungeonFloor.M1,
-        "Master Mode The Catacombs - Floor II" to DungeonFloor.M2,
-        "Master Mode The Catacombs - Floor III" to DungeonFloor.M3,
-        "Master Mode The Catacombs - Floor IV" to DungeonFloor.M4,
-        "Master Mode The Catacombs - Floor V" to DungeonFloor.M5,
-        "Master Mode The Catacombs - Floor VI" to DungeonFloor.M6,
-        "Master Mode The Catacombs - Floor VII" to DungeonFloor.M7,
+        "Catacombs - Floor I" to DungeonFloor.F1,
+        "Catacombs - Floor II" to DungeonFloor.F2,
+        "Catacombs - Floor III" to DungeonFloor.F3,
+        "Catacombs - Floor IV" to DungeonFloor.F4,
+        "Catacombs - Floor V" to DungeonFloor.F5,
+        "Catacombs - Floor VI" to DungeonFloor.F6,
+        "Catacombs - Floor VII" to DungeonFloor.F7,
+        "Master Mode Catacombs - Floor I" to DungeonFloor.M1,
+        "Master Mode Catacombs - Floor II" to DungeonFloor.M2,
+        "Master Mode Catacombs - Floor III" to DungeonFloor.M3,
+        "Master Mode Catacombs - Floor IV" to DungeonFloor.M4,
+        "Master Mode Catacombs - Floor V" to DungeonFloor.M5,
+        "Master Mode Catacombs - Floor VI" to DungeonFloor.M6,
+        "Master Mode Catacombs - Floor VII" to DungeonFloor.M7,
     )
 
     override val displayName: Component get() = Text.of("Croesus Gambling Item Hider")
@@ -48,7 +48,7 @@ object CroesusImpl : AbstractItemModifier() {
     }
 
     override fun appliesToScreen(screen: Screen): Boolean {
-        return screen.title.stripped.let { it.startsWith("The Catacombs - ") || it.startsWith("Master Mode The Catacombs - ") }
+        return screen.title.stripped.let { it.startsWith("Catacombs - ") || it.startsWith("Master Mode Catacombs - ") }
     }
 
     override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {
