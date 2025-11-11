@@ -3,12 +3,20 @@ package me.owdding.skyocean.repo.misc
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktmodules.Module
+import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.skyocean.utils.Utils
 import net.minecraft.core.BlockPos
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 
 @Module
 object GalateaRepoData {
-    val data: GalateaData? = Utils.loadFromRemoteRepo<GalateaData>("misc/galatea")
+    var data: GalateaData? = null
+        private set
+
+    @Subscription(FinishRepoLoadingEvent::class)
+    fun onRepoLoad() {
+        data = Utils.loadFromRemoteRepo<GalateaData>("misc/galatea")
+    }
 }
 
 @GenerateCodec

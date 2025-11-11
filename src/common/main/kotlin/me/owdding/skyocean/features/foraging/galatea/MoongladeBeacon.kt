@@ -39,7 +39,7 @@ object MoongladeBeacon   {
         return SkyBlockIsland.GALATEA.inIsland() && pos == beaconPos && GalateaConfig.moongladeBeaconColor
     }
 
-    private val beaconPos: BlockPos = GalateaRepoData.data?.moongladeBeaconPos ?: BlockPos(-688, 128, 65)
+    private val beaconPos: BlockPos get() = GalateaRepoData.data?.moongladeBeaconPos ?: BlockPos(-688, 128, 65)
 
     @JvmStatic
     fun getSection(): List<BeaconBeamOwner.Section> {
