@@ -47,8 +47,8 @@ object CroesusImpl : AbstractItemModifier() {
         return item.`is`(Items.PLAYER_HEAD) && DungeonChestType.getByNameStartsWith(item.cleanName) in allowedDungeonGamblingChests
     }
 
-    override fun appliesToScreen(screen: Screen): Boolean {
-        return screen.title.stripped.let { it.startsWith("Catacombs - ") || it.startsWith("Master Mode Catacombs - ") }
+    override fun appliesToScreen(screen: Screen) = screen.title.stripped.let {
+        it.startsWith("Catacombs - ") || it.startsWith("Master Mode Catacombs - ")
     }
 
     override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {

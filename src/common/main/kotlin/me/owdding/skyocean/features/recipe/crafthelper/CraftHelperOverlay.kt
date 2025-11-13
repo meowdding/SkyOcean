@@ -1,7 +1,6 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
 import earth.terrarium.olympus.client.ui.context.ContextMenu
-import kotlin.time.Duration.Companion.milliseconds
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asWidget
@@ -25,6 +24,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import kotlin.time.Duration.Companion.milliseconds
 
 @Overlay
 object CraftHelperOverlay : SkyOceanOverlay() {
