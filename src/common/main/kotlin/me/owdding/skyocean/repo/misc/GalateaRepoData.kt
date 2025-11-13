@@ -1,7 +1,7 @@
 package me.owdding.skyocean.repo.misc
 
+import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
-import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktmodules.Module
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.skyocean.utils.Utils
@@ -21,5 +21,5 @@ object GalateaRepoData {
 
 @GenerateCodec
 data class GalateaData(
-    @NamedCodec("moonglade_beacon_pos") val moongladeBeaconPos: BlockPos,
+    @FieldName("moonglade_beacon_pos") val moongladeBeaconPos: BlockPos,
 )
