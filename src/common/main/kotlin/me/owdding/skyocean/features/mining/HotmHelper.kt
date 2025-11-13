@@ -33,10 +33,7 @@ import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
 import tech.thatgravyboat.skyblockapi.api.profile.hotm.HotmAPI
 import tech.thatgravyboat.skyblockapi.api.profile.hotm.PowderAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
-import tech.thatgravyboat.skyblockapi.utils.extentions.enumMapOf
-import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
-import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
+import tech.thatgravyboat.skyblockapi.utils.extentions.*
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap
@@ -48,6 +45,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 // TODO: merge hotm helper and hotf helper into one, or abstract them out
 @Module
@@ -55,6 +54,7 @@ object HotmHelper {
 
     private val reminders get() = PerkUpgradeStorage.hotm
     private val cachedPerkCost = enumMapOf<PowderType, Int>()
+    private var lastClick: Instant = Instant.DISTANT_PAST
 
     private fun getNextLevelCost(perkName: String): Int? {
         val perk = TreeRepoData.hotmByName(perkName) as? LevelingTreeNode ?: return null
@@ -83,6 +83,7 @@ object HotmHelper {
             current >= needed
         }.keys
         if (powders.isEmpty()) return
+        if (lastClick.since() < 5.seconds) return
         val perks = reminders.filterKeys { it in powders }
         // We remove the perks even if you have the feature disabled
         powders.forEach {
@@ -210,6 +211,7 @@ object HotmHelper {
                             cachedPerkCost[powderType] = amount
                             // This is needed so that the lore gets updated when we toggle the reminder
                             tryReplaceItem(item)
+                            lastClick = currentInstant()
                         }
                     } else {
                         Text.of {
@@ -224,6 +226,7 @@ object HotmHelper {
                             PerkUpgradeStorage.remove(powderType)
                             cachedPerkCost.remove(powderType)
                             tryReplaceItem(item)
+                            lastClick = currentInstant()
                         }
                     }
                 }

@@ -44,6 +44,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 // TODO: merge hotm helper and hotf helper into one, or abstract them out
 @Module
@@ -51,6 +53,7 @@ object HotfHelper {
 
     private val reminders get() = PerkUpgradeStorage.hotf
     private val cachedPerkCost = enumMapOf<WhisperType, Int>()
+    private var lastClick: Instant = Instant.DISTANT_PAST
 
     private val config get() = ForagingConfig
 
@@ -82,6 +85,7 @@ object HotfHelper {
             current >= needed
         }.keys
         if (whispers.isEmpty()) return
+        if (lastClick.since() < 5.seconds) return
         val perks = reminders.filterKeys { it in whispers }
         // We remove the perks even if you have the feature disabled
         whispers.forEach {
@@ -203,6 +207,7 @@ object HotfHelper {
                             cachedPerkCost[whisperType] = amount
                             // This is needed so that the lore gets updated when we toggle the reminder
                             tryReplaceItem(item)
+                            lastClick = currentInstant()
                         }
                     } else {
                         Text.of {
@@ -217,6 +222,7 @@ object HotfHelper {
                             PerkUpgradeStorage.remove(whisperType)
                             cachedPerkCost.remove(whisperType)
                             tryReplaceItem(item)
+                            lastClick = currentInstant()
                         }
                     }
                 }
