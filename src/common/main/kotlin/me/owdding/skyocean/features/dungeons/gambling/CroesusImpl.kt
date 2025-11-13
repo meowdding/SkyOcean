@@ -43,12 +43,11 @@ object CroesusImpl : AbstractItemModifier() {
     override val displayName: Component get() = Text.of("Croesus Gambling Item Hider")
     override val isEnabled: Boolean get() = enabled
 
-    override fun appliesTo(item: ItemStack): Boolean {
-        return item.`is`(Items.PLAYER_HEAD) && DungeonChestType.getByNameStartsWith(item.cleanName) in allowedDungeonGamblingChests
-    }
+    override fun appliesTo(itemStack: ItemStack) =
+        itemStack.`is`(Items.PLAYER_HEAD) && DungeonChestType.getByNameStartsWith(itemStack.cleanName) in allowedDungeonGamblingChests
 
-    override fun appliesToScreen(screen: Screen): Boolean {
-        return screen.title.stripped.let { it.startsWith("Catacombs - ") || it.startsWith("Master Mode Catacombs - ") }
+    override fun appliesToScreen(screen: Screen) = screen.title.stripped.let {
+        it.startsWith("Catacombs - ") || it.startsWith("Master Mode Catacombs - ")
     }
 
     override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {
