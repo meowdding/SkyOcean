@@ -25,6 +25,8 @@ object MoongladeBeacon {
     private val redSection = listOf(BeaconBeamOwner.Section(ARGB.color(32, TextColor.RED)))
     private val greenSection = listOf(BeaconBeamOwner.Section(ARGB.color(32, TextColor.GREEN)))
 
+    private val beaconPos: BlockPos get() = GalateaRepoData.data?.moongladeBeaconPos ?: BlockPos(-688, 128, 65)
+
     @Subscription
     @OnlyWidget(MOONGLADE_BEACON)
     @OnlyIn(GALATEA)
@@ -39,8 +41,6 @@ object MoongladeBeacon {
 
     @JvmStatic
     fun isBlockPos(pos: BlockPos): Boolean = SkyBlockIsland.GALATEA.inIsland() && pos == beaconPos && GalateaConfig.moongladeBeaconColor
-
-    private val beaconPos: BlockPos get() = GalateaRepoData.data?.moongladeBeaconPos ?: BlockPos(-688, 128, 65)
 
     @JvmStatic
     fun getSection(): List<BeaconBeamOwner.Section> = if (beaconActive) greenSection else redSection
