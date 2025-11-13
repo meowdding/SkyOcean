@@ -16,11 +16,14 @@ import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.anyMatch
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 
 @Module
-object MoongladeBeacon   {
+object MoongladeBeacon {
 
     private var beaconActive: Boolean = false
 
     private val inactiveRegex = " Cooldown: AVAILABLE".toRegex()
+
+    private val redSection = listOf(BeaconBeamOwner.Section(ARGB.color(32, TextColor.RED)))
+    private val greenSection = listOf(BeaconBeamOwner.Section(ARGB.color(32, TextColor.GREEN)))
 
     @Subscription
     @OnlyWidget(MOONGLADE_BEACON)
@@ -35,18 +38,11 @@ object MoongladeBeacon   {
     }
 
     @JvmStatic
-    fun isBlockPos(pos: BlockPos): Boolean {
-        return SkyBlockIsland.GALATEA.inIsland() && pos == beaconPos && GalateaConfig.moongladeBeaconColor
-    }
+    fun isBlockPos(pos: BlockPos): Boolean = SkyBlockIsland.GALATEA.inIsland() && pos == beaconPos && GalateaConfig.moongladeBeaconColor
 
     private val beaconPos: BlockPos get() = GalateaRepoData.data?.moongladeBeaconPos ?: BlockPos(-688, 128, 65)
 
     @JvmStatic
-    fun getSection(): List<BeaconBeamOwner.Section> {
-        return if (beaconActive) greenSection else redSection
-    }
-
-    private val redSection = listOf(BeaconBeamOwner.Section(ARGB.color(32, TextColor.RED)))
-    private val greenSection = listOf(BeaconBeamOwner.Section(ARGB.color(32, TextColor.GREEN)))
+    fun getSection(): List<BeaconBeamOwner.Section> = if (beaconActive) greenSection else redSection
 
 }
