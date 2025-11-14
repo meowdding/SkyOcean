@@ -42,6 +42,7 @@ object CraftHelperStorage {
     val selectedItem
         get() = when (val data = data) {
             is NormalCraftHelperRecipe -> data.item
+            is SkyShardsRecipe -> data.tree.shard
             else -> null
         }
     val selectedAmount
