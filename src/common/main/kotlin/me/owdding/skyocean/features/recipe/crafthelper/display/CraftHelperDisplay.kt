@@ -2,11 +2,13 @@ package me.owdding.skyocean.features.recipe.crafthelper.display
 
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
+import me.owdding.lib.builder.ScalableFrameLayout
 import me.owdding.lib.compat.REIRenderOverlayEvent
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.layouts.BackgroundWidget
+import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
@@ -29,7 +31,6 @@ import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.setPosition
 import net.minecraft.client.gui.components.AbstractWidget
-import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -38,6 +39,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.mixins.accessors.AbstractContainerScreenAccessor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -54,7 +56,9 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
         if (!LocationAPI.isOnSkyBlock) return
         if (event.screen !is AbstractContainerScreen<*>) return
 
-        val layout = LayoutFactory.empty() as FrameLayout
+        val maxWidth = (event.screen as AbstractContainerScreenAccessor).leftPos - (CraftHelperConfig.margin * 2)
+
+        val layout = LayoutFactory.empty() as ScalableFrameLayout
         lateinit var callback: (save: Boolean) -> Unit
 
         fun resetLayout() {
@@ -64,8 +68,16 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             val (tree, output) = CraftHelperStorage.data?.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
             resetLayout()
             layout.tryClear()
-            layout.addChild(visualize(tree, output) { callback })
+            layout.addChild(ScalableWidget(visualize(tree, output) { callback }))
             layout.arrangeElements()
+
+            if (layout.width > maxWidth) {
+                layout.scale(maxWidth.toDouble() / layout.width)
+            } else {
+                layout.scale(1.0)
+            }
+            layout.arrangeElements()
+
             layout.setPosition(CraftHelperConfig.position.position(layout.width, layout.height))
             layout.visitWidgets { event.widgets.add(it) }
             this.craftHelperLayout = layout
