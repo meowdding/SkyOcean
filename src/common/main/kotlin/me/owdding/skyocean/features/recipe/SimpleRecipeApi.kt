@@ -72,7 +72,7 @@ object SimpleRecipeApi {
                     add(it.output)
                     addAll(it.inputs)
                 }.filterIsInstance<ItemLikeIngredient>()
-            }.distinct().count()
+            }.distinct().onEach { it.itemName }.count() // calls itemName to construct the itemstacks
             SkyOcean.debug("Preloaded $amount items")
         }
     }
