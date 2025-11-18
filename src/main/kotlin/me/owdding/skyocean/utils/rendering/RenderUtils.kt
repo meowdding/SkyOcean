@@ -7,6 +7,8 @@ import kotlin.math.sin
 import me.owdding.lib.rendering.world.RenderTypes
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
+import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.ShapeRenderer
@@ -23,16 +25,60 @@ import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-//fun GuiGraphics.applyPostEffect(id: ResourceLocation)
 
-// TODO
-//internal fun renderFace(
-//    poseStack: PoseStack,
-//    buffer: MultiBufferSource,
-//    direction: Direction,
-//    vec6: RenderUtils.Vec6f,
-//    color: Int,
-//)
+//? if > 1.21.5 {
+interface PostEffectApplicator {
+    fun `skyocean$applyPostEffect`(id: ResourceLocation)
+
+    fun `skyocean$getPostEffect`(): ResourceLocation?
+}
+
+fun GuiGraphics.applyPostEffect(id: ResourceLocation) {
+    this.nextStratum()
+    (this.guiRenderState as? PostEffectApplicator)?.`skyocean$applyPostEffect`(id)
+    this.fill(0, 0, this.guiWidth(), this.guiHeight(), 0)
+}
+//?} else {
+/*import tech.thatgravyboat.skyblockapi.helpers.McClient
+import me.owdding.skyocean.mixins.GameRendererAccessor
+import net.minecraft.client.renderer.LevelTargetBundle
+
+fun GuiGraphics.applyPostEffect(id: ResourceLocation) {
+    val mc = McClient.self
+    val pool = (mc.gameRenderer as GameRendererAccessor).resourcePool
+    val shaders = mc.shaderManager
+    shaders.getPostChain(id, LevelTargetBundle.MAIN_TARGETS)?.process(mc.mainRenderTarget, pool) {}
+}
+
+*///?}
+
+internal fun renderFace(
+    poseStack: PoseStack,
+    buffer: MultiBufferSource,
+    direction: Direction,
+    vec6: RenderUtils.Vec6f,
+    color: Int,
+) {
+    ShapeRenderer.renderFace(
+        //? if > 1.21.8 {
+        poseStack.last().pose(),
+        //?} else
+        /*poseStack,*/
+        buffer.getBuffer(RenderTypes.BLOCK_FILL_QUAD),
+        direction,
+        vec6.a,
+        vec6.b,
+        vec6.c,
+        vec6.d,
+        vec6.e,
+        vec6.f,
+        ARGB.redFloat(color),
+        ARGB.greenFloat(color),
+        ARGB.blueFloat(color),
+        ARGB.alphaFloat(color),
+    )
+}
+
 
 object RenderUtils {
 

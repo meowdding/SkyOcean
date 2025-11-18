@@ -23,8 +23,6 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
-
 //? if < 1.21.9 {
 /*import net.minecraft.network.chat.contents.KeybindContents
 import net.minecraft.network.chat.contents.NbtContents
@@ -49,6 +47,8 @@ internal fun createContentCodec(): MapCodec<ComponentContents> = ComponentSerial
     "type",
 )
 *///?}
+
+val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
 
 object CodecHelpers {
 
@@ -90,13 +90,13 @@ object CodecHelpers {
             //? if > 1.21.8 {
             ClientAsset.ResourceTexture(it)
             //?} else
-            /*ClientAsset(resourceLocation.withPath { "textures/$it.png" })*/
+            /*ClientAsset(it.withPath { "textures/$it.png" })*/
         },
         {
             //? if > 1.21.8 {
             it.id()
             //?} else
-            /*asset.id.withPath { it.removeSurrounding("textures/", ".png") }*/
+            /*it.id.withPath { it.removeSurrounding("textures/", ".png") }*/
         },
     )
 
