@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 class FontIconsProvider(output: FabricDataOutput) : SkyOceanFontProvider(output, ComponentIcons.ID) {
 
     override fun SkyOceanFontProviderHolder.create() {
-        ComponentIcon.entries.forEach { it ->
+        ComponentIcon.entries.forEach {
             bitmap(SkyOcean.id("font_icons/${it.image.lowercase()}.png"), 7) { row(it.icon.toString()) }
         }
     }

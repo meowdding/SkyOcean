@@ -69,6 +69,7 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
+import java.util.Optional
 import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -131,7 +132,9 @@ object Utils {
     }
 
     fun loadFromResourcesAsStream(path: String): InputStream = runBlocking {
-        SkyOcean.SELF.findPath(path).orElseThrow().inputStream()
+        SkyOcean.SELF.findPath(path).or {
+            Optional.ofNullable(SkyOcean.DATAGEN_SELF).flatMap { it.findPath(path) }
+        }.get().inputStream()
     }
 
     fun loadFromResources(path: String): ByteArray = loadFromResourcesAsStream(path).readAllBytes()

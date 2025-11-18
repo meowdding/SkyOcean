@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.google.devtools.ksp.gradle.KspAATask
+import kotlin.jvm.java
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
 import org.gradle.kotlin.dsl.version
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -96,7 +98,7 @@ loom {
     runConfigs["client"].apply {
         ideConfigGenerated(true)
         runDir = "../../run"
-        vmArg("-Dfabric.modsFolder=" + '"' + rootProject.projectDir.resolve("run/${mcVersion}Mods").absolutePath + '"')
+        vmArg("-Dfabric.modsFolder=" + '"' + "${mcVersion}Mods" + '"')
     }
 
     if (accessWidenerFile.exists()) {
@@ -104,9 +106,33 @@ loom {
     }
 }
 
+fabricApi {
+    configureDataGeneration {
+        client = true
+        modId = "skyocean-datagen"
+        createSourceSet = true
+        createRunConfiguration = true
+        outputDirectory.set(project.layout.buildDirectory.file("generated/skyocean/data"))
+    }
+}
+
 ksp {
-    arg("meowdding.project_name", "SkyOcean")
     arg("meowdding.package", "me.owdding.skyocean.generated")
+}
+
+afterEvaluate {
+    loom {
+        runs.named("datagen") {
+            this.vmArgs.add("-Dskyocean.extraPaths=\"\"")
+        }
+    }
+
+    tasks.withType(KspAATask::class.java).configureEach {
+        kspConfig.processorOptions.put(
+            "meowdding.project_name",
+            "SkyOcean" + (kspConfig.cachesDir.get().asFile.name.takeUnless { it == "main" }?.replaceFirstChar { it.uppercaseChar() } ?: "")
+        )
+    }
 }
 
 java {

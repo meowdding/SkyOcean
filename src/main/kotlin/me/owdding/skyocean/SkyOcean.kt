@@ -2,6 +2,7 @@ package me.owdding.skyocean
 
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
+import kotlin.jvm.optionals.getOrNull
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.RemoteConfig
 import me.owdding.lib.overlays.EditOverlaysScreen
@@ -36,6 +37,7 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
 
     val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createLookup() }
     val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
+    val DATAGEN_SELF by lazy { FabricLoader.getInstance().getModContainer("skyocean-datagen").getOrNull() }
     val SBAPI by lazy { FabricLoader.getInstance().getModContainer(SkyBlockAPI.MOD_ID).get() }
     val MOD_ID: String = SELF.metadata.id
     val VERSION: String = SELF.metadata.version.friendlyString
