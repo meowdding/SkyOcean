@@ -187,7 +187,8 @@ autoMixins {
 tasks.withType<ProcessResources>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
-        filter { if (it.startsWith("//!moj_import")) "#${it.substring(3)}" else it }
+        // `#` is used for all versions, `!` is used for multiversioned imports
+        filter { if (it.startsWith("//#moj_import") || it.startsWith("//!moj_import")) "#${it.substring(3)}" else it }
     }
     with(copySpec {
         from(rootProject.file("src/lang")).include("*.json").into("assets/skyocean/lang")
