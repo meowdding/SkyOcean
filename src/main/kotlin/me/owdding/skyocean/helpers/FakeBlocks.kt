@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
-//? if > 1.21.5 {
+//? if > 1.21.8 {
 import net.minecraft.server.packs.resources.PreparableReloadListener
 
 //?} else

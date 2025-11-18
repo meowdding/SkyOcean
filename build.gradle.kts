@@ -234,3 +234,7 @@ idea {
 }
 
 tasks.withType<ValidateAccessWidenerTask> { enabled = false }
+
+tasks.named<Jar>("sourcesJar") {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
