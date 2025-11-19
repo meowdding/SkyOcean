@@ -24,13 +24,9 @@ object DataGenPostProcessor {
     }
 
 
-    fun <T : Any> JsonElement?.toDataOrThrow(codec: Codec<T>): T {
-        return codec.parse(JsonOps.INSTANCE, this).getOrThrow()
-    }
+    fun <T : Any> JsonElement?.toDataOrThrow(codec: Codec<T>): T = codec.parse(JsonOps.INSTANCE, this).getOrThrow()
 
-    fun <T : Any> T.toJsonOrThrow(codec: Codec<T>): JsonElement {
-        return codec.encodeStart(JsonOps.INSTANCE, this).getOrThrow()
-    }
+    fun <T : Any> T.toJsonOrThrow(codec: Codec<T>): JsonElement = codec.encodeStart(JsonOps.INSTANCE, this).getOrThrow()
 
     fun processPack(folder: Path, output: Path) = zipFile(output.resolve("${folder.name}.zip")) { root ->
         val versions = folder.listDirectoryEntries("*.zip")

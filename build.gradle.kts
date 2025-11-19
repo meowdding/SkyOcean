@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
 import com.google.devtools.ksp.gradle.KspAATask
 import kotlin.jvm.java
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
@@ -14,6 +16,7 @@ plugins {
     alias(libs.plugins.kotlin.symbol.processor)
     alias(libs.plugins.meowdding.resources)
     alias(libs.plugins.meowdding.auto.mixins)
+    alias(libs.plugins.detekt)
     `versioned-catalogues`
     `museum-data`
 }
@@ -84,7 +87,7 @@ dependencies {
     ksp(libs.meowdding.ktmodules)
     ksp(libs.meowdding.ktcodecs)
 
-    //modRuntimeOnly(libs.devauth)
+    detektPlugins(libs.detekt.ktlintWrapper)
 }
 
 fun DependencyHandler.includeImplementation(dep: Any) {
@@ -237,4 +240,29 @@ tasks.withType<ValidateAccessWidenerTask> { enabled = false }
 
 tasks.named<Jar>("sourcesJar") {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+detekt {
+    source.setFrom(project.sourceSets.map { it.allSource })
+    config.from(files("$rootDir/detekt/detekt.yml"))
+    baseline = file("$rootDir/detekt/${project.name}-baseline.xml")
+    buildUponDefaultConfig = true
+    parallel = true
+}
+
+tasks.withType<Detekt>().configureEach {
+    onlyIf {
+        project.findProperty("skipDetekt") != "true"
+    }
+    exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.get().asFile.toPath()) }
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        sarif.required.set(true)
+        md.required.set(true)
+    }
+}
+tasks.withType<DetektCreateBaselineTask>().configureEach {
+    exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.get().asFile.toPath()) }
+    outputs.upToDateWhen { false }
 }

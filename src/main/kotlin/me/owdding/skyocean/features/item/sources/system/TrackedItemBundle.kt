@@ -33,6 +33,7 @@ class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
         val other = (newItem.context as? ParentItemContext)?.parent ?: newItem.context
         when {
             context is BundledItemContext -> context.add(newItem)
+
             context is EnderChestStorageItemContext && other is EnderChestStorageItemContext -> {
                 if (context.index == other.index) return
                 this.context = StorageItemContext
@@ -46,17 +47,22 @@ class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
             context is AbstractStorageItemContext && other is AbstractStorageItemContext -> {
                 this.context = StorageItemContext
             }
+
             context is RiftInventoryContext && other is RiftInventoryContext -> {}
+
             context is RiftEnderchestPageContext && other is RiftEnderchestPageContext -> {
                 if (context.index == other.index) return
                 this.context = RiftStorageContext
             }
 
             context is AbstractRiftStorageContext && other is AbstractRiftStorageContext -> {}
+
             context is RiftItemContext && other is RiftItemContext -> {}
 
             context is InventoryItemContext && other is InventoryItemContext -> {}
+
             context is EquipmentItemContext && other is EquipmentItemContext -> {}
+
             context !is BundledItemContext -> {
                 this.context = BundledItemContext().apply {
                     this@TrackedItemBundle.items.forEach(::add)

@@ -2,7 +2,6 @@ package me.owdding.skyocean.datagen.models.factories
 
 import me.owdding.skyocean.datagen.models.BlockModelFactory
 import me.owdding.skyocean.datagen.models.ModelGenContext
-
 import net.minecraft.client.data.models.BlockModelGenerators
 import net.minecraft.client.data.models.BlockModelGenerators.Y_ROT_270
 import net.minecraft.client.data.models.BlockModelGenerators.Y_ROT_90

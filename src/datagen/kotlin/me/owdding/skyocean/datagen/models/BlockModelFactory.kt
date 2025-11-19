@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Block
 import java.util.*
 
 val savedModels = mutableSetOf<ResourceLocation>()
+
 abstract class BlockModelFactory {
 
     lateinit var generator: BlockModelGenerators
@@ -39,22 +40,18 @@ abstract class BlockModelFactory {
         return BlockModelGenerators.plainVariant(create(apply, textureMapping, ::modelOutput))
     }
 
-    fun getBlockModelLocation(location: ResourceLocation, suffix: String = ""): ResourceLocation {
-        return location.withPrefix("block/").withSuffix(suffix)
-    }
+    fun getBlockModelLocation(location: ResourceLocation, suffix: String = ""): ResourceLocation = location.withPrefix("block/").withSuffix(suffix)
 
     fun getModelLocation(block: Block): ResourceLocation = BuiltInRegistries.BLOCK.getKey(block).withPrefix("block/")
 
-    fun createCopy(block: Block, fakeBlock: ResourceLocation, parent: ResourceLocation?): ResourceLocation {
-        return ModelTemplate(
-            parent.asOptional().map { getBlockModelLocation(it) }.orElse { getModelLocation(block) },
-            Optional.empty(),
-        ).create(
-            getBlockModelLocation(fakeBlock),
-            TextureMapping(),
-            ::modelOutput,
-        )
-    }
+    fun createCopy(block: Block, fakeBlock: ResourceLocation, parent: ResourceLocation?): ResourceLocation = ModelTemplate(
+        parent.asOptional().map { getBlockModelLocation(it) }.orElse { getModelLocation(block) },
+        Optional.empty(),
+    ).create(
+        getBlockModelLocation(fakeBlock),
+        TextureMapping(),
+        ::modelOutput,
+    )
 
     fun <T : Any> T?.asOptional(): Optional<T> = Optional.ofNullable(this)
     fun <T : Any> Optional<T>.orElse(supplier: () -> T): Optional<T> = this.or { supplier().asOptional() }

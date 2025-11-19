@@ -36,6 +36,7 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlock
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
     }
 
+    @Suppress("unused")
     private fun register(
         block: Block,
         texture: Block,
@@ -49,8 +50,8 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlock
     //? if > 1.21.8 {
     fun init(manager: PreparableReloadListener.SharedState, executor: Executor): CompletableFuture<Map<ResourceLocation, FakeBlockStateDefinition>> {
         val manager = manager.resourceManager()
-    //?} else
-    /*fun init(manager:  ResourceManager, executor: Executor): CompletableFuture<Map<ResourceLocation, FakeBlockStateDefinition>> {*/
+        //?} else
+        /*fun init(manager:  ResourceManager, executor: Executor): CompletableFuture<Map<ResourceLocation, FakeBlockStateDefinition>> {*/
         fakeBlocks.clear()
         RegisterFakeBlocksEvent(this::register).post(SkyBlockAPI.eventBus)
 

@@ -11,6 +11,7 @@ import net.minecraft.client.resources.model.ModelBaker
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import kotlin.jvm.optionals.getOrNull
+
 //? if = 1.21.5
 /*import net.fabricmc.fabric.api.renderer.v1.material.BlendMode*/
 
@@ -28,8 +29,8 @@ class FakeBlockStateDefinition(
         return roots!!
     }
 
-    fun instantiate(block: Block, baker: ModelBaker): Map<BlockState, BlockStateModel> {
-        return getRoots(block).mapValues { (state, model) -> model.bake(state, baker) }
+    fun instantiate(block: Block, baker: ModelBaker): Map<BlockState, BlockStateModel> = getRoots(block).mapValues { (state, model) ->
+        model.bake(state, baker)
     }
 
     companion object {

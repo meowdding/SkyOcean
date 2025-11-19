@@ -47,16 +47,19 @@ private const val BUTTON_SIZE = 5
 
 //? if > 1.21.5 {
 data class ItemWidgetItemState(
-    override val x0: Int, override val y0: Int, override val x1: Int, override val y1: Int,
+    override val x0: Int,
+    override val y0: Int,
+    override val x1: Int,
+    override val y1: Int,
     override val scissorArea: ScreenRectangle?,
     override val pose: Matrix3x2f,
     val rotation: Float,
     val item: TrackingItemStackRenderState,
 ) : MeowddingPipState<ItemWidgetItemState>() {
+    override val shrinkToScissor: Boolean = false
+
     override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<ItemWidgetItemState>> =
         Function { buffer -> ItemWidgetRenderer(buffer) }
-
-    override val shrinkToScissor: Boolean = false
 }
 
 class ItemWidgetRenderer(source: MultiBufferSource.BufferSource) : PictureInPictureRenderer<ItemWidgetItemState>(source) {
@@ -94,9 +97,9 @@ class ItemWidgetRenderer(source: MultiBufferSource.BufferSource) : PictureInPict
 
 class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
 
-    private val AUTO_ROTATE_ICON = WidgetSprites(SkyOcean.id("auto_rotate"), SkyOcean.id("auto_rotate_disabled"), SkyOcean.id("auto_rotate_hovered"))
-    private val LEFT_ARROW_ICON = SkyOcean.id("left_arrow")
-    private val RIGHT_ARROW_ICON = SkyOcean.id("right_arrow")
+    private val autoRotateIcon = WidgetSprites(SkyOcean.id("auto_rotate"), SkyOcean.id("auto_rotate_disabled"), SkyOcean.id("auto_rotate_hovered"))
+    private val leftArrowIcon = SkyOcean.id("left_arrow")
+    private val rightArrowIcon = SkyOcean.id("right_arrow")
 
     private var isAutoRotating = true
     private var rotation: Float = 0f
@@ -185,15 +188,15 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
         }
 
         this.isButtonHovered = isMouseOverButton(mouseX, mouseY)
-        graphics.drawSprite(LEFT_ARROW_ICON, buttonX - 1 - 7, buttonY, 7, BUTTON_SIZE)
+        graphics.drawSprite(leftArrowIcon, buttonX - 1 - 7, buttonY, 7, BUTTON_SIZE)
         graphics.drawSprite(
-            AUTO_ROTATE_ICON.get(!this.isAutoRotating, !this.isAutoRotating && this.isButtonHovered),
+            autoRotateIcon.get(!this.isAutoRotating, !this.isAutoRotating && this.isButtonHovered),
             buttonX,
             buttonY,
             BUTTON_SIZE,
             BUTTON_SIZE,
         )
-        graphics.drawSprite(RIGHT_ARROW_ICON, buttonX + BUTTON_SIZE + 1, buttonY, 7, BUTTON_SIZE)
+        graphics.drawSprite(rightArrowIcon, buttonX + BUTTON_SIZE + 1, buttonY, 7, BUTTON_SIZE)
         if (!this.isAutoRotating && this.isButtonHovered) {
             graphics.showTooltip(Text.of("Enable Auto Rotate"), mouseX, mouseY)
         }
@@ -226,7 +229,6 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
         else -> super.cursor
     }
 
-    private fun isMouseOverButton(mouseX: Int, mouseY: Int): Boolean {
-        return mouseX in buttonX until (buttonX + BUTTON_SIZE) && mouseY in buttonY until (buttonY + BUTTON_SIZE)
-    }
+    private fun isMouseOverButton(mouseX: Int, mouseY: Int): Boolean = mouseX in buttonX until (buttonX + BUTTON_SIZE) &&
+        mouseY in buttonY until (buttonY + BUTTON_SIZE)
 }

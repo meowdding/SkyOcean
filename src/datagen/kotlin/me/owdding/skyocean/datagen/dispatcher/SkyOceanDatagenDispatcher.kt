@@ -19,12 +19,13 @@ object SkyOceanDatagenDispatcher {
     }.getOrDefault(DatagenTarget.INCLUDED)
 
     val packs: MutableList<String> = mutableListOf()
+    lateinit var path: Path
+    var hasRegistered = false
 
     fun createResourcePack(name: String) {
         packs.add(name)
     }
 
-    lateinit var path: Path
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -34,7 +35,6 @@ object SkyOceanDatagenDispatcher {
         KnotClient.main(args)
     }
 
-    var hasRegistered = false
     fun register() {
         if (hasRegistered) return
         SkyBlockAPI.eventBus.register(this)
@@ -62,5 +62,4 @@ object SkyOceanDatagenDispatcher {
 enum class DatagenTarget {
     INCLUDED,
     RESOURCE_PACKS,
-    ;
 }

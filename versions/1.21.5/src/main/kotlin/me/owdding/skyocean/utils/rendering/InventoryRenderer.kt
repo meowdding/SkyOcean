@@ -62,11 +62,18 @@ object InventoryRenderer {
             .build(),
     )
 
+    private var lastMonoState: MonoState? = null
+    private var lastMonoTexture: GpuTexture? = null
+
+    private var lastNormalState: NormalState? = null
+    private var lastNormalTexture: GpuTexture? = null
+
     private inline fun cacheShaderToTexture(
         name: String,
         pipeline: RenderPipeline,
         property: KMutableProperty0<GpuTexture?>,
-        width: Int, height: Int,
+        width: Int,
+        height: Int,
         color: Int,
         setup: RenderPass.() -> Unit,
     ) {
@@ -109,9 +116,12 @@ object InventoryRenderer {
 
     private fun drawTexture(
         graphics: GuiGraphics,
-        x: Int, y: Int,
-        width: Int, height: Int,
-        color: Int = -1, texture: GpuTexture,
+        x: Int,
+        y: Int,
+        width: Int,
+        height: Int,
+        color: Int = -1,
+        texture: GpuTexture,
     ) {
         val matrix = graphics.pose().last().pose()
         val buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
@@ -123,9 +133,6 @@ object InventoryRenderer {
         RenderSystem.setShaderTexture(0, texture)
         PipelineRenderer.draw(RenderPipelines.GUI_TEXTURED, buffer.buildOrThrow()) {}
     }
-
-    private var lastMonoState: MonoState? = null
-    private var lastMonoTexture: GpuTexture? = null
 
     fun renderMonoInventory(graphics: GuiGraphics, x: Int, y: Int, width: Int, height: Int, size: Int, orientation: Orientation, color: Int) {
         val state = MonoState(width, height, size, orientation, color)
@@ -142,9 +149,6 @@ object InventoryRenderer {
 
         drawTexture(graphics, x, y, width, height, color, texture)
     }
-
-    private var lastNormalState: NormalState? = null
-    private var lastNormalTexture: GpuTexture? = null
 
     fun renderNormalInventory(graphics: GuiGraphics, x: Int, y: Int, width: Int, height: Int, columns: Int, rows: Int, color: Int) {
         val state = NormalState(width, height, columns, rows, color)

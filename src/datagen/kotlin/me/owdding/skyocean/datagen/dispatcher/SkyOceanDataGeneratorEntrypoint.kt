@@ -7,9 +7,10 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.minecraft.data.DataProvider
 
-abstract class SkyOceanDataGeneratorEntrypoint(val target: DatagenTarget = DatagenTarget.INCLUDED) : DataGeneratorEntrypoint,
-    MeowddingLogger by SkyOcean.featureLogger("datagen") {
+abstract class SkyOceanDataGeneratorEntrypoint(val target: DatagenTarget) : DataGeneratorEntrypoint, MeowddingLogger by SkyOcean.featureLogger("datagen") {
     abstract val name: String
+
+    constructor() : this(DatagenTarget.INCLUDED)
 
     override fun onInitializeDataGenerator(output: FabricDataGenerator) {
         if (target != SkyOceanDatagenDispatcher.target) {

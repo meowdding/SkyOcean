@@ -63,9 +63,7 @@ data class FakeBlockModelEntry(
         }
     }
 
-    fun isActive(state: BlockState, pos: BlockPos): Boolean {
-        return predicate(state, pos)
-    }
+    fun isActive(state: BlockState, pos: BlockPos): Boolean = predicate(state, pos)
 }
 
 class FakeBlockModel(
@@ -100,9 +98,7 @@ class FakeBlockModel(
         model.collectParts(randomSource, list)
     }
 
-    override fun particleIcon(): TextureAtlasSprite {
-        return model.particleIcon()
-    }
+    override fun particleIcon(): TextureAtlasSprite = model.particleIcon()
 }
 
 class FakeBlockUnbakedModel(
@@ -122,9 +118,7 @@ class FakeBlockUnbakedModel(
         },
     )
 
-    override fun visualEqualityGroup(blockState: BlockState): Any? {
-        return original.visualEqualityGroup(blockState)
-    }
+    override fun visualEqualityGroup(blockState: BlockState): Any? = original.visualEqualityGroup(blockState)
 
     override fun resolveDependencies(resolver: ResolvableModel.Resolver) {
         original.resolveDependencies(resolver)

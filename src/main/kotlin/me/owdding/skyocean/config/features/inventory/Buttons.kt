@@ -1,8 +1,8 @@
 package me.owdding.skyocean.config.features.inventory
 
+import kotlin.jvm.optionals.getOrNull
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
-import kotlin.jvm.optionals.getOrNull
 import me.owdding.skyocean.utils.Utils.id
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation

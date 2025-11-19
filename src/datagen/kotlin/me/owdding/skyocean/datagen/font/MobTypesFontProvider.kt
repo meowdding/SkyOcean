@@ -16,9 +16,9 @@ import java.awt.image.BufferedImage
 import java.util.concurrent.CompletableFuture
 import javax.imageio.ImageIO
 
-const val fontWidth = 5
-const val fontHeight = 5
-const val backgroundHeight = 7
+private const val fontWidth = 5
+private const val fontHeight = 5
+private const val backgroundHeight = 7
 
 class MobTypesFontProvider(output: FabricDataOutput, val converter: (KnownMobIcon) -> String, val fontType: ResourceLocation) :
     SkyOceanFontProvider(output, fontType) {

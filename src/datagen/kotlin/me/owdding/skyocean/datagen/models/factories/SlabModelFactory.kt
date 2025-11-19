@@ -95,13 +95,13 @@ object SlabModelFactory : BlockModelFactory() {
         val bottomSlab = ModelTemplates.SLAB_BOTTOM.plainVariant(fakeBlock, block, textureMapping)
         val topSlab = ModelTemplates.SLAB_TOP.plainVariant(fakeBlock, block, textureMapping)
         val doubleSlab = ModelTemplates.CUBE_ALL.plainVariant(fakeBlock.withSuffix("_double"), getBaseBlock(block), textureMapping)
-        
+
         MultiVariantGenerator.dispatch(block)
             .with(
                 PropertyDispatch.initial(BlockStateProperties.SLAB_TYPE)
                     .select(SlabType.BOTTOM, bottomSlab)
                     .select(SlabType.TOP, topSlab)
-                    .select(SlabType.DOUBLE, doubleSlab)
+                    .select(SlabType.DOUBLE, doubleSlab),
             ).let { modelGenContext.collectState(fakeBlock, it) }
     }
 }

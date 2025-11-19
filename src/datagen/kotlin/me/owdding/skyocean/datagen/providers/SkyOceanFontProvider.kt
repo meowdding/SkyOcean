@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation
 import java.util.concurrent.CompletableFuture
 import kotlin.streams.toList
 
-val CODEC = RecordCodecBuilder.create { it ->
+val CODEC = RecordCodecBuilder.create {
     it.group(
         GlyphProviderDefinition.MAP_CODEC.codec().listOf().fieldOf("providers").forGetter { it },
     ).apply(it) { it }
@@ -60,11 +60,9 @@ abstract class SkyOceanFontProvider(val output: PackOutput, val id: ResourceLoca
             grid.add(list.map { it.codePoints().findFirst().orElseThrow() })
         }
 
-        override fun build(): GlyphProviderDefinition {
-            return BitmapProvider.Definition(
-                file, height, ascent, grid.map { it.toIntArray() }.toTypedArray(),
-            )
-        }
+        override fun build(): GlyphProviderDefinition = BitmapProvider.Definition(
+            file, height, ascent, grid.map { it.toIntArray() }.toTypedArray(),
+        )
     }
 
     data class SpaceProviderDefinitionBuilder(private val holder: MutableMap<String, Int> = mutableMapOf()) : SkyOceanProviderDefinitionBuilder {
@@ -76,10 +74,8 @@ abstract class SkyOceanFontProvider(val output: PackOutput, val id: ResourceLoca
             holder[char] = space
         }
 
-        override fun build(): GlyphProviderDefinition {
-            return SpaceProvider.Definition(
-                holder.mapKeys { (k) -> k.codePoints().findFirst().orElseThrow() }.mapValues { (_, v) -> v.toFloat() },
-            )
-        }
+        override fun build(): GlyphProviderDefinition = SpaceProvider.Definition(
+            holder.mapKeys { (k) -> k.codePoints().findFirst().orElseThrow() }.mapValues { (_, v) -> v.toFloat() },
+        )
     }
 }

@@ -32,9 +32,10 @@ class FakeBlocksProvider(output: FabricDataOutput, saveBlockStates: Boolean = tr
 
     constructor(output: FabricDataOutput) : this(output, collector = { registrar -> RegisterFakeBlocksEvent(registrar).post(SkyBlockAPI.eventBus) })
 
-    override fun run(output: CachedOutput): CompletableFuture<*> {
-        return CompletableFuture.allOf(super.run(output), fakeBlockStateCollector.save(output, blockStatePathProvider))
-    }
+    override fun run(output: CachedOutput): CompletableFuture<*> = CompletableFuture.allOf(
+        super.run(output),
+        fakeBlockStateCollector.save(output, blockStatePathProvider),
+    )
 
     override fun generateBlockStateModels(blockModelGenerators: BlockModelGenerators) {
         savedModels.clear()

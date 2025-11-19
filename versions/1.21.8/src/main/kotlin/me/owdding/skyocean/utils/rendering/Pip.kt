@@ -20,30 +20,36 @@ val MONO_TEXTURE = SkyOcean.id("textures/gui/inventory/mono.png")
 val POLY_TEXTURE = SkyOcean.id("textures/gui/inventory/poly.png")
 
 data class MonoInventoryPipState(
-    override val x0: Int, override val y0: Int, override val x1: Int, override val y1: Int,
+    override val x0: Int,
+    override val y0: Int,
+    override val x1: Int,
+    override val y1: Int,
     override val scissorArea: ScreenRectangle?,
     override val pose: Matrix3x2f,
     val size: Int,
     val color: Int,
     val vertical: Boolean,
 ) : MeowddingPipState<MonoInventoryPipState>() {
+    override val shrinkToScissor: Boolean = false
+
     override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<MonoInventoryPipState>> =
         Function { buffer -> MonoInventoryPipRenderer(buffer) }
-
-    override val shrinkToScissor: Boolean = false
 }
 
 data class PolyInventoryPipState(
-    override val x0: Int, override val y0: Int, override val x1: Int, override val y1: Int,
+    override val x0: Int,
+    override val y0: Int,
+    override val x1: Int,
+    override val y1: Int,
     override val scissorArea: ScreenRectangle?,
     override val pose: Matrix3x2f,
     val size: Vector2i,
     val color: Int,
 ) : MeowddingPipState<PolyInventoryPipState>() {
+    override val shrinkToScissor: Boolean = false
+
     override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<PolyInventoryPipState>> =
         Function { buffer -> PolyInventoryPipRenderer(buffer) }
-
-    override val shrinkToScissor: Boolean = false
 }
 
 class MonoInventoryPipRenderer(source: MultiBufferSource.BufferSource) : PictureInPictureRenderer<MonoInventoryPipState>(source) {
@@ -51,9 +57,7 @@ class MonoInventoryPipRenderer(source: MultiBufferSource.BufferSource) : Picture
 
     override fun getRenderStateClass() = MonoInventoryPipState::class.java
 
-    override fun textureIsReadyToBlit(state: MonoInventoryPipState): Boolean {
-        return lastState != null && lastState == state
-    }
+    override fun textureIsReadyToBlit(state: MonoInventoryPipState): Boolean = lastState != null && lastState == state
 
     override fun renderToTexture(state: MonoInventoryPipState, stack: PoseStack) {
         val bounds = state.bounds ?: return
@@ -87,9 +91,7 @@ class PolyInventoryPipRenderer(source: MultiBufferSource.BufferSource) : Picture
 
     override fun getRenderStateClass() = PolyInventoryPipState::class.java
 
-    override fun textureIsReadyToBlit(state: PolyInventoryPipState): Boolean {
-        return lastState != null && lastState == state
-    }
+    override fun textureIsReadyToBlit(state: PolyInventoryPipState): Boolean = lastState != null && lastState == state
 
     override fun renderToTexture(state: PolyInventoryPipState, stack: PoseStack) {
         val bounds = state.bounds ?: return

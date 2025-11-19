@@ -1,8 +1,8 @@
 package me.owdding.skyocean
 
+import kotlin.jvm.optionals.getOrNull
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
-import kotlin.jvm.optionals.getOrNull
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.RemoteConfig
 import me.owdding.lib.overlays.EditOverlaysScreen
