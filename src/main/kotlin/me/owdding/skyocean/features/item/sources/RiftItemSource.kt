@@ -21,10 +21,17 @@ object RiftItemSource : ItemSource {
     override fun getAll(): List<SimpleTrackedItem> = buildList {
         addAll(StorageAPI.riftStorage.convert(::RiftEnderchestPageContext))
         addAll(EquipmentAPI.riftEquipment.map { (_, stack) -> SimpleTrackedItem(stack, RiftEquipment) })
+
         if (SkyBlockIsland.THE_RIFT.inIsland()) {
             addAll(McPlayer.inventory.map { SimpleTrackedItem(it, RiftInventoryContext) })
+            add(SimpleTrackedItem(McPlayer.helmet, RiftEquipment))
+            add(SimpleTrackedItem(McPlayer.chestplate, RiftEquipment))
+            add(SimpleTrackedItem(McPlayer.leggings, RiftEquipment))
+            add(SimpleTrackedItem(McPlayer.boots, RiftEquipment))
         } else {
-            InventoryStorage.data?.get(InventoryType.RIFT)?.map { SimpleTrackedItem(it, RiftInventoryContext) }?.toMutableList()?.let { addAll(it) }
+            val riftData = InventoryStorage.data?.get(InventoryType.RIFT)
+            riftData?.inventory?.map { SimpleTrackedItem(it, RiftInventoryContext) }?.toMutableList()?.let { addAll(it) }
+            riftData?.armour?.values?.map { SimpleTrackedItem(it, RiftEquipment) }?.let { addAll(it) }
         }
     }
 }
@@ -70,7 +77,7 @@ object RiftInventoryContext : RiftItemContext {
 }
 
 object RiftEquipment : RiftItemContext {
-    override val clickText: MutableComponent = Text.of("Click to equipment menu!") { color = TextColor.GRAY }
+    override val clickText: MutableComponent = Text.of("Click to open equipment menu!") { color = TextColor.GRAY }
 
     override fun lines(): List<Component> = build {
         requiresRift { add("Equipped!") { color = TextColor.GRAY } }

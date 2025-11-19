@@ -1,11 +1,18 @@
 package me.owdding.skyocean.features.inventory
 
 import com.mojang.serialization.Codec
-import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.skyocean.utils.codecs.CodecHelpers
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
-import tech.thatgravyboat.skyblockapi.utils.codecs.CodecUtils
 
-typealias InventoryData = MutableMap<InventoryType, MutableList<ItemStack>>
+@GenerateCodec
+data class DimensionInvetory(
+    val inventory: MutableList<ItemStack> = mutableListOf(),
+    val armour: MutableMap<EquipmentSlot, ItemStack> = mutableMapOf(),
+)
+
+typealias InventoryData = MutableMap<InventoryType, DimensionInvetory>
 
 enum class InventoryType {
     NORMAL,
@@ -13,11 +20,6 @@ enum class InventoryType {
     ;
 
     companion object {
-        val CODEC: Codec<InventoryData> = CodecUtils.map(
-            SkyOceanCodecs.getCodec<InventoryType>(),
-            CodecUtils.list(
-                ItemStack.OPTIONAL_CODEC,
-            ),
-        )
+        val CODEC: Codec<InventoryData> = CodecHelpers.mutableMap()
     }
 }

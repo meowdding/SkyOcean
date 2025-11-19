@@ -56,8 +56,7 @@ object CodecHelpers {
         Codec.unboundedMap(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
 
     internal inline fun <reified K, reified V> mutableMap(): Codec<MutableMap<K, V>> =
-        Codec.unboundedMap(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
-            .xmap({ it.toMutableMap() }, { it })
+        CodecUtils.map(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
 
     internal inline fun <reified T> list() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
 
