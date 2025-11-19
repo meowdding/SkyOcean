@@ -2,10 +2,7 @@ package me.owdding.skyocean.features.recipe.visitors
 
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
-import tech.thatgravyboat.repolib.api.recipes.CraftingRecipe
-import tech.thatgravyboat.repolib.api.recipes.ForgeRecipe
-import tech.thatgravyboat.repolib.api.recipes.KatRecipe
-import tech.thatgravyboat.repolib.api.recipes.Recipe
+import tech.thatgravyboat.repolib.api.recipes.*
 
 interface RecipeVisitor {
 
@@ -15,6 +12,7 @@ interface RecipeVisitor {
                 is ForgeRecipe -> ForgeRecipeVisitor
                 is CraftingRecipe -> CraftingRecipeVisitor
                 is KatRecipe -> KatRecipeVisitor
+                is ShopRecipe -> ShopRecipeVisitor
                 else -> null
             }
         }

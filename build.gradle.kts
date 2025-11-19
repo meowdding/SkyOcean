@@ -73,7 +73,7 @@ cloche {
     fun addDependencies(arg: ClocheDependencyHandler) = arg.apply {
         implementation(libs.meowdding.lib)
         implementation(libs.skyblockapi)
-        compileOnly(libs.skyblockapi.repo)
+        implementation(libs.skyblockapi.repo)
         implementation(libs.keval)
         implementation(libs.placeholders)
         implementation(libs.resourceful.config.kotlin)
