@@ -10,6 +10,7 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.level.block.Blocks
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyNonGuest
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.LeftClickBlockEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.GARDEN
@@ -38,6 +39,7 @@ object PestWarning {
 
     @Subscription
     @OnlyIn(GARDEN)
+    @OnlyNonGuest
     fun onBlockClick(event: LeftClickBlockEvent) {
         if (McLevel[event.pos].block !in cropBlocks) return
         val pests = PlotAPI.currentPestAmount
