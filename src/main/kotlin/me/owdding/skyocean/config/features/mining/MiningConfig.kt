@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.mining
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.separator
+import me.owdding.skyocean.features.mining.ForgeReminder
 
 object MiningConfig : CategoryKt("mining") {
 
@@ -27,6 +28,10 @@ object MiningConfig : CategoryKt("mining") {
         translation = "skyocean.config.mining.forge_reminder_delay"
         slider = true
         range = 1..30
+    }
+
+    var forgeReminderAction by enum(ForgeReminder.ForgeReminderAction.BOTH) {
+        translation = "skyocean.config.mining.forge_reminder_action"
     }
 
     init {
