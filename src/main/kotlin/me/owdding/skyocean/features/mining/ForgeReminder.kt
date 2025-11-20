@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.mining
 
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.helpers.CooldownHelper
@@ -38,6 +39,19 @@ object ForgeReminder {
         }
     }
 
+    private val clickToCall by lazy {
+        Text.of {
+            append(" [") { color = TextColor.YELLOW }
+            append("Click to call Fred") {
+                color = TextColor.GOLD
+                underlined = true
+            }
+            append("]") { color = TextColor.YELLOW }
+            command = "/call fred"
+            hover = Text.of("Call Fred!")
+        }
+    }
+
     private val helper = CooldownHelper(
         cooldown = { MiningConfig.forgeReminderDelay.minutes },
         onReady = {
@@ -51,11 +65,17 @@ object ForgeReminder {
                 }
             }
 
+            val action = when (MiningConfig.forgeReminderAction) {
+                ForgeReminderAction.WARP -> clickToWarp
+                ForgeReminderAction.CALL_FRED -> clickToCall
+                ForgeReminderAction.BOTH -> Text.join(clickToWarp, clickToCall)
+            }
+
             Text.join(
                 Text.translatable("skyocean.config.mining.forge_reminder"),
                 ChatUtils.SEPERATOR_COMPONENT,
                 items,
-                clickToWarp,
+                action,
             ) {
                 color = OceanColors.BASE_TEXT
             }.sendWithPrefix("SKYOCEAN_FORGE_REMINDER")
@@ -65,6 +85,16 @@ object ForgeReminder {
     @Subscription(ProfileChangeEvent::class)
     fun onProfileSwitch() {
         helper.reset()
+    }
+
+    enum class ForgeReminderAction : Translatable {
+        WARP,
+        CALL_FRED,
+        BOTH,
+        ;
+
+        //override fun getTranslationKey() = "skyocean.config.mining.forge_reminder_action.$name".lowercase()
+        override fun getTranslationKey() = "skyocean.config.mining.forge_reminder_action.${name.lowercase()}"
     }
 
 }
