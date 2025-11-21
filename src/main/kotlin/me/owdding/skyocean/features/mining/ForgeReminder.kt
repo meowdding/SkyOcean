@@ -93,7 +93,6 @@ object ForgeReminder {
         BOTH,
         ;
 
-        //override fun getTranslationKey() = "skyocean.config.mining.forge_reminder_action.$name".lowercase()
         override fun getTranslationKey() = "skyocean.config.mining.forge_reminder_action.${name.lowercase()}"
     }
 
