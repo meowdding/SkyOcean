@@ -20,6 +20,7 @@ object SkyOceanDatagen : SkyOceanDataGeneratorEntrypoint() {
         createPack.register { MobTypesFontProvider(it, KnownMobIcon::name, MobIcons.MOB_ICONS) }
         createPack.register { MobTypesFontProvider(it, KnownMobIcon::short, MobIcons.MOB_ICONS_SHORT) }
         createPack.register { FontIconsProvider(it) }
+        createPack.addProvider(::EntityTagProvider)
     }
 
     operator fun FakeBlockModelEventRegistrar.invoke(block: Block, definition: ResourceLocation) {

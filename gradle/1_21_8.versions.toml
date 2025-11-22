@@ -6,7 +6,7 @@ parchment = "2025.09.14"
 fabric-api = "0.136.0+1.21.8"
 
 resourceful-lib = "3.6.0"
-resourceful-config = "3.7.2"
+resourceful-config = "3.7.3"
 olympus = "1.5.2"
 placeholders = "2.7.2+1.21.8"
 

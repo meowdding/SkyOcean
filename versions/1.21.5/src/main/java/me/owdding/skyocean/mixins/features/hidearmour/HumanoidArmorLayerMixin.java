@@ -4,8 +4,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
+import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import me.owdding.skyocean.accessors.hidearmour.ItemStackAccessor;
-import me.owdding.skyocean.accessors.hidearmour.PlayerRenderStateAccessor;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -34,7 +34,7 @@ public class HumanoidArmorLayerMixin {
         Operation<Void> original,
         @Local(argsOnly = true) S renderState
     ) {
-        if (renderState instanceof PlayerRenderStateAccessor accessor && !accessor.skyocean$isNpc()) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor && !accessor.skyocean$isNpc()) {
             if (accessor.skyocean$isSelf()) {
                 ItemStackAccessor.setAlpha(armorItem, MiscConfig.INSTANCE.getTransparentArmorSelf());
             } else {

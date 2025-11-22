@@ -100,6 +100,8 @@ ktlint:
         active: false
     BlockCommentInitialStarAlignment:
         active: false
+    PackageName:
+        active: false
 
 naming:
     NoNameShadowing:

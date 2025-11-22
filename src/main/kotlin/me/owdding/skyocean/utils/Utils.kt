@@ -339,6 +339,9 @@ object Utils {
 
     @Suppress("UNCHECKED_CAST")
     fun <T, V> V.unsafeCast(): T = this as T
+    @Suppress("UNCHECKED_CAST")
+    @JvmName("saferUnsafeCast")
+    fun <T> Any.unsafeCast2(): T = this as T
 
     @JvmStatic
     fun <T> nonNullElse(value: T?, default: T?): T? {
