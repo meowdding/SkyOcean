@@ -456,6 +456,79 @@
               "The default <white>#FFFFFF</white> means that it doesn't get changed at all."
             ]
           }
+        },
+        "fun": {
+          "@value": "Fun",
+          "player_cats": {
+            "@value": "Player Cats",
+            "desc": [
+              "Changes players in the world to cats!",
+              "You can choose between <white>Nobody</white>, <white>Self</white>, <white>Players (non NPCs)</white> and <white>Everyone</white>."
+            ],
+            "state": {
+              "none": "Nobody",
+              "self": "Self",
+              "players": "Players",
+              "everyone": "Everyone"
+            },
+            "own_variant": {
+              "@value": "Own Cat Variant",
+              "desc": "Changes the cat variant that is used for yourself!"
+            },
+            "other_variant": {
+              "@value": "Other Cat Variant",
+              "desc": "Changes the car variant used for everyone else!"
+            },
+            "own_collar": {
+              "@value": "Own Collar Color",
+              "desc": "Defines what collar color to use for yourself!"
+            },
+            "other_collar": {
+              "@value": "Other Collar Color",
+              "desc": "Defines what collar color to use for everyone else!"
+            },
+            "variant": {
+              "default": "Random",
+              "tabby": "Tabby",
+              "black": "Black",
+              "red": "Red",
+              "siamese": "Siamese",
+              "british_shorthair": "British Shorthair",
+              "calico": "Calico",
+              "persian": "Persian",
+              "ragdoll": "Ragdoll",
+              "white": "White",
+              "jellie": "Jellie",
+              "all_black": "All Black"
+            },
+            "color": {
+              "default": "Random",
+              "none": "None",
+              "white": "<white>White",
+              "orange": "<#f5a97f>Orange",
+              "magenta": "<#ff00ff>Magenta",
+              "light_blue": "<#90d5ff>Light Blue",
+              "yellow": "<yellow>Yellow",
+              "lime": "<green>Lime",
+              "pink": "<pink>pink",
+              "gray": "<dark_gray>Gray",
+              "light_gray": "<light_gray>Light Gray",
+              "cyan": "<#00ffff>Cyan",
+              "purple": "<purple>Purple",
+              "blue": "<blue>Blue",
+              "brown": "<#964B00>Brown",
+              "green": "<green>Green",
+              "red": "<red>Red",
+              "black": "<black>Black"
+            },
+            "entity_overwrite": {
+              "@value": "Entity Overwrite",
+              "desc": [
+                "Changes the entity that is used, by default it's cats.",
+                "<italic><white>Note that settings like variant and collar won't work for non cat models!"
+              ]
+            }
+          }
         }
       },
       "fishing": {

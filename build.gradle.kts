@@ -3,6 +3,7 @@
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import com.google.devtools.ksp.gradle.KspAATask
+import kotlin.io.path.createDirectories
 import kotlin.jvm.java
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
 import org.gradle.kotlin.dsl.version
@@ -115,7 +116,9 @@ fabricApi {
         modId = "skyocean-datagen"
         createSourceSet = true
         createRunConfiguration = true
-        outputDirectory.set(project.layout.buildDirectory.file("generated/skyocean/data"))
+        outputDirectory.set(project.layout.buildDirectory.file("generated/skyocean/data").apply {
+            get().asFile.toPath().createDirectories()
+        })
     }
 }
 

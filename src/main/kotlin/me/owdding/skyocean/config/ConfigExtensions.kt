@@ -4,18 +4,18 @@ import com.teamresourceful.resourcefulconfigkt.api.*
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
-import me.owdding.skyocean.utils.Utils.unsafeCast
-import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
-import net.minecraft.network.chat.Component
-import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
-import tech.thatgravyboat.skyblockapi.utils.time.since
 import kotlin.reflect.KProperty
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
 import kotlin.time.Instant
 import kotlin.time.toTimeUnit
+import me.owdding.skyocean.utils.Utils.unsafeCast
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import net.minecraft.network.chat.Component
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.time.since
 
 fun <T> CategoryBuilder.observable(entry: ConfigDelegateProvider<RConfigKtEntry<T>>, onChange: () -> Unit) =
     this.observable(entry) { _, _ -> onChange() }

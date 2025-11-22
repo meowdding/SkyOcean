@@ -27,6 +27,7 @@ import me.owdding.skyocean.utils.SkyOceanModifyIndicator
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.OceanGradients
 import java.util.function.UnaryOperator
+import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 
 object Config : ConfigKt("skyocean/config") {
 
@@ -52,6 +53,7 @@ object Config : ConfigKt("skyocean/config") {
         category(MiscConfig) {
             category(MobIconsConfig)
             category(CraftHelperConfig)
+            category(FunConfig)
         }
         category(Buttons)
         category(OverlayPositions)
