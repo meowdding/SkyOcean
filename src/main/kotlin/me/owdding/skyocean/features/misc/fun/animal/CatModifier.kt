@@ -22,17 +22,17 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
     private val catVariants: List<CatVariant> = Registries.CAT_VARIANT.list().sortedBy { it.assetInfo.id.toString() }
     private val dyeColors = DyeColor.entries
 
-    fun getCollarColor(state: AvatarRenderState): DyeColor? {
-        val collarColor = PlayerAnimalConfig.collarColor.select(state)
-        if (collarColor == CollarColor.NONE) return null
-        return collarColor.dyeColor ?: getRandom(state, dyeColors)
-    }
-
     var catVariant = PlayerAnimalConfig.createEntry("cat_variant") { id, type ->
         enum(id, Variant.DEFAULT) {
             this.translation = "skyocean.config.misc.fun.player_animals.cat.${type}_variant"
             condition = isSelected(EntityType.CAT)
         }
+    }
+
+    fun getCollarColor(state: AvatarRenderState): DyeColor? {
+        val collarColor = PlayerAnimalConfig.collarColor.select(state)
+        if (collarColor == CollarColor.NONE) return null
+        return collarColor.dyeColor ?: getRandom(state, dyeColors)
     }
 
     fun getCatVariant(state: AvatarRenderState): CatVariant = catVariant.select(state).catVariant ?: getRandom(state, catVariants)
