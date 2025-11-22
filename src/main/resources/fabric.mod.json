@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "skyocean",
+  "version": "${version}",
+  "name": "SkyOcean",
+  "description": "SkyOcean is a hypixel skyblock mod that aims to provide a better playing experience by integrating QOL elements in an unnoticeable way.",
+  "license": "Modified MIT",
+  "icon": "assets/skyocean/skyocean-big.png",
+  "entrypoints": {
+    "client": [
+      {
+        "value": "me.owdding.skyocean.SkyOcean",
+        "adapter": "kotlin"
+      }
+    ]
+  },
+  "mixins": [
+    "skyocean.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": ">=${minecraft_start} <=${minecraft_end}",
+    "fabric": "*",
+    "fabric-language-kotlin": ">=${fabric_lang_kotlin}",
+    "resourcefullib": ">=${rlib}",
+    "olympus": ">=${olympus}",
+    "skyblock-api": ">=${sbapi}",
+    "meowdding-lib": ">=${mlib}",
+    "resourcefulconfigkt": ">=${rconfigkt}",
+    "resourcefulconfig": ">=${rconfig}",
+    "placeholder-api": ">=${placeholder_api}"
+  },
+  "accessWidener": "skyocean.accesswidener"
+}

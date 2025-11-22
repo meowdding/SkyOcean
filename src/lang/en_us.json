@@ -87,6 +87,13 @@
           "@value": "Reminder Delay",
           "desc": "The delay between reminders in minutes."
         },
+        "forge_reminder_action": {
+          "@value": "Reminder Action",
+          "desc": "What clickable action will show when the timer is over.",
+          "warp": "Warp to Forge",
+          "call_fred": "Call Fred",
+          "both": "Both"
+        },
         "retexture": {
           "@value": "Retexture",
           "carpets": {
