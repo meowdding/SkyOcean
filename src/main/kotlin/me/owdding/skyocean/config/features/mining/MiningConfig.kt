@@ -30,7 +30,7 @@ object MiningConfig : CategoryKt("mining") {
         range = 1..30
     }
 
-    var forgeReminderAction by enum(ForgeReminder.ForgeReminderAction.BOTH) {
+    var forgeReminderAction by enum(ForgeReminder.ForgeReminderAction.WARP) {
         translation = "skyocean.config.mining.forge_reminder_action"
     }
 
