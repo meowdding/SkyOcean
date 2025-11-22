@@ -15,6 +15,16 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 
 object PlayerAnimals {
+
+    private val modifiers: MutableMap<EntityType<*>, AnimalModifier<*, *>> = HashMap()
+
+    lateinit var renderer: LivingEntityRenderer<LivingEntity, LivingEntityRenderState, *>
+
+    init {
+        register(CatModifier)
+        register(FoxModifier)
+    }
+
     @JvmStatic
     fun shouldPlayerBeAnimal(renderState: AvatarRenderState): Boolean {
         val accessor = renderState as? AvatarRenderStateAccessor ?: return false
@@ -24,13 +34,6 @@ object PlayerAnimals {
             PlayerCatState.SELF -> accessor.`skyocean$isSelf`()
             PlayerCatState.PLAYERS -> !accessor.`skyocean$isNpc`()
         }
-    }
-
-    private val modifiers: MutableMap<EntityType<*>, AnimalModifier<*, *>> = HashMap()
-
-    init {
-        register(CatModifier)
-        register(FoxModifier)
     }
 
     private fun <Type : LivingEntity, State : LivingEntityRenderState> register(animalModifier: AnimalModifier<Type, State>) {
@@ -43,10 +46,8 @@ object PlayerAnimals {
     fun <State : LivingEntityRenderState> apply(avatarState: AvatarRenderState, state: State, partialTicks: Float) {
         getModifier<State>(state.entityType)?.apply(avatarState, state, partialTicks)
     }
-
     @JvmStatic
     fun getEntityType(): EntityType<*> = FunConfig.entityType
-    lateinit var renderer: LivingEntityRenderer<LivingEntity, LivingEntityRenderState, *>
 
     fun createRenderer(context: EntityRendererProvider.Context) {
         renderer = object : LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>(context, null, 20f) {

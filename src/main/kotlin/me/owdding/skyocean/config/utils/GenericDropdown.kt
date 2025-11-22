@@ -12,15 +12,15 @@ import com.teamresourceful.resourcefulconfigkt.api.ConfigDelegateProvider
 import com.teamresourceful.resourcefulconfigkt.api.RConfigKtEntry
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.TypeBuilder
+import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
-import java.util.*
+import java.util.UUID
 import kotlin.jvm.optionals.getOrNull
-import me.owdding.skyocean.utils.Utils.unsafeCast
 
 class GenericDropdown<T>(
     val element: ResourcefulConfigElement,

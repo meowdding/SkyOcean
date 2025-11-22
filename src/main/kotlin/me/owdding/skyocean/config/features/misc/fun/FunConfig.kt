@@ -22,7 +22,7 @@ object FunConfig : CategoryKt("fun") {
 
     val entityType: EntityType<*> by entityTypeDropdown(
         EntityType.CAT,
-        BuiltInRegistries.ENTITY_TYPE.toList().filter { it in EntityTagKey.LIVING_ENTITIES }
+        BuiltInRegistries.ENTITY_TYPE.toList().filter { it in EntityTagKey.LIVING_ENTITIES },
     ) {
         this.translation = "skyocean.config.misc.fun.player_animals.type"
     }

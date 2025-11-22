@@ -1,7 +1,6 @@
 package me.owdding.skyocean.features.misc.`fun`.animal
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
-import kotlin.jvm.optionals.getOrNull
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
@@ -14,6 +13,7 @@ import net.minecraft.world.entity.animal.Cat
 import net.minecraft.world.entity.animal.CatVariant
 import net.minecraft.world.entity.animal.CatVariants
 import net.minecraft.world.item.DyeColor
+import kotlin.jvm.optionals.getOrNull
 
 object CatModifier : AnimalModifier<Cat, CatRenderState> {
     override val type: EntityType<Cat> = EntityType.CAT
@@ -27,9 +27,7 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
         return collarColor.dyeColor ?: getRandom(state, dyeColors)
     }
 
-    fun getCatVariant(state: AvatarRenderState): CatVariant {
-        return PlayerAnimalConfig.catVariant.select(state).catVariant ?: getRandom(state, catVariants)
-    }
+    fun getCatVariant(state: AvatarRenderState): CatVariant = PlayerAnimalConfig.catVariant.select(state).catVariant ?: getRandom(state, catVariants)
 
     override fun apply(
         avatarState: AvatarRenderState,
@@ -58,8 +56,8 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
         ALL_BLACK(CatVariants.ALL_BLACK),
         ;
 
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_cats.variant.${name.lowercase()}"
         val catVariant by lazy { resourceKey?.let { Registries.CAT_VARIANT.lookup().get(it).getOrNull() }?.value() }
+        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_cats.variant.${name.lowercase()}"
     }
 
     enum class CollarColor(val dyeColor: DyeColor?) : Translatable {
@@ -83,7 +81,6 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
         RED(DyeColor.RED),
         BLACK(DyeColor.BLACK),
         ;
-
 
         override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_cats.color.${name.lowercase()}"
     }

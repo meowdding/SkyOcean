@@ -21,13 +21,13 @@ import me.owdding.skyocean.config.features.mining.MiningRetexture
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.misc.MobIconsConfig
+import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 import me.owdding.skyocean.config.hidden.OverlayPositions
 import me.owdding.skyocean.config.patcher.ConfigPatches
 import me.owdding.skyocean.utils.SkyOceanModifyIndicator
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.OceanGradients
 import java.util.function.UnaryOperator
-import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 
 object Config : ConfigKt("skyocean/config") {
 
