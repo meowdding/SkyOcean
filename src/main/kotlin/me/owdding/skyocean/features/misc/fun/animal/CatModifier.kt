@@ -15,6 +15,7 @@ import net.minecraft.world.entity.animal.CatVariants
 import net.minecraft.world.item.DyeColor
 import kotlin.jvm.optionals.getOrNull
 
+@RegisterAnimalModifier
 object CatModifier : AnimalModifier<Cat, CatRenderState> {
     override val type: EntityType<Cat> = EntityType.CAT
 
@@ -27,7 +28,14 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
         return collarColor.dyeColor ?: getRandom(state, dyeColors)
     }
 
-    fun getCatVariant(state: AvatarRenderState): CatVariant = PlayerAnimalConfig.catVariant.select(state).catVariant ?: getRandom(state, catVariants)
+    var catVariant = PlayerAnimalConfig.createEntry("cat_variant") { id, type ->
+        enum(id, Variant.DEFAULT) {
+            this.translation = "skyocean.config.misc.fun.player_animals.cat.${type}_variant"
+            condition = isSelected(EntityType.CAT)
+        }
+    }
+
+    fun getCatVariant(state: AvatarRenderState): CatVariant = catVariant.select(state).catVariant ?: getRandom(state, catVariants)
 
     override fun apply(
         avatarState: AvatarRenderState,
