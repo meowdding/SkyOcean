@@ -4,13 +4,11 @@ import me.owdding.skyocean.data.profile.InventoryStorage
 import me.owdding.skyocean.features.inventory.InventoryType
 import me.owdding.skyocean.features.item.sources.system.ItemContext
 import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.profile.items.equipment.EquipmentAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
