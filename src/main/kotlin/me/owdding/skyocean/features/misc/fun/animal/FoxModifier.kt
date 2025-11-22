@@ -14,7 +14,7 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
 
     var foxVariant = PlayerAnimalConfig.createEntry("fox_variant") { id, type ->
         enum(id, Variant.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.cat.${type}_variant"
+            this.translation = "skyocean.config.misc.fun.player_animals.fox.${type}_variant"
             condition = isSelected(EntityType.FOX)
         }
     }
@@ -34,6 +34,6 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
         SNOW(Fox.Variant.SNOW),
         ;
 
-        override fun getTranslationKey(): String = "$name"
+        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.fox.variant.${name.lowercase()}"
     }
 }

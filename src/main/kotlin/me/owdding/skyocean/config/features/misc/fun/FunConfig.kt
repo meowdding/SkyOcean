@@ -11,7 +11,7 @@ object FunConfig : CategoryKt("fun") {
     override val name get() = Translated("skyocean.config.misc.fun")
 
     var playerAnimals by enum(PlayerAnimals.PlayerCatState.NONE) {
-        this.translation = "skyocean.config.misc.fun.player_cats"
+        this.translation = "skyocean.config.misc.fun.player_animals"
     }
 
     init {

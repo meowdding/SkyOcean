@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.DyeColor
 
 object PlayerAnimals {
 
@@ -66,6 +67,32 @@ object PlayerAnimals {
         EVERYONE,
         ;
 
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_cats.state.${name.lowercase()}"
+        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.state.${name.lowercase()}"
     }
+
+}
+
+enum class CollarColor(val dyeColor: DyeColor?) : Translatable {
+    DEFAULT(null),
+    NONE(null),
+
+    WHITE(DyeColor.WHITE),
+    ORANGE(DyeColor.ORANGE),
+    MAGENTA(DyeColor.MAGENTA),
+    LIGHT_BLUE(DyeColor.LIGHT_BLUE),
+    YELLOW(DyeColor.YELLOW),
+    LIME(DyeColor.LIME),
+    PINK(DyeColor.PINK),
+    GRAY(DyeColor.GRAY),
+    LIGHT_GRAY(DyeColor.LIGHT_GRAY),
+    CYAN(DyeColor.CYAN),
+    PURPLE(DyeColor.PURPLE),
+    BLUE(DyeColor.BLUE),
+    BROWN(DyeColor.BROWN),
+    GREEN(DyeColor.GREEN),
+    RED(DyeColor.RED),
+    BLACK(DyeColor.BLACK),
+    ;
+
+    override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.color.${name.lowercase()}"
 }

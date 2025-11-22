@@ -12,7 +12,6 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.animal.Cat
 import net.minecraft.world.entity.animal.CatVariant
 import net.minecraft.world.entity.animal.CatVariants
-import net.minecraft.world.item.DyeColor
 import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier
@@ -20,19 +19,12 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
     override val type: EntityType<Cat> = EntityType.CAT
 
     private val catVariants: List<CatVariant> = Registries.CAT_VARIANT.list().sortedBy { it.assetInfo.id.toString() }
-    private val dyeColors = DyeColor.entries
 
     var catVariant = PlayerAnimalConfig.createEntry("cat_variant") { id, type ->
         enum(id, Variant.DEFAULT) {
             this.translation = "skyocean.config.misc.fun.player_animals.cat.${type}_variant"
             condition = isSelected(EntityType.CAT)
         }
-    }
-
-    fun getCollarColor(state: AvatarRenderState): DyeColor? {
-        val collarColor = PlayerAnimalConfig.collarColor.select(state)
-        if (collarColor == CollarColor.NONE) return null
-        return collarColor.dyeColor ?: getRandom(state, dyeColors)
     }
 
     fun getCatVariant(state: AvatarRenderState): CatVariant = catVariant.select(state).catVariant ?: getRandom(state, catVariants)
@@ -65,31 +57,6 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
         ;
 
         val catVariant by lazy { resourceKey?.let { Registries.CAT_VARIANT.lookup().get(it).getOrNull() }?.value() }
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_cats.variant.${name.lowercase()}"
-    }
-
-    enum class CollarColor(val dyeColor: DyeColor?) : Translatable {
-        DEFAULT(null),
-        NONE(null),
-
-        WHITE(DyeColor.WHITE),
-        ORANGE(DyeColor.ORANGE),
-        MAGENTA(DyeColor.MAGENTA),
-        LIGHT_BLUE(DyeColor.LIGHT_BLUE),
-        YELLOW(DyeColor.YELLOW),
-        LIME(DyeColor.LIME),
-        PINK(DyeColor.PINK),
-        GRAY(DyeColor.GRAY),
-        LIGHT_GRAY(DyeColor.LIGHT_GRAY),
-        CYAN(DyeColor.CYAN),
-        PURPLE(DyeColor.PURPLE),
-        BLUE(DyeColor.BLUE),
-        BROWN(DyeColor.BROWN),
-        GREEN(DyeColor.GREEN),
-        RED(DyeColor.RED),
-        BLACK(DyeColor.BLACK),
-        ;
-
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_cats.color.${name.lowercase()}"
+        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.cat.variant.${name.lowercase()}"
     }
 }
