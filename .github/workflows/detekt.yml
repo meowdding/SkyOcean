@@ -39,8 +39,6 @@ jobs:
                     java-version: '21'
             -   name: Setup gradle
                 uses: gradle/actions/setup-gradle@v5
-                with:
-                    add-job-summary-as-pr-comment: 'on-failure'
             -   run: chmod +x gradlew
             -   name: Run detekt main
                 run: ./gradlew detekt --stacktrace
