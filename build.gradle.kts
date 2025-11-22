@@ -108,15 +108,16 @@ loom {
     }
 }
 
+val datagenOutput = project.layout.buildDirectory.file("generated/skyocean/data").apply {
+    get().asFile.toPath().createDirectories()
+}
 fabricApi {
     configureDataGeneration {
         client = true
         modId = "skyocean-datagen"
         createSourceSet = true
         createRunConfiguration = true
-        outputDirectory.set(project.layout.buildDirectory.file("generated/skyocean/data").apply {
-            get().asFile.toPath().createDirectories()
-        })
+        outputDirectory.set(datagenOutput)
     }
 }
 
@@ -252,8 +253,13 @@ detekt {
 }
 
 tasks.named { it == "jar" || it == "sourcesJar" }.configureEach {
-    if (rootProject.hasProperty("datagen"))
+    if (this !is Jar) return@configureEach
+    if (rootProject.hasProperty("datagen")) {
         dependsOn(tasks.named("runDatagen"))
+        with(copySpec {
+            from(datagenOutput).exclude(".cache/**")
+        })
+    }
 }
 
 tasks.withType<Detekt>().configureEach {
