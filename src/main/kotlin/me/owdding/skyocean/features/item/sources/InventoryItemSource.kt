@@ -4,11 +4,13 @@ import me.owdding.skyocean.data.profile.InventoryStorage
 import me.owdding.skyocean.features.inventory.InventoryType
 import me.owdding.skyocean.features.item.sources.system.ItemContext
 import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.profile.items.equipment.EquipmentAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -42,8 +44,14 @@ interface OnPlayerItemContext : ItemContext {
 
 object EquipmentItemContext : OnPlayerItemContext {
     override fun collectLines() = build {
-        requiresOverworld { add("Equipped!") { color = TextColor.GRAY } }
-        requiresRift { add("Equipped in overworld!") { color = TextColor.GRAY } }
+        requiresOverworld {
+            add("Equipped!") { color = TextColor.GRAY }
+            add("Click to open equipment menu!") { color = TextColor.GRAY }
+        }
+        requiresRift {
+            add("Equipped in overworld!") { color = TextColor.GRAY }
+            add("Not currently in the overworld!") { color = TextColor.RED }
+        }
     }
 
     override fun open() = requiresOverworld(true) { McClient.sendCommand("/eq") }
