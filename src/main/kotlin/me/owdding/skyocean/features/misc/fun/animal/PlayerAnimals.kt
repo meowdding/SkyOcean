@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor
 import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
+import me.owdding.skyocean.generated.SkyOceanAnimalModifiers
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.entity.EntityRendererProvider
@@ -21,8 +22,7 @@ object PlayerAnimals {
     lateinit var renderer: LivingEntityRenderer<LivingEntity, LivingEntityRenderState, *>
 
     init {
-        register(CatModifier)
-        register(FoxModifier)
+        SkyOceanAnimalModifiers.collected.forEach { register(it) }
     }
 
     @JvmStatic

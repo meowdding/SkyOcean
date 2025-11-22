@@ -7,16 +7,24 @@ import net.minecraft.client.renderer.entity.state.FoxRenderState
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.animal.Fox
 
+@RegisterAnimalModifier
 object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
     override val type: EntityType<Fox> = EntityType.FOX
     private val foxVariants = Fox.Variant.entries
+
+    var foxVariant = PlayerAnimalConfig.createEntry("fox_variant") { id, type ->
+        enum(id, Variant.RANDOM) {
+            this.translation = "skyocean.config.misc.fun.player_animals.cat.${type}_variant"
+            condition = isSelected(EntityType.FOX)
+        }
+    }
 
     override fun apply(
         avatarState: AvatarRenderState,
         state: FoxRenderState,
         partialTicks: Float,
     ) {
-        state.variant = PlayerAnimalConfig.foxVariant.select(avatarState).variant ?: getRandom(avatarState, foxVariants)
+        state.variant = foxVariant.select(avatarState).variant ?: getRandom(avatarState, foxVariants)
         state.isSitting = avatarState.isCrouching
     }
 

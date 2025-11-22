@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
 import com.teamresourceful.resourcefulconfigkt.api.RConfigKtEntry
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor
 import me.owdding.skyocean.features.misc.`fun`.animal.CatModifier
-import me.owdding.skyocean.features.misc.`fun`.animal.FoxModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.world.entity.EntityType
 import kotlin.reflect.KProperty
@@ -23,27 +22,18 @@ object PlayerAnimalConfig : ObjectKt() {
         ): RConfigKtEntry<T> = this.provideDelegate(PlayerAnimalConfig, prop)
     }
 
-    var catVariant = TargetedValue("cat_variant") { id, type ->
-        enum(id, CatModifier.Variant.DEFAULT) {
-            this.translation = "skyocean.config.misc.fun.player_animals.cat.${type}_variant"
-            condition = isSelected(EntityType.CAT)
-        }
-    }
-
-    var foxVariant = TargetedValue("fox_variant") { id, type ->
-        enum(id, FoxModifier.Variant.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.cat.${type}_variant"
-            condition = isSelected(EntityType.FOX)
-        }
-    }
-
-    var collarColor = TargetedValue("color_color") { id, type ->
+    var collarColor = TargetedValue("collar_color") { id, type ->
         enum(id, CatModifier.CollarColor.DEFAULT) {
             this.translation = "skyocean.config.misc.fun.player_animals.cat.${type}_collar"
             condition = isAnySelected(EntityType.CAT, EntityType.WOLF)
         }
     }
 
-    private fun isSelected(type: EntityType<*>) = { FunConfig.entityType == type }
-    private fun isAnySelected(vararg types: EntityType<*>) = { FunConfig.entityType in types }
+    fun <T> createEntry(
+        id: String,
+        constructor: PlayerAnimalConfig.(id: String, type: String) -> ConfigDelegateProvider<RConfigKtEntry<T>>,
+    ) = TargetedValue(id, constructor)
+
+    fun isSelected(type: EntityType<*>) = { FunConfig.entityType == type }
+    fun isAnySelected(vararg types: EntityType<*>) = { FunConfig.entityType in types }
 }
