@@ -252,10 +252,9 @@ detekt {
     buildUponDefaultConfig = true
     parallel = true
 }
-
 tasks.withType<Detekt>().configureEach {
     onlyIf {
-        project.findProperty("skipDetekt") != "true"
+        !rootProject.hasProperty("skipDetekt")
     }
     exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.get().asFile.toPath()) }
     reports {
