@@ -1,14 +1,12 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.google.devtools.ksp.gradle.KspAATask
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
-import com.google.devtools.ksp.gradle.KspAATask
-import kotlin.io.path.createDirectories
-import kotlin.jvm.java
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
-import org.gradle.kotlin.dsl.version
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import kotlin.io.path.createDirectories
 
 plugins {
     idea
@@ -252,6 +250,12 @@ detekt {
     buildUponDefaultConfig = true
     parallel = true
 }
+
+tasks.named { it == "jar" || it == "sourcesJar" }.configureEach {
+    if (rootProject.hasProperty("datagen"))
+        dependsOn(tasks.named("runDatagen"))
+}
+
 tasks.withType<Detekt>().configureEach {
     onlyIf {
         !rootProject.hasProperty("skipDetekt")
