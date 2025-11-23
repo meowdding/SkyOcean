@@ -1,7 +1,7 @@
 #version 150
 
-//#moj_import <minecraft:dynamictransforms.glsl>
-//#moj_import <minecraft:projection.glsl>
+//!moj_import <minecraft:dynamictransforms.glsl>
+//!moj_import <minecraft:projection.glsl>
 
 out vec2 texCoord0;
 out vec4 vertexColor;
