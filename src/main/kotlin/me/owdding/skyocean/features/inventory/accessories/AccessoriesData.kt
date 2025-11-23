@@ -105,17 +105,21 @@ object AccessoriesAPI {
 data class AccessoryFamily(
     val family: String,
     @Compact val tiers: List<AccessoryTier>,
-) {
-    fun flatMapItems(): List<SkyBlockId> = tiers.flatMap(AccessoryTier::items)
-    fun contains(id: SkyBlockId): Boolean = tiers.any { id in it.items }
+) : List<AccessoryTier> by tiers {
+    //region Functions
+    val maxTier: Int get() = lastIndex
+    fun flatMapItems(): Sequence<SkyBlockId> = asSequence().flatMap(AccessoryTier::items)
+    operator fun get(id: SkyBlockId): AccessoryTier? = find { id in it }
+    fun contains(id: SkyBlockId): Boolean = any { id in it }
+    //endregion
 }
 
 data class AccessoryTier(
-    val items: List<SkyBlockId>,
-) : List<SkyBlockId> by items {
+    val items: Set<SkyBlockId>,
+) : Set<SkyBlockId> by items {
     companion object {
         @IncludedCodec
-        val CODEC: Codec<AccessoryTier> = CodecUtils.compactList(SkyBlockId.CODEC).xmap(::AccessoryTier, AccessoryTier::items)
+        val CODEC: Codec<AccessoryTier> = CodecUtils.compactSet(SkyBlockId.CODEC).xmap(::AccessoryTier, AccessoryTier::items)
     }
 }
 

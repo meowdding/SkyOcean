@@ -137,17 +137,17 @@ object ItemModifiers {
 
     @Subscription
     @MustBeContainer
-    fun InventoryChangeEvent.onContainerChange() {
+    private fun InventoryChangeEvent.onContainerChange() {
         tryModify(item)
     }
 
     @Subscription
-    fun PlayerInventoryChangeEvent.onInventoryChange() {
+    private fun PlayerInventoryChangeEvent.onInventoryChange() {
         tryModify(item)
     }
 
     @Subscription
-    fun PlayerHotbarChangeEvent.onHotbarChange() {
+    private fun PlayerHotbarChangeEvent.onHotbarChange() {
         tryModify(item)
     }
 

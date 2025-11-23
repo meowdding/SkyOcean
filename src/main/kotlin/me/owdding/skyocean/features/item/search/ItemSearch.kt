@@ -5,6 +5,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -24,7 +25,7 @@ object ItemSearch {
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("search") {
             if (!LocationAPI.isOnSkyBlock) {
-                Text.of("You must be on Skyblock!") { this.color = TextColor.RED }
+                Text.of("You must be on SkyBlock!") { this.color = TextColor.RED }.sendWithPrefix()
                 return@registerWithCallback
             }
             McClient.setScreen(ItemSearchScreen)
