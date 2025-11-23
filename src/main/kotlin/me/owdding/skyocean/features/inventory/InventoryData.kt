@@ -7,12 +7,12 @@ import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
 
 @GenerateCodec
-data class DimensionInvetory(
+data class DimensionInventory(
     val inventory: MutableList<ItemStack> = mutableListOf(),
     val armour: MutableMap<EquipmentSlot, ItemStack> = mutableMapOf(),
 )
 
-typealias InventoryData = MutableMap<InventoryType, DimensionInvetory>
+typealias InventoryData = MutableMap<InventoryType, DimensionInventory>
 
 enum class InventoryType {
     NORMAL,

@@ -11,6 +11,7 @@ import tech.thatgravyboat.skyblockapi.api.profile.items.equipment.EquipmentAPI
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.extentions.getArmor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -24,10 +25,7 @@ object RiftItemSource : ItemSource {
 
         if (SkyBlockIsland.THE_RIFT.inIsland()) {
             addAll(McPlayer.inventory.map { SimpleTrackedItem(it, RiftInventoryContext) })
-            add(SimpleTrackedItem(McPlayer.helmet, RiftEquipment))
-            add(SimpleTrackedItem(McPlayer.chestplate, RiftEquipment))
-            add(SimpleTrackedItem(McPlayer.leggings, RiftEquipment))
-            add(SimpleTrackedItem(McPlayer.boots, RiftEquipment))
+            McPlayer.self?.getArmor()?.forEach { add(SimpleTrackedItem(it, RiftEquipment)) }
         } else {
             val riftData = InventoryStorage.data?.get(InventoryType.RIFT)
             riftData?.inventory?.map { SimpleTrackedItem(it, RiftInventoryContext) }?.toMutableList()?.let { addAll(it) }

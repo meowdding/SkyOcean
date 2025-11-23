@@ -9,6 +9,7 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.profile.items.equipment.EquipmentAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.extentions.getArmor
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -26,10 +27,7 @@ object InventoryItemSource : ItemSource {
             overworldData?.armour?.values?.map { SimpleTrackedItem(it, EquipmentItemContext) }?.let { addAll(it) }
         } else {
             addAll(McPlayer.inventory.map { SimpleTrackedItem(it, InventoryItemContext) })
-            addEquipment(McPlayer.helmet)
-            addEquipment(McPlayer.chestplate)
-            addEquipment(McPlayer.leggings)
-            addEquipment(McPlayer.boots)
+            McPlayer.self?.getArmor()?.forEach(::addEquipment)
         }
     }
 

@@ -1,7 +1,7 @@
 package me.owdding.skyocean.data.profile
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.features.inventory.DimensionInvetory
+import me.owdding.skyocean.features.inventory.DimensionInventory
 import me.owdding.skyocean.features.inventory.InventoryData
 import me.owdding.skyocean.features.inventory.InventoryType
 import me.owdding.skyocean.generated.CodecUtils
@@ -27,7 +27,7 @@ object InventoryStorage {
                     SkyOceanCodecs.getCodec<InventoryType>(),
                     CodecUtils.mutableList(ItemStack.OPTIONAL_CODEC),
                 ).xmap(
-                    { it.mapValues { (_, value) -> DimensionInvetory(value) }.toMutableMap() },
+                    { it.mapValues { (_, value) -> DimensionInventory(value) }.toMutableMap() },
                     { it.mapValues { (_, value) -> value.inventory }.toMutableMap() },
                 )
 
@@ -51,7 +51,7 @@ object InventoryStorage {
     }
 
     fun setInventory(type: InventoryType, list: List<ItemStack>) {
-        data?.getOrPut(type, ::DimensionInvetory)?.inventory?.apply {
+        data?.getOrPut(type, ::DimensionInventory)?.inventory?.apply {
             this.clear()
             this.addAll(list)
         }
@@ -59,7 +59,7 @@ object InventoryStorage {
     }
 
     fun setArmour(type: InventoryType, equipmentSlot: EquipmentSlot, item: ItemStack) {
-        data?.getOrPut(type, ::DimensionInvetory)?.armour[equipmentSlot] = item
+        data?.getOrPut(type, ::DimensionInventory)?.armour[equipmentSlot] = item
         save()
     }
 
