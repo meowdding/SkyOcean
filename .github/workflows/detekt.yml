@@ -41,12 +41,14 @@ jobs:
                 uses: gradle/actions/setup-gradle@v5
             -   run: chmod +x gradlew
             -   name: Run detekt main
-                run: ./gradlew detekt --stacktrace
-            -   name: Check if SARIF file exists
+                run: ./gradlew detekt --stacktrace --continue
+            -   name: Merge detekt outputs
                 if: always()
                 id: check_sarif
                 run: |
-                    if [ -f "build/reports/detekt/main.sarif" ]; then
+                    chmod +x .github/scripts/process_detekt_sarif.sh
+                    kotlinc -script .github/scripts/collect-detekt-sarif-files.kts
+                    if [ -f "detekt_failures" ]; then
                         echo "exists=true" >> $GITHUB_OUTPUT
                     else
                         echo "exists=false" >> $GITHUB_OUTPUT
@@ -64,12 +66,6 @@ jobs:
                 with:
                     github_token: ${{ secrets.GITHUB_TOKEN }}
                     labels: 'Detekt'
-
-            -   name: Annotate detekt failures
-                if: ${{ !cancelled() && steps.check_sarif.outputs.exists == 'true' }}
-                run: |
-                    chmod +x .github/scripts/process_detekt_sarif.sh
-                    ./.github/scripts/process_detekt_sarif.sh build/reports/detekt/main.sarif | tee detekt_output.txt
             -   name: Upload detekt output as artifact
                 if: ${{ !cancelled() && steps.check_sarif.outputs.exists == 'true' }}
                 uses: actions/upload-artifact@v4
