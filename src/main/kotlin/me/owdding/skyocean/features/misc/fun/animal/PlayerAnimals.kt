@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityType
@@ -25,7 +26,7 @@ object PlayerAnimals {
 
     lateinit var renderer: LivingEntityRenderer<LivingEntity, LivingEntityRenderState, *>
 
-    init {
+    fun registerModifiers() {
         SkyOceanAnimalModifiers.collected.forEach { register(it) }
     }
 
@@ -51,6 +52,27 @@ object PlayerAnimals {
         state.isBaby = PlayerAnimalConfig.isBaby.select(avatarState)
         if (state is ArmedEntityRenderState) {
             ArmedEntityRenderState.extractArmedEntityRenderState(entity, state, Minecraft.getInstance().itemModelResolver)
+        }
+        if (state is HumanoidRenderState) {
+            state.swimAmount = avatarState.swimAmount
+            state.attackTime = avatarState.attackTime
+            state.speedValue = avatarState.speedValue
+            state.maxCrossbowChargeDuration = avatarState.maxCrossbowChargeDuration
+            state.ticksUsingItem = avatarState.ticksUsingItem
+            state.attackArm = avatarState.attackArm
+            state.useItemHand = avatarState.useItemHand
+            state.isCrouching = avatarState.isCrouching
+            state.isFallFlying = avatarState.isFallFlying
+            state.isVisuallySwimming = avatarState.isVisuallySwimming
+            state.isPassenger = avatarState.isPassenger
+            state.isUsingItem = avatarState.isUsingItem
+            state.elytraRotX = avatarState.elytraRotX
+            state.elytraRotY = avatarState.elytraRotY
+            state.elytraRotZ = avatarState.elytraRotZ
+            state.headEquipment = avatarState.headEquipment
+            state.chestEquipment = avatarState.chestEquipment
+            state.legsEquipment = avatarState.legsEquipment
+            state.feetEquipment = avatarState.feetEquipment
         }
         getModifier<State>(state.entityType)?.apply(avatarState, state, partialTicks)
     }

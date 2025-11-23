@@ -774,7 +774,7 @@
                 "desc": "Whether yourself is a jeb sheep or not."
               },
               "own_sheared": {
-                "@value": "Other Sheared",
+                "@value": "Own Sheared",
                 "desc": "Whether yourself is sheared or not."
               },
               "other_sheared": {
@@ -807,6 +807,117 @@
                 "clayfish": "Clayfish"
               }
             },
+            "villager": {
+              "own_type": {
+                "@value": "Own Villager Type",
+                "desc": "Changes the villager type that is used for yourself!"
+              },
+              "other_type": {
+                "@value": "Other Villager Type",
+                "desc": "Changes the villager type that is used for others!"
+              },
+              "own_profession": {
+                "@value": "Own Villager Profession",
+                "desc": "Changes the villager profession that is used for yourself!"
+              },
+              "other_profession": {
+                "@value": "Other Villager Profession",
+                "desc": "Changes the villager profession that is used for others!"
+              },
+              "type": {
+                "random": "Random",
+                "desert": "Desert",
+                "jungle": "Jungle",
+                "plains": "Plains",
+                "savanna": "Savanna",
+                "snow": "Snow",
+                "swamp": "Swamp",
+                "taiga": "Taiga"
+              }
+            },
+            "iron_golem": {
+              "own_state": {
+                "@value": "Own Iron Golem Crackiness",
+                "desc": "Changes the iron golem crackiness that is used for yourself!"
+              },
+              "other_state": {
+                "@value": "Other Iron Golem Crackiness",
+                "desc": "Changes the iron golem crackiness that is used for others!"
+              },
+              "state": {
+                "random": "Random",
+                "none": "None",
+                "low": "Low",
+                "medium": "Medium",
+                "high": "High"
+              }
+            },
+            "llama": {
+              "own_variant": {
+                "@value": "Own Llama Variant",
+                "desc": "Changes the llama variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Llama Variant",
+                "desc": "Changes the llama variant that is used for others!"
+              },
+              "own_trader": {
+                "@value": "Is Own Llama Trader",
+                "desc": "Whether the own llama is a trader llama or not!"
+              },
+              "other_trader": {
+                "@value": "Other Llama Trader",
+                "desc": "Whether other llamas are trader llamas or not!"
+              },
+              "variant": {
+                "random": "Random",
+                "creamy": "Creamy",
+                "white": "White",
+                "brown": "Brown",
+                "gray": "Gray"
+              }
+            },
+            "panda": {
+              "own_gene": {
+                "@value": "Own Panda Gene",
+                "desc": "Changes the panda gene that is used for yourself!"
+              },
+              "other_gene": {
+                "@value": "Other Panda Gene",
+                "desc": "Changes the panda gene that is used for others!"
+              },
+              "gene": {
+                "random": "Random",
+                "normal": "Normal",
+                "lazy": "Lazy",
+                "worried": "Worried",
+                "playful": "Playful",
+                "brown": "Brown",
+                "weak": "Weak",
+                "aggressive": "Aggressive"
+              }
+            },
+            "bogged": {
+              "own_sheared": {
+                "@value": "Own Sheared",
+                "desc": "Whether yourself is sheared or not."
+              },
+              "other_sheared": {
+                "@value": "Other Sheared",
+                "desc": "Whether yourself is sheared or not."
+              }
+            },
+            "shulker": {
+              "own_color": {
+                "@value": "Own Shulker Color",
+                "desc": "Changes the shulker color that is used for yourself!"
+              },
+              "other_color": {
+                "@value": "Other Shulker Color",
+                "desc": "Changes the shulker color that is used for others!"
+              }
+            },
+            "random": "Random",
             "boolean_state": {
               "random": "Random",
               "always": "Always",

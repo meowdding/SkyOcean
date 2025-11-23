@@ -18,6 +18,7 @@ object FunConfig : CategoryKt("fun") {
         obj("player_animals_config", PlayerAnimalConfig) {
             this.translation = "skyocean.config.misc.fun.player_animals.config"
         }
+        PlayerAnimals.registerModifiers()
     }
 
     val entityType: EntityType<*> by entityTypeDropdown(
