@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor
 import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
+import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.generated.SkyOceanAnimalModifiers
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.client.model.EntityModel
@@ -45,6 +46,7 @@ object PlayerAnimals {
 
     @JvmStatic
     fun <State : LivingEntityRenderState> apply(avatarState: AvatarRenderState, state: State, partialTicks: Float) {
+        state.isBaby = PlayerAnimalConfig.isBaby.select(avatarState)
         getModifier<State>(state.entityType)?.apply(avatarState, state, partialTicks)
     }
     @JvmStatic

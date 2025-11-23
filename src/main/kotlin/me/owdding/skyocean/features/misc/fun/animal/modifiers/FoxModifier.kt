@@ -1,7 +1,9 @@
-package me.owdding.skyocean.features.misc.`fun`.animal
+package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.FoxRenderState
 import net.minecraft.world.entity.EntityType

@@ -1,7 +1,9 @@
-package me.owdding.skyocean.features.misc.`fun`.animal
+package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
@@ -38,7 +40,6 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
         state.collarColor = getCollarColor(avatarState)
         state.isSitting = state.isCrouching
     }
-
 
     enum class Variant(val resourceKey: ResourceKey<CatVariant>?) : Translatable {
         DEFAULT(null),

@@ -520,6 +520,106 @@
                 "snow": "Snow"
               }
             },
+            "wolf": {
+              "own_variant": {
+                "@value": "Own Wolf Variant",
+                "desc": "Changes the wolf variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Wolf Variant",
+                "desc": "Changes the wolf variant that is used for others!"
+              },
+              "own_state": {
+                "@value": "Own Wolf State",
+                "desc": "Changes the wolf state that is used for yourself!"
+              },
+              "other_state": {
+                "@value": "Other Wolf State",
+                "desc": "Changes the wolf state that is used for others!"
+              },
+              "variant": {
+                "random": "Random",
+                "pale": "Pale",
+                "spotted": "Spotted",
+                "snowy": "Snowy",
+                "black": "Black",
+                "ashen": "Ashen",
+                "rusty": "Rusty",
+                "woods": "Woods",
+                "chestnut": "Chestnut",
+                "striped": "Striped"
+              },
+              "state": {
+                "random": "Random",
+                "tame": "Tame",
+                "wild": "Wild",
+                "angry": "Angry"
+              }
+            },
+            "axolotl": {
+              "own_variant": {
+                "@value": "Own Axolotl Variant",
+                "desc": "Changes the axolotl variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Axolotl Variant",
+                "desc": "Changes the axolotl variant that is used for others!"
+              },
+              "variant": {
+                "random": "Random",
+                "lucy": "Pink",
+                "wild": "Brown",
+                "gold": "Gold",
+                "cyan": "Cyan",
+                "blue": "Blue"
+              }
+            },
+            "chicken": {
+              "own_variant": {
+                "@value": "Own Chicken Variant",
+                "desc": "Changes the chicken variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Chicken Variant",
+                "desc": "Changes the chicken variant that is used for others!"
+              },
+              "variant": {
+                "random": "Random",
+                "temperate": "Temperate",
+                "warm": "Warm",
+                "cold": "Cold"
+              }
+            },
+            "copper_golem": {
+              "own_variant": {
+                "@value": "Own Copper Golem Weathering State",
+                "desc": "Changes the copper golem weathering state that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Own Copper Golem Weathering State",
+                "desc": "Changes the copper golem weathering state that is used for others!"
+              },
+              "own_block": {
+                "@value": "Own Copper Golem Antenna Block",
+                "desc": "Changes the copper golem antenna block that is used for yourself!"
+              },
+              "other_block": {
+                "@value": "Own Copper Golem Antenna Block",
+                "desc": "Changes the copper golem antenna block that is used for others!"
+              },
+              "state": {
+                "random": "Random",
+                "unaffected": "Unaffected",
+                "exposed": "Exposed",
+                "weathered": "Weathered",
+                "oxidized": "Oxidized"
+              }
+            },
+            "boolean_state": {
+              "random": "Random",
+              "always": "Always",
+              "never": "Never"
+            },
             "state": {
               "none": "Nobody",
               "self": "Self",

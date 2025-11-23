@@ -29,6 +29,12 @@ object PlayerAnimalConfig : ObjectKt() {
         }
     }
 
+    var isBaby = TargetedValue("baby") { id, type ->
+        boolean(id, false) {
+            this.translation = "skyocean.config.misc.fun.player_animals.config.${type}_baby"
+        }
+    }
+
     fun <T> createEntry(
         id: String,
         constructor: PlayerAnimalConfig.(id: String, type: String) -> ConfigDelegateProvider<RConfigKtEntry<T>>,
