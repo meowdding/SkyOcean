@@ -87,6 +87,13 @@
           "@value": "Reminder Delay",
           "desc": "The delay between reminders in minutes."
         },
+        "forge_reminder_action": {
+          "@value": "Reminder Action",
+          "desc": "What clickable action will show when the timer is over.",
+          "warp": "Warp to Forge",
+          "call_fred": "Call Fred",
+          "both": "Both"
+        },
         "retexture": {
           "@value": "Retexture",
           "carpets": {
@@ -740,6 +747,10 @@
             "@value": "Mute the Phantoms",
             "desc": "Mutes all phantoms making them not induce ear pain.",
             "warning": "<yellow>SkyOcean mutes the phantom sounds by default, if you wish to change this open the config and search for <gold>Mute the Phantoms</gold>!"
+          },
+          "moongladeBeaconColor": {
+            "@value": "Moonglade Beacon Color",
+            "desc": "Changes the Moonglade Beacon beam color in Galatea to <red>Red</red> if it's inactive, and <green>green</green> if its active."
           },
           "shulkerOverwrite": {
             "@value": "Retexture shulker",

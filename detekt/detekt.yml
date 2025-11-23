@@ -90,15 +90,26 @@ ktlint:
         active: false
     IfElseBracing:
         active: false
+    CommentSpacing:
+        active: false
+    NoSingleLineBlockComment:
+        active: false
+    NoConsecutiveComments:
+        active: false
+    CommentWrapping:
+        active: false
+    BlockCommentInitialStarAlignment:
+        active: false
+
 naming:
     NoNameShadowing:
         active: false
     ConstructorParameterNaming: # pedantic
         active: false
     FunctionNaming:
-        functionPattern: "[a-z][a-zA-Z0-9]*|[a-z]+$[a-z][a-zA-Z0-9]*"
+        functionPattern: "(?:[a-z]+$[a-z][a-zA-Z0-9]*)|(?:[a-z][a-zA-Z0-9]*)"
     VariableNaming:
-        variablePattern: "[a-z][A-Za-z0-9]*|[a-z]+$[a-z][A-Za-z0-9]*"
+        variablePattern: "(?:[a-z]+$[a-z][a-zA-Z0-9]*)|(?:[a-z][a-zA-Z0-9]*)"
 
 performance:
     SpreadOperator:
