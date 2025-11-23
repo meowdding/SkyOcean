@@ -69,7 +69,7 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import java.util.Optional
+import java.util.*
 import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -338,7 +338,7 @@ object Utils {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T, V> V.unsafeCast(): T = this as T
+    fun <T> Any.unsafeCast(): T = this as T
 
     @JvmStatic
     fun <T> nonNullElse(value: T?, default: T?): T? {
