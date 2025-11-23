@@ -1,13 +1,12 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.google.devtools.ksp.gradle.KspAATask
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
-import com.google.devtools.ksp.gradle.KspAATask
-import kotlin.jvm.java
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
-import org.gradle.kotlin.dsl.version
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import kotlin.io.path.createDirectories
 
 plugins {
     idea
@@ -109,13 +108,16 @@ loom {
     }
 }
 
+val datagenOutput = project.layout.buildDirectory.file("generated/skyocean/data").apply {
+    get().asFile.toPath().createDirectories()
+}
 fabricApi {
     configureDataGeneration {
         client = true
         modId = "skyocean-datagen"
         createSourceSet = true
         createRunConfiguration = true
-        outputDirectory.set(project.layout.buildDirectory.file("generated/skyocean/data"))
+        outputDirectory.set(datagenOutput)
     }
 }
 
@@ -238,7 +240,7 @@ idea {
 
 tasks.withType<ValidateAccessWidenerTask> { enabled = false }
 
-tasks.named<Jar>("sourcesJar") {
+tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
@@ -250,9 +252,19 @@ detekt {
     parallel = true
 }
 
+tasks.named { it == "jar" || it == "sourcesJar" }.configureEach {
+    if (this !is Jar) return@configureEach
+    if (rootProject.hasProperty("datagen")) {
+        dependsOn(tasks.named("runDatagen"))
+        with(copySpec {
+            from(datagenOutput).exclude(".cache/**")
+        })
+    }
+}
+
 tasks.withType<Detekt>().configureEach {
     onlyIf {
-        project.findProperty("skipDetekt") != "true"
+        !rootProject.hasProperty("skipDetekt")
     }
     exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.get().asFile.toPath()) }
     reports {
