@@ -36,10 +36,10 @@ object PlayerAnimals {
         val accessor = renderState as? AvatarRenderStateAccessor ?: return false
         if (!LocationAPI.isOnSkyBlock && !FunConfig.outsideSkyblock) return false
         return when (FunConfig.playerAnimals) {
-            PlayerCatState.NONE -> false
-            PlayerCatState.EVERYONE -> true
-            PlayerCatState.SELF -> accessor.`skyocean$isSelf`()
-            PlayerCatState.PLAYERS -> !accessor.`skyocean$isNpc`()
+            PlayerAnimalState.NONE -> false
+            PlayerAnimalState.EVERYONE -> true
+            PlayerAnimalState.SELF -> accessor.`skyocean$isSelf`()
+            PlayerAnimalState.PLAYERS -> !accessor.`skyocean$isNpc`()
         }
     }
 
@@ -89,7 +89,7 @@ object PlayerAnimals {
     }
 
 
-    enum class PlayerCatState : Translatable {
+    enum class PlayerAnimalState : Translatable {
         NONE,
         SELF,
         PLAYERS,

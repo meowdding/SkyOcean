@@ -10,7 +10,7 @@ import net.minecraft.world.entity.EntityType
 object FunConfig : CategoryKt("fun") {
     override val name get() = Translated("skyocean.config.misc.fun")
 
-    var playerAnimals by enum(PlayerAnimals.PlayerCatState.NONE) {
+    var playerAnimals by enum(PlayerAnimals.PlayerAnimalState.NONE) {
         this.translation = "skyocean.config.misc.fun.player_animals"
     }
 
