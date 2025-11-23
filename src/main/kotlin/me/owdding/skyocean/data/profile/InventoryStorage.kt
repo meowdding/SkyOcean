@@ -38,8 +38,8 @@ object InventoryStorage {
 
     val data get() = storage.get()
 
-    @OnlyOnSkyBlock
     @Subscription(PlayerInventoryChangeEvent::class)
+    @OnlyOnSkyBlock
     fun onInventoryChange() {
         val inventoryType = InventoryType.NORMAL.takeUnless { SkyBlockIsland.THE_RIFT.inIsland() } ?: InventoryType.RIFT
 
