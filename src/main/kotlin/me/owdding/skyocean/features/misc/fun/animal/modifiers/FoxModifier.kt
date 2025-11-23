@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.FoxRenderState
@@ -16,7 +17,7 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
 
     var foxVariant = PlayerAnimalConfig.createEntry("fox_variant") { id, type ->
         enum(id, Variant.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.fox.${type}_variant"
+            this.translation = createTranslationKey("fox", "${type}_variant")
             condition = isSelected(EntityType.FOX)
         }
     }
@@ -36,6 +37,6 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
         SNOW(Fox.Variant.SNOW),
         ;
 
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.fox.variant.${name.lowercase()}"
+        override fun getTranslationKey(): String =  createTranslationKey("fox", "variant", name)
     }
 }

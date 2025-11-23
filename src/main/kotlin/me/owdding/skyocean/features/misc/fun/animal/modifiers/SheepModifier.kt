@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalColor
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.SheepRenderState
@@ -17,7 +18,7 @@ object SheepModifier : AnimalModifier<Sheep, SheepRenderState> {
 
     var sheepColor = PlayerAnimalConfig.createEntry("sheep_color") { id, type ->
         enum(id, AnimalColor.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.sheep.${type}_color"
+            this.translation = createTranslationKey("sheep", "${type}_color")
             condition = isSelected(EntityType.SHEEP)
         }
     }
@@ -25,7 +26,7 @@ object SheepModifier : AnimalModifier<Sheep, SheepRenderState> {
     //? if > 1.21.8 {
     var isJebSheep = PlayerAnimalConfig.createEntry("sheep_jeb") { id, type ->
         enum(id, AnimalModifier.BooleanState.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.sheep.${type}_jeb"
+            this.translation = createTranslationKey("sheep", "${type}_jeb")
             condition = isSelected(EntityType.SHEEP)
         }
     }
@@ -33,7 +34,7 @@ object SheepModifier : AnimalModifier<Sheep, SheepRenderState> {
 
     var isSheared = PlayerAnimalConfig.createEntry("sheep_sheared") { id, type ->
         enum(id, AnimalModifier.BooleanState.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.sheep.${type}_sheared"
+            this.translation = createTranslationKey("sheep", "${type}_sheared")
             condition = isSelected(EntityType.SHEEP)
         }
     }

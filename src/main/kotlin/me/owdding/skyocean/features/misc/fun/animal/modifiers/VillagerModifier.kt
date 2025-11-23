@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.hash
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.lookup
@@ -26,14 +27,14 @@ object VillagerModifier : AnimalModifier<Villager, VillagerRenderState> {
 
     var villagerType = PlayerAnimalConfig.createEntry("villager_type") { id, type ->
         enum(id, Type.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.villager.${type}_type"
+            this.translation = createTranslationKey("villager", "${type}_type")
             condition = isAnySelected(EntityType.VILLAGER, EntityType.ZOMBIE_VILLAGER)
         }
     }
 
     var villagerProfession = PlayerAnimalConfig.createEntry("villager_profession") { id, type ->
         enum(id, Profession.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.villager.${type}_profession"
+            this.translation = createTranslationKey("villager", "${type}_profession")
             condition = isAnySelected(EntityType.VILLAGER, EntityType.ZOMBIE_VILLAGER)
         }
     }
@@ -72,7 +73,7 @@ object VillagerModifier : AnimalModifier<Villager, VillagerRenderState> {
 
         val villagerProfession by lazy { resourceKey?.let { Registries.VILLAGER_PROFESSION.lookup().get(it).getOrNull() } }
         override fun getTranslationKey(): String =
-            if (this == RANDOM) "skyocean.config.misc.fun.player_animals.random" else "entity.minecraft.villager.${name.lowercase()}"
+            if (this == RANDOM) createTranslationKey("random") else "entity.minecraft.villager.${name.lowercase()}"
     }
 
     enum class Type(val resourceKey: ResourceKey<VillagerType>?) : Translatable {
@@ -87,6 +88,6 @@ object VillagerModifier : AnimalModifier<Villager, VillagerRenderState> {
         ;
 
         val villagerType by lazy { resourceKey?.let { Registries.VILLAGER_TYPE.lookup().get(it).getOrNull() } }
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.villager.type.${name.lowercase()}"
+        override fun getTranslationKey(): String =createTranslationKey("villager", "type", name)
     }
 }

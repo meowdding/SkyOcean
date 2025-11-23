@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.RabbitRenderState
@@ -16,7 +17,7 @@ object RabbitModifier : AnimalModifier<Rabbit, RabbitRenderState> {
 
     var rabbitVariant = PlayerAnimalConfig.createEntry("rabbit_variant") { id, type ->
         enum(id, Variant.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.rabbit.${type}_variant"
+            this.translation = createTranslationKey("rabbit", "${type}_variant")
             condition = isSelected(EntityType.RABBIT)
         }
     }
@@ -41,6 +42,6 @@ object RabbitModifier : AnimalModifier<Rabbit, RabbitRenderState> {
         EVIL(Rabbit.Variant.EVIL),
         ;
 
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.rabbit.variant.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("rabbit", "variant", name)
     }
 }

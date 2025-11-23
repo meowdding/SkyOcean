@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
@@ -24,7 +25,7 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
 
     var catVariant = PlayerAnimalConfig.createEntry("cat_variant") { id, type ->
         enum(id, Variant.DEFAULT) {
-            this.translation = "skyocean.config.misc.fun.player_animals.cat.${type}_variant"
+            this.translation = createTranslationKey("cat", "${type}_variant")
             condition = isSelected(EntityType.CAT)
         }
     }
@@ -58,6 +59,6 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
         ;
 
         val catVariant by lazy { resourceKey?.let { Registries.CAT_VARIANT.lookup().get(it).getOrNull() }?.value() }
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.cat.variant.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("cat", "variant", name)
     }
 }

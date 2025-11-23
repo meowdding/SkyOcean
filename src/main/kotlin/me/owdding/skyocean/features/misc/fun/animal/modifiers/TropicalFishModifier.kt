@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.hash
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
@@ -18,7 +19,7 @@ object TropicalFishModifier : AnimalModifier<TropicalFish, TropicalFishRenderSta
 
     var tropicalPattern = PlayerAnimalConfig.createEntry("tropical_pattern") { id, type ->
         enum(id, Pattern.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.tropical_fish.${type}_pattern"
+            this.translation = createTranslationKey("tropical_fish", "${type}_pattern")
             condition = isSelected(EntityType.TROPICAL_FISH)
         }
     }
@@ -51,7 +52,7 @@ object TropicalFishModifier : AnimalModifier<TropicalFish, TropicalFishRenderSta
         CLAYFISH(TropicalFish.Pattern.CLAYFISH),
         ;
 
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.tropical_fish.pattern.${name.lowercase()}"
+        override fun getTranslationKey(): String =  createTranslationKey("tropical_fish", "pattern", name)
     }
 
 }

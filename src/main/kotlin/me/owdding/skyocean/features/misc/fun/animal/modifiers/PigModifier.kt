@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
@@ -24,7 +25,7 @@ object PigModifier : AnimalModifier<Pig, PigRenderState> {
 
     var pigVariant = PlayerAnimalConfig.createEntry("pig_variant") { id, type ->
         enum(id, Variant.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.pig.${type}_variant"
+            this.translation = createTranslationKey("pig", "${type}_variant")
             condition = isSelected(EntityType.PIG)
         }
     }
@@ -48,6 +49,6 @@ object PigModifier : AnimalModifier<Pig, PigRenderState> {
         ;
 
         val pigVariant by lazy { resourceKey?.let { Registries.PIG_VARIANT.lookup().get(it).getOrNull() }?.value() }
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.pig.variant.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("pig", "variant", name)
     }
 }

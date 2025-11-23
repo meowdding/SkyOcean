@@ -26,7 +26,7 @@ public interface AvatarRenderStateAccessor {
         return false;
     }
 
-    static void isSelf(Object renderState, boolean isSelf) {
+    static void setSelf(Object renderState, boolean isSelf) {
         if (renderState instanceof AvatarRenderStateAccessor accessor) {
             accessor.skyocean$setSelf(isSelf);
         }

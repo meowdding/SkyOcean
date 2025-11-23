@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.BoggedRenderState
@@ -14,7 +15,7 @@ object BoggedModifier : AnimalModifier<Bogged, BoggedRenderState> {
 
     var isSheared = PlayerAnimalConfig.createEntry("bogged_sheared") { id, type ->
         enum(id, AnimalModifier.BooleanState.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.bogged.${type}_sheared"
+            this.translation = createTranslationKey("bogged", "${type}_sheared")
             condition = isSelected(EntityType.BOGGED)
         }
     }

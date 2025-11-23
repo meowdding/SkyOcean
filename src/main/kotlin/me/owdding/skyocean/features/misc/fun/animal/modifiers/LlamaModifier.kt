@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.LlamaRenderState
@@ -16,14 +17,14 @@ object LlamaModifier : AnimalModifier<Llama, LlamaRenderState> {
 
     var llamaVariant = PlayerAnimalConfig.createEntry("llama_variant") { id, type ->
         enum(id, Variant.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.llama.${type}_variant"
+            this.translation = createTranslationKey("llama", "${type}_variant")
             condition = isSelected(EntityType.LLAMA)
         }
     }
 
     var llamaTrader = PlayerAnimalConfig.createEntry("llama_trader") { id, type ->
         enum(id, AnimalModifier.BooleanState.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.llama.${type}_trader"
+            this.translation = createTranslationKey("llama", "${type}_trader")
             condition = isSelected(EntityType.LLAMA)
         }
     }
@@ -46,6 +47,6 @@ object LlamaModifier : AnimalModifier<Llama, LlamaRenderState> {
         GRAY(Llama.Variant.GRAY),
         ;
 
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.llama.variant.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("llama", "variant", name)
     }
 }

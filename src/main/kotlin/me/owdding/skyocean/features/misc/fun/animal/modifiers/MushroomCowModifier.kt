@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.MushroomCowRenderState
@@ -16,7 +17,7 @@ object MushroomCowModifier : AnimalModifier<MushroomCow, MushroomCowRenderState>
 
     var mushroomCowVariant = PlayerAnimalConfig.createEntry("mooshroom_variant") { id, type ->
         enum(id, Variant.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.mooshroom.${type}_variant"
+            this.translation = createTranslationKey("mooshroom", "${type}_variant")
             condition = isSelected(EntityType.MOOSHROOM)
         }
     }
@@ -36,6 +37,6 @@ object MushroomCowModifier : AnimalModifier<MushroomCow, MushroomCowRenderState>
         BROWN(MushroomCow.Variant.BROWN),
         ;
 
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.mooshroom.variant.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("mooshroom", "variant", name)
     }
 }

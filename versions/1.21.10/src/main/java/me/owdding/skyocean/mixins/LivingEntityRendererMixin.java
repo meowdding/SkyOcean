@@ -66,7 +66,7 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
         ) {
             original.call(avatar, state, partialTick);
             AvatarRenderStateAccessor.setUUID(state, avatar.getUUID());
-            AvatarRenderStateAccessor.isSelf(state, avatar instanceof LocalPlayer);
+            AvatarRenderStateAccessor.setSelf(state, avatar instanceof LocalPlayer);
             AvatarRenderStateAccessor.setNpc(state, avatar.getUUID().version() != 4);
             if (!PlayerAnimals.shouldPlayerBeAnimal(state)) {
                 return;

@@ -31,6 +31,7 @@ interface AnimalModifier<Type : LivingEntity, State : LivingEntityRenderState> {
 
     companion object {
         val AvatarRenderState.hash get() = AvatarRenderStateAccessor.getUUID(this)?.hashCode() ?: this.skin.texture.hashCode()
+        fun createTranslationKey(vararg keys: String) = "skyocean.config.misc.fun.player_animals.${keys.joinToString(".")}".lowercase()
     }
 
     enum class BooleanState(val state: Boolean?) : Translatable {
@@ -40,7 +41,7 @@ interface AnimalModifier<Type : LivingEntity, State : LivingEntityRenderState> {
         ;
 
         fun select(state: AvatarRenderState) = this.state ?: (state.hash % 2 == 0)
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.boolean_state.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("boolean_state", name)
     }
 
 }

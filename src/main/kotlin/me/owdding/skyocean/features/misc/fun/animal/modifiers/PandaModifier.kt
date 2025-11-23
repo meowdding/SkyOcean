@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.PandaRenderState
@@ -16,7 +17,7 @@ object PandaModifier : AnimalModifier<Panda, PandaRenderState> {
 
     var pandaGene = PlayerAnimalConfig.createEntry("panda_gene") { id, type ->
         enum(id, Gene.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.panda.${type}_gene"
+            this.translation = createTranslationKey("panda", "${type}_gene")
             condition = isSelected(EntityType.PANDA)
         }
     }
@@ -41,6 +42,6 @@ object PandaModifier : AnimalModifier<Panda, PandaRenderState> {
         AGGRESSIVE(Panda.Gene.AGGRESSIVE),
         ;
 
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.panda.gene.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("panda", "gene", name)
     }
 }

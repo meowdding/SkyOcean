@@ -5,6 +5,7 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor
 import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.generated.SkyOceanAnimalModifiers
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.client.Minecraft
@@ -97,7 +98,7 @@ object PlayerAnimals {
         EVERYONE,
         ;
 
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.state.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("state", name)
     }
 
 }
@@ -124,7 +125,7 @@ enum class CollarColor(val dyeColor: DyeColor?) : Translatable {
     BLACK(DyeColor.BLACK),
     ;
 
-    override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.color.${name.lowercase()}"
+    override fun getTranslationKey(): String = createTranslationKey("color", name)
 }
 
 enum class AnimalColor(val dyeColor: DyeColor?) : Translatable {
@@ -148,5 +149,5 @@ enum class AnimalColor(val dyeColor: DyeColor?) : Translatable {
     BLACK(DyeColor.BLACK),
     ;
 
-    override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.color.${name.lowercase()}"
+    override fun getTranslationKey(): String = createTranslationKey("color", name)
 }

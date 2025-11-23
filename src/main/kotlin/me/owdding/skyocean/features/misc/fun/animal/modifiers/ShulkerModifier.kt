@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalColor
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.ShulkerRenderState
@@ -17,7 +18,7 @@ object ShulkerModifier : AnimalModifier<Shulker, ShulkerRenderState> {
 
     var shulkerColor = PlayerAnimalConfig.createEntry("shulker_color") { id, type ->
         enum(id, AnimalColor.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.shulker.${type}_color"
+            this.translation = createTranslationKey("shulker", "${type}_color")
             condition = isSelected(EntityType.SHULKER)
         }
     }

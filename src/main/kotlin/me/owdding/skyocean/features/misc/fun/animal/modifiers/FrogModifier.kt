@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
@@ -23,7 +24,7 @@ object FrogModifier : AnimalModifier<Frog, FrogRenderState> {
 
     var frogVariant = PlayerAnimalConfig.createEntry("frog_variant") { id, type ->
         enum(id, Variant.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.frog.${type}_variant"
+            this.translation = createTranslationKey("frog", "${type}_variant")
             condition = isSelected(EntityType.FROG)
         }
     }
@@ -47,6 +48,6 @@ object FrogModifier : AnimalModifier<Frog, FrogRenderState> {
         ;
 
         val frogVariant by lazy { resourceKey?.let { Registries.FROG_VARIANT.lookup().get(it).getOrNull() }?.value() }
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.frog.variant.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("frog", "variant", name)
     }
 }

@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import earth.terrarium.olympus.client.utils.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.ANGRY
 import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.TAME
@@ -29,14 +30,14 @@ object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
 
     var wolfVariant = PlayerAnimalConfig.createEntry("wolf_variant") { id, type ->
         enum(id, Variant.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.wolf.${type}_variant"
+            this.translation = createTranslationKey("wolf", "${type}_variant")
             condition = isSelected(EntityType.WOLF)
         }
     }
 
     var wolfState = PlayerAnimalConfig.createEntry("wolf_state") { id, type ->
         enum(id, State.RANDOM) {
-            this.translation = "skyocean.config.misc.fun.player_animals.wolf.${type}_state"
+            this.translation = createTranslationKey("wolf", "${type}_state")
             condition = isSelected(EntityType.WOLF)
         }
     }
@@ -66,7 +67,7 @@ object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
             this
         }.selector(wolfVariant)
 
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.wolf.state.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("wolf", "state", name)
     }
 
     enum class Variant(val resourceKey: ResourceKey<WolfVariant>?) : Translatable {
@@ -84,6 +85,6 @@ object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
         ;
 
         val wolfVariant by lazy { resourceKey?.let { Registries.WOLF_VARIANT.lookup().get(it).getOrNull() }?.value() }
-        override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.wolf.variant.${name.lowercase()}"
+        override fun getTranslationKey(): String = createTranslationKey("wolf", "variant", name)
     }
 }
