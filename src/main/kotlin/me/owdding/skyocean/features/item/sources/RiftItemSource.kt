@@ -11,6 +11,7 @@ import tech.thatgravyboat.skyblockapi.api.profile.items.equipment.EquipmentAPI
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.extentions.getArmor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -21,10 +22,14 @@ object RiftItemSource : ItemSource {
     override fun getAll(): List<SimpleTrackedItem> = buildList {
         addAll(StorageAPI.riftStorage.convert(::RiftEnderchestPageContext))
         addAll(EquipmentAPI.riftEquipment.map { (_, stack) -> SimpleTrackedItem(stack, RiftEquipment) })
+
         if (SkyBlockIsland.THE_RIFT.inIsland()) {
             addAll(McPlayer.inventory.map { SimpleTrackedItem(it, RiftInventoryContext) })
+            McPlayer.self?.getArmor()?.forEach { add(SimpleTrackedItem(it, RiftEquipment)) }
         } else {
-            InventoryStorage.data?.get(InventoryType.RIFT)?.map { SimpleTrackedItem(it, RiftInventoryContext) }?.toMutableList()?.let { addAll(it) }
+            val riftData = InventoryStorage.data?.get(InventoryType.RIFT)
+            riftData?.inventory?.map { SimpleTrackedItem(it, RiftInventoryContext) }?.toMutableList()?.let { addAll(it) }
+            riftData?.armour?.values?.map { SimpleTrackedItem(it, RiftEquipment) }?.let { addAll(it) }
         }
     }
 }
@@ -70,7 +75,7 @@ object RiftInventoryContext : RiftItemContext {
 }
 
 object RiftEquipment : RiftItemContext {
-    override val clickText: MutableComponent = Text.of("Click to equipment menu!") { color = TextColor.GRAY }
+    override val clickText: MutableComponent = Text.of("Click to open equipment menu!") { color = TextColor.GRAY }
 
     override fun lines(): List<Component> = build {
         requiresRift { add("Equipped!") { color = TextColor.GRAY } }
