@@ -238,7 +238,7 @@ object HotfHelper {
         if (!config.hotfDisplayTotalLeft && !config.hotfDisplayShiftCost && !config.hotfTotalProgress && !config.hotfStackSize) return
         if (event.title != "Heart of the Forest") return
         if (event.isInPlayerInventory) return
-        if (event.item !in ItemModelTagKey.HOTM_PERK_ITEMS) return
+        if (event.item !in ItemModelTagKey.HOTF_PERK_ITEMS) return
         tryReplaceItem(event.item)
     }
 
