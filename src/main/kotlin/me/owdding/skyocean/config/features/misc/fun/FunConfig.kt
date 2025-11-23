@@ -14,18 +14,22 @@ object FunConfig : CategoryKt("fun") {
         this.translation = "skyocean.config.misc.fun.player_animals"
     }
 
-    init {
-        obj("player_animals_config", PlayerAnimalConfig) {
-            this.translation = "skyocean.config.misc.fun.player_animals.config"
-        }
-        PlayerAnimals.registerModifiers()
-    }
-
     val entityType: EntityType<*> by entityTypeDropdown(
         EntityType.CAT,
         BuiltInRegistries.ENTITY_TYPE.toList().filter { it in EntityTagKey.LIVING_ENTITIES },
     ) {
         this.translation = "skyocean.config.misc.fun.player_animals.type"
+    }
+
+    val outsideSkyblock by boolean(false) {
+        this.translation = "skyocean.config.misc.fun.player_animals.outside_skyblock"
+    }
+
+    init {
+        obj("player_animals_config", PlayerAnimalConfig) {
+            this.translation = "skyocean.config.misc.fun.player_animals.config"
+        }
+        PlayerAnimals.registerModifiers()
     }
 
 }

@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 
 object PlayerAnimals {
 
@@ -33,6 +34,7 @@ object PlayerAnimals {
     @JvmStatic
     fun shouldPlayerBeAnimal(renderState: AvatarRenderState): Boolean {
         val accessor = renderState as? AvatarRenderStateAccessor ?: return false
+        if (!LocationAPI.isOnSkyBlock && !FunConfig.outsideSkyblock) return false
         return when (FunConfig.playerAnimals) {
             PlayerCatState.NONE -> false
             PlayerCatState.EVERYONE -> true

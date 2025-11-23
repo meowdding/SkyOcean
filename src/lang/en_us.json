@@ -956,6 +956,10 @@
                 "Changes the entity that is used, by default it's cats.",
                 "<italic><white>Note that settings like variant and collar won't work for non cat models!"
               ]
+            },
+            "outside_skyblock": {
+              "@value": "Allow outside skyblock",
+              "desc": "Whether player animals should also be visible outside of skyblock."
             }
           }
         }
