@@ -133,21 +133,21 @@ abstract class AbstractItemModifier {
 object ItemModifiers {
 
     val modifiers: List<AbstractItemModifier> = SkyOceanItemModifiers.collected.sortedBy { it.priority }.toList()
-    val modifiedItems: WeakHashMap<ItemStack, List<Component>> = WeakHashMap()
+    val modifiedItems: WeakHashMap<ItemStack, List<AbstractItemModifier>> = WeakHashMap()
 
     @Subscription
     @MustBeContainer
-    fun InventoryChangeEvent.onContainerChange() {
+    private fun InventoryChangeEvent.onContainerChange() {
         tryModify(item)
     }
 
     @Subscription
-    fun PlayerInventoryChangeEvent.onInventoryChange() {
+    private fun PlayerInventoryChangeEvent.onInventoryChange() {
         tryModify(item)
     }
 
     @Subscription
-    fun PlayerHotbarChangeEvent.onHotbarChange() {
+    private fun PlayerHotbarChangeEvent.onHotbarChange() {
         tryModify(item)
     }
 
@@ -159,7 +159,7 @@ object ItemModifiers {
         if (modifiers.isEmpty()) return
 
         val map = mutableMapOf<DataMarker<*>, Any>()
-        val usedModifiers = mutableListOf<Component>()
+        val usedModifiers = mutableListOf<AbstractItemModifier>()
         context(map, itemStack) {
             for (modifier in modifiers) {
                 val state = State.of(false)
@@ -173,7 +173,7 @@ object ItemModifiers {
                     }
                 }
                 if (state.get()) {
-                    usedModifiers.addAll(modifier.displayNames)
+                    usedModifiers.add(modifier)
                 }
             }
         }
@@ -254,14 +254,14 @@ object ItemModifiers {
 
         if (McScreen.isShiftDown) {
             this.tooltip.add(!"General modifiers active on item:", standardModifiers.filterNotNull())
-            this.tooltip.add(!"Lore modifiers active on item:", usedLoreModifiers.flatMap { it.displayNames })
+            this.tooltip.add(!"Lore modifiers active on item:", usedLoreModifiers)
             if (standardModifiers.isNotEmpty() || usedLoreModifiers.isNotEmpty()) {
                 this.tooltip.add(CommonComponents.EMPTY)
             }
         }
     }
 
-    private fun MutableList<Component>.add(message: Component, modifiers: List<Component>) {
+    private fun MutableList<Component>.add(message: Component, modifiers: List<AbstractItemModifier>) {
         if (modifiers.isEmpty()) return
         addAll(
             TooltipBuilder().apply {
@@ -270,7 +270,7 @@ object ItemModifiers {
                     append(message)
                     this.color = OceanColors.DARK_CYAN_BLUE
                 }
-                modifiers.forEach {
+                modifiers.flatMap { it.displayNames }.forEach {
                     add {
                         append("- ")
                         append(it)
@@ -283,13 +283,12 @@ object ItemModifiers {
 
     @Subscription
     private fun GatherItemTooltipComponentsEvent.onComponents() = components.takeUnless { it.isEmpty() }?.let {
-        var result: AbstractItemModifier.Result? = null
         for (modifier in modifiers.filter {
             it.isEnabled && it.appliesTo(this.item) && McScreen.self?.let { screen ->
                 it.appliesToScreen(screen)
             } == true
         }) {
-            result = modifier.appendComponents(item, components)
+            val result = modifier.appendComponents(item, components)
             if (!result.propagateFurther) break
         }
     }
