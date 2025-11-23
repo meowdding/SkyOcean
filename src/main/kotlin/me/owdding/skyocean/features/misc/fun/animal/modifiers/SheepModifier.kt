@@ -22,12 +22,14 @@ object SheepModifier : AnimalModifier<Sheep, SheepRenderState> {
         }
     }
 
+    //? if > 1.21.8 {
     var isJebSheep = PlayerAnimalConfig.createEntry("sheep_jeb") { id, type ->
         enum(id, AnimalModifier.BooleanState.RANDOM) {
             this.translation = "skyocean.config.misc.fun.player_animals.sheep.${type}_jeb"
             condition = isSelected(EntityType.SHEEP)
         }
     }
+    //?}
 
     var isSheared = PlayerAnimalConfig.createEntry("sheep_sheared") { id, type ->
         enum(id, AnimalModifier.BooleanState.RANDOM) {
@@ -42,6 +44,7 @@ object SheepModifier : AnimalModifier<Sheep, SheepRenderState> {
         partialTicks: Float,
     ) {
         state.woolColor = sheepColor.select(avatarState).dyeColor ?: getRandom(avatarState, colors)
+        //? if > 1.21.8
         state.isJebSheep = isJebSheep.select(avatarState).select(avatarState)
         state.isSheared = isSheared.select(avatarState).select(avatarState)
     }

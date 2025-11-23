@@ -48,7 +48,7 @@ object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
         state.isSitting = avatarState.isCrouching
     }
 
-    enum class State(val selector: ((WolfVariant) -> ClientAsset.ResourceTexture)) : Translatable {
+    enum class State(val selector: ((WolfVariant) -> /*? if > 1.21.8 {*/ClientAsset.ResourceTexture/*?} else {*//*ClientAsset*//*?}*/)) : Translatable {
         RANDOM({ it.assetInfo.tame }),
 
         TAME({ it.assetInfo.tame }),
