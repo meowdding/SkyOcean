@@ -479,6 +479,20 @@
               "other_collar": {
                 "@value": "Other Collar Color",
                 "desc": "The Collar Color that is used for others."
+              },
+              "own_baby": {
+                "@value": "Is Own Baby",
+                "desc": [
+                  "Whether to use a baby model for yourself or not.",
+                  "<yellow>This might cause rendering issues on some models!"
+                ]
+              },
+              "other_baby": {
+                "@value": "Are Others Baby",
+                "desc": [
+                  "Whether to use a baby model for others or not.",
+                  "<yellow>This might cause rendering issues on some models!"
+                ]
               }
             },
             "cat": {
@@ -596,7 +610,7 @@
                 "desc": "Changes the copper golem weathering state that is used for yourself!"
               },
               "other_variant": {
-                "@value": "Own Copper Golem Weathering State",
+                "@value": "Other Copper Golem Weathering State",
                 "desc": "Changes the copper golem weathering state that is used for others!"
               },
               "own_block": {
@@ -604,7 +618,7 @@
                 "desc": "Changes the copper golem antenna block that is used for yourself!"
               },
               "other_block": {
-                "@value": "Own Copper Golem Antenna Block",
+                "@value": "Other Copper Golem Antenna Block",
                 "desc": "Changes the copper golem antenna block that is used for others!"
               },
               "state": {
@@ -613,6 +627,184 @@
                 "exposed": "Exposed",
                 "weathered": "Weathered",
                 "oxidized": "Oxidized"
+              }
+            },
+            "cow": {
+              "own_variant": {
+                "@value": "Own Cow Variant",
+                "desc": "Changes the cow variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Cow Variant",
+                "desc": "Changes the cow variant that is used for others!"
+              },
+              "variant": {
+                "random": "Random",
+                "temperate": "Temperate",
+                "warm": "Warm",
+                "cold": "Cold"
+              }
+            },
+            "frog": {
+              "own_variant": {
+                "@value": "Own Frog Variant",
+                "desc": "Changes the frog variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Frog Variant",
+                "desc": "Changes the frog variant that is used for others!"
+              },
+              "variant": {
+                "random": "Random",
+                "temperate": "Temperate",
+                "warm": "Warm",
+                "cold": "Cold"
+              }
+            },
+            "mooshroom": {
+              "own_variant": {
+                "@value": "Own Mushroom Cow Variant",
+                "desc": "Changes the frog variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Mushroom Cow Variant",
+                "desc": "Changes the frog variant that is used for others!"
+              },
+              "variant": {
+                "random": "Random",
+                "red": "Red",
+                "brown": "Brown"
+              }
+            },
+            "parrot": {
+              "own_variant": {
+                "@value": "Own Parrot Variant",
+                "desc": "Changes the parrot variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Parrot Variant",
+                "desc": "Changes the parrot variant that is used for others!"
+              },
+              "variant": {
+                "random": "Random",
+                "red_blue": "Red Blue",
+                "blue": "Blue",
+                "green": "Green",
+                "yellow_blue": "Yellow Blue",
+                "gray": "Gray"
+              }
+            },
+            "pig": {
+              "own_variant": {
+                "@value": "Own Pig Variant",
+                "desc": "Changes the pig variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Pig Variant",
+                "desc": "Changes the pig variant that is used for others!"
+              },
+              "variant": {
+                "random": "Random",
+                "temperate": "Temperate",
+                "warm": "Warm",
+                "cold": "Cold"
+              }
+            },
+            "rabbit": {
+              "own_variant": {
+                "@value": "Own Rabbit Variant",
+                "desc": "Changes the rabbit variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Rabbit Variant",
+                "desc": "Changes the rabbit variant that is used for others!"
+              },
+              "variant": {
+                "random": "Random",
+                "brown": "Brown",
+                "white": "White",
+                "black": "Black",
+                "white_splotched": "White Splotched",
+                "gold": "Gold",
+                "salt": "Salt",
+                "evil": "Evil >:3"
+              }
+            },
+            "salmon": {
+              "own_variant": {
+                "@value": "Own Salmon Variant",
+                "desc": "Changes the salmon variant that is used for yourself!"
+              },
+              "other_variant": {
+                "@value": "Other Salmon Variant",
+                "desc": "Changes the salmon variant that is used for others!"
+              },
+              "variant": {
+                "random": "Random",
+                "small": "Small",
+                "medium": "Medium",
+                "large": "Large"
+              }
+            },
+            "snow_golem": {
+              "own_pumpkin": {
+                "@value": "Own Snow Golem Pumpkin State",
+                "desc": "Changes the snow golem pumpkin state that is used for yourself!"
+              },
+              "other_pumpkin": {
+                "@value": "Other Snow Golem Pumpkin State",
+                "desc": "Changes the snow golem pumpkin state that is used for others!"
+              }
+            },
+            "sheep": {
+              "own_color": {
+                "@value": "Own Sheep Color",
+                "desc": "Changes the sheep color that is used for yourself!"
+              },
+              "other_color": {
+                "@value": "Other Sheep Color",
+                "desc": "Changes the sheep color that is used for others!"
+              },
+              "own_jeb": {
+                "@value": "Own Jeb",
+                "desc": "Whether yourself is a jeb sheep or not."
+              },
+              "other_jeb": {
+                "@value": "Other Jeb",
+                "desc": "Whether yourself is a jeb sheep or not."
+              },
+              "own_sheared": {
+                "@value": "Other Sheared",
+                "desc": "Whether yourself is sheared or not."
+              },
+              "other_sheared": {
+                "@value": "Other Sheared",
+                "desc": "Whether yourself is sheared or not."
+              }
+            },
+            "tropical_fish": {
+              "own_pattern": {
+                "@value": "Own Tropical Fish Pattern",
+                "desc": "Changes the tropical fish pattern that is used for yourself!"
+              },
+              "other_pattern": {
+                "@value": "Other Tropical Fish Pattern",
+                "desc": "Changes the tropical fish pattern that is used for others!"
+              },
+              "pattern": {
+                "random": "Random",
+                "kob": "Kob",
+                "sunstreak": "Sunstreak",
+                "snooper": "Snooper",
+                "dasher": "Dasher",
+                "brinely": "Brinely",
+                "spotty": "Spotty",
+                "flopper": "Flopper",
+                "stripey": "Stripey",
+                "glitter": "Glitter",
+                "blockfish": "Blockfish",
+                "betty": "Betty",
+                "clayfish": "Clayfish"
               }
             },
             "boolean_state": {
@@ -628,6 +820,7 @@
             },
             "color": {
               "default": "Random",
+              "random": "Random",
               "none": "None",
               "white": "<white>White",
               "orange": "<#f5a97f>Orange",

@@ -7,9 +7,11 @@ import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.generated.SkyOceanAnimalModifiers
 import me.owdding.skyocean.utils.Utils.unsafeCast
+import net.minecraft.client.Minecraft
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
+import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.resources.ResourceLocation
@@ -45,8 +47,11 @@ object PlayerAnimals {
     private fun <State : LivingEntityRenderState> getModifier(entityType: EntityType<*>): AnimalModifier<*, State>? = modifiers[entityType].unsafeCast()
 
     @JvmStatic
-    fun <State : LivingEntityRenderState> apply(avatarState: AvatarRenderState, state: State, partialTicks: Float) {
+    fun <State : LivingEntityRenderState> apply(entity: LivingEntity, avatarState: AvatarRenderState, state: State, partialTicks: Float) {
         state.isBaby = PlayerAnimalConfig.isBaby.select(avatarState)
+        if (state is ArmedEntityRenderState) {
+            ArmedEntityRenderState.extractArmedEntityRenderState(entity, state, Minecraft.getInstance().itemModelResolver)
+        }
         getModifier<State>(state.entityType)?.apply(avatarState, state, partialTicks)
     }
     @JvmStatic
@@ -55,7 +60,6 @@ object PlayerAnimals {
     fun createRenderer(context: EntityRendererProvider.Context) {
         renderer = object : LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>(context, null, 20f) {
             override fun getTextureLocation(renderState: LivingEntityRenderState): ResourceLocation = SkyOcean.id("none")
-
             override fun createRenderState(): LivingEntityRenderState? = null
         }
     }
@@ -77,6 +81,30 @@ object PlayerAnimals {
 enum class CollarColor(val dyeColor: DyeColor?) : Translatable {
     DEFAULT(null),
     NONE(null),
+
+    WHITE(DyeColor.WHITE),
+    ORANGE(DyeColor.ORANGE),
+    MAGENTA(DyeColor.MAGENTA),
+    LIGHT_BLUE(DyeColor.LIGHT_BLUE),
+    YELLOW(DyeColor.YELLOW),
+    LIME(DyeColor.LIME),
+    PINK(DyeColor.PINK),
+    GRAY(DyeColor.GRAY),
+    LIGHT_GRAY(DyeColor.LIGHT_GRAY),
+    CYAN(DyeColor.CYAN),
+    PURPLE(DyeColor.PURPLE),
+    BLUE(DyeColor.BLUE),
+    BROWN(DyeColor.BROWN),
+    GREEN(DyeColor.GREEN),
+    RED(DyeColor.RED),
+    BLACK(DyeColor.BLACK),
+    ;
+
+    override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.color.${name.lowercase()}"
+}
+
+enum class AnimalColor(val dyeColor: DyeColor?) : Translatable {
+    RANDOM(null),
 
     WHITE(DyeColor.WHITE),
     ORANGE(DyeColor.ORANGE),

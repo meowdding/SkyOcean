@@ -86,7 +86,7 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
             livingState.shadowPieces.addAll(state.shadowPieces);
 
             livingState.entityType = type;
-            PlayerAnimals.apply(state, livingState, partialTick);
+            PlayerAnimals.apply(avatar, state, livingState, partialTick);
 
             AvatarRenderStateAccessor.setAnimalState(state, livingState);
         }
