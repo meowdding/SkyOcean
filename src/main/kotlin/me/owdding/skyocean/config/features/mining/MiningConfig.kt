@@ -1,7 +1,6 @@
 package me.owdding.skyocean.config.features.mining
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
-import me.owdding.skyocean.config.separator
 
 object MiningConfig : CategoryKt("mining") {
 
