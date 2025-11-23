@@ -2,16 +2,12 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
-import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig.isSelected
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.hash
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
-import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.TropicalFishModifier.Pattern
-import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.VillagerRenderState
-import net.minecraft.core.Holder
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.util.RandomSource
@@ -51,7 +47,7 @@ object VillagerModifier : AnimalModifier<Villager, VillagerRenderState> {
         state.villagerData = VillagerData(
             villagerType.select(avatarState).villagerType ?: getRandom(avatarState, types),
             villagerProfession.select(avatarState).villagerProfession ?: getRandom(avatarState, professions),
-            randomSource.nextInt(VillagerData.MIN_VILLAGER_LEVEL, VillagerData.MAX_VILLAGER_LEVEL)
+            randomSource.nextInt(VillagerData.MIN_VILLAGER_LEVEL, VillagerData.MAX_VILLAGER_LEVEL),
         )
     }
 
@@ -75,7 +71,8 @@ object VillagerModifier : AnimalModifier<Villager, VillagerRenderState> {
         ;
 
         val villagerProfession by lazy { resourceKey?.let { Registries.VILLAGER_PROFESSION.lookup().get(it).getOrNull() } }
-        override fun getTranslationKey(): String = if (this == RANDOM) "skyocean.config.misc.fun.player_animals.random" else "entity.minecraft.villager.${name.lowercase()}"
+        override fun getTranslationKey(): String =
+            if (this == RANDOM) "skyocean.config.misc.fun.player_animals.random" else "entity.minecraft.villager.${name.lowercase()}"
     }
 
     enum class Type(val resourceKey: ResourceKey<VillagerType>?) : Translatable {

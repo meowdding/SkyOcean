@@ -45,15 +45,15 @@ class GenericDropdown<T>(
 
     companion object {
         private data class TranslatableWrapper<T>(val value: T, val converter: (T) -> String) : Translatable {
+            override fun getTranslationKey(): String = converter(value)
+
             companion object {
+
                 fun <Type : EntityType<out E>, E : Entity> entityWrapper(type: Type) = TranslatableWrapper(type) {
                     EntityType.getKey(it).toLanguageKey("entity")
                 }
-
                 fun blockWrapper(block: Block) = TranslatableWrapper(block) { it.descriptionId }
             }
-
-            override fun getTranslationKey(): String = converter(value)
         }
 
         fun EntriesBuilder.entityTypeDropdown(

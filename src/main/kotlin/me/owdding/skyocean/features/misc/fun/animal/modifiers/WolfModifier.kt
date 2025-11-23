@@ -4,6 +4,9 @@ import earth.terrarium.olympus.client.utils.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.ANGRY
+import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.TAME
+import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.WILD
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
@@ -22,6 +25,7 @@ object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
     override val type: EntityType<Wolf> = EntityType.WOLF
 
     private val wolfVariants: List<WolfVariant> = Registries.WOLF_VARIANT.list().sortedBy { it.assetInfo.tame.toString() }
+    private val states = listOf(TAME, WILD, ANGRY)
 
     var wolfVariant = PlayerAnimalConfig.createEntry("wolf_variant") { id, type ->
         enum(id, Variant.RANDOM) {
@@ -56,15 +60,12 @@ object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
         ANGRY({ it.assetInfo.angry }),
         ;
 
-        companion object {
-            private val states = listOf(TAME, WILD, ANGRY)
-        }
-
         fun select(state: AvatarRenderState, wolfVariant: WolfVariant) = if (this == RANDOM) {
             getRandom(state, states)
         } else {
             this
         }.selector(wolfVariant)
+
         override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.wolf.state.${name.lowercase()}"
     }
 

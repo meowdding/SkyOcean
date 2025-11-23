@@ -28,7 +28,7 @@ object FrogModifier : AnimalModifier<Frog, FrogRenderState> {
         }
     }
 
-    fun getFrogVariant(state: AvatarRenderState): FrogVariant  = frogVariant.select(state).frogVariant ?: getRandom(state, variants)
+    fun getFrogVariant(state: AvatarRenderState): FrogVariant = frogVariant.select(state).frogVariant ?: getRandom(state, variants)
 
     override fun apply(
         avatarState: AvatarRenderState,

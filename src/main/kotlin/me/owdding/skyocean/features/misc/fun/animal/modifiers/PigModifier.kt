@@ -29,7 +29,7 @@ object PigModifier : AnimalModifier<Pig, PigRenderState> {
         }
     }
 
-    fun getPigVariant(state: AvatarRenderState): PigVariant  = pigVariant.select(state).pigVariant ?: getRandom(state, variants)
+    fun getPigVariant(state: AvatarRenderState): PigVariant = pigVariant.select(state).pigVariant ?: getRandom(state, variants)
 
     override fun apply(
         avatarState: AvatarRenderState,

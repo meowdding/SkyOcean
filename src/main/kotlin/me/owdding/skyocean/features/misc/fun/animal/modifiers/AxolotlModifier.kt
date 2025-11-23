@@ -12,6 +12,7 @@ import net.minecraft.world.entity.animal.axolotl.Axolotl
 @RegisterAnimalModifier
 object AxolotlModifier : AnimalModifier<Axolotl, AxolotlRenderState> {
     override val type: EntityType<Axolotl> = EntityType.AXOLOTL
+    private val variants = Axolotl.Variant.entries
 
     var axolotlVariant = PlayerAnimalConfig.createEntry("axolotl_variant") { id, type ->
         enum(id, Variant.RANDOM) {
@@ -28,7 +29,6 @@ object AxolotlModifier : AnimalModifier<Axolotl, AxolotlRenderState> {
         state.variant = axolotlVariant.select(avatarState).select(avatarState)
     }
 
-    private val variants = Axolotl.Variant.entries
     enum class Variant(val variant: Axolotl.Variant?) : Translatable {
         RANDOM(null),
 

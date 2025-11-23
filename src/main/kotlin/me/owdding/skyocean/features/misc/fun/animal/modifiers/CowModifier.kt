@@ -29,7 +29,7 @@ object CowModifier : AnimalModifier<Cow, CowRenderState> {
         }
     }
 
-    fun getCowVariant(state: AvatarRenderState): CowVariant  = cowVariant.select(state).cowVariant ?: getRandom(state, variants)
+    fun getCowVariant(state: AvatarRenderState): CowVariant = cowVariant.select(state).cowVariant ?: getRandom(state, variants)
 
     override fun apply(
         avatarState: AvatarRenderState,
