@@ -226,7 +226,6 @@ object HotfHelper {
                         }
                     }
                 }
-                listMerger.addRemaining()
                 listMerger.applyToTooltip(this)
             }
         }
