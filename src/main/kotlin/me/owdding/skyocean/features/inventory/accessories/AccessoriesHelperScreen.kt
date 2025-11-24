@@ -3,34 +3,40 @@ package me.owdding.skyocean.features.inventory.accessories
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
+import earth.terrarium.olympus.client.components.textbox.TextBox
+import earth.terrarium.olympus.client.ui.context.ContextMenu
+import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.lib.builder.LEFT
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
+import me.owdding.lib.builder.RIGHT
 import me.owdding.lib.displays.*
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.extensions.rightPad
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.extensions.asScrollable
+import me.owdding.skyocean.utils.extensions.withPadding
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
+import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 /*
  * TODO:
  *  - Marked accessories (they show on top of the list, and also an icon or smth)
- *  - Search accessories
  *  - CraftHelper support
  *  - Remove Rift-exclusive accessories
- *  - Toggle to disable cycling accessories
  *  - Be able to select a specific accessory in cycling accessories
  *  - Add sort options
  *      - MP
@@ -39,19 +45,24 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
  *      - Price per MP (take into account previous tier if upgrading)
  *  - Highlight accessories you have materials for
  *  - Handle accessories that upgrade with rarity (eg. pandora's box, pulse ring, etc)
- *  - Handle accessories like campfire badge having to be upgraded multiple times to upgrade rarity
  *
  * TODO for the future (maybe):
  *  - Recombs
+ *  - Handle accessories like campfire badge having to be upgraded multiple times to upgrade rarity
  *  - Take into account requirements (hotm level, slayer level, etc)
  */
 
 object AccessoriesHelperScreen : SkyOceanScreen() {
 
+    val state: ListenableState<String> = ListenableState.of("")
+    private lateinit var textBox: TextBox
     val dropdownState: DropdownState<TrackedAccessoryType> = DropdownState.of(ALL)
     val widgetWidth get() = (width / 3).coerceAtLeast(100) + 50
     val widgetHeight get() = (height / 3).coerceAtLeast(100) + 50
     var requireRebuild = true
+    private var search: String? = null
+
+    private var cycling = true
 
     val currentWidgets = mutableListOf<AbstractWidget>()
 
@@ -60,6 +71,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
     override fun onClose() {
         super.onClose()
         requireRebuild = true
+        search = null
         trackedAccessories.clear()
     }
 
@@ -78,6 +90,21 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
         val body = LayoutFactory.frame(width, height) {
             vertical {
                 LayoutFactory.frame {
+                    vertical(alignment = RIGHT) {
+                        spacer(width)
+                        LayoutFactory.horizontal {
+                            spacer(height = 24)
+                            textBox = Widgets.textInput(state) { box ->
+                                box.withChangeCallback(::refreshSearch)
+                                box.withPlaceholder("Search...")
+                                box.withSize(100, 20)
+                            }
+                            textBox.add {
+                                alignVerticallyMiddle()
+                            }
+                            spacer(width = 2)
+                        }.add()
+                    }
                     vertical(alignment = LEFT) {
                         spacer(width)
                         LayoutFactory.horizontal {
@@ -90,7 +117,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                                 },
                                 { button -> button.withSize(80, 20) },
                             ) { builder ->
-                                builder.withCallback { addItems() }
+                                builder.withCallback { refresh() }
                             }.add {
                                 alignVerticallyMiddle()
                             }
@@ -162,8 +189,10 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
         val filter = dropdownState.get() ?: TrackedAccessoryType.ALL
 
         // TODO: move marked to top
-        val items = this.trackedAccessories.filter { it.type.matches(filter) }.map { accessory ->
-            val tierItems = accessory.items
+        val items = this.trackedAccessories.filter { it.type.matches(filter) }.mapNotNull { accessory ->
+            if (!accessory.type.matches(filter)) return@mapNotNull null
+
+            val tierItems = accessory.items.filter(::matchesSearch)
 
             fun createItemDisplay(item: ItemStack): Display {
                 return Displays.item(
@@ -177,41 +206,77 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
 
                     when (accessory) {
                         is MissingAccessory -> {
-                            add("MISSING THIS ACCESSORY!", TextColor.RED)
+                            add("Missing Accessory!", TextColor.RED)
                         }
 
-                        is UpgradeAccessory -> {
-                            add("YOU CAN UPGRADE TO THIS ACCESSORY!", TextColor.YELLOW)
-                            add("Accessory to upgrade from: ") {
-                                color = TextColor.YELLOW
+                        is HasCurrentTier -> {
+                            add("You can upgrade to this accessory!", TextColor.BLUE)
+                            add("Current accessory: ") {
+                                color = TextColor.BLUE
                                 append(accessory.currentItem.hoverName)
                             }
                         }
                     }
 
                     space()
-                    add("Left click to set as marked")
+                    if (accessory.marked) {
+                        add("Left click to unmark accessory!", TextColor.YELLOW)
+                    } else {
+                        add("Left click to set as marked", TextColor.YELLOW)
+                    }
+
 
                 }.withPadding(2)
             }
 
-            val itemDisplay: Display
-            if (tierItems.size == 1) {
-                itemDisplay = createItemDisplay(tierItems.first())
-            } else {
-                val itemDisplays = tierItems.map { createItemDisplay(it) }
-                itemDisplay = Displays.supplied {
-                    val seconds = System.currentTimeMillis() / 1000
-                    itemDisplays[(seconds % itemDisplays.size).toInt()]
+            val size = tierItems.size
+            val itemDisplay = when  {
+                size == 0 -> return@mapNotNull null
+                size > 1 && cycling -> {
+                    val itemDisplays = tierItems.map(::createItemDisplay)
+                    Displays.supplied {
+                        val seconds = System.currentTimeMillis() / 1000
+                        itemDisplays[(seconds % itemDisplays.size).toInt()]
+                    }
                 }
+                else -> createItemDisplay(tierItems.first())
             }
 
             val leftAction = { _: Button ->
-                // TODO: toggle marked/unmarked
+                accessory.marked = !accessory.marked
+                refresh()
             }
 
-            val rightAction = { _: Button ->
-                // TODO: crafthelper integration or smth
+            val rightAction: (Button) -> Unit
+
+            if (size == 1) {
+                rightAction = { _: Button ->
+                    // TODO: set single as crafthelper
+                }
+            } else {
+                rightAction = { _: Button ->
+                    ContextMenu.open { menu ->
+                        menu.withAutoCloseOff()
+                        val title = "Select CraftHelper Item"
+                        menu.add { Widgets.text(title).withPadding(3) }
+                        val dropdownState = DropdownState.empty<ItemStack>()
+                        menu.add {
+                            Widgets.dropdown(dropdownState, tierItems, { it.hoverName }, { it: Button ->
+                                // TODO: make button size dependant on max width of item name
+                                it.withSize(80, 20)
+                            },
+                                {
+                                    it.withCallback { item ->
+                                        Text.of("Selected ") {
+                                            append(item.hoverName)
+                                        }.send()
+                                        // TODO: select crafthelper item
+                                    }
+                                })
+                        }
+
+                    }
+                }
             }
 
             itemDisplay.asButton(leftAction, rightAction)
@@ -229,10 +294,27 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
         }
     }
 
+    fun matchesSearch(item: ItemStack): Boolean {
+        val search = search ?: return true
+        if (item.cleanName.contains(search, true)) return true
+        return item.getRawLore().any { it.contains(search, true) }
+    }
+
+    fun refreshSearch(search: String) {
+        this.search = search.takeUnless { it.isEmpty() }
+        addItems()
+    }
+
+    fun refresh() {
+        addItems()
+    }
+
     fun rebuildItems() {
         trackedAccessories.clear()
-        trackedAccessories.addAll(AccessoriesHelper.getMissingAccessories().map { MissingAccessory(it) })
-        trackedAccessories.addAll(AccessoriesHelper.getUpgradeableAccessories().map { UpgradeAccessory(it) })
+        trackedAccessories.addAll(AccessoriesHelper.getMissingAccessories().map(::MissingAccessory))
+        trackedAccessories.addAll(AccessoriesHelper.getUpgradeableAccessories().map(::UpgradeAccessory))
+        trackedAccessories.addAll(AccessoriesHelper.getUpgradeableRarityAccessories().map(::UpgradeRarityAccessory))
+
         requireRebuild = false
     }
 

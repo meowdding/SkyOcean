@@ -43,6 +43,8 @@ object AccessoriesAPI {
     fun getFamily(id: SkyBlockId): AccessoryFamily? {
         return families.values.find { it.contains(id) }
     }
+
+    fun getRarityUpgraded(id: SkyBlockId): AccessoryRarityUpgraded? = rarityUpgraded[id]
     fun isIgnored(id: SkyBlockId): Boolean = id in ignored
     fun upgradesRarity(id: SkyBlockId): Boolean = id in rarityUpgraded
 
@@ -127,4 +129,7 @@ data class AccessoryTier(
 data class AccessoryRarityUpgraded(
     val item: SkyBlockId,
     val rarities: EnumSet<SkyBlockRarity>,
-)
+) : Set<SkyBlockRarity> by rarities {
+    fun isMax(rarity: SkyBlockRarity) = rarities.maxOrNull() == rarity
+    fun nextAfter(rarity: SkyBlockRarity): SkyBlockRarity? = firstOrNull { it > rarity }
+}

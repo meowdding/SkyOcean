@@ -69,7 +69,7 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import java.util.Optional
+import java.util.*
 import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -386,6 +386,9 @@ object Utils {
     fun LevelableTreeNode.powderForInterval(intRange: IntRange) = intRange.sumOf { costForLevel(it).second }
 
     fun nextUp(amount: Int, divider: Int) = if (amount % divider == 0) amount else amount - (amount % divider) + divider
+
+    inline fun <reified E : Enum<E>> E.next(): E? = enumValues<E>().getOrNull(ordinal + 1)
+    inline fun <reified E : Enum<E>> E.previous(): E? = enumValues<E>().getOrNull(ordinal + 1)
 }
 
 enum class SkyOceanModifyIndicator : Translatable {

@@ -6,10 +6,12 @@ import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.NONE
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
+import me.owdding.skyocean.utils.Utils.previous
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockCategory
+import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
@@ -117,10 +119,33 @@ object AccessoriesHelper : AbstractItemModifier() {
         }
     }
 
+    data class AccessoryRarityUpgradeData(
+        val family: AccessoryFamily,
+        val currentItem: ItemStack,
+        val nextRarity: SkyBlockRarity,
+    )
+
+    fun getUpgradeableRarityAccessories(): List<AccessoryRarityUpgradeData> {
+        return AccessoryBagAPI.getItems()
+            .asSequence()
+            .map { it.item }
+            .mapNotNull { item ->
+                val id = item.getSkyBlockId() ?: return@mapNotNull null
+                val upgraded = AccessoriesAPI.getRarityUpgraded(id) ?: return@mapNotNull null
+                val family = AccessoriesAPI.getFamily(id) ?: return@mapNotNull null
+                val hasRecomb = item[DataTypes.RECOMBOBULATOR] == true
+                val rarity = item[DataTypes.RARITY] ?: return@mapNotNull null
+                val realRarity = if (!hasRecomb) rarity else rarity.previous() ?: return@mapNotNull null
+                val next = upgraded.nextAfter(realRarity) ?: return@mapNotNull null
+                AccessoryRarityUpgradeData(family, item, next)
+            }.toList()
+    }
+
     data class AccessoryUpgradeData(
         val currentItem: ItemStack,
         val family: AccessoryFamily,
         val nextTier: AccessoryTier,
+        val nextTierInt: Int,
     )
 
     fun getUpgradeableAccessories(): List<AccessoryUpgradeData> {
@@ -130,12 +155,11 @@ object AccessoriesHelper : AbstractItemModifier() {
             .mapNotNull { item ->
                 val id = item.getSkyBlockId() ?: return@mapNotNull null
                 val family = AccessoriesAPI.getFamily(id) ?: return@mapNotNull null
-                val tier = family.indexOfFirst { id in it }
-                val nextTier = family.getOrNull(tier + 1) ?: return@mapNotNull null
-                AccessoryUpgradeData(item, family, nextTier) to tier
+                val tier = family.indexOfFirst { id in it } + 1
+                val nextTier = family.getOrNull(tier) ?: return@mapNotNull null
+                AccessoryUpgradeData(item, family, nextTier, tier)
             }
-            .sortedByDescending { it.second } // we sort by the tier to make sure we always use the highest tier of each family
-            .map { it.first }
+            .sortedByDescending { it.nextTierInt } // we sort by the tier to make sure we always use the highest tier of each family
             .distinctBy { it.family }
             .toList()
     }
