@@ -52,7 +52,7 @@ object TropicalFishModifier : AnimalModifier<TropicalFish, TropicalFishRenderSta
         CLAYFISH(TropicalFish.Pattern.CLAYFISH),
         ;
 
-        override fun getTranslationKey(): String =  createTranslationKey("tropical_fish", "pattern", name)
+        override fun getTranslationKey(): String = createTranslationKey("tropical_fish", "pattern", name)
     }
 
 }

@@ -37,6 +37,6 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
         SNOW(Fox.Variant.SNOW),
         ;
 
-        override fun getTranslationKey(): String =  createTranslationKey("fox", "variant", name)
+        override fun getTranslationKey(): String = createTranslationKey("fox", "variant", name)
     }
 }

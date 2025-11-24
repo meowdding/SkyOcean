@@ -88,6 +88,6 @@ object VillagerModifier : AnimalModifier<Villager, VillagerRenderState> {
         ;
 
         val villagerType by lazy { resourceKey?.let { Registries.VILLAGER_TYPE.lookup().get(it).getOrNull() } }
-        override fun getTranslationKey(): String =createTranslationKey("villager", "type", name)
+        override fun getTranslationKey(): String = createTranslationKey("villager", "type", name)
     }
 }
