@@ -15,6 +15,7 @@ permissions:
 
 jobs:
     detekt:
+        if: ${{ !github.event.pull_request.draft }}
         name: Run detekt
         runs-on: ubuntu-latest
         concurrency:
@@ -83,7 +84,8 @@ jobs:
         needs: detekt
         if: ${{
             needs.detekt.outputs.sarif_exists == 'true' &&
-            needs.detekt.outputs.detekt_failed == 'true'
+            needs.detekt.outputs.detekt_failed == 'true' &&
+            !github.event.pull_request.draft
             }}
         permissions:
             pull-requests: write
