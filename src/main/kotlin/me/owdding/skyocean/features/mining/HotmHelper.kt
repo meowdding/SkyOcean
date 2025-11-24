@@ -118,7 +118,7 @@ object HotmHelper {
         val perkName = item.cleanName
         val perkByName = TreeRepoData.hotmByName(perkName) as? LevelingTreeNode ?: return
         val tooltipLines = item.getLore()
-        val isLocked = (item.getItemModel()) == Items.COAL
+        val isLocked = item.getItemModel() == Items.COAL
         val notEnoughPowder = tooltipLines.any { it.stripped.startsWith("you don't have enough ", true) }
         val level = tooltipLines.firstOrNull()?.let {
             val isBoosted = it.siblings.any { sibling -> sibling.style.color?.serialize() == "aqua" }
