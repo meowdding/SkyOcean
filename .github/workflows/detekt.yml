@@ -41,19 +41,20 @@ jobs:
                 uses: gradle/actions/setup-gradle@v5
             -   run: chmod +x gradlew
             -   name: Run detekt main
+                id: run_detekt
                 run: ./gradlew detekt --stacktrace --continue
+                continue-on-error: true
             -   name: Merge detekt outputs
-                if: always()
                 id: check_sarif
+                if: always()
                 run: |
                     chmod +x .github/scripts/process_detekt_sarif.sh
                     kotlinc -script .github/scripts/collect-detekt-sarif-files.kts
-                    if [ -f "detekt_failures" ]; then
+                    if [ -f "detekt_output.txt" ]; then
                         echo "exists=true" >> $GITHUB_OUTPUT
                     else
                         echo "exists=false" >> $GITHUB_OUTPUT
                     fi
-
             -   name: Add label if detekt fails
                 if: ${{ steps.run_detekt.outcome == 'failure' && steps.check_sarif.outputs.exists == 'true' }}
                 uses: actions-ecosystem/action-add-labels@v1
