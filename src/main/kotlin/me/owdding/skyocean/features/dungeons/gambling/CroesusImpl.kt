@@ -31,13 +31,13 @@ object CroesusImpl : AbstractItemModifier() {
         "Catacombs - Floor V" to DungeonFloor.F5,
         "Catacombs - Floor VI" to DungeonFloor.F6,
         "Catacombs - Floor VII" to DungeonFloor.F7,
-        "Master Mode Catacombs - Floor I" to DungeonFloor.M1,
-        "Master Mode Catacombs - Floor II" to DungeonFloor.M2,
-        "Master Mode Catacombs - Floor III" to DungeonFloor.M3,
-        "Master Mode Catacombs - Floor IV" to DungeonFloor.M4,
-        "Master Mode Catacombs - Floor V" to DungeonFloor.M5,
-        "Master Mode Catacombs - Floor VI" to DungeonFloor.M6,
-        "Master Mode Catacombs - Floor VII" to DungeonFloor.M7,
+        "Master Catacombs - Floor I" to DungeonFloor.M1,
+        "Master Catacombs - Floor II" to DungeonFloor.M2,
+        "Master Catacombs - Floor III" to DungeonFloor.M3,
+        "Master Catacombs - Floor IV" to DungeonFloor.M4,
+        "Master Catacombs - Floor V" to DungeonFloor.M5,
+        "Master Catacombs - Floor VI" to DungeonFloor.M6,
+        "Master Catacombs - Floor VII" to DungeonFloor.M7,
     )
 
     override val displayName: Component get() = Text.of("Croesus Gambling Item Hider")
@@ -47,7 +47,7 @@ object CroesusImpl : AbstractItemModifier() {
         itemStack.`is`(Items.PLAYER_HEAD) && DungeonChestType.getByNameStartsWith(itemStack.cleanName) in allowedDungeonGamblingChests
 
     override fun appliesToScreen(screen: Screen) = screen.title.stripped.let {
-        it.startsWith("Catacombs - ") || it.startsWith("Master Mode Catacombs - ")
+        it.startsWith("Catacombs - ") || it.startsWith("Master Catacombs - ")
     }
 
     override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {

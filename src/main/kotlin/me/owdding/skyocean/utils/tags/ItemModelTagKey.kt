@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemModelTagKey
 
 enum class ItemModelTagKey(val path: String) : ItemModelTagKey {
-    HOTM_PERK_ITEMS("hotf_perk_items"),
+    HOTF_PERK_ITEMS("hotf_perk_items"),
     ;
 
     override val key: TagKey<Item> = TagKey.create(Registries.ITEM, SkyOcean.id(path))

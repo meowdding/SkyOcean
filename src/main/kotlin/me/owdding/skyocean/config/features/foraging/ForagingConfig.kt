@@ -23,4 +23,12 @@ object ForagingConfig : CategoryKt("foraging") {
         translation = "skyocean.config.foraging.hotf.totalLeft"
     }
 
+    var hotfReminder by boolean(true) {
+        translation = "skyocean.config.foraging.hotf.reminder"
+    }
+
+    var reminderTitle by boolean(true) {
+        translation = "skyocean.config.foraging.hotf.reminderTitle"
+    }
+
 }
