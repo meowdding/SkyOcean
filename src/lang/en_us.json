@@ -925,6 +925,16 @@
                 "desc": "Changes the shulker color that is used for others!"
               }
             },
+            "happy_ghast": {
+              "own_harness": {
+                "@value": "Own Harness Color",
+                "desc": "Changes the harness color that is used for yourself!"
+              },
+              "other_harness": {
+                "@value": "Other Harness Color",
+                "desc": "Changes the harness color that is used for others!"
+              }
+            },
             "random": "Random",
             "boolean_state": {
               "random": "Random",
@@ -947,7 +957,7 @@
               "light_blue": "<#90d5ff>Light Blue",
               "yellow": "<yellow>Yellow",
               "lime": "<green>Lime",
-              "pink": "<pink>pink",
+              "pink": "<pink>Pink",
               "gray": "<dark_gray>Gray",
               "light_gray": "<light_gray>Light Gray",
               "cyan": "<#00ffff>Cyan",
