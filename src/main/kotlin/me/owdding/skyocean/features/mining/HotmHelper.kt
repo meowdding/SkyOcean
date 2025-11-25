@@ -1,12 +1,16 @@
 package me.owdding.skyocean.features.mining
 
 import me.owdding.ktmodules.Module
+import me.owdding.lib.repo.CostTypes
+import me.owdding.lib.repo.PowderType
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.data.profile.PerkUpgradeStorage
 import me.owdding.skyocean.helpers.skilltree.SkillTreeHelper
 import me.owdding.skyocean.utils.tags.ItemTagKey
-import tech.thatgravyboat.skyblockapi.api.profile.hotm.*
-import tech.thatgravyboat.skyblockapi.api.profile.hotm.PowderType.*
+import tech.thatgravyboat.skyblockapi.api.profile.hotm.HotmAPI
+import tech.thatgravyboat.skyblockapi.api.profile.hotm.HotmData
+import tech.thatgravyboat.skyblockapi.api.profile.hotm.HotmPerk
+import tech.thatgravyboat.skyblockapi.api.profile.hotm.PowderAPI
 
 @Module
 object HotmHelper : SkillTreeHelper<PowderType, HotmData, HotmPerk, HotmAPI>(
@@ -15,6 +19,7 @@ object HotmHelper : SkillTreeHelper<PowderType, HotmData, HotmPerk, HotmAPI>(
     "Heart of the Mountain",
     ItemTagKey.HOTM_PERK_ITEMS,
     MiningConfig,
+    CostTypes.POWDER,
 ) {
 
     // We default to null even if the `when` statement is currently exhaustive, since hypixel could add more powder types in the future

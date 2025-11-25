@@ -1,12 +1,12 @@
 package me.owdding.skyocean.data.profile
 
 import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.lib.repo.PowderType
+import me.owdding.lib.repo.SkillTreeCurrency
+import me.owdding.lib.repo.WhisperType
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.storage.ProfileStorage
-import tech.thatgravyboat.skyblockapi.api.profile.hotf.WhisperType
-import tech.thatgravyboat.skyblockapi.api.profile.hotm.PowderType
-import tech.thatgravyboat.skyblockapi.api.profile.skilltree.SkillTreeCurrency
 
 object PerkUpgradeStorage {
 

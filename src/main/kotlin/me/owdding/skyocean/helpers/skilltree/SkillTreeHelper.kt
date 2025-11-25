@@ -4,14 +4,16 @@ import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.extensions.applyToTooltip
 import me.owdding.lib.extensions.round
+import me.owdding.lib.repo.CostTypes
 import me.owdding.lib.repo.LevelingTreeNode
+import me.owdding.lib.repo.SkillTreeCurrency
 import me.owdding.lib.repo.TreeRepoData
-import me.owdding.lib.repo.WhisperCostType
 import me.owdding.skyocean.data.profile.PerkUpgradeStorage
 import me.owdding.skyocean.utils.Utils.exclusiveInclusive
 import me.owdding.skyocean.utils.Utils.powderForInterval
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.Utils.totalPowder
+import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
@@ -28,7 +30,6 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
 import tech.thatgravyboat.skyblockapi.api.profile.skilltree.SkillTreeAPI
-import tech.thatgravyboat.skyblockapi.api.profile.skilltree.SkillTreeCurrency
 import tech.thatgravyboat.skyblockapi.api.profile.skilltree.SkillTreeData
 import tech.thatgravyboat.skyblockapi.api.profile.skilltree.SkillTreePerk
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -48,12 +49,13 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
-abstract class SkillTreeHelper<Powder: SkillTreeCurrency, Data : SkillTreeData<Perk>, Perk : SkillTreePerk, Self : SkillTreeAPI<Data, Perk, Self>>(
+abstract class SkillTreeHelper<Powder : SkillTreeCurrency, Data : SkillTreeData<Perk>, Perk : SkillTreePerk, Self : SkillTreeAPI<Data, Perk, Self>>(
     val reminders: Map<Powder, String>,
     val api: SkillTreeAPI<Data, Perk, Self>,
     val inventoryTitle: String,
     val perkItems: ItemTagKey,
     val config: SkillTreeConfig,
+    val costType: CostTypes,
 ) {
 
     protected val cachedPerkCost = mutableMapOf<Powder, Int>()
@@ -91,7 +93,7 @@ abstract class SkillTreeHelper<Powder: SkillTreeCurrency, Data : SkillTreeData<P
                                 val currencySpent = perkByName.powderForInterval(1 exclusiveInclusive level)
                                 val totalCurrencyNeeded = perkByName.totalPowder()
                                 this.color = TextColor.DARK_GRAY
-                                append("WHISPERS/POWDER ${currencySpent.toFormattedString()}") { this.color = TextColor.GRAY }
+                                append("${costType.toFormattedName()} ${currencySpent.toFormattedString()}") { this.color = TextColor.GRAY }
                                 append("/${totalCurrencyNeeded.toFormattedString()}")
                                 append(CommonComponents.SPACE)
                                 append(
@@ -110,30 +112,34 @@ abstract class SkillTreeHelper<Powder: SkillTreeCurrency, Data : SkillTreeData<P
                         fun MutableList<Component>.add(levels: Int) {
                             val name = perkByName.powderType.displayName ?: return
                             val formatting = perkByName.powderType.formatting ?: ChatFormatting.WHITE
-                            add("Cost (") {
-                                append(levels.toFormattedString()) { this.color = TextColor.YELLOW }
-                                append(")")
-                                this.color = TextColor.GRAY
-                            }
-                            add(perkByName.powderForInterval(level exclusiveInclusive (level + levels)).toFormattedString()) {
-                                append(CommonComponents.SPACE)
-                                append(name)
-                                this.withStyle(formatting)
-                            }
+                            add(
+                                Text.of("Cost (") {
+                                    append(levels.toFormattedString()) { this.color = TextColor.YELLOW }
+                                    append(")")
+                                    this.color = TextColor.GRAY
+                                },
+                            )
+                            add(
+                                Text.of(perkByName.powderForInterval(level exclusiveInclusive (level + levels)).toFormattedString()) {
+                                    append(CommonComponents.SPACE)
+                                    append(name)
+                                    this.withStyle(formatting)
+                                },
+                            )
                             add(CommonComponents.EMPTY)
                         }
                         if (level + 1 >= perkByName.maxLevel) return@addBeforeNext
 
                         val levelsOnShiftClick = perkByName.maxLevel.minus(level).coerceAtMost(10)
                         if (config.displayShiftCost) {
-                            add(levelsOnShiftClick)
+                            this.add(levelsOnShiftClick)
                         }
 
                         if (config.displayShiftCost && levelsOnShiftClick < 10) return@addBeforeNext
                         val levelsUntilMax = perkByName.maxLevel.minus(level)
                         if (config.displayShiftCost && levelsUntilMax == 10) return@addBeforeNext
                         if (config.displayTotalLeft) {
-                            add(levelsUntilMax)
+                            this.add(levelsUntilMax)
                         }
                     }
                 }
@@ -141,15 +147,15 @@ abstract class SkillTreeHelper<Powder: SkillTreeCurrency, Data : SkillTreeData<P
                 listMerger.addRemaining()
                 if (!perkByName.isMaxed(level) && !isLocked && config.reminder && notEnoughCurrency) run {
                     val (costType, amount) = perkByName.costForLevel(level + 1)
-                    //if (costType.type != CostTypes.WHISPER) return@run
-                    val currencyType = (costType as WhisperCostType).whisperType // (costType as PowderCostType).powderType
+                    if (costType.type != this@SkillTreeHelper.costType) return@run
+                    val currencyType = costType.currency!!.unsafeCast<Powder>()
                     val currentPerk = reminders[currencyType]
                     if (currentPerk != perkName) {
                         Text.of {
                             append(ChatUtils.ICON_SPACE_COMPONENT)
                             append("Click to set a reminder when you", OceanColors.SKYOCEAN_BLUE)
                             append(CommonText.NEWLINE)
-                            append("have enough WHISPERS/POWDER to buy this perk!", OceanColors.SKYOCEAN_BLUE)
+                            append("have enough ${costType.type.toFormattedName()} to buy this perk!", OceanColors.SKYOCEAN_BLUE)
                         }.splitLines().forEach(listMerger::add)
                         this@skyoceanReplace.onClick { button ->
                             if (button != InputConstants.MOUSE_BUTTON_LEFT) return@onClick null
@@ -215,7 +221,7 @@ abstract class SkillTreeHelper<Powder: SkillTreeCurrency, Data : SkillTreeData<P
         perks.forEach { (type, perk) ->
             Text.of {
                 append("You have enough ")
-                append(type.displayname)
+                append(type.displayName)
                 append(" to upgrade your $perk perk!")
 
                 hover = Text.of("Click to open the Hotm menu")
