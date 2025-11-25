@@ -36,7 +36,7 @@ object PerkUpgradeStorage {
         if (storage.remove(type) != null) save()
     }
 
-    private fun <T : SkillTreeCurrency> getStorage(currency: T) = when(currency) {
+    private fun <T : SkillTreeCurrency> getStorage(currency: T) = when (currency) {
         is PowderType -> data?.hotm
         is WhisperType -> data?.hotf
         else -> null
