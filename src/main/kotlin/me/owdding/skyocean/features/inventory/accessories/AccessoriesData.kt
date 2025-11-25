@@ -8,10 +8,12 @@ import me.owdding.ktcodecs.Compact
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.lib.events.FinishRepoLoadingEvent
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.Utils.getRealRarity
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
@@ -40,8 +42,21 @@ object AccessoriesAPI {
     internal var ignored: Set<SkyBlockId> = emptySet()
     internal var rarityUpgraded: Map<SkyBlockId, AccessoryRarityUpgraded> = emptyMap()
 
+    private val HEGEMONY = SkyBlockId.item("hegemony_artifact")
+
     fun getFamily(id: SkyBlockId): AccessoryFamily? {
         return families.values.find { it.contains(id) }
+    }
+
+    private fun getMpFromRarity(rarity: SkyBlockRarity): Int {
+        TODO()
+    }
+
+    fun getMp(item: ItemStack): Int {
+        val realRarity = item.getRealRarity() ?: return 0
+        var mp = getMpFromRarity(realRarity)
+        if (item.getSkyBlockId() == HEGEMONY) mp *= 2 // hegemony gives double mp
+        return mp
     }
 
     fun getRarityUpgraded(id: SkyBlockId): AccessoryRarityUpgraded? = rarityUpgraded[id]
@@ -56,7 +71,20 @@ object AccessoriesAPI {
 
 
         families = Utils.loadRemoteRepoData<AccessoryFamily, List<AccessoryFamily>>("accessories/families", CodecUtils::list)
-            ?.associateBy { it.family }.orEmpty()
+            ?.associateBy { it.family }
+            .orEmpty()
+            .onEach { (_, family) ->
+                // Initialize the tier of the tiers
+                family.forEachIndexed { index, tier ->
+                    tier.tier = index
+                }
+            }
+
+        val emptyFamilies = families.filter { it.value.isEmpty() }.keys
+        if (emptyFamilies.isNotEmpty()) {
+            SkyOcean.error("Accessory families are empty: $emptyFamilies")
+        }
+
         ignored = Utils.loadRemoteRepoData<SkyBlockId, Set<SkyBlockId>>("accessories/ignored_accessories", CodecUtils::set).orEmpty()
         rarityUpgraded = Utils.loadRemoteRepoData<AccessoryRarityUpgraded, List<AccessoryRarityUpgraded>>("accessories/rarity_upgraded", CodecUtils::list)
             ?.associateBy { it.item }.orEmpty()
@@ -69,6 +97,7 @@ object AccessoriesAPI {
         }
     }
 
+    // Creates every single item in skyblock and gets the accessories that don't have a family or are ignored
     private fun checkMissing() {
         val allAccessories = RepoAPI.items().items().map { json ->
             ItemStack.CODEC.parse(JsonOps.INSTANCE, json.value).orThrow
@@ -109,16 +138,23 @@ data class AccessoryFamily(
     @Compact val tiers: List<AccessoryTier>,
 ) : List<AccessoryTier> by tiers {
     //region Functions
-    val maxTier: Int get() = lastIndex
+    inline val maxTier: Int get() = lastIndex
     fun flatMapItems(): Sequence<SkyBlockId> = asSequence().flatMap(AccessoryTier::items)
     operator fun get(id: SkyBlockId): AccessoryTier? = find { id in it }
     fun contains(id: SkyBlockId): Boolean = any { id in it }
     //endregion
 }
 
-data class AccessoryTier(
+// Not a data class so that equality checks aren't done with its contents
+class AccessoryTier(
     val items: Set<SkyBlockId>,
-) : Set<SkyBlockId> by items {
+) : Set<SkyBlockId> by items, Comparable<AccessoryTier> {
+    /** Index of the [AccessoryTier] in its family, gets initialized when family is created */
+    var tier: Int = -1
+        internal set
+
+    override fun compareTo(other: AccessoryTier): Int = tier.compareTo(other.tier)
+
     companion object {
         @IncludedCodec
         val CODEC: Codec<AccessoryTier> = CodecUtils.compactSet(SkyBlockId.CODEC).xmap(::AccessoryTier, AccessoryTier::items)

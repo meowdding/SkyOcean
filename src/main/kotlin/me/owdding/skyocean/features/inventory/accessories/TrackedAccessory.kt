@@ -7,13 +7,6 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SimpleItemAPI
 enum class TrackedAccessoryType {
     MISSING,
     UPGRADE,
-    ALL,
-    ;
-
-    fun matches(type: TrackedAccessoryType): Boolean {
-        if (type == ALL || this == ALL) return true
-        return this == type
-    }
 }
 
 sealed interface TrackedAccessory {

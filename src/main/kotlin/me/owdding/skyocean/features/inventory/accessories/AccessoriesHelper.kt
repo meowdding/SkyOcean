@@ -6,7 +6,7 @@ import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.NONE
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
-import me.owdding.skyocean.utils.Utils.previous
+import me.owdding.skyocean.utils.Utils.getRealRarity
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
@@ -32,26 +32,24 @@ object AccessoriesHelper : AbstractItemModifier() {
 
     fun getCurrentAccessories(): MutableList<SkyBlockId> = AccessoryBagAPI.getItems().mapNotNullTo(mutableListOf()) { it.item.getSkyBlockId() }
 
-    fun getFamilyAndTier(id: SkyBlockId): Pair<AccessoryFamily, Int>? {
-        return AccessoriesAPI.families.values.firstNotNullOfOrNull { family ->
-            val index = family.indexOfFirst { id in it }
-            if (index == -1) return@firstNotNullOfOrNull null
-            return@firstNotNullOfOrNull family to index
-        }
+    fun getFamilyAndTier(id: SkyBlockId): Pair<AccessoryFamily, AccessoryTier>? {
+        val family = AccessoriesAPI.getFamily(id) ?: return null
+        val tier = family[id] ?: return null
+        return family to tier
     }
 
     // Returns highest tier in family, or -1 if no tier has been collected
-    fun highestTierCollectedInFamily(id: SkyBlockId): Int {
+    fun highestTierCollectedInFamily(id: SkyBlockId): AccessoryTier? {
         val current = currentIds
-        val (family, _) = getFamilyAndTier(id) ?: return -1
-        return family.withIndex().lastOrNull { it.value.any(current::contains) }?.index ?: -1
+        val (family, _) = getFamilyAndTier(id) ?: return null
+        return family.lastOrNull { it.any(current::contains) }
     }
 
     fun hasDuplicate(id: SkyBlockId): Boolean {
         val current = getCurrentAccessories()
-        val (family, tier) = getFamilyAndTier(id) ?: return false
+        val (_, tier) = getFamilyAndTier(id) ?: return false
         current.remove(id)
-        return family[tier].any(current::contains)
+        return tier.any(current::contains)
     }
 
     // temporary
@@ -69,11 +67,11 @@ object AccessoriesHelper : AbstractItemModifier() {
         // If you have another accessory of the same line, in the same tier
         if (hasId && hasDuplicate(id) && !ignoreDuplicate(id)) return DUPLICATE
 
-        val highestTierInFamily = highestTierCollectedInFamily(id)
-        // If you don't have any accessory in this family
-        if (highestTierInFamily == -1) return MISSING
+        // If you don't have any accessory in this family, this returns null
+        val highestTierInFamily = highestTierCollectedInFamily(id) ?: return MISSING
+
         // If you have the accessory, AND it's the max tier of the family
-        if (tier == family.maxTier && hasId) return MAXED
+        if (tier == family.last() && hasId) return MAXED
         // If you own a lower tier of this family
         if (tier > highestTierInFamily) return UPGRADE
         // If this accessory is a lower tier than one you already own
@@ -133,9 +131,7 @@ object AccessoriesHelper : AbstractItemModifier() {
                 val id = item.getSkyBlockId() ?: return@mapNotNull null
                 val upgraded = AccessoriesAPI.getRarityUpgraded(id) ?: return@mapNotNull null
                 val family = AccessoriesAPI.getFamily(id) ?: return@mapNotNull null
-                val hasRecomb = item[DataTypes.RECOMBOBULATOR] == true
-                val rarity = item[DataTypes.RARITY] ?: return@mapNotNull null
-                val realRarity = if (!hasRecomb) rarity else rarity.previous() ?: return@mapNotNull null
+                val realRarity = item.getRealRarity() ?: return@mapNotNull null
                 val next = upgraded.nextAfter(realRarity) ?: return@mapNotNull null
                 AccessoryRarityUpgradeData(family, item, next)
             }.toList()

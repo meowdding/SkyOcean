@@ -4,8 +4,10 @@ import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
 import earth.terrarium.olympus.client.components.textbox.TextBox
+import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.ui.context.ContextMenu
 import earth.terrarium.olympus.client.utils.ListenableState
+import earth.terrarium.olympus.client.utils.StateUtils
 import me.owdding.lib.builder.LEFT
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
@@ -21,8 +23,12 @@ import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
+import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
@@ -56,7 +62,9 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
 
     val state: ListenableState<String> = ListenableState.of("")
     private lateinit var textBox: TextBox
-    val dropdownState: DropdownState<TrackedAccessoryType> = DropdownState.of(ALL)
+    val dropdownSort: DropdownState<AccessoriesSortMode> = DropdownState.of(PRICE_PER_MP)
+    val ascending: ListenableState<Boolean> = ListenableState.of(true)
+
     val widgetWidth get() = (width / 3).coerceAtLeast(100) + 50
     val widgetHeight get() = (height / 3).coerceAtLeast(100) + 50
     var requireRebuild = true
@@ -110,14 +118,41 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                         LayoutFactory.horizontal {
                             spacer(height = 24, width = 2)
                             Widgets.dropdown(
-                                dropdownState,
-                                TrackedAccessoryType.entries,
+                                dropdownSort,
+                                AccessoriesSortMode.entries,
                                 { modes ->
                                     Text.of(modes.name.toTitleCase())
                                 },
                                 { button -> button.withSize(80, 20) },
                             ) { builder ->
-                                builder.withCallback { refresh() }
+                                builder.withCallback(::refreshSort)
+                            }.add {
+                                alignVerticallyMiddle()
+                            }
+                            Widgets.button { factory ->
+                                factory.withCallback {
+                                    StateUtils.booleanToggle(ascending).run()
+                                    refreshSort()
+                                    McClient.runNextTick {
+                                        factory.isFocused = false
+                                    }
+                                }
+                                factory.withRenderer { graphics, widget, _ ->
+                                    val texture = if (ascending.get()) {
+                                        UIIcons.CHEVRON_UP
+                                    } else {
+                                        UIIcons.CHEVRON_DOWN
+                                    }
+                                    graphics.drawSprite(
+                                        texture,
+                                        widget.x + 5,
+                                        widget.y + 5,
+                                        10,
+                                        10,
+                                        ARGB.opaque(TextColor.DARK_GRAY),
+                                    )
+                                }
+                                factory.withSize(20)
                             }.add {
                                 alignVerticallyMiddle()
                             }
@@ -186,14 +221,12 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
     fun buildItems(width: Int, height: Int): Layout {
         val columns = (width - 5) / 20
         val rows = (height - 5) / 20
-        val filter = dropdownState.get() ?: TrackedAccessoryType.ALL
 
         // TODO: move marked to top
-        val items = this.trackedAccessories.filter { it.type.matches(filter) }.mapNotNull { accessory ->
-            if (!accessory.type.matches(filter)) return@mapNotNull null
-
+        val items = this.trackedAccessories.mapNotNull { accessory ->
             val tierItems = accessory.items.filter(::matchesSearch)
 
+            // TODO: find a way to mark the accessories in some way
             fun createItemDisplay(item: ItemStack): Display {
                 return Displays.item(
                     item,
@@ -224,6 +257,8 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                     } else {
                         add("Left click to set as marked", TextColor.YELLOW)
                     }
+
+                    add("Right click to add to CraftHelper!", TextColor.ORANGE)
 
 
                 }.withPadding(2)
@@ -260,13 +295,15 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                         val title = "Select CraftHelper Item"
                         menu.add { Widgets.text(title).withPadding(3) }
                         val dropdownState = DropdownState.empty<ItemStack>()
+
+                        val maxWidth = tierItems.maxOf { McFont.width(it.hoverName) }
+
                         menu.add {
                             Widgets.dropdown(dropdownState, tierItems, { it.hoverName }, { it: Button ->
-                                // TODO: make button size dependant on max width of item name
-                                it.withSize(80, 20)
+                                it.withSize(maxWidth + 5, 20)
                             },
-                                {
-                                    it.withCallback { item ->
+                                { builder ->
+                                    builder.withCallback { item ->
                                         Text.of("Selected ") {
                                             append(item.hoverName)
                                         }.send()
@@ -305,6 +342,10 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
         addItems()
     }
 
+    fun refreshSort(mode: AccessoriesSortMode = dropdownSort.get() ?: PRICE_PER_MP) {
+        this.trackedAccessories.sortWith(mode.let { if (ascending.get() == true) it else it.reversed() })
+    }
+
     fun refresh() {
         addItems()
     }
@@ -315,6 +356,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
         trackedAccessories.addAll(AccessoriesHelper.getUpgradeableAccessories().map(::UpgradeAccessory))
         trackedAccessories.addAll(AccessoriesHelper.getUpgradeableRarityAccessories().map(::UpgradeRarityAccessory))
 
+        this.refreshSort()
         requireRebuild = false
     }
 
