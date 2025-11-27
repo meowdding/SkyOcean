@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "skyocean-datagen",
+  "version": "${version}",
+  "name": "SkyOcean",
+  "icon": "assets/skyocean/skyocean-big.png",
+  "entrypoints": {
+    "fabric-datagen": [
+      {
+        "value": "me.owdding.skyocean.datagen.SkyOceanDatagen",
+        "adapter": "kotlin"
+      }
+    ]
+  },
+  "mixins": [
+    "skyocean.datagen.mixins.json"
+  ]
+}

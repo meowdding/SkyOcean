@@ -87,6 +87,13 @@
           "@value": "Reminder Delay",
           "desc": "The delay between reminders in minutes."
         },
+        "forge_reminder_action": {
+          "@value": "Reminder Action",
+          "desc": "What clickable action will show when the timer is over.",
+          "warp": "Warp to Forge",
+          "call_fred": "Call Fred",
+          "both": "Both"
+        },
         "retexture": {
           "@value": "Retexture",
           "carpets": {
@@ -161,6 +168,14 @@
           "totalLeft": {
             "@value": "Show total amount left",
             "desc": "Displays the total amount that is still required to max a perk."
+          },
+          "reminder": {
+            "@value": "Reminder",
+            "desc": "Lets you add reminders for when you have enough powder to buy a perk."
+          },
+          "reminderTitle": {
+            "@value": "Reminder Title",
+            "desc": "Shows a title when the reminder triggers."
           }
         },
         "ch": {
@@ -716,6 +731,14 @@
           "totalLeft": {
             "@value": "Show total amount left",
             "desc": "Displays the total amount that is still required to max a perk."
+          },
+          "reminder": {
+            "@value": "Reminder",
+            "desc": "Lets you add reminders for when you have enough whispers to buy a perk."
+          },
+          "reminderTitle": {
+            "@value": "Reminder Title",
+            "desc": "Shows a title when the reminder triggers."
           }
         },
         "galatea": {
