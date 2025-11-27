@@ -7,14 +7,12 @@ import tech.thatgravyboat.repolib.api.recipes.*
 interface RecipeVisitor {
 
     companion object {
-        fun getVisitor(recipe: Recipe<*>): RecipeVisitor? {
-            return when (recipe) {
-                is ForgeRecipe -> ForgeRecipeVisitor
-                is CraftingRecipe -> CraftingRecipeVisitor
-                is KatRecipe -> KatRecipeVisitor
-                is ShopRecipe -> ShopRecipeVisitor
-                else -> null
-            }
+        fun getVisitor(recipe: Recipe<*>): RecipeVisitor? = when (recipe) {
+            is ForgeRecipe -> ForgeRecipeVisitor
+            is CraftingRecipe -> CraftingRecipeVisitor
+            is KatRecipe -> KatRecipeVisitor
+            is ShopRecipe -> ShopRecipeVisitor
+            else -> null
         }
 
         fun getInputs(recipe: Recipe<*>) = getVisitor(recipe)?.getInputs(recipe) ?: emptyList()
