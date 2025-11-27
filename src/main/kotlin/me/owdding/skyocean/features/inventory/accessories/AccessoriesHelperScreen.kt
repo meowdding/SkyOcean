@@ -15,6 +15,7 @@ import me.owdding.lib.builder.RIGHT
 import me.owdding.lib.displays.*
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.extensions.rightPad
+import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.extensions.asScrollable
@@ -25,6 +26,7 @@ import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -34,23 +36,15 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 /*
  * TODO:
- *  - Marked accessories (they show on top of the list, and also an icon or smth)
- *  - CraftHelper support
  *  - Remove Rift-exclusive accessories
- *  - Be able to select a specific accessory in cycling accessories
- *  - Add sort options
- *      - MP
- *      - Rarity
- *      - Price (take into account previous tier if upgrading)
- *      - Price per MP (take into account previous tier if upgrading)
+ *  - Take into account price of previous tier when calculating price for sorting
+ *  - Add icon to marked accessories
  *  - Highlight accessories you have materials for
- *  - Handle accessories that upgrade with rarity (eg. pandora's box, pulse ring, etc)
  *
  * TODO for the future (maybe):
  *  - Recombs
@@ -286,7 +280,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
 
             if (size == 1) {
                 rightAction = { _: Button ->
-                    // TODO: set single as crafthelper
+                    CraftHelperStorage.setSelected(tierItems.first().getSkyBlockId())
                 }
             } else {
                 rightAction = { _: Button ->
@@ -304,10 +298,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                             },
                                 { builder ->
                                     builder.withCallback { item ->
-                                        Text.of("Selected ") {
-                                            append(item.hoverName)
-                                        }.send()
-                                        // TODO: select crafthelper item
+                                        CraftHelperStorage.setSelected(item.getSkyBlockId())
                                     }
                                 })
                         }

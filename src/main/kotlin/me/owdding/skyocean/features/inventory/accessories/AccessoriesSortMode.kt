@@ -6,10 +6,10 @@ import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
 
 // TODO: figure out the best order for some of these
 enum class AccessoriesSortMode(vararg sortModes: Mode) : Comparator<TrackedAccessory> {
-    MP(Mode.MP, Mode.PRICE, Mode.RARITY),
-    PRICE(Mode.PRICE, Mode.MP, Mode.RARITY),
-    RARITY(Mode.RARITY, Mode.PRICE, Mode.MP),
-    PRICE_PER_MP(Mode.PRICE_PER_MP, Mode.RARITY),
+    MP(Mode.MARKED, Mode.MP, Mode.PRICE, Mode.RARITY),
+    PRICE(Mode.MARKED, Mode.PRICE, Mode.MP, Mode.RARITY),
+    RARITY(Mode.MARKED, Mode.RARITY, Mode.PRICE, Mode.MP),
+    PRICE_PER_MP(Mode.MARKED, Mode.PRICE_PER_MP, Mode.RARITY),
     ;
 
     val comparator = sortModes.map { it.comparator }.reduce { c1, c2 -> c1.thenComparing(c2) }
@@ -19,6 +19,7 @@ enum class AccessoriesSortMode(vararg sortModes: Mode) : Comparator<TrackedAcces
 private typealias Mode = AdditionalSortMode
 
 private enum class AdditionalSortMode(val comparator: Comparator<TrackedAccessory>) {
+    MARKED(reversed(Comparator.comparing { it.marked })),
     MP(Comparator.comparing { AccessoriesAPI.getMp(it.items.first()) }),
     PRICE(Comparator.comparing { getPrice(it) }),
     RARITY(reversed(Comparator.comparing { getRarity(it) })),
