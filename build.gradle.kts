@@ -71,6 +71,7 @@ dependencies {
     includeImplementation(libs.meowdding.remote.repo)
     includeImplementation(libs.meowdding.lib)
     includeImplementation(libs.skyblockapi)
+    implementation(libs.moulberry.mixinconstraints) // Already included in mlib
 
     implementation(libs.keval)
     include(libs.keval)

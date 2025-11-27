@@ -6,6 +6,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 
 data class SearchItemFilter(val search: String) : ItemFilter {
     override fun test(item: ItemStack): Boolean {
-        return item.cleanName.contains(search, ignoreCase = true) && item.getRawLore().any { it.contains(search, ignoreCase = true) }
+        return item.cleanName.contains(search, ignoreCase = true) || item.getRawLore().any { it.contains(search, ignoreCase = true) }
     }
 }

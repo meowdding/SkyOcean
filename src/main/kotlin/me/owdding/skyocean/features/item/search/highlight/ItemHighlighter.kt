@@ -4,6 +4,8 @@ import com.teamresourceful.resourcefullib.common.color.Color
 import kotlinx.coroutines.*
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.data.profile.ChestItem
+import me.owdding.skyocean.data.profile.IslandChestStorage
 import me.owdding.skyocean.events.ItemSearchComponent
 import me.owdding.skyocean.events.ItemStackCreateEvent
 import me.owdding.skyocean.features.item.search.search.ItemFilter
@@ -18,10 +20,13 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.InventoryTitle
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyNonGuest
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.PRIVATE_ISLAND
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.PlayerStorageInstance
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.StorageAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -29,39 +34,69 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.extentions.clearAnd
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
-import java.util.concurrent.CopyOnWriteArrayList
+import java.util.*
 
 @Module
 object ItemHighlighter {
 
-    private var currentSearch: ItemFilter? = null
-    private val allItems = mutableSetOf<ItemStack>()
+    var currentSearch: ItemFilter? = null
+        private set
+    private val allItems: MutableSet<ItemStack> = Collections.newSetFromMap(WeakHashMap())
     private var future: Job? = null
-    private val chests: MutableList<BlockPos> = CopyOnWriteArrayList()
+    private val chests: MutableSet<BlockPos> = mutableSetOf()
 
-    fun setHighlight(filter: ItemFilter?) = McClient.runNextTick {
-        allItems.forEach { it.replaceVisually(null) }
+
+    private var hasHighlightInCurrentInventory = false
+
+    fun setHighlight(
+        filter: ItemFilter?,
+        updateChests: Boolean = true,
+        scheduleClear: Boolean = true,
+    ) = McClient.runNextTick {
+        allItems.clearAnd { it.replaceVisually(null) }
         currentSearch = filter
         chests.clear()
-        cancelOrScheduleClear()
+        if (filter == null) return@runNextTick
+        if (scheduleClear) cancelOrScheduleClear()
+        if (updateChests) recalculateChests()
+        recalculate(filter)
     }
 
-    fun addChests(chests: Collection<BlockPos>) = this.chests.addAll(chests)
-    fun addChest(chest: BlockPos) = this.chests.add(chest)
+    fun recalculateChests() = McClient.self.executeIfPossible {
+        chests.clear()
+        val filter = currentSearch ?: return@executeIfPossible
+        IslandChestStorage.getItems().filter { filter.test(it.itemStack) }
+            .flatMapTo(mutableSetOf(), ChestItem::posList)
+            .let(chests::addAll)
+    }
+
+    fun addChests(chests: Collection<BlockPos>) = McClient.self.executeIfPossible {
+        this.chests.addAll(chests)
+    }
+    fun addChest(chest: BlockPos) = McClient.self.executeIfPossible {
+        this.chests.add(chest)
+    }
 
     fun cancelOrScheduleClear() {
-        future?.cancel(CancellationException("Item search has been canceled"))
+        future?.cancel()
         future = CoroutineScope(Dispatchers.Default).launch {
             delay(MiscConfig.highlightTime)
             resetSearch()
-        }
-        future?.start()
+        }.apply(Job::start)
     }
 
-    fun resetSearch() = setHighlight(null)
+    fun resetSearch() = McClient.self.executeIfPossible {
+        allItems.clearAnd { it.replaceVisually(null) }
+        currentSearch = null
+        chests.clear()
+        future?.cancel()
+        future = null
+    }
 
     private fun ItemStack.highlight() {
+        if (!allItems.add(this)) return
         this.skyoceanReplace(false) {
             if (this@highlight in ItemTag.GLASS_PANES) {
                 item = MiscConfig.itemSearchItemHighlight.paneItem
@@ -69,7 +104,6 @@ object ItemHighlighter {
                 backgroundItem = MiscConfig.itemSearchItemHighlight.paneStack
             }
         }
-        allItems.add(this)
     }
 
     @Subscription
@@ -78,6 +112,25 @@ object ItemHighlighter {
         val filter = currentSearch ?: return
         if (filter.test(event.itemStack)) {
             event.itemStack.highlight()
+        }
+    }
+
+    @Subscription(ContainerCloseEvent::class)
+    fun onContainerClose() {
+        if (!hasHighlightInCurrentInventory) return
+        hasHighlightInCurrentInventory = false
+        if (SkyBlockIsland.PRIVATE_ISLAND.inIsland() && !LocationAPI.isGuest) recalculateChests()
+    }
+
+    @Subscription
+    @OnlyNonGuest
+    @MustBeContainer
+    @OnlyIn(PRIVATE_ISLAND)
+    fun onInventoryChange(event: InventoryChangeEvent) {
+        val filter = currentSearch ?: return
+        if (filter.test(event.item)) {
+            hasHighlightInCurrentInventory = true
+            event.item.highlight()
         }
     }
 
@@ -98,8 +151,7 @@ object ItemHighlighter {
     }
 
     // TODO: add support for Sack/Storage highlighting when recalculating
-    fun recalculate() {
-        val filter = currentSearch ?: return
+    fun recalculate(filter: ItemFilter) {
         McPlayer.inventory.forEach {
             if (filter.test(it)) it.highlight()
         }
@@ -145,6 +197,7 @@ object ItemHighlighter {
     }
 
     @Subscription
+    @OnlyNonGuest
     @OnlyIn(PRIVATE_ISLAND)
     private fun RenderWorldEvent.AfterTranslucent.renderWorld() {
         atCamera {
