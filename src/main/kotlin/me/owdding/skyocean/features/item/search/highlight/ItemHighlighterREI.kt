@@ -18,9 +18,7 @@ object ItemHighlighterREI {
     private val config get() = MiscConfig.useReiSearchBar
 
     @JvmStatic
-    fun shouldStopREIHighlight(): Boolean {
-        return LocationAPI.isOnSkyBlock && config
-    }
+    fun shouldStopREIHighlight(): Boolean = LocationAPI.isOnSkyBlock && config
 
     @OnlyOnSkyBlock
     @Subscription(TickEvent::class)
