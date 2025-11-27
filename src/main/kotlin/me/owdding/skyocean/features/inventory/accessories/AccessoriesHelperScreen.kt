@@ -18,6 +18,7 @@ import me.owdding.lib.extensions.rightPad
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidgetTable
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.extensions.withPadding
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
@@ -40,13 +41,13 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 /*
- * TODO:
+ * TODO before release:
  *  - Remove Rift-exclusive accessories
- *  - Take into account price of previous tier when calculating price for sorting
  *  - Add icon to marked accessories
- *  - Highlight accessories you have materials for
  *
- * TODO for the future (maybe):
+ * TODO for the future:
+ *  - Take into account price of previous tier when calculating price for sorting
+ *  - Highlight accessories you have materials for
  *  - Recombs
  *  - Handle accessories like campfire badge having to be upgraded multiple times to upgrade rarity
  *  - Take into account requirements (hotm level, slayer level, etc)
@@ -239,11 +240,15 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                         is HasCurrentTier -> {
                             add("You can upgrade to this accessory!", TextColor.BLUE)
                             add("Current accessory: ") {
-                                color = TextColor.BLUE
+                                color = TextColor.WHITE
                                 append(accessory.currentItem.hoverName)
                             }
                         }
                     }
+
+                    space()
+                    add("MARKED ACCESSORY", TextColor.GOLD)
+
 
                     space()
                     if (accessory.marked) {
@@ -252,7 +257,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                         add("Left click to set as marked", TextColor.YELLOW)
                     }
 
-                    add("Right click to add to CraftHelper!", TextColor.ORANGE)
+                    add("Right click to add to CraftHelper!", TextColor.GREEN)
 
 
                 }.withPadding(2)
@@ -273,14 +278,22 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
 
             val leftAction = { _: Button ->
                 accessory.marked = !accessory.marked
-                refresh()
+                refreshSort()
             }
 
             val rightAction: (Button) -> Unit
 
+            fun setCraftHelper(item: ItemStack) {
+                CraftHelperStorage.setSelected(item.getSkyBlockId())
+                Text.of("Set current recipe to ") {
+                    append(item.hoverName)
+                    append("!")
+                }.sendWithPrefix()
+            }
+
             if (size == 1) {
                 rightAction = { _: Button ->
-                    CraftHelperStorage.setSelected(tierItems.first().getSkyBlockId())
+                    setCraftHelper(tierItems.first())
                 }
             } else {
                 rightAction = { _: Button ->
@@ -294,12 +307,10 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
 
                         menu.add {
                             Widgets.dropdown(dropdownState, tierItems, { it.hoverName }, { it: Button ->
-                                it.withSize(maxWidth + 5, 20)
+                                it.withSize(maxWidth + 20, 20)
                             },
                                 { builder ->
-                                    builder.withCallback { item ->
-                                        CraftHelperStorage.setSelected(item.getSkyBlockId())
-                                    }
+                                    builder.withCallback(::setCraftHelper)
                                 })
                         }
 
@@ -335,9 +346,6 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
 
     fun refreshSort(mode: AccessoriesSortMode = dropdownSort.get() ?: PRICE_PER_MP) {
         this.trackedAccessories.sortWith(mode.let { if (ascending.get() == true) it else it.reversed() })
-    }
-
-    fun refresh() {
         addItems()
     }
 

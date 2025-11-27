@@ -20,14 +20,14 @@ private typealias Mode = AdditionalSortMode
 
 private enum class AdditionalSortMode(val comparator: Comparator<TrackedAccessory>) {
     MARKED(reversed(Comparator.comparing { it.marked })),
-    MP(Comparator.comparing { AccessoriesAPI.getMp(it.items.first()) }),
+    MP(reversed(Comparator.comparing { AccessoriesAPI.getMp(it.items.first()) })),
     PRICE(Comparator.comparing { getPrice(it) }),
     RARITY(reversed(Comparator.comparing { getRarity(it) })),
-    PRICE_PER_MP(Comparator.comparing { getPrice(it) / getMp(it) }),
+    PRICE_PER_MP(reversed(Comparator.comparing { getPrice(it) / getMp(it) })),
     ;
 
     companion object {
-        private fun getPrice(accessory: TrackedAccessory): Long = accessory.items.minOf { item -> item.getItemValue().rawPrice.takeIf { it <= 0 } ?: Long.MAX_VALUE }
+        private fun getPrice(accessory: TrackedAccessory): Long = accessory.items.minOf { item -> item.getItemValue().rawPrice.takeIf { it > 0 } ?: Long.MAX_VALUE }
         // TODO: handle accessory upgrades of recombed accessories
         private fun getMp(accessory: TrackedAccessory): Int {
             return AccessoriesAPI.getMp(accessory.items.first())

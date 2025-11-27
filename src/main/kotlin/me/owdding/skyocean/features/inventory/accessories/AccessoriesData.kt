@@ -49,7 +49,17 @@ object AccessoriesAPI {
     }
 
     private fun getMpFromRarity(rarity: SkyBlockRarity): Int {
-        TODO()
+        return when (rarity) {
+            COMMON -> 3
+            UNCOMMON -> 5
+            RARE -> 8
+            EPIC -> 12
+            LEGENDARY -> 16
+            MYTHIC -> 22
+            SPECIAL -> 3
+            VERY_SPECIAL -> 5
+            else -> 0
+        }
     }
 
     fun getMp(item: ItemStack): Int {
