@@ -115,7 +115,8 @@ object ItemHighlighter {
         }
     }
 
-    @Subscription(ContainerCloseEvent::class)
+    /** Low priority so that [me.owdding.skyocean.features.misc.ChestTracker.onClose] gets called first */
+    @Subscription(ContainerCloseEvent::class, priority = Subscription.LOW)
     fun onContainerClose() {
         if (!hasHighlightInCurrentInventory) return
         hasHighlightInCurrentInventory = false
