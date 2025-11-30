@@ -812,6 +812,24 @@
       "non_binary": "Non Binary",
       "trans": "Transgender"
     },
+    "minecraft_colors": {
+      "white": "<color #FFFFFF> White </color>",
+      "orange": "<color #FF681F> Orange </color>",
+      "magenta": "<color #FF00FF> Magenta </color>",
+      "light_blue": "<color #9AC0CD> Light Blue </color>",
+      "yellow": "<color #FFFF00> Yellow </color>",
+      "lime": "<color #BFFF00> Lime </color>",
+      "pink": "<color #FF69B4> Pink </color>",
+      "gray": "<color #808080> Gray </color>",
+      "light_gray": "<color #D3D3D3> Light Gray </color>",
+      "cyan": "<color #00FFFF> Cyan </color>",
+      "purple": "<color #A020F0> Purple </color>",
+      "blue": "<color #0000FF> Blue </color>",
+      "brown": "<color #8B4513> Brown </color>",
+      "green": "<color #00FF00> Green </color>",
+      "red": "<color #FF0000> Red </color>",
+      "black": "<color #000000> Black </color>"
+    },
     "overlays": {
       "crafthelper": "Crafthelper",
       "background": {
