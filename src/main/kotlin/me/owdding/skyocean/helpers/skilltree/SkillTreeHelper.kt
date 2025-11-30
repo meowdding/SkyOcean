@@ -28,7 +28,6 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
-import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
 import tech.thatgravyboat.skyblockapi.api.profile.skilltree.SkillTreeAPI
 import tech.thatgravyboat.skyblockapi.api.profile.skilltree.SkillTreeData
 import tech.thatgravyboat.skyblockapi.api.profile.skilltree.SkillTreePerk
@@ -49,8 +48,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
-abstract class SkillTreeHelper<Powder : SkillTreeCurrency, Data : SkillTreeData<Perk>, Perk : SkillTreePerk, Self : SkillTreeAPI<Data, Perk, Self>>(
-    val reminders: Map<Powder, String>,
+abstract class SkillTreeHelper<Currency : SkillTreeCurrency, Data : SkillTreeData<Perk>, Perk : SkillTreePerk, Self : SkillTreeAPI<Data, Perk, Self>>(
+    val reminders: Map<Currency, String>,
     val api: SkillTreeAPI<Data, Perk, Self>,
     val inventoryTitle: String,
     val perkItems: ItemTagKey,
@@ -58,17 +57,17 @@ abstract class SkillTreeHelper<Powder : SkillTreeCurrency, Data : SkillTreeData<
     val costType: CostTypes,
 ) {
 
-    protected val cachedPerkCost = mutableMapOf<Powder, Int>()
+    protected val cachedPerkCost = mutableMapOf<Currency, Int>()
     protected var lastClick = Instant.DISTANT_PAST
 
-    protected abstract fun Powder.getCurrentAmount(): Long?
-
+    protected abstract fun Currency.getCurrentAmount(): Long?
+    protected abstract fun ItemStack.isLocked(): Boolean
 
     protected fun tryReplaceItem(item: ItemStack) {
         val perkName = item.cleanName
         val perkByName = TreeRepoData.hotfByName(perkName) as? LevelingTreeNode ?: return
         val tooltipLines = item.getLore()
-        val isLocked = item.getItemModel() == Items.PALE_OAK_BUTTON || item.getVisualItem() == Items.COAL
+        val isLocked = item.isLocked()
         val notEnoughCurrency = tooltipLines.any { it.stripped.startsWith("you don't have enough ", true) }
         val level = tooltipLines.firstOrNull()?.let {
             val isBoosted = it.siblings.any { sibling -> sibling.style.color?.serialize() == "aqua" }
@@ -148,7 +147,7 @@ abstract class SkillTreeHelper<Powder : SkillTreeCurrency, Data : SkillTreeData<
                 if (!perkByName.isMaxed(level) && !isLocked && config.reminder && notEnoughCurrency) run {
                     val (costType, amount) = perkByName.costForLevel(level + 1)
                     if (costType.type != this@SkillTreeHelper.costType) return@run
-                    val currencyType = costType.currency!!.unsafeCast<Powder>()
+                    val currencyType = costType.currency!!.unsafeCast<Currency>()
                     val currentPerk = reminders[currencyType]
                     if (currentPerk != perkName) {
                         Text.of {
