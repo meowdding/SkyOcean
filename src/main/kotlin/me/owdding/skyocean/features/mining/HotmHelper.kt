@@ -4,6 +4,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.repo.CostTypes
 import me.owdding.lib.repo.PowderType
 import me.owdding.lib.repo.PowderType.*
+import me.owdding.lib.repo.TreeRepoData
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.data.profile.PerkUpgradeStorage
 import me.owdding.skyocean.helpers.skilltree.SkillTreeHelper
@@ -24,6 +25,8 @@ object HotmHelper : SkillTreeHelper<PowderType, HotmData, HotmPerk, HotmAPI>(
     ItemTagKey.HOTM_PERK_ITEMS,
     MiningConfig,
     CostTypes.POWDER,
+    TreeRepoData::hotmByName,
+    "Hotm"
 ) {
 
     // We default to null even if the `when` statement is currently exhaustive, since hypixel could add more powder types in the future

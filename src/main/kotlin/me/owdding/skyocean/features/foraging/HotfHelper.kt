@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.foraging
 
 import me.owdding.ktmodules.Module
 import me.owdding.lib.repo.CostTypes
+import me.owdding.lib.repo.TreeRepoData
 import me.owdding.lib.repo.WhisperType
 import me.owdding.lib.repo.WhisperType.FOREST
 import me.owdding.skyocean.config.features.foraging.ForagingConfig
@@ -24,6 +25,8 @@ object HotfHelper : SkillTreeHelper<WhisperType, HotfData, HotfPerk, HotfAPI>(
     ItemModelTagKey.HOTF_PERK_ITEMS,
     ForagingConfig,
     CostTypes.WHISPER,
+    TreeRepoData::hotfByName,
+    "Hotf"
 ) {
 
     // We default to null even if the `when` statement is currently exhaustive, since hypixel could add more whisper types in the future

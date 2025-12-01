@@ -7,7 +7,7 @@ import me.owdding.lib.extensions.round
 import me.owdding.lib.repo.CostTypes
 import me.owdding.lib.repo.LevelingTreeNode
 import me.owdding.lib.repo.SkillTreeCurrency
-import me.owdding.lib.repo.TreeRepoData
+import me.owdding.lib.repo.TreeNode
 import me.owdding.skyocean.data.profile.PerkUpgradeStorage
 import me.owdding.skyocean.utils.Utils.exclusiveInclusive
 import me.owdding.skyocean.utils.Utils.powderForInterval
@@ -55,6 +55,9 @@ abstract class SkillTreeHelper<Currency : SkillTreeCurrency, Data : SkillTreeDat
     val perkItems: ItemTagKey,
     val config: SkillTreeConfig,
     val costType: CostTypes,
+    val nodeLookup: (name: String) -> TreeNode?,
+    val shortName: String,
+    val command: String = shortName.lowercase(),
 ) {
 
     protected val cachedPerkCost = mutableMapOf<Currency, Int>()
@@ -65,7 +68,7 @@ abstract class SkillTreeHelper<Currency : SkillTreeCurrency, Data : SkillTreeDat
 
     protected fun tryReplaceItem(item: ItemStack) {
         val perkName = item.cleanName
-        val perkByName = TreeRepoData.hotfByName(perkName) as? LevelingTreeNode ?: return
+        val perkByName = nodeLookup(perkName) as? LevelingTreeNode ?: return
         val tooltipLines = item.getLore()
         val isLocked = item.isLocked()
         val notEnoughCurrency = tooltipLines.any { it.stripped.startsWith("you don't have enough ", true) }
@@ -187,7 +190,7 @@ abstract class SkillTreeHelper<Currency : SkillTreeCurrency, Data : SkillTreeDat
     }
 
     protected fun getNextLevelCost(perkName: String): Int? {
-        val perk = TreeRepoData.hotmByName(perkName) as? LevelingTreeNode ?: return null
+        val perk = nodeLookup(perkName) as? LevelingTreeNode ?: return null
         val level = api.perks[perkName]?.level ?: return null
         return perk.costForLevel(level + 1).second
     }
@@ -223,16 +226,16 @@ abstract class SkillTreeHelper<Currency : SkillTreeCurrency, Data : SkillTreeDat
                 append(type.displayName)
                 append(" to upgrade your $perk perk!")
 
-                hover = Text.of("Click to open the Hotm menu")
+                hover = Text.of("Click to open the $shortName menu")
                 onClick {
-                    McClient.sendCommand("hotm")
+                    McClient.sendCommand(command)
                 }
             }.sendWithPrefix()
         }
         if (!config.reminderTitle) return
         val title = Text.of {
             append(ChatUtils.ICON_SPACE_COMPONENT)
-            append("Hotm perk upgrade!") {
+            append("$shortName perk upgrade!") {
                 color = OceanColors.WARNING
                 bold = true
             }
