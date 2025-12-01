@@ -95,8 +95,8 @@ object ItemHighlighter {
         future = null
     }
 
-    private fun ItemStack.highlight() {
-        if (!allItems.add(this)) return
+    private fun ItemStack.highlight() = McClient.self.executeIfPossible {
+        if (!allItems.add(this)) return@executeIfPossible
         this.skyoceanReplace(false) {
             if (this@highlight in ItemTag.GLASS_PANES) {
                 item = MiscConfig.itemSearchItemHighlight.paneItem
