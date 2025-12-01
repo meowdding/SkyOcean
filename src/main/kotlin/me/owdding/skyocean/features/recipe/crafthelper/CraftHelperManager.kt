@@ -12,6 +12,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.SimpleRecipeView
 import me.owdding.skyocean.utils.Utils.refreshScreen
+import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
@@ -22,7 +23,9 @@ import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.atomic.AtomicReference
 
 @Module
@@ -54,12 +57,14 @@ object CraftHelperManager {
             if (!it.childrenDone) return@SimpleRecipeView
             if (hasBeenNotified) return@SimpleRecipeView
             hasBeenNotified = true
-            Text.join(
-                "You have all materials to craft ",
-                CraftHelperStorage.selectedItem?.toItem()?.hoverName ?: "your selected craft helper tree",
-                "!",
-            ).sendWithPrefix()
-        }.visit(tree, ItemTracker(ItemSources.craftHelperSources))
+            text("You have all materials to craft ") {
+                CraftHelperStorage.selectedItem?.toItem()?.hoverName?.let { item ->
+                    append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }
+                    append(item)
+                } ?: append("your selected craft helper tree")
+                append("!")
+            }.sendWithPrefix()
+        }.visit(tree, ItemTracker(ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()))
     }
 
 
