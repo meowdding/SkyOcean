@@ -64,7 +64,7 @@ object CraftHelperManager {
                 } ?: append("your selected craft helper tree")
                 append("!")
             }.sendWithPrefix()
-        }.visit(tree, ItemTracker(ItemSources.craftHelperSources))
+        }.visit(tree, ItemTracker(ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()))
     }
 
 
