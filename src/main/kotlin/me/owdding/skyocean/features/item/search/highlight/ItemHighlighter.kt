@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.item.search.highlight
 
+import com.google.common.collect.Queues
 import com.teamresourceful.resourcefullib.common.color.Color
 import kotlinx.coroutines.*
 import me.owdding.ktmodules.Module
@@ -17,10 +18,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.base.predicates.InventoryTitle
-import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
-import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
-import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyNonGuest
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.*
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
@@ -37,7 +35,11 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.clearAnd
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import java.util.*
+import java.util.Queue
+import kotlin.concurrent.atomics.AtomicBoolean
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
+@OptIn(ExperimentalAtomicApi::class)
 @Module
 object ItemHighlighter {
 
@@ -95,8 +97,23 @@ object ItemHighlighter {
         future = null
     }
 
-    private fun ItemStack.highlight() = McClient.self.executeIfPossible {
-        if (!allItems.add(this)) return@executeIfPossible
+    private val queue: Queue<ItemStack> = Queues.newConcurrentLinkedQueue()
+    private var scheduled = AtomicBoolean(false)
+
+    private fun scheduleAdd(item: ItemStack) {
+        queue.add(item)
+        if (!scheduled.compareAndSet(expectedValue = false, newValue = true)) return
+        allItems.addAll(queue)
+        McClient.self.executeIfPossible {
+            while (true) {
+                val item = queue.poll() ?: break
+                allItems.add(item)
+            }
+            scheduled.store(false)
+        }
+    }
+
+    private fun ItemStack.highlight() {
         this.skyoceanReplace(false) {
             if (this@highlight in ItemTag.GLASS_PANES) {
                 item = MiscConfig.itemSearchItemHighlight.paneItem
@@ -104,9 +121,11 @@ object ItemHighlighter {
                 backgroundItem = MiscConfig.itemSearchItemHighlight.paneStack
             }
         }
+        scheduleAdd(this)
     }
 
     @Subscription
+    @OnlyOnSkyBlock
     @OptIn(ItemSearchComponent::class)
     fun onItem(event: ItemStackCreateEvent) {
         val filter = currentSearch ?: return
@@ -116,6 +135,7 @@ object ItemHighlighter {
     }
 
     /** Low priority so that [me.owdding.skyocean.features.misc.ChestTracker.onClose] gets called first */
+    @OnlyOnSkyBlock
     @Subscription(ContainerCloseEvent::class, priority = Subscription.LOW)
     fun onContainerClose() {
         if (!hasHighlightInCurrentInventory) return
@@ -136,6 +156,7 @@ object ItemHighlighter {
     }
 
     @Subscription
+    @OnlyOnSkyBlock
     @MustBeContainer
     @InventoryTitle("Sack of Sacks")
     fun onSackScreen(event: InventoryChangeEvent) {
@@ -171,6 +192,7 @@ object ItemHighlighter {
     private val backpack = Regex("Backpack Slot (\\d+)")
 
     @Subscription
+    @OnlyOnSkyBlock
     @MustBeContainer
     @InventoryTitle("Storage")
     fun onStorage(event: InventoryChangeEvent) {
