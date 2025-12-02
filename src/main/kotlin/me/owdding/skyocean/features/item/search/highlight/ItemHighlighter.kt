@@ -49,8 +49,23 @@ object ItemHighlighter {
     private var future: Job? = null
     private val chests: MutableSet<BlockPos> = mutableSetOf()
 
-
     private var hasHighlightInCurrentInventory = false
+
+    private val queue: Queue<ItemStack> = Queues.newConcurrentLinkedQueue()
+    private var scheduled = AtomicBoolean(false)
+
+    private fun scheduleAdd(item: ItemStack) {
+        queue.add(item)
+        if (!scheduled.compareAndSet(expectedValue = false, newValue = true)) return
+        allItems.addAll(queue)
+        McClient.self.executeIfPossible {
+            while (true) {
+                val item = queue.poll() ?: break
+                allItems.add(item)
+            }
+            scheduled.store(false)
+        }
+    }
 
     fun setHighlight(
         filter: ItemFilter?,
@@ -95,22 +110,6 @@ object ItemHighlighter {
         chests.clear()
         future?.cancel()
         future = null
-    }
-
-    private val queue: Queue<ItemStack> = Queues.newConcurrentLinkedQueue()
-    private var scheduled = AtomicBoolean(false)
-
-    private fun scheduleAdd(item: ItemStack) {
-        queue.add(item)
-        if (!scheduled.compareAndSet(expectedValue = false, newValue = true)) return
-        allItems.addAll(queue)
-        McClient.self.executeIfPossible {
-            while (true) {
-                val item = queue.poll() ?: break
-                allItems.add(item)
-            }
-            scheduled.store(false)
-        }
     }
 
     private fun ItemStack.highlight() {
