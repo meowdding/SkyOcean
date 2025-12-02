@@ -35,6 +35,8 @@ object ItemHighlighterREI {
             return
         }
         highlighting = true
+        // TODO: maybe add some search tags, so you can do more advanced searching
+        //  (for example, searching by id, item category/rarity, etc)
         ItemHighlighter.setHighlight(SearchItemFilter(search), scheduleClear = false)
     }
 
