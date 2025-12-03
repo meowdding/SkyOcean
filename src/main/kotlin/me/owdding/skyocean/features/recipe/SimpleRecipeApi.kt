@@ -26,20 +26,25 @@ object SimpleRecipeApi {
         RepoApiRecipe.Type.FORGE to RecipeType.FORGE,
         RepoApiRecipe.Type.CRAFTING to RecipeType.CRAFTING,
         RepoApiRecipe.Type.KAT to RecipeType.KAT,
+        RepoApiRecipe.Type.SHOP to RecipeType.SHOP,
     )
 
     internal val illegalIngredients = CopyOnWriteArrayList<SkyBlockItemId>()
     internal val recipes = CopyOnWriteArrayList<Recipe>()
     internal val idToRecipes: MutableMap<SkyBlockId, List<Recipe>> = ConcurrentHashMap()
+    internal val illegalShopRecipes = CopyOnWriteArrayList<SkyBlockItemId>()
 
     @Subscription(FinishRepoLoadingEvent::class, RepoStatusEvent::class)
     fun onRepoLoad() {
         recipes.clear()
         idToRecipes.clear()
         illegalIngredients.clear()
+        illegalShopRecipes.clear()
 
         illegalIngredients.addAll(Utils.loadRemoteRepoData("skyocean/illegal_ingredients", CodecUtils::list))
         SkyOcean.debug("Loaded ${illegalIngredients.size} illegal ingredients")
+        illegalShopRecipes.addAll(Utils.loadRemoteRepoData("skyocean/illegal_shop_recipes", CodecUtils::list))
+        SkyOcean.debug("Loaded ${illegalShopRecipes.size} illegal shop recipes")
 
         supportedTypes.forEach { (recipe, type) ->
             recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe ->
@@ -108,6 +113,9 @@ object SimpleRecipeApi {
     }
 
     fun isBlacklisted(recipe: Recipe): Boolean {
+        if (recipe.recipeType == SHOP) {
+            return illegalShopRecipes.contains(recipe.output?.id)
+        }
         val inputs = recipe.inputs
         val itemInputs = inputs.filterIsInstance<ItemLikeIngredient>().map { it.id }.distinct()
         if (inputs.size == itemInputs.size && itemInputs.size == 1 && illegalIngredients.containsAll(itemInputs)) {

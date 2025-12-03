@@ -382,6 +382,7 @@ class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallb
                 RecipeType.CUSTOM -> SkyOcean.debug("Custom recipes dont support click actions!")
                 RecipeType.UNKNOWN -> SkyOcean.debug("Clicked unknown recipe type for $id")
                 RecipeType.KAT -> Text.of("No preview yet, go to Kat :(").sendWithPrefix()
+                RecipeType.SHOP -> Text.of("No preview for Shop Recipes yet :(").sendWithPrefix()
                 else if state.recipeType.command != null -> McClient.sendClientCommand("${state.recipeType.command} $id")
                 else -> SkyOcean.debug("Clicked recipe type with undefined click behaviour ($id)")
             }
