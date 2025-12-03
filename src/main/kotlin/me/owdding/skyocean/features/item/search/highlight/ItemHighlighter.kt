@@ -36,10 +36,9 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.clearAnd
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import java.util.*
 import java.util.Queue
-import kotlin.concurrent.atomics.AtomicBoolean
-import kotlin.concurrent.atomics.ExperimentalAtomicApi
+import java.util.concurrent.atomic.AtomicBoolean
 
-@OptIn(ExperimentalAtomicApi::class)
+
 @Module
 object ItemHighlighter {
 
@@ -56,14 +55,14 @@ object ItemHighlighter {
 
     private fun scheduleAdd(item: ItemStack) {
         queue.add(item)
-        if (!scheduled.compareAndSet(expectedValue = false, newValue = true)) return
+        if (!scheduled.compareAndSet(false, true)) return
         allItems.addAll(queue)
         McClient.self.executeIfPossible {
             while (true) {
                 val item = queue.poll() ?: break
                 allItems.add(item)
             }
-            scheduled.store(false)
+            scheduled.set(false)
         }
     }
 
