@@ -11,7 +11,6 @@ import me.owdding.skyocean.helpers.skilltree.SkillTreeHelper
 import me.owdding.skyocean.utils.tags.ItemTagKey
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
 import tech.thatgravyboat.skyblockapi.api.profile.hotm.HotmAPI
 import tech.thatgravyboat.skyblockapi.api.profile.hotm.HotmData
 import tech.thatgravyboat.skyblockapi.api.profile.hotm.HotmPerk
@@ -38,5 +37,5 @@ object HotmHelper : SkillTreeHelper<PowderType, HotmData, HotmPerk, HotmAPI>(
         else -> null
     }
 
-    override fun ItemStack.isLocked(): Boolean = item.getVisualItem() == Items.COAL
+    override fun ItemStack.isLocked(): Boolean = this.item == Items.COAL
 }

@@ -36,6 +36,6 @@ object HotfHelper : SkillTreeHelper<WhisperType, HotfData, HotfPerk, HotfAPI>(
         else -> null
     }
 
-    override fun ItemStack.isLocked() = item.getItemModel() == Items.PALE_OAK_BUTTON
+    override fun ItemStack.isLocked() = getItemModel() == Items.PALE_OAK_BUTTON
 }
 
