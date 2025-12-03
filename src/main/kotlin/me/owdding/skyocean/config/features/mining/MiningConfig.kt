@@ -55,7 +55,7 @@ object MiningConfig : CategoryKt("mining"), SkillTreeConfig {
         translation = "skyocean.config.mining.hotm.totalLeft"
     }
 
-    override var reminder by boolean("hotmRender", true) {
+    override var reminder by boolean("hotmReminder", true) {
         translation = "skyocean.config.mining.hotm.reminder"
     }
 
