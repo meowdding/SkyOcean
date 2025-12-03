@@ -6,7 +6,7 @@ parchment = "2025.10.05"
 sbapi-mc-version = "1.21.9"
 fabric-api = "0.138.3+1.21.10"
 
-resourceful-lib = "3.9.0"
+resourceful-lib = "3.9.1"
 resourceful-config = "3.9.0"
 olympus = "1.6.1"
 placeholders = "2.8.1+1.21.10"
