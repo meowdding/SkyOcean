@@ -25,7 +25,7 @@ object HotmHelper : SkillTreeHelper<PowderType, HotmData, HotmPerk, HotmAPI>(
     MiningConfig,
     CostTypes.POWDER,
     TreeRepoData::hotmByName,
-    "Hotm"
+    "Hotm",
 ) {
 
     // We default to null even if the `when` statement is currently exhaustive, since hypixel could add more powder types in the future

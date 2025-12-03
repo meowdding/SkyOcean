@@ -26,7 +26,7 @@ object HotfHelper : SkillTreeHelper<WhisperType, HotfData, HotfPerk, HotfAPI>(
     ForagingConfig,
     CostTypes.WHISPER,
     TreeRepoData::hotfByName,
-    "Hotf"
+    "Hotf",
 ) {
 
     // We default to null even if the `when` statement is currently exhaustive, since hypixel could add more whisper types in the future
