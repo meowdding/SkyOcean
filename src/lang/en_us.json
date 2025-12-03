@@ -341,6 +341,10 @@
             "@value": "Highlight Time",
             "desc": "Amount of time that items will be highlighted for, in seconds."
           },
+          "useReiSearchBar": {
+            "@value": "Use REI Search Bar",
+            "desc": "Replaces REI's inventory highlighting with SkyOcean's"
+          },
           "preserve_search": {
             "@value": "Preserve Search",
             "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
