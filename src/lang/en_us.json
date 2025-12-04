@@ -146,6 +146,10 @@
             "@value": "Corpse Waypoint",
             "desc": "Show a waypoint on all possible Corpse Locations in a Mineshaft."
           },
+          "show_title": {
+            "@value": "Show Title",
+            "desc": "Shows a title in addition to the announcement message."
+          },
           "key-announce": {
             "@value": "Key Announce",
             "desc": "Send a chat message how many keys of the current mineshaft corpses you have in your sacks."
