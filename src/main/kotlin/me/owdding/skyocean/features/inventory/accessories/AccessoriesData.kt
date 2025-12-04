@@ -18,9 +18,11 @@ import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockCategory
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
+import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity.*
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -105,6 +107,9 @@ object AccessoriesAPI {
         event.registerDevWithCallback("accessories check_missing") {
             Scheduling.async(::checkMissing)
         }
+        event.registerDevWithCallback("accessories check_unknown") {
+            Scheduling.async(::checkUnknown)
+        }
     }
 
     // Creates every single item in skyblock and gets the accessories that don't have a family or are ignored
@@ -135,6 +140,33 @@ object AccessoriesAPI {
                     val codec = CodecUtils.set(SkyBlockId.CODEC)
                     McClient.clipboard = allAccessories.toJsonOrThrow(codec).toPrettyString()
                     text("Copied missing accessories to clipboard!").sendWithPrefix()
+                }
+            }.sendWithPrefix()
+        }
+    }
+
+    private fun checkUnknown() {
+        val knownAccessories: Set<SkyBlockId> = buildSet {
+            families.values.forEach { family ->
+                family.tiers.forEach(::addAll)
+            }
+            addAll(ignored)
+        }
+
+        val unknownAccessories = knownAccessories.filterTo(mutableSetOf()) {
+            it.toItem().`is`(Items.BARRIER)
+        }
+
+        if (unknownAccessories.isEmpty()) {
+            text("No unknown accessories found!").sendWithPrefix()
+        } else {
+            text("Found unknown accessories! Click to copy them") {
+                this.color = OceanColors.WARNING
+                this.hover = text("Click to copy unknown ones!")
+                onClick {
+                    val codec = CodecUtils.set(SkyBlockId.CODEC)
+                    McClient.clipboard = unknownAccessories.toJsonOrThrow(codec).toPrettyString()
+                    text("Copied unknown accessories to clipboard!").sendWithPrefix()
                 }
             }.sendWithPrefix()
         }
