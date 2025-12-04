@@ -11,10 +11,12 @@ import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.CodecUtils
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.getRealRarity
 import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import net.minecraft.world.item.ItemStack
@@ -28,10 +30,14 @@ import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
+import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.Scheduling
+import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
+import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
@@ -43,12 +49,15 @@ object AccessoriesAPI {
     internal var families: Map<String, AccessoryFamily> = emptyMap()
     internal var ignored: Set<SkyBlockId> = emptySet()
     internal var rarityUpgraded: Map<SkyBlockId, AccessoryRarityUpgraded> = emptyMap()
+    internal var disallowedOriginFamilies: Set<String> = emptySet()
 
     private val HEGEMONY = SkyBlockId.item("hegemony_artifact")
 
     fun getFamily(id: SkyBlockId): AccessoryFamily? {
         return families.values.find { it.contains(id) }
     }
+
+    fun AccessoryFamily.isDisallowed(): Boolean = isDisallowedOriginFamily(family)
 
     private fun getMpFromRarity(rarity: SkyBlockRarity): Int {
         return when (rarity) {
@@ -71,9 +80,22 @@ object AccessoriesAPI {
         return mp
     }
 
+    private fun calculateIsDisallowedOrigin(family: AccessoryFamily): Boolean {
+        return family.flatMapItems().any { id ->
+            val data = ItemData.getItemData(id.skyblockId) ?: return@any false
+            when(data.origin) {
+                BINGO -> true
+                RIFT -> !data.riftTransferable
+                else -> false
+            }
+        }
+    }
+
     fun getRarityUpgraded(id: SkyBlockId): AccessoryRarityUpgraded? = rarityUpgraded[id]
     fun isIgnored(id: SkyBlockId): Boolean = id in ignored
     fun upgradesRarity(id: SkyBlockId): Boolean = id in rarityUpgraded
+    fun isDisallowedOriginFamily(family: String) = family in disallowedOriginFamilies
+    fun isDisallowedOrigin(id: SkyBlockId): Boolean = getFamily(id)?.isDisallowed() == true
 
     @Subscription(FinishRepoLoadingEvent::class)
     fun onRepo() {
@@ -100,15 +122,31 @@ object AccessoriesAPI {
         ignored = Utils.loadRemoteRepoData<SkyBlockId, Set<SkyBlockId>>("accessories/ignored_accessories", CodecUtils::set).orEmpty()
         rarityUpgraded = Utils.loadRemoteRepoData<AccessoryRarityUpgraded, List<AccessoryRarityUpgraded>>("accessories/rarity_upgraded", CodecUtils::list)
             ?.associateBy { it.item }.orEmpty()
+
+        disallowedOriginFamilies = families.filterValues(::calculateIsDisallowedOrigin).keys
     }
 
     @Subscription
     fun onRegisterSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
-        event.registerDevWithCallback("accessories check_missing") {
-            Scheduling.async(::checkMissing)
-        }
-        event.registerDevWithCallback("accessories check_unknown") {
-            Scheduling.async(::checkUnknown)
+        event.registerDev("accessories") {
+            then("copy") {
+                fun <T : Any> copy(name: String, data: () -> T, codec: Codec<T>) {
+                    thenCallback(name) {
+                        McClient.clipboard = data().toJson(codec).toPrettyString()
+                        Text.of("Copied accessories ${name.toTitleCase()} data to clipboard!").sendWithPrefix()
+                    }
+                }
+
+                copy("families", ::families, CodecUtils.map(Codec.STRING, AccessoryFamily.CODEC).unsafeCast())
+                copy("ignored", ::ignored, CodecUtils.set(SkyBlockId.CODEC))
+                copy("rarity_upgraded", ::rarityUpgraded, CodecUtils.map(SkyBlockId.CODEC, AccessoryRarityUpgraded.CODEC).unsafeCast())
+                copy("disallowed_origin_families", ::disallowedOriginFamilies, CodecUtils.set(Codec.STRING))
+            }
+
+            then("check") {
+                thenCallback("missing") { Scheduling.async(::checkMissing) }
+                thenCallback("unknown") { Scheduling.async(::checkUnknown) }
+            }
         }
     }
 
@@ -185,6 +223,10 @@ data class AccessoryFamily(
     operator fun get(id: SkyBlockId): AccessoryTier? = find { id in it }
     fun contains(id: SkyBlockId): Boolean = any { id in it }
     //endregion
+
+    companion object {
+        val CODEC: Codec<AccessoryFamily> = SkyOceanCodecs.getCodec()
+    }
 }
 
 // Not a data class so that equality checks aren't done with its contents
@@ -210,4 +252,7 @@ data class AccessoryRarityUpgraded(
 ) : Set<SkyBlockRarity> by rarities {
     fun isMax(rarity: SkyBlockRarity) = rarities.maxOrNull() == rarity
     fun nextAfter(rarity: SkyBlockRarity): SkyBlockRarity? = firstOrNull { it > rarity }
+    companion object {
+        val CODEC: Codec<AccessoryRarityUpgraded> = SkyOceanCodecs.getCodec()
+    }
 }

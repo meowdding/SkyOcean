@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.inventory.accessories
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
+import me.owdding.skyocean.features.inventory.accessories.AccessoriesAPI.isDisallowed
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.NONE
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
@@ -113,7 +114,7 @@ object AccessoriesHelper : AbstractItemModifier() {
     fun getMissingAccessories(): Set<AccessoryFamily> {
         val ids = currentIds
         return AccessoriesAPI.families.values.filterTo(mutableSetOf()) { family ->
-            family.flatMapItems().none { it in ids }
+            family.flatMapItems().none { it in ids } && !family.isDisallowed()
         }
     }
 
@@ -131,6 +132,7 @@ object AccessoriesHelper : AbstractItemModifier() {
                 val id = item.getSkyBlockId() ?: return@mapNotNull null
                 val upgraded = AccessoriesAPI.getRarityUpgraded(id) ?: return@mapNotNull null
                 val family = AccessoriesAPI.getFamily(id) ?: return@mapNotNull null
+                if (family.isDisallowed()) return@mapNotNull null
                 val realRarity = item.getRealRarity() ?: return@mapNotNull null
                 val next = upgraded.nextAfter(realRarity) ?: return@mapNotNull null
                 AccessoryRarityUpgradeData(family, item, next)
@@ -151,6 +153,7 @@ object AccessoriesHelper : AbstractItemModifier() {
             .mapNotNull { item ->
                 val id = item.getSkyBlockId() ?: return@mapNotNull null
                 val family = AccessoriesAPI.getFamily(id) ?: return@mapNotNull null
+                if (family.isDisallowed()) return@mapNotNull null
                 val tier = family.indexOfFirst { id in it } + 1
                 val nextTier = family.getOrNull(tier) ?: return@mapNotNull null
                 AccessoryUpgradeData(item, family, nextTier, tier)
@@ -183,8 +186,11 @@ object AccessoriesHelper : AbstractItemModifier() {
         get() = true
 
     override fun appliesTo(itemStack: ItemStack): Boolean {
-        return !itemStack.isEmpty && itemStack[DataTypes.CATEGORY]
-            ?.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY, ignoreDungeon = true) == true
+        if (itemStack.isEmpty) return false
+        val category = itemStack[DataTypes.CATEGORY] ?: return false
+        if (!category.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY)) return false
+        val id = itemStack.getSkyBlockId() ?: return false
+        return getResult(id) != NONE
     }
 
     override fun itemCountOverride(itemStack: ItemStack): Component? {
