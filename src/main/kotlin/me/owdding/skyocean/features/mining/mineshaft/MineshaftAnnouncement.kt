@@ -103,6 +103,16 @@ object MineshaftAnnouncement {
             color = OceanColors.BASE_TEXT
         }
 
+        if (MineshaftConfig.showTitle) {
+            McClient.setTitle(
+                text,
+                CorpseKeyAnnouncement.createKeyMessage(MineshaftAPI.corpses).takeUnless { MineshaftConfig.keyAnnouncement },
+                0.5f,
+                3f,
+                0.5f,
+            )
+        }
+
         if (MineshaftConfig.shaftAnnounceType == ShaftAnnounceType.PARTY) {
             if (PartyAPI.inParty) {
                 Text.of("Sending message into party chat...", OceanColors.SEPARATOR).sendWithPrefix()

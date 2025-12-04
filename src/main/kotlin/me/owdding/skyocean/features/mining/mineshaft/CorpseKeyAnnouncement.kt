@@ -5,7 +5,9 @@ import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.mining.mineshaft.MineshaftAnnouncement.color
 import me.owdding.skyocean.utils.chat.ChatUtils
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
+import net.minecraft.network.chat.MutableComponent
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.Corpse
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.CorpseType
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
@@ -27,7 +29,7 @@ object CorpseKeyAnnouncement {
         sendKeys(event.corpses)
     }
 
-    private fun sendKeys(corpses: List<Corpse>) {
+    fun createKeyMessage(corpses: List<Corpse>): MutableComponent? {
         val keys = CorpseType.entries.associateWith { corpse ->
             val amount = corpses.count { corpse == it.type }
             val sackAmount = SacksAPI.sackItems[corpse.key] ?: 0
@@ -36,9 +38,9 @@ object CorpseKeyAnnouncement {
             amount to sackAmount + enderChestAmount + storageAmount
         }.filter { it.value.first > 0 && it.key != CorpseType.LAPIS }
 
-        if (keys.isEmpty()) return
+        if (keys.isEmpty()) return null
 
-        val text = Text.join(
+        return Text.join(
             "Corpse Keys",
             ChatUtils.SEPERATOR_COMPONENT,
             keys.map { (type, pair) ->
@@ -54,8 +56,10 @@ object CorpseKeyAnnouncement {
         ) {
             color = OceanColors.BASE_TEXT
         }
+    }
 
-        ChatUtils.chat(text)
+    private fun sendKeys(corpses: List<Corpse>) {
+        createKeyMessage(corpses)?.sendWithPrefix()
     }
 
     @Subscription
