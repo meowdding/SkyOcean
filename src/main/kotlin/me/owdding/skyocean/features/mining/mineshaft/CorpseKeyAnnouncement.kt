@@ -16,6 +16,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.location.mineshaft.CorpseSpawnEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
 import tech.thatgravyboat.skyblockapi.api.profile.items.storage.StorageAPI
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
@@ -35,7 +36,8 @@ object CorpseKeyAnnouncement {
             val sackAmount = SacksAPI.sackItems[corpse.key] ?: 0
             val enderChestAmount = StorageAPI.enderchests.flatMap { it.items }.filter { it.getData(DataTypes.ID) == corpse.key }.sumOf { it.count }
             val storageAmount = StorageAPI.backpacks.flatMap { it.items }.filter { it.getData(DataTypes.ID) == corpse.key }.sumOf { it.count }
-            amount to sackAmount + enderChestAmount + storageAmount
+            val invAmount = McPlayer.inventory.filter { it.getData(DataTypes.ID) == corpse.key }.sumOf { it.count }
+            amount to sackAmount + enderChestAmount + storageAmount + invAmount
         }.filter { it.value.first > 0 && it.key != CorpseType.LAPIS }
 
         if (keys.isEmpty()) return null
