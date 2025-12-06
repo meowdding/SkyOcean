@@ -106,7 +106,7 @@ object MineshaftAnnouncement {
         if (MineshaftConfig.showTitle) {
             McClient.setTitle(
                 text,
-                CorpseKeyAnnouncement.createKeyMessage(MineshaftAPI.corpses).takeUnless { MineshaftConfig.keyAnnouncement },
+                CorpseKeyAnnouncement.createKeyMessage(MineshaftAPI.corpses).takeIf { MineshaftConfig.keyAnnouncement },
                 0.5f,
                 3f,
                 0.5f,
