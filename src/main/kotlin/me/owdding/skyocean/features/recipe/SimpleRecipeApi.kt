@@ -41,10 +41,12 @@ object SimpleRecipeApi {
         illegalIngredients.clear()
         illegalShopRecipes.clear()
 
-        illegalIngredients.addAll(Utils.loadRemoteRepoData("skyocean/illegal_ingredients", CodecUtils::list))
-        SkyOcean.debug("Loaded ${illegalIngredients.size} illegal ingredients")
-        illegalShopRecipes.addAll(Utils.loadRemoteRepoData("skyocean/illegal_shop_recipes", CodecUtils::list))
-        SkyOcean.debug("Loaded ${illegalShopRecipes.size} illegal shop recipes")
+        runCatching {
+            illegalIngredients.addAll(Utils.loadRemoteRepoData("skyocean/illegal_ingredients", CodecUtils::list))
+            SkyOcean.debug("Loaded ${illegalIngredients.size} illegal ingredients")
+            illegalShopRecipes.addAll(Utils.loadRemoteRepoData("skyocean/illegal_shop_recipes", CodecUtils::list))
+            SkyOcean.debug("Loaded ${illegalShopRecipes.size} illegal shop recipes")
+        }
 
         supportedTypes.forEach { (recipe, type) ->
             recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe ->
