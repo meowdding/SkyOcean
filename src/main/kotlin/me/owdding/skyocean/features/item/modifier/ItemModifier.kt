@@ -185,8 +185,11 @@ object ItemModifiers {
                 for ((key, value) in map) {
                     when (key) {
                         DataMarker.ITEM -> item = value.unsafeCast()
+
                         DataMarker.BACKGROUND_ITEM -> backgroundItem = value.unsafeCast()
+
                         DataMarker.ITEM_COUNT -> customSlotComponent = value.unsafeCast()
+
                         is DataMarker.ComponentDataMarker -> {
                             set(key.component, value.unsafeCast())
                         }

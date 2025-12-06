@@ -173,7 +173,7 @@ object UltrasequencerSolver : AbstractItemModifier() {
     private enum class Variant(val rows: Int, val padding: Int, val names: List<String>) {
         SUPREME(3, 1, "supreme"),
         LARGE(4, 1, "transcendent"),
-        METAPHYSICAL(4, 0, "metaphysical")
+        METAPHYSICAL(4, 0, "metaphysical"),
         ;
 
         constructor(rows: Int, padding: Int, vararg name: String) : this(rows, padding, name.toList())
