@@ -41,6 +41,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
  *  - Highlight accessories you have materials for
  *  - Recombs
  *  - Handle accessories like campfire badge having to be upgraded multiple times to upgrade rarity
+ *  - Add price and price/mp data to tooltip
  *  - Take into account requirements (hotm level, slayer level, etc)
  */
 
