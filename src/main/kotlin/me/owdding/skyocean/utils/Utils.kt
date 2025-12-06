@@ -383,10 +383,10 @@ object Utils {
 
     // TODO: add more sources to this
     fun ItemStack.getRealRarity(): SkyBlockRarity? {
-        var rarity = get(DataTypes.RARITY) ?: return null
-        if (get(DataTypes.RECOMBOBULATOR) == true) rarity = rarity.previous() ?: return rarity
+        var rarity = this[DataTypes.RARITY] ?: return null
+        if (this[DataTypes.RECOMBOBULATOR] == true) rarity = rarity.previous() ?: return rarity
         // TODO: get max dungeon quality from repo maybe?
-        if (get(DataTypes.DUNGEON_QUALITY) == 50) rarity = rarity.previous() ?: return rarity
+        if (this[DataTypes.DUNGEON_QUALITY] == 50) rarity = rarity.previous() ?: return rarity
         return rarity
     }
 

@@ -3,11 +3,8 @@ package me.owdding.skyocean.features.inventory.accessories
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
-import earth.terrarium.olympus.client.components.textbox.TextBox
-import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.ui.context.ContextMenu
 import earth.terrarium.olympus.client.utils.ListenableState
-import earth.terrarium.olympus.client.utils.StateUtils
 import me.owdding.lib.builder.LEFT
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
@@ -28,23 +25,17 @@ import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
-import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 /*
- * TODO before release:
- *  - Remove Rift-exclusive accessories
- *  - Add icon to marked accessories
- *
  * TODO for the future:
  *  - Take into account price of previous tier when calculating price for sorting
  *  - Highlight accessories you have materials for
@@ -56,9 +47,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object AccessoriesHelperScreen : SkyOceanScreen() {
 
     val state: ListenableState<String> = ListenableState.of("")
-    private lateinit var textBox: TextBox
     val dropdownSort: DropdownState<AccessoriesSortMode> = DropdownState.of(PRICE_PER_MP)
-    val ascending: ListenableState<Boolean> = ListenableState.of(true)
 
     val widgetWidth get() = (width / 3).coerceAtLeast(100) + 50
     val widgetHeight get() = (height / 3).coerceAtLeast(100) + 50
@@ -97,12 +86,11 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                         spacer(width)
                         LayoutFactory.horizontal {
                             spacer(height = 24)
-                            textBox = Widgets.textInput(state) { box ->
+                            Widgets.textInput(state) { box ->
                                 box.withChangeCallback(::refreshSearch)
                                 box.withPlaceholder("Search...")
                                 box.withSize(100, 20)
-                            }
-                            textBox.add {
+                            }.add {
                                 alignVerticallyMiddle()
                             }
                             spacer(width = 2)
@@ -116,38 +104,14 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                                 dropdownSort,
                                 AccessoriesSortMode.entries,
                                 { modes ->
-                                    Text.of(modes.name.toTitleCase())
+                                    Text.of(modes.displayName)
                                 },
-                                { button -> button.withSize(80, 20) },
+                                { button ->
+                                    val width = AccessoriesSortMode.entries.maxOf { McFont.width(it.displayName) }
+                                    button.withSize(width, 20)
+                                },
                             ) { builder ->
                                 builder.withCallback(::refreshSort)
-                            }.add {
-                                alignVerticallyMiddle()
-                            }
-                            Widgets.button { factory ->
-                                factory.withCallback {
-                                    StateUtils.booleanToggle(ascending).run()
-                                    refreshSort()
-                                    McClient.runNextTick {
-                                        factory.isFocused = false
-                                    }
-                                }
-                                factory.withRenderer { graphics, widget, _ ->
-                                    val texture = if (ascending.get()) {
-                                        UIIcons.CHEVRON_UP
-                                    } else {
-                                        UIIcons.CHEVRON_DOWN
-                                    }
-                                    graphics.drawSprite(
-                                        texture,
-                                        widget.x + 5,
-                                        widget.y + 5,
-                                        10,
-                                        10,
-                                        ARGB.opaque(TextColor.DARK_GRAY),
-                                    )
-                                }
-                                factory.withSize(20)
                             }.add {
                                 alignVerticallyMiddle()
                             }
@@ -220,6 +184,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
         // TODO: move marked to top
         val items = this.trackedAccessories.mapNotNull { accessory ->
             val tierItems = accessory.items.filter(::matchesSearch)
+            val hasPrice = AccessoriesSortMode.hasPrice(accessory)
 
             // TODO: find a way to mark the accessories in some way
             fun createItemDisplay(item: ItemStack): Display {
@@ -231,6 +196,14 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                     add(item.hoverName)
                     item.getLore().forEach(::add)
                     space()
+
+                    if (!hasPrice) {
+                        add("No price data!") {
+                            color = TextColor.RED
+                            bold = true
+                        }
+                        space()
+                    }
 
                     when (accessory) {
                         is MissingAccessory -> {
@@ -259,8 +232,16 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
 
                     add("Right click to add to CraftHelper!", TextColor.GREEN)
 
-
-                }.withPadding(2)
+                }.let {
+                    if (!accessory.marked) it.withPadding(2)
+                    else {
+                        val color = ARGB.opaque(TextColor.YELLOW).toUInt()
+                        Displays.outline({ color }, it).withPadding(1)
+                    }
+                }.let {
+                    if (!hasPrice) background(ARGB.color(120, TextColor.RED).toUInt(), it)
+                    else it
+                }
             }
 
             val size = tierItems.size
@@ -345,7 +326,9 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
     }
 
     fun refreshSort(mode: AccessoriesSortMode = dropdownSort.get() ?: PRICE_PER_MP) {
-        this.trackedAccessories.sortWith(mode.let { if (ascending.get() == true) it else it.reversed() })
+        val comparator = AccessoriesSortMode.BASE
+            .thenComparing(mode)
+        this.trackedAccessories.sortWith(comparator)
         addItems()
     }
 

@@ -4,6 +4,7 @@ package me.owdding.skyocean.features.inventory.accessories
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.Compact
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
@@ -69,12 +70,12 @@ object AccessoriesAPI {
             MYTHIC -> 22
             SPECIAL -> 3
             VERY_SPECIAL -> 5
-            else -> 0
+            else -> 1
         }
     }
 
     fun getMp(item: ItemStack): Int {
-        val realRarity = item.getRealRarity() ?: return 0
+        val realRarity = item.getRealRarity() ?: return 1
         var mp = getMpFromRarity(realRarity)
         if (item.getSkyBlockId() == HEGEMONY) mp *= 2 // hegemony gives double mp
         return mp
@@ -253,6 +254,11 @@ data class AccessoryRarityUpgraded(
     fun isMax(rarity: SkyBlockRarity) = rarities.maxOrNull() == rarity
     fun nextAfter(rarity: SkyBlockRarity): SkyBlockRarity? = firstOrNull { it > rarity }
     companion object {
-        val CODEC: Codec<AccessoryRarityUpgraded> = SkyOceanCodecs.getCodec()
+        val CODEC: Codec<AccessoryRarityUpgraded> = RecordCodecBuilder.create {
+            it.group(
+                SkyOceanCodecs.getCodec<SkyBlockId>().fieldOf("item").forGetter(AccessoryRarityUpgraded::item),
+                CodecUtils.enumSet(SkyOceanCodecs.getCodec<SkyBlockRarity>()).fieldOf("rarities").forGetter(AccessoryRarityUpgraded::rarities),
+            ).apply(it, ::AccessoryRarityUpgraded)
+        }
     }
 }

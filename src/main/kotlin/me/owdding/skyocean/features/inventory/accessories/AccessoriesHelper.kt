@@ -9,6 +9,7 @@ import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.utils.Utils.getRealRarity
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.Icons
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockCategory
@@ -86,7 +87,7 @@ object AccessoriesHelper : AbstractItemModifier() {
 
     enum class AccessoryResult(val component: Component?, val color: Int = 0) {
         // You own that accessory and it's the max tier
-        MAXED("✓", TextColor.GREEN),
+        MAXED(Icons.CHECKMARK, TextColor.GREEN),
 
         // You own a lower tier of this accessory
         UPGRADE("✦", TextColor.BLUE),
@@ -95,7 +96,7 @@ object AccessoriesHelper : AbstractItemModifier() {
         UPGRADEABLE("▲", TextColor.YELLOW),
 
         // You don't own any accessories of this family
-        MISSING("❌", TextColor.RED),
+        MISSING(Icons.CROSS, TextColor.RED),
 
         // You own multiple accessories of the same tier on the same family
         DUPLICATE("☰", TextColor.DARK_PURPLE),
