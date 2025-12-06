@@ -978,6 +978,21 @@
               "desc": "Whether player animals should also be visible outside of SkyBlock."
             }
           }
+        },
+        "experimentation": {
+          "@value": "Experiment Solvers",
+          "superpairs": {
+            "@value": "Super pairs solver",
+            "desc": "Highlights matching pairs and shows previously revealed items."
+          },
+          "chronomatron": {
+            "@value": "Chronomatron solver",
+            "desc": "Remembers the correct sequence of colors and highlights them."
+          },
+          "ultrasequencer": {
+            "@value": "Ultrasequencer solver",
+            "desc": "Remembers the order of the correct items and shows them."
+          }
         }
       },
       "fishing": {

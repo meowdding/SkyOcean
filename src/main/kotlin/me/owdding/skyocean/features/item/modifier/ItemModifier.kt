@@ -12,7 +12,9 @@ import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.OceanColors
+import me.owdding.skyocean.utils.extensions.getAttachments
 import me.owdding.skyocean.utils.extensions.or
+import me.owdding.skyocean.utils.extensions.putAttachments
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.core.component.DataComponentPatch
@@ -32,6 +34,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ItemTooltipEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.PlayerHotbarChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.PlayerInventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
+import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -65,7 +68,6 @@ abstract class AbstractItemModifier {
     open fun getExtraComponents(itemStack: ItemStack): DataComponentPatch? = null
     open fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?): Result = Result.unmodified
     open fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>): Result = Result.unmodified
-
 
     protected fun withMerger(original: MutableList<Component>, init: ListMerger<Component>.() -> Result?): Result {
         val merger = ListMerger(original)
@@ -135,7 +137,7 @@ object ItemModifiers {
     val modifiers: List<AbstractItemModifier> = SkyOceanItemModifiers.collected.sortedBy { it.priority }.toList()
     val modifiedItems: WeakHashMap<ItemStack, List<AbstractItemModifier>> = WeakHashMap()
 
-    @Subscription
+    @Subscription(priority = Subscription.LOW)
     @MustBeContainer
     private fun InventoryChangeEvent.onContainerChange() {
         tryModify(item)
@@ -151,7 +153,7 @@ object ItemModifiers {
         tryModify(item)
     }
 
-    private fun tryModify(itemStack: ItemStack) {
+    fun tryModify(itemStack: ItemStack) {
         if (modifiedItems.contains(itemStack)) return
 
         val modifiers = modifiers.filter { it.isEnabled && it.appliesTo(itemStack) && McScreen.self?.let { screen -> it.appliesToScreen(screen) } == true }
@@ -178,21 +180,25 @@ object ItemModifiers {
             }
         }
 
-        itemStack.skyoceanReplace(addIndicator = false) {
-            for ((key, value) in map) {
-                when (key) {
-                    DataMarker.ITEM -> item = value.unsafeCast()
-                    DataMarker.BACKGROUND_ITEM -> backgroundItem = value.unsafeCast()
-                    DataMarker.ITEM_COUNT -> count = 2
-                    is DataMarker.ComponentDataMarker -> {
-                        set(key.component, value.unsafeCast())
-                    }
+        if (map.isNotEmpty()) {
+            itemStack.skyoceanReplace(addIndicator = false) {
+                for ((key, value) in map) {
+                    when (key) {
+                        DataMarker.ITEM -> item = value.unsafeCast()
+                        DataMarker.BACKGROUND_ITEM -> backgroundItem = value.unsafeCast()
+                        DataMarker.ITEM_COUNT -> customSlotComponent = value.unsafeCast()
+                        is DataMarker.ComponentDataMarker -> {
+                            set(key.component, value.unsafeCast())
+                        }
 
-                    else -> {}
+                        else -> {}
+                    }
                 }
             }
+
+            modifiedItems[itemStack.getVisualItem() ?: itemStack] = usedModifiers
+            itemStack.getVisualItem()?.putAttachments(itemStack.getAttachments())
         }
-        modifiedItems[itemStack.getVisualItem() ?: itemStack] = usedModifiers
     }
 
     private context(map: MutableMap<DataMarker<*>, Any>, state: State<Boolean>, itemStack: ItemStack) fun <T : Any> AbstractItemModifier.extract(
@@ -291,6 +297,12 @@ object ItemModifiers {
             val result = modifier.appendComponents(item, components)
             if (!result.propagateFurther) break
         }
+    }
+
+    fun clear(stack: ItemStack) {
+        this.modifiedItems.remove(stack)
+        this.modifiedItems.remove(stack.getVisualItem())
+        stack.replaceVisually(null)
     }
 }
 
