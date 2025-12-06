@@ -2,6 +2,8 @@ package me.owdding.skyocean.features.misc
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
+//? if > 1.21.8
+import net.minecraft.client.gui.components.debug.DebugScreenEntries
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.world.entity.ai.attributes.Attributes
@@ -19,8 +21,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import java.util.concurrent.CopyOnWriteArraySet
 import kotlin.math.abs
 
-//? if > 1.21.8
-import net.minecraft.client.gui.components.debug.DebugScreenEntries
 
 @Module
 object RatHitboxes {
