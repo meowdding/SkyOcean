@@ -94,6 +94,7 @@ object Utils {
     }
 
     operator fun Item.contains(stack: ItemStack): Boolean = stack.item == this
+    operator fun TagKey<Item>.contains(stack: ItemStack): Boolean = stack.`is`(this)
 
     inline fun <reified T> CommandContext<*>.getArgument(name: String): T? = this.getArgument(name, T::class.java)
 
