@@ -5,14 +5,14 @@ import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 object ExperimentationTableConfig : CategoryKt("experimentation") {
     override val name get() = Translated("skyocean.config.misc.experimentation")
 
-    const val superpairsTranslationKey = "skyocean.config.misc.experimentation.superpairs"
+    const val SUPEPAIRS_TRANSLATION_KEY = "skyocean.config.misc.experimentation.superpairs"
     val superpairsSolver by boolean(false) {
-        this.translation = superpairsTranslationKey
+        this.translation = SUPEPAIRS_TRANSLATION_KEY
     }
 
-    const val chronomatronTranslationKey = "skyocean.config.misc.experimentation.chronomatron"
+    const val CHRONOMATRON_TRANSLATION_KEY = "skyocean.config.misc.experimentation.chronomatron"
     val chronomatronSolver by boolean(false) {
-        this.translation = chronomatronTranslationKey
+        this.translation = CHRONOMATRON_TRANSLATION_KEY
     }
 
     const val ultrasequencerTranslationKey = "skyocean.config.misc.experimentation.ultrasequencer"

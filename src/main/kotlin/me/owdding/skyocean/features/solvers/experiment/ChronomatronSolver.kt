@@ -106,7 +106,7 @@ object ChronomatronSolver : AbstractItemModifier() {
     private var slotStates: Int = 0
     private var lastVariant: Variant = Variant.SMALL
 
-    override val displayName: Component = +ExperimentationTableConfig.chronomatronTranslationKey
+    override val displayName: Component = +ExperimentationTableConfig.CHRONOMATRON_TRANSLATION_KEY
     override val isEnabled: Boolean get() = ExperimentationTableConfig.chronomatronSolver
 
     fun Int.decompose(): Triple<Int, Int, Int> {
