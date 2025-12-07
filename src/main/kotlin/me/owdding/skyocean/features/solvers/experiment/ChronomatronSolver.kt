@@ -180,9 +180,6 @@ object ChronomatronSolver : AbstractItemModifier() {
         if (state == State.RECALL) {
             val correct = queue.peekFirst() == slotStateIndex
             val correctInFuture = queue.getOrNull(1) == slotStateIndex
-            if (correct) {
-                Text.of("Correct item index ${queue.joinToString(", ")}").send("meow")
-            }
             if (!replacements.containsKey(item.item)) return
 
             item[correctItemKey] = correct
