@@ -91,7 +91,7 @@ class CachedValue<Type>(private val timeToLive: Duration = Duration.INFINITE, pr
     private var value: Any? = UNINITIALIZED_VALUE
     var lastUpdated: Instant = Instant.DISTANT_PAST
 
-    operator fun getValue(thisRef: Any?, property: Any?) = getValue()
+    operator fun <T> getValue(thisRef: T?, property: Any?) = getValue()
 
     fun getValue(): Type {
         if (!hasValue()) {

@@ -60,6 +60,8 @@ object CodecHelpers {
 
     internal inline fun <reified T> list() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
 
+    internal inline fun <reified T> set() = CodecUtils.mutableSet(SkyOceanCodecs.getCodec<T>())
+
     fun <T> copyOnWriteList(original: Codec<T>): Codec<CopyOnWriteArrayList<T>> = original.listOf().xmap(
         { CopyOnWriteArrayList(it) },
         { it },

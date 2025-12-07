@@ -6,6 +6,7 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.commands.VirtualResourceArgument
@@ -19,24 +20,20 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KProperty
+import kotlin.time.Duration.Companion.seconds
 
 internal fun debugToggle(path: String, description: String = path): DebugToggle {
     return DebugToggle(SkyOcean.id(path), description)
 }
 
 data class DebugToggle(val location: ResourceLocation, val description: String) {
+    private val cache = CachedValue(5.seconds) { DevUtils.isOn(location) }
+
     init {
         DevUtils.register(this)
     }
 
-    operator fun getValue(any: Nothing?, property: KProperty<*>): Boolean {
-        return DevUtils.isOn(location)
-    }
-
-    operator fun getValue(any: Any?, property: KProperty<*>): Boolean {
-        return DevUtils.isOn(location)
-    }
-
+    operator fun <T> provideDelegate(ref: T, property: KProperty<*>) = cache
 }
 
 @Module
