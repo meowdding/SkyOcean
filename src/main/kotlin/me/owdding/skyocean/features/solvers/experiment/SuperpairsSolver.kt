@@ -35,7 +35,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 @Module
 @ItemModifier
 object SuperpairsSolver : AbstractItemModifier() {
-    override val displayName: Component = +ExperimentationTableConfig.SUPEPAIRS_TRANSLATION_KEY
+    override val displayName: Component = +ExperimentationTableConfig.SUPERPAIRS_TRANSLATION_KEY
     override val isEnabled: Boolean get() = ExperimentationTableConfig.superpairsSolver
 
     private val superPairSlots: MutableSet<Int> = mutableSetOf()

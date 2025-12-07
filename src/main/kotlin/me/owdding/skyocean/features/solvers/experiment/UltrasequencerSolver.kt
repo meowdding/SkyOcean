@@ -55,7 +55,7 @@ object UltrasequencerSolver : AbstractItemModifier() {
 
     private val itemNumberKey = ItemAttachmentKey.int("ultrasequencer_item_number")
 
-    override val displayName: Component = +ExperimentationTableConfig.ultrasequencerTranslationKey
+    override val displayName: Component = +ExperimentationTableConfig.ULTRASEQUENCER_TRANSLATION_KEY
     override val isEnabled: Boolean get() = ExperimentationTableConfig.ultrasequencerSolver
 
     @Subscription
