@@ -71,6 +71,7 @@ object ItemHighlighter {
                         backgroundItem = MiscConfig.itemSearchItemHighlight.paneStack
                     }
                 }
+
                 FILL -> {
                     backgroundColor = MiscConfig.itemSearchItemHighlight.color
                 }

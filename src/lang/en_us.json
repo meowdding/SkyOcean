@@ -341,6 +341,10 @@
             "@value": "Item Highlight",
             "desc": "Choose what color the searched item will be highlighted with."
           },
+          "highlightMode": {
+            "@value": "Highlight Mode",
+            "desc": "Choose how items will be highlighted."
+          },
           "highlightTime": {
             "@value": "Highlight Time",
             "desc": "Amount of time that items will be highlighted for, in seconds."
