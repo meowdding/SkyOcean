@@ -30,8 +30,6 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.SlotClickEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.mixins.accessors.ContainerScreenAccessor
-import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
