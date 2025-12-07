@@ -24,6 +24,10 @@ object MineshaftConfig : CategoryKt("mineshaft") {
         translation = "skyocean.config.mining.mineshaft.announce-type"
     }
 
+    var showTitle by boolean(false) {
+        translation = "skyocean.config.mining.mineshaft.show_title"
+    }
+
     init {
         separator {
             this.title = "Corpse Waypoint"
