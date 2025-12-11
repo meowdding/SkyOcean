@@ -1,4 +1,5 @@
-package me.owdding.skyocean.helpers
+//? if TODO {
+/*package me.owdding.skyocean.helpers
 
 import com.google.gson.JsonParser
 import com.mojang.logging.LogUtils
@@ -11,7 +12,7 @@ import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.FileToIdConverter
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
@@ -19,13 +20,13 @@ import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import net.minecraft.server.packs.resources.PreparableReloadListener
 
 //?} else
-/*import net.minecraft.server.packs.resources.ResourceManager*/
+/^import net.minecraft.server.packs.resources.ResourceManager^/
 
-typealias FakeBlockEntry = Pair<ResourceLocation, (BlockState, BlockPos) -> Boolean>
+typealias FakeBlockEntry = Pair<Identifier, (BlockState, BlockPos) -> Boolean>
 typealias FakeBlockUnbakedEntry = Pair<FakeBlockStateDefinition, (BlockState, BlockPos) -> Boolean>
 
 @LateInitModule
-object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlockStateDefinition>> {
+object FakeBlocks : PreparableModelLoadingPlugin<Map<Identifier, FakeBlockStateDefinition>> {
 
     private val logger = LogUtils.getLogger()
     private val path = FileToIdConverter.json(BLOCK_STATES_PATH)
@@ -40,24 +41,24 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlock
     private fun register(
         block: Block,
         texture: Block,
-        definition: ResourceLocation,
-        parent: ResourceLocation?,
+        definition: Identifier,
+        parent: Identifier?,
         predicate: (BlockState, BlockPos) -> Boolean,
     ) {
         fakeBlocks.getOrPut(block, ::mutableListOf).add(FakeBlockEntry(definition, predicate))
     }
 
     //? if > 1.21.8 {
-    fun init(manager: PreparableReloadListener.SharedState, executor: Executor): CompletableFuture<Map<ResourceLocation, FakeBlockStateDefinition>> {
+    fun init(manager: PreparableReloadListener.SharedState, executor: Executor): CompletableFuture<Map<Identifier, FakeBlockStateDefinition>> {
         val manager = manager.resourceManager()
         //?} else
-        /*fun init(manager:  ResourceManager, executor: Executor): CompletableFuture<Map<ResourceLocation, FakeBlockStateDefinition>> {*/
+        /^fun init(manager:  ResourceManager, executor: Executor): CompletableFuture<Map<Identifier, FakeBlockStateDefinition>> {^/
         fakeBlocks.clear()
         RegisterFakeBlocksEvent(this::register).post(SkyBlockAPI.eventBus)
 
         return CompletableFuture.supplyAsync(
             {
-                val output = mutableMapOf<ResourceLocation, FakeBlockStateDefinition>()
+                val output = mutableMapOf<Identifier, FakeBlockStateDefinition>()
 
                 for ((file, resource) in path.listMatchingResources(manager)) {
                     runCatching {
@@ -81,7 +82,7 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlock
         )
     }
 
-    override fun initialize(definitions: Map<ResourceLocation, FakeBlockStateDefinition>, context: ModelLoadingPlugin.Context) {
+    override fun initialize(definitions: Map<Identifier, FakeBlockStateDefinition>, context: ModelLoadingPlugin.Context) {
         context.modifyBlockModelOnLoad().register { original, context ->
             val block = context.state().block
 
@@ -99,3 +100,5 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<ResourceLocation, FakeBlock
     }
 
 }
+
+*///?}

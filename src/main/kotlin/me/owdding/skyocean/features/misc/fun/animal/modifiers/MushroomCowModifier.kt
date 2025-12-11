@@ -8,7 +8,7 @@ import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.MushroomCowRenderState
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.MushroomCow
+import net.minecraft.world.entity.animal.cow.MushroomCow
 
 @RegisterAnimalModifier
 object MushroomCowModifier : AnimalModifier<MushroomCow, MushroomCowRenderState> {

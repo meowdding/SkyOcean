@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
@@ -54,7 +54,12 @@ object PlayerAnimals {
     fun <State : LivingEntityRenderState> apply(entity: LivingEntity, avatarState: AvatarRenderState, state: State, partialTicks: Float) {
         state.isBaby = PlayerAnimalConfig.isBaby.select(avatarState)
         if (state is ArmedEntityRenderState) {
-            ArmedEntityRenderState.extractArmedEntityRenderState(entity, state, Minecraft.getInstance().itemModelResolver)
+            ArmedEntityRenderState.extractArmedEntityRenderState(
+                entity,
+                state,
+                Minecraft.getInstance().itemModelResolver,
+                /*? > 1.21.10 >>*/partialTicks,
+            )
         }
         if (state is HumanoidRenderState) {
             state.swimAmount = avatarState.swimAmount
@@ -84,7 +89,7 @@ object PlayerAnimals {
 
     fun createRenderer(context: EntityRendererProvider.Context) {
         renderer = object : LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>(context, null, 20f) {
-            override fun getTextureLocation(renderState: LivingEntityRenderState): ResourceLocation = SkyOcean.id("none")
+            override fun getTextureLocation(renderState: LivingEntityRenderState): Identifier = SkyOcean.id("none")
             override fun createRenderState(): LivingEntityRenderState? = null
         }
     }

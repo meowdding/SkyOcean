@@ -1,4 +1,5 @@
-package me.owdding.skyocean.features.misc.`fun`.animal.modifier
+//? if > 1.21.8 {
+package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
@@ -10,10 +11,10 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.CopperGolemRenderState
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.coppergolem.CopperGolem
+import net.minecraft.world.entity.animal.golem.CopperGolem
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.WeatheringCopper
-import java.util.Optional
+import java.util.*
 
 @RegisterAnimalModifier
 object CopperGolemModifier : AnimalModifier<CopperGolem, CopperGolemRenderState> {
@@ -62,3 +63,5 @@ object CopperGolemModifier : AnimalModifier<CopperGolem, CopperGolemRenderState>
         override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.copper_golem.state.${name.lowercase()}"
     }
 }
+
+//?}

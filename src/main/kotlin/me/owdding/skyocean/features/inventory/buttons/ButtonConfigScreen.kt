@@ -51,7 +51,7 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
     override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, type: ClickType) {
     }
 
-    override fun renderSlots(guiGraphics: GuiGraphics) {}
+    override fun renderSlots(guiGraphics: GuiGraphics, /*? if > 1.21.10 {*/ i: Int, j: Int /*?}*/) {}
     override fun onRecipeBookButtonClick() {}
 
     // Crazy workaround, why the fuck is the whole inventory tied to the recipe book holy shit

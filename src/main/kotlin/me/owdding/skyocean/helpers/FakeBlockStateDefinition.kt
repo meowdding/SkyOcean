@@ -1,4 +1,5 @@
-package me.owdding.skyocean.helpers
+//? if TODO {
+/*package me.owdding.skyocean.helpers
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
@@ -13,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState
 import kotlin.jvm.optionals.getOrNull
 
 //? if = 1.21.5
-/*import net.fabricmc.fabric.api.renderer.v1.material.BlendMode*/
+/^import net.fabricmc.fabric.api.renderer.v1.material.BlendMode^/
 
 class FakeBlockStateDefinition(
     val model: BlockModelDefinition,
@@ -43,3 +44,5 @@ class FakeBlockStateDefinition(
         }
     }
 }
+
+*///?}
