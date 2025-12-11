@@ -15,54 +15,144 @@ import com.mojang.blaze3d.vertex.ByteBufferBuilder
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
-import earth.terrarium.olympus.client.pipelines.PipelineRenderer
 import earth.terrarium.olympus.client.utils.Orientation
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.RenderPipelines
-import tech.thatgravyboat.skyblockapi.helpers.McClient
-import java.util.*
+import org.joml.Matrix3x2f
+import org.joml.Vector2i
+import java.util.OptionalDouble
+import java.util.OptionalInt
 import kotlin.reflect.KMutableProperty0
+import kotlin.use
+
+//? if 1.21.5 {
+/*import earth.terrarium.olympus.client.pipelines.PipelineRenderer
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 private data class MonoState(val width: Int, val height: Int, val size: Int, val orientation: Orientation, val color: Int)
 private data class NormalState(val width: Int, val height: Int, val columns: Int, val rows: Int, val color: Int)
+*///?}
 
 object InventoryRenderer {
 
-    private val MONO_TEXTURE = SkyOcean.id("textures/gui/inventory/mono.png")
+    //? if 1.21.5 {
+    /*private val MONO_TEXTURE = SkyOcean.id("textures/gui/inventory/mono.png")
     private val POLY_TEXTURE = SkyOcean.id("textures/gui/inventory/poly.png")
-    private val MONO_INVENTORY_BACKGROUND = RenderPipelines.register(
-        RenderPipeline.builder()
-            .withLocation(SkyOcean.id("mono_inventory"))
-            .withVertexShader(SkyOcean.id("core/inventory"))
-            .withFragmentShader(SkyOcean.id("core/mono_inventory"))
-            .withCull(false)
-            .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
-            .withColorLogic(LogicOp.NONE)
-            .withBlend(BlendFunction.TRANSLUCENT)
-            .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
-            .withSampler("Sampler0")
-            .withUniform("Size", UniformType.INT)
-            .withUniform("Vertical", UniformType.INT)
-            .build(),
-    )
+    *///?}
 
-    private val INVENTORY_BACKGROUND = RenderPipelines.register(
+    val INVENTORY_BACKGROUND = RenderPipelines.register(
         RenderPipeline.builder()
             .withLocation(SkyOcean.id("inventory"))
             .withVertexShader(SkyOcean.id("core/inventory"))
             .withFragmentShader(SkyOcean.id("core/inventory"))
             .withCull(false)
             .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
-            .withColorLogic(LogicOp.NONE)
+            //? if 1.21.5
+            /*.withColorLogic(LogicOp.NONE)*/
             .withBlend(BlendFunction.TRANSLUCENT)
             .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
             .withSampler("Sampler0")
-            .withUniform("Size", UniformType.VEC2)
+            //? if > 1.21.5 {
+            .withUniform(POLY_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
+            .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
+            .withUniform("Projection", UniformType.UNIFORM_BUFFER)
+            //?} else
+            /*.withUniform("Size", UniformType.VEC2)*/
+            .build(),
+    )
+    val MONO_INVENTORY_BACKGROUND: RenderPipeline = RenderPipelines.register(
+        RenderPipeline.builder()
+            .withLocation(SkyOcean.id("mono_inventory"))
+            .withVertexShader(SkyOcean.id("core/inventory"))
+            .withFragmentShader(SkyOcean.id("core/mono_inventory"))
+            .withCull(false)
+            //? if 1.21.5 {
+            /*.withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
+            .withColorLogic(LogicOp.NONE)
+            *///?} else
+            .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
+            .withBlend(BlendFunction.TRANSLUCENT)
+            .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+            .withSampler("Sampler0")
+            //? if > 1.21.5 {
+            .withUniform(MONO_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
+            .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
+            .withUniform("Projection", UniformType.UNIFORM_BUFFER)
+            //?} else {
+            /*.withUniform("Size", UniformType.INT)
+            .withUniform("Vertical", UniformType.INT)
+            *///?}
             .build(),
     )
 
-    private var lastMonoState: MonoState? = null
+
+    fun renderMonoInventory(graphics: GuiGraphics, x: Int, y: Int, width: Int, height: Int, size: Int, orientation: Orientation, color: Int) {
+        //? if > 1.21.5 {
+        graphics.guiRenderState.submitPicturesInPictureState(
+            MonoInventoryPipState(
+                x,
+                y,
+                x + width,
+                y + height,
+                graphics.scissorStack.peek(),
+                Matrix3x2f(graphics.pose()),
+                size,
+                color,
+                orientation == Orientation.VERTICAL,
+            ),
+        )
+        //?} else {
+        
+        /*val state = MonoState(width, height, size, orientation, color)
+        if (lastMonoState != state || lastMonoTexture == null) {
+            val texture = McClient.self.textureManager.getTexture(MONO_TEXTURE).texture
+            cacheShaderToTexture("SkyOcean Mono Inventory", MONO_INVENTORY_BACKGROUND, InventoryRenderer::lastMonoTexture, width, height, color) {
+                setUniform("Size", size)
+                setUniform("Vertical", orientation.getValue(0, 1))
+                bindSampler("Sampler0", texture)
+            }
+        }
+
+        val texture = lastMonoTexture ?: error("Mono inventory texture not initialized")
+
+        drawTexture(graphics, x, y, width, height, color, texture)
+        *///?}
+    }
+
+    fun renderNormalInventory(graphics: GuiGraphics, x: Int, y: Int, width: Int, height: Int, columns: Int, rows: Int, color: Int) {
+        //? if > 1.21.5 {
+        graphics.guiRenderState.submitPicturesInPictureState(
+            PolyInventoryPipState(
+                x,
+                y,
+                x + width,
+                y + height,
+                graphics.scissorStack.peek(),
+                Matrix3x2f(graphics.pose()),
+                Vector2i(columns, rows),
+                color,
+            ),
+        )
+        //?} else {
+        
+        /*val state = NormalState(width, height, columns, rows, color)
+        if (lastNormalState != state || lastNormalTexture == null) {
+            val texture = McClient.self.textureManager.getTexture(POLY_TEXTURE).texture
+            cacheShaderToTexture("SkyOcean Normal Inventory", INVENTORY_BACKGROUND, InventoryRenderer::lastNormalTexture, width, height, color) {
+                setUniform("Size", columns.toFloat(), rows.toFloat())
+                bindSampler("Sampler0", texture)
+            }
+        }
+
+        val texture = lastNormalTexture ?: error("Normal inventory texture not initialized")
+
+        drawTexture(graphics, x, y, width, height, color, texture)
+        *///?}
+    }
+
+    //? if 1.21.5 {
+    /*private var lastMonoState: MonoState? = null
     private var lastMonoTexture: GpuTexture? = null
 
     private var lastNormalState: NormalState? = null
@@ -133,36 +223,7 @@ object InventoryRenderer {
         RenderSystem.setShaderTexture(0, texture)
         PipelineRenderer.draw(RenderPipelines.GUI_TEXTURED, buffer.buildOrThrow()) {}
     }
+    *///?}
 
-    fun renderMonoInventory(graphics: GuiGraphics, x: Int, y: Int, width: Int, height: Int, size: Int, orientation: Orientation, color: Int) {
-        val state = MonoState(width, height, size, orientation, color)
-        if (lastMonoState != state || lastMonoTexture == null) {
-            val texture = McClient.self.textureManager.getTexture(MONO_TEXTURE).texture
-            cacheShaderToTexture("SkyOcean Mono Inventory", MONO_INVENTORY_BACKGROUND, InventoryRenderer::lastMonoTexture, width, height, color) {
-                setUniform("Size", size)
-                setUniform("Vertical", orientation.getValue(0, 1))
-                bindSampler("Sampler0", texture)
-            }
-        }
-
-        val texture = lastMonoTexture ?: error("Mono inventory texture not initialized")
-
-        drawTexture(graphics, x, y, width, height, color, texture)
-    }
-
-    fun renderNormalInventory(graphics: GuiGraphics, x: Int, y: Int, width: Int, height: Int, columns: Int, rows: Int, color: Int) {
-        val state = NormalState(width, height, columns, rows, color)
-        if (lastNormalState != state || lastNormalTexture == null) {
-            val texture = McClient.self.textureManager.getTexture(POLY_TEXTURE).texture
-            cacheShaderToTexture("SkyOcean Normal Inventory", INVENTORY_BACKGROUND, InventoryRenderer::lastNormalTexture, width, height, color) {
-                setUniform("Size", columns.toFloat(), rows.toFloat())
-                bindSampler("Sampler0", texture)
-            }
-        }
-
-        val texture = lastNormalTexture ?: error("Normal inventory texture not initialized")
-
-        drawTexture(graphics, x, y, width, height, color, texture)
-    }
 
 }

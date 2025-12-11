@@ -1,3 +1,4 @@
+//? if > 1.21.5 {
 package me.owdding.skyocean.utils.rendering
 
 import com.mojang.blaze3d.systems.RenderSystem
@@ -9,6 +10,7 @@ import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer
 import me.owdding.lib.rendering.MeowddingPipState
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.navigation.ScreenRectangle
+import net.minecraft.client.gui.render.TextureSetup
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.renderer.MultiBufferSource
 import org.joml.Matrix3x2f
@@ -72,10 +74,15 @@ class MonoInventoryPipRenderer(source: MultiBufferSource.BufferSource) : Picture
         buffer.addVertex(scaledWidth, scaledHeight, 0f).setUv(1f, 1f).setColor(state.color)
         buffer.addVertex(scaledWidth, 0f, 0f).setUv(1f, 0f).setColor(state.color)
 
-        RenderSystem.setShaderTexture(0, McClient.self.textureManager.getTexture(MONO_TEXTURE).textureView)
+        val texture = McClient.self.textureManager.getTexture(MONO_TEXTURE)
+        //? if < 1.21.11
+        /*RenderSystem.setShaderTexture(0, texture.textureView)*/
+
 
         PipelineRenderer.builder(InventoryRenderer.MONO_INVENTORY_BACKGROUND, buffer.buildOrThrow())
             .uniform(MonoInventoryUniform.STORAGE, MonoInventoryUniform(state.size, if (state.vertical) 1 else 0))
+            //? if > 1.21.10
+            .textures(TextureSetup.singleTexture(texture.textureView, texture.sampler))
             .color(state.color)
             .draw()
 
@@ -106,10 +113,14 @@ class PolyInventoryPipRenderer(source: MultiBufferSource.BufferSource) : Picture
         buffer.addVertex(scaledWidth, scaledHeight, 0f).setUv(1f, 1f).setColor(state.color)
         buffer.addVertex(scaledWidth, 0f, 0f).setUv(1f, 0f).setColor(state.color)
 
-        RenderSystem.setShaderTexture(0, McClient.self.textureManager.getTexture(POLY_TEXTURE).textureView)
+        val texture = McClient.self.textureManager.getTexture(POLY_TEXTURE)
+        //? if < 1.21.11
+        /*RenderSystem.setShaderTexture(0, texture.textureView)*/
 
         PipelineRenderer.builder(InventoryRenderer.INVENTORY_BACKGROUND, buffer.buildOrThrow())
             .uniform(PolyInventoryUniform.STORAGE, PolyInventoryUniform(state.size))
+            //? if > 1.21.10
+            .textures(TextureSetup.singleTexture(texture.textureView, texture.sampler))
             .color(state.color)
             .draw()
 
@@ -119,3 +130,5 @@ class PolyInventoryPipRenderer(source: MultiBufferSource.BufferSource) : Picture
     override fun getTextureLabel() = "skyocean_poly_inventory"
 
 }
+
+//?}
