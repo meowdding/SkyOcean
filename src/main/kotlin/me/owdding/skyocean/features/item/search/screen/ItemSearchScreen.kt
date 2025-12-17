@@ -308,7 +308,10 @@ object ItemSearchScreen : SkyOceanScreen() {
 
 
             val leftAction = { _: Button ->
-                ItemHighlighter.setHighlight(ReferenceItemFilter.create(context, itemStack))
+                ItemHighlighter.setHighlight(
+                    ReferenceItemFilter.create(context, itemStack),
+                    updateChests = false, // The item contexts already handle this
+                )
                 context.open()
                 onClose()
             }
