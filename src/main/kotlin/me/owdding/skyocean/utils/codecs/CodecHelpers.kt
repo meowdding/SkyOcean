@@ -4,24 +4,31 @@ import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.function.Function
-import kotlin.jvm.optionals.getOrNull
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.lib.helper.TextShaderHolder
 import me.owdding.lib.rendering.text.TextShaders
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.PackMetadata
+import net.minecraft.Util
 import net.minecraft.core.BlockPos
 import net.minecraft.core.ClientAsset
-import net.minecraft.network.chat.*
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentContents
+import net.minecraft.network.chat.ComponentSerialization
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
+import org.joml.Vector3i
+import org.joml.Vector3ic
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.function.Function
+import kotlin.jvm.optionals.getOrNull
 
 //? if < 1.21.9 {
 /*import net.minecraft.network.chat.contents.KeybindContents
@@ -71,7 +78,7 @@ object CodecHelpers {
     @IncludedCodec
     val BLOCK_POS_CODEC: Codec<BlockPos> = BlockPos.CODEC
 
-    @IncludedCodec
+    @IncludedCodec(keyable = true)
     val RESOURCE_LOCATION: Codec<ResourceLocation> = ResourceLocation.CODEC
 
     @IncludedCodec
@@ -82,6 +89,12 @@ object CodecHelpers {
 
     @IncludedCodec
     val SKYBLOCK_ID_UNKNOWN: Codec<SkyBlockId> = SkyBlockId.UNKNOWN_CODEC
+
+    @IncludedCodec
+    val VECTOR_3IC: Codec<Vector3ic> = Codec.INT.listOf().comapFlatMap(
+        { list -> Util.fixedSize(list, 3).map { Vector3i(it[0], it[1], it[2]) } },
+        { listOf(it.x(), it.y(), it.z()) },
+    )
 
     @IncludedCodec
     val CLIENT_ASSET_CODEC: Codec<ClientAsset> = ResourceLocation.CODEC.xmap(

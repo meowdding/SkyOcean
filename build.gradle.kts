@@ -173,6 +173,7 @@ compactingResources {
         "https://raw.githubusercontent.com/Campionnn/SkyShards-Parser/55483450ff83e1bf1e453f31797cedb08b0c2733/shard-data.json",
         "skyshards_data.json"
     )
+    compactToArray("mutations")
 }
 
 tasks.withType<JavaCompile>().configureEach {

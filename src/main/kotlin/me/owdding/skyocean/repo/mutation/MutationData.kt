@@ -1,0 +1,171 @@
+package me.owdding.skyocean.repo.mutation
+
+import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
+import me.owdding.ktcodecs.Compact
+import me.owdding.ktcodecs.FieldName
+import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.ktcodecs.IncludedCodec
+import me.owdding.ktcodecs.NamedCodec
+import me.owdding.ktmodules.Module
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.generated.CodecUtils
+import me.owdding.skyocean.generated.EnumCodec
+import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.Utils.lookup
+import me.owdding.skyocean.utils.codecs.CodecHelpers
+import net.minecraft.commands.arguments.blocks.BlockStateParser
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
+import org.joml.Vector3i
+import org.joml.Vector3ic
+import org.joml.div
+import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+
+@Module
+data object MutationData {
+
+    val mutations: List<MutationEntry> = Utils.loadRepoData("mutations", CodecHelpers.list())
+
+}
+
+@GenerateCodec
+data class MutationEntry(
+    val name: String,
+    val id: SkyBlockId,
+    val texture: MutationTexture,
+    val rarity: SkyBlockRarity,
+    val size: MutationSize,
+    @Compact val surface: List<ResourceLocation>,
+    @FieldName("spreading_conditions") val spreadingCondition: Map<ResourceLocation, Int>,
+    val blueprint: MutationBlueprint?,
+)
+
+interface BlockSupplier {
+    val block: BlockState
+    fun tick()
+
+    companion object {
+        val EMPTY = SingleBlockSupplier(Blocks.AIR.defaultBlockState())
+    }
+
+    data class MultiBlockSupplier(
+        val entries: List<BlockState>,
+    ) : BlockSupplier {
+        var ticks: Int = 0
+        override fun tick() {
+            ticks++
+        }
+
+        override val block: BlockState get() = entries[Math.floorMod(ticks / 20, entries.size)]
+    }
+
+    data class SingleBlockSupplier(
+        override val block: BlockState,
+    ) : BlockSupplier {
+        override fun tick() {}
+    }
+}
+
+data class MutationBlueprint(
+    val map: Map<Vector3ic, BlockSupplier>,
+    val set: Set<BlockSupplier>,
+) {
+    fun tick() {
+        set.forEach(BlockSupplier::tick)
+    }
+
+    companion object : MeowddingLogger by SkyOcean.featureLogger("mutation_blueprint") {
+        @IncludedCodec(named = "mutation§blueprint")
+        val paletteCodec: Codec<Map<String, List<String>>> = Codec.unboundedMap(Codec.STRING, CodecUtils.compactList(Codec.STRING))
+
+        @IncludedCodec
+        val codec: Codec<MutationBlueprint> = SkyOceanCodecs.CompletableMutationBlueprintCodec.codec().xmap(
+            {
+                val map = mutableMapOf<Vector3ic, BlockSupplier>()
+                val palette = it.palette.mapValues { (_, values) ->
+                    val list = values.map {
+                        runCatching {
+                            if (it.startsWith("skyocean:")) {
+                                return@map Blocks.FROGSPAWN.defaultBlockState()
+                            }
+
+                            BlockStateParser.parseForBlock(Registries.BLOCK.lookup(), it, true).blockState
+                        }.getOrElse { throwable ->
+                            warn("Failed to parse blueprint placeholder balue $it", throwable)
+                            Blocks.AIR.defaultBlockState()
+                        }
+                    }
+
+                    if (list.size == 1) {
+                        BlockSupplier.SingleBlockSupplier(list[0])
+                    } else {
+                        BlockSupplier.MultiBlockSupplier(list)
+                    }
+                }
+
+                val halfSize = it.size / 2
+                for (y in 0 until it.size.y()) {
+                    val layer = it.shape[it.size.y() - 1 - y]
+                    for (x in 0 until it.size.x()) {
+                        val row = layer[x]
+                        for (z in 0 until it.size.z()) {
+                            val placeholder = row[z].toString()
+                            if (placeholder == " ") continue
+                            val blocks = palette[placeholder] ?: run {
+                                warn("Unknown placeholder $placeholder!")
+                                BlockSupplier.EMPTY
+                            }
+
+                            map[Vector3i(x - halfSize.x, y, z - halfSize.z)] = blocks
+                        }
+                    }
+                }
+
+                MutationBlueprint(map, palette.values.toSet())
+            },
+            { TODO() },
+        )
+    }
+
+    @GenerateCodec
+    @NamedCodec("CompletableMutationBlueprint")
+    data class Completable(
+        @NamedCodec("mutation§blueprint") val palette: Map<String, List<String>>,
+        val shape: List<List<String>>,
+        val size: Vector3ic,
+    )
+}
+
+enum class MutationSize(val sizeX: Int, val sizeY: Int) {
+    ONE_BY_ONE(1, 1)
+    ;
+
+    companion object {
+        @IncludedCodec
+        val CODEC: Codec<MutationSize> = Codec.withAlternative(
+            EnumCodec.forKCodec(entries.toTypedArray()),
+            Codec.STRING.flatXmap(
+                {
+                    val result = when (it) {
+                        "1x1" -> ONE_BY_ONE
+                        else -> null
+                    }
+                    if (result == null) DataResult.error { "Unable to parse $result" } else DataResult.success(result)
+                },
+                { DataResult.success(it.name) },
+            ),
+        )
+    }
+}
+
+@GenerateCodec
+data class MutationTexture(
+    val value: String,
+    val signature: String,
+)

@@ -4,15 +4,15 @@ import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import me.owdding.lib.rendering.MeowddingPipState
+import me.owdding.skyocean.repo.mutation.BlockSupplier
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.texture.OverlayTexture
-import net.minecraft.core.Vec3i
-import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3x2f
+import org.joml.Vector3ic
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import java.util.function.Function
@@ -32,19 +32,19 @@ class GuiBlockRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictur
 
                 val bufferSource = McClient.self.renderBuffers().bufferSource()
 
-                blocks.forEach { (pos, blockState) ->
+                blocks.forEach { (pos, supplier) ->
                     poseStack.pushPop {
                         poseStack.translate(
-                            pos.x.toFloat(),
-                            pos.y.toFloat(),
-                            pos.z.toFloat()
+                            pos.x().toFloat(),
+                            pos.y().toFloat(),
+                            pos.z().toFloat()
                         )
 
                         poseStack.translate(-0.5f, -0.5f, -0.5f)
 
                         McClient.self.gameRenderer.lighting.setupFor(Lighting.Entry.ITEMS_FLAT)
                         McClient.self.blockRenderer.renderSingleBlock(
-                            blockState,
+                            supplier.block,
                             poseStack,
                             bufferSource,
                             LightTexture.FULL_BRIGHT,
@@ -59,11 +59,10 @@ class GuiBlockRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictur
 
     override fun getTextureLabel(): String = "skyocean_gui_block_renderer"
     override fun getTranslateY(height: Int, guiScale: Int): Float = height * 0.6f
-    override fun textureIsReadyToBlit(renderState: GuiBlockRenderState) = true
 }
 
 data class GuiBlockRenderState(
-    val blocks: Map<Vec3i, BlockState>,
+    val blocks: Map<Vector3ic, BlockSupplier>,
     val rotation: Vec3 = Vec3(22.5, 45.0, 0.0),
     override val scale: Float = 20f,
     override val bounds: ScreenRectangle,

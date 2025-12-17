@@ -22,7 +22,7 @@
       "+": "skyocean:cactus",
       "-": "minecraft:sand",
       "?": [
-        "minecraft:farm_land",
+        "minecraft:farmland",
         "minecraft:sand"
       ]
     },
