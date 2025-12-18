@@ -1,25 +1,26 @@
-package me.owdding.skyocean.features.garden.mutations
+package me.owdding.skyocean.features.garden
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import earth.terrarium.olympus.client.components.string.TextWidget
 import me.owdding.ktmodules.Module
 import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.lib.utils.suggestions.IterableSuggestionProvider
+import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.repo.mutation.MutationBlueprint
 import me.owdding.skyocean.repo.mutation.MutationData
 import me.owdding.skyocean.repo.mutation.MutationEntry
+import me.owdding.skyocean.utils.rendering.GuiBlockRenderState
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent.Companion.argument
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 
-class BlockRenderTestScreen(val entry: MutationEntry, val blueprint: MutationBlueprint) : MeowddingScreen() {
+class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlueprint) : MeowddingScreen() {
     private var yAngle: Double = 45.0
     private var xAngle: Double = 22.5
     private var scale: Float = 6f
@@ -44,11 +45,11 @@ class BlockRenderTestScreen(val entry: MutationEntry, val blueprint: MutationBlu
         super.init()
 
         TextWidget(Text.of("Blueprint").withColor(TextColor.WHITE)).apply {
-            setPosition(this@BlockRenderTestScreen.width / 2 - this.width / 2, 10)
+            setPosition(this@MutationViewerScreen.width / 2 - this.width / 2, 10)
             addRenderableOnly(this)
         }
         TextWidget(Text.of(entry.name).withColor(entry.rarity.color)).apply {
-            setPosition(this@BlockRenderTestScreen.width / 2 - this.width / 2, 20)
+            setPosition(this@MutationViewerScreen.width / 2 - this.width / 2, 20)
             addRenderableOnly(this)
         }
     }
@@ -72,12 +73,12 @@ class BlockRenderTestScreen(val entry: MutationEntry, val blueprint: MutationBlu
     @Module
     companion object {
         @Subscription
-        fun command(event: RegisterCommandsEvent) {
-            event.register("tot") {
+        fun command(event: RegisterSkyOceanCommandEvent) {
+            event.register("mutation") {
                 thenCallback("name", StringArgumentType.word(), IterableSuggestionProvider(MutationData.mutations.map { it.name })) {
                     val name = argument<String>("name")
                     val mutation = MutationData.mutations.find { it.name == name }!!
-                    McClient.setScreenAsync { BlockRenderTestScreen(mutation, mutation.blueprint!!) }
+                    McClient.setScreenAsync { MutationViewerScreen(mutation, mutation.blueprint!!) }
                 }
             }
         }

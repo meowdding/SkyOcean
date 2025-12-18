@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.garden.mutations
+package me.owdding.skyocean.utils.rendering
 
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
