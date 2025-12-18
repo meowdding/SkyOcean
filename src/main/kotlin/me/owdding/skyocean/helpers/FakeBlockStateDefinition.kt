@@ -1,5 +1,4 @@
-//? if TODO {
-/*package me.owdding.skyocean.helpers
+package me.owdding.skyocean.helpers
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
@@ -14,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState
 import kotlin.jvm.optionals.getOrNull
 
 //? if = 1.21.5
-/^import net.fabricmc.fabric.api.renderer.v1.material.BlendMode^/
+/*import net.fabricmc.fabric.api.renderer.v1.material.BlendMode*/
 
 class FakeBlockStateDefinition(
     val model: BlockModelDefinition,
@@ -25,7 +24,15 @@ class FakeBlockStateDefinition(
 
     fun getRoots(block: Block): Map<BlockState, BlockStateModel.UnbakedRoot> {
         if (roots == null) {
-            roots = model.instantiate(block.stateDefinition) { block.builtInRegistryHolder().key().location().toString() }
+            roots = model.instantiate(block.stateDefinition) {
+                block.builtInRegistryHolder()
+                    .key()
+                    //? if > 1.21.10 {
+                    .identifier()
+                    //?} else
+                    /*.location()*/
+                    .toString()
+            }
         }
         return roots!!
     }
@@ -44,5 +51,3 @@ class FakeBlockStateDefinition(
         }
     }
 }
-
-*///?}

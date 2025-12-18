@@ -1,5 +1,4 @@
-//? if TODO {
-/*package me.owdding.skyocean.helpers
+package me.owdding.skyocean.helpers
 
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadTransform
@@ -18,10 +17,10 @@ import net.minecraft.world.level.block.state.BlockState
 import java.util.function.Predicate
 //? if = 1.21.5 {
 
-/^import net.fabricmc.fabric.api.renderer.v1.material.BlendMode
+/*import net.fabricmc.fabric.api.renderer.v1.material.BlendMode
 import net.fabricmc.fabric.api.renderer.v1.Renderer
 
-^///?} else {
+*///?} else {
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer
 
 enum class BlendMode {
@@ -35,7 +34,7 @@ enum class BlendMode {
     fun toSectionLayer(): ChunkSectionLayer? = when (this) {
         DEFAULT -> null
         SOLID -> ChunkSectionLayer.SOLID
-        CUTOUT_MIPPED -> ChunkSectionLayer.CUTOUT_MIPPED
+        CUTOUT_MIPPED -> /*? if > 1.21.10 {*/ ChunkSectionLayer.CUTOUT /*?} else {*//* ChunkSectionLayer.CUTOUT_MIPPED *//*?}*/
         CUTOUT -> ChunkSectionLayer.CUTOUT
         TRANSLUCENT -> ChunkSectionLayer.TRANSLUCENT
     }
@@ -50,13 +49,13 @@ data class FakeBlockModelEntry(
 
     val transform: QuadTransform by lazy {
         //? if = 1.21.5
-        /^val materials = Renderer.get().materialFinder()^/
+        /*val materials = Renderer.get().materialFinder()*/
         if (blend != null) {
             QuadTransform { quad ->
                 //? if > 1.21.5 {
                 quad.renderLayer(blend.toSectionLayer())
                 //?} else
-                /^quad.material(materials.copyFrom(quad.material()).blendMode(blend).find())^/
+                /*quad.material(materials.copyFrom(quad.material()).blendMode(blend).find())*/
                 true
             }
         } else {
@@ -131,5 +130,3 @@ class FakeBlockUnbakedModel(
     }
 
 }
-
-*///?}

@@ -1,5 +1,4 @@
-//? if TODO {
-/*package me.owdding.skyocean.helpers
+package me.owdding.skyocean.helpers
 
 import com.google.gson.JsonParser
 import com.mojang.logging.LogUtils
@@ -20,7 +19,7 @@ import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import net.minecraft.server.packs.resources.PreparableReloadListener
 
 //?} else
-/^import net.minecraft.server.packs.resources.ResourceManager^/
+/*import net.minecraft.server.packs.resources.ResourceManager*/
 
 typealias FakeBlockEntry = Pair<Identifier, (BlockState, BlockPos) -> Boolean>
 typealias FakeBlockUnbakedEntry = Pair<FakeBlockStateDefinition, (BlockState, BlockPos) -> Boolean>
@@ -52,7 +51,7 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<Identifier, FakeBlockStateD
     fun init(manager: PreparableReloadListener.SharedState, executor: Executor): CompletableFuture<Map<Identifier, FakeBlockStateDefinition>> {
         val manager = manager.resourceManager()
         //?} else
-        /^fun init(manager:  ResourceManager, executor: Executor): CompletableFuture<Map<Identifier, FakeBlockStateDefinition>> {^/
+        /*fun init(manager:  ResourceManager, executor: Executor): CompletableFuture<Map<Identifier, FakeBlockStateDefinition>> {*/
         fakeBlocks.clear()
         RegisterFakeBlocksEvent(this::register).post(SkyBlockAPI.eventBus)
 
@@ -100,5 +99,3 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<Identifier, FakeBlockStateD
     }
 
 }
-
-*///?}
