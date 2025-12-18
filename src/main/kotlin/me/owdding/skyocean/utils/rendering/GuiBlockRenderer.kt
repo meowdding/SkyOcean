@@ -58,7 +58,7 @@ class GuiBlockRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictur
     }
 
     override fun getTextureLabel(): String = "skyocean_gui_block_renderer"
-    override fun getTranslateY(height: Int, guiScale: Int): Float = height * 0.6f
+    override fun getTranslateY(height: Int, guiScale: Int): Float = height * 0.55f
 }
 
 data class GuiBlockRenderState(

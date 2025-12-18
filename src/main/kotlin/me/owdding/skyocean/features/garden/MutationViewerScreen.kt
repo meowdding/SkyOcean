@@ -1,6 +1,10 @@
 package me.owdding.skyocean.features.garden
 
 import com.mojang.brigadier.arguments.StringArgumentType
+import earth.terrarium.olympus.client.components.buttons.Button
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
+import earth.terrarium.olympus.client.constants.MinecraftColors
+import earth.terrarium.olympus.client.ui.UIIcons
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.displays.Alignment
@@ -26,7 +30,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.math.abs
 
 class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlueprint) : MeowddingScreen() {
-    private var yAngle: Double = 45.0
+    private var yAngle: Double = 65.0
     private var xAngle: Double = 22.5
     private var scale: Float = 6f
 
@@ -50,13 +54,34 @@ class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlue
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
-        scale = (scale + scrollY.toFloat()).coerceAtLeast(2f)
+        scale = (scale + scrollY.toFloat()).coerceIn(2f, 13f)
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
     }
 
     override fun tick() {
         super.tick()
         blueprint.tick()
+    }
+
+    override fun init() {
+        Button().apply {
+            setPosition(5, 5)
+            setSize(10, 10)
+            withRenderer(
+                WidgetRenderers.layered(
+                    WidgetRenderers.icon<Button>(UIIcons.LAYOUT).withColor(MinecraftColors.WHITE).withPadding(2),
+                ),
+            )
+            withTexture(null)
+            withCallback {
+                yAngle = 65.0
+                xAngle = 22.5
+                scale = 6f
+            }
+            addRenderableWidget(this)
+        }
+
+        super.init()
     }
 
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
