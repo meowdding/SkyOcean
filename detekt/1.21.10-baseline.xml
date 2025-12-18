@@ -100,7 +100,7 @@
     <ID>EmptyFunctionBlock:SkyOceanModelProvider.kt:SkyOceanModelProvider${}</ID>
     <ID>EnumWrapping:ChatUtils.kt:ComponentIcon</ID>
     <ID>EnumWrapping:ItemSource.kt:ItemSources</ID>
-    <ID>EnumWrapping:MinecraftColor.kt:MinecraftColor</ID>
+    <ID>EnumWrapping:MinecraftColor.kt:MinecraftColor : Translatable</ID>
     <ID>Filename:CraftHelperData.kt:me.owdding.skyocean.features.recipe.crafthelper.CraftHelperData.kt</ID>
     <ID>Filename:CraftHelperTreeType.kt:me.owdding.skyocean.features.recipe.crafthelper.data.CraftHelperTreeType.kt</ID>
     <ID>Filename:CustomItemStates.kt:me.owdding.skyocean.features.item.custom.data.CustomItemStates.kt</ID>
@@ -143,7 +143,6 @@
     <ID>FunctionExpressionBody:Octree.kt:Octree${ return findLeaf(pos)?.isInside(pos) == true }</ID>
     <ID>FunctionExpressionBody:Octree.kt:Octree${ return root.toString() }</ID>
     <ID>FunctionExpressionBody:OctreeDebugRenderer.kt:OctreeDebugRenderer${ return Mth.frac((multiplier * value.toFloat())) * 0.9f + 0.1f }</ID>
-    <ID>FunctionExpressionBody:RecipeVisitor.kt:RecipeVisitor.Companion${ return when (recipe) { is ForgeRecipe -&gt; ForgeRecipeVisitor is CraftingRecipe -&gt; CraftingRecipeVisitor is KatRecipe -&gt; KatRecipeVisitor else -&gt; null } }</ID>
     <ID>FunctionExpressionBody:RodUpgradesItemSource.kt:RodUpgradesItemSource${ return items.filter { (itemStack) -&gt; itemStack.getData(DataTypes.CATEGORY)?.name?.contains("rod", true) == true } .flatMap { item -&gt; val (itemStack) = item listOfNotNull( itemStack.getData(DataTypes.SINKER), itemStack.getData(DataTypes.HOOK), itemStack.getData(DataTypes.LINE), ).map { (_, id) -&gt; SkyBlockId.item(id) } .map { SimpleTrackedItem(it.toItem(), RodUpgradeItemContext(item)) } } }</ID>
     <ID>FunctionExpressionBody:SearchItemFilter.kt:SearchItemFilter${ return item.cleanName.contains(search, ignoreCase = true) &amp;&amp; item.getRawLore().any { it.contains(search, ignoreCase = true) } }</ID>
     <ID>FunctionExpressionBody:SkyShardsRecipeTree.kt:SkyShardsRecipe${ return SkyShardsTreeResolver.resolve(this, resetLayout, clear) }</ID>
