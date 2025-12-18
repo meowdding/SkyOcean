@@ -2,11 +2,7 @@ package me.owdding.skyocean.repo.mutation
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
-import me.owdding.ktcodecs.Compact
-import me.owdding.ktcodecs.FieldName
-import me.owdding.ktcodecs.GenerateCodec
-import me.owdding.ktcodecs.IncludedCodec
-import me.owdding.ktcodecs.NamedCodec
+import me.owdding.ktcodecs.*
 import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
@@ -26,6 +22,8 @@ import org.joml.Vector3ic
 import org.joml.div
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import kotlin.math.max
+import kotlin.math.min
 
 @Module
 data object MutationData {
@@ -76,6 +74,21 @@ data class MutationBlueprint(
     val map: Map<Vector3ic, BlockSupplier>,
     val set: Set<BlockSupplier>,
 ) {
+    val min = map.keys.reduce { a, b ->
+        Vector3i(
+            min(a.x(), b.x()),
+            min(a.y(), b.y()),
+            min(a.z(), b.z()),
+        )
+    } as Vector3i
+    val max = map.keys.reduce { a, b ->
+        Vector3i(
+            max(a.x(), b.x()),
+            max(a.y(), b.y()),
+            max(a.z(), b.z()),
+        )
+    } as Vector3i
+
     fun tick() {
         set.forEach(BlockSupplier::tick)
     }
