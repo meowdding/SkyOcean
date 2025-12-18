@@ -204,8 +204,7 @@ tasks.processResources {
         "sbapi" to libs.versions.skyblockapi.asProvider().get(),
         "rlib" to versionedCatalog.versions["resourceful.lib"],
         "olympus" to versionedCatalog.versions["olympus"],
-        //"mlib" to libs.versions.meowdding.lib.get(),
-        "mlib" to "*", // TODO: remove once the version in mlib is fixed
+        "mlib" to libs.versions.meowdding.lib.get(),
         "rconfigkt" to libs.versions.rconfigkt.get(),
         "rconfig" to versionedCatalog.versions["resourceful.config"],
         "placeholder_api" to versionedCatalog.versions["placeholders"]
