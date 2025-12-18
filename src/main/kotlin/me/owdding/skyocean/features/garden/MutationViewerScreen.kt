@@ -1,8 +1,9 @@
 package me.owdding.skyocean.features.garden
 
 import com.mojang.brigadier.arguments.StringArgumentType
-import earth.terrarium.olympus.client.components.string.TextWidget
 import me.owdding.ktmodules.Module
+import me.owdding.lib.builder.DisplayFactory
+import me.owdding.lib.displays.Alignment
 import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.lib.utils.suggestions.IterableSuggestionProvider
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
@@ -17,8 +18,8 @@ import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent.Companion.argument
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlueprint) : MeowddingScreen() {
     private var yAngle: Double = 45.0
@@ -41,22 +42,7 @@ class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlue
         blueprint.tick()
     }
 
-    override fun init() {
-        super.init()
-
-        TextWidget(Text.of("Blueprint").withColor(TextColor.WHITE)).apply {
-            setPosition(this@MutationViewerScreen.width / 2 - this.width / 2, 10)
-            addRenderableOnly(this)
-        }
-        TextWidget(Text.of(entry.name).withColor(entry.rarity.color)).apply {
-            setPosition(this@MutationViewerScreen.width / 2 - this.width / 2, 20)
-            addRenderableOnly(this)
-        }
-    }
-
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
-        super.render(graphics, mouseX, mouseY, f)
-
         val bounds = ScreenRectangle(0, 0, width, height).transformMaxBounds(graphics.pose())
         graphics.guiRenderState.submitPicturesInPictureState(
             GuiBlockRenderState(
@@ -68,6 +54,19 @@ class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlue
                 graphics.pose(),
             ),
         )
+
+        DisplayFactory.vertical(3, Alignment.CENTER) {
+            string("Blueprint Preview") {
+                color = TextColor.WHITE
+            }
+            string(entry.name) {
+                color = entry.rarity.color
+            }
+        }.apply {
+            this.render(graphics, this@MutationViewerScreen.width / 2 - this.getWidth() / 2, 20)
+        }
+
+        super.render(graphics, mouseX, mouseY, f)
     }
 
     @Module
