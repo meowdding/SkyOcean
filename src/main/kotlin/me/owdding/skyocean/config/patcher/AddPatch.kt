@@ -5,7 +5,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.SkyOcean
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.utils.json.getPath
 
 @GenerateCodec
@@ -13,7 +13,7 @@ data class AddPatch(
     val path: String,
     val insert: JsonElement,
 ) : Patch {
-    override fun id(): ResourceLocation = ID
+    override fun id(): Identifier = ID
 
     override fun patch(jsonObject: JsonObject) {
         val json = jsonObject.getPath(path.substringBeforeLast("."), true)
@@ -26,6 +26,6 @@ data class AddPatch(
     }
 
     companion object {
-        val ID: ResourceLocation = SkyOcean.id("add")
+        val ID: Identifier = SkyOcean.id("add")
     }
 }

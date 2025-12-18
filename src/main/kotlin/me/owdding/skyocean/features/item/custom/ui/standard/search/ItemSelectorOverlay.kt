@@ -76,8 +76,8 @@ class ItemSelectorOverlay(
         super.render(graphics, mouseX, mouseY, partialTicks)
     }
 
-    override fun resize(minecraft: Minecraft, width: Int, height: Int) {
-        super.resize(minecraft, width, height)
+    override fun resize(/*? if < 1.21.11 {*/ /*minecraft: Minecraft,  *//*?}*/width: Int, height: Int) {
+        super.resize(/*? < 1.21.11 >>*//*minecraft,*/ width, height)
         McClient.runNextTick(this::onClose)
     }
 

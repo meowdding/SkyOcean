@@ -24,8 +24,8 @@ object CompactLevelBarsModifier : AbstractItemModifier() {
         "Skill Related Tasks",
     )
 
-    override fun appliesTo(item: ItemStack): Boolean {
-        return McScreen.self?.title?.stripped in list && item.cleanName.endsWith(" tasks", true)
+    override fun appliesTo(itemStack: ItemStack): Boolean {
+        return McScreen.self?.title?.stripped in list && itemStack.cleanName.endsWith(" tasks", true)
     }
 
     override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {

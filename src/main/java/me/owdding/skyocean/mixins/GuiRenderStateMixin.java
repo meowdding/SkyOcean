@@ -3,7 +3,7 @@ package me.owdding.skyocean.mixins;
 
 import me.owdding.skyocean.utils.rendering.PostEffectApplicator;
 import net.minecraft.client.gui.render.state.GuiRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +23,7 @@ public abstract class GuiRenderStateMixin implements PostEffectApplicator {
     public abstract void blurBeforeThisStratum();
 
     @Unique
-    private ResourceLocation skyocean$currentEffect = null;
+    private Identifier skyocean$currentEffect = null;
 
     @Inject(method = "reset", at = @At("TAIL"))
     private void skyocean$resetPostEffect(CallbackInfo ci) {
@@ -31,14 +31,14 @@ public abstract class GuiRenderStateMixin implements PostEffectApplicator {
     }
 
     @Override
-    public void skyocean$applyPostEffect(@NotNull ResourceLocation id) {
+    public void skyocean$applyPostEffect(@NotNull Identifier id) {
         this.firstStratumAfterBlur = Integer.MAX_VALUE;
         this.blurBeforeThisStratum();
         this.skyocean$currentEffect = id;
     }
 
     @Override
-    public @Nullable ResourceLocation skyocean$getPostEffect() {
+    public @Nullable Identifier skyocean$getPostEffect() {
         return this.skyocean$currentEffect;
     }
 }

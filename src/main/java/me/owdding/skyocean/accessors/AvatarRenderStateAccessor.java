@@ -1,6 +1,8 @@
 package me.owdding.skyocean.accessors;
 
 import java.util.UUID;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import org.jetbrains.annotations.Nullable;
 
 public interface AvatarRenderStateAccessor {
 
@@ -17,8 +19,60 @@ public interface AvatarRenderStateAccessor {
         return null;
     }
 
-    UUID ocean$getUUID();
+    static boolean isSelf(Object renderState) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            return accessor.skyocean$isSelf();
+        }
+        return false;
+    }
+
+    static void setSelf(Object renderState, boolean isSelf) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            accessor.skyocean$setSelf(isSelf);
+        }
+    }
+
+    static boolean isNpc(Object renderState) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            return accessor.skyocean$isNpc();
+        }
+        return false;
+    }
+
+    static void setNpc(Object renderState, boolean isNpc) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            accessor.skyocean$setNpc(isNpc);
+        }
+    }
+
+    @Nullable
+    static LivingEntityRenderState getAnimalState(Object renderState) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            return accessor.skyocean$getAnimalState();
+        }
+        return null;
+    }
+
+    static void setAnimalState(Object renderState, LivingEntityRenderState state) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            accessor.skyocean$setAnimalState(state);
+        }
+    }
 
     void ocean$setUUID(UUID uuid);
+
+    UUID ocean$getUUID();
+
+    void skyocean$setSelf(boolean isSelf);
+
+    boolean skyocean$isSelf();
+
+    void skyocean$setNpc(boolean isNpc);
+
+    boolean skyocean$isNpc();
+
+    LivingEntityRenderState skyocean$getAnimalState();
+
+    void skyocean$setAnimalState(LivingEntityRenderState state);
 
 }

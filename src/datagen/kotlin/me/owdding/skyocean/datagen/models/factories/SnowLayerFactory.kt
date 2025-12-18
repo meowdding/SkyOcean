@@ -9,7 +9,7 @@ import net.minecraft.client.data.models.blockstates.PropertyDispatch
 import net.minecraft.client.data.models.model.ModelTemplate
 import net.minecraft.client.data.models.model.TextureMapping
 import net.minecraft.client.data.models.model.TextureSlot
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -21,8 +21,8 @@ object SnowLayerFactory : BlockModelFactory() {
     override fun create(
         block: Block,
         texture: Block,
-        fakeBlock: ResourceLocation,
-        parent: ResourceLocation?,
+        fakeBlock: Identifier,
+        parent: Identifier?,
         generator: BlockModelGenerators,
         modelGenContext: ModelGenContext,
     ) {
@@ -34,7 +34,7 @@ object SnowLayerFactory : BlockModelFactory() {
                 PropertyDispatch.initial(BlockStateProperties.LAYERS).generate {
                     if (it < 8) {
                         ModelTemplate(
-                            Optional.of(ResourceLocation.withDefaultNamespace("block/snow_height${it * 2}")),
+                            Optional.of(Identifier.withDefaultNamespace("block/snow_height${it * 2}")),
                             Optional.empty(),
                             TextureSlot.TEXTURE,
                             TextureSlot.PARTICLE,
