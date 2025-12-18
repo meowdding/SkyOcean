@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import java.nio.file.Files
@@ -15,9 +15,9 @@ import kotlin.io.path.readText
 
 object ConfigPatches {
 
-    private val registry = mutableMapOf<ResourceLocation, MapCodec<out Patch>>()
+    private val registry = mutableMapOf<Identifier, MapCodec<out Patch>>()
 
-    val CODEC: Codec<Patch> = ResourceLocation.CODEC.dispatch(Patch::id, registry::get)
+    val CODEC: Codec<Patch> = Identifier.CODEC.dispatch(Patch::id, registry::get)
 
     init {
         register(MovePatch.ID, MovePatch.CODEC)
@@ -26,7 +26,7 @@ object ConfigPatches {
         register(AddListPatch.ID, SkyOceanCodecs.AddListPatchCodec)
     }
 
-    fun register(id: ResourceLocation, codec: MapCodec<out Patch>) {
+    fun register(id: Identifier, codec: MapCodec<out Patch>) {
         registry[id] = codec
     }
 

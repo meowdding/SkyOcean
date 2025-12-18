@@ -5,12 +5,12 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.skyocean.SkyOcean
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.utils.json.getPath
 
 data class MovePatch(val from: String, val to: String) : Patch {
     companion object {
-        val ID: ResourceLocation = SkyOcean.id("move")
+        val ID: Identifier = SkyOcean.id("move")
         val CODEC: MapCodec<MovePatch> = RecordCodecBuilder.mapCodec {
             it.group(
                 Codec.STRING.fieldOf("from").forGetter(MovePatch::from),

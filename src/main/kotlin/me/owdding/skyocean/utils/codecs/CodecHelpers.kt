@@ -4,9 +4,6 @@ import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.function.Function
-import kotlin.jvm.optionals.getOrNull
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.lib.helper.TextShaderHolder
 import me.owdding.lib.rendering.text.TextShaders
@@ -16,22 +13,19 @@ import me.owdding.skyocean.utils.PackMetadata
 import net.minecraft.core.BlockPos
 import net.minecraft.core.ClientAsset
 import net.minecraft.network.chat.*
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.network.chat.contents.*
+import net.minecraft.resources.Identifier
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.function.Function
+import kotlin.jvm.optionals.getOrNull
 
 //? if < 1.21.9 {
-/*import net.minecraft.network.chat.contents.KeybindContents
-import net.minecraft.network.chat.contents.NbtContents
-import net.minecraft.network.chat.contents.PlainTextContents
-import net.minecraft.network.chat.contents.ScoreContents
-import net.minecraft.network.chat.contents.SelectorContents
-import net.minecraft.network.chat.contents.TranslatableContents
-
-private val componentTypes = arrayOf(
+/*private val componentTypes = arrayOf(
     PlainTextContents.TYPE,
     TranslatableContents.TYPE,
     KeybindContents.TYPE,
@@ -46,7 +40,25 @@ internal fun createContentCodec(): MapCodec<ComponentContents> = ComponentSerial
     { it!!.type() },
     "type",
 )
-*///?}
+*///?} else {
+
+
+
+
+internal fun createContentCodec(): MapCodec<ComponentContents> {
+    val idMapper = ExtraCodecs.LateBoundIdMapper<String, MapCodec<out ComponentContents>>()
+    idMapper.put("text", PlainTextContents.MAP_CODEC)
+    idMapper.put("translatable", TranslatableContents.MAP_CODEC)
+    idMapper.put("keybind", KeybindContents.MAP_CODEC)
+    idMapper.put("score", ScoreContents.MAP_CODEC)
+    idMapper.put("selector", SelectorContents.MAP_CODEC)
+    idMapper.put("nbt", NbtContents.MAP_CODEC)
+    idMapper.put("object", ObjectContents.MAP_CODEC)
+
+    return ComponentSerialization.createLegacyComponentMatcher(idMapper, ComponentContents::codec, "type")
+}
+
+//?}
 
 val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
 
@@ -60,6 +72,11 @@ object CodecHelpers {
 
     internal inline fun <reified T> list() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
 
+
+    fun <A> unit(defaultValue: A): Codec<A> = unit { defaultValue }
+
+    fun <A> unit(defaultValue: () -> A): Codec<A> = MapCodec.unit<A>(defaultValue).codec()
+
     fun <T> copyOnWriteList(original: Codec<T>): Codec<CopyOnWriteArrayList<T>> = original.listOf().xmap(
         { CopyOnWriteArrayList(it) },
         { it },
@@ -72,7 +89,7 @@ object CodecHelpers {
     val BLOCK_POS_CODEC: Codec<BlockPos> = BlockPos.CODEC
 
     @IncludedCodec
-    val RESOURCE_LOCATION: Codec<ResourceLocation> = ResourceLocation.CODEC
+    val RESOURCE_LOCATION: Codec<Identifier> = Identifier.CODEC
 
     @IncludedCodec
     val COMPONENT_CODEC: Codec<Component> = ComponentSerialization.CODEC
@@ -84,7 +101,7 @@ object CodecHelpers {
     val SKYBLOCK_ID_UNKNOWN: Codec<SkyBlockId> = SkyBlockId.UNKNOWN_CODEC
 
     @IncludedCodec
-    val CLIENT_ASSET_CODEC: Codec<ClientAsset> = ResourceLocation.CODEC.xmap(
+    val CLIENT_ASSET_CODEC: Codec<ClientAsset> = Identifier.CODEC.xmap(
         {
             //? if > 1.21.8 {
             ClientAsset.ResourceTexture(it)

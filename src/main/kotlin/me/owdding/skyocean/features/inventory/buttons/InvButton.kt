@@ -7,7 +7,7 @@ import me.owdding.skyocean.SkyOcean.minecraft
 import me.owdding.skyocean.config.features.inventory.ButtonConfig
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.platform.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -69,7 +69,7 @@ class InvButton(
         return
     }
 
-    fun renderPrevious(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float, sprite: ResourceLocation) {
+    fun renderPrevious(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float, sprite: Identifier) {
         graphics.drawSprite(
             sprite,
             this.x,

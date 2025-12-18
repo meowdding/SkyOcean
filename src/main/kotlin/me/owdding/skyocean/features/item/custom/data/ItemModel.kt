@@ -7,7 +7,7 @@ import me.owdding.skyocean.features.item.custom.ui.standard.search.ModelSearchEn
 import me.owdding.skyocean.features.item.custom.ui.standard.search.SkyBlockModelEntry
 import me.owdding.skyocean.generated.DispatchHelper
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import kotlin.reflect.KClass
@@ -26,7 +26,7 @@ enum class ItemModelType(override val type: KClass<out ItemModel>) : DispatchHel
 
 @GenerateCodec
 data class StaticModel(
-    val location: ResourceLocation,
+    val location: Identifier,
 ) : ItemModel {
     override val type: ItemModelType = ItemModelType.STATIC
     override fun toModelSearchEntry() = ItemModelSearchEntry(location)
@@ -50,6 +50,6 @@ interface ItemModel {
     val type: ItemModelType
 
     fun toModelSearchEntry(): ModelSearchEntry
-    fun getModel(): ResourceLocation
+    fun getModel(): Identifier
     fun resolveToItem(): Item?
 }

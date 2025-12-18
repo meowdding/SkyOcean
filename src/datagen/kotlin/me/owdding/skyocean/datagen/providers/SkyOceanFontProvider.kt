@@ -7,7 +7,7 @@ import net.minecraft.client.gui.font.providers.GlyphProviderDefinition
 import net.minecraft.data.CachedOutput
 import net.minecraft.data.DataProvider
 import net.minecraft.data.PackOutput
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.concurrent.CompletableFuture
 import kotlin.streams.toList
 
@@ -17,7 +17,7 @@ val CODEC = RecordCodecBuilder.create {
     ).apply(it) { it }
 }
 
-abstract class SkyOceanFontProvider(val output: PackOutput, val id: ResourceLocation) : DataProvider {
+abstract class SkyOceanFontProvider(val output: PackOutput, val id: Identifier) : DataProvider {
     val fontPathProvider: PackOutput.PathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "font")
 
     abstract fun SkyOceanFontProviderHolder.create()
@@ -35,7 +35,7 @@ abstract class SkyOceanFontProvider(val output: PackOutput, val id: ResourceLoca
             glyphProvider.add(SpaceProviderDefinitionBuilder().apply(init).build())
         }
 
-        fun bitmap(file: ResourceLocation, height: Int, ascent: Int = 7, init: BitMapProviderDefinitionBuilder.() -> Unit) {
+        fun bitmap(file: Identifier, height: Int, ascent: Int = 7, init: BitMapProviderDefinitionBuilder.() -> Unit) {
             glyphProvider.add(BitMapProviderDefinitionBuilder(file, height, ascent).apply(init).build())
         }
     }
@@ -45,7 +45,7 @@ abstract class SkyOceanFontProvider(val output: PackOutput, val id: ResourceLoca
     }
 
     data class BitMapProviderDefinitionBuilder(
-        val file: ResourceLocation,
+        val file: Identifier,
         val height: Int,
         val ascent: Int,
         val grid: MutableList<List<Int>> = mutableListOf(),

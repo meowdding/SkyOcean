@@ -5,7 +5,7 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils.readAsJson
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.getApiId
@@ -22,7 +22,7 @@ interface SkyblockTagKey<T> {
     val tag: Set<String>
     fun load(): Set<String> = load(toPath(location)).mapTo(HashSet()) { it.lowercase() }
 
-    fun toPath(resourceLocation: ResourceLocation) = "data/${resourceLocation.namespace}/tags/skyblock/${resourceLocation.path}.json"
+    fun toPath(resourceLocation: Identifier) = "data/${resourceLocation.namespace}/tags/skyblock/${resourceLocation.path}.json"
 
     companion object {
         private fun getResourcePaths(path: String) = FabricLoader.getInstance().allMods.mapNotNull { mod -> mod.findPath(path).getOrNull() }
@@ -38,13 +38,13 @@ interface SkyblockTagKey<T> {
 
     }
 
-    val location: ResourceLocation
+    val location: Identifier
     operator fun contains(value: T): Boolean
 }
 
 interface BaseSkyblockItemTagKey : SkyblockTagKey<ItemStack> {
 
-    override fun toPath(resourceLocation: ResourceLocation) = super.toPath(resourceLocation.withPrefix("item/"))
+    override fun toPath(resourceLocation: Identifier) = super.toPath(resourceLocation.withPrefix("item/"))
     override operator fun contains(value: ItemStack) = value.getSkyBlockId()?.cleanId?.lowercase() in this.tag ||
         value.getApiId()?.lowercase() in this.tag ||
         value.getSkyBlockId()?.let { it.cleanId in this.tag || it.skyblockId in this.tag } == true

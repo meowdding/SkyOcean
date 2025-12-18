@@ -1,0 +1,54 @@
+[identifier]
+type = "regex"
+condition = "< 1.21.11"
+regex = "import net.minecraft.resources.Identifier(?!;)"
+to = "import net.minecraft.resources.ResourceLocation as Identifier"
+reverseRegex = "import net.minecraft.resources.ResourceLocation as Identifier"
+reverse = "import net.minecraft.resources.Identifier"
+
+[named_identifier_temp]
+type = "string"
+condition = "< 1.21.11"
+from = "Identifier"
+to = "ResourceLocation"
+
+[named_identifier]
+type = "string"
+condition = "< 1.21.11"
+from = "Identifier"
+to = "ResourceLocation"
+named = true
+
+[identifier_pattern]
+type = "regex"
+condition = "< 1.21.11"
+regex = "import net.minecraft.util.IdentifierPattern(?!;)"
+to = "import net.minecraft.util.ResourceLocationPattern as IdentifierPattern"
+reverseRegex = "import net.minecraft.util.ResourceLocationPattern as IdentifierPattern"
+reverse = "import net.minecraft.util.IdentifierPattern"
+
+[criterion]
+type = "string"
+condition = "< 1.21.11"
+from = "import net.minecraft.advancements.criterion"
+to = "import net.minecraft.advancements.critereon"
+
+[render_type]
+type = "string"
+condition = "< 1.21.11"
+from = "import net.minecraft.client.renderer.rendertype.RenderType"
+to = "import net.minecraft.client.renderer.RenderType"
+
+[util]
+type = "string"
+condition = "< 1.21.11"
+from = "net.minecraft.util.Util"
+to = "net.minecraft.Util"
+
+[replacements]
+type = "regex"
+condition = "< 1.21.11"
+regex = "import net.minecraft.client.renderer.(rendertype.)?RenderTypes(?!;)"
+to = "import net.minecraft.client.renderer.RenderType as RenderTypes"
+reverseRegex = "import net.minecraft.client.renderer.(rendertype.)?RenderType as RenderTypes"
+reverse = "import net.minecraft.client.renderer.rendertype.RenderTypes"
