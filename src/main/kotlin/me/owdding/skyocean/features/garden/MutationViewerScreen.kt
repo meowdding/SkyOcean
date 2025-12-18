@@ -4,12 +4,12 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.constants.MinecraftColors
-import earth.terrarium.olympus.client.ui.UIIcons
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.displays.Alignment
 import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.lib.utils.suggestions.IterableSuggestionProvider
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.repo.mutation.BlockSupplier
 import me.owdding.skyocean.repo.mutation.MutationBlueprint
@@ -67,11 +67,7 @@ class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlue
         Button().apply {
             setPosition(5, 5)
             setSize(10, 10)
-            withRenderer(
-                WidgetRenderers.layered(
-                    WidgetRenderers.icon<Button>(UIIcons.LAYOUT).withColor(MinecraftColors.WHITE).withPadding(2),
-                ),
-            )
+            withRenderer(WidgetRenderers.icon<Button>(SkyOcean.id("refresh.png")).withColor(MinecraftColors.WHITE).withPadding(2))
             withTexture(null)
             withCallback {
                 yAngle = 65.0
