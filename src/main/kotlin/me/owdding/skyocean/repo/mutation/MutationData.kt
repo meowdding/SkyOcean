@@ -2,21 +2,27 @@ package me.owdding.skyocean.repo.mutation
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
-import me.owdding.ktcodecs.*
+import me.owdding.ktcodecs.Compact
+import me.owdding.ktcodecs.FieldName
+import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.ktcodecs.IncludedCodec
+import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.EnumCodec
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.repo.models.AlternatingModel
+import me.owdding.skyocean.repo.models.CustomModels
+import me.owdding.skyocean.repo.models.SkyOceanBlockModel
+import me.owdding.skyocean.repo.models.SkyOceanModel
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.lookup
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import net.minecraft.commands.arguments.blocks.BlockStateParser
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.resources.Identifier
 import org.joml.Vector3i
 import org.joml.Vector3ic
 import org.joml.div
@@ -39,40 +45,14 @@ data class MutationEntry(
     val texture: MutationTexture,
     val rarity: SkyBlockRarity,
     val size: MutationSize,
-    @Compact val surface: List<ResourceLocation>,
-    @FieldName("spreading_conditions") val spreadingCondition: Map<ResourceLocation, Int>,
+    @Compact val surface: List<Identifier>,
+    @FieldName("spreading_conditions") val spreadingCondition: Map<Identifier, Int>,
     val blueprint: MutationBlueprint?,
 )
 
-interface BlockSupplier {
-    val block: BlockState
-    fun tick()
-
-    companion object {
-        val EMPTY = SingleBlockSupplier(Blocks.AIR.defaultBlockState())
-    }
-
-    data class MultiBlockSupplier(
-        val entries: List<BlockState>,
-    ) : BlockSupplier {
-        var ticks: Int = 0
-        override fun tick() {
-            ticks++
-        }
-
-        override val block: BlockState get() = entries[Math.floorMod(ticks / 20, entries.size)]
-    }
-
-    data class SingleBlockSupplier(
-        override val block: BlockState,
-    ) : BlockSupplier {
-        override fun tick() {}
-    }
-}
-
 data class MutationBlueprint(
-    val map: Map<Vector3ic, BlockSupplier>,
-    val set: Set<BlockSupplier>,
+    val map: Map<Vector3ic, SkyOceanModel>,
+    val set: Set<SkyOceanModel>,
 ) {
     val min = map.keys.reduce { a, b ->
         Vector3i(
@@ -80,17 +60,17 @@ data class MutationBlueprint(
             min(a.y(), b.y()),
             min(a.z(), b.z()),
         )
-    } as Vector3i
+    }
     val max = map.keys.reduce { a, b ->
         Vector3i(
             max(a.x(), b.x()),
             max(a.y(), b.y()),
             max(a.z(), b.z()),
         )
-    } as Vector3i
+    }
 
     fun tick() {
-        set.forEach(BlockSupplier::tick)
+        set.forEach(SkyOceanModel::tick)
     }
 
     companion object : MeowddingLogger by SkyOcean.featureLogger("mutation_blueprint") {
@@ -100,25 +80,28 @@ data class MutationBlueprint(
         @IncludedCodec
         val codec: Codec<MutationBlueprint> = SkyOceanCodecs.CompletableMutationBlueprintCodec.codec().xmap(
             {
-                val map = mutableMapOf<Vector3ic, BlockSupplier>()
+                val map = mutableMapOf<Vector3ic, SkyOceanModel>()
                 val palette = it.palette.mapValues { (_, values) ->
                     val list = values.map {
                         runCatching {
                             if (it.startsWith("skyocean:")) {
-                                return@map Blocks.FROGSPAWN.defaultBlockState()
+                                return@map CustomModels.models.getOrElse(it.substringAfter(":")) {
+                                    warn("Expected custom model ${it.substringAfter(":")}")
+                                    SkyOceanBlockModel.EMPTY
+                                }
                             }
 
-                            BlockStateParser.parseForBlock(Registries.BLOCK.lookup(), it, true).blockState
+                            SkyOceanBlockModel.single(BlockStateParser.parseForBlock(Registries.BLOCK.lookup(), it, true).blockState)
                         }.getOrElse { throwable ->
-                            warn("Failed to parse blueprint placeholder balue $it", throwable)
-                            Blocks.AIR.defaultBlockState()
+                            warn("Failed to parse blueprint placeholder $it", throwable)
+                            SkyOceanBlockModel.EMPTY
                         }
                     }
 
                     if (list.size == 1) {
-                        BlockSupplier.SingleBlockSupplier(list[0])
+                        list[0]
                     } else {
-                        BlockSupplier.MultiBlockSupplier(list)
+                        AlternatingModel(list)
                     }
                 }
 
@@ -132,7 +115,7 @@ data class MutationBlueprint(
                             if (placeholder == " ") continue
                             val blocks = palette[placeholder] ?: run {
                                 warn("Unknown placeholder $placeholder!")
-                                BlockSupplier.EMPTY
+                                SkyOceanBlockModel.EMPTY
                             }
 
                             map[Vector3i(x - halfSize.x, y, z - halfSize.z)] = blocks

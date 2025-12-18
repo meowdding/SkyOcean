@@ -11,7 +11,8 @@ import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.lib.utils.suggestions.IterableSuggestionProvider
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
-import me.owdding.skyocean.repo.mutation.BlockSupplier
+import me.owdding.skyocean.repo.models.SkyOceanBlockModel
+import me.owdding.skyocean.repo.models.SkyOceanModel
 import me.owdding.skyocean.repo.mutation.MutationBlueprint
 import me.owdding.skyocean.repo.mutation.MutationData
 import me.owdding.skyocean.repo.mutation.MutationEntry
@@ -34,14 +35,14 @@ class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlue
     private var xAngle: Double = 22.5
     private var scale: Float = 6f
 
-    private val floor: Map<Vector3i, BlockSupplier> = buildMap {
-        val min = blueprint.min.add(-1, -1, -1)
-        val max = blueprint.max.add(1, -1, 1)
+    private val floor: Map<Vector3i, SkyOceanModel> = buildMap {
+        val min = blueprint.min.add(-1, -1, -1, Vector3i())
+        val max = blueprint.max.add(1, -1, 1, Vector3i())
         for (x in min.x()..max.x()) {
             for (z in min.z()..max.z()) {
                 val pos = Vector3i(x, min.y(), z)
                 val block = Blocks.WHITE_CONCRETE.defaultBlockState().takeIf { (abs(x) + abs(z)) % 2 == 0 } ?: Blocks.LIGHT_GRAY_CONCRETE.defaultBlockState()
-                put(pos, BlockSupplier.SingleBlockSupplier(block))
+                put(pos, SkyOceanBlockModel.single(block))
             }
         }
     }
@@ -67,7 +68,7 @@ class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlue
         Button().apply {
             setPosition(5, 5)
             setSize(10, 10)
-            withRenderer(WidgetRenderers.icon<Button>(SkyOcean.id("refresh.png")).withColor(MinecraftColors.WHITE).withPadding(2))
+            withRenderer(WidgetRenderers.icon<Button>(SkyOcean.id("refresh")).withColor(MinecraftColors.WHITE).withPadding(2))
             withTexture(null)
             withCallback {
                 yAngle = 65.0
@@ -84,7 +85,7 @@ class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlue
         val bounds = ScreenRectangle(0, 0, width, height).transformMaxBounds(graphics.pose())
         graphics.guiRenderState.submitPicturesInPictureState(
             GuiBlockRenderState(
-                blueprint.map + floor,
+                floor + blueprint.map,
                 Vec3(xAngle, yAngle, 0.0),
                 scale,
                 bounds,

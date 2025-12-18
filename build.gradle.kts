@@ -179,6 +179,7 @@ compactingResources {
         "skyshards_data.json"
     )
     compactToArray("mutations")
+    compactToObject("custom_models")
 }
 
 tasks.withType<JavaCompile>().configureEach {

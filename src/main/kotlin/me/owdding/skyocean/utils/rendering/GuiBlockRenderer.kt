@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import me.owdding.lib.rendering.MeowddingPipState
-import me.owdding.skyocean.repo.mutation.BlockSupplier
+import me.owdding.skyocean.repo.models.SkyOceanModel
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.renderer.LightTexture
@@ -32,7 +32,7 @@ class GuiBlockRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictur
 
                 val bufferSource = McClient.self.renderBuffers().bufferSource()
 
-                blocks.forEach { (pos, supplier) ->
+                blocks.forEach { (pos, model) ->
                     poseStack.pushPop {
                         poseStack.translate(
                             pos.x().toFloat(),
@@ -43,13 +43,7 @@ class GuiBlockRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictur
                         poseStack.translate(-0.5f, -0.5f, -0.5f)
 
                         McClient.self.gameRenderer.lighting.setupFor(Lighting.Entry.ITEMS_FLAT)
-                        McClient.self.blockRenderer.renderSingleBlock(
-                            supplier.block,
-                            poseStack,
-                            bufferSource,
-                            LightTexture.FULL_BRIGHT,
-                            OverlayTexture.NO_OVERLAY,
-                        )
+                        model.render(poseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY)
                     }
                 }
                 bufferSource.endBatch()
@@ -62,7 +56,7 @@ class GuiBlockRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictur
 }
 
 data class GuiBlockRenderState(
-    val blocks: Map<Vector3ic, BlockSupplier>,
+    val blocks: Map<Vector3ic, SkyOceanModel>,
     val rotation: Vec3 = Vec3(22.5, 45.0, 0.0),
     override val scale: Float = 20f,
     override val bounds: ScreenRectangle,

@@ -10,7 +10,7 @@ import me.owdding.lib.rendering.text.TextShaders
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.PackMetadata
-import net.minecraft.Util
+import net.minecraft.util.Util
 import net.minecraft.core.BlockPos
 import net.minecraft.core.ClientAsset
 import net.minecraft.network.chat.Component
@@ -22,6 +22,10 @@ import net.minecraft.network.chat.contents.*
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
+import org.joml.Quaternionf
+import org.joml.Quaternionfc
+import org.joml.Vector3f
+import org.joml.Vector3fc
 import org.joml.Vector3i
 import org.joml.Vector3ic
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
@@ -111,6 +115,17 @@ object CodecHelpers {
     val VECTOR_3IC: Codec<Vector3ic> = Codec.INT.listOf().comapFlatMap(
         { list -> Util.fixedSize(list, 3).map { Vector3i(it[0], it[1], it[2]) } },
         { listOf(it.x(), it.y(), it.z()) },
+    )
+
+    @IncludedCodec
+    val VECTOR_3FC: Codec<Vector3fc> = Codec.FLOAT.listOf().comapFlatMap(
+        { list -> Util.fixedSize(list, 3).map { Vector3f(it[0], it[1], it[2]) } },
+        { listOf(it.x(), it.y(), it.z()) },
+    )
+    @IncludedCodec
+    val QUATERNIONFC: Codec<Quaternionfc> = Codec.FLOAT.listOf().comapFlatMap(
+        { list -> Util.fixedSize(list, 4).map { Quaternionf(it[0], it[1], it[2], it[3]) } },
+        { listOf(it.x(), it.y(), it.z(), it.w()) },
     )
 
     @IncludedCodec

@@ -16,6 +16,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.platform.identifier
 import tech.thatgravyboat.skyblockapi.utils.extentions.filterKeysNotNull
 import tech.thatgravyboat.skyblockapi.utils.json.JsonArray
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
@@ -97,7 +98,7 @@ object SerializeMutation {
                     map.filterKeysNotNull().forEach { (state, string) ->
                         this[string.toString()] = BlockStateParser.serialize(state).takeUnless {
                             state.block.defaultBlockState() == state
-                        } ?: state.block.builtInRegistryHolder().key().location().toString()
+                        } ?: state.block.builtInRegistryHolder().key().identifier.toString()
                     }
                 },
             )
