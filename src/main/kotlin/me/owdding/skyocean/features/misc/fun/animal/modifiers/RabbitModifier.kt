@@ -8,7 +8,7 @@ import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.RabbitRenderState
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.Rabbit
+import net.minecraft.world.entity.animal.rabbit.Rabbit
 
 @RegisterAnimalModifier
 object RabbitModifier : AnimalModifier<Rabbit, RabbitRenderState> {

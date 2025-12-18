@@ -12,9 +12,9 @@ import net.minecraft.client.renderer.entity.state.CatRenderState
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.Cat
-import net.minecraft.world.entity.animal.CatVariant
-import net.minecraft.world.entity.animal.CatVariants
+import net.minecraft.world.entity.animal.feline.Cat
+import net.minecraft.world.entity.animal.feline.CatVariant
+import net.minecraft.world.entity.animal.feline.CatVariants
 import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier

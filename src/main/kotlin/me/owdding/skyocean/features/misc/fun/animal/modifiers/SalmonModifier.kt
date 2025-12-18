@@ -8,7 +8,7 @@ import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.SalmonRenderState
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.Salmon
+import net.minecraft.world.entity.animal.fish.Salmon
 
 @RegisterAnimalModifier
 object SalmonModifier : AnimalModifier<Salmon, SalmonRenderState> {

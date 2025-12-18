@@ -2,7 +2,7 @@ package me.owdding.skyocean.mixins;
 
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
@@ -12,6 +12,6 @@ import java.util.Map;
 public interface ModelManagerAccessor {
 
     @Accessor("bakedItemStackModels")
-    Map<ResourceLocation, ItemModel> bakedItemModels();
+    Map<Identifier, ItemModel> bakedItemModels();
 
 }

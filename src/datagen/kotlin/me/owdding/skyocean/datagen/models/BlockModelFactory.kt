@@ -7,11 +7,11 @@ import net.minecraft.client.data.models.model.ModelInstance
 import net.minecraft.client.data.models.model.ModelTemplate
 import net.minecraft.client.data.models.model.TextureMapping
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.level.block.Block
 import java.util.*
 
-val savedModels = mutableSetOf<ResourceLocation>()
+val savedModels = mutableSetOf<Identifier>()
 
 abstract class BlockModelFactory {
 
@@ -20,19 +20,19 @@ abstract class BlockModelFactory {
     abstract fun create(
         block: Block,
         texture: Block,
-        fakeBlock: ResourceLocation,
-        parent: ResourceLocation?,
+        fakeBlock: Identifier,
+        parent: Identifier?,
         generator: BlockModelGenerators,
         modelGenContext: ModelGenContext,
     )
 
     fun ModelTemplate.plainVariant(
-        location: ResourceLocation,
+        location: Identifier,
         block: Block,
         textureMapping: TextureMapping,
     ): MultiVariant {
         val apply = this.getDefaultModelLocation(block).let {
-            ResourceLocation.fromNamespaceAndPath(
+            Identifier.fromNamespaceAndPath(
                 location.namespace,
                 it.path.replace(BuiltInRegistries.BLOCK.getKey(block).path, location.path),
             )
@@ -40,11 +40,11 @@ abstract class BlockModelFactory {
         return BlockModelGenerators.plainVariant(create(apply, textureMapping, ::modelOutput))
     }
 
-    fun getBlockModelLocation(location: ResourceLocation, suffix: String = ""): ResourceLocation = location.withPrefix("block/").withSuffix(suffix)
+    fun getBlockModelLocation(location: Identifier, suffix: String = ""): Identifier = location.withPrefix("block/").withSuffix(suffix)
 
-    fun getModelLocation(block: Block): ResourceLocation = BuiltInRegistries.BLOCK.getKey(block).withPrefix("block/")
+    fun getModelLocation(block: Block): Identifier = BuiltInRegistries.BLOCK.getKey(block).withPrefix("block/")
 
-    fun createCopy(block: Block, fakeBlock: ResourceLocation, parent: ResourceLocation?): ResourceLocation = ModelTemplate(
+    fun createCopy(block: Block, fakeBlock: Identifier, parent: Identifier?): Identifier = ModelTemplate(
         parent.asOptional().map { getBlockModelLocation(it) }.orElse { getModelLocation(block) },
         Optional.empty(),
     ).create(
@@ -56,7 +56,7 @@ abstract class BlockModelFactory {
     fun <T : Any> T?.asOptional(): Optional<T> = Optional.ofNullable(this)
     fun <T : Any> Optional<T>.orElse(supplier: () -> T): Optional<T> = this.or { supplier().asOptional() }
 
-    fun modelOutput(location: ResourceLocation, model: ModelInstance) {
+    fun modelOutput(location: Identifier, model: ModelInstance) {
         if (savedModels.contains(location)) {
             SkyOcean.info("Model with id $location already registered, skipping!")
             return

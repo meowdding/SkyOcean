@@ -7,10 +7,10 @@ import net.minecraft.client.renderer.block.model.BlockModelDefinition
 import net.minecraft.data.CachedOutput
 import net.minecraft.data.DataProvider
 import net.minecraft.data.PackOutput.PathProvider
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.concurrent.CompletableFuture
 
-typealias BlockStateEntry = Pair<ResourceLocation, BlockModelDefinitionGenerator>
+typealias BlockStateEntry = Pair<Identifier, BlockModelDefinitionGenerator>
 
 data class FakeBlockStateCollector(val list: MutableList<BlockStateEntry>, val saveBlockStates: Boolean) {
     fun save(cachedOutput: CachedOutput, pathProvider: PathProvider): CompletableFuture<*> {
@@ -21,7 +21,7 @@ data class FakeBlockStateCollector(val list: MutableList<BlockStateEntry>, val s
 }
 
 data class ModelGenContext(private val fakeBlockStateCollector: FakeBlockStateCollector, val output: FabricDataOutput) {
-    fun collectState(location: ResourceLocation, generator: BlockModelDefinitionGenerator) {
+    fun collectState(location: Identifier, generator: BlockModelDefinitionGenerator) {
         fakeBlockStateCollector.list.add(location to generator)
     }
 }

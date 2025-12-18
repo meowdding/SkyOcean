@@ -3,12 +3,9 @@ import org.gradle.api.artifacts.ExternalModuleDependencyBundle
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionConstraint
-import org.gradle.api.attributes.AttributeDisambiguationRule
-import org.gradle.api.attributes.MultipleCandidatesDetails
 import org.gradle.api.provider.Provider
 import org.gradle.plugin.use.PluginDependency
 import java.util.*
-import javax.inject.Inject
 
 data class ForwardingVersionCatalog(
     val catalogs: List<VersionCatalog>,
@@ -45,9 +42,3 @@ data class ForwardingVersionCatalog(
 
 internal val entries: MutableMap<Project, ForwardingVersionCatalog> = mutableMapOf()
 val Project.versionedCatalog get() = entries[this] ?: ForwardingVersionCatalog()
-
-data class ClocheDisambiguationRule @Inject constructor(val version: String) : AttributeDisambiguationRule<String> {
-    override fun execute(canidate: MultipleCandidatesDetails<String>) {
-        canidate.closestMatch(version)
-    }
-}

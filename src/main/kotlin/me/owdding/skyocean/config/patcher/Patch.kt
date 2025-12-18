@@ -1,7 +1,7 @@
 package me.owdding.skyocean.config.patcher
 
 import com.google.gson.JsonObject
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.function.UnaryOperator
 
 interface Patch : UnaryOperator<JsonObject> {
@@ -11,7 +11,7 @@ interface Patch : UnaryOperator<JsonObject> {
         return t
     }
 
-    fun id(): ResourceLocation
+    fun id(): Identifier
     fun patch(jsonObject: JsonObject)
 
 }

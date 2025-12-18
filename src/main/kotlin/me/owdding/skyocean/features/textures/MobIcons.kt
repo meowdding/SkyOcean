@@ -11,7 +11,7 @@ import me.owdding.skyocean.utils.Utils.visitSiblings
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener
@@ -36,7 +36,7 @@ object MobIcons {
 
     internal var settings: Map<KnownMobIcon, MobIconSettings> = emptyMap()
 
-    enum class DisplayType(val font: ResourceLocation) {
+    enum class DisplayType(val font: Identifier) {
         NORMAL(MOB_ICONS),
         SHORT(MOB_ICONS_SHORT),
     }
@@ -100,7 +100,7 @@ private object MobIconSettingsListener : SimplePreparableReloadListener<Map<Know
         MobIcons.settings = data
     }
 
-    override fun getFabricId(): ResourceLocation = id("mob_icon_settings")
+    override fun getFabricId(): Identifier = id("mob_icon_settings")
 
 }
 

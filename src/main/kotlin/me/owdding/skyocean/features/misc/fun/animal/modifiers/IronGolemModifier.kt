@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.IronGolemRenderState
 import net.minecraft.world.entity.Crackiness
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.IronGolem
+import net.minecraft.world.entity.animal.golem.IronGolem
 
 @RegisterAnimalModifier
 object IronGolemModifier : AnimalModifier<IronGolem, IronGolemRenderState> {

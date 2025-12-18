@@ -1,6 +1,6 @@
 import kotlin.io.path.*
 
-val versions = listOf("1.21.5", "1.21.8", "1.21.10")
+val versions = listOf("1.21.5", "1.21.8", "1.21.10", "1.21.11")
 
 val finalFile = Path("detekt_output.txt")
 
@@ -8,7 +8,7 @@ var createFakeReportFile = false
 
 versions.map {
     Path("versions/$it/build/reports/detekt") to it
-}.forEach { (path, version) ->
+}.filter { it.first.exists() }.forEach { (path, version) ->
     println("Scanning $path")
     path.listDirectoryEntries("*.sarif").forEach {
         println("Found sarif file $it")

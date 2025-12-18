@@ -1,12 +1,12 @@
 package me.owdding.skyocean.data.profile
 
-import com.mojang.serialization.Codec
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsRecipe
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
@@ -31,7 +31,7 @@ object CraftHelperStorage {
             1 -> SkyOceanCodecs.NormalCraftHelperRecipeCodec.codec().xmap({ it as CraftHelperRecipe }, { it as NormalCraftHelperRecipe })
 
             2 -> SkyOceanCodecs.CraftHelperRecipeCodec.codec()
-            else -> Codec.unit { NormalCraftHelperRecipe(null, 1) }
+            else -> CodecHelpers.unit { NormalCraftHelperRecipe(null, 1) }
         }
     }
 
