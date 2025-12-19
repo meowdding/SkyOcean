@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.minecraft.client.data.models.BlockModelGenerators
 import net.minecraft.data.CachedOutput
 import net.minecraft.data.PackOutput
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.level.block.Block
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import java.util.concurrent.CompletableFuture
@@ -41,8 +41,8 @@ class FakeBlocksProvider(output: FabricDataOutput, saveBlockStates: Boolean = tr
         savedModels.clear()
         factories.forEach { it.generator = blockModelGenerators }
 
-        val fakeBlocks = mutableMapOf<Block, MutableMap<ResourceLocation, Pair<ResourceLocation?, Block>>>()
-        fun register(block: Block, texture: Block, definition: ResourceLocation, parent: ResourceLocation?) {
+        val fakeBlocks = mutableMapOf<Block, MutableMap<Identifier, Pair<Identifier?, Block>>>()
+        fun register(block: Block, texture: Block, definition: Identifier, parent: Identifier?) {
             fakeBlocks.getOrPut(block, ::mutableMapOf)[definition] = (parent to texture)
         }
         collector { block, texture, definition, parent, _ ->

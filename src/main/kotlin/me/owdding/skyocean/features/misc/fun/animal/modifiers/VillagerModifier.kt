@@ -13,10 +13,10 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.npc.Villager
-import net.minecraft.world.entity.npc.VillagerData
-import net.minecraft.world.entity.npc.VillagerProfession
-import net.minecraft.world.entity.npc.VillagerType
+import net.minecraft.world.entity.npc.villager.Villager
+import net.minecraft.world.entity.npc.villager.VillagerData
+import net.minecraft.world.entity.npc.villager.VillagerProfession
+import net.minecraft.world.entity.npc.villager.VillagerType
 import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier

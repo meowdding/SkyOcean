@@ -8,7 +8,7 @@ import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.ParrotRenderState
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.Parrot
+import net.minecraft.world.entity.animal.parrot.Parrot
 
 @RegisterAnimalModifier
 object ParrotModifier : AnimalModifier<Parrot, ParrotRenderState> {
