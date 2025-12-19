@@ -182,12 +182,10 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
         val columns = (width - 5) / 20
         val rows = (height - 5) / 20
 
-        // TODO: move marked to top
         val items = this.trackedAccessories.mapNotNull { accessory ->
             val tierItems = accessory.items.filter(::matchesSearch)
             val hasPrice = AccessoriesSortMode.hasPrice(accessory)
 
-            // TODO: find a way to mark the accessories in some way
             fun createItemDisplay(item: ItemStack): Display {
                 return Displays.item(
                     item,

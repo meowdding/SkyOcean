@@ -60,6 +60,7 @@ object AccessoriesAPI {
 
     fun AccessoryFamily.isDisallowed(): Boolean = isDisallowedOriginFamily(family)
 
+    // TODO: get from repo
     private fun getMpFromRarity(rarity: SkyBlockRarity): Int {
         return when (rarity) {
             COMMON -> 3
