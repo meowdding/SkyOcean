@@ -9,7 +9,10 @@ import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.gizmos.DrawableGizmoPrimitives
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.gizmos.ArrowGizmo
 import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3x2f
 import org.joml.Vector3ic
@@ -24,11 +27,16 @@ class GuiBlockRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictur
     override fun renderToTexture(renderState: GuiBlockRenderState, poseStack: PoseStack) {
         poseStack.pushPop {
             with(renderState) {
-                poseStack.scale(scale, -scale, -scale)
+                poseStack.scale(scale, scale, scale)
 
                 poseStack.mulPose(Axis.XP.rotationDegrees(rotation.x.toFloat()))
                 poseStack.mulPose(Axis.YP.rotationDegrees(rotation.y.toFloat()))
                 poseStack.mulPose(Axis.ZP.rotationDegrees(rotation.z.toFloat()))
+                poseStack.translate(-0.5f, 0.5f, 0.5f)
+
+                val gizmos = DrawableGizmoPrimitives()
+                ArrowGizmo(Vec3.ZERO, Vec3(0.0, 10.0, 0.0), -1, 2.5f).emit(gizmos, 0f)
+                gizmos.render(poseStack, bufferSource, CameraRenderState(), McClient.self.gameRenderer.getProjectionMatrix(110f))
 
                 val bufferSource = McClient.self.renderBuffers().bufferSource()
 
@@ -36,11 +44,10 @@ class GuiBlockRenderer(buffer: MultiBufferSource.BufferSource) : PictureInPictur
                     poseStack.pushPop {
                         poseStack.translate(
                             pos.x().toFloat(),
-                            pos.y().toFloat(),
-                            pos.z().toFloat()
+                            -pos.y().toFloat(),
+                            -pos.z().toFloat(),
                         )
 
-                        poseStack.translate(-0.5f, -0.5f, -0.5f)
 
                         McClient.self.gameRenderer.lighting.setupFor(Lighting.Entry.ITEMS_FLAT)
                         model.render(poseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY)

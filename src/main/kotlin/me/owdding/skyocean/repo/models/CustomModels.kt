@@ -18,6 +18,8 @@ object CustomModels {
     init {
         ID_MAPPER.put("player_head", SkyOceanCodecs.PlayerHeadModelCodec)
         ID_MAPPER.put("block", SkyOceanCodecs.SingleBlockSupplierCodec)
+        ID_MAPPER.put("alternating", SkyOceanCodecs.AlternatingModelCodec)
+        ID_MAPPER.put("composite", SkyOceanCodecs.CompositeModelCodec)
     }
 
     val models: Map<String, SkyOceanModel> = Utils.loadRepoData("custom_models", Codec.unboundedMap(Codec.STRING, CODEC))

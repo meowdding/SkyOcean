@@ -13,6 +13,7 @@ import org.joml.Vector3f
 import org.joml.Vector3fc
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
+import tech.thatgravyboat.skyblockapi.utils.extentions.scaled
 
 @GenerateCodec
 data class ModelTransform(
@@ -48,11 +49,27 @@ interface SkyOceanModel {
     fun emit(poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int)
 }
 
+@GenerateCodec
+data class CompositeModel(
+    val models: List<SkyOceanModel>,
+    override val transform: ModelTransform = ModelTransform.DEFAULT
+) : SkyOceanModel {
+    override val codec: MapCodec<CompositeModel> = SkyOceanCodecs.getMapCodec()
+
+    override fun tick() = models.forEach(SkyOceanModel::tick)
+    override fun emit(poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int) {
+        models.forEach {
+            it.render(poseStack, bufferSource, packedLight, packedOverlay)
+        }
+    }
+}
+
+@GenerateCodec
 data class AlternatingModel(
     val entries: List<SkyOceanModel>,
 ) : SkyOceanModel {
     var ticks: Int = 0
-    override val codec: MapCodec<out SkyOceanModel> = MapCodec.unit { AlternatingModel(listOf()) }
+    override val codec: MapCodec<AlternatingModel> = SkyOceanCodecs.getMapCodec()
 
     override fun tick() {
         ticks++
@@ -75,13 +92,15 @@ sealed interface SkyOceanBlockModel : SkyOceanModel {
     val state: BlockState
 
     override fun emit(poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int) {
-        McClient.self.blockRenderer.renderSingleBlock(
-            state,
-            poseStack,
-            bufferSource,
-            packedLight,
-            packedOverlay,
-        )
+        poseStack.scaled(y = -1, z = -1) {
+            McClient.self.blockRenderer.renderSingleBlock(
+                state,
+                poseStack,
+                bufferSource,
+                packedLight,
+                packedOverlay,
+            )
+        }
     }
 
     companion object {

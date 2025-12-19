@@ -50,7 +50,7 @@ class MutationViewerScreen(val entry: MutationEntry, val blueprint: MutationBlue
 
     override fun mouseDragged(event: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
         xAngle = (xAngle + deltaY).coerceIn(0.0, 60.0)
-        yAngle += deltaX
+        yAngle -= deltaX
         return super.mouseDragged(event, deltaX, deltaY)
     }
 
