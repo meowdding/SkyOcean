@@ -7,15 +7,16 @@ import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.Compact
 import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.CodecUtils
+import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
-import me.owdding.skyocean.utils.Utils.getRealRarity
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
@@ -25,13 +26,14 @@ import net.minecraft.world.item.Items
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockCategory
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
-import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity.*
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
+import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.BINGO
+import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.RIFT
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.Scheduling
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
@@ -43,6 +45,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 import java.util.*
+import kotlin.math.roundToInt
+import kotlin.reflect.KClass
 
 @LateInitModule
 object AccessoriesAPI {
@@ -51,8 +55,7 @@ object AccessoriesAPI {
     internal var ignored: Set<SkyBlockId> = emptySet()
     internal var rarityUpgraded: Map<SkyBlockId, AccessoryRarityUpgraded> = emptyMap()
     internal var disallowedOriginFamilies: Set<String> = emptySet()
-
-    private val HEGEMONY = SkyBlockId.item("hegemony_artifact")
+    internal var magicalPower: MagicalPowerRepoData? = null
 
     fun getFamily(id: SkyBlockId): AccessoryFamily? {
         return families.values.find { it.contains(id) }
@@ -61,26 +64,7 @@ object AccessoriesAPI {
     fun AccessoryFamily.isDisallowed(): Boolean = isDisallowedOriginFamily(family)
 
     // TODO: get from repo
-    private fun getMpFromRarity(rarity: SkyBlockRarity): Int {
-        return when (rarity) {
-            COMMON -> 3
-            UNCOMMON -> 5
-            RARE -> 8
-            EPIC -> 12
-            LEGENDARY -> 16
-            MYTHIC -> 22
-            SPECIAL -> 3
-            VERY_SPECIAL -> 5
-            else -> 1
-        }
-    }
-
-    fun getMp(item: ItemStack): Int {
-        val realRarity = item.getRealRarity() ?: return 1
-        var mp = getMpFromRarity(realRarity)
-        if (item.getSkyBlockId() == HEGEMONY) mp *= 2 // hegemony gives double mp
-        return mp
-    }
+    fun getMp(item: ItemStack): Int = magicalPower?.getMagicalPower(item) ?: 1
 
     private fun calculateIsDisallowedOrigin(family: AccessoryFamily): Boolean {
         return family.flatMapItems().any { id ->
@@ -104,6 +88,7 @@ object AccessoriesAPI {
         families = emptyMap()
         ignored = emptySet()
         rarityUpgraded = emptyMap()
+        magicalPower = null
 
 
         families = Utils.loadRemoteRepoData<AccessoryFamily, List<AccessoryFamily>>("accessories/families", CodecUtils::list)
@@ -124,6 +109,7 @@ object AccessoriesAPI {
         ignored = Utils.loadRemoteRepoData<SkyBlockId, Set<SkyBlockId>>("accessories/ignored_accessories", CodecUtils::set).orEmpty()
         rarityUpgraded = Utils.loadRemoteRepoData<AccessoryRarityUpgraded, List<AccessoryRarityUpgraded>>("accessories/rarity_upgraded", CodecUtils::list)
             ?.associateBy { it.item }.orEmpty()
+        magicalPower = Utils.loadRemoteRepoData<MagicalPowerRepoData>("accessories/magical_power")
 
         disallowedOriginFamilies = families.filterValues(::calculateIsDisallowedOrigin).keys
     }
@@ -261,5 +247,37 @@ data class AccessoryRarityUpgraded(
                 CodecUtils.enumSet(SkyOceanCodecs.getCodec<SkyBlockRarity>()).fieldOf("rarities").forGetter(AccessoryRarityUpgraded::rarities),
             ).apply(it, ::AccessoryRarityUpgraded)
         }
+    }
+}
+
+@GenerateCodec
+data class MagicalPowerRepoData(
+    val rarity: Map<SkyBlockRarity, Int>,
+    val overrides: Map<SkyBlockId, Override>,
+) {
+    fun getMagicalPower(item: ItemStack): Int {
+        val override = overrides[item.getSkyBlockId()]
+        val mp = rarity[item.getData(DataTypes.RARITY)] ?: 0
+
+        return override?.apply(mp) ?: mp
+    }
+}
+
+abstract class Override(val type: OverrideTypes) {
+    abstract fun apply(num: Int): Int
+}
+
+@GenerateCodec
+data class MultiplyOverride(val value: Double) : Override(OverrideTypes.MULTIPLY) {
+    override fun apply(num: Int) = (num * value).roundToInt()
+}
+
+@GenerateDispatchCodec(Override::class)
+enum class OverrideTypes(override val type: KClass<out Override>) : DispatchHelper<Override> {
+    MULTIPLY(MultiplyOverride::class),
+    ;
+
+    companion object {
+        fun getType(id: String) = valueOf(id.uppercase())
     }
 }
