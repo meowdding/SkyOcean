@@ -7,7 +7,7 @@ import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.BoggedRenderState
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.monster.Bogged
+import net.minecraft.world.entity.monster.skeleton.Bogged
 
 @RegisterAnimalModifier
 object BoggedModifier : AnimalModifier<Bogged, BoggedRenderState> {

@@ -7,7 +7,7 @@ import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.SnowGolemRenderState
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.SnowGolem
+import net.minecraft.world.entity.animal.golem.SnowGolem
 
 @RegisterAnimalModifier
 object SnowGolemModifier : AnimalModifier<SnowGolem, SnowGolemRenderState> {

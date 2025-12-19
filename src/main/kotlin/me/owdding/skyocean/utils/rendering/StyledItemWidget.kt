@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.component.DataComponents
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
@@ -128,7 +129,7 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
                 this.entity.isInvisible = true
 
                 val angle = Quaternionf().rotateYXZ(rotation * 0.017453292f, 180 * 0.017453292f, 0f)
-                InventoryScreen.renderEntityInInventory(
+                renderEntityInInventory(
                     graphics,
                     //? if > 1.21.5 {
                     x,
@@ -231,4 +232,34 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
 
     private fun isMouseOverButton(mouseX: Int, mouseY: Int): Boolean = mouseX in buttonX until (buttonX + BUTTON_SIZE) &&
         mouseY in buttonY until (buttonY + BUTTON_SIZE)
+}
+
+@Suppress("SameParameterValue")
+private fun renderEntityInInventory(
+    graphics: GuiGraphics,
+    //? if > 1.21.5 {
+    
+    x0: Int,
+    y0: Int,
+    width: Int,
+    height: Int,
+    //?} else {
+    /*x: Float,
+    y: Float,
+    *///?}
+    scale: Float,
+    translation: Vector3f,
+    rotation: Quaternionf,
+    overrideCameraAngle: Quaternionf?,
+    entity: LivingEntity,
+) {
+    //? if 1.21.5 {
+    /*InventoryScreen.renderEntityInInventory(graphics, x, y, scale, translation, rotation, overrideCameraAngle, entity)
+    *///?} else if < 1.21.11 {
+     /*InventoryScreen.renderEntityInInventory(graphics, x0, y0, width, height, scale, translation, rotation, overrideCameraAngle, entity)
+    *///?} else {
+    val renderState = InventoryScreen.extractRenderState(entity)
+    graphics.submitEntityRenderState(renderState, scale, translation, rotation, overrideCameraAngle, x0, y0, width, height)
+    //?}
+
 }

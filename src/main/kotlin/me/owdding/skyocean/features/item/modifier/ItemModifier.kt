@@ -211,15 +211,15 @@ object ItemModifiers {
         }
     }
 
-    private sealed interface DataMarker<T> {
+    private sealed interface DataMarker<T : Any> {
         companion object {
             val ITEM = DefaultDataMarker<Item>()
             val BACKGROUND_ITEM = DefaultDataMarker<ItemStack>()
             val ITEM_COUNT = DefaultDataMarker<Component>()
         }
 
-        class DefaultDataMarker<T> : DataMarker<T>
-        data class ComponentDataMarker<T>(val component: DataComponentType<T>) : DataMarker<T>
+        class DefaultDataMarker<T : Any> : DataMarker<T>
+        data class ComponentDataMarker<T : Any>(val component: DataComponentType<T>) : DataMarker<T>
     }
 
     @Subscription

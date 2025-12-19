@@ -2,12 +2,7 @@ package me.owdding.skyocean.features.item.custom.ui.standard.search
 
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
-import me.owdding.skyocean.features.item.custom.data.AnimatedSkyblockSkin
-import me.owdding.skyocean.features.item.custom.data.CustomItemData
-import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
-import me.owdding.skyocean.features.item.custom.data.SkyblockModel
-import me.owdding.skyocean.features.item.custom.data.SkyblockSkin
-import me.owdding.skyocean.features.item.custom.data.StaticModel
+import me.owdding.skyocean.features.item.custom.data.*
 import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.utils.Utils.applyCatching
 import me.owdding.skyocean.utils.Utils.itemBuilder
@@ -15,7 +10,7 @@ import me.owdding.skyocean.utils.Utils.set
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import tech.thatgravyboat.skyblockapi.api.remote.api.SimpleItemAPI
@@ -53,10 +48,10 @@ interface ModelSearchEntry {
 }
 
 data class ItemModelSearchEntry(
-    val model: ResourceLocation,
+    val model: Identifier,
 ) : ModelSearchEntry {
 
-    override val name: Component = if (this.model.namespace == ResourceLocation.DEFAULT_NAMESPACE) {
+    override val name: Component = if (this.model.namespace == Identifier.DEFAULT_NAMESPACE) {
         Component.translatableWithFallback(this.model.toLanguageKey(), this.model.path)
     } else {
         Text.of(this.model.toString())
