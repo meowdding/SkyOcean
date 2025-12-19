@@ -11,7 +11,7 @@ import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.commands.VirtualResourceArgument
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.SharedSuggestionProvider
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
@@ -24,7 +24,7 @@ internal fun debugToggle(path: String, description: String = path): DebugToggle 
     return DebugToggle(SkyOcean.id(path), description)
 }
 
-data class DebugToggle(val location: ResourceLocation, val description: String) {
+data class DebugToggle(val location: Identifier, val description: String) {
     init {
         DevUtils.register(this)
     }
@@ -41,7 +41,7 @@ data class DebugToggle(val location: ResourceLocation, val description: String) 
 
 @Module
 internal object DevUtils {
-    internal val states = mutableMapOf<ResourceLocation, Boolean>()
+    internal val states = mutableMapOf<Identifier, Boolean>()
     internal val toggles = mutableListOf<DebugToggle>()
 
     fun register(debugToggle: DebugToggle) {
@@ -49,18 +49,18 @@ internal object DevUtils {
         toggles += debugToggle
     }
 
-    fun toggle(location: ResourceLocation) {
+    fun toggle(location: Identifier) {
         states[location] = states[location]?.not() == true
     }
 
-    fun isOn(location: ResourceLocation) = states.getOrDefault(location, false)
+    fun isOn(location: Identifier) = states.getOrDefault(location, false)
 
     @Subscription
     fun onCommandRegister(event: RegisterSkyOceanCommandEvent) {
         event.registerDev("toggle") {
             then("location", VirtualResourceArgument(states.keys, SkyOcean.MOD_ID), DevToolSuggestionProvider) {
                 callback {
-                    val argument = this.getArgument("location", ResourceLocation::class.java)
+                    val argument = this.getArgument("location", Identifier::class.java)
                     toggle(argument)
                     ChatUtils.chat(
                         Text.of("Toggled ") {

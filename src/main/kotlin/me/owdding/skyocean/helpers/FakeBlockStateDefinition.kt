@@ -24,7 +24,15 @@ class FakeBlockStateDefinition(
 
     fun getRoots(block: Block): Map<BlockState, BlockStateModel.UnbakedRoot> {
         if (roots == null) {
-            roots = model.instantiate(block.stateDefinition) { block.builtInRegistryHolder().key().location().toString() }
+            roots = model.instantiate(block.stateDefinition) {
+                block.builtInRegistryHolder()
+                    .key()
+                    //? if > 1.21.10 {
+                    .identifier()
+                    //?} else
+                    /*.location()*/
+                    .toString()
+            }
         }
         return roots!!
     }
