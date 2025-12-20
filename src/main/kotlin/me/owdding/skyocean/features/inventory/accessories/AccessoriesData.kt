@@ -63,7 +63,6 @@ object AccessoriesAPI {
 
     fun AccessoryFamily.isDisallowed(): Boolean = isDisallowedOriginFamily(family)
 
-    // TODO: get from repo
     fun getMp(item: ItemStack): Int = magicalPower?.getMagicalPower(item) ?: 1
 
     private fun calculateIsDisallowedOrigin(family: AccessoryFamily): Boolean {
