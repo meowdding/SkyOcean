@@ -33,6 +33,7 @@ object MiningConfig : CategoryKt("mining"), SkillTreeConfig {
 
     var forgeReminderAction by enum(ForgeReminder.ForgeReminderAction.WARP) {
         translation = "skyocean.config.mining.forge_reminder_action"
+        searchTerms += listOf("call", "fred", "warp")
     }
 
     init {
