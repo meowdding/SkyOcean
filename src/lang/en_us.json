@@ -84,11 +84,11 @@
           "desc": "Sends a reminder if you have unclaimed expired forge items"
         },
         "forge_reminder_delay": {
-          "@value": "Reminder Delay",
+          "@value": "Forge Reminder Delay",
           "desc": "The delay between reminders in minutes."
         },
         "forge_reminder_action": {
-          "@value": "Reminder Action",
+          "@value": "Forge Reminder Action",
           "desc": "What clickable action will show when the timer is over.",
           "warp": "Warp to Forge",
           "call_fred": "Call Fred",

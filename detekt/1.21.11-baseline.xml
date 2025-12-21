@@ -98,18 +98,11 @@
     <ID>ContextReceiverListWrapping:Utils.kt:Utils$context(parent: JsonArray)</ID>
     <ID>ContextReceiverListWrapping:Utils.kt:Utils$context(parent: JsonObject)</ID>
     <ID>ContextReceiverMapping:DeferredLayout.kt:DeferredLayout$context(AnimationManager)</ID>
-    <ID>Deprecation:FakeBlockStateDefinition.kt:FakeBlockStateDefinition$builtInRegistryHolder</ID>
-    <ID>Deprecation:ForgeReminder.kt:ForgeReminder$id</ID>
-    <ID>Deprecation:MobIcons.kt:MobIconSettingsListener$IdentifiableResourceReloadListener</ID>
-    <ID>Deprecation:MobIcons.kt:MobIcons$ResourceManagerHelper</ID>
-    <ID>Deprecation:MobIcons.kt:MobIcons$registerReloadListener</ID>
-    <ID>Deprecation:MobIcons.kt:import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener</ID>
-    <ID>Deprecation:MobIcons.kt:import net.fabricmc.fabric.api.resource.ResourceManagerHelper</ID>
-    <ID>Deprecation:PuzzlerSolver.kt:PuzzlerSolver$LOCATION_BLOCKS</ID>
     <ID>DestructuringDeclarationWithTooManyEntries:RenderUtils.kt:RenderUtils$val (a, b, c, d, e, f) = when (direction) { Direction.UP, Direction.DOWN -&gt; Vec6f(startX, z, startY, endX, z, endY) Direction.NORTH, Direction.SOUTH -&gt; Vec6f(startX, startY, z, endX, endY, z) Direction.EAST, Direction.WEST -&gt; Vec6f(z, startX, startY, z, endX, endY) }</ID>
     <ID>DestructuringDeclarationWithTooManyEntries:RenderUtils.kt:val (a, b, c, d, e, f) = vec6</ID>
     <ID>EmptyFunctionBlock:ButtonConfigScreen.kt:ButtonConfigScreen${ }</ID>
     <ID>EmptyFunctionBlock:ButtonConfigScreen.kt:ButtonConfigScreen${}</ID>
+    <ID>EmptyFunctionBlock:SkyOceanModelProvider.kt:SkyOceanModelProvider${}</ID>
     <ID>EnumWrapping:ChatUtils.kt:ComponentIcon</ID>
     <ID>EnumWrapping:ItemSource.kt:ItemSources</ID>
     <ID>EnumWrapping:MinecraftColor.kt:MinecraftColor : Translatable</ID>
@@ -180,7 +173,6 @@
     <ID>FunctionNaming:NpcRecipeParser.kt:NpcRecipeParser$@Subscription @OnlyOnSkyBlock private fun ScreenMouseClickEvent.Pre()</ID>
     <ID>FunctionNaming:RenderUtils.kt:PostEffectApplicator$fun `skyocean$applyPostEffect`(id: Identifier)</ID>
     <ID>FunctionNaming:RenderUtils.kt:PostEffectApplicator$fun `skyocean$getPostEffect`(): Identifier?</ID>
-    <ID>ImplicitDefaultLocale:BobberTime.kt:BobberTime$"%.2f".format(time)</ID>
     <ID>ImportOrdering:FakeBlockModel.kt:import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter import net.fabricmc.fabric.api.renderer.v1.mesh.QuadTransform import net.fabricmc.fabric.api.renderer.v1.model.FabricBlockStateModel import net.minecraft.client.renderer.block.model.BlockModelPart import net.minecraft.client.renderer.block.model.BlockStateModel import net.minecraft.client.renderer.texture.TextureAtlasSprite import net.minecraft.client.resources.model.ModelBaker import net.minecraft.client.resources.model.ResolvableModel import net.minecraft.core.BlockPos import net.minecraft.core.Direction import net.minecraft.util.RandomSource import net.minecraft.world.level.BlockAndTintGetter import net.minecraft.world.level.block.Block import net.minecraft.world.level.block.state.BlockState import java.util.function.Predicate //? if = 1.21.5 { /*import net.fabricmc.fabric.api.renderer.v1.material.BlendMode import net.fabricmc.fabric.api.renderer.v1.Renderer *///?} else { import net.minecraft.client.renderer.chunk.ChunkSectionLayer</ID>
     <ID>ImportOrdering:FakeBlocks.kt:import com.google.gson.JsonParser import com.mojang.logging.LogUtils import com.mojang.serialization.JsonOps import java.util.concurrent.CompletableFuture import java.util.concurrent.Executor import me.owdding.skyocean.events.RegisterFakeBlocksEvent import me.owdding.skyocean.utils.LateInitModule import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin import net.minecraft.core.BlockPos import net.minecraft.resources.FileToIdConverter import net.minecraft.resources.Identifier import net.minecraft.world.level.block.Block import net.minecraft.world.level.block.state.BlockState import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI //? if &gt; 1.21.8 { import net.minecraft.server.packs.resources.PreparableReloadListener</ID>
     <ID>ImportOrdering:ResourcePackUtils.kt:import com.google.gson.JsonElement import kotlin.math.max import kotlin.math.min import me.owdding.ktcodecs.FieldName import me.owdding.ktcodecs.GenerateCodec import me.owdding.ktcodecs.Inline</ID>
@@ -189,26 +181,15 @@
     <ID>ImportOrdering:StyledItemWidget.kt:import com.mojang.math.Axis import com.teamresourceful.resourcefullib.client.screens.CursorScreen import earth.terrarium.olympus.client.components.base.BaseWidget import earth.terrarium.olympus.client.ui.UIConstants import me.owdding.skyocean.SkyOcean import net.minecraft.client.gui.GuiGraphics import net.minecraft.client.gui.components.WidgetSprites import net.minecraft.client.gui.screens.inventory.InventoryScreen import net.minecraft.client.renderer.LightTexture import net.minecraft.client.renderer.texture.OverlayTexture import net.minecraft.core.component.DataComponents import net.minecraft.sounds.SoundEvents import net.minecraft.world.entity.EquipmentSlot import net.minecraft.world.entity.LivingEntity import net.minecraft.world.entity.decoration.ArmorStand import net.minecraft.world.item.ItemDisplayContext import net.minecraft.world.item.ItemStack import org.joml.Matrix3x2f import org.joml.Quaternionf import org.joml.Vector3f import tech.thatgravyboat.skyblockapi.helpers.McClient import tech.thatgravyboat.skyblockapi.helpers.McLevel import tech.thatgravyboat.skyblockapi.platform.drawSprite import tech.thatgravyboat.skyblockapi.platform.showTooltip import tech.thatgravyboat.skyblockapi.utils.extentions.scissor import tech.thatgravyboat.skyblockapi.utils.text.Text //? if &gt; 1.21.8 import net.minecraft.client.input.MouseButtonEvent //? if &gt; 1.21.5 { import net.minecraft.client.renderer.MultiBufferSource import net.minecraft.client.renderer.item.TrackingItemStackRenderState import net.minecraft.client.gui.navigation.ScreenRectangle import net.minecraft.client.gui.render.pip.PictureInPictureRenderer import java.util.function.Function import me.owdding.lib.rendering.MeowddingPipState import com.mojang.blaze3d.platform.Lighting import com.mojang.blaze3d.vertex.PoseStack</ID>
     <ID>ImportOrdering:Utils.kt:import com.google.common.cache.Cache import com.google.common.cache.CacheLoader import com.google.gson.JsonArray import com.google.gson.JsonElement import com.google.gson.JsonObject import com.google.gson.JsonParser import com.mojang.brigadier.context.CommandContext import com.mojang.serialization.Codec import com.mojang.serialization.DataResult import com.teamresourceful.resourcefulconfig.api.types.info.Translatable import earth.terrarium.olympus.client.components.textbox.TextBox import kotlinx.coroutines.runBlocking import me.owdding.ktmodules.AutoCollect import me.owdding.lib.displays.Display import me.owdding.lib.displays.Displays import me.owdding.lib.extensions.ListMerger import me.owdding.lib.repo.LevelableTreeNode import me.owdding.lib.utils.MeowddingLogger import me.owdding.repo.RemoteRepo import me.owdding.skyocean.SkyOcean import me.owdding.skyocean.accessors.SafeMutableComponentAccessor import me.owdding.skyocean.config.Config import me.owdding.skyocean.generated.SkyOceanCodecs import me.owdding.skyocean.utils.chat.ChatUtils import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow import net.fabricmc.fabric.api.tag.client.v1.ClientTags import net.minecraft.core.BlockPos import net.minecraft.core.Holder import net.minecraft.core.HolderLookup import net.minecraft.core.Registry import net.minecraft.core.component.DataComponentType import net.minecraft.core.component.DataComponents import net.minecraft.core.registries.BuiltInRegistries import net.minecraft.nbt.CompoundTag import net.minecraft.network.chat.CommonComponents import net.minecraft.network.chat.Component import net.minecraft.network.chat.ComponentContents import net.minecraft.network.chat.MutableComponent import net.minecraft.resources.ResourceKey import net.minecraft.resources.Identifier import net.minecraft.tags.TagKey import net.minecraft.world.entity.player.Inventory import net.minecraft.world.inventory.Slot import net.minecraft.world.item.Item import net.minecraft.world.item.ItemStack import net.minecraft.world.item.Items import net.minecraft.world.item.component.CustomData import net.minecraft.world.item.component.TooltipDisplay import net.minecraft.world.level.ItemLike import org.joml.Vector3dc import tech.thatgravyboat.skyblockapi.api.item.replaceVisually import tech.thatgravyboat.skyblockapi.helpers.McClient import tech.thatgravyboat.skyblockapi.helpers.McScreen import tech.thatgravyboat.skyblockapi.platform.identifier import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder import tech.thatgravyboat.skyblockapi.utils.extentions.getLore import tech.thatgravyboat.skyblockapi.utils.json.Json import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString import tech.thatgravyboat.skyblockapi.utils.text.Text import tech.thatgravyboat.skyblockapi.utils.text.Text.wrap import tech.thatgravyboat.skyblockapi.utils.text.TextColor import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic import java.io.InputStream import java.nio.charset.Charset import java.nio.file.Files import java.nio.file.Path import java.nio.file.StandardOpenOption import java.util.Optional import kotlin.io.path.inputStream import kotlin.io.path.readText import kotlin.io.path.writeText import kotlin.jvm.optionals.getOrNull import kotlin.math.roundToInt import kotlin.reflect.KMutableProperty0 import kotlin.reflect.jvm.javaType import kotlin.reflect.typeOf</ID>
     <ID>Indentation:StyledItemWidget.kt:StyledItemWidget$ </ID>
-    <ID>InjectDispatcher:ItemHighlighter.kt:ItemHighlighter$Default</ID>
     <ID>LongMethod:CraftHelperDisplay.kt:CraftHelperDisplay$private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -&gt; ((save: Boolean) -&gt; Unit)): AbstractWidget</ID>
     <ID>LongMethod:CustomizeCommand.kt:CustomizeCommand$@Subscription fun onCommand(event: RegisterSkyOceanCommandEvent)</ID>
     <ID>LongMethod:ItemCustomizationModal.kt:ItemCustomizationModal$override fun init()</ID>
     <ID>LongMethod:ItemSearchScreen.kt:ItemSearchScreen$override fun init()</ID>
     <ID>LongMethod:SourceToWidget.kt:SourceToWidget$fun CalculationEntry.asWidget(callback: () -&gt; Unit): LayoutElement</ID>
-    <ID>MapGetWithNotNullAssertionOperator:AnimationManager.kt:AnimationManager$nextStates[key]!!</ID>
     <ID>MatchingDeclarationName:CraftHelperData.kt:CraftHelperRecipe</ID>
     <ID>MatchingDeclarationName:CraftHelperTreeType.kt:CraftHelperRecipeType : DispatchHelper</ID>
     <ID>MatchingDeclarationName:CustomItemStates.kt:EquippableModelState</ID>
     <ID>MatchingDeclarationName:StandardCraftHelperTree.kt:NormalCraftHelperRecipe : CraftHelperRecipe</ID>
-    <ID>MemberNameEqualsClassName:Buttons.kt:Buttons$val buttons get() = arrayOf( button0, button1, button2, button3, button4, button5, button6, button7, button8, button9, button10, button11, button12, button13, )</ID>
-    <ID>MemberNameEqualsClassName:ChickenModifier.kt:ChickenModifier.Variant$val variant by lazy { resourceKey?.let { Registries.CHICKEN_VARIANT.lookup().get(it).getOrNull() }?.value() }</ID>
-    <ID>MemberNameEqualsClassName:FakeBlocks.kt:FakeBlocks$val fakeBlocks = mutableMapOf&lt;Block, MutableList&lt;FakeBlockEntry&gt;&gt;()</ID>
-    <ID>MemberNameEqualsClassName:GenericDropdown.kt:GenericDropdown.Companion$fun &lt;T : Any&gt; EntriesBuilder.genericDropdown( default: T, options: List&lt;T&gt;, toString: (T) -&gt; String, fromString: (String) -&gt; T?, id: String? = null, init: TypeBuilder.() -&gt; Unit = {}, ): CachedTransformedEntry&lt;String, T&gt;</ID>
-    <ID>MissingUseCall:CraftHelperCommand.kt:CraftHelperCommand$inputStream()</ID>
-    <ID>MissingUseCall:Pip.kt:MonoInventoryPipState$MonoInventoryPipRenderer(buffer)</ID>
-    <ID>MissingUseCall:Pip.kt:PolyInventoryPipState$PolyInventoryPipRenderer(buffer)</ID>
-    <ID>MissingUseCall:StyledItemWidget.kt:ItemWidgetItemState$ItemWidgetRenderer(buffer)</ID>
-    <ID>MissingUseCall:Utils.kt:Utils$loadFromResourcesAsStream(path)</ID>
     <ID>ModifierListSpacing:AnimationManager.kt:AnimationManager.Companion$context(manager: AnimationManager)</ID>
     <ID>ModifierListSpacing:CustomItemsHelper.kt:CustomItemsHelper$context(item: ItemStack)</ID>
     <ID>ModifierListSpacing:DeferredLayout.kt:DeferredLayout$context(_: AnimationManager)</ID>
@@ -223,36 +204,6 @@
     <ID>ModifierListSpacing:Utils.kt:Utils$context(parent: JsonObject)</ID>
     <ID>ModifierOrdering:ItemModifier.kt:ItemModifiers$private context(map: MutableMap&lt;DataMarker&lt;*&gt;, Any&gt;, state: State&lt;Boolean&gt;, itemStack: ItemStack)</ID>
     <ID>ModifierOrdering:MuseumDonationHelper.kt:MuseumDonationHelper$private context(item: ItemStack)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.DOWN, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.maxY() + 1, colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.DOWN, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.minY(), colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.EAST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.maxX() + 1, colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.EAST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.minX(), colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.NORTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.maxZ() + 1, colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.NORTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.minZ(), colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.SOUTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.maxZ() + 1, colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.SOUTH, box.minX(), box.minY(), box.maxX() + 1, box.maxY() + 1, box.minZ(), colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.UP, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.maxY() + 1, colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.UP, box.minX(), box.minZ(), box.maxX() + 1, box.maxZ() + 1, box.minY(), colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.UP, box.minX(), box.minZ(), box.maxX(), box.maxZ(), box.maxY() + 1, color.value)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.WEST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.maxX() + 1, colorValue)</ID>
-    <ID>NamedArguments:AreaWalls.kt:AreaWalls$renderPlane(Direction.WEST, box.minY(), box.minZ(), box.maxY() + 1, box.maxZ() + 1, box.minX(), colorValue)</ID>
-    <ID>NamedArguments:ClientSideInventory.kt:ClientSideInventory$drawTexture( TEXTURE, textureX, textureY, width = backgroundWidth, height = this.rows * 18 + 17, u1 = backgroundWidth / 256f, v1 = (this.rows * 18f + 17f) / 256f, )</ID>
-    <ID>NamedArguments:ClientSideInventory.kt:ClientSideInventory$drawTexture( TEXTURE, x = textureX, y = textureY + this.rows * 18 + 17, width = backgroundWidth, height = 96, u0 = 0f, u1 = backgroundWidth / 256f, v0 = 125f / 256f, v1 = backgroundHeight / 256f, )</ID>
-    <ID>NamedArguments:ContextAwareRecipeTree.kt:StandardRecipeNode$RecipeNode(recipe, craftsRequired, requiredAmount, totalRequired, carriedOver, it, context)</ID>
-    <ID>NamedArguments:DungeonCard.kt:DungeonCard$drawGradient(0, 0, WIDTH, HEIGHT - 1, BACKGROUND_COLOR, ARGB.color(0x60, color), ARGB.color(0x60, color), BACKGROUND_COLOR)</ID>
-    <ID>NamedArguments:DungeonCard.kt:DungeonCard$drawGradient(0, HEIGHT - 1, WIDTH, 1, color, color, color, color)</ID>
-    <ID>NamedArguments:DungeonGamblingRenderer.kt:DungeonGamblingRenderer$drawGradient( graphics.guiWidth() / 2 - 1, (graphics.guiHeight() + FULL_CARD_HEIGHT) / 2, 2, (DungeonCard.HEIGHT * ITEM_SCALE * 0.25).toInt(), 0xFFFF5555.toInt(), 0xFFFF5555.toInt(), 0xFFFF5555.toInt(), 0xFFFF5555.toInt(), )</ID>
-    <ID>NamedArguments:ExtraDisplays.kt:ExtraDisplays.&lt;no name provided&gt;$renderMonoInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), size, orientation, color)</ID>
-    <ID>NamedArguments:ExtraDisplays.kt:ExtraDisplays.&lt;no name provided&gt;$renderNormalInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), columns, rows, color)</ID>
-    <ID>NamedArguments:InvButtons.kt:InvButtons$InvButton(button, x, y == 1, screen, x + y * 7, posX, posY, 26, buttonHeight)</ID>
-    <ID>NamedArguments:InventoryRenderer.kt:InventoryRenderer$MonoInventoryPipState( x, y, x + width, y + height, graphics.scissorStack.peek(), Matrix3x2f(graphics.pose()), size, color, orientation == Orientation.VERTICAL, )</ID>
-    <ID>NamedArguments:InventoryRenderer.kt:InventoryRenderer$PolyInventoryPipState( x, y, x + width, y + height, graphics.scissorStack.peek(), Matrix3x2f(graphics.pose()), Vector2i(columns, rows), color, )</ID>
-    <ID>NamedArguments:RecipeView.kt:CraftHelperState.Companion$CraftHelperState( entries.first().ingredient, entries.first().itemTracker, entries.first().ingredient.serializeWithAmount(), entries.first().recipeType, entries.sumOf { it.recipeOutputAmount }, entries.flatMap { it.usedItems }.toMutableList(), entries.all { it.childrenDone }, entries.all { it.canSupercraft }, false, entries.sumOf { it.required }, entries.sumOf { it.amount }, entries.sumOf { it.amountThroughParents }, entries.sumOf { it.amountCarryOver }, false, entries.all { it.hasBeenInitialized }, null, )</ID>
-    <ID>NamedArguments:RenderUtils.kt:RenderUtils$renderPlane(direction, startX.toFloat(), startY.toFloat(), endX.toFloat(), endY.toFloat(), z.toFloat(), color)</ID>
-    <ID>NamedArguments:RenderUtils.kt:RenderUtils$renderShape( poseStack, buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS), blockAABB, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), color, )</ID>
-    <ID>NamedArguments:SkyShardsTreeResolver.kt:SkyShardsTreeResolver$RecipeNode(null, self.quantity, self.quantity, self.quantity, 0, self.shard.toIngredient(self.quantity), RecipeRemainder.EMPTY)</ID>
-    <ID>NamedArguments:StyledItemWidget.kt:StyledItemWidget$ItemWidgetItemState( x, y, x + width, y + height, graphics.scissorStack.peek(), Matrix3x2f(graphics.pose()), this.rotation, itemState, )</ID>
-    <ID>NamedArguments:StyledItemWidget.kt:StyledItemWidget$renderEntityInInventory( graphics, //? if &gt; 1.21.5 { x, y, x + width, y + height, 25f, //?} else { /*x + width / 2f, y + (height -5) / 2f, 20f, *///?} Vector3f(0f, 1f, 0f), angle, null, this.entity, )</ID>
     <ID>NoBlankLineInList:ClientSideInventory.kt:ClientSideInventory$ </ID>
     <ID>NoBlankLineInList:ItemCustomizationModal.kt:ItemCustomizationModal$ </ID>
     <ID>NoBlankLineInList:RenderUtils.kt:RenderUtils$ </ID>
@@ -266,84 +217,19 @@
     <ID>NoUnusedImports:RenderUtils.kt:me.owdding.skyocean.utils.rendering.RenderUtils.kt</ID>
     <ID>NoUnusedImports:Utils.kt:me.owdding.skyocean.utils.Utils.kt</ID>
     <ID>ParameterListWrapping:AnimationManager.kt:AnimationManager.State$( val x: Int, val y: Int, val width: Int, val height: Int, )</ID>
+    <ID>PropertyName:MobTypesFontProvider.kt:private const val backgroundHeight = 7</ID>
+    <ID>PropertyName:MobTypesFontProvider.kt:private const val fontHeight = 5</ID>
+    <ID>PropertyName:MobTypesFontProvider.kt:private const val fontWidth = 5</ID>
     <ID>ReturnCount:VisitorModifier.kt:VisitorModifier$override fun applies(event: InventoryChangeEvent): SkyOceanItemIngredient?</ID>
+    <ID>TopLevelPropertyNaming:MobTypesFontProvider.kt:private const val backgroundHeight = 7</ID>
+    <ID>TopLevelPropertyNaming:MobTypesFontProvider.kt:private const val fontHeight = 5</ID>
+    <ID>TopLevelPropertyNaming:MobTypesFontProvider.kt:private const val fontWidth = 5</ID>
     <ID>TrailingCommaOnCallSite:RenderUtils.kt:( poseStack, vertexConsumer, shape, offsetX, offsetY, offsetZ, color, /*? &gt; 1.21.10 &gt;&gt;*/lineWidth )</ID>
-    <ID>UnnecessarySafeCall:SkyOceanCommandEvent.kt:RegisterSkyOceanCommandEvent$ClientCommandManager.literal("skyocean") ?.apply { LiteralCommandBuilder(this, context).then(command, action = builder) }</ID>
-    <ID>UnsafeCallOnNullableType:AnimatedSkulls.kt:AnimatedSkulls$Utils.loadFromRepo&lt;JsonElement&gt;("skulls")!!</ID>
-    <ID>UnsafeCallOnNullableType:AnimationManager.kt:AnimationManager$nextStates[key]!!</ID>
-    <ID>UnsafeCallOnNullableType:ButtonConfigScreen.kt:ButtonConfigScreen$selectedButton!!</ID>
-    <ID>UnsafeCallOnNullableType:CalcCommand.kt:CalcCommand$getArgument&lt;Int&gt;("maxLevel")!!</ID>
-    <ID>UnsafeCallOnNullableType:CalcCommand.kt:CalcCommand$getArgument&lt;String&gt;("expression")!!</ID>
-    <ID>UnsafeCallOnNullableType:CalcCommand.kt:CalcCommand$this.getArgument&lt;String&gt;("expression")!!</ID>
-    <ID>UnsafeCallOnNullableType:ChestTracker.kt:ChestTracker$this.first!!</ID>
-    <ID>UnsafeCallOnNullableType:ClientSideInventory.kt:ClientSideInventory$McPlayer.self!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomItems.kt:CustomItems$this.getSkyBlockId()!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomItems.kt:CustomItems$this.getTag("skyocean:static_item")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomItems.kt:CustomItems$this[DataTypes.TIMESTAMP]!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomItems.kt:CustomItems$this[DataTypes.UUID]!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;Boolean&gt;("state")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;Identifier&gt;("vanilla_model")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;Int&gt;("hex_color")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;Int&gt;("time")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;ResourceKey&lt;TrimMaterial&gt;&gt;("material")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;ResourceKey&lt;TrimPattern&gt;&gt;("pattern")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;SkyBlockId&gt;("animated_color")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;SkyBlockId&gt;("animated_skull")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;SkyBlockId&gt;("skyblock_model")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;SkyBlockId&gt;("static_color")!!</ID>
-    <ID>UnsafeCallOnNullableType:CustomizeCommand.kt:CustomizeCommand$getArgument&lt;String&gt;("name")!!</ID>
-    <ID>UnsafeCallOnNullableType:DungeonGambling.kt:DungeonGambling$getArgument&lt;DungeonChestType&gt;("chest")!!</ID>
-    <ID>UnsafeCallOnNullableType:DungeonGambling.kt:DungeonGambling$getArgument&lt;DungeonFloor&gt;("floor")!!</ID>
-    <ID>UnsafeCallOnNullableType:DyeData.kt:DyeData$Utils.loadFromRepo&lt;JsonElement&gt;("dyes")!!</ID>
-    <ID>UnsafeCallOnNullableType:DyeData.kt:DyeData$animatedDyes[id]!!</ID>
-    <ID>UnsafeCallOnNullableType:FakeBlockStateDefinition.kt:FakeBlockStateDefinition$roots!!</ID>
-    <ID>UnsafeCallOnNullableType:GenericDropdown.kt:GenericDropdown$selected!!</ID>
-    <ID>UnsafeCallOnNullableType:GenericDropdown.kt:GenericDropdown.Companion$EntityType.byString(it).getOrNull()!!</ID>
-    <ID>UnsafeCallOnNullableType:HotspotAPI.kt:HotspotAPI$entry.pos!!</ID>
-    <ID>UnsafeCallOnNullableType:ItemColor.kt:SkyBlockDye$DyeData.staticDyes[id]!!</ID>
-    <ID>UnsafeCallOnNullableType:ItemCustomizationModal.kt:ItemCustomizationModal$animationManager!!</ID>
-    <ID>UnsafeCallOnNullableType:ItemCustomizationModal.kt:ItemCustomizationModal$copiedItem.getKey()!!</ID>
-    <ID>UnsafeCallOnNullableType:ItemCustomizationModal.kt:ItemCustomizationModal$item.getOrTryCreateCustomData()!!</ID>
-    <ID>UnsafeCallOnNullableType:ItemCustomizationModal.kt:ItemCustomizationModal$this.layout!!</ID>
-    <ID>UnsafeCallOnNullableType:ResourcePackUtils.kt:PackMetadata$overlays!!</ID>
-    <ID>UnsafeCallOnNullableType:SimpleRecipeApi.kt:SimpleRecipeApi$merge(key, ingredient) { a, b -&gt; a + b }!!</ID>
-    <ID>UnsafeCallOnNullableType:SourceToWidget.kt:SourceToWidget$conversionCost!!</ID>
-    <ID>UnsafeCast:ButtonConfigScreen.kt:ButtonConfigScreen$this as AbstractRecipeBookScreenAccessor</ID>
-    <ID>UnsafeCast:CodecHelpers.kt:CodecHelpers$style as? TextShaderHolder</ID>
-    <ID>UnsafeCast:Utils.kt:Utils$this as? SafeMutableComponentAccessor</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import com.mojang.blaze3d.platform.LogicOp</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import com.mojang.blaze3d.systems.RenderPass</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import com.mojang.blaze3d.systems.RenderSystem</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import com.mojang.blaze3d.textures.FilterMode</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import com.mojang.blaze3d.textures.GpuTexture</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import com.mojang.blaze3d.textures.TextureFormat</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import com.mojang.blaze3d.vertex.BufferBuilder</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import com.mojang.blaze3d.vertex.ByteBufferBuilder</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import com.mojang.blaze3d.vertex.Tesselator</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import java.util.OptionalDouble</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import java.util.OptionalInt</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import kotlin.reflect.KMutableProperty0</ID>
-    <ID>UnusedImport:InventoryRenderer.kt:import kotlin.use</ID>
-    <ID>UnusedImport:ItemCustomizationModal.kt:import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow</ID>
-    <ID>UnusedImport:ItemCustomizationModal.kt:import net.minecraft.client.Minecraft</ID>
-    <ID>UnusedImport:ItemSelectorOverlay.kt:import net.minecraft.client.Minecraft</ID>
-    <ID>UnusedImport:Pip.kt:import com.mojang.blaze3d.systems.RenderSystem</ID>
-    <ID>UnusedImport:RenderUtils.kt:import com.mojang.blaze3d.systems.RenderSystem</ID>
-    <ID>UnusedImport:RenderUtils.kt:import com.mojang.blaze3d.vertex.VertexFormatElement</ID>
-    <ID>UnusedImport:Utils.kt:import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow</ID>
-    <ID>UnusedImport:Utils.kt:import tech.thatgravyboat.skyblockapi.helpers.McClient</ID>
     <ID>UnusedParameter:BlockRetexture.kt:BlockRetexture$parent: Identifier? = null</ID>
     <ID>UnusedParameter:IngredientParser.kt:IngredientParser$regex: Regex</ID>
     <ID>UnusedParameter:OctreeDebugRenderer.kt:OctreeDebugRenderer$depth: Int</ID>
     <ID>UnusedParameter:OctreeDebugRenderer.kt:OctreeDebugRenderer$nodesRendered: MutableInt</ID>
     <ID>UnusedParameter:OctreeDebugRenderer.kt:OctreeDebugRenderer$playerNode: Leaf?</ID>
-    <ID>UnusedVariable:OctreeDebugRenderer.kt:OctreeDebugRenderer$val camX = event.cameraPosition.x</ID>
-    <ID>UnusedVariable:OctreeDebugRenderer.kt:OctreeDebugRenderer$val camY = event.cameraPosition.y</ID>
-    <ID>UnusedVariable:OctreeDebugRenderer.kt:OctreeDebugRenderer$val camZ = event.cameraPosition.z</ID>
-    <ID>UnusedVariable:OctreeDebugRenderer.kt:OctreeDebugRenderer$val colorValue = color + 5L</ID>
-    <ID>UnusedVariable:OctreeDebugRenderer.kt:OctreeDebugRenderer$val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderTypes.lines())</ID>
-    <ID>UseRequire:ItemColor.kt:AnimatedSkyBlockDye$throw IllegalArgumentException("Unknown animated dye $id")</ID>
-    <ID>UseRequire:ItemColor.kt:SkyBlockDye$throw IllegalArgumentException("Unknown dye $id")</ID>
     <ID>ValueParameterComment:ButtonConfigScreen.kt:ButtonConfigScreen$/*?}*/</ID>
     <ID>VariableNaming:DeferredLayout.kt:DeferredLayout$protected abstract val _backing: Type</ID>
     <ID>Wrapping:ItemContext.kt:ItemContext$(</ID>
