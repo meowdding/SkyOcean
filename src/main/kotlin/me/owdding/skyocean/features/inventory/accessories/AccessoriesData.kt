@@ -5,10 +5,7 @@ package me.owdding.skyocean.features.inventory.accessories
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import me.owdding.ktcodecs.Compact
-import me.owdding.ktcodecs.GenerateCodec
-import me.owdding.ktcodecs.GenerateDispatchCodec
-import me.owdding.ktcodecs.IncludedCodec
+import me.owdding.ktcodecs.*
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
@@ -52,7 +49,7 @@ import kotlin.reflect.KClass
 object AccessoriesAPI {
 
     internal var families: Map<String, AccessoryFamily> = emptyMap()
-    internal var ignored: Set<SkyBlockId> = emptySet()
+    internal var unobtainable: Set<SkyBlockId> = emptySet()
     internal var rarityUpgraded: Map<SkyBlockId, AccessoryRarityUpgraded> = emptyMap()
     internal var disallowedOriginFamilies: Set<String> = emptySet()
     internal var magicalPower: MagicalPowerRepoData? = null
@@ -77,7 +74,7 @@ object AccessoriesAPI {
     }
 
     fun getRarityUpgraded(id: SkyBlockId): AccessoryRarityUpgraded? = rarityUpgraded[id]
-    fun isIgnored(id: SkyBlockId): Boolean = id in ignored
+    fun isIgnored(id: SkyBlockId): Boolean = id in unobtainable
     fun upgradesRarity(id: SkyBlockId): Boolean = id in rarityUpgraded
     fun isDisallowedOriginFamily(family: String) = family in disallowedOriginFamilies
     fun isDisallowedOrigin(id: SkyBlockId): Boolean = getFamily(id)?.isDisallowed() == true
@@ -85,7 +82,7 @@ object AccessoriesAPI {
     @Subscription(FinishRepoLoadingEvent::class)
     fun onRepo() {
         families = emptyMap()
-        ignored = emptySet()
+        unobtainable = emptySet()
         rarityUpgraded = emptyMap()
         magicalPower = null
 
@@ -105,7 +102,7 @@ object AccessoriesAPI {
             SkyOcean.error("Accessory families are empty: $emptyFamilies")
         }
 
-        ignored = Utils.loadRemoteRepoData<SkyBlockId, Set<SkyBlockId>>("accessories/ignored_accessories", CodecUtils::set).orEmpty()
+        unobtainable = Utils.loadRemoteRepoData<SkyBlockId, Set<SkyBlockId>>("accessories/unobtainable_accessories", CodecUtils::set).orEmpty()
         rarityUpgraded = Utils.loadRemoteRepoData<AccessoryRarityUpgraded, List<AccessoryRarityUpgraded>>("accessories/rarity_upgraded", CodecUtils::list)
             ?.associateBy { it.item }.orEmpty()
         magicalPower = Utils.loadRemoteRepoData<MagicalPowerRepoData>("accessories/magical_power")
@@ -125,7 +122,7 @@ object AccessoriesAPI {
                 }
 
                 copy("families", ::families, CodecUtils.map(Codec.STRING, AccessoryFamily.CODEC).unsafeCast())
-                copy("ignored", ::ignored, CodecUtils.set(SkyBlockId.CODEC))
+                copy("ignored", ::unobtainable, CodecUtils.set(SkyBlockId.CODEC))
                 copy("rarity_upgraded", ::rarityUpgraded, CodecUtils.map(SkyBlockId.CODEC, AccessoryRarityUpgraded.CODEC).unsafeCast())
                 copy("disallowed_origin_families", ::disallowedOriginFamilies, CodecUtils.set(Codec.STRING))
             }
@@ -150,7 +147,7 @@ object AccessoriesAPI {
             families.values.forEach { family ->
                 family.tiers.forEach(::addAll)
             }
-            addAll(ignored)
+            addAll(unobtainable)
         }
 
         allAccessories.removeAll(storedAccessories)
@@ -175,7 +172,7 @@ object AccessoriesAPI {
             families.values.forEach { family ->
                 family.tiers.forEach(::addAll)
             }
-            addAll(ignored)
+            addAll(unobtainable)
         }
 
         val unknownAccessories = knownAccessories.filterTo(mutableSetOf()) {
@@ -203,6 +200,7 @@ object AccessoriesAPI {
 data class AccessoryFamily(
     val family: String,
     @Compact val tiers: List<AccessoryTier>,
+    @FieldName("ignore_duplicates") val ignoreDuplicates: Boolean = false,
 ) : List<AccessoryTier> by tiers {
     //region Functions
     inline val maxTier: Int get() = lastIndex

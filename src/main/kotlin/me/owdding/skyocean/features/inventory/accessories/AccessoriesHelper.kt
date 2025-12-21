@@ -4,7 +4,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesAPI.isDisallowed
-import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.NONE
+import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.*
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.utils.Utils.getRealRarity
@@ -54,14 +54,7 @@ object AccessoriesHelper : AbstractItemModifier() {
         return tier.any(current::contains)
     }
 
-    // temporary
-    private val duplicateFamilies = setOf("cake_bag", "hatcessory", "personal_compactor", "personal_deletor")
-
-    // TODO: use repo
-    fun ignoreDuplicate(id: SkyBlockId): Boolean {
-        val (family, _) = getFamilyAndTier(id) ?: return false
-        return family.family in duplicateFamilies
-    }
+    fun ignoreDuplicate(id: SkyBlockId): Boolean = getFamilyAndTier(id)?.first?.ignoreDuplicates ?: false
 
     fun getResult(id: SkyBlockId): AccessoryResult {
         val (family, tier) = getFamilyAndTier(id) ?: return NONE
