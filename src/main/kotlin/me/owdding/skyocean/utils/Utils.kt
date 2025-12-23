@@ -50,12 +50,15 @@ import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
+import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
+import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.identifier
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
+import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
@@ -70,7 +73,7 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import java.util.Optional
+import java.util.*
 import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -379,6 +382,15 @@ object Utils {
         }
     }
 
+    // TODO: add more sources to this
+    fun ItemStack.getRealRarity(): SkyBlockRarity? {
+        var rarity = this[DataTypes.RARITY] ?: return null
+        if (this[DataTypes.RECOMBOBULATOR] == true) rarity = rarity.previous() ?: return rarity
+        // TODO: get max dungeon quality from repo maybe?
+        if (this[DataTypes.DUNGEON_QUALITY] == 50) rarity = rarity.previous() ?: return rarity
+        return rarity
+    }
+
     fun Component.asDisplay(): Display = Displays.text(this)
     fun Iterable<Item>.filterNotAir() = this.filterNot { item -> item == Items.AIR }
     fun <T> Iterable<Holder<T>>.unwrap() = this.map { it.value() }
@@ -387,6 +399,9 @@ object Utils {
     fun LevelableTreeNode.powderForInterval(intRange: IntRange) = intRange.sumOf { costForLevel(it).second }
 
     fun nextUp(amount: Int, divider: Int) = if (amount % divider == 0) amount else amount - (amount % divider) + divider
+
+    inline fun <reified E : Enum<E>> E.next(offset: Int = 1): E? = enumValues<E>().getOrNull(ordinal + offset)
+    inline fun <reified E : Enum<E>> E.previous(offset: Int = 1): E? = enumValues<E>().getOrNull(ordinal - offset)
 }
 
 enum class SkyOceanModifyIndicator : Translatable {
