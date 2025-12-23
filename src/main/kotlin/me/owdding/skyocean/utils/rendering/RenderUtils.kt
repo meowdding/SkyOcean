@@ -1,15 +1,14 @@
 package me.owdding.skyocean.utils.rendering
 
-import com.mojang.blaze3d.systems.RenderSystem
+//? if < 1.21.11
+/*import com.mojang.blaze3d.systems.RenderSystem*/
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
-import com.mojang.blaze3d.vertex.VertexFormatElement
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.ShapeRenderer
-import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
@@ -289,7 +288,7 @@ object RenderUtils {
     ) {
         atCamera {
             translate(x, y, z)
-            val buffer = buffer.getBuffer(RenderTypes.debugFilledBox())
+            val buffer = buffer.getBuffer(MLibRenderTypes.DEBUG_FILLED_BOX)
 
             for (i in 0..360) {
                 val rad = Math.toRadians(i.toDouble())
@@ -318,7 +317,7 @@ object RenderUtils {
     ) {
         atCamera {
             translate(x, y, z)
-            val buffer = buffer.getBuffer(RenderTypes.debugFilledBox())
+            val buffer = buffer.getBuffer(MLibRenderTypes.DEBUG_FILLED_BOX)
 
             for (i in 0..360) {
                 val rad = Math.toRadians(i.toDouble())
