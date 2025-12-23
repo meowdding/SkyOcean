@@ -13,15 +13,15 @@ import kotlin.text.substringBeforeLast
 @GenerateCodec
 data class RemovePatch(val path: String) : Patch {
 
-    companion object {
-        val ID: Identifier = SkyOcean.id("remove")
-        val CODEC: MapCodec<RemovePatch> = SkyOceanCodecs.getMapCodec()
-    }
-
     override fun id(): Identifier = ID
     override fun patch(jsonObject: JsonObject) {
         val parent = path.substringBeforeLast(".", "")
         val entry = path.substringAfterLast(".")
         jsonObject.getPath(parent, true)?.asJsonObject?.remove(entry)
+    }
+
+    companion object {
+        val ID: Identifier = SkyOcean.id("remove")
+        val CODEC: MapCodec<RemovePatch> = SkyOceanCodecs.getMapCodec()
     }
 }
