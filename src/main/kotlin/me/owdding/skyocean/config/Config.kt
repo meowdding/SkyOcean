@@ -62,7 +62,7 @@ object Config : ConfigKt("skyocean/config") {
     }
 
     val disableMessageTextShadow: Boolean by invalidProperty(
-        boolean(true) {
+        boolean(false) {
             translation = "skyocean.config.main.text_shadow"
         },
         ChatUtils.prefixDelegate,

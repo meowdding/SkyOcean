@@ -18,7 +18,7 @@ rconfigkt = "3.5.15"
 
 detekt = "2.0.0-alpha.0"
 
-meowdding-lib = "4.0.1"
+meowdding-lib = "4.0.2"
 meowdding-ktmodules = "1.0.6"
 meowdding-ktcodecs = "1.1.5"
 meowdding-gradle = "1.1.0"

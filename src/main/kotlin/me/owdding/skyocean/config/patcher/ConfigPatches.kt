@@ -22,6 +22,7 @@ object ConfigPatches {
     init {
         register(MovePatch.ID, MovePatch.CODEC)
         register(CompoundPatch.ID, CompoundPatch.CODEC)
+        register(RemovePatch.ID, RemovePatch.CODEC)
         register(AddPatch.ID, SkyOceanCodecs.AddPatchCodec)
         register(AddListPatch.ID, SkyOceanCodecs.AddListPatchCodec)
     }
