@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos
 
 @Module
 object GalateaRepoData {
-    val data: GalateaData? by RemoteRepoDelegate.load("misc/galatea")
+    val data: GalateaData? by RemoteRepoDelegate.load("misc/galatea_data")
 }
 
 @GenerateCodec
