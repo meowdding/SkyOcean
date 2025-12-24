@@ -70,7 +70,8 @@ object CodecHelpers {
     internal inline fun <reified K, reified V> mutableMap(): Codec<MutableMap<K, V>> =
         CodecUtils.map(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
 
-    internal inline fun <reified T> list() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
+    internal inline fun <reified T> mutableList() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
+    internal inline fun <reified T> list(): Codec<List<T>> = SkyOceanCodecs.getCodec<T>().listOf()
 
 
     fun <A> unit(defaultValue: A): Codec<A> = unit { defaultValue }
