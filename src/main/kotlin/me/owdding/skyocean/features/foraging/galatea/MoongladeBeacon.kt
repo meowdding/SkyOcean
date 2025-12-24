@@ -25,7 +25,7 @@ object MoongladeBeacon {
     private val redSection = listOf(BeaconBeamOwner.Section(ARGB.color(32, TextColor.RED)))
     private val greenSection = listOf(BeaconBeamOwner.Section(ARGB.color(32, TextColor.GREEN)))
 
-    private val beaconPos: BlockPos get() = GalateaRepoData.data?.moongladeBeaconPos ?: BlockPos(-688, 128, 65)
+    private val beaconPos: BlockPos? get() = GalateaRepoData.data?.moongladeBeaconPos // TODO REVERT
 
     @Subscription
     @OnlyWidget(MOONGLADE_BEACON)
