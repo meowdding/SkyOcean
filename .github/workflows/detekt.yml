@@ -15,6 +15,7 @@ permissions:
 
 jobs:
     detekt:
+        if: ${{ !github.event.pull_request.draft }}
         name: Run detekt
         runs-on: ubuntu-latest
         concurrency:
@@ -32,23 +33,29 @@ jobs:
                 with:
                     ref: ${{ github.event.pull_request.head.ref }}
                     repository: ${{ github.event.pull_request.head.repo.full_name }}
-            -   uses: ./.github/actions/setup-normal-workspace
-            -   name: Run detekt main (w/ typing analysis) w/gradle retry
-                id: run_detekt
-                uses: ./.github/actions/gradle-retry
-                continue-on-error: true
+            -   name: Setup JDK 21
+                uses: actions/setup-java@v5
                 with:
-                    gradle-command: setupForWorkflows detektMain --stacktrace
-            -   name: Check if SARIF file exists
-                if: always()
+                    distribution: temurin
+                    java-version: '21'
+            -   name: Setup gradle
+                uses: gradle/actions/setup-gradle@v5
+            -   run: chmod +x gradlew
+            -   name: Run detekt main
+                id: run_detekt
+                run: ./gradlew detekt --stacktrace --continue
+                continue-on-error: true
+            -   name: Merge detekt outputs
                 id: check_sarif
+                if: always()
                 run: |
-                    if [ -f "build/reports/detekt/main.sarif" ]; then
+                    chmod +x .github/scripts/process_detekt_sarif.sh
+                    kotlinc -script .github/scripts/collect-detekt-sarif-files.kts
+                    if [ -f "detekt_output.txt" ]; then
                         echo "exists=true" >> $GITHUB_OUTPUT
                     else
                         echo "exists=false" >> $GITHUB_OUTPUT
                     fi
-
             -   name: Add label if detekt fails
                 if: ${{ steps.run_detekt.outcome == 'failure' && steps.check_sarif.outputs.exists == 'true' }}
                 uses: actions-ecosystem/action-add-labels@v1
@@ -61,12 +68,6 @@ jobs:
                 with:
                     github_token: ${{ secrets.GITHUB_TOKEN }}
                     labels: 'Detekt'
-
-            -   name: Annotate detekt failures
-                if: ${{ !cancelled() && steps.check_sarif.outputs.exists == 'true' }}
-                run: |
-                    chmod +x .github/scripts/process_detekt_sarif.sh
-                    ./.github/scripts/process_detekt_sarif.sh build/reports/detekt/main.sarif | tee detekt_output.txt
             -   name: Upload detekt output as artifact
                 if: ${{ !cancelled() && steps.check_sarif.outputs.exists == 'true' }}
                 uses: actions/upload-artifact@v4
@@ -83,7 +84,8 @@ jobs:
         needs: detekt
         if: ${{
             needs.detekt.outputs.sarif_exists == 'true' &&
-            needs.detekt.outputs.detekt_failed == 'true'
+            needs.detekt.outputs.detekt_failed == 'true' &&
+            !github.event.pull_request.draft
             }}
         permissions:
             pull-requests: write

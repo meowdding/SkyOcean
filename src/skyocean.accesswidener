@@ -1,3 +1,10 @@
 accessWidener v2 named
 accessible method net/minecraft/network/chat/MutableComponent <init> (Lnet/minecraft/network/chat/ComponentContents;Ljava/util/List;Lnet/minecraft/network/chat/Style;)V
 accessible class net/minecraft/client/gui/layouts/FrameLayout$ChildContainer
+accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher renderers Ljava/util/Map;
+
+# 1.21.9
+accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$GlyphInstance
+
+# 1.21.11
+accessible method net/minecraft/client/gui/screens/inventory/InventoryScreen extractRenderState (Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/client/renderer/entity/state/EntityRenderState;

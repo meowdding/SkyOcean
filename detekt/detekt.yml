@@ -9,14 +9,14 @@ complexity:
         active: false
     ComplexCondition: # aggressive by default, at a complexity of 4
         active: true
-        threshold: 6
+        allowedConditions: 6
     LongMethod: # default max length of 60, caught way too much
         active: true
-        threshold: 100
+        allowedLines: 100
     NamedArguments:
         active: true
         ignoreArgumentsMatchingNames: true
-        threshold: 6
+        allowedArguments: 6
     TooManyFunctions:
         active: false
 
@@ -28,7 +28,32 @@ exceptions:
     TooGenericExceptionThrown: # we don't have our own custom exceptions
         active: false
 
-formatting:
+ktlint:
+    BlankLineBetweenWhenConditions:
+        active: true
+    SpacingAroundSquareBrackets:
+        active: true
+    ChainMethodContinuation:
+        active: false
+    MultilineExpressionWrapping:
+        active: false
+    NoEmptyFirstLineInClassBody:
+        active: false
+    BlankLineBeforeDeclaration:
+        active: false
+    BinaryExpressionWrapping:
+        active: false
+    ClassSignature:
+        active: false
+    FunctionLiteral:
+        active: false
+    FunctionSignature:
+        active: false
+    IfElseWrapping:
+        active: false
+    FunctionExpressionBody:
+        active: true
+        maxLineLength: 160
     MaximumLineLength: # ktlint - handled by detekt
         active: false
     MultiLineIfElse:
@@ -63,6 +88,20 @@ formatting:
         maxLineLength: 160
     NoWildcardImports: # we use wildcard imports in some places
         active: false
+    IfElseBracing:
+        active: false
+    CommentSpacing:
+        active: false
+    NoSingleLineBlockComment:
+        active: false
+    NoConsecutiveComments:
+        active: false
+    CommentWrapping:
+        active: false
+    BlockCommentInitialStarAlignment:
+        active: false
+    PackageName:
+        active: false
 
 naming:
     NoNameShadowing:
@@ -70,9 +109,9 @@ naming:
     ConstructorParameterNaming: # pedantic
         active: false
     FunctionNaming:
-        functionPattern: "[a-z][a-zA-Z0-9]*|[a-z]+$[a-z][a-zA-Z0-9]*"
+        functionPattern: "(?:[a-z]+$[a-z][a-zA-Z0-9]*)|(?:[a-z][a-zA-Z0-9]*)"
     VariableNaming:
-        variablePattern: "[a-z][A-Za-z0-9]*|[a-z]+$[a-z][A-Za-z0-9]*"
+        variablePattern: "(?:[a-z]+$[a-z][a-zA-Z0-9]*)|(?:[a-z][a-zA-Z0-9]*)"
 
 performance:
     SpreadOperator:
@@ -88,6 +127,8 @@ potential-bugs:
     HasPlatformType: # false positives on config get() methods
         active: false
     Deprecation:
+        active: true
+    MissingUseCall:
         active: true
 
 style:
@@ -116,9 +157,15 @@ style:
     LoopWithTooManyJumpStatements:
         active: true
         maxJumpCount: 5
-    UnnecessaryAbstractClass: # gets horrendously messed up with Event classes
+    RedundantConstructorKeyword:
+        active: true
+    UnnecessaryAny:
+        active: true
+    DoubleNegativeExpression:
+        active: true
+    AbstractClassCanBeConcreteClass: # gets horrendously messed up with Event classes
         active: false
-    UnusedPrivateMember: # gets tripped up by API methods
+    UnusedPrivateFunction: # gets tripped up by API methods
         active: false
     UnusedPrivateProperty: # loops that don't use their iterator
         active: true
@@ -130,7 +177,7 @@ style:
     DestructuringDeclarationWithTooManyEntries: # too aggressive
         active: true
         maxDestructuringEntries: 5
-    RedundantVisibilityModifierRule:
+    RedundantVisibilityModifier:
         active: true
     UnnecessaryBracesAroundTrailingLambda:
         active: true
@@ -147,5 +194,5 @@ style:
         imports:
             -   value: kotlinx.datetime.*
                 reason: "Kotlinx datetime is still in beta and shouldn't be used"
-    UnusedImports:
+    UnusedImport:
         active: true
