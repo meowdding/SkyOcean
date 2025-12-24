@@ -1,10 +1,17 @@
 package me.owdding.skyocean.helpers
 
+//? if = 1.21.5 {
+
+/*import net.fabricmc.fabric.api.renderer.v1.material.BlendMode
+import net.fabricmc.fabric.api.renderer.v1.Renderer
+
+*///?} else {
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadTransform
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBlockStateModel
 import net.minecraft.client.renderer.block.model.BlockModelPart
 import net.minecraft.client.renderer.block.model.BlockStateModel
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.ModelBaker
 import net.minecraft.client.resources.model.ResolvableModel
@@ -15,13 +22,6 @@ import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import java.util.function.Predicate
-//? if = 1.21.5 {
-
-/*import net.fabricmc.fabric.api.renderer.v1.material.BlendMode
-import net.fabricmc.fabric.api.renderer.v1.Renderer
-
-*///?} else {
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer
 
 enum class BlendMode {
     DEFAULT,
@@ -34,7 +34,7 @@ enum class BlendMode {
     fun toSectionLayer(): ChunkSectionLayer? = when (this) {
         DEFAULT -> null
         SOLID -> ChunkSectionLayer.SOLID
-        CUTOUT_MIPPED -> /*? if > 1.21.10 {*/ ChunkSectionLayer.CUTOUT /*?} else {*//* ChunkSectionLayer.CUTOUT_MIPPED *//*?}*/
+        CUTOUT_MIPPED -> /*? if > 1.21.10 {*/ ChunkSectionLayer.CUTOUT /*?} else {*/ /*ChunkSectionLayer.CUTOUT_MIPPED *//*?}*/
         CUTOUT -> ChunkSectionLayer.CUTOUT
         TRANSLUCENT -> ChunkSectionLayer.TRANSLUCENT
     }

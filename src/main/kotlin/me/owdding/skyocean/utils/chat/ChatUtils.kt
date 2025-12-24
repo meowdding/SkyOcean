@@ -133,6 +133,7 @@ internal object ChatUtils {
         this.textShader = if (useSelected) Config.prefixGradient else OceanGradients.DEFAULT
     }
 
+    // Unused on 1.21.11+ bc minecraft added their own withoutShadow()
     fun MutableComponent.withoutShadow(): MutableComponent = this.apply {
         this.shadowColor = null
         this.siblings.filterIsInstance<MutableComponent>().forEach { it.withoutShadow() }
