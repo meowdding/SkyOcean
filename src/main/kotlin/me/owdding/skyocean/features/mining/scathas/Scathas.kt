@@ -60,26 +60,25 @@ object Scathas {
     @TimePassed("5t")
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onTick() {
-        if (worm?.isAlive() ?: false) {
+        val worm = worm ?: return
+        if (worm.isAlive()) {
             McClient.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP)
         }
 
         if (cooldown) {
-            worm?.spawnedAt()?.since()?.let {
-                if ((it > 29.seconds)) {
-                    cooldown = false
-                    if (ScathaConfig.wormCooldown) {
-                        McClient.setTitle(
-                            Text.of {
-                                append(ChatUtils.ICON_SPACE_COMPONENT)
-                                append("Scatha Cooldown Over") {
-                                    color = TextColor.GRAY
-                                }
-                            },
-                            stayTime = 1f
-                        )
-                        McClient.playSound(SoundEvents.NOTE_BLOCK_PLING.value(), 1f, 2f)
-                    }
+            if ((worm.spawnedAt().since() > 29.seconds)) {
+                cooldown = false
+                if (ScathaConfig.wormCooldown) {
+                    McClient.setTitle(
+                        Text.of {
+                            append(ChatUtils.ICON_SPACE_COMPONENT)
+                            append("Scatha Cooldown Over") {
+                                color = TextColor.GRAY
+                            }
+                        },
+                        stayTime = 1f
+                    )
+                    McClient.playSound(SoundEvents.NOTE_BLOCK_PLING.value(), 1f, 2f)
                 }
             }
         }
