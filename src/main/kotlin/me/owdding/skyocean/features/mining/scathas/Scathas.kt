@@ -27,7 +27,6 @@ object Scathas {
 
     var worm: SpawnedWorm = SpawnedWorm(null)
     var cooldown: Boolean = false
-    val magicFindPetRegex = Regex("^PET DROP! (?<pet>.+) \\(\\+(?<mf>.+)✯ Magic Find\\)$")
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
@@ -69,7 +68,7 @@ object Scathas {
                         Text.of {
                             append(ChatUtils.ICON_SPACE_COMPONENT)
                             append("Scatha Cooldown Over") {
-                                color = TextColor.GRAY;
+                                color = TextColor.GRAY
                             }
                         },
                         stayTime = 1f
@@ -82,6 +81,7 @@ object Scathas {
 
     val scathaPetDropRegex = Regex("^PET DROP! Scatha(?: \\(\\+(?<mf>\\d+)✯ Magic Find\\))?$")
     @Subscription
+    @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onPetDrop(event: ChatReceivedEvent.Pre) {
         if (!scathaPetDropRegex.matches(event.text)) return
 
@@ -100,7 +100,7 @@ object Scathas {
                     this.bold = true
                     this.color = TextColor.GOLD
                 }
-                append((rarity?.name?.uppercase() + " ") ?: " ") {
+                append((rarity?.name?.uppercase() + " ")) {
                     this.bold = true
                     this.color = rarity?.color ?: TextColor.WHITE
                 }
@@ -115,12 +115,12 @@ object Scathas {
                 Text.of {
                     append(ChatUtils.ICON_SPACE_COMPONENT)
                     append("Scatha Pet!") {
-                        color = TextColor.GOLD;
+                        color = TextColor.GOLD
                     }
                 },
                 Text.of {
                     append(rarity?.name?.uppercase() ?: " ") {
-                        color = rarity?.color ?: TextColor.WHITE;
+                        color = rarity?.color ?: TextColor.WHITE
                         this.bold = true
                     }
                 },

@@ -1,7 +1,4 @@
 package me.owdding.skyocean.features.mining.scathas
-import me.owdding.skyocean.config.features.mining.ScathaConfig
-import me.owdding.skyocean.helpers.glowingColor
-import me.owdding.skyocean.helpers.isGlowing
 import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.world.entity.Entity
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -41,14 +38,14 @@ class SpawnedWorm(val entity: Entity?, val scatha: Boolean = false) {
                 Text.of {
                     append(ChatUtils.ICON_SPACE_COMPONENT)
                     append("Scatha") {
-                        color = TextColor.GOLD;
-                        bold = true;
+                        color = TextColor.GOLD
+                        bold = true
                     }
                 },
                 Text.of {
                     append("PRAY TO RNGESUS!") {
-                        color = TextColor.RED;
-                        bold = true;
+                        color = TextColor.RED
+                        bold = true
                     }
                 }, stayTime = 1.5f
             )
