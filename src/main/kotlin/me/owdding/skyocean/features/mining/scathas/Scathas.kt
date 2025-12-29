@@ -47,11 +47,13 @@ object Scathas {
             worm = SpawnedWorm(entity, true)
         }
 
-        worm?.isAlive()?.let { if (!it) return }
+        val worm = worm ?: return
+
+        if (!worm.isAlive()) return
 
         cooldown = true
 
-        worm?.title()
+        worm.title()
     }
 
     @Subscription(TickEvent::class)

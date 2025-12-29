@@ -1,4 +1,5 @@
 package me.owdding.skyocean.features.mining.scathas
+
 import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.world.entity.Entity
 import tech.thatgravyboat.skyblockapi.helpers.McClient
