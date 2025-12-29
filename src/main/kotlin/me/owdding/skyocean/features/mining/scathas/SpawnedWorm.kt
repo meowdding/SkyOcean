@@ -8,30 +8,19 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
+import kotlin.time.Instant
 
-class SpawnedWorm(val entity: Entity?, val scatha: Boolean = false) {
-    var birth: Long = 0
+class SpawnedWorm(val entity: Entity, val scatha: Boolean = false) {
+    val birth: Instant = currentInstant()
 
-    init {
-        birth = System.currentTimeMillis()
-    }
 
-    fun spawnedAt(): Long {
-        if (entity == null) return 0
+    fun spawnedAt(): Instant = birth
 
-        return birth
+    fun isAlive(): Boolean = entity.isAlive
 
-    }
-
-    fun isAlive(): Boolean {
-        if (entity == null) return false
-
-        return entity.isAlive
-    }
 
     fun title() {
-        if (entity == null) return
-
         if (!((entity.cleanName.endsWith("10❤") && scatha) || (entity.cleanName.endsWith("5❤") && !scatha))) { return }
         if (scatha) {
             McClient.setTitle(

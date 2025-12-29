@@ -1,9 +1,11 @@
 package me.owdding.skyocean.features.mining.scathas
 
+import kotlin.time.Duration.Companion.seconds
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.ScathaConfig
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import net.minecraft.sounds.SoundEvents
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
@@ -11,8 +13,8 @@ import tech.thatgravyboat.skyblockapi.api.events.entity.EntityInfoLineEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
-import net.minecraft.sounds.SoundEvents
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -25,13 +27,14 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @Module
 object Scathas {
 
-    var worm: SpawnedWorm = SpawnedWorm(null)
-    var cooldown: Boolean = false
+    private var worm: SpawnedWorm? = null
+    private var cooldown: Boolean = false
+    private val scathaPetDropRegex = Regex("^PET DROP! Scatha(?: \\(\\+(?<mf>\\d+)✯ Magic Find\\))?$")
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun getWorm(event: EntityInfoLineEvent) {
-        if (!ScathaConfig.wormAnnouncer) { return }
+        if (!ScathaConfig.wormAnnouncer) return
 
         val entity = event.infoLineEntity
         val name = entity.cleanName
@@ -44,42 +47,42 @@ object Scathas {
             worm = SpawnedWorm(entity, true)
         }
 
-        if (!worm.isAlive()) { return }
+        worm?.isAlive()?.let { if (!it) return }
 
         cooldown = true
 
-        worm.title()
+        worm?.title()
     }
 
     @Subscription(TickEvent::class)
     @TimePassed("5t")
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onTick() {
-        val now = System.currentTimeMillis()
-        if (worm.isAlive()) {
+        if (worm?.isAlive() ?: false) {
             McClient.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP)
         }
 
         if (cooldown) {
-            if ((now - worm.spawnedAt()) >= 29000) {
-                cooldown = false
-                if (ScathaConfig.wormCooldown) {
-                    McClient.setTitle(
-                        Text.of {
-                            append(ChatUtils.ICON_SPACE_COMPONENT)
-                            append("Scatha Cooldown Over") {
-                                color = TextColor.GRAY
-                            }
-                        },
-                        stayTime = 1f
-                    )
-                    McClient.playSound(SoundEvents.NOTE_BLOCK_PLING.value(), 1f, 2f)
+            worm?.spawnedAt()?.since()?.let {
+                if ((it > 29.seconds)) {
+                    cooldown = false
+                    if (ScathaConfig.wormCooldown) {
+                        McClient.setTitle(
+                            Text.of {
+                                append(ChatUtils.ICON_SPACE_COMPONENT)
+                                append("Scatha Cooldown Over") {
+                                    color = TextColor.GRAY
+                                }
+                            },
+                            stayTime = 1f
+                        )
+                        McClient.playSound(SoundEvents.NOTE_BLOCK_PLING.value(), 1f, 2f)
+                    }
                 }
             }
         }
     }
 
-    val scathaPetDropRegex = Regex("^PET DROP! Scatha(?: \\(\\+(?<mf>\\d+)✯ Magic Find\\))?$")
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onPetDrop(event: ChatReceivedEvent.Pre) {
@@ -95,7 +98,7 @@ object Scathas {
         if (ScathaConfig.replacePetMessage) {
             event.cancel()
 
-            Text.of(){
+            Text.of{
                 append("PET DROP! ") {
                     this.bold = true
                     this.color = TextColor.GOLD
