@@ -4,12 +4,12 @@ import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.world.entity.Entity
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import kotlin.time.Instant
 
 class SpawnedWorm(val entity: Entity, val scatha: Boolean = false) {
@@ -22,7 +22,9 @@ class SpawnedWorm(val entity: Entity, val scatha: Boolean = false) {
 
 
     fun title() {
-        if (!((entity.cleanName.endsWith("10❤") && scatha) || (entity.cleanName.endsWith("5❤") && !scatha))) { return }
+        if (!((entity.cleanName.endsWith("10❤") && scatha) || (entity.cleanName.endsWith("5❤") && !scatha))) {
+            return
+        }
         if (scatha) {
             McClient.setTitle(
                 Text.of {
@@ -37,7 +39,8 @@ class SpawnedWorm(val entity: Entity, val scatha: Boolean = false) {
                         color = TextColor.RED
                         bold = true
                     }
-                }, stayTime = 1.5f
+                },
+                stayTime = 1.5f,
             )
         } else {
             McClient.setTitle(
@@ -52,7 +55,8 @@ class SpawnedWorm(val entity: Entity, val scatha: Boolean = false) {
                     append("just a worm...") {
                         color = TextColor.GRAY
                     }
-                }, stayTime = 1.5f
+                },
+                stayTime = 1.5f,
             )
         }
     }

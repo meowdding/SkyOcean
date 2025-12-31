@@ -1,24 +1,22 @@
 package me.owdding.skyocean.features.mining.scathas
 
-import kotlin.time.Duration.Companion.seconds
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.ScathaConfig
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.append
-import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
+import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
+import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityInfoLineEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
-import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
-import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
+import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import tech.thatgravyboat.skyblockapi.utils.regex.component.ComponentRegex
 import tech.thatgravyboat.skyblockapi.utils.regex.component.match
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
@@ -27,6 +25,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import kotlin.time.Duration.Companion.seconds
 
 @Module
 object Scathas {
@@ -76,7 +75,7 @@ object Scathas {
                         ChatUtils.ICON_SPACE_COMPONENT.copy().append("Scatha Cooldown Over") {
                             color = TextColor.GRAY
                         },
-                        stayTime = 1f
+                        stayTime = 1f,
                     )
                     McClient.playSound(SoundEvents.NOTE_BLOCK_PLING.value(), 1f, 2f)
                 }
@@ -124,7 +123,7 @@ object Scathas {
                         color = rarity.color
                         this.bold = true
                     },
-                    stayTime = 3f
+                    stayTime = 3f,
                 )
                 McClient.playSound(SoundEvents.ANVIL_LAND, 1f, 2f)
 
