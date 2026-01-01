@@ -155,6 +155,25 @@
             "desc": "Send a chat message how many keys of the current mineshaft corpses you have in your sacks."
           }
         },
+        "scatha": {
+          "@value": "Scathas",
+          "wormAnnouncer": {
+            "@value": "Enable Worm Announcer",
+            "desc": "Announce worm type when spawned."
+          },
+          "wormCooldown": {
+            "@value": "Enable Cooldown Notifier",
+            "desc": "Notifies you when you can spawn another worm."
+          },
+          "wormPetMessage": {
+            "@value": "Include Rarity in Pet Drop",
+            "desc": "Changes the pet drop message to include the pet rarity."
+          },
+          "wormPetTitle": {
+            "@value": "Enable Pet Drop Titles",
+            "desc": "Notifies you via title when you drop a pet."
+          }
+        },
         "hotm": {
           "@value": "Heart of the Mountain Perk Modifier",
           "shiftCost": {
