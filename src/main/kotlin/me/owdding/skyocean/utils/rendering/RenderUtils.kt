@@ -316,22 +316,24 @@ object RenderUtils {
         color: Int,
     ) {
         atCamera {
-            translate(x, y, z)
-            val buffer = buffer.getBuffer(MLibRenderTypes.DEBUG_FILLED_BOX)
+            translate(x, y + 0.01f, z)
 
-            for (i in 0..360) {
+            val vc = buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_QUAD)
+            val pose = poseStack.last().pose()
+
+            for (i in 0 until 360) {
                 val rad = Math.toRadians(i.toDouble())
-                val nextRad = Math.toRadians(i + 1.toDouble())
+                val nextRad = Math.toRadians((i + 1).toDouble())
 
-                val x1 = radius * cos(rad)
-                val y1 = radius * sin(rad)
+                val x1 = (radius * cos(rad)).toFloat()
+                val z1 = (radius * sin(rad)).toFloat()
+                val x2 = (radius * cos(nextRad)).toFloat()
+                val z2 = (radius * sin(nextRad)).toFloat()
 
-                val x2 = radius * cos(nextRad)
-                val y2 = radius * sin(nextRad)
-
-                buffer.addVertex(poseStack.last().pose(), 0f, 0f, 0f).setColor(color)
-                buffer.addVertex(poseStack.last().pose(), x1.toFloat(), 0f, y1.toFloat()).setColor(color)
-                buffer.addVertex(poseStack.last().pose(), x2.toFloat(), 0f, y2.toFloat()).setColor(color)
+                vc.addVertex(pose, 0f, 0f, 0f).setColor(color)
+                vc.addVertex(pose, x2, 0f, z2).setColor(color)
+                vc.addVertex(pose, x1, 0f, z1).setColor(color)
+                vc.addVertex(pose, 0f, 0f, 0f).setColor(color)
             }
         }
     }
