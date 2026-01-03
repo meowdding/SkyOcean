@@ -150,8 +150,7 @@ object RenderUtils {
             buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
             blockAABB,
             pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), color,
-
-            )
+        )
     }
 
     fun RenderWorldEvent.renderTextInWorld(
