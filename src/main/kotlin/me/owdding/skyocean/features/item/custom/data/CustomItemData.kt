@@ -2,12 +2,10 @@ package me.owdding.skyocean.features.item.custom.data
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
-import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.NamedCodec
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents.register
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils.get
 import me.owdding.skyocean.utils.Utils.unsafeCast
