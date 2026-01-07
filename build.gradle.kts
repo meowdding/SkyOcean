@@ -46,14 +46,6 @@ configurations {
 }
 
 dependencies {
-    attributesSchema {
-        attribute(Attribute.of("earth.terrarium.cloche.minecraftVersion", String::class.java)) {
-            disambiguationRules.add(ClocheDisambiguationRule::class) {
-                params(versionedCatalog.versions.getOrFallback("sbapi-mc-version", "minecraft").toString())
-            }
-        }
-    }
-
     minecraft(versionedCatalog["minecraft"])
     mappings(loom.layered {
         officialMojangMappings()
@@ -62,6 +54,19 @@ dependencies {
         })
     })
 
+    api(libs.skyblockapi) {
+        capabilities { requireCapability("tech.thatgravyboat:skyblock-api-${stonecutter.current.version}") }
+    }
+    include(libs.skyblockapi) {
+        capabilities { requireCapability("tech.thatgravyboat:skyblock-api-${stonecutter.current.version}-remapped") }
+    }
+    api(libs.meowdding.lib) {
+        capabilities { requireCapability("me.owdding.meowdding-lib:meowdding-lib-${stonecutter.current.version}") }
+    }
+    include(libs.meowdding.lib) {
+        capabilities { requireCapability("me.owdding.meowdding-lib:meowdding-lib-${stonecutter.current.version}-remapped") }
+    }
+
     includeImplementation(versionedCatalog["resourceful.config"])
     includeImplementation(versionedCatalog["resourceful.lib"])
     includeImplementation(versionedCatalog["placeholders"])
@@ -69,8 +74,8 @@ dependencies {
     includeImplementation(libs.resourceful.config.kotlin)
     includeImplementation(versionedCatalog["olympus"])
     includeImplementation(libs.meowdding.remote.repo)
-    includeImplementation(libs.meowdding.lib)
-    includeImplementation(libs.skyblockapi)
+
+    modRuntimeOnly(libs.hypixel.modapi.fabric)
 
     implementation(libs.keval)
     include(libs.keval)
@@ -185,7 +190,8 @@ tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.optIn.add("kotlin.time.ExperimentalTime")
     compilerOptions.freeCompilerArgs.addAll(
         "-Xcontext-parameters",
-        "-Xcontext-sensitive-resolution"
+        "-Xcontext-sensitive-resolution",
+        "-Xnullability-annotations=@org.jspecify.annotations:warn"
     )
 }
 

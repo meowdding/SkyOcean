@@ -12,9 +12,9 @@ import net.minecraft.client.renderer.entity.state.PigRenderState
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.Pig
-import net.minecraft.world.entity.animal.PigVariant
-import net.minecraft.world.entity.animal.PigVariants
+import net.minecraft.world.entity.animal.pig.Pig
+import net.minecraft.world.entity.animal.pig.PigVariant
+import net.minecraft.world.entity.animal.pig.PigVariants
 import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier

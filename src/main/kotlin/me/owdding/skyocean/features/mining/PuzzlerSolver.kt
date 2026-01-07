@@ -4,8 +4,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.utils.Utils.plus
 import net.minecraft.client.renderer.LightTexture
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.block.ModelBlockRenderer
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.core.BlockPos
@@ -60,7 +60,8 @@ object PuzzlerSolver {
 
             ModelBlockRenderer.renderModel(
                 event.poseStack.last(),
-                event.buffer.getBuffer(RenderType.entityCutoutNoCullZOffset(TextureAtlas.LOCATION_BLOCKS)),
+                // RenderTypes instead of RenderType but how
+                event.buffer.getBuffer(RenderTypes.entityCutoutNoCullZOffset(TextureAtlas.LOCATION_BLOCKS)),
                 McClient.self.blockRenderer.getBlockModel(state),
                 1f,
                 1f,

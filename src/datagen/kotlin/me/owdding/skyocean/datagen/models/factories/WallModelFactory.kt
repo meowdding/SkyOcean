@@ -7,7 +7,7 @@ import net.minecraft.client.data.models.BlockModelGenerators.*
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator
 import net.minecraft.client.data.models.model.ModelTemplates
 import net.minecraft.client.data.models.model.TextureMapping
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -50,8 +50,8 @@ object WallModelFactory : BlockModelFactory() {
     override fun create(
         block: Block,
         texture: Block,
-        fakeBlock: ResourceLocation,
-        parent: ResourceLocation?,
+        fakeBlock: Identifier,
+        parent: Identifier?,
         generator: BlockModelGenerators,
         modelGenContext: ModelGenContext,
     ) {

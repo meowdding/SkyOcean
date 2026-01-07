@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.TropicalFishRenderState
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.TropicalFish
+import net.minecraft.world.entity.animal.fish.TropicalFish
 
 @RegisterAnimalModifier
 object TropicalFishModifier : AnimalModifier<TropicalFish, TropicalFishRenderState> {

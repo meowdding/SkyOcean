@@ -5,3 +5,6 @@ accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher ren
 
 # 1.21.9
 accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$GlyphInstance
+
+# 1.21.11
+accessible method net/minecraft/client/gui/screens/inventory/InventoryScreen extractRenderState (Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/client/renderer/entity/state/EntityRenderState;

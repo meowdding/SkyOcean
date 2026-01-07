@@ -18,11 +18,11 @@ import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Block
-import java.util.UUID
+import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 class GenericDropdown<T>(
@@ -84,7 +84,7 @@ class GenericDropdown<T>(
                 default = TranslatableWrapper.blockWrapper(default),
                 options = options.map { TranslatableWrapper.blockWrapper(it) },
                 toString = { it.value.id.toString() },
-                fromString = { TranslatableWrapper.blockWrapper(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(it))) },
+                fromString = { TranslatableWrapper.blockWrapper(BuiltInRegistries.BLOCK.getValue(Identifier.parse(it))) },
                 id = id,
                 init = init,
             ),
@@ -100,7 +100,7 @@ class GenericDropdown<T>(
             id: String? = null,
             init: TypeBuilder.() -> Unit = {},
         ): CachedTransformedEntry<String, T> {
-            val renderer = ResourceLocation.fromNamespaceAndPath("skyocean_dropdown", UUID.randomUUID().toString())
+            val renderer = Identifier.fromNamespaceAndPath("skyocean_dropdown", UUID.randomUUID().toString())
             ResourcefulConfigUI.registerElementRenderer(renderer) { element -> GenericDropdown(element, options, toString) }
 
             val init: StringBuilder.() -> Unit = {

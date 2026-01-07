@@ -7,8 +7,8 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.ZombieVillagerRenderState
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.monster.ZombieVillager
-import net.minecraft.world.entity.npc.VillagerData
+import net.minecraft.world.entity.monster.zombie.ZombieVillager
+import net.minecraft.world.entity.npc.villager.VillagerData
 
 @RegisterAnimalModifier
 object ZombieVillagerModifier : AnimalModifier<ZombieVillager, ZombieVillagerRenderState> {

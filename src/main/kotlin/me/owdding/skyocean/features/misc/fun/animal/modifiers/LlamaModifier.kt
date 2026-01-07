@@ -8,7 +8,7 @@ import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.LlamaRenderState
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.horse.Llama
+import net.minecraft.world.entity.animal.equine.Llama
 
 @RegisterAnimalModifier
 object LlamaModifier : AnimalModifier<Llama, LlamaRenderState> {
