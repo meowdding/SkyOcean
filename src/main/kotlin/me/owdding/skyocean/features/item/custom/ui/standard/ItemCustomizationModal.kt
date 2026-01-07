@@ -13,9 +13,6 @@ import earth.terrarium.olympus.client.ui.modals.Modals
 import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.Orientation
 import earth.terrarium.olympus.client.utils.State
-import kotlin.jvm.optionals.getOrNull
-import kotlin.math.max
-import kotlin.time.Duration.Companion.seconds
 import me.owdding.lib.displays.*
 import me.owdding.lib.rendering.text.textShader
 import me.owdding.skyocean.SkyOcean
@@ -93,6 +90,9 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
+import kotlin.jvm.optionals.getOrNull
+import kotlin.math.max
+import kotlin.time.Duration.Companion.seconds
 
 const val PADDING: Int = 5
 const val BUTTON_GAP: Int = 5
@@ -578,7 +578,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         )
     }
 
-    override fun resize(mc: Minecraft, width: Int, height: Int) {
+    override fun resize(/*? if < 1.21.11 {*/ /*mc: Minecraft,  *//*?}*/width: Int, height: Int) {
         this.width = width
         this.height = height
         this.repositionElements()

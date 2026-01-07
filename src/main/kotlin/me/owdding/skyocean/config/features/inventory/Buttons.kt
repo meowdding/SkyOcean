@@ -1,16 +1,16 @@
 package me.owdding.skyocean.config.features.inventory
 
-import kotlin.jvm.optionals.getOrNull
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
 import me.owdding.skyocean.utils.Utils.id
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.ItemLike
 import org.intellij.lang.annotations.Language
 import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import kotlin.jvm.optionals.getOrNull
 
 object Buttons : CategoryKt("buttons") {
     override val hidden: Boolean = true
@@ -85,7 +85,7 @@ class ButtonConfig(
         disabled = false
     }
 
-    private fun toItem(id: String) = ResourceLocation.tryParse(id.lowercase())?.let {
+    private fun toItem(id: String) = Identifier.tryParse(id.lowercase())?.let {
         BuiltInRegistries.ITEM.getOptional(it).getOrNull()?.defaultInstance
     } ?: RepoItemsAPI.getItem(id.uppercase())
 }

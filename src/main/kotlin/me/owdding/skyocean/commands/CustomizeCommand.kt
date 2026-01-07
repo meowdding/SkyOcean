@@ -30,8 +30,8 @@ import me.owdding.skyocean.utils.extensions.copy
 import net.minecraft.commands.arguments.ResourceKeyArgument
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.equipment.trim.TrimMaterial
@@ -171,7 +171,7 @@ object CustomizeCommand {
                 val keys = (McClient.self.modelManager as ModelManagerAccessor).bakedItemModels().keys
                 thenCallback("vanilla_model", VirtualResourceArgument(keys)) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
-                    val model = getArgument<ResourceLocation>("vanilla_model")!!
+                    val model = getArgument<Identifier>("vanilla_model")!!
 
                     val success = CustomItems.modify(item) {
                         this[CustomItemDataComponents.MODEL] = StaticModel(model)
@@ -342,7 +342,7 @@ object CustomizeCommand {
 
     fun remove(type: CustomItemComponent<*>, messageProvider: (item: ItemStack) -> Component) = remove(type) { item, _ -> messageProvider(item) }
 
-    fun <T> remove(type: CustomItemComponent<T>, messageProvider: (item: ItemStack, oldData: T?) -> Component) {
+    fun <T : Any> remove(type: CustomItemComponent<T>, messageProvider: (item: ItemStack, oldData: T?) -> Component) {
         val item = mainHandItemOrNull() ?: return
 
         var oldData: T? = null

@@ -21,6 +21,7 @@ import me.owdding.skyocean.config.features.mining.MiningRetexture
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.misc.MobIconsConfig
+import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 import me.owdding.skyocean.config.hidden.OverlayPositions
 import me.owdding.skyocean.config.patcher.ConfigPatches
 import me.owdding.skyocean.utils.SkyOceanModifyIndicator
@@ -52,6 +53,7 @@ object Config : ConfigKt("skyocean/config") {
         category(MiscConfig) {
             category(MobIconsConfig)
             category(CraftHelperConfig)
+            category(FunConfig)
         }
         category(Buttons)
         category(OverlayPositions)
@@ -60,7 +62,7 @@ object Config : ConfigKt("skyocean/config") {
     }
 
     val disableMessageTextShadow: Boolean by invalidProperty(
-        boolean(true) {
+        boolean(false) {
             translation = "skyocean.config.main.text_shadow"
         },
         ChatUtils.prefixDelegate,

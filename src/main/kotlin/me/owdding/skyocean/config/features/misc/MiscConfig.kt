@@ -5,6 +5,7 @@ import me.owdding.lib.utils.KnownMods
 import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.config.duration
 import me.owdding.skyocean.config.separator
+import me.owdding.skyocean.features.item.search.highlight.ItemHighlightMode
 import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.transparency
@@ -74,6 +75,10 @@ object MiscConfig : CategoryKt("misc") {
 
     var itemSearchItemHighlight by enum(MinecraftColor.RED) {
         translation = "skyocean.config.misc.itemSearch.itemHighlight"
+    }
+
+    var itemSearchHighlightMode by enum(ItemHighlightMode.GLASS_PANE) {
+        translation = "skyocean.config.misc.itemSearch.highlightMode"
     }
 
     var highlightTime by long(10) {

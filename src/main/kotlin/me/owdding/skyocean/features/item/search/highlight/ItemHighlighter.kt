@@ -113,10 +113,18 @@ object ItemHighlighter {
 
     private fun ItemStack.highlight() {
         this.skyoceanReplace(false) {
-            if (this@highlight in ItemTag.GLASS_PANES) {
-                item = MiscConfig.itemSearchItemHighlight.paneItem
-            } else {
-                backgroundItem = MiscConfig.itemSearchItemHighlight.paneStack
+            when (MiscConfig.itemSearchHighlightMode) {
+                GLASS_PANE -> {
+                    if (this@highlight in ItemTag.GLASS_PANES) {
+                        item = MiscConfig.itemSearchItemHighlight.paneItem
+                    } else {
+                        backgroundItem = MiscConfig.itemSearchItemHighlight.paneStack
+                    }
+                }
+
+                FILL -> {
+                    backgroundColor = MiscConfig.itemSearchItemHighlight.color
+                }
             }
         }
         scheduleAdd(this)

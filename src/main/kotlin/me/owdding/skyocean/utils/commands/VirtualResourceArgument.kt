@@ -11,18 +11,18 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.suggestions.SkyOceanSuggestionProvider
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
-import net.minecraft.ResourceLocationException
+import net.minecraft.IdentifierException
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.CompletableFuture
 
 class VirtualResourceArgument(
-    private val locations: Collection<ResourceLocation>,
-    private val namespace: String = ResourceLocation.DEFAULT_NAMESPACE,
-) : ArgumentType<ResourceLocation>, SkyOceanSuggestionProvider {
+    private val locations: Collection<Identifier>,
+    private val namespace: String = Identifier.DEFAULT_NAMESPACE,
+) : ArgumentType<Identifier>, SkyOceanSuggestionProvider {
 
     private val commandException: SimpleCommandExceptionType = SimpleCommandExceptionType(Component.translatable("argument.id.invalid"))
     private val identifierNotFound: DynamicCommandExceptionType = DynamicCommandExceptionType { id: Any? ->
@@ -32,8 +32,8 @@ class VirtualResourceArgument(
         }
     }
 
-    override fun parse(reader: StringReader): ResourceLocation {
-        val resourceLocation: ResourceLocation = this.fromCommandInput(reader)
+    override fun parse(reader: StringReader): Identifier {
+        val resourceLocation: Identifier = this.fromCommandInput(reader)
         if (!locations.contains(resourceLocation)) {
             throw identifierNotFound.create(resourceLocation)
         }
@@ -42,16 +42,16 @@ class VirtualResourceArgument(
     }
 
     @Throws(CommandSyntaxException::class)
-    private fun fromCommandInput(reader: StringReader): ResourceLocation {
+    private fun fromCommandInput(reader: StringReader): Identifier {
         val i = reader.cursor
-        while (reader.canRead() && ResourceLocation.isAllowedInResourceLocation(reader.peek())) {
+        while (reader.canRead() && Identifier.isAllowedInIdentifier(reader.peek())) {
             reader.skip()
         }
         val string = reader.string.substring(i, reader.cursor)
         try {
             val split: Array<String> = split(string)
-            return ResourceLocation.fromNamespaceAndPath(split[0], split[1])
-        } catch (_: ResourceLocationException) {
+            return Identifier.fromNamespaceAndPath(split[0], split[1])
+        } catch (_: IdentifierException) {
             reader.cursor = i
             throw commandException.createWithContext(reader)
         }

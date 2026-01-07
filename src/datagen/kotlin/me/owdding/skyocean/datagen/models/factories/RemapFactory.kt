@@ -3,7 +3,7 @@ package me.owdding.skyocean.datagen.models.factories
 import me.owdding.skyocean.datagen.models.BlockModelFactory
 import me.owdding.skyocean.datagen.models.ModelGenContext
 import net.minecraft.client.data.models.BlockModelGenerators
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 
@@ -23,8 +23,8 @@ object RemapFactory : BlockModelFactory() {
     override fun create(
         block: Block,
         texture: Block,
-        fakeBlock: ResourceLocation,
-        parent: ResourceLocation?,
+        fakeBlock: Identifier,
+        parent: Identifier?,
         generator: BlockModelGenerators,
         modelGenContext: ModelGenContext,
     ) {

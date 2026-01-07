@@ -8,7 +8,7 @@ import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.rendering.RenderUtils
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.CommonComponents
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
@@ -136,7 +136,7 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
     }
 
     companion object {
-        private val TEXTURE = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png")
+        private val TEXTURE = Identifier.withDefaultNamespace("textures/gui/container/generic_54.png")
     }
 
     data class Slot(val x: Int, val y: Int, val itemStack: ItemStack? = null, var onClick: (Int) -> Unit = {}) {
