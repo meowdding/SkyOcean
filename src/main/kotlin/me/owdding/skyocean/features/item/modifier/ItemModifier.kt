@@ -178,7 +178,11 @@ object ItemModifiers {
 
     private fun Screen?.isInventory() = this is InventoryScreen || this is ContainerScreen
 
-    private fun Int.toSource(start: Int = 0) = if ((this >= start && this <= start + 8) && !McScreen.self.isInventory()) AbstractItemModifier.ModifierSource.HOTBAR else AbstractItemModifier.ModifierSource.PLAYER_INVENTORY
+    private fun Int.toSource(start: Int = 0) = if ((this >= start && this <= start + 8) && !McScreen.self.isInventory()) {
+        AbstractItemModifier.ModifierSource.HOTBAR
+    } else {
+        AbstractItemModifier.ModifierSource.PLAYER_INVENTORY
+    }
 
     @Subscription
     private fun ScreenInitializedEvent.event() {
@@ -233,8 +237,11 @@ object ItemModifiers {
             for ((key, value) in map) {
                 when (key) {
                     DataMarker.ITEM -> item = value.unsafeCast()
+
                     DataMarker.BACKGROUND_ITEM -> backgroundItem = value.unsafeCast()
+
                     DataMarker.ITEM_COUNT -> customSlotComponent = value.unsafeCast()
+
                     is DataMarker.ComponentDataMarker -> {
                         set(key.component, value.unsafeCast())
                     }
