@@ -12,7 +12,7 @@ import me.owdding.skyocean.utils.extensions.nullIfEmpty
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.forge.ForgeAPI
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -61,7 +61,7 @@ object ForgeReminder {
             val items = forgeSlots.groupBy { it.id }.values.joinToComponent(", ") {
                 Text.of {
                     append("${it.size}x ") { color = TextColor.GRAY }
-                    append(RepoItemsAPI.getItemName(it.first().id))
+                    append(it.first().skyBlockId.toItem().cleanName)
                 }
             }
 
