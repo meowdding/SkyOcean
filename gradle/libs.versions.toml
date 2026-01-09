@@ -7,7 +7,7 @@ fabric-api = "0.133.4"
 kotlin = "2.2.0"
 kotlin-symbol-processor = "2.2.0-2.0.2"
 gson = "2.12.1"
-skyblockapi = "4.0.0"
+skyblockapi = "4.0.1"
 skyblockapi-repo = "3.0.2"
 placeholders = "2.6.1+1.21.5"
 keval = "1.1.1"
@@ -18,11 +18,10 @@ rconfigkt = "3.5.15"
 
 detekt = "2.0.0-alpha.0"
 
-meowdding-lib = "4.0.2"
+meowdding-lib = "4.0.4"
 meowdding-ktmodules = "1.0.6"
 meowdding-ktcodecs = "1.1.5"
 meowdding-gradle = "1.1.0"
-meowdding-remote-repo = "1.0.4"
 meowdding-resources = "1.0.17"
 meowdding-auto-mixins = "1.0.7"
 
@@ -45,7 +44,6 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-fabric-1.21.5", version.ref = "rconfigkt" }
 
 meowdding-lib = { module = "me.owdding.meowdding-lib:meowdding-lib", version.ref = "meowdding-lib" }
-meowdding-remote-repo = { module = "me.owdding.repo:remote-repo", version.ref = "meowdding-remote-repo" }
 meowdding-ktmodules = { module = "me.owdding.ktmodules:KtModules", version.ref = "meowdding-ktmodules" }
 meowdding-ktcodecs = { module = "me.owdding.ktcodecs:KtCodecs", version.ref = "meowdding-ktcodecs" }
 meowdding-resources = { module = "me.owdding.repo:compacting-resources", version.ref = "meowdding-resources" }

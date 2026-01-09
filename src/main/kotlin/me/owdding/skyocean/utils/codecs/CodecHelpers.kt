@@ -64,24 +64,6 @@ val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
 
 object CodecHelpers {
 
-    internal inline fun <reified K, reified V> map(): Codec<Map<K, V>> =
-        Codec.unboundedMap(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
-
-    internal inline fun <reified K, reified V> mutableMap(): Codec<MutableMap<K, V>> =
-        CodecUtils.map(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
-
-    internal inline fun <reified T> list() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
-
-
-    fun <A> unit(defaultValue: A): Codec<A> = unit { defaultValue }
-
-    fun <A> unit(defaultValue: () -> A): Codec<A> = MapCodec.unit<A>(defaultValue).codec()
-
-    fun <T> copyOnWriteList(original: Codec<T>): Codec<CopyOnWriteArrayList<T>> = original.listOf().xmap(
-        { CopyOnWriteArrayList(it) },
-        { it },
-    )
-
     @IncludedCodec
     val ITEM_STACK_CODEC: Codec<ItemStack> = ItemStack.OPTIONAL_CODEC
 
@@ -177,4 +159,23 @@ object CodecHelpers {
             b.fieldOf("second").forGetter { it.second },
         ).apply(it, { a, b -> a to b })
     }
+
+    internal inline fun <reified K, reified V> map(): Codec<Map<K, V>> =
+        Codec.unboundedMap(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
+
+    internal inline fun <reified K, reified V> mutableMap(): Codec<MutableMap<K, V>> =
+        CodecUtils.map(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
+
+    internal inline fun <reified T> mutableList() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
+    internal inline fun <reified T> list(): Codec<List<T>> = SkyOceanCodecs.getCodec<T>().listOf()
+
+
+    fun <A> unit(defaultValue: A): Codec<A> = unit { defaultValue }
+
+    fun <A> unit(defaultValue: () -> A): Codec<A> = MapCodec.unit<A>(defaultValue).codec()
+
+    fun <T> copyOnWriteList(original: Codec<T>): Codec<CopyOnWriteArrayList<T>> = original.listOf().xmap(
+        { CopyOnWriteArrayList(it) },
+        { it },
+    )
 }
