@@ -4,9 +4,11 @@ import me.owdding.ktcodecs.Compact
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
+import me.owdding.skyocean.utils.RemoteRepoDelegate
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
@@ -33,7 +35,7 @@ object FetchurHelper {
         val message: String,
         @Compact val items: List<SkyBlockId>,
         val amount: Int,
-        private val override: String?,
+        val override: String?,
     ) {
         val itemName: String = override ?: run {
             require(items.size == 1) { "Fetchur items must have exactly one item if no override is provided" }
@@ -42,12 +44,11 @@ object FetchurHelper {
     }
 
     private val fetchurItems = Utils.loadRepoData("mining/fetchur", CodecHelpers.list<FetchurItem>())
-
     private var fetchurItem: FetchurItem? = null
 
     @Subscription
     @OnlyIn(DWARVEN_MINES)
-    fun onChatReceived(event: ChatReceivedEvent) {
+    fun onChatReceived(event: ChatReceivedEvent.Pre) {
         val message = regex.findGroup(event.text, "message") ?: return
         if (message.equals(CORRECT_ITEM, true)) {
             reset()
@@ -58,9 +59,9 @@ object FetchurHelper {
         fetchurItem = item
         McClient.runNextTick {
             text {
-                append("Fetchur Wants: ")
+                append("Fetchur wants: ") { color = OceanColors.BASE_TEXT }
                 append("${item.amount}x ") { color = TextColor.BLUE }
-                append(item.itemName) { color = TextColor.GOLD }
+                append(item.itemName) { color = OceanColors.HIGHLIGHT }
             }.sendWithPrefix()
             // TODO: do item tracker stuff
         }

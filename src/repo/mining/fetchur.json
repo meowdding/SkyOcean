@@ -1,12 +1,12 @@
 [
   {
     "message": "theyre yellow and see through",
-    "item": "item:stained_glass:4",
+    "items": "item:stained_glass:4",
     "amount": 20
   },
   {
     "message": "its hot and gives energy",
-    "item": [
+    "items": [
       "item:cheap_coffee",
       "item:black_coffee",
       "item:decent_coffee"
@@ -16,22 +16,22 @@
   },
   {
     "message": "its circular and sometimes moves",
-    "item": "item:compass",
+    "items": "item:compass",
     "amount": 1
   },
   {
     "message": "theyre expensive minerals",
-    "item": "item:mithril_ore",
+    "items": "item:mithril_ore",
     "amount": 20
   },
   {
     "message": "its useful during celebrations",
-    "item": "item:firework",
+    "items": "item:firework",
     "amount": 1
   },
   {
     "message": "its tall and can be opened",
-    "item": [
+    "items": [
       "item:wood_door",
       "item:acacia_door_item",
       "item:birch_door_item",
@@ -45,37 +45,37 @@
   },
   {
     "message": "theyre brown and fluffy",
-    "item": "item:rabbit_foot",
+    "items": "item:rabbit_foot",
     "amount": 3
   },
   {
     "message": "its explosive but more than usual",
-    "item": "item:superboom_tnt",
+    "items": "item:superboom_tnt",
     "amount": 1
   },
   {
     "message": "its wearable and grows",
-    "item": "item:pumpkin",
+    "items": "item:pumpkin",
     "amount": 1
   },
   {
     "message": "its shiny and makes sparks",
-    "item": "item:flint_and_steel",
+    "items": "item:flint_and_steel",
     "amount": 1
   },
   {
     "message": "theyre green and some dudes trade stuff for it",
-    "item": "item:emerald",
+    "items": "item:emerald",
     "amount": 50
   },
   {
     "message": "theyre round and green, or purple",
-    "item": "item:ender_pearl",
+    "items": "item:ender_pearl",
     "amount": 16
   },
   {
     "message": "theyre red and soft",
-    "item": "item:wool:14",
+    "items": "item:wool:14",
     "amount": 50
   }
 ]
