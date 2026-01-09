@@ -51,6 +51,8 @@ import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector3dc
+//? < 1.21.11
+/*import tech.thatgravyboat.skyblockapi.helpers.McClient*/
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.identifier
@@ -198,7 +200,7 @@ object Utils {
         SkyOcean.error("Failed to load '$file' from remote repo!", it)
     }.getOrNull()
 
-    internal fun <B : Any> loadRemoteRepoData(file: String, codec: Codec<B>): B? = loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(codec)
+    internal fun <B : Any> loadRemoteRepoData(file: String, codec: Codec<B>): B = loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(codec)
 
     val ItemLike.id get() = BuiltInRegistries.ITEM.getKey(this.asItem())
 

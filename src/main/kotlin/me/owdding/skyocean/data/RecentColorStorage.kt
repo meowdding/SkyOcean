@@ -9,7 +9,7 @@ import me.owdding.skyocean.utils.storage.DataStorage
 @Module
 object RecentColorStorage {
 
-    internal val storage: DataStorage<MutableList<ItemColor>> = DataStorage({ mutableListOf() }, "recent_colors", CodecHelpers.list())
+    internal val storage: DataStorage<MutableList<ItemColor>> = DataStorage({ mutableListOf() }, "recent_colors", CodecHelpers.mutableList())
 
     fun getColorAt(index: Int) = storage.get().getOrNull(index)
     fun addColor(color: ItemColor) {
