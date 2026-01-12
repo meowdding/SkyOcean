@@ -66,7 +66,7 @@ object StarStackSizeModifier : AbstractItemModifier() {
 object RevertMasterStarModifier : AbstractItemModifier() {
     override val displayName: Component get() = Text.translatable("skyocean.config.misc.revertMasterStars")
     override val isEnabled: Boolean get() = MiscConfig.revertMasterStars
-    val regex = ComponentRegex("(?<first>.*)✪✪✪✪✪[➊➋➌➍➎](?<second>.*)")
+    private val regex = ComponentRegex("(?<first>.*)✪✪✪✪✪[➊➋➌➍➎](?<second>.*)")
 
     override fun appliesTo(itemStack: ItemStack): Boolean {
         val stars = itemStack[DataTypes.STAR_COUNT] ?: return false
