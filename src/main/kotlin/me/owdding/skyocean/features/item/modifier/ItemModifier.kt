@@ -180,15 +180,25 @@ object ItemModifiers {
 
     private fun Int.toSource(start: Int = 0) = if ((this >= start && this <= start + 8) && !McScreen.self.isInventory()) AbstractItemModifier.ModifierSource.HOTBAR else AbstractItemModifier.ModifierSource.PLAYER_INVENTORY
 
+    val McPlayer.equipment get() = listOf(helmet, chestplate, leggings, boots)
+
     @Subscription
     private fun ScreenInitializedEvent.event() {
         if (this.screen.isInventory()) {
+            McPlayer.equipment.forEach { stack ->
+                clear(stack)
+                tryModify(stack, AbstractItemModifier.ModifierSource.EQUIPMENT)
+            }
             McPlayer.inventory.forEachIndexed { index, stack ->
                 clear(stack)
                 tryModify(stack, index.toSource())
             }
             ScreenEvents.remove(this.screen).register {
                 McClient.runNextTick {
+                    McPlayer.equipment.forEach { stack ->
+                        clear(stack)
+                        tryModify(stack, AbstractItemModifier.ModifierSource.EQUIPMENT)
+                    }
                     McPlayer.inventory.forEachIndexed { index, stack ->
                         clear(stack)
                         tryModify(stack, index.toSource())
