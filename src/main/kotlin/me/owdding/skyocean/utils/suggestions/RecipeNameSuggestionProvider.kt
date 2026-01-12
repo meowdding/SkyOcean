@@ -16,9 +16,10 @@ object RecipeNameSuggestionProvider : SkyOceanSuggestionProvider {
     ): CompletableFuture<Suggestions?>? {
         SimpleRecipeApi.recipes.forEach { recipe ->
             recipe.output?.let {
-                suggest(builder, it.itemName.stripped)
-                if (it.itemName.stripped.startsWith("[Lvl ")) {
-                    suggest(builder, it.itemName.stripped.substringAfter("]"))
+                val name = it.itemName.stripped.takeUnless { name -> name == "Unknown item: ${it.id}" } ?: return@let
+                suggest(builder, name)
+                if (name.startsWith("[Lvl ")) {
+                    suggest(builder, name.substringAfter("]"))
                 }
             }
         }

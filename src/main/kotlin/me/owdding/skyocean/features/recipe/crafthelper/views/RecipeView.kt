@@ -64,11 +64,9 @@ fun interface RecipeView {
                 val childState = childContext.toState()
                 state.childStates.add(childState)
                 childState.isLast = context.node.nodes.first() == node
-                state.childrenDone = state.childrenDone && (childState.isDone() || childState.childrenDone)
             }
-        } else {
-            state.childrenDone = false
         }
+        state.childrenDone = state.childStates.isNotEmpty() && state.childStates.all { it.isDone() || it.childrenDone }
     }
 
     fun create(state: CraftHelperState, widget: WidgetBuilder, widgetConsumer: (AbstractWidget) -> Unit)
