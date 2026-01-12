@@ -155,6 +155,8 @@ object ItemModifiers {
     val modifiers: List<AbstractItemModifier> = SkyOceanItemModifiers.collected.sortedBy { it.priority }.toList()
     val modifiedItems: WeakHashMap<ItemStack, List<AbstractItemModifier>> = WeakHashMap()
 
+    val McPlayer.equipment get() = listOf(helmet, chestplate, leggings, boots)
+
     @Subscription
     @MustBeContainer
     private fun InventoryChangeEvent.onContainerChange() {
@@ -178,9 +180,11 @@ object ItemModifiers {
 
     private fun Screen?.isInventory() = this is InventoryScreen || this is ContainerScreen
 
-    private fun Int.toSource(start: Int = 0) = if ((this >= start && this <= start + 8) && !McScreen.self.isInventory()) AbstractItemModifier.ModifierSource.HOTBAR else AbstractItemModifier.ModifierSource.PLAYER_INVENTORY
-
-    val McPlayer.equipment get() = listOf(helmet, chestplate, leggings, boots)
+    private fun Int.toSource(start: Int = 0) = if ((this >= start && this <= start + 8) && !McScreen.self.isInventory()) {
+        AbstractItemModifier.ModifierSource.HOTBAR
+    } else {
+        AbstractItemModifier.ModifierSource.PLAYER_INVENTORY
+    }
 
     @Subscription
     private fun ScreenInitializedEvent.event() {
@@ -245,10 +249,7 @@ object ItemModifiers {
                     DataMarker.ITEM -> item = value.unsafeCast()
                     DataMarker.BACKGROUND_ITEM -> backgroundItem = value.unsafeCast()
                     DataMarker.ITEM_COUNT -> customSlotComponent = value.unsafeCast()
-                    is DataMarker.ComponentDataMarker -> {
-                        set(key.component, value.unsafeCast())
-                    }
-
+                    is DataMarker.ComponentDataMarker -> set(key.component, value.unsafeCast())
                     else -> {}
                 }
             }
