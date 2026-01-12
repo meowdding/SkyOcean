@@ -13,7 +13,10 @@ import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.extensions.or
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.gui.screens.inventory.ContainerScreen
+import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.core.component.DataComponentPatch
 import net.minecraft.core.component.DataComponentType
@@ -29,9 +32,14 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.minecraft.ui.GatherItemTooltipComponentsEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ItemTooltipEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.PlayerEquipmentChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.PlayerHotbarChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.PlayerInventoryChangeEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
+import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -41,6 +49,18 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.*
 
 abstract class AbstractItemModifier {
+
+    enum class ModifierSource {
+        INVENTORY,
+        PLAYER_INVENTORY,
+        HOTBAR,
+        EQUIPMENT,
+        ;
+
+        companion object {
+            val ALL: List<ModifierSource> = entries
+        }
+    }
 
     companion object {
         const val LOWEST = 1000000
@@ -54,6 +74,7 @@ abstract class AbstractItemModifier {
     open val priority: Int = NORMAL
     protected abstract val displayName: Component
     open val displayNames: List<Component> by lazy { listOf(displayName) }
+    open val modifierSources: List<ModifierSource> get() = ModifierSource.ALL
     abstract val isEnabled: Boolean
 
     abstract fun appliesTo(itemStack: ItemStack): Boolean
@@ -65,7 +86,6 @@ abstract class AbstractItemModifier {
     open fun getExtraComponents(itemStack: ItemStack): DataComponentPatch? = null
     open fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?): Result = Result.unmodified
     open fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>): Result = Result.unmodified
-
 
     protected fun withMerger(original: MutableList<Component>, init: ListMerger<Component>.() -> Result?): Result {
         val merger = ListMerger(original)
@@ -138,23 +158,54 @@ object ItemModifiers {
     @Subscription
     @MustBeContainer
     private fun InventoryChangeEvent.onContainerChange() {
-        tryModify(item)
+        tryModify(item, AbstractItemModifier.ModifierSource.INVENTORY)
     }
 
     @Subscription
     private fun PlayerInventoryChangeEvent.onInventoryChange() {
-        tryModify(item)
+        tryModify(item, slot.toSource(36))
     }
 
     @Subscription
     private fun PlayerHotbarChangeEvent.onHotbarChange() {
-        tryModify(item)
+        tryModify(item, AbstractItemModifier.ModifierSource.HOTBAR)
     }
 
-    private fun tryModify(itemStack: ItemStack) {
+    @Subscription
+    private fun PlayerEquipmentChangeEvent.onHotbarChange() {
+        tryModify(item, AbstractItemModifier.ModifierSource.EQUIPMENT)
+    }
+
+    private fun Screen?.isInventory() = this is InventoryScreen || this is ContainerScreen
+
+    private fun Int.toSource(start: Int = 0) = if ((this >= start && this <= start + 8) && !McScreen.self.isInventory()) AbstractItemModifier.ModifierSource.HOTBAR else AbstractItemModifier.ModifierSource.PLAYER_INVENTORY
+
+    @Subscription
+    private fun ScreenInitializedEvent.event() {
+        if (this.screen.isInventory()) {
+            McPlayer.inventory.forEachIndexed { index, stack ->
+                clear(stack)
+                tryModify(stack, index.toSource())
+            }
+            ScreenEvents.remove(this.screen).register {
+                McClient.runNextTick {
+                    McPlayer.inventory.forEachIndexed { index, stack ->
+                        clear(stack)
+                        tryModify(stack, index.toSource())
+                    }
+                }
+            }
+        }
+    }
+
+    private fun tryModify(itemStack: ItemStack, modifierSource: AbstractItemModifier.ModifierSource) {
         if (modifiedItems.contains(itemStack)) return
 
-        val modifiers = modifiers.filter { it.isEnabled && it.appliesTo(itemStack) && McScreen.self?.let { screen -> it.appliesToScreen(screen) } == true }
+        val modifiers = modifiers.filter {
+            it.isEnabled && it.appliesTo(itemStack) && it.modifierSources.contains(modifierSource) && McScreen.self?.let { screen ->
+                it.appliesToScreen(screen)
+            } == true
+        }
 
         if (modifiers.isEmpty()) return
 
@@ -183,7 +234,7 @@ object ItemModifiers {
                 when (key) {
                     DataMarker.ITEM -> item = value.unsafeCast()
                     DataMarker.BACKGROUND_ITEM -> backgroundItem = value.unsafeCast()
-                    DataMarker.ITEM_COUNT -> count = 2
+                    DataMarker.ITEM_COUNT -> customSlotComponent = value.unsafeCast()
                     is DataMarker.ComponentDataMarker -> {
                         set(key.component, value.unsafeCast())
                     }
@@ -195,7 +246,8 @@ object ItemModifiers {
         modifiedItems[itemStack.getVisualItem() ?: itemStack] = usedModifiers
     }
 
-    private context(map: MutableMap<DataMarker<*>, Any>, state: State<Boolean>, itemStack: ItemStack) fun <T : Any> AbstractItemModifier.extract(
+    private context(map: MutableMap<DataMarker<*>, Any>, state: State<Boolean>, itemStack: ItemStack)
+    fun <T : Any> AbstractItemModifier.extract(
         dataMarker: DataMarker<T>,
         mapper: AbstractItemModifier.(ItemStack) -> T?,
     ) {
@@ -203,7 +255,8 @@ object ItemModifiers {
         set(dataMarker, mapper(itemStack))
     }
 
-    context(map: MutableMap<DataMarker<*>, Any>, state: State<Boolean>) private fun <T : Any, V> set(dataMarker: DataMarker<T>, value: V?) {
+    context(map: MutableMap<DataMarker<*>, Any>, state: State<Boolean>)
+    private fun <T : Any, V> set(dataMarker: DataMarker<T>, value: V?) {
         if (map.contains(dataMarker)) return
         if (value != null) {
             map[dataMarker] = value
@@ -291,6 +344,12 @@ object ItemModifiers {
             val result = modifier.appendComponents(item, components)
             if (!result.propagateFurther) break
         }
+    }
+
+    fun clear(stack: ItemStack) {
+        this.modifiedItems.remove(stack)
+        this.modifiedItems.remove(stack.getVisualItem())
+        stack.replaceVisually(null)
     }
 }
 
