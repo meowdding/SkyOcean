@@ -204,7 +204,7 @@ object ItemModifiers {
         val modifiers = modifiers.filter {
             it.isEnabled && it.appliesTo(itemStack) && it.modifierSources.contains(modifierSource) && McScreen.self?.let { screen ->
                 it.appliesToScreen(screen)
-            } == true
+            } != false
         }
 
         if (modifiers.isEmpty()) return
