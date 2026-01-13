@@ -1233,6 +1233,10 @@
         "museum_donation": {
           "@value": "Museum Donation",
           "desc": "Shows what items haven't been donated to museum in the tooltip."
+        },
+        "dye_hex": {
+          "@value": "Dye Hex Color",
+          "desc": "Shows the hex code of the dye on armors. Only visible with Advanced Tooltips enabled (F3 + H)."
         }
       },
       "foraging": {
