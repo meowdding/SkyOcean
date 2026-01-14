@@ -66,13 +66,14 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
             Operation<Void> original
         ) {
             original.call(avatar, state, partialTick);
-            AvatarRenderStateAccessor.setLastMoveTime(state, PlayerUtils.INSTANCE.getLastMoveTime());
             AvatarRenderStateAccessor.setUUID(state, avatar.getUUID());
             AvatarRenderStateAccessor.setSelf(state, avatar instanceof LocalPlayer);
             AvatarRenderStateAccessor.setNpc(state, avatar.getUUID().version() != 4);
             if (!PlayerAnimals.shouldPlayerBeAnimal(state)) {
                 return;
             }
+            AvatarRenderStateAccessor.setHeldItemStack(state, avatar.getMainHandItem());
+            AvatarRenderStateAccessor.setLastMoveTime(state, PlayerUtils.INSTANCE.getLastMoveTime());
 
             var type = PlayerAnimals.getEntityType();
             var renderer = Minecraft.getInstance().getEntityRenderDispatcher().renderers.get(type);

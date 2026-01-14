@@ -59,13 +59,14 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<Entity, E
         @WrapMethod(method = "extractRenderState(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;F)V")
         public void extractRenderState(AbstractClientPlayer entity, PlayerRenderState state, float partialTick, Operation<Void> original) {
             original.call(entity, state, partialTick);
-            AvatarRenderStateAccessor.setLastMoveTime(state, PlayerUtils.INSTANCE.getLastMoveTime());
             AvatarRenderStateAccessor.setUUID(state, entity.getUUID());
             AvatarRenderStateAccessor.setSelf(state, entity instanceof LocalPlayer);
             AvatarRenderStateAccessor.setNpc(state, entity.getUUID().version() != 4);
             if (!PlayerAnimals.shouldPlayerBeAnimal(state)) {
                 return;
             }
+            AvatarRenderStateAccessor.setHeldItemStack(state, entity.getMainHandItem());
+            AvatarRenderStateAccessor.setLastMoveTime(state, PlayerUtils.INSTANCE.getLastMoveTime());
 
             var type = PlayerAnimals.getEntityType();
             var renderer = Minecraft.getInstance().getEntityRenderDispatcher().renderers.get(type);

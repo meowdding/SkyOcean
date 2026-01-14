@@ -2,6 +2,7 @@ package me.owdding.skyocean.accessors;
 
 import java.util.UUID;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public interface AvatarRenderStateAccessor {
@@ -72,6 +73,20 @@ public interface AvatarRenderStateAccessor {
         }
     }
 
+    static ItemStack getHeldItemStack(Object renderState) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            return accessor.ocean$getHeldItemStack();
+        }
+        return ItemStack.EMPTY;
+    }
+
+    static void setHeldItemStack(Object renderState, ItemStack stack) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            accessor.ocean$setHeldItemStack(stack);
+        }
+    }
+
+
     void ocean$setUUID(UUID uuid);
 
     UUID ocean$getUUID();
@@ -91,5 +106,9 @@ public interface AvatarRenderStateAccessor {
     Long ocean$getLastMoveTime();
 
     void ocean$setLastMoveTime(Long time);
+
+    ItemStack ocean$getHeldItemStack();
+
+    void ocean$setHeldItemStack(ItemStack stack);
 
 }

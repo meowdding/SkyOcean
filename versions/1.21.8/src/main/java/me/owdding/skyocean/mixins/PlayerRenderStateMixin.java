@@ -3,6 +3,7 @@ package me.owdding.skyocean.mixins;
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -20,6 +21,8 @@ public class PlayerRenderStateMixin implements AvatarRenderStateAccessor {
     private LivingEntityRenderState skyocean$animalState;
     @Unique
     private Long skyocean$lastMoveTime;
+    @Unique
+    private ItemStack skyocean$heldItemStack;
 
     @Override
     public UUID ocean$getUUID() {
@@ -70,5 +73,15 @@ public class PlayerRenderStateMixin implements AvatarRenderStateAccessor {
     @Override
     public Long ocean$getLastMoveTime() {
         return this.skyocean$lastMoveTime;
+    }
+
+    @Override
+    public void ocean$setHeldItemStack(ItemStack stack) {
+        this.skyocean$heldItemStack = stack;
+    }
+
+    @Override
+    public ItemStack ocean$getHeldItemStack() {
+        return this.skyocean$heldItemStack;
     }
 }
