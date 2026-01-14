@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
+import me.owdding.skyocean.accessors.AvatarRenderStateAccessor
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
@@ -29,6 +30,7 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
     ) {
         state.variant = foxVariant.select(avatarState).variant ?: getRandom(avatarState, foxVariants)
         state.isSitting = avatarState.isCrouching
+        state.isSleeping = AvatarRenderStateAccessor.getLastMoveTime(avatarState) + 5000L < System.currentTimeMillis()
     }
 
     enum class Variant(val variant: Fox.Variant?) : Translatable {

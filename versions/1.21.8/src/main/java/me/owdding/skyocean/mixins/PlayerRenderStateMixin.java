@@ -18,6 +18,8 @@ public class PlayerRenderStateMixin implements AvatarRenderStateAccessor {
     private boolean skyocean$isNpc;
     @Unique
     private LivingEntityRenderState skyocean$animalState;
+    @Unique
+    private Long skyocean$lastMoveTime;
 
     @Override
     public UUID ocean$getUUID() {
@@ -58,5 +60,15 @@ public class PlayerRenderStateMixin implements AvatarRenderStateAccessor {
     @Override
     public void skyocean$setAnimalState(LivingEntityRenderState state) {
         this.skyocean$animalState = state;
+    }
+
+    @Override
+    public void ocean$setLastMoveTime(Long time) {
+        this.skyocean$lastMoveTime = time;
+    }
+
+    @Override
+    public Long ocean$getLastMoveTime() {
+        return this.skyocean$lastMoveTime;
     }
 }

@@ -59,6 +59,19 @@ public interface AvatarRenderStateAccessor {
         }
     }
 
+    static Long getLastMoveTime(Object renderState) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            return accessor.ocean$getLastMoveTime();
+        }
+        return null;
+    }
+
+    static void setLastMoveTime(Object renderState, Long time) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            accessor.ocean$setLastMoveTime(time);
+        }
+    }
+
     void ocean$setUUID(UUID uuid);
 
     UUID ocean$getUUID();
@@ -74,5 +87,9 @@ public interface AvatarRenderStateAccessor {
     LivingEntityRenderState skyocean$getAnimalState();
 
     void skyocean$setAnimalState(LivingEntityRenderState state);
+
+    Long ocean$getLastMoveTime();
+
+    void ocean$setLastMoveTime(Long time);
 
 }

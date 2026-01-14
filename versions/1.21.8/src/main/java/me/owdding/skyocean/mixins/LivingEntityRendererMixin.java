@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import me.owdding.skyocean.features.misc.fun.animal.PlayerAnimals;
+import me.owdding.skyocean.utils.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
@@ -58,6 +59,7 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<Entity, E
         @WrapMethod(method = "extractRenderState(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;F)V")
         public void extractRenderState(AbstractClientPlayer entity, PlayerRenderState state, float partialTick, Operation<Void> original) {
             original.call(entity, state, partialTick);
+            AvatarRenderStateAccessor.setLastMoveTime(state, PlayerUtils.INSTANCE.getLastMoveTime());
             AvatarRenderStateAccessor.setUUID(state, entity.getUUID());
             AvatarRenderStateAccessor.setSelf(state, entity instanceof LocalPlayer);
             AvatarRenderStateAccessor.setNpc(state, entity.getUUID().version() != 4);
