@@ -5,12 +5,11 @@ import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.unaryPlus
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-import net.minecraft.core.component.DataComponents
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-
 
 @ItemModifier
 object DyeHexLoreModifier : AbstractItemModifier() {
