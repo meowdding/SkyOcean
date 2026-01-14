@@ -7,10 +7,9 @@ import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import net.minecraft.core.component.DataComponents
-import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 
 
 @ItemModifier
@@ -22,7 +21,7 @@ object DyeHexLoreModifier : AbstractItemModifier() {
     override fun appliesTo(itemStack: ItemStack) : Boolean {
         val isDyedHidden = itemStack.get(DataComponents.TOOLTIP_DISPLAY)?.shows(DataComponents.DYED_COLOR) == false
         val isLeather = itemStack.has(DataComponents.DYED_COLOR)
-        return isDyedHidden && isLeather && McClient.options.advancedItemTooltips
+        return isDyedHidden && isLeather
     }
 
     override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {
@@ -30,7 +29,8 @@ object DyeHexLoreModifier : AbstractItemModifier() {
 
         copy()
         add("Color: ${String.format("#%06X", dyeColor.rgb)}") {
-            this.color = TextColor.DARK_GRAY
+            this.color = dyeColor.rgb
+            this.shadowColor = (dyeColor.rgb xor 0x00FFFFFF) or (0x40 shl 24)
         }
         Result.modified
     }
