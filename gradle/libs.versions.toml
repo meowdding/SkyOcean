@@ -20,7 +20,7 @@ detekt = "2.0.0-alpha.0"
 
 meowdding-lib = "4.0.4"
 meowdding-ktmodules = "1.0.6"
-meowdding-ktcodecs = "1.1.5"
+meowdding-ktcodecs = "1.1.9"
 meowdding-gradle = "1.1.0"
 meowdding-resources = "1.0.17"
 meowdding-auto-mixins = "1.0.7"
