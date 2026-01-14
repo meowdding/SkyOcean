@@ -8,8 +8,8 @@ import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import net.minecraft.core.component.DataComponents
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 
 
 @ItemModifier
@@ -18,7 +18,7 @@ object DyeHexLoreModifier : AbstractItemModifier() {
     override val isEnabled: Boolean get() = LoreModifierConfig.dyeHex
 
 
-    override fun appliesTo(itemStack: ItemStack) : Boolean {
+    override fun appliesTo(itemStack: ItemStack): Boolean {
         val isDyedHidden = itemStack.get(DataComponents.TOOLTIP_DISPLAY)?.shows(DataComponents.DYED_COLOR) == false
         val isLeather = itemStack.has(DataComponents.DYED_COLOR)
         return isDyedHidden && isLeather
@@ -29,8 +29,7 @@ object DyeHexLoreModifier : AbstractItemModifier() {
 
         copy()
         add("Color: ${String.format("#%06X", dyeColor.rgb)}") {
-            this.color = dyeColor.rgb
-            this.shadowColor = (dyeColor.rgb xor 0x00FFFFFF) or (0x40 shl 24)
+            this.color = TextColor.DARK_GRAY
         }
         Result.modified
     }
