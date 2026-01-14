@@ -60,19 +60,6 @@ public interface AvatarRenderStateAccessor {
         }
     }
 
-    static Long getLastMoveTime(Object renderState) {
-        if (renderState instanceof AvatarRenderStateAccessor accessor) {
-            return accessor.ocean$getLastMoveTime();
-        }
-        return null;
-    }
-
-    static void setLastMoveTime(Object renderState, Long time) {
-        if (renderState instanceof AvatarRenderStateAccessor accessor) {
-            accessor.ocean$setLastMoveTime(time);
-        }
-    }
-
     static ItemStack getHeldItemStack(Object renderState) {
         if (renderState instanceof AvatarRenderStateAccessor accessor) {
             return accessor.ocean$getHeldItemStack();
@@ -102,10 +89,6 @@ public interface AvatarRenderStateAccessor {
     LivingEntityRenderState skyocean$getAnimalState();
 
     void skyocean$setAnimalState(LivingEntityRenderState state);
-
-    Long ocean$getLastMoveTime();
-
-    void ocean$setLastMoveTime(Long time);
 
     ItemStack ocean$getHeldItemStack();
 

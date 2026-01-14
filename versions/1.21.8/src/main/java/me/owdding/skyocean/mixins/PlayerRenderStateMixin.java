@@ -20,8 +20,6 @@ public class PlayerRenderStateMixin implements AvatarRenderStateAccessor {
     @Unique
     private LivingEntityRenderState skyocean$animalState;
     @Unique
-    private Long skyocean$lastMoveTime;
-    @Unique
     private ItemStack skyocean$heldItemStack;
 
     @Override
@@ -63,16 +61,6 @@ public class PlayerRenderStateMixin implements AvatarRenderStateAccessor {
     @Override
     public void skyocean$setAnimalState(LivingEntityRenderState state) {
         this.skyocean$animalState = state;
-    }
-
-    @Override
-    public void ocean$setLastMoveTime(Long time) {
-        this.skyocean$lastMoveTime = time;
-    }
-
-    @Override
-    public Long ocean$getLastMoveTime() {
-        return this.skyocean$lastMoveTime;
     }
 
     @Override

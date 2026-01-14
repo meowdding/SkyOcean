@@ -983,6 +983,7 @@
               ]
             },
             "outside_skyblock": {
+              "@value": "Outside SkyBlock",
               "desc": "Whether player animals should also be visible outside of SkyBlock."
             }
           }

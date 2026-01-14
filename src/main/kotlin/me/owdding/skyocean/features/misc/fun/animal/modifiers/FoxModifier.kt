@@ -1,11 +1,11 @@
 package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
-import me.owdding.skyocean.accessors.AvatarRenderStateAccessor
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import me.owdding.skyocean.utils.PlayerUtils
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.FoxRenderState
 import net.minecraft.world.entity.EntityType
@@ -23,6 +23,20 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
         }
     }
 
+    var shouldSleep = PlayerAnimalConfig.createEntry("fox_eepy") { id, type ->
+        boolean(id, false) {
+            this.translation = createTranslationKey("fox", "${type}_eepy")
+            condition = { isSelected(EntityType.FOX)() && type == "own" }
+        }
+    }
+
+    var sleepDelay = PlayerAnimalConfig.createEntry("fox_sleep_delay") { id, type ->
+        double(id, 5.0) {
+            this.translation = createTranslationKey("fox", "${type}_sleep_delay")
+            condition = { isSelected(EntityType.FOX)() && type == "own" }
+        }
+    }
+
     override fun apply(
         avatarState: AvatarRenderState,
         state: FoxRenderState,
@@ -30,7 +44,11 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
     ) {
         state.variant = foxVariant.select(avatarState).variant ?: getRandom(avatarState, foxVariants)
         state.isSitting = avatarState.isCrouching
-        state.isSleeping = AvatarRenderStateAccessor.getLastMoveTime(avatarState) + 5000L < System.currentTimeMillis()
+
+        if (shouldSleep.select(avatarState)) {
+            val delay = sleepDelay.select(avatarState) * 1000
+            state.isSleeping = PlayerUtils.lastMoveTime + delay < System.currentTimeMillis()
+        }
     }
 
     enum class Variant(val variant: Fox.Variant?) : Translatable {

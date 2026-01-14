@@ -73,8 +73,7 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
                 return;
             }
             AvatarRenderStateAccessor.setHeldItemStack(state, avatar.getMainHandItem());
-            AvatarRenderStateAccessor.setLastMoveTime(state, PlayerUtils.INSTANCE.getLastMoveTime());
-
+            
             var type = PlayerAnimals.getEntityType();
             var renderer = Minecraft.getInstance().getEntityRenderDispatcher().renderers.get(type);
             var renderState = renderer.createRenderState();
