@@ -15,6 +15,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription.Companion.LOW
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.info.TabListChangeEvent
+import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -43,10 +44,7 @@ object ProfileInChat {
             val name = player.profile.name
             val suffix = player.team?.playerSuffix ?: return@forEach
             suffix.visitSiblings { sibling ->
-                if (sibling.stripped.trim() == "☀" && sibling.color == TextColor.GOLD) {
-                    usernameToProfileTypeCache.invalidate(name)
-                    return@visitSiblings
-                }
+                if (sibling.stripped.trim() == "☀" && sibling.color == TextColor.GOLD) return@visitSiblings
                 if (sibling.stripped.trim() in profileTypes) {
                     usernameToProfileTypeCache[name] = Text.of {
                         append(sibling)
@@ -79,5 +77,11 @@ object ProfileInChat {
             event.component = modified
         } catch (_: IndexOutOfBoundsException) {
         }
+    }
+
+    @OnlyOnSkyBlock
+    @Subscription(ProfileChangeEvent::class)
+    fun onProfileChange() {
+        usernameToProfileTypeCache.invalidateAll()
     }
 }
