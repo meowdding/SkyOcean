@@ -19,8 +19,7 @@ object StarStackSizeModifier : AbstractItemModifier() {
     override val displayName: Component get() = Text.translatable("skyocean.config.misc.itemStarStacksize")
     override val isEnabled: Boolean get() = MiscConfig.itemStarStacksize
 
-    override fun appliesTo(itemStack: ItemStack): Boolean 
-        = itemStack[DataTypes.STAR_COUNT]?.takeUnless { it == 0 } != null
+    override fun appliesTo(itemStack: ItemStack): Boolean = itemStack[DataTypes.STAR_COUNT]?.takeUnless { it == 0 } != null
 
     override fun itemCountOverride(itemStack: ItemStack): Component? {
         val stars = itemStack[DataTypes.STAR_COUNT]?.takeUnless { it == 0 } ?: return null
