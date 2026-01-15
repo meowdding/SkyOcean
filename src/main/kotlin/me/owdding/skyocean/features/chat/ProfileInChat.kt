@@ -43,6 +43,10 @@ object ProfileInChat {
             val name = player.profile.name
             val suffix = player.team?.playerSuffix ?: return@forEach
             suffix.visitSiblings { sibling ->
+                if (sibling.stripped.trim() == "☀" && sibling.color == TextColor.GOLD) {
+                    usernameToProfileTypeCache.invalidate(name)
+                    return@visitSiblings
+                }
                 if (sibling.stripped.trim() in profileTypes) {
                     usernameToProfileTypeCache[name] = Text.of {
                         append(sibling)
