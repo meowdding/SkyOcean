@@ -290,6 +290,14 @@
           "@value": "Anvil helper",
           "desc": "Highlights books that have the same enchantment as the ones in the anvil."
         },
+        "itemStarStacksize": {
+          "@value": "Item Star Stacksize",
+          "desc": "Shows the Item Star amount as the stacksize."
+        },
+        "revertMasterStars": {
+          "@value": "Revert Master Stars",
+          "desc": "Reverts the Master Star back to the stacked colored look."
+        },
         "previousServer": {
           "@value": "Previous Server",
           "desc": "Sends a chat message when you join a server you were previously in."
@@ -1234,6 +1242,10 @@
         "museum_donation": {
           "@value": "Museum Donation",
           "desc": "Shows what items haven't been donated to museum in the tooltip."
+        },
+        "dye_hex": {
+          "@value": "Dye Hex Color",
+          "desc": "Shows the hex code of the dye on armors."
         }
       },
       "foraging": {

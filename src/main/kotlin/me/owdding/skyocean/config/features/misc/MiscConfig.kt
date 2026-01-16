@@ -33,6 +33,14 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.anvilHelper"
     }
 
+    var itemStarStacksize by boolean(false) {
+        translation = "skyocean.config.misc.itemStarStacksize"
+    }
+
+    var revertMasterStars by boolean(false) {
+        translation = "skyocean.config.misc.revertMasterStars"
+    }
+
     var hideLightning by boolean(false) {
         translation = "skyocean.config.misc.hideLightning"
     }
