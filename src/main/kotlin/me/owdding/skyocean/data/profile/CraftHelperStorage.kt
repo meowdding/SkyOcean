@@ -5,6 +5,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.data.Meow
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsRecipe
+import me.owdding.skyocean.features.recipe.custom.CustomRoot
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.codecs.CodecHelpers
@@ -63,6 +64,14 @@ object CraftHelperStorage {
     fun setStorage(recipe: CraftHelperRecipe) {
         storage.set(recipe)
         save()
+    }
+
+    fun getAndOrSetCustomRecipe(): Meow {
+        if (data !is Meow) {
+            storage.set(Meow(CustomRoot(), mutableMapOf()))
+            save()
+        }
+        return data!! as Meow
     }
 
     fun setAmount(amount: Int) {

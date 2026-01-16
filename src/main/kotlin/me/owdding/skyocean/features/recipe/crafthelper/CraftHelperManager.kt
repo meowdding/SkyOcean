@@ -19,6 +19,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -76,13 +77,25 @@ object CraftHelperManager {
         val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
         val item = mcScreenHovered ?: reiHovered ?: return
 
-        setSelected(SkyBlockId.fromItem(item))
+        if (McClient.self.hasShiftDown()) {
+            val storage = CraftHelperStorage.getAndOrSetCustomRecipe()
+            val id = SkyBlockId.fromItem(item) ?: return
+            storage.inputs[id.id] = (storage.inputs[id.id] ?: 0) + 1
+            CraftHelperStorage.save()
+            Text.of("Added 1 ") {
+                append(item.hoverName) {
+                    this.bold = true
+                }
+                append(" to custom Crafthelper recipe.")
+            }.sendWithPrefix()
+        } else {
+            setSelected(SkyBlockId.fromItem(item))
+            Text.of("Set selected Crafthelper item to ") {
+                append(item.hoverName) {
+                    this.bold = true
+                }
+            }.sendWithPrefix()
+        }
         McScreen.refreshScreen()
-
-        Text.of("Set selected Crafthelper item to ") {
-            append(item.hoverName) {
-                this.bold = true
-            }
-        }.sendWithPrefix()
     }
 }

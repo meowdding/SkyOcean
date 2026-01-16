@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
@@ -16,10 +17,12 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.TooltipDisplay
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import kotlin.collections.set
 
 abstract class AbstractCraftHelperModifier {
     abstract fun applies(event: InventoryChangeEvent): SkyOceanItemIngredient?
@@ -38,15 +41,24 @@ abstract class AbstractCraftHelperModifier {
                 },
             )
             tooltip {
-                add("Set as selected craft helper item!") {
+                add("Click to set as selected craft helper item!") {
+                    this.color = TextColor.GRAY
+                }
+                add("Shift-Click to add 1 to custom recipe!") {
                     this.color = TextColor.GRAY
                 }
             }
 
             onClick {
-                setSelected(ingredient.id)
-                val amount = SimpleRecipeApi.getBestRecipe(ingredient.id)?.output?.amount ?: 1
-                setAmount(Utils.nextUp(ingredient.amount, amount))
+                if (McClient.self.hasShiftDown()) {
+                    val storage = CraftHelperStorage.getAndOrSetCustomRecipe()
+                    storage.inputs[ingredient.id.id] = (storage.inputs[ingredient.id.id] ?: 0) + 1
+                    CraftHelperStorage.save()
+                } else {
+                    setSelected(ingredient.id)
+                    val amount = SimpleRecipeApi.getBestRecipe(ingredient.id)?.output?.amount ?: 1
+                    setAmount(Utils.nextUp(ingredient.amount, amount))
+                }
                 McScreen.refreshScreen()
             }
         }

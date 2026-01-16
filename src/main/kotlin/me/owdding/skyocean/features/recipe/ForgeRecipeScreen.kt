@@ -79,7 +79,10 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
                             this.color = TextColor.GREEN
                         },
                     )
-                    add("Set as selected craft helper item!") {
+                    add("Click to set as selected craft helper item!") {
+                        this.color = TextColor.GRAY
+                    }
+                    add("Shift-Click to add 1 to custom recipe!") {
                         this.color = TextColor.GRAY
                     }
                 }
@@ -120,7 +123,15 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
         addItems(items)
         if (shouldAddCraftHelperModifier) {
             slots[32].onClick = {
-                CraftHelperStorage.setSelected(skyblockId)
+                if (McClient.self.hasShiftDown()) {
+                    if (skyblockId?.id != null) {
+                        val storage = CraftHelperStorage.getAndOrSetCustomRecipe()
+                        storage.inputs[skyblockId.id] = (storage.inputs[skyblockId.id] ?: 0) + 1
+                        CraftHelperStorage.save()
+                    }
+                } else {
+                    CraftHelperStorage.setSelected(skyblockId)
+                }
                 McScreen.self?.onClose()
             }
         }

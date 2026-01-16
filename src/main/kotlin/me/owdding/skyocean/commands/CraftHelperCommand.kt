@@ -141,10 +141,11 @@ object CraftHelperCommand {
                             }
 
                             current.inputs[itemId!!] = (current.inputs[itemId] ?: 0) + amount
+                            CraftHelperStorage.save()
 
                             text("Added ") {
                                 append("${amount}x ") { color = TextColor.GREEN }
-                                append(item?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
+                                append(item.toItem().let(ItemStack::getHoverName) ?: !"unknown")
                                 append(" to custom recipe!")
                             }.sendWithPrefix()
                         }
@@ -168,6 +169,7 @@ object CraftHelperCommand {
                             }
 
                             current.inputs[itemId!!] = amount
+                            CraftHelperStorage.save()
 
                             text("Set ") {
                                 append(item.toItem().let(ItemStack::getHoverName) ?: !"unknown")
@@ -194,6 +196,7 @@ object CraftHelperCommand {
                             }
 
                             current.inputs.remove(itemId)
+                            CraftHelperStorage.save()
 
                             text("Removed ") {
                                 append(item?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
