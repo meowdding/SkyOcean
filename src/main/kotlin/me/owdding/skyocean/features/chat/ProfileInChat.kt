@@ -32,7 +32,7 @@ object ProfileInChat {
     private val profileTypes = mapOf(
         "♲" to TextColor.GRAY,
         "Ⓑ" to null,
-        "☀" to TextColor.GREEN
+        "☀" to TextColor.GREEN,
     )
 
     private val usernameToProfileTypeCache: Cache<String, Component> = CacheBuilder.newBuilder()
@@ -76,6 +76,10 @@ object ProfileInChat {
     fun onChat(event: ChatReceivedEvent.Post) {
         try {
             if (!ChatConfig.enableProfileInChat) return
+
+            val strippedMsg = event.component.stripped
+
+            if (strippedMsg.startsWith("From ") || strippedMsg.startsWith("To ")) return
 
             val index = event.component.siblings.indexOfFirst { sibling -> sibling.stripped.startsWith(": ") } - 1
 
