@@ -1,6 +1,7 @@
 package me.owdding.skyocean.data.profile
 
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.data.Meow
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsRecipe
@@ -43,12 +44,14 @@ object CraftHelperStorage {
         get() = when (val data = data) {
             is NormalCraftHelperRecipe -> data.item
             is SkyShardsRecipe -> data.tree.shard
+            is Meow -> null
             else -> null
         }
     val selectedAmount
         get() = when (val data = data) {
             is NormalCraftHelperRecipe -> data.amount
             is SkyShardsRecipe -> data.tree.quantity
+            is Meow -> data.amount
             else -> 1
         }
 
@@ -57,10 +60,16 @@ object CraftHelperStorage {
         save()
     }
 
+    fun setStorage(recipe: CraftHelperRecipe) {
+        storage.set(recipe)
+        save()
+    }
+
     fun setAmount(amount: Int) {
         val amount = amount.coerceAtLeast(1)
         when (val data = data) {
             is NormalCraftHelperRecipe -> storage.set(data.copy(amount = amount))
+            is Meow -> storage.set(data.copy(outputAmount = amount))
             else -> return
         }
 

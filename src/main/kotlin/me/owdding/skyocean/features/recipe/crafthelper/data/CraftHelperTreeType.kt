@@ -10,6 +10,7 @@ import kotlin.reflect.KClass
 enum class CraftHelperRecipeType(override val type: KClass<out CraftHelperRecipe>) : DispatchHelper<CraftHelperRecipe> {
     NORMAL(NormalCraftHelperRecipe::class),
     SKY_SHARDS(SkyShardsRecipe::class),
+    CUSTOM(Meow::class),
     ;
 
     companion object {

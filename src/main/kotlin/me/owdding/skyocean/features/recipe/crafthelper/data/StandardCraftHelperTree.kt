@@ -4,6 +4,7 @@ import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.resolver.CustomTreeResolver
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.DefaultTreeResolver
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
@@ -18,4 +19,21 @@ data class NormalCraftHelperRecipe(
     ): Pair<ContextAwareRecipeTree, ItemLikeIngredient>? {
         return DefaultTreeResolver.resolve(this, resetLayout, clear)
     }
+}
+
+@GenerateCodec
+data class Meow(
+    var output: ItemLikeIngredient,
+    var inputs: MutableMap<String, Int>,
+    var amount: Int = 1,
+) : CraftHelperRecipe(CraftHelperRecipeType.CUSTOM, true) {
+
+    override fun resolve(
+        resetLayout: () -> Unit,
+        clear: () -> Unit,
+    ): Pair<ContextAwareRecipeTree, ItemLikeIngredient> {
+        return CustomTreeResolver.resolve(this, resetLayout, clear)
+    }
+
+    fun copy(outputAmount: Int) = Meow(output, inputs, outputAmount)
 }

@@ -8,9 +8,11 @@ import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
+import me.owdding.skyocean.features.recipe.crafthelper.data.Meow
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsCycleElement
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperDisplay
+import me.owdding.skyocean.features.recipe.custom.CustomRoot
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.not
@@ -118,6 +120,99 @@ object CraftHelperCommand {
                         append(CraftHelperStorage.selectedItem?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
                         append("!")
                     }.sendWithPrefix()
+                }
+            }
+            then("custom") {
+                then("add"){
+                    then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
+                        callback {
+                            val input = this.getArgument("recipe", String::class.java)
+                            var amount = 1
+                            val item = SkyBlockId.fromName(input, dropLast = false) ?: SkyBlockId.unknownType(input) ?: run {
+                                val splitName = input.substringBeforeLast(" ")
+                                amount = input.substringAfterLast(" ").toIntOrNull() ?: 1
+                                SkyBlockId.fromName(splitName) ?: SkyBlockId.unknownType(splitName)
+                            }
+                            val itemId = item?.id
+
+                            val current = CraftHelperStorage.data as? Meow ?: run {
+                                CraftHelperStorage.setStorage(Meow(CustomRoot(), mutableMapOf()))
+                                CraftHelperStorage.data as Meow
+                            }
+
+                            current.inputs[itemId!!] = (current.inputs[itemId] ?: 0) + amount
+
+                            text("Added ") {
+                                append("${amount}x ") { color = TextColor.GREEN }
+                                append(item?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
+                                append(" to custom recipe!")
+                            }.sendWithPrefix()
+                        }
+                    }
+                }
+                then("set"){
+                    then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
+                        callback {
+                            val input = this.getArgument("recipe", String::class.java)
+                            var amount = 1
+                            val item = SkyBlockId.fromName(input, dropLast = false) ?: SkyBlockId.unknownType(input) ?: run {
+                                val splitName = input.substringBeforeLast(" ")
+                                amount = input.substringAfterLast(" ").toIntOrNull() ?: 1
+                                SkyBlockId.fromName(splitName) ?: SkyBlockId.unknownType(splitName)
+                            }
+                            val itemId = item?.id
+
+                            val current = CraftHelperStorage.data as? Meow ?: run {
+                                CraftHelperStorage.setStorage(Meow(CustomRoot(), mutableMapOf()))
+                                CraftHelperStorage.data as Meow
+                            }
+
+                            current.inputs[itemId!!] = amount
+
+                            text("Set ") {
+                                append(item.toItem().let(ItemStack::getHoverName) ?: !"unknown")
+                                append(" to ")
+                                append("${amount}x") { color = TextColor.GREEN }
+                                append(" in the custom recipe!")
+                            }.sendWithPrefix()
+                        }
+                    }
+                }
+                then("remove") {
+                    then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
+                        callback {
+                            val input = this.getArgument("recipe", String::class.java)
+                            val item = SkyBlockId.fromName(input, dropLast = false) ?: SkyBlockId.unknownType(input) ?: run {
+                                val splitName = input.substringBeforeLast(" ")
+                                SkyBlockId.fromName(splitName) ?: SkyBlockId.unknownType(splitName)
+                            }
+                            val itemId = item?.id
+
+                            val current = CraftHelperStorage.data as? Meow ?: run {
+                                CraftHelperStorage.setStorage(Meow(CustomRoot(), mutableMapOf()))
+                                CraftHelperStorage.data as Meow
+                            }
+
+                            current.inputs.remove(itemId)
+
+                            text("Removed ") {
+                                append(item?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
+                                append(" from the custom recipe!")
+                            }.sendWithPrefix()
+                        }
+                    }
+                }
+                thenCallback("reset") {
+                    CraftHelperStorage.setStorage(
+                        Meow(
+                            CustomRoot(),
+                            mutableMapOf()
+                        )
+                    )
+                    text("Reset custom recipe!").sendWithPrefix()
+                }
+                callback {
+                    text("Please specify an action!") { this.color = TextColor.RED }
                 }
             }
         }
