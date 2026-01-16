@@ -123,7 +123,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
         addItems(items)
         if (shouldAddCraftHelperModifier) {
             slots[32].onClick = {
-                if (McClient.self.hasShiftDown()) {
+                if (McScreen.isShiftDown) {
                     if (skyblockId?.id != null) {
                         val storage = CraftHelperStorage.getAndOrSetCustomRecipe()
                         storage.inputs[skyblockId.id] = (storage.inputs[skyblockId.id] ?: 0) + 1

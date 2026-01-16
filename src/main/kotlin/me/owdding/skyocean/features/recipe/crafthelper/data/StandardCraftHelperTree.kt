@@ -31,9 +31,8 @@ data class Meow(
     override fun resolve(
         resetLayout: () -> Unit,
         clear: () -> Unit,
-    ): Pair<ContextAwareRecipeTree, ItemLikeIngredient> {
-        return CustomTreeResolver.resolve(this, resetLayout, clear)
-    }
+    ): Pair<ContextAwareRecipeTree, ItemLikeIngredient> = CustomTreeResolver.resolve(this, resetLayout, clear)
+
 
     fun copy(outputAmount: Int) = Meow(output, inputs, outputAmount)
 }

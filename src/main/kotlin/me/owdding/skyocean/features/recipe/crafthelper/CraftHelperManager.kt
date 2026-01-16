@@ -19,7 +19,6 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -77,7 +76,7 @@ object CraftHelperManager {
         val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
         val item = mcScreenHovered ?: reiHovered ?: return
 
-        if (McClient.self.hasShiftDown()) {
+        if (McScreen.isShiftDown) {
             val storage = CraftHelperStorage.getAndOrSetCustomRecipe()
             val id = SkyBlockId.fromItem(item) ?: return
             storage.inputs[id.id] = (storage.inputs[id.id] ?: 0) + 1

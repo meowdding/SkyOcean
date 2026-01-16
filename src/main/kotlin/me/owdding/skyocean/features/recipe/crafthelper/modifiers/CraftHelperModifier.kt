@@ -17,12 +17,10 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.TooltipDisplay
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import kotlin.collections.set
 
 abstract class AbstractCraftHelperModifier {
     abstract fun applies(event: InventoryChangeEvent): SkyOceanItemIngredient?
@@ -50,7 +48,7 @@ abstract class AbstractCraftHelperModifier {
             }
 
             onClick {
-                if (McClient.self.hasShiftDown()) {
+                if (McScreen.isShiftDown) {
                     val storage = CraftHelperStorage.getAndOrSetCustomRecipe()
                     storage.inputs[ingredient.id.id] = (storage.inputs[ingredient.id.id] ?: 0) + 1
                     CraftHelperStorage.save()

@@ -22,9 +22,9 @@ object CustomTreeResolver : TreeResolver<Meow> {
             meow.inputs.map { (id, amount) ->
                 SkyOceanItemIngredient(
                     SkyBlockId.unknownType(id.split(":").drop(1).joinToString("")) ?: SkyBlockId.EMPTY,
-                    amount * meow.output.amount
+                    amount * meow.output.amount,
                 )
-            }.toMutableList()
+            }.toMutableList(),
         )
 
         val output = meow.output
