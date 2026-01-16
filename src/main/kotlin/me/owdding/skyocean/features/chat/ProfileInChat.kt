@@ -14,8 +14,8 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription.Companion.LOWEST
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
+import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.info.TabListChangeEvent
-import tech.thatgravyboat.skyblockapi.api.events.profile.ProfileChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -29,7 +29,12 @@ import kotlin.time.toJavaDuration
 @Module
 object ProfileInChat {
 
-    private val profileTypes = listOf("♲", "Ⓑ", "☀")
+    private val profileTypes = mapOf(
+        "♲" to TextColor.GRAY,
+        "Ⓑ" to null,
+        "☀" to TextColor.GREEN
+    )
+
     private val usernameToProfileTypeCache: Cache<String, Component> = CacheBuilder.newBuilder()
         .maximumSize(100)
         .expireAfterAccess(10.minutes.toJavaDuration())
@@ -40,12 +45,18 @@ object ProfileInChat {
     @OnlyOnSkyBlock
     fun onTablistUpdate() {
         if (!ChatConfig.enableProfileInChat) return
+
         McClient.players.forEach { player ->
             val name = player.profile.name
             val suffix = player.team?.playerSuffix ?: return@forEach
+
             suffix.visitSiblings { sibling ->
-                if (sibling.stripped.trim() == "☀" && sibling.color == TextColor.GOLD) return@visitSiblings
-                if (sibling.stripped.trim() in profileTypes) {
+                val symbol = sibling.stripped.trim()
+                val color = profileTypes[symbol]
+
+                if (!profileTypes.containsKey(symbol)) return@visitSiblings
+
+                if (color == null || sibling.color == color) {
                     usernameToProfileTypeCache[name] = Text.of {
                         append(sibling)
                         append(CommonComponents.SPACE)
@@ -65,13 +76,20 @@ object ProfileInChat {
     fun onChat(event: ChatReceivedEvent.Post) {
         try {
             if (!ChatConfig.enableProfileInChat) return
+
             val index = event.component.siblings.indexOfFirst { sibling -> sibling.stripped.startsWith(": ") } - 1
+
             if (index < 0) return
+
             val name = event.component.siblings[index].stripped.trim().substringAfterLast(" ")
-            val targetIndex = if (name.equals(McPlayer.name, true)) {
-                event.component.siblings.indexOfFirst { sibling -> sibling.style.hoverEvent == null }
-            } else index
+
+            val targetIndex =
+                if (name.equals(McPlayer.name, true)) {
+                    event.component.siblings.indexOfFirst { sibling -> sibling.style.hoverEvent == null }
+                } else index
+
             val profileType = usernameToProfileTypeCache[name] ?: return
+
             val modified = event.component.copy()
             modified.siblings.add(targetIndex, profileType)
             event.component = modified
@@ -80,8 +98,8 @@ object ProfileInChat {
     }
 
     @OnlyOnSkyBlock
-    @Subscription(ProfileChangeEvent::class)
-    fun onProfileChange() {
+    @Subscription(ServerChangeEvent::class)
+    fun onServerChange() {
         usernameToProfileTypeCache.invalidateAll()
     }
 }
