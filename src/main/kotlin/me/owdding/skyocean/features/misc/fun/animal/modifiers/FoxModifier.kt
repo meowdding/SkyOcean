@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.FoxRenderState
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.animal.fox.Fox
-import kotlin.time.Clock
+import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
 import kotlin.time.Duration.Companion.milliseconds
 
 @RegisterAnimalModifier
@@ -49,7 +49,7 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
 
         if (shouldSleep.select(avatarState)) {
             val delay = sleepDelay.select(avatarState) * 1000
-            state.isSleeping = AvatarRenderStateAccessor.getLastMoveTime(avatarState)?.let { it + delay.milliseconds < Clock.System.now() } == true
+            state.isSleeping = AvatarRenderStateAccessor.getLastMoveTime(avatarState)?.let { it + delay.milliseconds < currentInstant() } == true
         }
     }
 

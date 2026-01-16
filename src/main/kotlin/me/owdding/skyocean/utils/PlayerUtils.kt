@@ -6,7 +6,7 @@ import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
-import kotlin.time.Clock
+import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
 import kotlin.time.Instant
 
 @Module
@@ -29,7 +29,7 @@ object PlayerUtils {
         val lastPlayerPos = lastPos[player]
         if (lastPlayerPos == null || currentPos != lastPlayerPos) {
             lastPos[player] = currentPos
-            lastMoveTime[player] = Clock.System.now()
+            lastMoveTime[player] = currentInstant()
         }
     }
 
