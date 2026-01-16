@@ -1,5 +1,6 @@
 package me.owdding.skyocean.mixins;
 
+import kotlin.time.Instant;
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -21,6 +22,8 @@ public class AvatarRenderStateMixin implements AvatarRenderStateAccessor {
     private LivingEntityRenderState skyocean$animalState;
     @Unique
     private ItemStack skyocean$heldItemStack;
+    @Unique
+    private Instant skyocean$lastMoveTime;
 
     @Override
     public UUID ocean$getUUID() {
@@ -70,5 +73,15 @@ public class AvatarRenderStateMixin implements AvatarRenderStateAccessor {
     @Override
     public ItemStack ocean$getHeldItemStack() {
         return this.skyocean$heldItemStack;
+    }
+
+    @Override
+    public Instant ocean$getLastMoveTime() {
+        return this.skyocean$lastMoveTime;
+    }
+
+    @Override
+    public void ocean$setLastMoveTime(Instant time) {
+        this.skyocean$lastMoveTime = time;
     }
 }

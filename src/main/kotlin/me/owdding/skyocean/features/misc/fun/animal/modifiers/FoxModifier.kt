@@ -1,15 +1,17 @@
 package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
+import me.owdding.skyocean.accessors.AvatarRenderStateAccessor
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
-import me.owdding.skyocean.utils.PlayerUtils
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.FoxRenderState
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.animal.fox.Fox
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.milliseconds
 
 @RegisterAnimalModifier
 object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
@@ -26,14 +28,14 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
     var shouldSleep = PlayerAnimalConfig.createEntry("fox_eepy") { id, type ->
         boolean(id, false) {
             this.translation = createTranslationKey("fox", "${type}_eepy")
-            condition = { isSelected(EntityType.FOX)() && type == "own" }
+            condition = isSelected(EntityType.FOX)
         }
     }
 
     var sleepDelay = PlayerAnimalConfig.createEntry("fox_sleep_delay") { id, type ->
         double(id, 5.0) {
             this.translation = createTranslationKey("fox", "${type}_sleep_delay")
-            condition = { isSelected(EntityType.FOX)() && type == "own" }
+            condition = isSelected(EntityType.FOX)
         }
     }
 
@@ -47,7 +49,7 @@ object FoxModifier : AnimalModifier<Fox, FoxRenderState> {
 
         if (shouldSleep.select(avatarState)) {
             val delay = sleepDelay.select(avatarState) * 1000
-            state.isSleeping = PlayerUtils.lastMoveTime + delay < System.currentTimeMillis()
+            state.isSleeping = AvatarRenderStateAccessor.getLastMoveTime(avatarState)?.let { it + delay.milliseconds < Clock.System.now() } == true
         }
     }
 

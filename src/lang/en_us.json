@@ -556,6 +556,22 @@
                 "random": "Random",
                 "red": "Red",
                 "snow": "Snow"
+              },
+              "own_eepy": {
+                "@value": "Own Eepy",
+                "desc": "zzzZZzzZ"
+              },
+              "other_eepy": {
+                "@value": "Other Eepy",
+                "desc": "zzzZZzzZ"
+              },
+              "own_sleep_delay": {
+                "@value": "Own Sleep Delay",
+                "desc": "Delay before eep zzZZz..."
+              },
+              "other_sleep_delay": {
+                "@value": "Other Sleep Delay",
+                "desc": "Delay before eep zzZZz..."
               }
             },
             "wolf": {

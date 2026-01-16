@@ -102,16 +102,14 @@ object PlayerAnimals {
     }
 
     fun appendItemLayer(state: HoldingEntityRenderState, avatarState: AvatarRenderState) {
-        if (context != null) {
-            context!!.itemModelResolver.appendItemLayers(
-                state.heldItem,
-                AvatarRenderStateAccessor.getHeldItemStack(avatarState),
-                ItemDisplayContext.GROUND,
-                null,
-                null,
-                avatarState.id + ItemDisplayContext.GROUND.ordinal,
-            )
-        }
+        context?.itemModelResolver?.appendItemLayers(
+            state.heldItem,
+            AvatarRenderStateAccessor.getHeldItemStack(avatarState),
+            ItemDisplayContext.GROUND,
+            null,
+            null,
+            avatarState.id + ItemDisplayContext.GROUND.ordinal,
+        )
     }
 
     enum class PlayerAnimalState : Translatable {
