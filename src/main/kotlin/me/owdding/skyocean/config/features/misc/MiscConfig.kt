@@ -1,6 +1,7 @@
 package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.lib.utils.KnownMods
 import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.config.duration
 import me.owdding.skyocean.config.separator
@@ -93,6 +94,11 @@ object MiscConfig : CategoryKt("misc") {
         slider = true
         range = 10L..60L
     }.duration(SECONDS)
+
+    var useReiSearchBar by boolean(true) {
+        translation = "skyocean.config.misc.itemSearch.useReiSearchBar"
+        condition = KnownMods.REI::installed
+    }
 
     var preserveLastSearch by boolean(false) {
         translation = "skyocean.config.misc.itemSearch.preserve_search"
