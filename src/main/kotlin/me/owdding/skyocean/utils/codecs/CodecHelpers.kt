@@ -2,6 +2,7 @@ package me.owdding.skyocean.utils.codecs
 
 import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.IncludedCodec
@@ -10,13 +11,34 @@ import me.owdding.lib.rendering.text.TextShaders
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.PackMetadata
+import me.owdding.skyocean.utils.Utils.lookup
+import net.minecraft.commands.arguments.blocks.BlockStateParser
 import net.minecraft.core.BlockPos
 import net.minecraft.core.ClientAsset
-import net.minecraft.network.chat.*
-import net.minecraft.network.chat.contents.*
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentContents
+import net.minecraft.network.chat.ComponentSerialization
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
+import net.minecraft.network.chat.contents.KeybindContents
+import net.minecraft.network.chat.contents.NbtContents
+import net.minecraft.network.chat.contents.ObjectContents
+import net.minecraft.network.chat.contents.PlainTextContents
+import net.minecraft.network.chat.contents.ScoreContents
+import net.minecraft.network.chat.contents.SelectorContents
+import net.minecraft.network.chat.contents.TranslatableContents
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ExtraCodecs
+import net.minecraft.util.Util
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.state.BlockState
+import org.joml.Quaternionf
+import org.joml.Quaternionfc
+import org.joml.Vector3f
+import org.joml.Vector3fc
+import org.joml.Vector3i
+import org.joml.Vector3ic
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -70,7 +92,7 @@ object CodecHelpers {
     @IncludedCodec
     val BLOCK_POS_CODEC: Codec<BlockPos> = BlockPos.CODEC
 
-    @IncludedCodec
+    @IncludedCodec(keyable = true)
     val RESOURCE_LOCATION: Codec<Identifier> = Identifier.CODEC
 
     @IncludedCodec
@@ -81,6 +103,23 @@ object CodecHelpers {
 
     @IncludedCodec
     val SKYBLOCK_ID_UNKNOWN: Codec<SkyBlockId> = SkyBlockId.UNKNOWN_CODEC
+
+    @IncludedCodec
+    val VECTOR_3IC: Codec<Vector3ic> = Codec.INT.listOf().comapFlatMap(
+        { list -> Util.fixedSize(list, 3).map { Vector3i(it[0], it[1], it[2]) } },
+        { listOf(it.x(), it.y(), it.z()) },
+    )
+
+    @IncludedCodec
+    val VECTOR_3FC: Codec<Vector3fc> = Codec.FLOAT.listOf().comapFlatMap(
+        { list -> Util.fixedSize(list, 3).map { Vector3f(it[0], it[1], it[2]) } },
+        { listOf(it.x(), it.y(), it.z()) },
+    )
+    @IncludedCodec
+    val QUATERNIONFC: Codec<Quaternionfc> = Codec.FLOAT.listOf().comapFlatMap(
+        { list -> Util.fixedSize(list, 4).map { Quaternionf(it[0], it[1], it[2], it[3]) } },
+        { listOf(it.x(), it.y(), it.z(), it.w()) },
+    )
 
     @IncludedCodec
     val CLIENT_ASSET_CODEC: Codec<ClientAsset> = Identifier.CODEC.xmap(
@@ -111,6 +150,22 @@ object CodecHelpers {
             (style as? TextShaderHolder)?.`meowddinglib$withTextShader`(shader.getOrNull())
         }
     }
+
+    @IncludedCodec
+    val BLOCK_STATE_CODEC: Codec<BlockState> = Codec.STRING.flatXmap(
+        {
+            val result = runCatching {
+                    BlockStateParser.parseForBlock(Registries.BLOCK.lookup(), it, true).blockState
+            }
+
+            if (result.isSuccess) DataResult.success(result.getOrThrow()) else DataResult.error {
+                result.exceptionOrNull()?.message ?: "Failed to parse block state '$it'!"
+            }
+        },
+        {
+            DataResult.success(BlockStateParser.serialize(it))
+        },
+    )
 
     val CUSTOM_COMPONENT_CODEC: Codec<Component> = Codec.recursive("SkyOceanComponentCodec") { self ->
         val componentMatcher = createContentCodec()
