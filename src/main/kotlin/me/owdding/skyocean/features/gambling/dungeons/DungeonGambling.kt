@@ -1,11 +1,11 @@
-package me.owdding.skyocean.features.dungeons.gambling
+package me.owdding.skyocean.features.gambling.dungeons
 
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.type.EnumArgumentType
-import me.owdding.skyocean.config.features.dungeons.DungeonsConfig
+import me.owdding.skyocean.config.features.gambling.GamblingConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
-import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
+import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonChestType
 import me.owdding.skyocean.utils.Utils.containerItems
 import me.owdding.skyocean.utils.Utils.getArgument
 import net.minecraft.client.gui.screens.inventory.ContainerScreen
@@ -41,10 +41,10 @@ object DungeonGambling {
 
     @Subscription
     fun onScreenChange(event: InventoryChangeEvent) {
-        if (!DungeonsConfig.gamblingScreenEnabled) return
+        if (!GamblingConfig.dungeonsGambling) return
         val floor = when (event.item) {
             in Items.BARRIER -> DungeonAPI.dungeonFloor ?: return
-            in Items.ARROW -> if (DungeonsConfig.gamblingInCroesus) {
+            in Items.ARROW -> if (GamblingConfig.gamblingInCroesus) {
                 event.item.getRawLore().firstOrNull { it.startsWith("To ") }?.let { line ->
                     CroesusImpl.croesusLoreToFloor[line.substring(3)]
                 } ?: return
@@ -104,7 +104,7 @@ object DungeonGambling {
 
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
-        event.registerDev("gambling") {
+        event.registerDev("gambling dungeons") {
             then("floor", EnumArgumentType(DungeonFloor::class)) {
                 then("chest", EnumArgumentType(DungeonChestType::class)) {
                     callback {

@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.dungeons.gambling
+package me.owdding.skyocean.features.gambling.dungeons
 
 import me.owdding.lib.displays.Displays
 import net.minecraft.client.gui.GuiGraphics
