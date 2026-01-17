@@ -16,10 +16,8 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import java.util.function.Predicate
 //? if = 1.21.5 {
-
 /*import net.fabricmc.fabric.api.renderer.v1.material.BlendMode
 import net.fabricmc.fabric.api.renderer.v1.Renderer
-
 *///?} else {
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer
 
