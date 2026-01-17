@@ -76,13 +76,25 @@ object CraftHelperManager {
         val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
         val item = mcScreenHovered ?: reiHovered ?: return
 
-        setSelected(SkyBlockId.fromItem(item))
+        if (McScreen.isShiftDown) {
+            val storage = CraftHelperStorage.getAndOrSetCustomRecipe()
+            val id = SkyBlockId.fromItem(item) ?: return
+            storage.inputs[id.id] = (storage.inputs[id.id] ?: 0) + 1
+            CraftHelperStorage.save()
+            Text.of("Added 1 ") {
+                append(item.hoverName) {
+                    this.bold = true
+                }
+                append(" to custom Crafthelper recipe.")
+            }.sendWithPrefix()
+        } else {
+            setSelected(SkyBlockId.fromItem(item))
+            Text.of("Set selected Crafthelper item to ") {
+                append(item.hoverName) {
+                    this.bold = true
+                }
+            }.sendWithPrefix()
+        }
         McScreen.refreshScreen()
-
-        Text.of("Set selected Crafthelper item to ") {
-            append(item.hoverName) {
-                this.bold = true
-            }
-        }.sendWithPrefix()
     }
 }
