@@ -22,7 +22,7 @@ object GamblingConfig : CategoryKt("gambling") {
         separator("skyocean.config.gambling.vanguard.separator")
     }
 
-    var vanguardGambling by boolean(true) {
+    var vanguardGambling by boolean(false) {
         this.translation = "skyocean.config.gambling.vanguard"
     }
 }

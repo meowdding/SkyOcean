@@ -79,7 +79,7 @@ object CodecHelpers {
     @IncludedCodec(keyable = true, named = "str_low")
     val STRING_LOWER: Codec<String> = Codec.STRING.xmap({ it.lowercase() }, { it })
 
-    @IncludedCodec
+    @IncludedCodec(keyable = true)
     val SKYBLOCK_ID_UNKNOWN: Codec<SkyBlockId> = SkyBlockId.UNKNOWN_CODEC
 
     @IncludedCodec
