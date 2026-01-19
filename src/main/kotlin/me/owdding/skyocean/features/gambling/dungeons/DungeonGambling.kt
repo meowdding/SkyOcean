@@ -44,6 +44,7 @@ object DungeonGambling {
         if (!GamblingConfig.dungeonsGambling) return
         val floor = when (event.item) {
             in Items.BARRIER -> DungeonAPI.dungeonFloor ?: return
+
             in Items.ARROW -> if (GamblingConfig.gamblingInCroesus) {
                 event.item.getRawLore().firstOrNull { it.startsWith("To ") }?.let { line ->
                     CroesusImpl.croesusLoreToFloor[line.substring(3)]

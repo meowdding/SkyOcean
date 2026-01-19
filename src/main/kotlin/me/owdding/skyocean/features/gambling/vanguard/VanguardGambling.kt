@@ -76,6 +76,7 @@ object VanguardGambling {
                 val item = data.items.keys.random().toItem()
                 item.cleanName to (item[DataTypes.RARITY]?.color ?: 0)
             }
+            @Suppress("MaxLineLength")
             val components = listOf(
                 "{\"text\":\"\",\"extra\":[{\"text\":\"▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\",\"bold\":true,\"color\":\"green\"}],\"italic\":false}",
                 "{\"text\":\"\",\"extra\":[\"  \",{\"text\":\"\",\"bold\":true,\"color\":\"aqua\"},{\"text\":\"VANGUARD \",\"bold\":true,\"color\":\"white\"},{\"text\":\"CORPSE LOOT! \",\"bold\":true,\"color\":\"aqua\"}],\"italic\":false}",
