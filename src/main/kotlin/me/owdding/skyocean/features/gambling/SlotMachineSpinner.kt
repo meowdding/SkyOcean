@@ -2,20 +2,32 @@ package me.owdding.skyocean.features.gambling
 
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection
 import me.owdding.lib.platform.screens.MeowddingScreen
+import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
+import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.platform.drawFilledBox
+import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.pow
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.times
 
-class SlotMachineSpinner(spinPool: Map<SkyBlockId, Int>, val winningItem: SkyBlockId?) : MeowddingScreen("Slot Machine Spinner") {
+class SlotMachineSpinner(
+    spinPool: Map<SkyBlockId, Int>,
+    val winningItem: SkyBlockId?,
+    val backgroundTexture: Identifier,
+    val slotTexture: Identifier,
+) : MeowddingScreen("Slot Machine Spinner") {
+    private val armTexture = SkyOcean.id("gambling/arm")
     private val weightedCollection = WeightedCollection.of(spinPool.entries) { it.value.toDouble() }
+
+    private val ticktracker = TickTracker()
 
     private val slots = mutableListOf<List<SkyBlockId>>()
 
@@ -60,6 +72,7 @@ class SlotMachineSpinner(spinPool: Map<SkyBlockId, Int>, val winningItem: SkyBlo
 
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
         val elapsedTime = startTime.since()
+        val scale = 1.5
 
         for (i in 0..2) {
             val spinDuration = baseDuration + (i * waitDelay)
@@ -67,15 +80,13 @@ class SlotMachineSpinner(spinPool: Map<SkyBlockId, Int>, val winningItem: SkyBlo
             val rawProgress = (elapsedTime.inWholeMilliseconds / spinDuration.inWholeMilliseconds.toFloat()).coerceIn(0f, 1f)
             val easedProgress = easeOutCubic(rawProgress)
 
-            val xPos = (width / 2) + ((i - 1) * 70)
+            val xPos = (width / 2) + ((i - 1) * 24 * scale).toInt()
             val yPos = height / 2
 
             val boxWidth = 40
             val boxHeight = 100
             val boxTop = yPos - (boxHeight / 2)
             val boxLeft = xPos - (boxWidth / 2)
-
-            graphics.drawFilledBox(boxLeft, boxTop, boxWidth, boxHeight, 0xA0000000.toInt())
 
             graphics.scissor(boxLeft, boxTop, boxWidth, boxHeight) {
                 val slot = slots[i]
@@ -85,8 +96,13 @@ class SlotMachineSpinner(spinPool: Map<SkyBlockId, Int>, val winningItem: SkyBlo
                 val currentBaseIndex = (currentScrollY / slotHeight).toInt()
 
                 if (elapsedTime < spinDuration && currentBaseIndex > lastScrollIndex[i]) {
-                    if (lastScrollIndex[i] != -1) {
-                        McClient.playSound(SoundEvents.ITEM_PICKUP, 1f, 2f)
+                    if (lastScrollIndex[i] != -1 && ticktracker.consume()) {
+                        val sound = if (ThreadLocalRandom.current().nextInt(0, 1) == 0) {
+                            SoundEvents.VAULT_INSERT_ITEM
+                        } else {
+                            SoundEvents.VAULT_INSERT_ITEM_FAIL
+                        }
+                        McClient.playSound(sound, 1f, 2f)
                     }
                     lastScrollIndex[i] = currentBaseIndex
                 }
@@ -102,6 +118,26 @@ class SlotMachineSpinner(spinPool: Map<SkyBlockId, Int>, val winningItem: SkyBlo
             }
         }
 
+        graphics.drawSprite(
+            backgroundTexture,
+            width / 2 - (55 * scale).toInt(),
+            height / 2 - (86 * scale).toInt(),
+            (146 * scale).toInt(),
+            (184 * scale).toInt(),
+        )
+
         super.render(graphics, mouseX, mouseY, f)
+    }
+}
+
+class TickTracker {
+    var lastTick = TickEvent.ticks
+
+    fun consume(): Boolean {
+        if (lastTick != TickEvent.ticks) {
+            lastTick = TickEvent.ticks
+            return true
+        }
+        return false
     }
 }

@@ -25,4 +25,8 @@ object GamblingConfig : CategoryKt("gambling") {
     var vanguardGambling by boolean(false) {
         this.translation = "skyocean.config.gambling.vanguard"
     }
+
+    init {
+        separator("skyocean.config.gambling.credits")
+    }
 }

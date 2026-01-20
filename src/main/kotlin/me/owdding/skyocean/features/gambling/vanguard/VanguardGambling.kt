@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.gambling.vanguard
 import com.google.gson.JsonParser
 import com.mojang.serialization.JsonOps
 import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.gambling.GamblingConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.gambling.SlotMachineSpinner
@@ -27,6 +28,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 object VanguardGambling {
 
     private val data = Utils.loadRepoData<VanguardRepoData>("vanguard") { SkyOceanCodecs.getCodec<VanguardRepoData>() }
+    private val BACKGROUND = SkyOcean.id("gambling/vanguard")
+    private val SLOT = SkyOcean.id("gambling/vanguard_slot")
 
     // TODO: ENCHANTED BOOK SUPPORT MAYBE
     private val startRegex = " +VANGUARD CORPSE LOOT! ?".toRegex()
@@ -40,7 +43,7 @@ object VanguardGambling {
         val sortedLoot = loot.sortedByDescending { it.first.toItem().getItemValue().price * it.second }
 
         val (id, _) = sortedLoot.find { it.first in data.valuables } ?: (null to 0)
-        McClient.setScreenAsync { SlotMachineSpinner(data.items, id) }
+        McClient.setScreenAsync { SlotMachineSpinner(data.items, id, BACKGROUND, SLOT) }
     }
 
     @Subscription
