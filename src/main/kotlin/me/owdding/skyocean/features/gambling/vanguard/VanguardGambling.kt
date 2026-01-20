@@ -22,16 +22,15 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.match
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @LateInitModule
 object VanguardGambling {
 
-    private val data = Utils.loadRepoData<Thing>("vanguard") { SkyOceanCodecs.getCodec<Thing>() }
+    private val data = Utils.loadRepoData<VanguardRepoData>("vanguard") { SkyOceanCodecs.getCodec<VanguardRepoData>() }
 
     // TODO: ENCHANTED BOOK SUPPORT MAYBE
-    private val startRegex = " {2}VANGUARD CORPSE LOOT! ?".toRegex()
-    private val itemRegex = " {4}(?<item>.+?)(?: x(?<amount>[\\d,]+)|$)".toRegex()
+    private val startRegex = " +VANGUARD CORPSE LOOT! ?".toRegex()
+    private val itemRegex = " +(?<item>.+?)(?: x(?<amount>[\\d,]+)|$)".toRegex()
     private val endRegex = "▬{64}".toRegex()
 
     private var parsing = false
@@ -96,7 +95,7 @@ object VanguardGambling {
     }
 
     @GenerateCodec
-    data class Thing(
+    data class VanguardRepoData(
         val items: Map<SkyBlockId, Int>,
         val valuables: List<SkyBlockId>,
     )
