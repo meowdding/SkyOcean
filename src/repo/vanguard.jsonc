@@ -2,8 +2,8 @@
   "items": {
     "item:dye_frostbitten": 1, // Assumed odds
     "item:shattered_pendant": 3,
-    "item:frozen_scute": 5, // Assumed odds
     "item:skeleton_key": 6,
+    "item:frozen_scute": 8,
     "item:umber_key": 10,
     "item:tungsten_key": 10,
     "item:mithril_plate": 30,
