@@ -36,7 +36,7 @@ class SlotMachineSpinner(
     private var startTime = currentInstant()
     private val baseDuration = 3.seconds
     private val waitDelay = 1.seconds
-    private val slotHeight = 40
+    private val slotHeight = 18
 
     override fun init() {
         super.init()
@@ -109,10 +109,18 @@ class SlotMachineSpinner(
 
                 val pixelOffset = (currentScrollY % slotHeight).toInt()
 
+                graphics.drawSprite(
+                    slotTexture,
+                    xPos - (9 * scale).toInt(),
+                    yPos + pixelOffset - (slotHeight * 3 * scale).toInt() + (8 * scale).toInt(),
+                    (18 * scale).toInt(),
+                    (90 * scale).toInt(),
+                )
+
                 for (offset in -1..2) {
                     val targetIndex = (currentBaseIndex + offset).coerceIn(0, slot.size - 1)
                     val item = slot[targetIndex]
-                    val itemY = yPos + pixelOffset - (offset * slotHeight)
+                    val itemY = yPos + pixelOffset - (offset * slotHeight * scale).toInt()
                     graphics.renderItem(item.toItem(), xPos - 8, itemY - 8)
                 }
             }
