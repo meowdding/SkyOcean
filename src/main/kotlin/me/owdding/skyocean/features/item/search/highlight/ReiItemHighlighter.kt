@@ -10,7 +10,7 @@ import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 
 @Module
-object REIItemHighlighter {
+object ReiItemHighlighter {
 
     private var highlighting: Boolean = false
     private var lastSearch: String? = null
