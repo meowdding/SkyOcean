@@ -5,14 +5,14 @@ import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 
-enum class AccessoriesSortMode(vararg sortModes: Comparator<TrackedAccessory>) : Comparator<TrackedAccessory> {
-    MP(Mode.MP, Mode.PRICE, Mode.RARITY),
+enum class AccessoriesSortMode(vararg sortModes: Comparator<TrackedAccessory>, displayName: String? = null) : Comparator<TrackedAccessory> {
+    MP(Mode.MP, Mode.PRICE, Mode.RARITY, displayName = "MP"),
     PRICE(Mode.PRICE, Mode.MP, Mode.RARITY),
     RARITY(Mode.RARITY, Mode.PRICE, Mode.MP),
     PRICE_PER_MP(Mode.PRICE_PER_MP, Mode.RARITY),
     ;
 
-    val displayName: String = toFormattedName()
+    val displayName: String = displayName ?: toFormattedName()
     val comparator: Comparator<TrackedAccessory> = sortModes.reduce { c1, c2 -> c1.thenComparing(c2) }
     override fun compare(o1: TrackedAccessory?, o2: TrackedAccessory?): Int = comparator.compare(o1, o2)
 
