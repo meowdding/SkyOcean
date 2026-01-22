@@ -5,6 +5,7 @@ import me.owdding.skyocean.features.item.custom.CustomItems.get
 import me.owdding.skyocean.features.item.custom.CustomItems.getCustomData
 import me.owdding.skyocean.features.item.custom.CustomItems.getStaticCustomData
 import me.owdding.skyocean.features.item.custom.CustomItems.getVanillaIntegrationData
+import me.owdding.skyocean.features.item.custom.data.CustomItemComponent
 import me.owdding.skyocean.features.item.custom.data.CustomItemData
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
 import me.owdding.skyocean.features.item.custom.data.EquippableModelState
@@ -19,6 +20,9 @@ object CustomItemsHelper {
 
     @JvmStatic
     fun <T> getData(instance: ItemStack, type: DataComponentType<T>): T? = context(instance) { getCustomData(instance)?.getData(type) }
+
+    @JvmStatic
+    fun <T : Any> getCustomData(instance: ItemStack, type: CustomItemComponent<T>): T? = context(instance) { getCustomData(instance)?.get(type) }
 
     fun getCustomData(instance: ItemStack) = instance.getStaticCustomData() ?: instance.getCustomData() ?: instance.getVanillaIntegrationData()
 

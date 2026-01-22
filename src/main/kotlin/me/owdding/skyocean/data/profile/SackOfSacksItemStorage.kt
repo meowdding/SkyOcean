@@ -17,7 +17,7 @@ object SackOfSacksItemStorage {
     private val storage: ProfileStorage<MutableList<ItemStack>> = ProfileStorage(
         defaultData = { mutableListOf() },
         fileName = "sack_of_sacks",
-        codec = { CodecHelpers.list() },
+        codec = { CodecHelpers.mutableList() },
     )
 
     val items: List<ItemStack> get() = storage.get() ?: emptyList()
