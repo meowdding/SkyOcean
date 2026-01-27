@@ -22,6 +22,8 @@ meowdding-ktcodecs = "1.1.5"
 meowdding-resources = "1.0.21"
 meowdding-auto-mixins = "1.0.7"
 
+moulberry-mixinconstraints = "1.0.8"
+
 [libraries]
 
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
@@ -41,6 +43,8 @@ meowdding-lib = { module = "me.owdding.meowdding-lib:meowdding-lib", version.ref
 meowdding-ktmodules = { module = "me.owdding.ktmodules:KtModules", version.ref = "meowdding-ktmodules" }
 meowdding-ktcodecs = { module = "me.owdding.ktcodecs:KtCodecs", version.ref = "meowdding-ktcodecs" }
 meowdding-resources = { module = "me.owdding.repo:compacting-resources", version.ref = "meowdding-resources" }
+
+moulberry-mixinconstraints = { module = "com.moulberry:mixinconstraints", version.ref = "moulberry-mixinconstraints" }
 
 detekt-ktlintWrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
 

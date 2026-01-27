@@ -75,6 +75,7 @@ dependencies {
     includeImplementation(versionedCatalog["olympus"])
 
     modRuntimeOnly(libs.hypixel.modapi.fabric)
+    implementation(libs.moulberry.mixinconstraints) // Already included in mlib
 
     implementation(libs.keval)
     include(libs.keval)
