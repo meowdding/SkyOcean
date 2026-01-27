@@ -5,7 +5,10 @@ import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.TickTracker
 import net.minecraft.client.gui.GuiGraphics
+//? > 1.21.5 {
 import net.minecraft.client.renderer.RenderPipelines
+//? } else
+//import net.minecraft.client.renderer.RenderType
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
