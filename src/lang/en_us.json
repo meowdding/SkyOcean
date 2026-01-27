@@ -220,9 +220,13 @@
             "bazaar": "BZ",
             "npc": "NPC"
           },
-          "showInSackOfSacks": {
+          "show_in_sack_of_sacks": {
             "@value": "Show in Sack of Sacks",
             "desc": "Whether to show the total sack value in the sack of sacks."
+          },
+          "hide_items_with_no_value": {
+            "@value": "Hide items with no value",
+            "desc": "Hides items that have no value from the total sack value."
           }
         },
         "inventory_buttons": {

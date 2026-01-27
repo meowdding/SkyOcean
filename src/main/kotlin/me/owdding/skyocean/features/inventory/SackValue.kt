@@ -48,7 +48,7 @@ object SackValue : InventorySideGui(".* Sack|Sack of Sacks") {
         return LayoutFactory.vertical {
             val sackEntries = SacksAPI.sackItems.filter { it.key in ids }.map {
                 SackEntry(it.key, it.value)
-            }.sortedByDescending { it.price }
+            }.sortedByDescending { it.price }.filterNot { SackValueConfig.hideItemsWithNoValue && it.price == 0L }
 
             val title = LayoutFactory.horizontal {
                 string(ChatUtils.ICON_SPACE_COMPONENT)
