@@ -389,6 +389,11 @@ object Utils {
     fun LevelableTreeNode.powderForInterval(intRange: IntRange) = intRange.sumOf { costForLevel(it).second }
 
     fun nextUp(amount: Int, divider: Int) = if (amount % divider == 0) amount else amount - (amount % divider) + divider
+
+    fun <T : Enum<T>> T.next(): T {
+        val constants = if (this.javaClass.isEnum) this.javaClass.enumConstants else this.javaClass.superclass.enumConstants
+        return constants[(this.ordinal + 1) % constants.size].unsafeCast()
+    }
 }
 
 enum class SkyOceanModifyIndicator : Translatable {
