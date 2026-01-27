@@ -27,6 +27,8 @@ meowdding-auto-mixins = "1.0.7"
 
 terrarium-cloche = "0.13.5"
 
+moulberry-mixinconstraints = "1.0.8"
+
 [libraries]
 
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
@@ -47,6 +49,8 @@ meowdding-lib = { module = "me.owdding.meowdding-lib:meowdding-lib", version.ref
 meowdding-ktmodules = { module = "me.owdding.ktmodules:KtModules", version.ref = "meowdding-ktmodules" }
 meowdding-ktcodecs = { module = "me.owdding.ktcodecs:KtCodecs", version.ref = "meowdding-ktcodecs" }
 meowdding-resources = { module = "me.owdding.repo:compacting-resources", version.ref = "meowdding-resources" }
+
+moulberry-mixinconstraints = { module = "com.moulberry:mixinconstraints", version.ref = "moulberry-mixinconstraints" }
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 

@@ -50,6 +50,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
+import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
@@ -157,6 +158,7 @@ object Utils {
             null
         }
     }
+
     inline fun <reified T : Any> loadFromRemoteRepo(file: String): T? = runBlocking {
         try {
             val json = RemoteRepo.getFileContentAsJson("$file.json") ?: return@runBlocking null
