@@ -8,4 +8,3 @@ accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$GlyphInsta
 
 # 1.21.11
 accessible method net/minecraft/client/gui/screens/inventory/InventoryScreen extractRenderState (Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/client/renderer/entity/state/EntityRenderState;
-accessible method net/minecraft/client/gui/GuiGraphics blitSprite (Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;IIIIIIIII)V
