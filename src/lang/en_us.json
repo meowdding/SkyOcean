@@ -1340,7 +1340,7 @@
         "credits": {
           "@value": "Credits",
           "desc": [
-            "Dungeon Chest Gambling is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>."
+            "Dungeon Chest Gambling is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>.",
             "",
             "Slot Machine textures are created by <hover 'Click to visit her BlueSky'><url 'https://bsky.app/profile/vrachel.bsky.social'><color:#4FB1FF>rachel</color></copy_to_clipboard></hover>."
           ]
