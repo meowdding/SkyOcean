@@ -1,8 +1,5 @@
 package me.owdding.skyocean.features.gambling
 
-//? > 1.21.5 {
-//? } else
-//import net.minecraft.client.renderer.RenderType
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection
 import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.skyocean.SkyOcean
@@ -12,7 +9,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.gui.GuiGraphics
+//? > 1.21.5 {
 import net.minecraft.client.renderer.RenderPipelines
+//? } else
+//import net.minecraft.client.renderer.RenderType
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
