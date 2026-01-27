@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.gambling
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection
 import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.utils.TickTracker
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.resources.Identifier
@@ -35,7 +36,7 @@ class SlotMachineSpinner(
 
     private val lastScrollIndex = IntArray(3) { -1 }
 
-    private var startTime = currentInstant() + 0.5.seconds
+    private var startTime = currentInstant() + 0.3.seconds
     private val baseDuration = 3.seconds
     private val waitDelay = 1.seconds
     private val slotHeight = 18
@@ -89,8 +90,8 @@ class SlotMachineSpinner(
         )
 
         val armAnimationIndex = when {
-            elapsedTime < 0.seconds -> 0
-            elapsedTime < 0.5.seconds -> 1
+            elapsedTime < (-0.2).seconds -> 0
+            elapsedTime < 0.seconds -> 1
             else -> 2
         }
 
@@ -163,17 +164,5 @@ class SlotMachineSpinner(
                 renderItem(item.toItem(), xPos - 8, itemY - 8)
             }
         }
-    }
-}
-
-class TickTracker {
-    var lastTick = TickEvent.ticks
-
-    fun consume(): Boolean {
-        if (lastTick != TickEvent.ticks) {
-            lastTick = TickEvent.ticks
-            return true
-        }
-        return false
     }
 }
