@@ -73,9 +73,9 @@ dependencies {
     includeImplementation(versionedCatalog["placeholders"])
     includeImplementation(libs.resourceful.config.kotlin)
     includeImplementation(versionedCatalog["olympus"])
-    includeImplementation(libs.meowdding.remote.repo)
 
     modRuntimeOnly(libs.hypixel.modapi.fabric)
+    implementation(libs.moulberry.mixinconstraints) // Already included in mlib
 
     implementation(libs.keval)
     include(libs.keval)
@@ -132,6 +132,9 @@ ksp {
 
 afterEvaluate {
     loom {
+        log4jConfigs.removeAll { true }
+        log4jConfigs.from(rootProject.layout.projectDirectory.file("gradle/log4j.config.xml"))
+
         runs.named("datagen") {
             this.vmArgs.add("-Dskyocean.extraPaths=\"\"")
         }

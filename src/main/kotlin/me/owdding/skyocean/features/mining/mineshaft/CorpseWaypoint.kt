@@ -2,14 +2,13 @@ package me.owdding.skyocean.features.mining.mineshaft
 
 import com.mojang.serialization.Codec
 import me.owdding.ktmodules.Module
-import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
-import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.RemoteRepoDelegate
+import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.codecs.CodecHelpers
-import me.owdding.skyocean.utils.extensions.putAll
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderTextInWorld
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.decoration.ArmorStand
@@ -41,26 +40,26 @@ object CorpseWaypoint {
             Codec.STRING.xmap({ v -> MineshaftVariant.entries.find { it.name == v } }, { it?.name }),
             CodecHelpers.BLOCK_POS_STRING_CODEC.listOf(),
         ),
+    ).xmap(
+        {
+            it.filterKeysNotNull()
+                .mapValues { (_, value) -> value.filterKeysNotNull() }
+                .toMutableMap()
+        },
+        { it.mapValues { (_, value) -> value.toMutableMap() }.toMutableMap().unsafeCast() },
     )
 
 
-    private val mineshaftCorpses: MutableMap<MineshaftType, Map<MineshaftVariant, List<BlockPos>>> = mutableMapOf()
-
-    @Subscription(FinishRepoLoadingEvent::class)
-    fun onRepoLoad() {
-        mineshaftCorpses.putAll(
-            Utils.loadRemoteRepoData("mining/mineshaft_corpses", CODEC)
-                ?.filterKeysNotNull()
-                ?.map { (k, v) -> k to v.filterKeysNotNull() }
-                ?.toMap(),
-        )
-    }
+    private val mineshaftCorpses: MutableMap<MineshaftType, Map<MineshaftVariant, List<BlockPos>>>? by RemoteRepoDelegate.load(
+        "mining/mineshaft_corpses",
+        CODEC,
+    )
 
     @Subscription
     @OnlyIn(SkyBlockIsland.MINESHAFT)
     fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         if (!MineshaftConfig.corpseWaypoint) return
-        val mineshaft = mineshaftCorpses.entries.find { it.key == MineshaftAPI.mineshaftType } ?: return
+        val mineshaft = mineshaftCorpses?.entries?.find { it.key == MineshaftAPI.mineshaftType } ?: return
         val corpses = mineshaft.value.entries.find { it.key == MineshaftAPI.mineshaftVariant }?.value ?: return
 
         corpses.forEach {
@@ -77,7 +76,7 @@ object CorpseWaypoint {
         if (entity.isInvisible) return
         if (entity.getArmor().any { it.isEmpty }) return
 
-        val mineshaft = mineshaftCorpses.entries.find { it.key == MineshaftAPI.mineshaftType } ?: return
+        val mineshaft = mineshaftCorpses?.entries?.find { it.key == MineshaftAPI.mineshaftType } ?: return
         val corpses = mineshaft.value.entries.find { it.key == MineshaftAPI.mineshaftVariant }?.value ?: return
 
         val isKnown = corpses.any { corpsePos -> corpsePos.distSqr(entity.blockPosition()) < 4.0 }

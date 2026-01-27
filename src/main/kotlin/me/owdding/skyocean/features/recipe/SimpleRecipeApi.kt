@@ -1,12 +1,15 @@
 package me.owdding.skyocean.features.recipe
 
 import me.owdding.lib.events.FinishRepoLoadingEvent
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.extensions.addAll
+import me.owdding.skyocean.utils.extensions.runCatching
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -20,7 +23,7 @@ import me.owdding.skyocean.features.recipe.RepoApiRecipe as RepoApiRecipeWrapper
 import tech.thatgravyboat.repolib.api.recipes.Recipe as RepoApiRecipe
 
 @LateInitModule
-object SimpleRecipeApi {
+object SimpleRecipeApi : MeowddingLogger by SkyOcean.featureLogger() {
 
     internal val supportedTypes = arrayOf(
         RepoApiRecipe.Type.FORGE to RecipeType.FORGE,
@@ -41,10 +44,14 @@ object SimpleRecipeApi {
         illegalIngredients.clear()
         illegalShopRecipes.clear()
 
-        illegalIngredients.addAll(Utils.loadRemoteRepoData("skyocean/illegal_ingredients", CodecUtils::list))
-        SkyOcean.debug("Loaded ${illegalIngredients.size} illegal ingredients")
-        illegalShopRecipes.addAll(Utils.loadRemoteRepoData("skyocean/illegal_shop_recipes", CodecUtils::list))
-        SkyOcean.debug("Loaded ${illegalShopRecipes.size} illegal shop recipes")
+        runCatching("Loading illegal ingredients from remote repo") {
+            illegalIngredients.addAll(Utils.loadRemoteRepoData("skyocean/illegal_ingredients", CodecUtils::list))
+            debug("Loaded ${illegalIngredients.size} illegal ingredients")
+        }
+        runCatching("Loading illegal shop recipes from remote repo") {
+            illegalShopRecipes.addAll(Utils.loadRemoteRepoData("skyocean/illegal_shop_recipes", CodecUtils::list))
+            debug("Loaded ${illegalShopRecipes.size} illegal shop recipes")
+        }
 
         supportedTypes.forEach { (recipe, type) ->
             recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe ->
@@ -57,17 +64,19 @@ object SimpleRecipeApi {
         recipes.removeIf {
             isBlacklisted(it).apply {
                 if (this) {
-                    SkyOcean.trace(
+                    trace(
                         "Removing ${it.output?.skyblockId} with ${it.inputs.size} ingredients",
                     )
                 }
             }
         }
 
-        SkyOcean.debug("Loaded ${recipes.size} Recipes from repo api")
-        val extra = Utils.loadRemoteRepoData("skyocean/recipes", SkyOceanCodecs.CustomRecipeCodec.codec().listOf())
-        recipes.addAll(extra)
-        SkyOcean.debug("Loaded ${extra?.size ?: 0} extra from remote repo, new total is ${recipes.size}")
+        debug("Loaded ${recipes.size} Recipes from repo api")
+        runCatching("Loading extra recipes from repo!") {
+            val extra = Utils.loadRemoteRepoData("skyocean/recipes", SkyOceanCodecs.CustomRecipeCodec.codec().listOf())
+            recipes.addAll(extra)
+            debug("Loaded ${extra?.size ?: 0} extra from remote repo, new total is ${recipes.size}")
+        }
 
         rebuildRecipes()
 
@@ -78,7 +87,7 @@ object SimpleRecipeApi {
                     addAll(it.inputs)
                 }.filterIsInstance<ItemLikeIngredient>()
             }.distinct().onEach { it.itemName }.count() // calls itemName to construct the itemstacks
-            SkyOcean.debug("Preloaded $amount items")
+            debug("Preloaded $amount items")
         }
     }
 

@@ -35,4 +35,8 @@ object LoreModifierConfig : CategoryKt("lore_modifiers") {
     var museumDonation by boolean(false) {
         this.translation = "skyocean.config.lore_modifiers.museum_donation"
     }
+
+    var dyeHex by boolean(false) {
+        this.translation = "skyocean.config.lore_modifiers.dye_hex"
+    }
 }
