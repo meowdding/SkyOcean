@@ -8,7 +8,6 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
-import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
@@ -100,7 +99,11 @@ class SlotMachineSpinner(
         val scaledSpriteHeight = scaledHeight * 3
 
         graphics.blitSprite(
-            RenderPipelines.GUI_TEXTURED, armTexture,
+            //? if > 1.21.5 {
+            RenderPipelines.GUI_TEXTURED,
+            //? } else
+            // RenderType::guiTextured,
+            armTexture,
             scaledWidth, // spriteWidth
             scaledSpriteHeight, // spriteHeight
             0, // textureX
