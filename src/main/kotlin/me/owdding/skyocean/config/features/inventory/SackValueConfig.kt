@@ -15,6 +15,10 @@ object SackValueConfig : ObjectKt(), Translatable {
         this.translation = "$PATH.price_source"
     }
 
+    var showInSackOfSacks by boolean(true) {
+        this.translation = "$PATH.show_in_sack_of_sacks"
+    }
+
     enum class PriceSource : Translatable {
         BAZAAR,
         NPC,

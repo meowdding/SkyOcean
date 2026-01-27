@@ -28,7 +28,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
-object SackValue : InventorySideGui(".* Sack") {
+object SackValue : InventorySideGui(".* Sack|Sack of Sacks") {
 
     private const val SCROLLBAR_WIDTH = 10
     private val gemstoneLevel = listOf("ROUGH", "FLAWED", "FINE")
@@ -39,6 +39,7 @@ object SackValue : InventorySideGui(".* Sack") {
         val idsInInventory = containerItems.mapNotNullTo(mutableSetOf()) { it.getSkyBlockId() }
 
         val ids = when (title) {
+            "Sack of Sacks" -> if (SackValueConfig.showInSackOfSacks) SacksAPI.sackItems.keys.toList() else emptyList()
             "Runes Sack" -> emptyList()
             "Gemstones Sack" -> idsInInventory.flatMap { id -> gemstoneLevel.map { id.replace("ROUGH", it) } }
             else -> idsInInventory

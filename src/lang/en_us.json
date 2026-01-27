@@ -219,6 +219,10 @@
             "desc": "The source to use for the price of items in sacks.",
             "bazaar": "BZ",
             "npc": "NPC"
+          },
+          "showInSackOfSacks": {
+            "@value": "Show in Sack of Sacks",
+            "desc": "Whether to show the total sack value in the sack of sacks."
           }
         },
         "inventory_buttons": {
