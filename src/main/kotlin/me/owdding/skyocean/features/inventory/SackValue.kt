@@ -30,6 +30,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @Module
 object SackValue : InventorySideGui(".* Sack") {
 
+    private const val SCROLLBAR_WIDTH = 10
     private val gemstoneLevel = listOf("ROUGH", "FLAWED", "FINE")
 
     override val enabled get() = SackValueConfig.enabled
@@ -67,6 +68,7 @@ object SackValue : InventorySideGui(".* Sack") {
             widget(title)
 
             LayoutFactory.vertical {
+                spacer(title.width - SCROLLBAR_WIDTH)
                 sackEntries.forEach { (item, amount, price) ->
                     horizontal(alignment = MIDDLE) {
                         display(Displays.item(RepoItemsAPI.getItem(item), showTooltip = true))
@@ -87,7 +89,7 @@ object SackValue : InventorySideGui(".* Sack") {
             }.let {
                 widget(
                     it.asScrollable(
-                        it.width + 10, screen.containerHeight - 10 - title.height,
+                        it.width + SCROLLBAR_WIDTH, screen.containerHeight - 10 - title.height,
                         {
                             this.withScroll(oldList?.xScroll ?: 0, oldList?.yScroll ?: 0)
                             oldList = this
