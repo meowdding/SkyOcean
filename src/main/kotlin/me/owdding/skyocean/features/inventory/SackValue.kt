@@ -50,21 +50,33 @@ object SackValue : InventorySideGui(".* Sack|Sack of Sacks") {
                 SackEntry(it.key, it.value)
             }.sortedByDescending { it.price }.filterNot { SackValueConfig.hideItemsWithNoValue && it.price == 0L }
 
-            val title = LayoutFactory.horizontal {
-                string(ChatUtils.ICON_SPACE_COMPONENT)
-                string(-"inventory.sack_value")
-                string(" - ")
-                buton {
-                    val translation = -SackValueConfig.priceSource.translationKey
-                    withSize(McFont.width(translation), McFont.height)
-                    withTexture(null)
-                    withRenderer(WidgetRenderers.text(translation))
-                    withTooltip(Text.of("Click to switch price source"))
-                    withCallback {
-                        SackValueConfig.priceSource = SackValueConfig.priceSource.next()
-                        refresh()
+            val title = LayoutFactory.vertical {
+                horizontal {
+                    string(ChatUtils.ICON_SPACE_COMPONENT)
+                    string(-"inventory.sack_value")
+                    string(" - ")
+                    buton {
+                        val translation = -SackValueConfig.priceSource.translationKey
+                        withSize(McFont.width(translation), McFont.height)
+                        withTexture(null)
+                        withRenderer(WidgetRenderers.text(translation))
+                        withTooltip(Text.of("Click to switch price source"))
+                        withCallback {
+                            SackValueConfig.priceSource = SackValueConfig.priceSource.next()
+                            refresh()
+                        }
                     }
                 }
+                if (!SackValueConfig.showTotalValue) return@vertical
+                val totalValue = sackEntries.sumOf { it.price }
+                string(
+                    Text.of {
+                        append(-"inventory.sack_value.total_value")
+                        append(totalValue.shorten()) {
+                            color = BETTER_GOLD
+                        }
+                    },
+                )
             }
             widget(title)
 
