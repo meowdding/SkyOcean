@@ -43,7 +43,7 @@ object VanguardGambling {
         val sortedLoot = loot.sortedByDescending { it.first.toItem().getItemValue().price * it.second }
 
         val (id, _) = sortedLoot.find { it.first in data.valuables } ?: (null to 0)
-        McClient.setScreenAsync { SlotMachineSpinner(data.items, id, BACKGROUND, SLOT) }
+        McClient.setScreenAsync { SlotMachineSpinner(data.items, id, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat) }
     }
 
     @Subscription

@@ -1335,7 +1335,11 @@
             "desc": ""
           },
           "@value": "Vanguard Slot Machine",
-          "desc": "Shows a slot machine animation when looting a Vanguard."
+          "desc": "Shows a slot machine animation when looting a Vanguard.",
+          "hide_chat": {
+            "@value": "Hide Chat While Gambling",
+            "desc": "Hides the chat messages while the gambling animation is playing so you don't get spoiled."
+          }
         },
         "credits": {
           "@value": "Credits",

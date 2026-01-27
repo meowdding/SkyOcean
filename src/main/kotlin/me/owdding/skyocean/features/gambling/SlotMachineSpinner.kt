@@ -1,22 +1,29 @@
 package me.owdding.skyocean.features.gambling
 
+//? > 1.21.5 {
+//? } else
+//import net.minecraft.client.renderer.RenderType
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection
 import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.TickTracker
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
+import net.minecraft.client.DeltaTracker
 import net.minecraft.client.gui.GuiGraphics
-//? > 1.21.5 {
 import net.minecraft.client.renderer.RenderPipelines
-//? } else
-//import net.minecraft.client.renderer.RenderType
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
+import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.pow
 import kotlin.time.Duration
@@ -28,6 +35,7 @@ class SlotMachineSpinner(
     val winningItem: SkyBlockId?,
     val backgroundTexture: Identifier,
     val slotTexture: Identifier,
+    val hideChat: Boolean,
 ) : MeowddingScreen("Slot Machine Spinner") {
     private val armTexture = SkyOcean.id("gambling/arm")
     private val weightedCollection = WeightedCollection.of(spinPool.entries) { it.value.toDouble() }
@@ -43,9 +51,20 @@ class SlotMachineSpinner(
     private val waitDelay = 1.seconds
     private val slotHeight = 18
 
+    private var chatElement: HudElement? = null
+
     override fun init() {
         super.init()
         createSlots()
+        if (hideChat) HudElementRegistry.replaceElement(VanillaHudElements.CHAT) {
+            chatElement = it
+            FakeChat()
+        }
+    }
+
+    override fun onClose() {
+        super.onClose()
+        if (hideChat) HudElementRegistry.replaceElement(VanillaHudElements.CHAT) { chatElement }
     }
 
     private fun createSlots() {
@@ -168,6 +187,17 @@ class SlotMachineSpinner(
                 val item = slot[targetIndex]
                 val itemY = yPos + pixelOffset - (offset * slotHeight * scale).toInt()
                 renderItem(item.toItem(), xPos - 8, itemY - 8)
+            }
+        }
+    }
+
+    private class FakeChat : HudElement {
+        override fun render(context: GuiGraphics, tickCounter: DeltaTracker?) {
+            listOf(
+                "If you're seeing this outside a Gambling Feature",
+                "please report this in the SkyOcean discord!"
+            ).forEachIndexed { index, item ->
+                context.drawString(item, 10, 10 + (index * McFont.height), TextColor.GRAY, true)
             }
         }
     }

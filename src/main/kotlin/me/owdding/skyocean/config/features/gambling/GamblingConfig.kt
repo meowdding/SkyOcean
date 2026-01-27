@@ -26,6 +26,10 @@ object GamblingConfig : CategoryKt("gambling") {
         this.translation = "skyocean.config.gambling.vanguard"
     }
 
+    var vanguardHideChat by boolean(true) {
+        this.translation = "skyocean.config.gambling.vanguard.hide_chat"
+    }
+
     init {
         separator("skyocean.config.gambling.credits")
     }
