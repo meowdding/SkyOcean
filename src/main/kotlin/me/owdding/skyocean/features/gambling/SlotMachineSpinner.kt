@@ -46,7 +46,7 @@ class SlotMachineSpinner(
 
     private val lastScrollIndex = IntArray(3) { -1 }
 
-    private var startTime = currentInstant() + 0.3.seconds
+    private var startTime = currentInstant() + 0.2.seconds
     private val baseDuration = 3.seconds
     private val waitDelay = 1.seconds
     private val slotHeight = 18
@@ -111,7 +111,7 @@ class SlotMachineSpinner(
         )
 
         val armAnimationIndex = when {
-            elapsedTime < (-0.2).seconds -> 0
+            elapsedTime < (-0.1).seconds -> 0
             elapsedTime < 0.seconds -> 1
             else -> 2
         }
