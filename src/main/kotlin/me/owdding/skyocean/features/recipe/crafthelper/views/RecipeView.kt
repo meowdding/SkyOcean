@@ -13,6 +13,8 @@ import me.owdding.skyocean.features.item.sources.ForgeItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.*
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.NoOpCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.NodeWithChildren
 import me.owdding.skyocean.features.recipe.crafthelper.RecipeNode
 import me.owdding.skyocean.features.recipe.crafthelper.StandardRecipeNode
@@ -199,9 +201,13 @@ data class CraftHelperContext(
     }
 }
 
-class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallback: (save: Boolean) -> Unit) {
+class WidgetBuilder(
+    val recipeData: CraftHelperRecipe,
+    val includeParentOverride: Boolean? = null,
+    val refreshCallback: (save: Boolean) -> Unit
+) {
     companion object {
-        val noOp = WidgetBuilder {}
+        val noOp = WidgetBuilder(NoOpCraftHelperRecipe) {}
     }
 
     fun createLine(state: CraftHelperState): AbstractWidget {
@@ -231,7 +237,7 @@ class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallb
         if (ItemSources.HUNTING_BOX in sources) append(ComponentIcons.BOX)
     }
 
-    fun reload() = refreshCallback(false)
+    fun reload(save: Boolean = false) = refreshCallback(save)
 
     context(state: CraftHelperState)
     fun tooltip() = buildList<Component> {

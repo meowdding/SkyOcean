@@ -17,6 +17,7 @@ import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
@@ -61,10 +62,11 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             layout.visitWidgets { event.widgets.remove(it) }
         }
         callback = callback@{ save ->
-            val (tree, output) = CraftHelperStorage.data?.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
+            val data = CraftHelperStorage.data ?: return@callback
+            val (tree, output) = data.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
             resetLayout()
             layout.tryClear()
-            layout.addChild(visualize(tree, output) { callback })
+            layout.addChild(visualize(data, tree, output) { callback })
             layout.arrangeElements()
             layout.setPosition(CraftHelperConfig.position.position(layout.width, layout.height))
             layout.visitWidgets { event.widgets.add(it) }
@@ -86,7 +88,12 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
         craftHelperLayout = null
     }
 
-    private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
+    private fun visualize(
+        recipe: CraftHelperRecipe,
+        tree: ContextAwareRecipeTree,
+        output: ItemLikeIngredient,
+        callback: () -> ((save: Boolean) -> Unit),
+    ): AbstractWidget {
         val sources = ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()
         val tracker = ItemTracker(sources)
         val callback = callback()
@@ -102,7 +109,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                         CraftHelperFormat.TREE -> TreeFormatter
                     }
 
-                    formatter.format(tree, tracker, WidgetBuilder(refreshCallback = callback)) {
+                    formatter.format(tree, tracker, WidgetBuilder(recipeData = recipe, refreshCallback = callback)) {
                         lines++
                         maxLine = maxOf(maxLine, it.width + 10)
                         list.add(it)

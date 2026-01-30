@@ -11,6 +11,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 data class NormalCraftHelperRecipe(
     var item: SkyBlockId?,
     var amount: Int = 1,
+    override val hiddenPaths: MutableSet<String> = mutableSetOf(),
 ) : CraftHelperRecipe(CraftHelperRecipeType.NORMAL, true) {
     override fun resolve(
         resetLayout: () -> Unit,

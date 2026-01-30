@@ -31,7 +31,7 @@ object CraftHelperOverlay : SkyOceanOverlay() {
     private val layoutCache = CachedValue(250.milliseconds) {
         val state = state ?: return@CachedValue null
         LayoutFactory.vertical {
-            val builder = WidgetBuilder(true) {}
+            val builder = WidgetBuilder(NoOpCraftHelperRecipe, true) {}
             context(state) {
                 widget(
                     Displays.row(

@@ -16,6 +16,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 @GenerateCodec
 data class SkyShardsRecipe(
     var tree: SkyShardsMethod,
+    override val hiddenPaths: MutableSet<String> = mutableSetOf(),
 ) : CraftHelperRecipe(CraftHelperRecipeType.SKY_SHARDS, false) {
     override fun resolve(
         resetLayout: () -> Unit,
