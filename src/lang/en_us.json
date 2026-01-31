@@ -357,6 +357,10 @@
             "<yellow>(Doesn't currently work with skins that allow variant selection or pets)</yellow>"
           ]
         },
+        "queueEstimation": {
+          "@value": "Queue Estimation",
+          "desc": "Estimates your alpha/main server queue time based on the current queue size and average queue speed."
+        },
         "hideEntityFire": {
           "@value": "Hide entity fire",
           "desc": "Removes the fire effect from all entities."
