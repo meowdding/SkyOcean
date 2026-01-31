@@ -17,7 +17,6 @@ object PlayerUtils {
     private var lastPos: MutableMap<UUID, Vec3> = mutableMapOf()
     private var lastMoveTime: MutableMap<UUID, Instant> = mutableMapOf()
 
-    fun getLastPos(uuid: UUID): Vec3? = lastPos[uuid]
     fun getLastMoveTime(uuid: UUID): Instant? = lastMoveTime[uuid]
 
     @Subscription(TickEvent::class)
