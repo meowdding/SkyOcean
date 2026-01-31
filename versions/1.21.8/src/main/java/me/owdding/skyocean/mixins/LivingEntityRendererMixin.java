@@ -70,7 +70,7 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<Entity, E
             AvatarRenderStateAccessor.setHeldItemStack(state, entity.getMainHandItem());
 
             if (entity instanceof AbstractClientPlayer) {
-                Instant lastMoveTime = PlayerUtils.INSTANCE.getLastMoveTime().get(entity);
+                Instant lastMoveTime = PlayerUtils.INSTANCE.getLastMoveTime(entity.getUUID());
                 AvatarRenderStateAccessor.setLastMoveTime(state, lastMoveTime);
             }
             
