@@ -20,7 +20,7 @@ object PlayerUtils {
     fun getLastMoveTime(uuid: UUID): Instant? = lastMoveTime[uuid]
 
     @Subscription
-    fun onTick(event: PacketReceivedEvent) {
+    fun onPacket(event: PacketReceivedEvent) {
         val packet = event.packet as? ClientboundPlayerPositionPacket ?: return
         val player = McLevel.level.getEntity(packet.id) as? Player ?: return
 
