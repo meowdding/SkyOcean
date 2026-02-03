@@ -41,7 +41,7 @@ object LoreModifierConfig : CategoryKt("lore_modifiers") {
         this.translation = "skyocean.config.lore_modifiers.dye_hex"
     }
 
-    var dyePosition by enum(DyeHexLoreModifier.DyePosition.LEFT){
+    var dyePosition by enum(DyeHexLoreModifier.DyePosition.LEFT) {
         this.translation = "skyocean.config.lore_modifiers.dye_pos"
         searchTerms += listOf("left", "middle", "right")
     }
