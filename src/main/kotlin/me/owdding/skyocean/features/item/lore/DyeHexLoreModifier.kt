@@ -8,9 +8,8 @@ import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @ItemModifier
 object DyeHexLoreModifier : AbstractItemModifier() {
@@ -29,40 +28,30 @@ object DyeHexLoreModifier : AbstractItemModifier() {
 
         copy()
         add {
-            val colorText = {
-                append("Color: ") { this.color = TextColor.DARK_GRAY }
-            }
-
-            val hexText = {
-                append(String.format("#%06X", dyeColor.rgb)) {
-                    this.color = TextColor.DARK_GRAY
-                }
-            }
-
-            val square = {
-                append("█") { this.color = dyeColor.rgb }
-            }
+            val colorText = Text.of("Color: ", TextColor.DARK_GRAY)
+            val hexText = Text.of(String.format("#%06X", dyeColor.rgb), TextColor.DARK_GRAY)
+            val square = Text.of("█", dyeColor.rgb)
 
             when (LoreModifierConfig.dyePosition) {
                 DyePosition.LEFT -> {
-                    square()
+                    append(square)
                     append(" ")
-                    colorText()
-                    hexText()
+                    append(colorText)
+                    append(hexText)
                 }
 
                 DyePosition.MIDDLE -> {
-                    colorText()
-                    square()
+                    append(colorText)
+                    append(square)
                     append(" ")
-                    hexText()
+                    append(hexText)
                 }
 
                 DyePosition.RIGHT -> {
-                    colorText()
-                    hexText()
+                    append(colorText)
+                    append(hexText)
                     append(" ")
-                    square()
+                    append(square)
                 }
             }
         }
