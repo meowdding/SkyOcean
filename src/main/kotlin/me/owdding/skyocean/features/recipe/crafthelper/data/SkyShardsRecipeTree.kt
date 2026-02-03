@@ -26,7 +26,7 @@ data class SkyShardsRecipe(
 }
 
 abstract class SkyShardsMethod(
-    val type: SkyShardsMethodType,
+    val method: SkyShardsMethodType,
     open val shard: SkyBlockId,
     open val quantity: Int,
 ) : ParentRecipe {

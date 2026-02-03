@@ -18,20 +18,23 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.exists
 import kotlin.io.path.relativeTo
 
-internal class DataStorage<T : Any>(
+internal class DataStorage<Type : Any>(
     private val version: Int = 0,
-    defaultData: () -> T,
+    defaultData: () -> Type,
     fileName: String,
-    codec: (Int) -> Codec<T>,
+    codec: (Int) -> Codec<Type>,
 ) {
-    constructor(defaultData: () -> T, fileName: String, codec: Codec<T>) : this(0, defaultData, fileName, { codec })
+    constructor(defaultData: () -> Type, fileName: String, codec: Codec<Type>) : this(0, defaultData, fileName, { codec })
 
-    fun get(): T = data
+    fun get(): Type = data
 
     fun save() {
         requiresSave.add(this)
@@ -58,14 +61,14 @@ internal class DataStorage<T : Any>(
 
     private val path: Path = defaultPath.resolve("$fileName.json")
 
-    private val data: T
+    private val data: Type
 
     init {
         if (!path.exists()) {
             path.createParentDirectories()
             this.data = defaultData()
         } else {
-            var newData: T
+            var newData: Type
             try {
                 val readJson = path.readJson<JsonObject>()
                 val version = readJson.get("@skyocean:version").asInt
@@ -107,5 +110,15 @@ internal class DataStorage<T : Any>(
         } catch (e: Exception) {
             SkyOcean.error("Failed to save $data to file", e)
         }
+    }
+
+    @OptIn(ExperimentalContracts::class)
+    fun edit(modifier: Type.() -> Unit) {
+        contract {
+            callsInPlace(modifier, InvocationKind.EXACTLY_ONCE)
+        }
+
+        get().modifier()
+        save()
     }
 }

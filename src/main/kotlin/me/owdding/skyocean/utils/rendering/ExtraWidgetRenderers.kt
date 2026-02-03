@@ -2,6 +2,7 @@ package me.owdding.skyocean.utils.rendering
 
 import com.teamresourceful.resourcefullib.common.color.Color
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
+import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.displays.Display
@@ -26,4 +27,8 @@ object ExtraWidgetRenderers {
         }
 
     fun <T : AbstractWidget> display(display: Display): WidgetRenderer<T> = WidgetRenderer<T> { graphics, ctx, _ -> display.render(graphics, ctx.x, ctx.y) }
+
+    fun <T : AbstractWidget> supplied(function: () -> WidgetRenderer<T>): WidgetRenderer<T> = WidgetRenderer<T> {graphics, ctx, partial ->
+        function().render(graphics, ctx, partial)
+    }
 }

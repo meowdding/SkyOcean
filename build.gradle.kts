@@ -221,6 +221,7 @@ tasks.processResources {
 autoMixins {
     mixinPackage = "me.owdding.skyocean.mixins"
     projectName = "skyocean"
+    mixinExtrasVersion = "0.5.0"
 }
 
 tasks.withType<ProcessResources>().configureEach {
