@@ -10,6 +10,7 @@ import me.owdding.skyocean.features.gambling.SlotMachineSpinner
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.chat.ComponentAnimator
 import net.minecraft.network.chat.ComponentSerialization
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
@@ -23,6 +24,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.match
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 
 @LateInitModule
 object VanguardGambling {
@@ -43,7 +45,8 @@ object VanguardGambling {
         val sortedLoot = loot.sortedByDescending { it.first.toItem().getItemValue().price * it.second }
 
         val (id, _) = sortedLoot.find { it.first in data.valuables } ?: (null to 0)
-        McClient.setScreenAsync { SlotMachineSpinner(data.items, id, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat) }
+        val animator = ComponentAnimator("VANGUARD", 0x55FFFF, 0x33DDDDDD)
+        McClient.setScreenAsync { SlotMachineSpinner(data.items, id, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat, animator) }
     }
 
     @Subscription

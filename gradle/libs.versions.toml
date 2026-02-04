@@ -6,7 +6,7 @@ fabric-api = "0.133.4"
 
 kotlin-symbol-processor = "2.2.0-2.0.2"
 gson = "2.12.1"
-skyblockapi = "4.0.1"
+skyblockapi = "4.0.7"
 skyblockapi-repo = "3.0.2"
 keval = "1.1.1"
 
