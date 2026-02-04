@@ -1268,6 +1268,13 @@
         "dye_hex": {
           "@value": "Dye Hex Color",
           "desc": "Shows the hex code of the dye on armors."
+        },
+        "dye_pos": {
+          "@value": "Dye Hex Color square position",
+          "desc": "Select where the color display square is positioned.",
+          "left": "Left",
+          "middle": "Middle",
+          "right": "Right"
         }
       },
       "foraging": {
