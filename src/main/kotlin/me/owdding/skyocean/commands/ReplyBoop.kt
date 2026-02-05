@@ -27,7 +27,7 @@ object ReplyBoop {
         if (!ChatConfig.replyBoop) return
         event.registerWithCallback("rboop") {
             fun noUser() {
-                Text.of("You haven't messaged anyone in the past 5 minutes!", OceanColors.WARNING).sendWithPrefix()
+                Text.of("You haven't been messaged by anyone in the past 5 minutes!", OceanColors.WARNING).sendWithPrefix()
             }
 
             val ign = lastIgn ?: return@registerWithCallback noUser()
