@@ -65,7 +65,7 @@ object HotkeyManager {
     private var pressedKeys: MutableSet<InputConstants.Key> = HashSet()
 
     init {
-        storage.get().hotkeys.forEach(::register)
+        storage.get().hotkeys.forEach(::registerInternal)
     }
 
     fun hotkeys() = storage.get().hotkeys
@@ -207,7 +207,7 @@ object HotkeyManager {
     fun deleteCategory(category: HotkeyCategory) {
         this.storage.edit {
             hotkeys.removeAll { it.group == category.identifier }
-            categories.remove(category)
+            categories.removeIf {  it.identifier == category.identifier }
         }
     }
 }

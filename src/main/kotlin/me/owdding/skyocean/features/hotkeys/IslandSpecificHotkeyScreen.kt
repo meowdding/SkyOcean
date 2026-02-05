@@ -81,76 +81,78 @@ object IslandSpecificHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), 
             string("Categories", CatppuccinColors.Mocha.text, middleCenter)
         }.withTexturedBackground("hotkey/header")
 
-        val categories = LayoutFactory.vertical {
-            widget(createCategory(HotkeyManager.defaultCategory, sliceWidth, 15))
-            HotkeyManager.categories.forEach { category ->
-                createCategory(category, sliceWidth, 15).add()
-            }
+        val categories = LayoutFactory.frame(height = height - header.height - SPACER) {
+            LayoutFactory.vertical {
+                widget(createCategory(HotkeyManager.defaultCategory, sliceWidth, 15))
+                HotkeyManager.categories.forEach { category ->
+                    createCategory(category, sliceWidth, 15).add()
+                }
 
-            LayoutFactory.horizontal(SPACER * 2) {
-                createButton(
-                    texture = null,
-                    icon = UIIcons.PLUS,
-                    color = unhovered,
-                    hoveredColor = hovered,
-                    hover = Text.of("Add category", CatppuccinColors.Mocha.text),
-                    leftClick = setScreen {
-                        EditCategoryModal(this@IslandSpecificHotkeyScreen, sliceWidth) { name, madeBy ->
-                            currentCategory = HotkeyManager.createCategory(name, madeBy)
-                        }
-                    },
-                ).add()
-                createButton(
-                    texture = null,
-                    icon = UIIcons.DOWNLOAD,
-                    color = unhovered,
-                    hoveredColor = hovered,
-                    hover = Text.of("Import category", CatppuccinColors.Mocha.text),
-                    leftClick = setScreen {
-                        val data = HotkeyUtils.readData(McClient.clipboard)
-                        data.exceptionOrNull()?.let {
-                            it.printStackTrace()
-                            return@setScreen ShowMessageModal(
-                                titleComponent = "An error occurred".asComponent {
-                                    color = CatppuccinColors.Mocha.red
+                LayoutFactory.horizontal(SPACER * 2) {
+                    createButton(
+                        texture = null,
+                        icon = UIIcons.PLUS,
+                        color = unhovered,
+                        hoveredColor = hovered,
+                        hover = Text.of("Add category", CatppuccinColors.Mocha.text),
+                        leftClick = setScreen {
+                            EditCategoryModal(this@IslandSpecificHotkeyScreen, sliceWidth) { name, madeBy ->
+                                currentCategory = HotkeyManager.createCategory(name, madeBy)
+                            }
+                        },
+                    ).add()
+                    createButton(
+                        texture = null,
+                        icon = UIIcons.DOWNLOAD,
+                        color = unhovered,
+                        hoveredColor = hovered,
+                        hover = Text.of("Import category", CatppuccinColors.Mocha.text),
+                        leftClick = setScreen {
+                            val data = HotkeyUtils.readData(McClient.clipboard)
+                            data.exceptionOrNull()?.let {
+                                it.printStackTrace()
+                                return@setScreen ShowMessageModal(
+                                    titleComponent = "An error occurred".asComponent {
+                                        color = CatppuccinColors.Mocha.red
+                                    },
+                                    message = "Failed to import data!\n".asComponent {
+                                        color = CatppuccinColors.Mocha.red
+                                        append("See the logs for more details!", CatppuccinColors.Mocha.text)
+                                    },
+                                )
+                            }
+
+                            val result = data.getOrThrow()
+                            val category = HotkeyManager.createCategory(result.category.name, result.category.username)
+
+                            result.hotkeys.forEach {
+                                HotkeyManager.register(it.copy(group = category.identifier))
+                            }
+                            currentCategory = category
+
+                            ShowMessageModal(
+                                titleComponent = "Imported Hotkeys!".asComponent {
+                                    color = CatppuccinColors.Mocha.green
                                 },
-                                message = "Failed to import data!\n".asComponent {
-                                    color = CatppuccinColors.Mocha.red
-                                    append("See the logs for more details!", CatppuccinColors.Mocha.text)
+                                message = Text.multiline(
+                                    Text.of("Successfully imported data!", CatppuccinColors.Mocha.green),
+                                    CommonComponents.EMPTY,
+                                    Text.of("Imported Data"),
+                                    Text.of("Name: ") {
+                                        append(result.category.name, CatppuccinColors.Mocha.sky)
+                                    },
+                                    Text.of("Made by: ") {
+                                        append(result.category.username, CatppuccinColors.Mocha.green)
+                                    },
+                                    Text.of("Hotkeys: ${result.hotkeys.size}"),
+                                ) {
+                                    color = CatppuccinColors.Mocha.text
                                 },
                             )
-                        }
-
-                        val result = data.getOrThrow()
-                        val category = HotkeyManager.createCategory(result.category.name, result.category.username)
-
-                        result.hotkeys.forEach {
-                            HotkeyManager.register(it.copy(group = category.identifier))
-                        }
-                        currentCategory = category
-
-                        ShowMessageModal(
-                            titleComponent = "Imported Hotkeys!".asComponent {
-                                color = CatppuccinColors.Mocha.green
-                            },
-                            message = Text.multiline(
-                                Text.of("Successfully imported data!", CatppuccinColors.Mocha.green),
-                                CommonComponents.EMPTY,
-                                Text.of("Imported Data"),
-                                Text.of("Name: ") {
-                                    append(result.category.name, CatppuccinColors.Mocha.sky)
-                                },
-                                Text.of("Made by: ") {
-                                    append(result.category.username, CatppuccinColors.Mocha.green)
-                                },
-                                Text.of("Hotkeys: ${result.hotkeys.size}")
-                            ) {
-                                color = CatppuccinColors.Mocha.text
-                            }
-                        )
-                    },
-                ).add()
-            }.withPadding(bottom = SPACER, top = SPACER).add { alignHorizontallyCenter() }
+                        },
+                    ).add()
+                }.withPadding(bottom = SPACER, top = SPACER).add { alignHorizontallyCenter() }
+            }.add(topCenter)
         }
 
         return LayoutFactory.frame(sliceWidth, height) {
@@ -245,10 +247,10 @@ object IslandSpecificHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), 
                             message = Text.multiline(
                                 Text.of("Successfully exported data!", CatppuccinColors.Mocha.green),
                                 CommonComponents.EMPTY,
-                                Text.of("Exported 1 Category containing ${entry.size} Hotkey(s)!")
+                                Text.of("Exported 1 Category containing ${entry.size} Hotkey(s)!"),
                             ) {
                                 color = CatppuccinColors.Mocha.text
-                            }
+                            },
                         )
                     },
                 ).withPadding(right = SPACER).add()

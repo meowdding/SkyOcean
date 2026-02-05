@@ -35,6 +35,7 @@ import me.owdding.skyocean.utils.extensions.createToggleButton
 import me.owdding.skyocean.utils.extensions.middleCenter
 import me.owdding.skyocean.utils.extensions.middleLeft
 import me.owdding.skyocean.utils.extensions.middleRight
+import me.owdding.skyocean.utils.extensions.setScreen
 import me.owdding.skyocean.utils.extensions.topLeft
 import me.owdding.skyocean.utils.extensions.topRight
 import me.owdding.skyocean.utils.extensions.withPadding
@@ -48,8 +49,13 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.renderer.RenderPipelines
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import kotlin.contracts.contract
 import kotlin.math.min
 
 private const val PADDING = 5
@@ -299,6 +305,18 @@ class EditHotkeyModal(
                                 width = modalWidth / 2 - PADDING * 2,
                                 height = PADDING * 4,
                                 click = {
+                                    fun require(type: String) = McClient.setScreenAsync {
+                                        ShowMessageModal(
+                                            "Missing Value".asComponent { color = CatppuccinColors.Mocha.red },
+                                            message = Text.of {
+                                                append("Please add a${if (type == "Action") "n" else ""} ")
+                                                append(type, CatppuccinColors.Mocha.sky)
+                                                append(" to proceed!")
+                                                color = CatppuccinColors.Mocha.text
+                                            }
+                                        )
+                                    }
+
                                     callback(
                                         Keybind(
                                             keys = keys,
@@ -309,8 +327,14 @@ class EditHotkeyModal(
                                                 context = context.get(),
                                             ),
                                         ),
-                                        action ?: return@createButton,
-                                        condition ?: return@createButton,
+                                        action ?: run {
+                                            require("Action")
+                                            return@createButton
+                                        },
+                                        condition ?: run {
+                                            require("Condition")
+                                            return@createButton
+                                        },
                                         name.get(),
                                         enabled.get(),
                                     )

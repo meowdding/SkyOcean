@@ -60,14 +60,14 @@ class DeleteCategoryModal(
                     .withContents { contents: FrameLayout ->
                         contents.addChild(
                             LayoutFactory.frame(modalWidth - PADDING * 2, HEADER_HEIGHT + PADDING * 2) {
-                                Widgets.text(Text.of("Delete Category")).withColor(CatppuccinColors.Mocha.lavenderColor).add(middleRight)
+                                Widgets.text(Text.of("Delete Category")).withColor(CatppuccinColors.Mocha.lavenderColor).add(middleLeft)
                                 createButton(
                                     texture = null,
                                     icon = UIIcons.X,
                                     click = ::onClose,
                                     color = CatppuccinColors.Mocha.lavenderColor,
                                     hover = UITexts.BACK,
-                                ).add(middleLeft)
+                                ).add(middleRight)
                             }.asWidget().withPadding(PADDING, bottom = 2, top = 0)
                         )
                     }
