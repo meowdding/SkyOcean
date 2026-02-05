@@ -1,7 +1,5 @@
 package me.owdding.skyocean.features.gambling.vanguard
 
-import com.google.gson.JsonParser
-import com.mojang.serialization.JsonOps
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.gambling.GamblingConfig
@@ -11,7 +9,6 @@ import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.chat.ComponentAnimator
-import net.minecraft.network.chat.ComponentSerialization
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -23,7 +20,13 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.match
+import tech.thatgravyboat.skyblockapi.utils.text.CommonText
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @LateInitModule
 object VanguardGambling {
@@ -80,19 +83,30 @@ object VanguardGambling {
                 val item = data.items.keys.random().toItem()
                 item.cleanName to (item[DataTypes.RARITY]?.color ?: 0)
             }
-            @Suppress("MaxLineLength")
-            val components = listOf(
-                "{\"text\":\"\",\"extra\":[{\"text\":\"▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\",\"bold\":true,\"color\":\"green\"}],\"italic\":false}",
-                "{\"text\":\"\",\"extra\":[\"  \",{\"text\":\"\",\"bold\":true,\"color\":\"aqua\"},{\"text\":\"VANGUARD \",\"bold\":true,\"color\":\"white\"},{\"text\":\"CORPSE LOOT! \",\"bold\":true,\"color\":\"aqua\"}],\"italic\":false}",
-                "{\"text\":\"\",\"italic\":false}",
-                "{\"text\":\"\",\"extra\":[\"  \",{\"text\":\"REWARDS\",\"bold\":true,\"color\":\"green\"}],\"italic\":false}",
-                *possibleLoot.map {
-                    "{\"text\":\"\",\"extra\":[\"    \",{\"text\":\"${it.first}\",\"color\":\"#${it.second.toHexString()}\"}],\"italic\":false}"
-                }.toTypedArray(),
-                "{\"text\":\"\",\"extra\":[{\"text\":\"▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\",\"bold\":true,\"color\":\"green\"}],\"italic\":false}",
-            ).map { ComponentSerialization.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(it)).getOrThrow().first }
-
-            components.forEach { component ->
+            listOf(
+                Text.of("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬") {
+                    bold = true
+                    color = TextColor.GREEN
+                },
+                Text.of("  ") {
+                    bold = true
+                    color = TextColor.AQUA
+                    append("VANGUARD ") {
+                        color = TextColor.WHITE
+                    }
+                    append("CORPSE LOOT! ")
+                },
+                CommonText.EMPTY,
+                Text.of("  REWARDS") {
+                    bold = true
+                    color = TextColor.GREEN
+                },
+                *possibleLoot.map { Text.of("    ${it.first}", it.second) }.toTypedArray(),
+                Text.of("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬") {
+                    bold = true
+                    color = TextColor.GREEN
+                },
+            ).forEach { component ->
                 ChatReceivedEvent.Pre(component).post(SkyBlockAPI.eventBus)
                 component.send()
             }
