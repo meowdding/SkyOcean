@@ -48,7 +48,10 @@ object SackValue : InventorySideGui(".* Sack|Sack of Sacks") {
         return LayoutFactory.vertical {
             val sackEntries = SacksAPI.sackItems.filter { it.key in ids }.map {
                 SackEntry(it.key, it.value)
-            }.sortedByDescending { it.price }.filterNot { SackValueConfig.hideItemsWithNoValue && it.price == 0L }
+            }.let { entries ->
+                if (SackValueConfig.hideItemsWithNoValue) entries.filterNot { it.price == 0L }
+                else entries
+            }.sortedByDescending { it.price }
 
             val title = LayoutFactory.vertical {
                 horizontal {
