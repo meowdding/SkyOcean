@@ -24,11 +24,14 @@ class ComponentAnimator(val text: String, val colorA: Int, val colorB: Int, val 
         return Text.of {
             when {
                 currentStep < waveLength -> wave(currentStep)
+
                 currentStep < waveLength + pauseLength -> append(text, colorB)
+
                 currentStep < waveLength + pauseLength + flashLength -> {
                     val flashIndex = currentStep - (waveLength + pauseLength)
                     append(text, if (flashIndex % 2 == 0) colorA else colorB)
                 }
+
                 else -> append(text, colorA)
             }
         }

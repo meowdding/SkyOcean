@@ -23,7 +23,7 @@ object ComponentAnimatorDebug {
             10,
             10,
             0xFFFFFFFF.toInt(),
-            false
+            false,
         )
     }
 
