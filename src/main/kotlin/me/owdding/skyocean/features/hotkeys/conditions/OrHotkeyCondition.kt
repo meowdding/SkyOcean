@@ -57,6 +57,7 @@ data class OrHotkeyCondition(
                         conditions[conditions.indexOf(hotkey)] = it
                         context.rebuild()
                     }.add(bottomCenter)
+                    childContext.advance()
                 }
             }
         }.add(bottomCenter)

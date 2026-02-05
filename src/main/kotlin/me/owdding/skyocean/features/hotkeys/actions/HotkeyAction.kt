@@ -45,13 +45,13 @@ object KeybindActions {
 
     init {
         ID_MAPPER.put("command", SkyOceanCodecs.CommandHotkeyActionCodec)
-        ID_MAPPER.put("key_mapping", SkyOceanCodecs.KeyMappingHotkeyActionCodec)
+        //ID_MAPPER.put("key_mapping", SkyOceanCodecs.KeyMappingHotkeyActionCodec)
     }
 }
 
 enum class HotkeyActionType(val builder: (() -> HotkeyAction)? = null) {
     NONE,
     COMMAND({ CommandHotkeyAction("command") }),
-    KEY_MAPPING({ KeyMappingHotkeyAction("") }),
+    //KEY_MAPPING({ KeyMappingHotkeyAction("") }),
     ;
 }

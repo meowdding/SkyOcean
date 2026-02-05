@@ -10,6 +10,7 @@ import me.owdding.skyocean.utils.extensions.topLeft
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.layouts.LayoutElement
 
+/*
 @GenerateCodec
 data class KeyMappingHotkeyAction(
     @FieldName("key_name") val keyName: String
@@ -26,3 +27,4 @@ data class KeyMappingHotkeyAction(
         KeyMapping.get(keyName)?.clickCount++
     }
 }
+*/

@@ -9,8 +9,11 @@ import earth.terrarium.olympus.client.ui.UITexts
 import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.Orientation
 import me.owdding.lib.builder.LayoutFactory
+import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.SkyOcean.id
+import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
+import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.utils.components.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.asSprite
 import me.owdding.skyocean.utils.extensions.asWidget
@@ -31,9 +34,10 @@ import kotlin.math.max
 private const val PADDING = 5
 private const val HEADER_HEIGHT = PADDING * 2
 
-class CreateCategoryModal(
+class EditCategoryModal(
     val parent: Screen?,
     val sectionWidth: Int,
+    val category: HotkeyCategory? = null,
     val callback: (name: String, by: String) -> Unit,
 ) : Overlay(parent), IgnoreHotkeyInputs {
     private var layout: Layout = LayoutFactory.empty()
@@ -42,8 +46,8 @@ class CreateCategoryModal(
         super.init()
         val modalWidth = max(sectionWidth, 100)
 
-        val nameState = ListenableState.of("")
-        val madeByState = ListenableState.of(McPlayer.name)
+        val nameState = ListenableState.of(category?.name ?: "")
+        val madeByState = ListenableState.of(category?.username ?: McPlayer.name)
 
         this.layout = Layouts.column()
             .withGap(PADDING)
@@ -52,24 +56,20 @@ class CreateCategoryModal(
                     .withTexture(id("hotkey/header"))
                     .withContents { contents: FrameLayout ->
                         contents.addChild(
-                            Widgets.labelled(
-                                this.font,
-                                Text.of("Create Category"),
-                                CatppuccinColors.Mocha.lavenderColor,
+                            LayoutFactory.frame(modalWidth - PADDING * 2, HEADER_HEIGHT + PADDING * 2) {
+                                Widgets.text(
+                                    Text.of("${if (category != null) "Edit" else  "Create"} Category")
+                                ).withColor(CatppuccinColors.Mocha.lavenderColor).add(middleLeft)
                                 createButton(
                                     texture = null,
                                     icon = UIIcons.X,
                                     click = ::onClose,
-                                    hover = UITexts.BACK,
                                     color = CatppuccinColors.Mocha.lavenderColor,
-                                ),
-                            ).withSize(modalWidth, HEADER_HEIGHT + PADDING * 2 - 2)
-                                .withEqualSpacing(Orientation.HORIZONTAL)
-                                .withPadding(bottom = 2),
+                                    hover = UITexts.BACK,
+                                ).add(middleRight)
+                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0)
                         )
                     }
-                    .withStretchToContentSize()
-                    .withContentMargin(PADDING),
             )
             .withChildren(
                 LayoutFactory.vertical(PADDING) {

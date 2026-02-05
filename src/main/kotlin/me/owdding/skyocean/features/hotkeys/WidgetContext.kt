@@ -36,6 +36,8 @@ data class WidgetContext(
         index++
     }
 
+    fun reset() { index = 0 }
+
     fun createActionDropdown(state: DropdownState<HotkeyActionType>): LayoutElement {
         return LayoutFactory.horizontal {
             createText("Type", CatppuccinColors.Mocha.surface0).withPadding(right = PADDING).add(middleLeft)

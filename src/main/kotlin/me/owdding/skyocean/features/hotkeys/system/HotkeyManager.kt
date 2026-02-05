@@ -9,7 +9,7 @@ import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
-import me.owdding.skyocean.features.hotkeys.IslandSpecificKeybindScreen
+import me.owdding.skyocean.features.hotkeys.IslandSpecificHotkeyScreen
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.debugToggle
@@ -162,7 +162,7 @@ object HotkeyManager {
     @Subscription
     fun registerCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("keybinds") {
-            McClient.setScreenAsync { IslandSpecificKeybindScreen }
+            McClient.setScreenAsync { IslandSpecificHotkeyScreen }
         }
     }
 
@@ -206,6 +206,7 @@ object HotkeyManager {
 
     fun deleteCategory(category: HotkeyCategory) {
         this.storage.edit {
+            hotkeys.removeAll { it.group == category.identifier }
             categories.remove(category)
         }
     }

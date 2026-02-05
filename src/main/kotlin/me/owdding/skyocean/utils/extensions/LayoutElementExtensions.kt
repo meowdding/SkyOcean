@@ -36,7 +36,6 @@ import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.layouts.*
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
@@ -185,7 +184,7 @@ fun LayoutBuilder.string(text: Component, color: Number = -1, settings: LayoutSe
     settings,
 )
 
-fun Component.asWidget(): LayoutElement = Widgets.text(this)
+fun Component.asWidget(): AbstractWidget = Widgets.text(this)
 
 fun <T> dropdown(
     state: DropdownState<T>,
@@ -380,18 +379,20 @@ fun createButton(
     height: Int = 12,
     builder: Button.() -> Unit = {},
 ): Button = Widgets.button().apply {
-    withSize(width, height)
     click?.let { withCallback(click) }
     rightClick?.let { withCallback(GLFW.GLFW_MOUSE_BUTTON_RIGHT, rightClick) }
     leftClick?.let { withCallback(GLFW.GLFW_MOUSE_BUTTON_LEFT, leftClick) }
     if (icon != null || text != null) {
         withRenderer(
-            ExtraWidgetRenderers.conditional(
-                createRenderer<Button, _>(text, hoveredIcon ?: icon).colored(hoveredColor),
-                createRenderer<Button, _>(text, icon).colored(color),
-            ) {
-                this.isHovered
-            },
+            WidgetRenderers.layered(
+                WidgetRenderers.solid<Button>().colored(MinecraftColors.RED),
+                ExtraWidgetRenderers.conditional(
+                    createRenderer<Button, _>(text, hoveredIcon ?: icon).colored(hoveredColor),
+                    createRenderer<Button, _>(text, icon).colored(color),
+                ) {
+                    this.isHovered
+                },
+            ),
         )
     }
     hover?.let {
@@ -400,6 +401,7 @@ fun createButton(
     }
     withShape(shape)
     withTexture(texture)
+    withSize(width, height)
 }.apply(builder)
 
 fun setScreen(provider: () -> Screen?): () -> Unit = { McClient.setScreenAsync(provider) }

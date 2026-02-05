@@ -9,15 +9,30 @@ import me.owdding.skyocean.features.hotkeys.system.Hotkey
 import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
 import me.owdding.skyocean.utils.SkyOceanScreen
-import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.components.CatppuccinColors
-import me.owdding.skyocean.utils.extensions.*
+import me.owdding.skyocean.utils.extensions.asScrollableWidget
+import me.owdding.skyocean.utils.extensions.asWidget
+import me.owdding.skyocean.utils.extensions.bottomCenter
+import me.owdding.skyocean.utils.extensions.createButton
+import me.owdding.skyocean.utils.extensions.createSeparator
+import me.owdding.skyocean.utils.extensions.createText
+import me.owdding.skyocean.utils.extensions.framed
+import me.owdding.skyocean.utils.extensions.middleCenter
+import me.owdding.skyocean.utils.extensions.middleLeft
+import me.owdding.skyocean.utils.extensions.middleRight
+import me.owdding.skyocean.utils.extensions.setScreen
+import me.owdding.skyocean.utils.extensions.string
+import me.owdding.skyocean.utils.extensions.topCenter
+import me.owdding.skyocean.utils.extensions.withPadding
+import me.owdding.skyocean.utils.extensions.withTexturedBackground
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.layouts.LayoutElement
+import net.minecraft.network.chat.CommonComponents
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
@@ -25,17 +40,15 @@ import kotlin.math.max
 
 /**
  * todo before release
- *  - Import/export
- *  - Condition builder string representation
- *  - Dungeon floor and dungeon class condition
- *  - Held item condition (probably with extra item conditions??)
+ *  - add settings
+ *
+ * todo for next release
  *  - implement KeyMapping action
  *  - Maybe add rconfig toggle action?
- *  - Debug related actions (??)
- *  - rename to hotkey
- *  - add options
+ *  - Condition builder string representation
+ *  - Held item condition (probably with extra item conditions??)
  */
-object IslandSpecificKeybindScreen : SkyOceanScreen("Island Specific Keybinds"), IgnoreHotkeyInputs {
+object IslandSpecificHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), IgnoreHotkeyInputs {
 
     private var tryDeleting: Hotkey? = null
 
@@ -82,7 +95,7 @@ object IslandSpecificKeybindScreen : SkyOceanScreen("Island Specific Keybinds"),
                     hoveredColor = hovered,
                     hover = Text.of("Add category", CatppuccinColors.Mocha.text),
                     leftClick = setScreen {
-                        CreateCategoryModal(this@IslandSpecificKeybindScreen, sliceWidth) { name, madeBy ->
+                        EditCategoryModal(this@IslandSpecificHotkeyScreen, sliceWidth) { name, madeBy ->
                             currentCategory = HotkeyManager.createCategory(name, madeBy)
                         }
                     },
@@ -93,8 +106,48 @@ object IslandSpecificKeybindScreen : SkyOceanScreen("Island Specific Keybinds"),
                     color = unhovered,
                     hoveredColor = hovered,
                     hover = Text.of("Import category", CatppuccinColors.Mocha.text),
-                    leftClick = {
-                        Text.of("Import").send()
+                    leftClick = setScreen {
+                        val data = HotkeyUtils.readData(McClient.clipboard)
+                        data.exceptionOrNull()?.let {
+                            it.printStackTrace()
+                            return@setScreen ShowMessageModal(
+                                titleComponent = "An error occurred".asComponent {
+                                    color = CatppuccinColors.Mocha.red
+                                },
+                                message = "Failed to import data!\n".asComponent {
+                                    color = CatppuccinColors.Mocha.red
+                                    append("See the logs for more details!", CatppuccinColors.Mocha.text)
+                                },
+                            )
+                        }
+
+                        val result = data.getOrThrow()
+                        val category = HotkeyManager.createCategory(result.category.name, result.category.username)
+
+                        result.hotkeys.forEach {
+                            HotkeyManager.register(it.copy(group = category.identifier))
+                        }
+                        currentCategory = category
+
+                        ShowMessageModal(
+                            titleComponent = "Imported Hotkeys!".asComponent {
+                                color = CatppuccinColors.Mocha.green
+                            },
+                            message = Text.multiline(
+                                Text.of("Successfully imported data!", CatppuccinColors.Mocha.green),
+                                CommonComponents.EMPTY,
+                                Text.of("Imported Data"),
+                                Text.of("Name: ") {
+                                    append(result.category.name, CatppuccinColors.Mocha.sky)
+                                },
+                                Text.of("Made by: ") {
+                                    append(result.category.username, CatppuccinColors.Mocha.green)
+                                },
+                                Text.of("Hotkeys: ${result.hotkeys.size}")
+                            ) {
+                                color = CatppuccinColors.Mocha.text
+                            }
+                        )
                     },
                 ).add()
             }.withPadding(bottom = SPACER, top = SPACER).add { alignHorizontallyCenter() }
@@ -120,6 +173,7 @@ object IslandSpecificKeybindScreen : SkyOceanScreen("Island Specific Keybinds"),
 
     fun createRightPanel(sliceWidth: Int, height: Int): LayoutElement {
         val panelWidth = sliceWidth * 2 + SPACER
+        val entry = getHotkeysInCategory().sortedBy { it.timeCreated }
         val header = LayoutFactory.frame(panelWidth, SPACER * 6) {
             LayoutFactory.vertical {
                 createText(currentCategory.name, CatppuccinColors.Mocha.sky) {
@@ -143,30 +197,59 @@ object IslandSpecificKeybindScreen : SkyOceanScreen("Island Specific Keybinds"),
                         hoveredColor = hovered,
                         hover = Text.of("Delete category", CatppuccinColors.Mocha.text),
                         leftClick = setScreen {
-                            DeleteCategoryModal(this@IslandSpecificKeybindScreen, sliceWidth, currentCategory) {
+                            DeleteCategoryModal(this@IslandSpecificHotkeyScreen, sliceWidth, currentCategory) {
                                 currentCategory = HotkeyManager.defaultCategory
+                            }
+                        },
+                    ).withPadding(right = SPACER).add()
+                    createButton(
+                        texture = null,
+                        icon = UIIcons.PENCIL,
+                        color = unhovered,
+                        hoveredColor = hovered,
+                        hover = Text.of("Edit category", CatppuccinColors.Mocha.text),
+                        leftClick = setScreen {
+                            EditCategoryModal(this@IslandSpecificHotkeyScreen, sliceWidth, currentCategory) { name, username ->
+                                currentCategory.username = username
+                                currentCategory.name = name
                             }
                         },
                     ).withPadding(right = SPACER).add()
                 }
                 createButton(
                     texture = null,
-                    icon = UIIcons.PENCIL,
-                    color = unhovered,
-                    hoveredColor = hovered,
-                    hover = Text.of("Edit category", CatppuccinColors.Mocha.text),
-                    leftClick = {
-                        Text.of("edit category").send()
-                    },
-                ).withPadding(right = SPACER).add()
-                createButton(
-                    texture = null,
                     icon = UIIcons.SAVE,
                     color = unhovered,
                     hoveredColor = hovered,
                     hover = Text.of("Export category", CatppuccinColors.Mocha.text),
-                    leftClick = {
-                        Text.of("export category").send()
+                    leftClick = setScreen {
+                        val data = HotkeyUtils.writeData(currentCategory)
+                        data.exceptionOrNull()?.let {
+                            it.printStackTrace()
+                            return@setScreen ShowMessageModal(
+                                titleComponent = "An error occurred".asComponent {
+                                    color = CatppuccinColors.Mocha.red
+                                },
+                                message = "Failed to export data!\n".asComponent {
+                                    color = CatppuccinColors.Mocha.red
+                                    append("See the logs for more details!", CatppuccinColors.Mocha.text)
+                                },
+                            )
+                        }
+
+                        val result = data.getOrThrow()
+
+                        McClient.clipboard = result
+                        ShowMessageModal(
+                            titleComponent = "Exported data".asComponent(),
+                            message = Text.multiline(
+                                Text.of("Successfully exported data!", CatppuccinColors.Mocha.green),
+                                CommonComponents.EMPTY,
+                                Text.of("Exported 1 Category containing ${entry.size} Hotkey(s)!")
+                            ) {
+                                color = CatppuccinColors.Mocha.text
+                            }
+                        )
                     },
                 ).withPadding(right = SPACER).add()
             }.add(middleRight)
@@ -174,7 +257,6 @@ object IslandSpecificKeybindScreen : SkyOceanScreen("Island Specific Keybinds"),
 
         val mainSectionHeight = height - header.height - SPACER
         val mainSection = LayoutFactory.vertical {
-            val entry = getHotkeysInCategory()
             entry.forEach { hotkey ->
                 createEntry(hotkey, panelWidth, SPACER * 7).add()
                 createSeparator(panelWidth - SPACER * 2).add {
@@ -191,10 +273,20 @@ object IslandSpecificKeybindScreen : SkyOceanScreen("Island Specific Keybinds"),
                 hoveredColor = hovered,
                 leftClick = setScreen {
                     EditHotkeyModal(
-                        this@IslandSpecificKeybindScreen,
+                        this@IslandSpecificHotkeyScreen,
                         null,
                     ) { keybind, action, condition, name, enabled ->
-                        HotkeyManager.register(Hotkey(keybind, action, condition, name, enabled, currentCategory.takeUnless { it.isDefault() }?.identifier))
+                        HotkeyManager.register(
+                            Hotkey(
+                                keybind,
+                                action,
+                                condition,
+                                name,
+                                enabled,
+                                currentCategory.takeUnless { it.isDefault() }?.identifier,
+                                System.currentTimeMillis(),
+                            ),
+                        )
                     }
                 },
                 width = 12 + SPACER + McFont.width(text),
@@ -218,13 +310,7 @@ object IslandSpecificKeybindScreen : SkyOceanScreen("Island Specific Keybinds"),
         }
     }
 
-    fun getHotkeysInCategory(): Collection<Hotkey> {
-        return if (this.currentCategory === HotkeyManager.defaultCategory) {
-            HotkeyManager.hotkeys().filter { it.group == null }
-        } else {
-            HotkeyManager.hotkeys().filter { it.group == currentCategory.identifier }
-        }
-    }
+    fun getHotkeysInCategory(): Collection<Hotkey> = this.currentCategory.getHotkeysInCategory()
 
     override fun init() {
         toggleWidth = max(McFont.width(disabled), McFont.width(enabled))
@@ -311,7 +397,7 @@ object IslandSpecificKeybindScreen : SkyOceanScreen("Island Specific Keybinds"),
                     color = unhovered,
                     height = 15,
                     click = setScreen {
-                        EditHotkeyModal(this@IslandSpecificKeybindScreen, hotkey) { keybind, action, condition, name, enabled ->
+                        EditHotkeyModal(this@IslandSpecificHotkeyScreen, hotkey) { keybind, action, condition, name, enabled ->
                             hotkey.keybind = keybind
                             hotkey.action = action
                             hotkey.condition = condition

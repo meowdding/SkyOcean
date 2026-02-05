@@ -12,6 +12,7 @@ import earth.terrarium.olympus.client.ui.UITexts
 import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.Orientation
 import me.owdding.lib.builder.LayoutFactory
+import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.features.hotkeys.actions.HotkeyAction
@@ -101,8 +102,10 @@ class EditHotkeyModal(
                     createText("Can't display condition!", CatppuccinColors.Mocha.surface0).add(middleCenter)
                 }.withTexturedBackground(widgetContext.background)
             }
+            widgetContext.advance()
         }
 
+        widgetContext.reset()
         val actionLayout = LayoutFactory.frame(minWidth - PADDING * 2) {
             val action = action
             val state = ListenableState.of(HotkeyActionType.NONE)
@@ -125,6 +128,7 @@ class EditHotkeyModal(
                     action.toWidget(callback).withTexturedBackground(widgetContext.background).add()
                 }
             }
+            widgetContext.advance()
         }
 
 
@@ -248,24 +252,20 @@ class EditHotkeyModal(
                     .withTexture(id("hotkey/header"))
                     .withContents { contents: FrameLayout ->
                         contents.addChild(
-                            Widgets.labelled(
-                                this.font,
-                                Text.of("${if (hotkey == null) "Create" else "Edit"} Hotkey"),
-                                CatppuccinColors.Mocha.lavenderColor,
+                            LayoutFactory.frame(modalWidth - PADDING * 2, HEADER_HEIGHT + PADDING * 2) {
+                                Widgets.text(
+                                    Text.of("${if (hotkey == null) "Create" else "Edit"} Hotkey")
+                                ).withColor(CatppuccinColors.Mocha.lavenderColor).add(middleLeft)
                                 createButton(
                                     texture = null,
                                     icon = UIIcons.X,
                                     click = ::onClose,
-                                    hover = UITexts.BACK,
                                     color = CatppuccinColors.Mocha.lavenderColor,
-                                ),
-                            ).withSize(modalWidth, HEADER_HEIGHT + PADDING * 2 - 2)
-                                .withEqualSpacing(Orientation.HORIZONTAL)
-                                .withPadding(bottom = 2),
+                                    hover = UITexts.BACK,
+                                ).add(middleRight)
+                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0)
                         )
                     }
-                    .withStretchToContentSize()
-                    .withContentMargin(PADDING),
             )
             .withChildren(
                 content.withPadding(PADDING, top = 0).asScrollable(

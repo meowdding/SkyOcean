@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.hotkeys.system
 
 import com.mojang.blaze3d.platform.InputConstants
+import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.OptionalBoolean
 import me.owdding.skyocean.features.hotkeys.actions.HotkeyAction
@@ -25,7 +26,8 @@ data class Hotkey(
     var condition: HotkeyCondition,
     var name: String,
     @OptionalBoolean(true) var enabled: Boolean = true,
-    val group: UUID?
+    val group: UUID?,
+    @FieldName("created_at") val timeCreated: Long = System.currentTimeMillis(),
 ) {
     fun isActive() = enabled && condition.test()
 

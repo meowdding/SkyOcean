@@ -8,9 +8,11 @@ import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.ui.UITexts
 import earth.terrarium.olympus.client.utils.Orientation
 import me.owdding.lib.builder.LayoutFactory
+import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
+import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.utils.components.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.*
 import net.minecraft.client.gui.GuiGraphics
@@ -57,24 +59,18 @@ class DeleteCategoryModal(
                     .withTexture(id("hotkey/header"))
                     .withContents { contents: FrameLayout ->
                         contents.addChild(
-                            Widgets.labelled(
-                                this.font,
-                                Text.of("Delete Category"),
-                                CatppuccinColors.Mocha.lavenderColor,
+                            LayoutFactory.frame(modalWidth - PADDING * 2, HEADER_HEIGHT + PADDING * 2) {
+                                Widgets.text(Text.of("Delete Category")).withColor(CatppuccinColors.Mocha.lavenderColor).add(middleRight)
                                 createButton(
                                     texture = null,
                                     icon = UIIcons.X,
                                     click = ::onClose,
-                                    hover = UITexts.BACK,
                                     color = CatppuccinColors.Mocha.lavenderColor,
-                                ),
-                            ).withSize(modalWidth, HEADER_HEIGHT + PADDING * 2 - 2)
-                                .withEqualSpacing(Orientation.HORIZONTAL)
-                                .withPadding(bottom = 2),
+                                    hover = UITexts.BACK,
+                                ).add(middleLeft)
+                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0)
                         )
                     }
-                    .withStretchToContentSize()
-                    .withContentMargin(PADDING),
             )
             .withChildren(
                 content,
