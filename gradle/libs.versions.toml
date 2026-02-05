@@ -7,7 +7,7 @@ fabric-api = "0.133.4"
 kotlin = "2.2.0"
 kotlin-symbol-processor = "2.2.0-2.0.2"
 gson = "2.12.1"
-skyblockapi = "4.0.1"
+skyblockapi = "4.0.7"
 skyblockapi-repo = "3.0.2"
 placeholders = "2.6.1+1.21.5"
 keval = "1.1.1"
@@ -18,7 +18,7 @@ rconfigkt = "3.5.15"
 
 detekt = "2.0.0-alpha.0"
 
-meowdding-lib = "4.0.4"
+meowdding-lib = "4.0.5"
 meowdding-ktmodules = "1.0.6"
 meowdding-ktcodecs = "1.1.5"
 meowdding-gradle = "1.1.0"
@@ -26,6 +26,8 @@ meowdding-resources = "1.0.17"
 meowdding-auto-mixins = "1.0.7"
 
 terrarium-cloche = "0.13.5"
+
+moulberry-mixinconstraints = "1.0.8"
 
 [libraries]
 
@@ -47,6 +49,8 @@ meowdding-lib = { module = "me.owdding.meowdding-lib:meowdding-lib", version.ref
 meowdding-ktmodules = { module = "me.owdding.ktmodules:KtModules", version.ref = "meowdding-ktmodules" }
 meowdding-ktcodecs = { module = "me.owdding.ktcodecs:KtCodecs", version.ref = "meowdding-ktcodecs" }
 meowdding-resources = { module = "me.owdding.repo:compacting-resources", version.ref = "meowdding-resources" }
+
+moulberry-mixinconstraints = { module = "com.moulberry:mixinconstraints", version.ref = "moulberry-mixinconstraints" }
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 

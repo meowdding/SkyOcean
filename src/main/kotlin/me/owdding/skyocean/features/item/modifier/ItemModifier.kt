@@ -32,6 +32,8 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.minecraft.ui.GatherItemTooltipComponentsEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ItemTooltipEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.PlayerEquipmentChangeEvent
+import tech.thatgravyboat.skyblockapi.api.events.screen.PlayerHotbarChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.PlayerInventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
@@ -84,7 +86,6 @@ abstract class AbstractItemModifier {
     open fun getExtraComponents(itemStack: ItemStack): DataComponentPatch? = null
     open fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?): Result = Result.unmodified
     open fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>): Result = Result.unmodified
-
 
     protected fun withMerger(original: MutableList<Component>, init: ListMerger<Component>.() -> Result?): Result {
         val merger = ListMerger(original)
@@ -154,6 +155,8 @@ object ItemModifiers {
     val modifiers: List<AbstractItemModifier> = SkyOceanItemModifiers.collected.sortedBy { it.priority }.toList()
     val modifiedItems: WeakHashMap<ItemStack, List<AbstractItemModifier>> = WeakHashMap()
 
+    val McPlayer.equipment get() = listOf(helmet, chestplate, leggings, boots)
+
     @Subscription
     @MustBeContainer
     private fun InventoryChangeEvent.onContainerChange() {
@@ -163,6 +166,16 @@ object ItemModifiers {
     @Subscription
     private fun PlayerInventoryChangeEvent.onInventoryChange() {
         tryModify(item, slot.toSource(36))
+    }
+
+    @Subscription
+    private fun PlayerHotbarChangeEvent.onHotbarChange() {
+        tryModify(item, AbstractItemModifier.ModifierSource.HOTBAR)
+    }
+
+    @Subscription
+    private fun PlayerEquipmentChangeEvent.onHotbarChange() {
+        tryModify(item, AbstractItemModifier.ModifierSource.EQUIPMENT)
     }
 
     private fun Screen?.isInventory() = this is InventoryScreen || this is ContainerScreen
@@ -176,12 +189,20 @@ object ItemModifiers {
     @Subscription
     private fun ScreenInitializedEvent.event() {
         if (this.screen.isInventory()) {
+            McPlayer.equipment.forEach { stack ->
+                clear(stack)
+                tryModify(stack, AbstractItemModifier.ModifierSource.EQUIPMENT)
+            }
             McPlayer.inventory.forEachIndexed { index, stack ->
                 clear(stack)
                 tryModify(stack, index.toSource())
             }
             ScreenEvents.remove(this.screen).register {
                 McClient.runNextTick {
+                    McPlayer.equipment.forEach { stack ->
+                        clear(stack)
+                        tryModify(stack, AbstractItemModifier.ModifierSource.EQUIPMENT)
+                    }
                     McPlayer.inventory.forEachIndexed { index, stack ->
                         clear(stack)
                         tryModify(stack, index.toSource())
@@ -197,7 +218,7 @@ object ItemModifiers {
         val modifiers = modifiers.filter {
             it.isEnabled && it.appliesTo(itemStack) && it.modifierSources.contains(modifierSource) && McScreen.self?.let { screen ->
                 it.appliesToScreen(screen)
-            } == true
+            } != false
         }
 
         if (modifiers.isEmpty()) return
@@ -227,11 +248,8 @@ object ItemModifiers {
                 when (key) {
                     DataMarker.ITEM -> item = value.unsafeCast()
                     DataMarker.BACKGROUND_ITEM -> backgroundItem = value.unsafeCast()
-                    DataMarker.ITEM_COUNT -> count = 2
-                    is DataMarker.ComponentDataMarker -> {
-                        set(key.component, value.unsafeCast())
-                    }
-
+                    DataMarker.ITEM_COUNT -> customSlotComponent = value.unsafeCast()
+                    is DataMarker.ComponentDataMarker -> set(key.component, value.unsafeCast())
                     else -> {}
                 }
             }
