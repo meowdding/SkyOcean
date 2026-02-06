@@ -14,8 +14,9 @@ import net.minecraft.util.ExtraCodecs
 interface HotkeyAction {
 
     val codec: MapCodec<out HotkeyAction>
-    fun perform()
     val type: HotkeyActionType
+
+    fun perform()
 
     operator fun invoke() = perform()
 
@@ -53,5 +54,4 @@ enum class HotkeyActionType(val builder: (() -> HotkeyAction)? = null) {
     NONE,
     COMMAND({ CommandHotkeyAction("command") }),
     //KEY_MAPPING({ KeyMappingHotkeyAction("") }),
-    ;
 }

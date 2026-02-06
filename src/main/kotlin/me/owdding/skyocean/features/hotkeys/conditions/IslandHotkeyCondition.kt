@@ -13,16 +13,13 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 data class IslandHotkeyCondition(
     @Compact val islands: MutableSet<SkyBlockIsland> = mutableSetOf(),
 ) : SelectHotkeyCondition<SkyBlockIsland> {
+    override val text: String = "Islands"
     override val codec: MapCodec<out HotkeyCondition> = SkyOceanCodecs.IslandHotkeyConditionCodec
     override val type: HotkeyConditionType = HotkeyConditionType.ISLAND
 
-    override fun test(): Boolean = SkyBlockIsland.inAnyIsland(islands)
-    override val text: String = "Islands"
-
     override fun data(): MutableSet<SkyBlockIsland> = islands
-
     override fun possibilities(): List<SkyBlockIsland> = SkyBlockIsland.entries
-
     override fun nameConverter(data: SkyBlockIsland): Component = data.name.toTitleCase().asComponent()
 
+    override fun test(): Boolean = SkyBlockIsland.inAnyIsland(islands)
 }

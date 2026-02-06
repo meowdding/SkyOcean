@@ -1,3 +1,4 @@
+//? > 1.21.8 {
 package me.owdding.skyocean.features.hotkeys.system
 
 import com.google.common.collect.EvictingQueue
@@ -25,7 +26,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.drawString
-import java.util.UUID
+import java.util.*
 import java.util.function.Function
 
 @Module
@@ -33,12 +34,14 @@ object HotkeyManager {
 
     val defaultCategory = HotkeyCategory(
         Util.NIL_UUID,
-        "Uncategorized"
+        "Uncategorized",
     )
     val categories: MutableSet<HotkeyCategory> get() = storage.get().categories
 
     @IncludedCodec(named = "hotkey_set")
     val hotkeySet: Codec<HashSet<Hotkey>> = CodecHelpers.mutableSet<Hotkey>().xmap(::HashSet, Function.identity())
+
+    val debug by debugToggle("hotkey/buffers", "Shows the values of the current hotkey buffers")
 
     @GenerateCodec
     @NamedCodec("HotkeyData")
@@ -168,8 +171,6 @@ object HotkeyManager {
         }
     }
 
-    val debug by debugToggle("hotkey/buffers", "Shows the values of the current hotkey buffers")
-
     @Subscription
     fun renderDebug(event: RenderHudEvent) {
         if (!debug) return
@@ -209,7 +210,8 @@ object HotkeyManager {
     fun deleteCategory(category: HotkeyCategory) {
         this.storage.edit {
             hotkeys.removeAll { it.group == category.identifier }
-            categories.removeIf {  it.identifier == category.identifier }
+            categories.removeIf { it.identifier == category.identifier }
         }
     }
 }
+//?}

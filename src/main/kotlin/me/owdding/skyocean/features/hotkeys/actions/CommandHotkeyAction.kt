@@ -46,7 +46,7 @@ data class CommandHotkeyAction(
                     falseColor = CatppuccinColors.Mocha.mauve,
                     texture = id(context.listBackground),
                     width = context.width / 3,
-                    onClick = context.rebuildCallback
+                    onClick = context.rebuildCallback,
                 ).add(middleLeft)
             }.add(middleLeft)
             LayoutFactory.vertical {

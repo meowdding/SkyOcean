@@ -1,3 +1,4 @@
+//? > 1.21.8 {
 package me.owdding.skyocean.features.hotkeys
 
 import earth.terrarium.olympus.client.components.Widgets
@@ -14,7 +15,11 @@ import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.utils.components.CatppuccinColors
-import me.owdding.skyocean.utils.extensions.*
+import me.owdding.skyocean.utils.extensions.asWidget
+import me.owdding.skyocean.utils.extensions.createButton
+import me.owdding.skyocean.utils.extensions.middleLeft
+import me.owdding.skyocean.utils.extensions.middleRight
+import me.owdding.skyocean.utils.extensions.withPadding
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
@@ -68,9 +73,9 @@ class DeleteCategoryModal(
                                     color = CatppuccinColors.Mocha.lavenderColor,
                                     hover = UITexts.BACK,
                                 ).add(middleRight)
-                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0)
+                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0),
                         )
-                    }
+                    },
             )
             .withChildren(
                 content,
@@ -126,3 +131,4 @@ class DeleteCategoryModal(
         )
     }
 }
+//?}

@@ -1,3 +1,4 @@
+//? > 1.21.8 {
 package me.owdding.skyocean.features.hotkeys
 
 import earth.terrarium.olympus.client.components.Widgets
@@ -6,14 +7,11 @@ import earth.terrarium.olympus.client.layouts.Layouts
 import earth.terrarium.olympus.client.ui.Overlay
 import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.ui.UITexts
-import earth.terrarium.olympus.client.utils.Orientation
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.layouts.asWidget
-import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.utils.components.CatppuccinColors
-import me.owdding.skyocean.utils.extensions.asWidget
 import me.owdding.skyocean.utils.extensions.createButton
 import me.owdding.skyocean.utils.extensions.middleLeft
 import me.owdding.skyocean.utils.extensions.middleRight
@@ -27,7 +25,6 @@ import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitLines
 
 private const val PADDING = 5
@@ -36,7 +33,7 @@ private const val HEADER_HEIGHT = PADDING * 2
 class ShowMessageModal(
     val titleComponent: Component,
     val message: Component,
-    parent: Screen? = McScreen.self
+    parent: Screen? = McScreen.self,
 ) : Overlay(parent), IgnoreHotkeyInputs {
     private var layout: Layout = LayoutFactory.empty()
 
@@ -63,12 +60,12 @@ class ShowMessageModal(
                                     click = ::onClose,
                                     hover = UITexts.BACK,
                                 ).add(middleRight)
-                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0)
+                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0),
                         )
-                    }
+                    },
             )
             .withChildren(
-                content.withPadding(PADDING, top = 0)
+                content.withPadding(PADDING, top = 0),
             )
             .build { widget: AbstractWidget -> this.addRenderableWidget(widget) }
 
@@ -88,4 +85,4 @@ class ShowMessageModal(
         )
     }
 }
-
+//?}

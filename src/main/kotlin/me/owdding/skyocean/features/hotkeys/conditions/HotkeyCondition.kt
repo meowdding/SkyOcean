@@ -64,6 +64,4 @@ enum class HotkeyConditionType(val builder: (() -> HotkeyCondition)? = null, val
     OR(builder = ::OrHotkeyCondition, nested = true),
     DUNGEON_FLOOR(builder = ::DungeonFloorHotkeyCondition),
     DUNGEON_CLASS(builder = ::DungeonClassHotkeyCondition),
-    ;
-
 }

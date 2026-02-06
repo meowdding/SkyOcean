@@ -50,16 +50,16 @@ object ExtraDisplays {
         }
     }
 
-    fun solid(color: Number, width: Int, height: Int)  = object : Display {
+    fun solid(color: Number, width: Int, height: Int) = object : Display {
+        val color = ARGB.opaque(color.toInt())
         override fun getWidth() = width
         override fun getHeight() = height
-        val color = ARGB.opaque(color.toInt())
 
         override fun render(graphics: GuiGraphics) {
             graphics.drawFilledBox(
                 0, 0,
                 getWidth(), getHeight(),
-                this.color
+                this.color,
             )
         }
     }

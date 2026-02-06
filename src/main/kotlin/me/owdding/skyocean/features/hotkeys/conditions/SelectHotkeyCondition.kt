@@ -45,7 +45,7 @@ interface SelectHotkeyCondition<DataType> : HotkeyCondition {
                 elementColor = CatppuccinColors.Mocha.surface0Color,
                 buttonTexture = id(context.button),
                 backgroundTexture = id(context.listBackground),
-                elementSprite = createSprite(id(context.listEntry))
+                elementSprite = createSprite(id(context.listEntry)),
             ) {
                 withSize(context.width / 2, 20)
             }.withPadding(left = PADDING).add()

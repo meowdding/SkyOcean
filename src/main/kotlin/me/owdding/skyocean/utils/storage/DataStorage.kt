@@ -32,6 +32,34 @@ internal class DataStorage<Type : Any>(
     fileName: String,
     codec: (Int) -> Codec<Type>,
 ) {
+    private val path: Path = defaultPath.resolve("$fileName.json")
+
+    private val data: Type
+    private val currentCodec = codec(version)
+
+    init {
+        if (!path.exists()) {
+            path.createParentDirectories()
+            this.data = defaultData()
+        } else {
+            var newData: Type
+            try {
+                val readJson = path.readJson<JsonObject>()
+                val version = readJson.get("@skyocean:version").asInt
+                var data = readJson.get("@skyocean:data")
+                for (version in version until this.version) {
+                    data = data.toDataOrThrow(codec(version)).toJsonOrThrow(codec(version))
+                }
+                val codec = codec(version)
+                newData = data.toDataOrThrow(codec)
+            } catch (e: Exception) {
+                SkyOcean.error("Failed to load ${path.relativeTo(defaultPath)}.", e)
+                newData = defaultData()
+            }
+            this.data = newData
+        }
+    }
+
     constructor(defaultData: () -> Type, fileName: String, codec: Codec<Type>) : this(0, defaultData, fileName, { codec })
 
     fun get(): Type = data
@@ -58,35 +86,6 @@ internal class DataStorage<Type : Any>(
 
         val defaultPath: Path = McClient.config.resolve("skyocean/data")
     }
-
-    private val path: Path = defaultPath.resolve("$fileName.json")
-
-    private val data: Type
-
-    init {
-        if (!path.exists()) {
-            path.createParentDirectories()
-            this.data = defaultData()
-        } else {
-            var newData: Type
-            try {
-                val readJson = path.readJson<JsonObject>()
-                val version = readJson.get("@skyocean:version").asInt
-                var data = readJson.get("@skyocean:data")
-                for (version in version until this.version) {
-                    data = data.toDataOrThrow(codec(version)).toJsonOrThrow(codec(version))
-                }
-                val codec = codec(version)
-                newData = data.toDataOrThrow(codec)
-            } catch (e: Exception) {
-                SkyOcean.error("Failed to load ${path.relativeTo(defaultPath)}.", e)
-                newData = defaultData()
-            }
-            this.data = newData
-        }
-    }
-
-    private val currentCodec = codec(version)
 
     fun delete() {
         try {

@@ -1,9 +1,8 @@
 package me.owdding.skyocean.features.hotkeys.system
 
 import me.owdding.ktcodecs.GenerateCodec
-import me.owdding.skyocean.features.hotkeys.IslandSpecificHotkeyScreen.currentCategory
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import java.util.UUID
+import java.util.*
 
 @GenerateCodec
 data class HotkeyCategory(
@@ -11,13 +10,16 @@ data class HotkeyCategory(
     var name: String,
     var username: String = McPlayer.name,
 ) {
+    //? > 1.21.8 {
     fun isDefault(): Boolean = this === HotkeyManager.defaultCategory
 
-    fun getHotkeysInCategory(): Collection<Hotkey> {
-        return if (isDefault()) {
-            HotkeyManager.hotkeys().filter { it.group == null }
-        } else {
-            HotkeyManager.hotkeys().filter { it.group == currentCategory.identifier }
-        }
+    fun getHotkeysInCategory(): Collection<Hotkey> = if (isDefault()) {
+        HotkeyManager.hotkeys().filter { it.group == null }
+    } else {
+        HotkeyManager.hotkeys().filter { it.group == this }
     }
+    //?} else {
+    /*fun isDefault() = false
+    fun getHotkeysInCategory(): Collection<Hotkey> = emptyList()
+    *///?}
 }

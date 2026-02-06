@@ -24,14 +24,15 @@ enum class ConflictContext {
     IN_GAME {
         override val isActive: Boolean get() = Minecraft.getInstance().screen == null
         override fun conflictsWith(other: ConflictContext): Boolean = other == IN_GAME
-    };
-
+    },
+    ;
 
     abstract val isActive: Boolean
     abstract fun conflictsWith(other: ConflictContext): Boolean
+
+    fun next() = VALUES[(ordinal + 1) % VALUES.size]
+
     companion object {
         private val VALUES = entries
     }
-
-    fun next() = VALUES[(ordinal + 1) % VALUES.size]
 }

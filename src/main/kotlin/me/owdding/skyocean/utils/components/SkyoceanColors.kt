@@ -1,4 +1,4 @@
-@file:Suppress("unused", "ConstPropertyName")
+@file:Suppress("unused", "ConstPropertyName", "all")
 
 package me.owdding.skyocean.utils.components
 
@@ -153,6 +153,6 @@ object SkyoceanColors {
 
     const val magenta = fuchsia
     const val grey = gray
-    const val cyan  = aqua
+    const val cyan = aqua
 
 }

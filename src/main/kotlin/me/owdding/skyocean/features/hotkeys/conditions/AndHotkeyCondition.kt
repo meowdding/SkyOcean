@@ -49,7 +49,7 @@ data class AndHotkeyCondition(
                                     click = {
                                         conditions.remove(hotkey)
                                         context.rebuild()
-                                    }
+                                    },
                                 ).withPadding(PADDING, bottom = 0).add(topRight)
                             }
                         },

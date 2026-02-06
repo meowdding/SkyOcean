@@ -5,16 +5,17 @@ import java.util.*
 import kotlin.math.max
 
 private sealed interface HotkeyTreeNode {
+    val isEmpty: Boolean
     fun put(depth: Int, hotkey: Hotkey)
     fun get(depth: Int, path: List<InputConstants.Key>): List<Hotkey>?
     fun remove(depth: Int, hotkey: Hotkey)
     fun getMaxDepth(): Int
-    val isEmpty: Boolean
 }
 
 private class HotkeyTreeBranch : HotkeyTreeNode {
     private val map = IdentityHashMap<InputConstants.Key, HotkeyTreeNode>()
     private var hotkeys: List<Hotkey>? = null
+    override val isEmpty: Boolean get() = this.map.isEmpty() && this.hotkeys?.isEmpty() != false
 
     override fun put(depth: Int, hotkey: Hotkey) {
         val path = hotkey.keybind.keys
@@ -27,6 +28,7 @@ private class HotkeyTreeBranch : HotkeyTreeNode {
         val current = path[depth]
         when (val node = map[current]) {
             is HotkeyTreeBranch -> node.put(depth + 1, hotkey)
+
             null -> map[current] = HotkeyTreeBranch().apply {
                 put(depth + 1, hotkey)
             }
@@ -68,8 +70,6 @@ private class HotkeyTreeBranch : HotkeyTreeNode {
     }
 
     override fun getMaxDepth(): Int = max(1, 1 + (map.values.maxOfOrNull { it.getMaxDepth() } ?: 0))
-
-    override val isEmpty: Boolean get() = this.map.isEmpty() && this.hotkeys?.isEmpty() != false
 }
 
 class HotkeyTree {

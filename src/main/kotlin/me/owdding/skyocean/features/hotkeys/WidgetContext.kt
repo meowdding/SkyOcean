@@ -32,22 +32,33 @@ data class WidgetContext(
         if (depth >= 5) throw UnsupportedOperationException("Depth higher then 5!")
     }
 
+    var index: Int = 0
+
+    val background: String
+        get() {
+            return "hotkey/$depth/background${if (index % 2 == 0) "_odd" else ""}"
+        }
+
+    val button: String = "hotkey/$depth/button"
+    val listEntry: String = "hotkey/$depth/list_entry"
+    val listBackground: String = "hotkey/$depth/list_background"
+
     fun advance() {
         index++
     }
 
-    fun reset() { index = 0 }
-
-    fun createActionDropdown(state: DropdownState<HotkeyActionType>): LayoutElement {
-        return LayoutFactory.horizontal {
-            createText("Type", CatppuccinColors.Mocha.surface0).withPadding(right = PADDING).add(middleLeft)
-            val options = buildList {
-                addAll(HotkeyActionType.entries)
-                remove(HotkeyActionType.NONE)
-            }
-            createDropdown(state, options)
-        }.withPadding(PADDING)
+    fun reset() {
+        index = 0
     }
+
+    fun createActionDropdown(state: DropdownState<HotkeyActionType>): LayoutElement = LayoutFactory.horizontal {
+        createText("Type", CatppuccinColors.Mocha.surface0).withPadding(right = PADDING).add(middleLeft)
+        val options = buildList {
+            addAll(HotkeyActionType.entries)
+            remove(HotkeyActionType.NONE)
+        }
+        createDropdown(state, options)
+    }.withPadding(PADDING)
 
     fun <T : Enum<T>> LayoutBuilder.createDropdown(state: DropdownState<T>, options: List<T>) {
         val toText: (T) -> Component = { Text.of(it.name.toTitleCase(), CatppuccinColors.Mocha.surface0) }
@@ -80,19 +91,17 @@ data class WidgetContext(
         }.add(middleLeft)
     }
 
-    fun createDropdown(state: DropdownState<HotkeyConditionType>): LayoutElement {
-        return LayoutFactory.horizontal {
-            createText("Type", CatppuccinColors.Mocha.surface0).withPadding(right = PADDING).add(middleLeft)
-            val options = buildList {
-                addAll(HotkeyConditionType.entries)
-                remove(HotkeyConditionType.NONE)
-                if (depth + 1 >= 5) {
-                    removeIf { it.nested }
-                }
+    fun createDropdown(state: DropdownState<HotkeyConditionType>): LayoutElement = LayoutFactory.horizontal {
+        createText("Type", CatppuccinColors.Mocha.surface0).withPadding(right = PADDING).add(middleLeft)
+        val options = buildList {
+            addAll(HotkeyConditionType.entries)
+            remove(HotkeyConditionType.NONE)
+            if (depth + 1 >= 5) {
+                removeIf { it.nested }
             }
-            createDropdown(state, options)
-        }.withPadding(PADDING)
-    }
+        }
+        createDropdown(state, options)
+    }.withPadding(PADDING)
 
     fun push() = WidgetContext(width - PADDING * 2, depth + 1, rebuildCallback)
     fun createEntry(condition: HotkeyCondition?, callback: (HotkeyCondition) -> Unit): LayoutElement {
@@ -109,17 +118,6 @@ data class WidgetContext(
             return condition.toWidget(consumer = callback)
         }
     }
-
-    var index: Int = 0
-
-    val background: String
-        get() {
-            return "hotkey/${depth}/background${if (index % 2 == 0) "_odd" else ""}"
-        }
-
-    val button: String = "hotkey/${depth}/button"
-    val listEntry: String = "hotkey/${depth}/list_entry"
-    val listBackground: String = "hotkey/${depth}/list_background"
 
     fun rebuild() = rebuildCallback()
 }

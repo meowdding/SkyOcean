@@ -1,3 +1,4 @@
+//? > 1.21.8 {
 package me.owdding.skyocean.features.hotkeys
 
 import com.mojang.blaze3d.platform.InputConstants
@@ -35,7 +36,6 @@ import me.owdding.skyocean.utils.extensions.createToggleButton
 import me.owdding.skyocean.utils.extensions.middleCenter
 import me.owdding.skyocean.utils.extensions.middleLeft
 import me.owdding.skyocean.utils.extensions.middleRight
-import me.owdding.skyocean.utils.extensions.setScreen
 import me.owdding.skyocean.utils.extensions.topLeft
 import me.owdding.skyocean.utils.extensions.topRight
 import me.owdding.skyocean.utils.extensions.withPadding
@@ -55,7 +55,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import kotlin.contracts.contract
 import kotlin.math.min
 
 private const val PADDING = 5
@@ -92,118 +91,124 @@ class EditHotkeyModal(
         rebuildWidgets()
     }
 
-    override fun init() {
-        super.init()
-
-        val minWidth = width / 6 * 2
-        val widgetContext = WidgetContext(minWidth - PADDING * 2, rebuildCallback = ::rebuildWidgets)
-        val conditionLayout = LayoutFactory.frame(minWidth - PADDING * 2) {
-            try {
-                widgetContext.createEntry(condition) {
-                    condition = it
-                    rebuildWidgets()
-                }.add(middleCenter)
-            } catch (_: UnsupportedOperationException) {
-                LayoutFactory.frame(widgetContext.width) {
-                    createText("Can't display condition!", CatppuccinColors.Mocha.surface0).add(middleCenter)
-                }.withTexturedBackground(widgetContext.background)
-            }
-            widgetContext.advance()
-        }
-
-        widgetContext.reset()
-        val actionLayout = LayoutFactory.frame(minWidth - PADDING * 2) {
-            val action = action
-            val state = ListenableState.of(HotkeyActionType.NONE)
-            val dropdownState = DropdownState(null, state, false)
-            val dropdown = widgetContext.createActionDropdown(dropdownState)
-            val callback: (HotkeyAction) -> Unit = {
-                this@EditHotkeyModal.action = it
+    fun conditionLayout(widgetContext: WidgetContext, minWidth: Int) = LayoutFactory.frame(minWidth - PADDING * 2) {
+        try {
+            widgetContext.createEntry(condition) {
+                condition = it
                 rebuildWidgets()
-            }
-            if (action == null) {
-                state.registerListener {
-                    callback(it.builder!!.invoke())
-                }
-                val dropdown = dropdown
-                LayoutFactory.frame(widgetContext.width) {
-                    dropdown.add(middleLeft)
-                }.withTexturedBackground(widgetContext.background).add()
-            } else {
-                context(widgetContext) {
-                    action.toWidget(callback).withTexturedBackground(widgetContext.background).add()
-                }
-            }
-            widgetContext.advance()
+            }.add(middleCenter)
+        } catch (_: UnsupportedOperationException) {
+            LayoutFactory.frame(widgetContext.width) {
+                createText("Can't display condition!", CatppuccinColors.Mocha.surface0).add(middleCenter)
+            }.withTexturedBackground(widgetContext.background)
         }
+        widgetContext.advance()
+    }
 
+    fun actionLayout(widgetContext: WidgetContext, minWidth: Int) = LayoutFactory.frame(minWidth - PADDING * 2) {
+        val action = action
+        val state = ListenableState.of(HotkeyActionType.NONE)
+        val dropdownState = DropdownState(null, state, false)
+        val dropdown = widgetContext.createActionDropdown(dropdownState)
+        val callback: (HotkeyAction) -> Unit = {
+            this@EditHotkeyModal.action = it
+            rebuildWidgets()
+        }
+        if (action == null) {
+            state.registerListener {
+                callback(it.builder!!.invoke())
+            }
+            val dropdown = dropdown
+            LayoutFactory.frame(widgetContext.width) {
+                dropdown.add(middleLeft)
+            }.withTexturedBackground(widgetContext.background).add()
+        } else {
+            context(widgetContext) {
+                action.toWidget(callback).withTexturedBackground(widgetContext.background).add()
+            }
+        }
+        widgetContext.advance()
+    }
 
-        val content = LayoutFactory.vertical(PADDING) {
-            LayoutFactory.frame(conditionLayout.width - PADDING * 2) {
-                LayoutFactory.vertical(PADDING) {
-                    vertical {
-                        createText("Name", CatppuccinColors.Mocha.text).withPadding(1).add()
-                        createTextInput(
-                            state = name,
-                            placeholder = "Name",
-                            texture = id("hotkey/inset"),
-                            width = conditionLayout.width / 2 - PADDING * 2,
-                        ).add()
-                    }
-                    vertical {
-                        createText("Context", CatppuccinColors.Mocha.text).withPadding(1).add()
-                        createButton(
-                            text = Text.of(context.get().name.toTitleCase(), CatppuccinColors.Mocha.text),
-                            texture = createSprite(id("hotkey/inset")),
-                            width = conditionLayout.width / 2 - PADDING * 2,
-                            height = 20,
-                            click = withRebuild {
-                                context.set(context.get().next())
-                            },
-                        ).add()
-                    }
-                }.add(topLeft)
+    fun topContentSection(conditionLayout: Layout) = LayoutFactory.frame(conditionLayout.width - PADDING * 2) {
+        LayoutFactory.vertical(PADDING) {
+            vertical {
+                createText("Name", CatppuccinColors.Mocha.text).withPadding(1).add()
+                createTextInput(
+                    state = name,
+                    placeholder = "Name",
+                    texture = id("hotkey/inset"),
+                    width = conditionLayout.width / 2 - PADDING * 2,
+                ).add()
+            }
+            vertical {
+                createText("Context", CatppuccinColors.Mocha.text).withPadding(1).add()
+                createButton(
+                    text = Text.of(context.get().name.toTitleCase(), CatppuccinColors.Mocha.text),
+                    texture = createSprite(id("hotkey/inset")),
+                    width = conditionLayout.width / 2 - PADDING * 2,
+                    height = 20,
+                    click = withRebuild {
+                        context.set(context.get().next())
+                    },
+                ).add()
+            }
+        }.add(topLeft)
 
-                LayoutFactory.vertical(PADDING) {
-                    vertical {
-                        createText("Keys", CatppuccinColors.Mocha.text).withPadding(1).add(bottomLeft)
-                        createButton(
-                            texture = createSprite(id("hotkey/inset")),
-                            width = conditionLayout.width / 2 - PADDING * 2,
-                            height = 20,
-                            click = {
-                                keys.clear()
-                                recordKeys = true
-                            },
-                        ) {
-                            val left = Text.of("< ", CatppuccinColors.Mocha.yellow)
-                            val right = Text.of(" >", CatppuccinColors.Mocha.yellow)
+        LayoutFactory.vertical(PADDING) {
+            vertical {
+                createText("Keys", CatppuccinColors.Mocha.text).withPadding(1).add(bottomLeft)
+                createButton(
+                    texture = createSprite(id("hotkey/inset")),
+                    width = conditionLayout.width / 2 - PADDING * 2,
+                    height = 20,
+                    click = {
+                        keys.clear()
+                        recordKeys = true
+                    },
+                ) {
+                    val left = Text.of("< ", CatppuccinColors.Mocha.yellow)
+                    val right = Text.of(" >", CatppuccinColors.Mocha.yellow)
 
-                            withRenderer(
-                                ExtraWidgetRenderers.supplied {
-                                    WidgetRenderers.text(
-                                        (if (keys.isNotEmpty()) Hotkey.formatKeys(keys, orderSensitive.get()) else Text.of(
-                                            "UNBOUND",
-                                            CatppuccinColors.Mocha.red,
-                                        )).let {
-                                            if (recordKeys) Text.join(left, it, right) else it
-                                        },
+                    withRenderer(
+                        ExtraWidgetRenderers.supplied {
+                            WidgetRenderers.text(
+                                if (keys.isNotEmpty()) {
+                                    Hotkey.formatKeys(keys, orderSensitive.get())
+                                } else {
+                                    Text.of(
+                                        "UNBOUND",
+                                        CatppuccinColors.Mocha.red,
                                     )
+                                }.let {
+                                    if (recordKeys) Text.join(left, it, right) else it
                                 },
                             )
-                        }.add()
-                    }
-                    vertical {
-                        createText("Priority", CatppuccinColors.Mocha.text).withPadding(1).add(bottomLeft)
-                        createIntInput(
-                            state = priority,
-                            texture = id("hotkey/inset"),
-                            width = conditionLayout.width / 2 - PADDING * 2,
-                            height = 20,
-                        ).add()
-                    }
-                }.add(topRight)
-            }.add(middleCenter)
+                        },
+                    )
+                }.add()
+            }
+            vertical {
+                createText("Priority", CatppuccinColors.Mocha.text).withPadding(1).add(bottomLeft)
+                createIntInput(
+                    state = priority,
+                    texture = id("hotkey/inset"),
+                    width = conditionLayout.width / 2 - PADDING * 2,
+                    height = 20,
+                ).add()
+            }
+        }.add(topRight)
+    }
+
+    fun content(minWidth: Int): Layout {
+        val widgetContext = WidgetContext(minWidth - PADDING * 2, rebuildCallback = ::rebuildWidgets)
+        val conditionLayout = conditionLayout(widgetContext, minWidth)
+
+        widgetContext.reset()
+        val actionLayout = actionLayout(widgetContext, minWidth)
+
+        return LayoutFactory.vertical(PADDING) {
+            topContentSection(conditionLayout).add(middleCenter)
             LayoutFactory.frame(conditionLayout.width - PADDING * 2) {
                 LayoutFactory.vertical {
                     vertical {
@@ -248,6 +253,13 @@ class EditHotkeyModal(
             createText("Action", CatppuccinColors.Mocha.text).withPadding(PADDING, bottom = 0).add()
             actionLayout.withPadding(left = PADDING, right = PADDING).add(middleCenter)
         }
+    }
+
+    override fun init() {
+        super.init()
+
+        val minWidth = width / 6 * 2
+        val content = content(minWidth)
         val modalWidth = content.width + PADDING * 2
 
         this.layout = Layouts.column()
@@ -260,7 +272,7 @@ class EditHotkeyModal(
                         contents.addChild(
                             LayoutFactory.frame(modalWidth - PADDING * 2, HEADER_HEIGHT + PADDING * 2) {
                                 Widgets.text(
-                                    Text.of("${if (hotkey == null) "Create" else "Edit"} Hotkey")
+                                    Text.of("${if (hotkey == null) "Create" else "Edit"} Hotkey"),
                                 ).withColor(CatppuccinColors.Mocha.lavenderColor).add(middleLeft)
                                 createButton(
                                     texture = null,
@@ -269,9 +281,9 @@ class EditHotkeyModal(
                                     color = CatppuccinColors.Mocha.lavenderColor,
                                     hover = UITexts.BACK,
                                 ).add(middleRight)
-                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0)
+                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0),
                         )
-                    }
+                    },
             )
             .withChildren(
                 content.withPadding(PADDING, top = 0).asScrollable(
@@ -313,7 +325,7 @@ class EditHotkeyModal(
                                                 append(type, CatppuccinColors.Mocha.sky)
                                                 append(" to proceed!")
                                                 color = CatppuccinColors.Mocha.text
-                                            }
+                                            },
                                         )
                                     }
 
@@ -385,3 +397,4 @@ class EditHotkeyModal(
     }
 
 }
+//?}

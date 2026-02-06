@@ -127,7 +127,7 @@ fun createSprite(
     disabledFocused: Identifier = focused,
 ): WidgetSprites = WidgetSprites(base, disabledBase, focused, disabledFocused)
 
-fun Identifier.asSprite() = WidgetSprites(this)
+fun Identifier.asSprite() = createSprite(this)
 
 fun LayoutElement.framed(
     width: Int = this.width,
@@ -199,10 +199,14 @@ fun <T> dropdown(
     val button: Button = Widgets.button { btn ->
         btn.withRenderer(
             state.withRenderer { value, open ->
-                (if (value == null) WidgetRenderers.ellpsisWithChevron(open) else WidgetRenderers.textWithChevron<Button>(
-                    optionText(value),
-                    open,
-                )).withPadding(4, 6)
+                if (value == null) {
+                    WidgetRenderers.ellpsisWithChevron(open)
+                } else {
+                    WidgetRenderers.textWithChevron<Button>(
+                        optionText(value),
+                        open,
+                    )
+                }.withPadding(4, 6)
             },
         )
     }

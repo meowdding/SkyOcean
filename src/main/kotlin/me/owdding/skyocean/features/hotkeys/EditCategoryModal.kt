@@ -1,3 +1,4 @@
+//? > 1.21.8 {
 package me.owdding.skyocean.features.hotkeys
 
 import earth.terrarium.olympus.client.components.Widgets
@@ -58,7 +59,7 @@ class EditCategoryModal(
                         contents.addChild(
                             LayoutFactory.frame(modalWidth - PADDING * 2, HEADER_HEIGHT + PADDING * 2) {
                                 Widgets.text(
-                                    Text.of("${if (category != null) "Edit" else  "Create"} Category")
+                                    Text.of("${if (category != null) "Edit" else "Create"} Category"),
                                 ).withColor(CatppuccinColors.Mocha.lavenderColor).add(middleLeft)
                                 createButton(
                                     texture = null,
@@ -67,9 +68,9 @@ class EditCategoryModal(
                                     color = CatppuccinColors.Mocha.lavenderColor,
                                     hover = UITexts.BACK,
                                 ).add(middleRight)
-                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0)
+                            }.asWidget().withPadding(PADDING, bottom = 2, top = 0),
                         )
-                    }
+                    },
             )
             .withChildren(
                 LayoutFactory.vertical(PADDING) {
@@ -150,3 +151,4 @@ class EditCategoryModal(
         )
     }
 }
+//?}
