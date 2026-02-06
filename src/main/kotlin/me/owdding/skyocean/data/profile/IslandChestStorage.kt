@@ -54,4 +54,6 @@ data class ChestItem(
     val slot: Int = 0,
     val pos: BlockPos,
     val pos2: BlockPos?,
-)
+) {
+    val posList: List<BlockPos> get() = listOfNotNull(pos, pos2)
+}

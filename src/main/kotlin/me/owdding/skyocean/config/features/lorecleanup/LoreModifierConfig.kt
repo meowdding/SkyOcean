@@ -1,6 +1,7 @@
 package me.owdding.skyocean.config.features.lorecleanup
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.skyocean.features.item.lore.DyeHexLoreModifier
 
 object LoreModifierConfig : CategoryKt("lore_modifiers") {
     override val name = Translated("skyocean.config.lore_modifiers")
@@ -34,5 +35,14 @@ object LoreModifierConfig : CategoryKt("lore_modifiers") {
 
     var museumDonation by boolean(false) {
         this.translation = "skyocean.config.lore_modifiers.museum_donation"
+    }
+
+    var dyeHex by boolean(false) {
+        this.translation = "skyocean.config.lore_modifiers.dye_hex"
+    }
+
+    var dyePosition by enum(DyeHexLoreModifier.DyePosition.LEFT) {
+        this.translation = "skyocean.config.lore_modifiers.dye_pos"
+        searchTerms += listOf("left", "middle", "right")
     }
 }

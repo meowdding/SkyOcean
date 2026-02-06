@@ -155,6 +155,25 @@
             "desc": "Send a chat message how many keys of the current mineshaft corpses you have in your sacks."
           }
         },
+        "scatha": {
+          "@value": "Scathas",
+          "wormAnnouncer": {
+            "@value": "Enable Worm Announcer",
+            "desc": "Announce worm type when spawned."
+          },
+          "wormCooldown": {
+            "@value": "Enable Cooldown Notifier",
+            "desc": "Notifies you when you can spawn another worm."
+          },
+          "wormPetMessage": {
+            "@value": "Include Rarity in Pet Drop",
+            "desc": "Changes the pet drop message to include the pet rarity."
+          },
+          "wormPetTitle": {
+            "@value": "Enable Pet Drop Titles",
+            "desc": "Notifies you via title when you drop a pet."
+          }
+        },
         "hotm": {
           "@value": "Heart of the Mountain Perk Modifier",
           "shiftCost": {
@@ -290,6 +309,14 @@
           "@value": "Anvil helper",
           "desc": "Highlights books that have the same enchantment as the ones in the anvil."
         },
+        "itemStarStacksize": {
+          "@value": "Item Star Stacksize",
+          "desc": "Shows the Item Star amount as the stacksize."
+        },
+        "revertMasterStars": {
+          "@value": "Revert Master Stars",
+          "desc": "Reverts the Master Star back to the stacked colored look."
+        },
         "previousServer": {
           "@value": "Previous Server",
           "desc": "Sends a chat message when you join a server you were previously in."
@@ -348,6 +375,10 @@
           "highlightTime": {
             "@value": "Highlight Time",
             "desc": "Amount of time that items will be highlighted for, in seconds."
+          },
+          "useReiSearchBar": {
+            "@value": "Use REI Search Bar",
+            "desc": "Replaces REI's inventory highlighting with SkyOcean's"
           },
           "preserve_search": {
             "@value": "Preserve Search",
@@ -1233,6 +1264,17 @@
         "museum_donation": {
           "@value": "Museum Donation",
           "desc": "Shows what items haven't been donated to museum in the tooltip."
+        },
+        "dye_hex": {
+          "@value": "Dye Hex Color",
+          "desc": "Shows the hex code of the dye on armors."
+        },
+        "dye_pos": {
+          "@value": "Dye Hex Color square position",
+          "desc": "Select where the color display square is positioned.",
+          "left": "Left",
+          "middle": "Middle",
+          "right": "Right"
         }
       },
       "foraging": {
