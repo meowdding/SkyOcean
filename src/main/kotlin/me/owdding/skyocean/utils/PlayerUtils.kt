@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityRemovedEvent
+import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
@@ -15,7 +16,7 @@ import kotlin.time.Instant
 @Module
 object PlayerUtils {
 
-    private var lastMoveTime: MutableMap<UUID, Instant> = mutableMapOf()
+    private val lastMoveTime: MutableMap<UUID, Instant> = mutableMapOf()
 
     fun getLastMoveTime(uuid: UUID): Instant? = lastMoveTime[uuid]
 
@@ -32,6 +33,11 @@ object PlayerUtils {
     fun onEntityRemove(event: EntityRemovedEvent) {
         val player = event.entity as? Player ?: return
         lastMoveTime.remove(player.uuid)
+    }
+
+    @Subscription(ServerChangeEvent::class)
+    fun onWorldChange() {
+        lastMoveTime.clear()
     }
 
     private fun updatePlayerMovement(player: Player, delta: Vec3) {
