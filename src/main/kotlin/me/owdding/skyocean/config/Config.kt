@@ -12,6 +12,7 @@ import me.owdding.skyocean.config.features.fishing.FishingConfig
 import me.owdding.skyocean.config.features.foraging.ForagingConfig
 import me.owdding.skyocean.config.features.foraging.GalateaConfig
 import me.owdding.skyocean.config.features.garden.GardenConfig
+import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
 import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
@@ -36,27 +37,19 @@ object Config : ConfigKt("skyocean/config") {
     override val links: Array<ResourcefulConfigLink> = emptyArray()
 
     init {
-        category(ChatConfig)
-        category(SlayerConfig)
-        category(FishingConfig)
+        categories(ChatConfig, SlayerConfig, FishingConfig)
         category(ForagingConfig) {
             category(GalateaConfig)
         }
-        category(GardenConfig)
-        category(InventoryConfig)
-        category(LoreModifierConfig)
+        categories(GardenConfig, InventoryConfig, LoreModifierConfig)
         category(MiningConfig) {
-            category(MiningRetexture)
-            category(MineshaftConfig)
+            categories(MiningRetexture, MineshaftConfig)
         }
-        category(DungeonsConfig)
+        categories(HotkeyConfig, DungeonsConfig)
         category(MiscConfig) {
-            category(MobIconsConfig)
-            category(CraftHelperConfig)
-            category(FunConfig)
+            categories(MobIconsConfig, CraftHelperConfig, FunConfig)
         }
-        category(Buttons)
-        category(OverlayPositions)
+        categories(Buttons, OverlayPositions)
 
         separator("skyocean.config.main.modifications")
     }

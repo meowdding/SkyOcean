@@ -7,6 +7,7 @@ import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.features.hotkeys.IslandSpecificHotkeyScreen
@@ -57,7 +58,7 @@ object HotkeyManager {
 
     private val tree = HotkeyTree()
 
-    const val MAX_INPUT_DELAY = 250
+    inline val MAX_INPUT_DELAY get() = HotkeyConfig.sequenceInputDelay
 
     private var unorderedKeybinds = mutableListOf<Hotkey>()
     private var buffer: EvictingQueue<InputConstants.Key> = EvictingQueue.create(5)
@@ -125,6 +126,7 @@ object HotkeyManager {
 
     @JvmStatic
     fun handle(action: Int, event: KeyEvent): Boolean {
+        if (HotkeyConfig.disabled) return false
         if (McScreen.self is IgnoreHotkeyInputs) return false
         val key by lazy { InputConstants.getKey(event) }
         if (action == GLFW.GLFW_RELEASE) {

@@ -39,9 +39,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import kotlin.math.max
 
 /**
- * todo before release
- *  - add settings
- *
  * todo for next release
  *  - implement KeyMapping action
  *  - Maybe add rconfig toggle action?
