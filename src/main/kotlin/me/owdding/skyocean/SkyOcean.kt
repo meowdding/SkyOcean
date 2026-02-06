@@ -19,7 +19,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.registries.VanillaRegistries
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -113,7 +113,7 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         }
     }
 
-    fun id(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
-    fun minecraft(path: String): ResourceLocation = ResourceLocation.withDefaultNamespace(path)
-    fun olympus(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath("olympus", path)
+    fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(MOD_ID, path)
+    fun minecraft(path: String): Identifier = Identifier.withDefaultNamespace(path)
+    fun olympus(path: String): Identifier = Identifier.fromNamespaceAndPath("olympus", path)
 }

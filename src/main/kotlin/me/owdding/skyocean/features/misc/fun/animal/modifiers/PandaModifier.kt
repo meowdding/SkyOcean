@@ -8,7 +8,7 @@ import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.PandaRenderState
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.Panda
+import net.minecraft.world.entity.animal.panda.Panda
 
 @RegisterAnimalModifier
 object PandaModifier : AnimalModifier<Panda, PandaRenderState> {

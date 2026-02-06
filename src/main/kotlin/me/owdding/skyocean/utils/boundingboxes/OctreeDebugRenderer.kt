@@ -1,7 +1,7 @@
 package me.owdding.skyocean.utils.boundingboxes
 
 import com.mojang.blaze3d.vertex.VertexConsumer
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.AABB
@@ -17,7 +17,7 @@ data class OctreeDebugRenderer(val octree: Octree) {
         val camY = event.cameraPosition.y
         val camZ = event.cameraPosition.z
         octree.boxes.forEach {
-            val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderType.lines())
+            val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderTypes.lines())
             //ShapeRenderer.renderLineBox(
             //    event.poseStack,
             //    vertexConsumer,
@@ -40,7 +40,7 @@ data class OctreeDebugRenderer(val octree: Octree) {
         val aABB: AABB = AABB.of(node.getBox())
         val size = aABB.xsize
         val color = (size / 16.0).roundToInt()
-        val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderType.lines())
+        val vertexConsumer: VertexConsumer = event.buffer.getBuffer(RenderTypes.lines())
         val colorValue = color + 5L
         val camX = event.cameraPosition.x
         val camY = event.cameraPosition.y

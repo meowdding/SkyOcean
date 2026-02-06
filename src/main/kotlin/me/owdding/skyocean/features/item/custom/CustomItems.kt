@@ -40,7 +40,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     private val storage: DataStorage<MutableList<CustomItemData>> = DataStorage(
         { mutableListOf() },
         "custom_items",
-        CodecHelpers.list(),
+        CodecHelpers.mutableList(),
     )
 
     init {
@@ -96,11 +96,11 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     fun ItemStack.getOrTryCreateCustomData() = this.getKey()?.let { getOrPut(it) }
     fun ItemStack.getOrCreateStaticData() = this.getKey()?.let { staticMap.getOrPut(it) { CustomItemData(it) } }
 
-    operator fun <T> ItemStack.get(component: CustomItemComponent<T>): T? {
+    operator fun <T : Any> ItemStack.get(component: CustomItemComponent<T>): T? {
         return this.getCustomData()?.let { it[component] }
     }
 
-    operator fun <T> ItemStack.set(component: CustomItemComponent<T>, value: T?) {
+    operator fun <T : Any> ItemStack.set(component: CustomItemComponent<T>, value: T?) {
         this.getOrTryCreateCustomData()?.let {
             if (value == null) {
                 it.data.remove(component)

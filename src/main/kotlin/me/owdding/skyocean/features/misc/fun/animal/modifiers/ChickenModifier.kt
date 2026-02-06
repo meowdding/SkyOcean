@@ -12,9 +12,9 @@ import net.minecraft.client.renderer.entity.state.ChickenRenderState
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.animal.Chicken
-import net.minecraft.world.entity.animal.ChickenVariant
-import net.minecraft.world.entity.animal.ChickenVariants
+import net.minecraft.world.entity.animal.chicken.Chicken
+import net.minecraft.world.entity.animal.chicken.ChickenVariant
+import net.minecraft.world.entity.animal.chicken.ChickenVariants
 import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier

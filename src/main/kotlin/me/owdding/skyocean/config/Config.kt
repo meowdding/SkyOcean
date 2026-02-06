@@ -18,6 +18,7 @@ import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.config.features.mining.MiningRetexture
+import me.owdding.skyocean.config.features.mining.ScathaConfig
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.ExperimentationTableConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
@@ -48,6 +49,7 @@ object Config : ConfigKt("skyocean/config") {
         category(LoreModifierConfig)
         category(MiningConfig) {
             category(MiningRetexture)
+            category(ScathaConfig)
             category(MineshaftConfig)
         }
         category(DungeonsConfig)
@@ -64,7 +66,7 @@ object Config : ConfigKt("skyocean/config") {
     }
 
     val disableMessageTextShadow: Boolean by invalidProperty(
-        boolean(true) {
+        boolean(false) {
             translation = "skyocean.config.main.text_shadow"
         },
         ChatUtils.prefixDelegate,

@@ -1,39 +1,43 @@
 package me.owdding.skyocean.utils.rendering
 
+//? if < 1.21.11
+/*import com.mojang.blaze3d.systems.RenderSystem*/
 import com.mojang.blaze3d.vertex.PoseStack
-import java.awt.Color
-import kotlin.math.cos
-import kotlin.math.max
-import kotlin.math.sin
-import me.owdding.lib.rendering.world.RenderTypes
+import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.LightTexture
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.ARGB
+import net.minecraft.resources.Identifier
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import java.awt.Color
+import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.sin
+import me.owdding.lib.rendering.world.RenderTypes as MLibRenderTypes
 
 
 //? if > 1.21.5 {
 interface PostEffectApplicator {
-    fun `skyocean$applyPostEffect`(id: ResourceLocation)
+    fun `skyocean$applyPostEffect`(id: Identifier)
 
-    fun `skyocean$getPostEffect`(): ResourceLocation?
+    fun `skyocean$getPostEffect`(): Identifier?
 }
 
-fun GuiGraphics.applyPostEffect(id: ResourceLocation) {
+fun GuiGraphics.applyPostEffect(id: Identifier) {
     this.nextStratum()
     (this.guiRenderState as? PostEffectApplicator)?.`skyocean$applyPostEffect`(id)
     this.fill(0, 0, this.guiWidth(), this.guiHeight(), 0)
@@ -43,7 +47,7 @@ fun GuiGraphics.applyPostEffect(id: ResourceLocation) {
 import me.owdding.skyocean.mixins.GameRendererAccessor
 import net.minecraft.client.renderer.LevelTargetBundle
 
-fun GuiGraphics.applyPostEffect(id: ResourceLocation) {
+fun GuiGraphics.applyPostEffect(id: Identifier) {
     val mc = McClient.self
     val pool = (mc.gameRenderer as GameRendererAccessor).resourcePool
     val shaders = mc.shaderManager
@@ -59,44 +63,93 @@ internal fun renderFace(
     vec6: RenderUtils.Vec6f,
     color: Int,
 ) {
-    ShapeRenderer.renderFace(
-        //? if > 1.21.8 {
-        poseStack.last().pose(),
-        //?} else
-        /*poseStack,*/
-        buffer.getBuffer(RenderTypes.BLOCK_FILL_QUAD),
-        direction,
-        vec6.a,
-        vec6.b,
-        vec6.c,
-        vec6.d,
-        vec6.e,
-        vec6.f,
-        ARGB.redFloat(color),
-        ARGB.greenFloat(color),
-        ARGB.blueFloat(color),
-        ARGB.alphaFloat(color),
+    val matrix = poseStack.last().pose()
+    val vertexconsumer = buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_QUAD)
+
+    val (a, b, c, d, e, f) = vec6
+
+    when (direction) {
+        Direction.DOWN -> {
+            vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
+            vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
+            vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
+            vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
+        }
+
+        Direction.UP -> {
+            vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
+            vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
+            vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
+            vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
+        }
+
+        Direction.NORTH -> {
+            vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
+            vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
+            vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
+            vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
+        }
+
+        Direction.SOUTH -> {
+            vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
+            vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
+            vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
+            vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
+        }
+
+        Direction.WEST -> {
+            vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
+            vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
+            vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
+            vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
+        }
+
+        Direction.EAST -> {
+            vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
+            vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
+            vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
+            vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
+        }
+    }
+}
+
+internal fun renderShape(
+    poseStack: PoseStack,
+    vertexConsumer: VertexConsumer,
+    shape: VoxelShape,
+    offsetX: Double,
+    offsetY: Double,
+    offsetZ: Double,
+    color: Int,
+    lineWidth: Float = 1f,
+) {
+    //? if < 1.21.11 {
+    /*val prevLineWidth = RenderSystem.getShaderLineWidth()
+    RenderSystem.lineWidth(lineWidth)
+    *///?}
+    ShapeRenderer.renderShape(
+        poseStack,
+        vertexConsumer,
+        shape,
+        offsetX, offsetY, offsetZ, color, /*? > 1.21.10 >>*/lineWidth,
     )
+    //? if < 1.21.11 {
+    /*RenderSystem.lineWidth(prevLineWidth)
+    *///?}
 }
 
 
 object RenderUtils {
 
+    val blockAABB = Shapes.create(AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0))
+
     fun RenderWorldEvent.renderBox(pos: BlockPos, color: UInt = 0xFFFFFFFFu) {
         val color = color.toInt()
-        ShapeRenderer.addChainedFilledBoxVertices(
+        renderShape(
             poseStack,
-            buffer.getBuffer(RenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
-            pos.x.toDouble(),
-            pos.y.toDouble(),
-            pos.z.toDouble(),
-            pos.x.toDouble() + 1.0,
-            pos.y.toDouble() + 1.0,
-            pos.z.toDouble() + 1.0,
-            ARGB.redFloat(color),
-            ARGB.greenFloat(color),
-            ARGB.blueFloat(color),
-            ARGB.alphaFloat(color),
+            buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
+            blockAABB,
+            pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), color,
         )
     }
 
@@ -146,8 +199,8 @@ object RenderUtils {
         graphics.drawSprite(SLOT_HIGHLIGHT_FRONT_TEXTURE, slotX - 4, slotY - 4, 24, 24)
     }
 
-    private val SLOT_HIGHLIGHT_BACK_SPRITE = ResourceLocation.withDefaultNamespace("container/slot_highlight_back")
-    private val SLOT_HIGHLIGHT_FRONT_TEXTURE = ResourceLocation.withDefaultNamespace("container/slot_highlight_front")
+    private val SLOT_HIGHLIGHT_BACK_SPRITE = Identifier.withDefaultNamespace("container/slot_highlight_back")
+    private val SLOT_HIGHLIGHT_FRONT_TEXTURE = Identifier.withDefaultNamespace("container/slot_highlight_front")
 
     data class Vec6f(var a: Float, var b: Float, var c: Float, var d: Float, var e: Float, var f: Float)
 
@@ -170,18 +223,58 @@ object RenderUtils {
         z: Float,
         color: Int,
     ) {
-        val vec6 = when (direction) {
+        val (a, b, c, d, e, f) = when (direction) {
             Direction.UP, Direction.DOWN -> Vec6f(startX, z, startY, endX, z, endY)
             Direction.NORTH, Direction.SOUTH -> Vec6f(startX, startY, z, endX, endY, z)
             Direction.EAST, Direction.WEST -> Vec6f(z, startX, startY, z, endX, endY)
         }
-        renderFace(
-            poseStack,
-            buffer,
-            direction,
-            vec6,
-            color,
-        )
+
+        val matrix = poseStack.last().pose()
+        val vertexconsumer = buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_QUAD)
+
+        when (direction) {
+            Direction.DOWN -> {
+                vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
+                vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
+                vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
+                vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
+            }
+
+            Direction.UP -> {
+                vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
+                vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
+                vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
+                vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
+            }
+
+            Direction.NORTH -> {
+                vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
+                vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
+                vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
+                vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
+            }
+
+            Direction.SOUTH -> {
+                vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
+                vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
+                vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
+                vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
+            }
+
+            Direction.WEST -> {
+                vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
+                vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
+                vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
+                vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
+            }
+
+            Direction.EAST -> {
+                vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
+                vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
+                vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
+                vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
+            }
+        }
     }
 
     fun RenderWorldEvent.renderCylinder(
@@ -193,23 +286,30 @@ object RenderUtils {
         color: Int,
     ) {
         atCamera {
-            translate(x, y, z)
-            val buffer = buffer.getBuffer(RenderType.debugFilledBox())
+            translate(x, y + 0.01f, z)
+            val vc = buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_QUAD)
+            val pose = poseStack.last().pose()
 
-            for (i in 0..360) {
+            for (i in 0 until 360) {
                 val rad = Math.toRadians(i.toDouble())
                 val nextRad = Math.toRadians(i + 1.toDouble())
 
-                val x1 = radius * cos(rad)
-                val y1 = radius * sin(rad)
+                val x1 = (radius * cos(rad)).toFloat()
+                val z1 = (radius * sin(rad)).toFloat()
+                val x2 = (radius * cos(nextRad)).toFloat()
+                val z2 = (radius * sin(nextRad)).toFloat()
 
-                val x2 = radius * cos(nextRad)
-                val y2 = radius * sin(nextRad)
+                // Inside
+                vc.addVertex(pose, x1, 0f, z1).setColor(color)
+                vc.addVertex(pose, x2, 0f, z2).setColor(color)
+                vc.addVertex(pose, x2, height, z2).setColor(color)
+                vc.addVertex(pose, x1, height, z1).setColor(color)
 
-                buffer.addVertex(poseStack.last().pose(), x2.toFloat(), 0f, y2.toFloat()).setColor(color)
-                buffer.addVertex(poseStack.last().pose(), x1.toFloat(), 0f, y1.toFloat()).setColor(color)
-                buffer.addVertex(poseStack.last().pose(), x2.toFloat(), height, y2.toFloat()).setColor(color)
-                buffer.addVertex(poseStack.last().pose(), x1.toFloat(), height, y1.toFloat()).setColor(color)
+                // Outside
+                vc.addVertex(pose, x2, 0f, z2).setColor(color)
+                vc.addVertex(pose, x1, 0f, z1).setColor(color)
+                vc.addVertex(pose, x1, height, z1).setColor(color)
+                vc.addVertex(pose, x2, height, z2).setColor(color)
             }
         }
     }
@@ -222,22 +322,23 @@ object RenderUtils {
         color: Int,
     ) {
         atCamera {
-            translate(x, y, z)
-            val buffer = buffer.getBuffer(RenderType.debugFilledBox())
+            translate(x, y + 0.01f, z)
+            val vc = buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_QUAD)
+            val pose = poseStack.last().pose()
 
-            for (i in 0..360) {
+            for (i in 0 until 360) {
                 val rad = Math.toRadians(i.toDouble())
-                val nextRad = Math.toRadians(i + 1.toDouble())
+                val nextRad = Math.toRadians((i + 1).toDouble())
 
-                val x1 = radius * cos(rad)
-                val y1 = radius * sin(rad)
+                val x1 = (radius * cos(rad)).toFloat()
+                val z1 = (radius * sin(rad)).toFloat()
+                val x2 = (radius * cos(nextRad)).toFloat()
+                val z2 = (radius * sin(nextRad)).toFloat()
 
-                val x2 = radius * cos(nextRad)
-                val y2 = radius * sin(nextRad)
-
-                buffer.addVertex(poseStack.last().pose(), 0f, 0f, 0f).setColor(color)
-                buffer.addVertex(poseStack.last().pose(), x1.toFloat(), 0f, y1.toFloat()).setColor(color)
-                buffer.addVertex(poseStack.last().pose(), x2.toFloat(), 0f, y2.toFloat()).setColor(color)
+                vc.addVertex(pose, 0f, 0f, 0f).setColor(color)
+                vc.addVertex(pose, x2, 0f, z2).setColor(color)
+                vc.addVertex(pose, x1, 0f, z1).setColor(color)
+                vc.addVertex(pose, 0f, 0f, 0f).setColor(color)
             }
         }
     }

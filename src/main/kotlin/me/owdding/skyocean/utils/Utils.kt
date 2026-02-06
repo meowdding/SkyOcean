@@ -24,7 +24,8 @@ import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.chat.ChatUtils
-import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
+//? < 1.21.11
+/*import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow*/
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -38,8 +39,8 @@ import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
@@ -49,10 +50,12 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
-import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
-import tech.thatgravyboat.skyblockapi.helpers.McClient
+import org.joml.Vector3dc
+//? < 1.21.11
+/*import tech.thatgravyboat.skyblockapi.helpers.McClient*/
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.platform.identifier
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
@@ -69,7 +72,7 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import java.util.Optional
+import java.util.*
 import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -90,7 +93,7 @@ object Utils {
 
     // todo: better idk someone is hater number 1
     fun McScreen.refreshScreen() {
-        self?.let { it.resize(McClient.self, it.width, it.height) }
+        self?.let { it.resize(/*? < 1.21.11 >>*//*McClient.self,*/ it.width, it.height) }
     }
 
     operator fun Item.contains(stack: ItemStack): Boolean = stack.item == this
@@ -152,6 +155,7 @@ object Utils {
             null
         }
     }
+
     inline fun <reified T : Any> loadFromRemoteRepo(file: String): T? = runBlocking {
         try {
             val json = RemoteRepo.getFileContentAsJson("$file.json") ?: return@runBlocking null
@@ -195,7 +199,7 @@ object Utils {
         SkyOcean.error("Failed to load '$file' from remote repo!", it)
     }.getOrNull()
 
-    internal fun <B : Any> loadRemoteRepoData(file: String, codec: Codec<B>): B? = loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(codec)
+    internal fun <B : Any> loadRemoteRepoData(file: String, codec: Codec<B>): B = loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(codec)
 
     val ItemLike.id get() = BuiltInRegistries.ITEM.getKey(this.asItem())
 
@@ -212,7 +216,7 @@ object Utils {
     fun CompoundTag.putCompound(key: String, init: CompoundTag.() -> Unit) = this.put(key, compoundTag(init))
     fun CompoundTag.toData(): CustomData = CustomData.of(this)
 
-    operator fun <T> ItemBuilder.set(type: DataComponentType<T>, value: T) = this.set(type, value)
+    operator fun <T : Any> ItemBuilder.set(type: DataComponentType<T>, value: T) = this.set(type, value)
     fun itemBuilder(item: ItemLike, init: ItemBuilder.() -> Unit) = ItemBuilder().also { it.item = item.asItem() }.apply(init).build()
     fun itemBuilder(item: ItemStack, init: ItemBuilder.() -> Unit) = ItemBuilder().apply { copyFrom(item) }.apply(init).build()
 
@@ -338,8 +342,8 @@ object Utils {
         this.italic = false
     }
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T> Any?.unsafeCast(): T = this as T
+    @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
+    inline fun <T> Any?.unsafeCast(): T = this as T
 
     @JvmStatic
     fun <T> nonNullElse(value: T?, default: T?): T? {
@@ -356,12 +360,12 @@ object Utils {
     fun <T> ResourceKey<T>.get(): Holder<T>? = SkyOcean.registryLookup.get(this).getOrNull()
     fun <T> ResourceKey<out Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
     fun <T> ResourceKey<out Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
-    fun <T> ResourceKey<out Registry<T>>.get(value: ResourceLocation): Holder<T> = runCatching {
+    fun <T> ResourceKey<out Registry<T>>.get(value: Identifier): Holder<T> = runCatching {
         this.lookup().listElements().filter {
-            it.unwrapKey().get().location() == value
+            it.unwrapKey().get().identifier == value
         }.findFirst().orElseThrow()
     }.onFailure {
-        throw RuntimeException("Failed to load $value from registry ${this.location()}", it)
+        throw RuntimeException("Failed to load $value from registry $identifier", it)
     }.getOrThrow()
 
     fun <T> DataResult<T>.resultOrError() = error().map { it.message() }.orElse(this.result().get().toString())

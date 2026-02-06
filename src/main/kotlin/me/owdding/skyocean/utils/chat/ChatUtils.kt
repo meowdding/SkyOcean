@@ -17,7 +17,7 @@ import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -133,12 +133,11 @@ internal object ChatUtils {
         this.textShader = if (useSelected) Config.prefixGradient else OceanGradients.DEFAULT
     }
 
+    // Unused on 1.21.11+ bc minecraft added their own withoutShadow()
     fun MutableComponent.withoutShadow(): MutableComponent = this.apply {
         this.shadowColor = null
         this.siblings.filterIsInstance<MutableComponent>().forEach { it.withoutShadow() }
     }
-
-    fun MutableComponent.append(init: MutableComponent.() -> Unit): MutableComponent = this.append(Text.of(init))
 
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))
     fun chat(text: Component) = Text.join(prefix, text).withPotentialShadow().send()
@@ -174,7 +173,7 @@ enum class OceanGradients(val colors: List<Int>, private val shader: GradientTex
     DISABLED(0),
     ;
 
-    override val id: ResourceLocation = id("named_gradient")
+    override val id: Identifier = id("named_gradient")
     val isDisabled = this.colors.size == 1
 
     constructor(vararg colors: Int) : this(colors.toList())
