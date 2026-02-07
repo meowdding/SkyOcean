@@ -77,6 +77,10 @@ object MiscConfig : CategoryKt("misc") {
         this.translation = "skyocean.config.misc.customization_vanilla_integration"
     }
 
+    var queueEstimation by boolean(true) {
+        translation = "skyocean.config.misc.queueEstimation"
+    }
+
     init {
         separator("skyocean.config.misc.itemSearch")
     }
