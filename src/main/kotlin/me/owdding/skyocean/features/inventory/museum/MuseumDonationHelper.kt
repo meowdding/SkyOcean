@@ -263,6 +263,17 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
                 )
             }
         }
+
+        /*
+        val recipe = Meow(
+                    CustomRoot(),
+                    items.associate { it.id to 1 }.toMutableMap(),
+                )
+                CraftHelperStorage.setStorage(recipe)
+                CraftHelperStorage.setAmount(1)
+                CraftHelperStorage.save()
+                McScreen.refreshScreen()
+         */
     }
 
     private fun ItemStack.getPriority() = when (this[DataTypes.CATEGORY]?.name?.lowercase()) {
