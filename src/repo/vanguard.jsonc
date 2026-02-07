@@ -1,0 +1,44 @@
+{
+  "items": {
+    "item:dye_frostbitten": 1, // Assumed odds
+    "item:shattered_pendant": 3,
+    "item:skeleton_key": 6,
+    "item:frozen_scute": 8,
+    "item:umber_key": 10,
+    "item:tungsten_key": 10,
+    "item:mithril_plate": 30,
+    "item:fine_onyx_gem": 40,
+    "item:fine_peridot_gem": 40,
+    "item:fine_citrine_gem": 40,
+    "item:fine_aquamarine_gem": 40,
+    "item:glacite_amalgamation": 40,
+    "item:dwarven_os_metallic_minis": 50,
+    "item:umber_plate": 50,
+    "item:tungsten_plate": 50,
+    "item:opal_crystal": 50,
+    "item:onyx_crystal": 50,
+    "item:aquamarine_crystal": 50,
+    "item:peridot_crystal": 50,
+    "item:citrine_crystal": 50,
+    "item:ruby_crystal": 50,
+    "item:jasper_crystal": 50,
+    "item:refined_mithril": 60,
+    "item:refined_titanium": 60,
+    "item:goblin_egg_blue": 70,
+    "item:flawless_onyx_gem": 80,
+    "item:flawless_peridot_gem": 80,
+    "item:flawless_citrine_gem": 80,
+    "item:flawless_aquamarine_gem": 80,
+    "item:refined_umber": 80,
+    "item:refined_tungsten": 80,
+    "item:suspicious_scrap": 150,
+    "enchantment:ice_cold:1": 150,
+    "item:bejeweled_handle": 150
+  },
+  "valuables": [
+    "item:dye_frostbitten",
+    "item:shattered_pendant",
+    "item:frozen_scute",
+    "item:skeleton_key"
+  ]
+}

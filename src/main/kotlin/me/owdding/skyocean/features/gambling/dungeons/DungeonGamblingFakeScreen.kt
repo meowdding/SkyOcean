@@ -1,8 +1,8 @@
-package me.owdding.skyocean.features.dungeons.gambling
+package me.owdding.skyocean.features.gambling.dungeons
 
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.lib.platform.screens.KeyEvent
-import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
+import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonChestType
 import me.owdding.skyocean.utils.SkyOceanScreen
 import net.minecraft.client.gui.GuiGraphics
 import tech.thatgravyboat.skyblockapi.api.area.dungeon.DungeonFloor

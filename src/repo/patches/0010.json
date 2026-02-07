@@ -1,0 +1,15 @@
+{
+  "type": "skyocean:compound",
+  "patches": [
+    {
+      "type": "skyocean:move",
+      "from": "dungeon.gamblingScreenEnabled",
+      "to": "gambling.dungeonsGambling"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "dungeon.gamblingInCroesus",
+      "to": "gambling.gamblingInCroesus"
+    }
+  ]
+}
