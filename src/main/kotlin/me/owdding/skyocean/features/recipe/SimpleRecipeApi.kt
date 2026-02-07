@@ -44,6 +44,7 @@ object SimpleRecipeApi : MeowddingLogger by SkyOcean.featureLogger() {
         illegalIngredients.clear()
         illegalShopRecipes.clear()
 
+
         runCatching("Loading illegal ingredients from remote repo") {
             illegalIngredients.addAll(Utils.loadRemoteRepoData("skyocean/illegal_ingredients", CodecUtils::list))
             debug("Loaded ${illegalIngredients.size} illegal ingredients")
