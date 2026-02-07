@@ -16,6 +16,15 @@ object HotkeyConfig : CategoryKt("hotkeys") {
         range = 50L..2000L
     }
 
+    init {
+        button {
+
+            onClick {
+
+            }
+        }
+    }
+
     val disabled get() = !enabled
 
 }

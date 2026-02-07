@@ -12,7 +12,7 @@ import me.owdding.skyocean.features.hotkeys.actions.HotkeyActionType
 import me.owdding.skyocean.features.hotkeys.conditions.HotkeyCondition
 import me.owdding.skyocean.features.hotkeys.conditions.HotkeyConditionType
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
-import me.owdding.skyocean.utils.components.CatppuccinColors
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.createSprite
 import me.owdding.skyocean.utils.extensions.createText
 import me.owdding.skyocean.utils.extensions.middleLeft

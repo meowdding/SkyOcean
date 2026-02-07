@@ -7,7 +7,7 @@ import me.owdding.ktcodecs.OptionalBoolean
 import me.owdding.skyocean.features.hotkeys.actions.HotkeyAction
 import me.owdding.skyocean.features.hotkeys.conditions.HotkeyCondition
 import me.owdding.skyocean.utils.Utils.not
-import me.owdding.skyocean.utils.components.CatppuccinColors
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.UUID

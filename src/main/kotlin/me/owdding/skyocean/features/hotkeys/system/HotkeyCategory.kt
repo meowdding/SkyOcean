@@ -18,8 +18,5 @@ data class HotkeyCategory(
     } else {
         HotkeyManager.hotkeys().filter { it.group == this }
     }
-    //?} else {
-    /*fun isDefault() = false
-    fun getHotkeysInCategory(): Collection<Hotkey> = emptyList()
-    *///?}
+    //?}
 }

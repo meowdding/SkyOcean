@@ -11,7 +11,7 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
-import me.owdding.skyocean.utils.components.CatppuccinColors
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.createButton
 import me.owdding.skyocean.utils.extensions.middleLeft
 import me.owdding.skyocean.utils.extensions.middleRight

@@ -15,7 +15,7 @@ import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
-import me.owdding.skyocean.utils.components.CatppuccinColors
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.asSprite
 import me.owdding.skyocean.utils.extensions.asWidget
 import me.owdding.skyocean.utils.extensions.createButton

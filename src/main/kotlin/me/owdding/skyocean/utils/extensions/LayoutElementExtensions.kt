@@ -29,7 +29,7 @@ import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.accessors.ClearableLayout
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.utils.Utils.unsafeCast
-import me.owdding.skyocean.utils.components.CatppuccinColors
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import net.minecraft.client.gui.components.AbstractWidget

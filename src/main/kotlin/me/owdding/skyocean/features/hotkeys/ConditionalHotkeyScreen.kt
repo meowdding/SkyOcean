@@ -11,7 +11,7 @@ import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.chat.ChatUtils
-import me.owdding.skyocean.utils.components.CatppuccinColors
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.asScrollableWidget
 import me.owdding.skyocean.utils.extensions.asWidget
 import me.owdding.skyocean.utils.extensions.bottomCenter
@@ -46,7 +46,7 @@ import kotlin.math.max
  *  - Condition builder string representation
  *  - Held item condition (probably with extra item conditions??)
  */
-object IslandSpecificHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), IgnoreHotkeyInputs {
+object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), IgnoreHotkeyInputs {
 
     private var tryDeleting: Hotkey? = null
 
@@ -94,7 +94,7 @@ object IslandSpecificHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), 
                         hoveredColor = hovered,
                         hover = Text.of("Add category", CatppuccinColors.Mocha.text),
                         leftClick = setScreen {
-                            EditCategoryModal(this@IslandSpecificHotkeyScreen, sliceWidth) { name, madeBy ->
+                            EditCategoryModal(this@ConditionalHotkeyScreen, sliceWidth) { name, madeBy ->
                                 currentCategory = HotkeyManager.createCategory(name, madeBy)
                             }
                         },
@@ -194,7 +194,7 @@ object IslandSpecificHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), 
                     hoveredColor = hovered,
                     hover = Text.of("Delete category", CatppuccinColors.Mocha.text),
                     leftClick = setScreen {
-                        DeleteCategoryModal(this@IslandSpecificHotkeyScreen, sliceWidth, currentCategory) {
+                        DeleteCategoryModal(this@ConditionalHotkeyScreen, sliceWidth, currentCategory) {
                             currentCategory = HotkeyManager.defaultCategory
                         }
                     },
@@ -206,7 +206,7 @@ object IslandSpecificHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), 
                     hoveredColor = hovered,
                     hover = Text.of("Edit category", CatppuccinColors.Mocha.text),
                     leftClick = setScreen {
-                        EditCategoryModal(this@IslandSpecificHotkeyScreen, sliceWidth, currentCategory) { name, username ->
+                        EditCategoryModal(this@ConditionalHotkeyScreen, sliceWidth, currentCategory) { name, username ->
                             currentCategory.username = username
                             currentCategory.name = name
                         }
@@ -275,7 +275,7 @@ object IslandSpecificHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), 
                 hoveredColor = hovered,
                 leftClick = setScreen {
                     EditHotkeyModal(
-                        this@IslandSpecificHotkeyScreen,
+                        this@ConditionalHotkeyScreen,
                         null,
                     ) { keybind, action, condition, name, enabled ->
                         HotkeyManager.register(
@@ -399,7 +399,7 @@ object IslandSpecificHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), 
                     color = unhovered,
                     height = 15,
                     click = setScreen {
-                        EditHotkeyModal(this@IslandSpecificHotkeyScreen, hotkey) { keybind, action, condition, name, enabled ->
+                        EditHotkeyModal(this@ConditionalHotkeyScreen, hotkey) { keybind, action, condition, name, enabled ->
                             hotkey.keybind = keybind
                             hotkey.action = action
                             hotkey.condition = condition

@@ -7,7 +7,7 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.skyocean.features.hotkeys.WidgetContext
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.components.CatppuccinColors
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.bottomCenter
 import me.owdding.skyocean.utils.extensions.createButton
 import me.owdding.skyocean.utils.extensions.createText

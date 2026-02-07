@@ -14,7 +14,7 @@ import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
-import me.owdding.skyocean.utils.components.CatppuccinColors
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.asWidget
 import me.owdding.skyocean.utils.extensions.createButton
 import me.owdding.skyocean.utils.extensions.middleLeft
@@ -77,9 +77,7 @@ class DeleteCategoryModal(
                         )
                     },
             )
-            .withChildren(
-                content,
-            )
+            .withChildren(content)
             .withChild(
                 Widgets.frame()
                     .withSize(modalWidth, PADDING * 6)

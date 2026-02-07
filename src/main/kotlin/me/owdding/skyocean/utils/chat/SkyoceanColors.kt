@@ -1,6 +1,6 @@
 @file:Suppress("unused", "ConstPropertyName", "all")
 
-package me.owdding.skyocean.utils.components
+package me.owdding.skyocean.utils.chat
 
 object SkyoceanColors {
 

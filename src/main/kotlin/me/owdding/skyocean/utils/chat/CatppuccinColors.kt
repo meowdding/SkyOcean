@@ -1,6 +1,6 @@
 @file:Suppress("ConstPropertyName", "unused")
 
-package me.owdding.skyocean.utils.components
+package me.owdding.skyocean.utils.chat
 
 import com.teamresourceful.resourcefullib.common.color.Color
 

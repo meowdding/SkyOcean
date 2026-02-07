@@ -11,7 +11,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
-import me.owdding.skyocean.features.hotkeys.IslandSpecificHotkeyScreen
+import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.debugToggle
@@ -167,7 +167,7 @@ object HotkeyManager {
     @Subscription
     fun registerCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("keybinds") {
-            McClient.setScreenAsync { IslandSpecificHotkeyScreen }
+            McClient.setScreenAsync { ConditionalHotkeyScreen }
         }
     }
 
