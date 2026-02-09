@@ -10,8 +10,8 @@ import me.owdding.skyocean.features.hotkeys.system.Hotkey
 import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
 import me.owdding.skyocean.utils.SkyOceanScreen
-import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.CatppuccinColors
+import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.extensions.asScrollableWidget
 import me.owdding.skyocean.utils.extensions.asWidget
 import me.owdding.skyocean.utils.extensions.bottomCenter

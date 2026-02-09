@@ -1,11 +1,13 @@
 package me.owdding.skyocean.config.features.hotkey
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
 object HotkeyConfig : CategoryKt("hotkeys") {
     override val name = Translated("skyocean.config.hotkeys")
 
-    val enabled by boolean(false) {
+    val enabled by boolean(true) {
         this.translation = "skyocean.config.hotkeys.enabled"
     }
 
@@ -18,9 +20,11 @@ object HotkeyConfig : CategoryKt("hotkeys") {
 
     init {
         button {
-
+            title = "skyocean.config.hotkeys.edit"
+            text = "Open"
+            description = "skyocean.config.hotkeys.edit.desc"
             onClick {
-
+                McClient.setScreen(McScreen.self?.let { me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen })
             }
         }
     }

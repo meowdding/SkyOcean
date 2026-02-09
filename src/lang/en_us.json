@@ -1348,6 +1348,10 @@
         "sequence_input_delay": {
           "@value": "Sequence input delay",
           "desc": "The max delay between two keypresses in a sequence. (in ms)"
+        },
+        "edit": {
+          "@value": "Edit hotkeys",
+          "desc": "Opens the hotkey edit screen."
         }
       }
     },
