@@ -405,6 +405,7 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
                             hotkey.condition = condition
                             hotkey.name = name
                             hotkey.enabled = enabled
+                            HotkeyManager.save()
                         }
                     },
                 ).add()

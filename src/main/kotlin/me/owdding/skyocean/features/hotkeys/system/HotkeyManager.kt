@@ -212,5 +212,9 @@ object HotkeyManager {
             categories.removeIf { it.identifier == category.identifier }
         }
     }
+
+    fun save() {
+        this.storage.save()
+    }
 }
 //?}
