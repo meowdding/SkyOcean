@@ -141,12 +141,12 @@ object HotkeyManager {
         pressedKeys.add(key)
 
         val hotkey = this.unorderedKeybinds.find {
+            val extraKeys = it.keybind.settings.allowExtraKeys || pressedKeys.all { key ->
+                key in it.keybind.keys
+            }
             it.isActive() && it.keybind.keys.all { key ->
                 key in pressedKeys
-            } && (
-                it.keybind.settings.allowExtraKeys || pressedKeys.all { key ->
-                    key in it.keybind.keys
-                })
+            } && extraKeys
         } ?: return false
 
         hotkey.invoke()

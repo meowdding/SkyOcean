@@ -1,6 +1,8 @@
+//? > 1.21.8 {
 package me.owdding.skyocean.config.features.hotkey
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
@@ -24,7 +26,7 @@ object HotkeyConfig : CategoryKt("hotkeys") {
             text = "Open"
             description = "skyocean.config.hotkeys.edit.desc"
             onClick {
-                McClient.setScreen(McScreen.self?.let { me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen })
+                McClient.setScreen(McScreen.self?.let { ConditionalHotkeyScreen })
             }
         }
     }
@@ -32,3 +34,4 @@ object HotkeyConfig : CategoryKt("hotkeys") {
     val disabled get() = !enabled
 
 }
+//? }
