@@ -29,7 +29,7 @@ data class Hotkey(
     val group: UUID?,
     @FieldName("created_at") val timeCreated: Long = System.currentTimeMillis(),
 ) {
-    fun isActive() = enabled && condition.test()
+    fun isActive() = enabled && condition.test() && keybind.settings.context.isActive
 
     fun invoke() {
         action()

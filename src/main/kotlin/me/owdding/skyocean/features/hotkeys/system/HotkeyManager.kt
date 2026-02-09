@@ -10,8 +10,8 @@ import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
-import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen
+import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.debugToggle
@@ -112,7 +112,7 @@ object HotkeyManager {
     fun invokeValid() {
         for (keys in getOptions()) {
             val hotkeys = tree.get(keys) ?: continue
-            val hotkey = hotkeys.find { it.keybind.settings.context.isActive && it.isActive() } ?: continue
+            val hotkey = hotkeys.find { it.isActive() } ?: continue
             hotkey.invoke()
             break
         }
@@ -146,8 +146,7 @@ object HotkeyManager {
             } && (
                 it.keybind.settings.allowExtraKeys || pressedKeys.all { key ->
                     key in it.keybind.keys
-                }
-                )
+                })
         } ?: return false
 
         hotkey.invoke()
