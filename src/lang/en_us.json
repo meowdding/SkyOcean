@@ -579,6 +579,22 @@
                 "random": "Random",
                 "red": "Red",
                 "snow": "Snow"
+              },
+              "own_eepy": {
+                "@value": "Own Eepy",
+                "desc": "zzzZZzzZ"
+              },
+              "other_eepy": {
+                "@value": "Other Eepy",
+                "desc": "zzzZZzzZ"
+              },
+              "own_sleep_delay": {
+                "@value": "Own Sleep Delay",
+                "desc": "Delay before eep zzZZz..."
+              },
+              "other_sleep_delay": {
+                "@value": "Other Sleep Delay",
+                "desc": "Delay before eep zzZZz..."
               }
             },
             "wolf": {
@@ -1014,6 +1030,7 @@
               ]
             },
             "outside_skyblock": {
+              "@value": "Outside SkyBlock",
               "desc": "Whether player animals should also be visible outside of SkyBlock."
             }
           }
@@ -1268,6 +1285,13 @@
         "dye_hex": {
           "@value": "Dye Hex Color",
           "desc": "Shows the hex code of the dye on armors."
+        },
+        "dye_pos": {
+          "@value": "Dye Hex Color square position",
+          "desc": "Select where the color display square is positioned.",
+          "left": "Left",
+          "middle": "Middle",
+          "right": "Right"
         }
       },
       "foraging": {

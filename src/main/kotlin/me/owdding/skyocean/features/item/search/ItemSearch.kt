@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.item.search
 
 import com.mojang.blaze3d.platform.InputConstants
+import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
@@ -23,13 +24,22 @@ object ItemSearch {
 
     @Subscription
     fun onCommand(event: RegisterSkyOceanCommandEvent) {
-        event.registerWithCallback("search") {
-            if (!LocationAPI.isOnSkyBlock) {
-                Text.of("You must be on SkyBlock!") { this.color = TextColor.RED }.sendWithPrefix()
-                return@registerWithCallback
+        event.register("search") {
+            then("query", StringArgumentType.greedyString()) {
+                callback { open(StringArgumentType.getString(this, "query")) }
             }
-            McClient.setScreen(ItemSearchScreen)
+            callback { open() }
         }
+    }
+
+    private fun open(query: String? = null) {
+        if (!LocationAPI.isOnSkyBlock) {
+            Text.of("You must be on SkyBlock!") { this.color = TextColor.RED }.sendWithPrefix()
+            return
+        }
+        ItemSearchScreen.search = query
+        ItemSearchScreen.state.set(query)
+        McClient.setScreenAsync { ItemSearchScreen }
     }
 
 }
