@@ -211,6 +211,10 @@
           "@value": "Puzzler Solver",
           "desc": "Highlights the correct block for the puzzler."
         },
+        "fetchur": {
+          "@value": "Fetchur Helper",
+          "desc": "Helps you get the items needed to complete Fetchur's quests."
+        },
         "metal_detector": {
           "@value": "Metal Detector Solver",
           "metalDetector": {
