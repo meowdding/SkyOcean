@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.item.search.search.tag
 
+// Taken from Mojang's Brigadier StringReader class, converted to kotlin and slightly modified
 class StringReader {
     val string: String
     var cursor = 0
@@ -13,7 +14,7 @@ class StringReader {
         this.string = string
     }
 
-    val remainingLength: Int get() = remainingLength - cursor
+    val remainingLength: Int get() = totalLength - cursor
 
     val totalLength: Int get() = string.length
 
