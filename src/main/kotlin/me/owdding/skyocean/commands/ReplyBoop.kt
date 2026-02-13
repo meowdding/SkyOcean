@@ -22,14 +22,14 @@ object ReplyBoop {
     private var time = Instant.DISTANT_PAST
     private val regex = "^From (?!stash)(?:\\[.+] )?(?<author>[^:]*): (?<message>.*)".toRegex()
 
+    private fun noUser() {
+        Text.of("You haven't been messaged by anyone in the past 5 minutes!", OceanColors.WARNING).sendWithPrefix()
+    }
+
     @Subscription
     fun onRegisterCommands(event: RegisterCommandsEvent) {
         if (!ChatConfig.replyBoop) return
         event.registerWithCallback("rboop") {
-            fun noUser() {
-                Text.of("You haven't been messaged by anyone in the past 5 minutes!", OceanColors.WARNING).sendWithPrefix()
-            }
-
             val ign = lastIgn ?: return@registerWithCallback noUser()
             if (time.since() > 5.minutes) return@registerWithCallback noUser()
             McClient.sendCommand("boop $ign")
