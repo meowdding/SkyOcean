@@ -12,7 +12,9 @@ import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.OceanColors
+import me.owdding.skyocean.utils.extensions.getAttachments
 import me.owdding.skyocean.utils.extensions.or
+import me.owdding.skyocean.utils.extensions.putAttachments
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.ContainerScreen
@@ -154,10 +156,10 @@ object ItemModifiers {
 
     val modifiers: List<AbstractItemModifier> = SkyOceanItemModifiers.collected.sortedBy { it.priority }.toList()
     val modifiedItems: WeakHashMap<ItemStack, List<AbstractItemModifier>> = WeakHashMap()
-
+    
     val McPlayer.equipment get() = listOf(helmet, chestplate, leggings, boots)
 
-    @Subscription
+    @Subscription(priority = Subscription.LOW)
     @MustBeContainer
     private fun InventoryChangeEvent.onContainerChange() {
         tryModify(item, AbstractItemModifier.ModifierSource.INVENTORY)
@@ -243,18 +245,22 @@ object ItemModifiers {
             }
         }
 
-        itemStack.skyoceanReplace(addIndicator = false) {
-            for ((key, value) in map) {
-                when (key) {
-                    DataMarker.ITEM -> item = value.unsafeCast()
-                    DataMarker.BACKGROUND_ITEM -> backgroundItem = value.unsafeCast()
-                    DataMarker.ITEM_COUNT -> customSlotComponent = value.unsafeCast()
-                    is DataMarker.ComponentDataMarker -> set(key.component, value.unsafeCast())
-                    else -> {}
+        if (map.isNotEmpty()) {
+            itemStack.skyoceanReplace(addIndicator = false) {
+                for ((key, value) in map) {
+                    when (key) {
+                        DataMarker.ITEM -> item = value.unsafeCast()
+                        DataMarker.BACKGROUND_ITEM -> backgroundItem = value.unsafeCast()
+                        DataMarker.ITEM_COUNT -> customSlotComponent = value.unsafeCast()
+                        is DataMarker.ComponentDataMarker -> set(key.component, value.unsafeCast())
+                        else -> {}
+                    }
                 }
             }
+
+            modifiedItems[itemStack.getVisualItem() ?: itemStack] = usedModifiers
+            itemStack.getVisualItem()?.putAttachments(itemStack.getAttachments())
         }
-        modifiedItems[itemStack.getVisualItem() ?: itemStack] = usedModifiers
     }
 
     private context(map: MutableMap<DataMarker<*>, Any>, state: State<Boolean>, itemStack: ItemStack)

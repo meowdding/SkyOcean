@@ -20,6 +20,7 @@ import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.config.features.mining.MiningRetexture
 import me.owdding.skyocean.config.features.mining.ScathaConfig
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.ExperimentationTableConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.misc.MobIconsConfig
 import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
@@ -56,6 +57,7 @@ object Config : ConfigKt("skyocean/config") {
             category(MobIconsConfig)
             category(CraftHelperConfig)
             category(FunConfig)
+            category(ExperimentationTableConfig)
         }
         category(Buttons)
         category(OverlayPositions)
