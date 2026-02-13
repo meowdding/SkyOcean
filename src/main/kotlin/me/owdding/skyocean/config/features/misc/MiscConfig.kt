@@ -77,6 +77,10 @@ object MiscConfig : CategoryKt("misc") {
         this.translation = "skyocean.config.misc.customization_vanilla_integration"
     }
 
+    var enableWateringCanDurability by boolean(false) {
+        this.translation ="skyocean.config.misc.watering_can_durability"
+    }
+
     init {
         separator("skyocean.config.misc.itemSearch")
     }
