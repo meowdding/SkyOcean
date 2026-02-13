@@ -1,7 +1,10 @@
 package me.owdding.skyocean.accessors;
 
 import java.util.UUID;
+
+import kotlin.time.Instant;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public interface AvatarRenderStateAccessor {
@@ -59,6 +62,32 @@ public interface AvatarRenderStateAccessor {
         }
     }
 
+    static ItemStack getHeldItemStack(Object renderState) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            return accessor.ocean$getHeldItemStack();
+        }
+        return ItemStack.EMPTY;
+    }
+
+    static void setHeldItemStack(Object renderState, ItemStack stack) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            accessor.ocean$setHeldItemStack(stack);
+        }
+    }
+
+    static Instant getLastMoveTime(Object renderState) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            return accessor.ocean$getLastMoveTime();
+        }
+        return null;
+    }
+
+    static void setLastMoveTime(Object renderState, Instant time) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            accessor.ocean$setLastMoveTime(time);
+        }
+    }
+
     void ocean$setUUID(UUID uuid);
 
     UUID ocean$getUUID();
@@ -74,5 +103,13 @@ public interface AvatarRenderStateAccessor {
     LivingEntityRenderState skyocean$getAnimalState();
 
     void skyocean$setAnimalState(LivingEntityRenderState state);
+
+    ItemStack ocean$getHeldItemStack();
+
+    void ocean$setHeldItemStack(ItemStack stack);
+
+    Instant ocean$getLastMoveTime();
+
+    void ocean$setLastMoveTime(Instant time);
 
 }
