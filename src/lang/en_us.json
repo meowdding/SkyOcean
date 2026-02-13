@@ -399,7 +399,7 @@
         },
         "watering_can_durability": {
           "@value": "Water Level as durability",
-          "desc:": "Displays the Water Level of watering cans as durability"
+          "desc": "Displays the Water Level of watering cans as durability."
         },
         "crafthelper": {
           "@value": "Craft Helper",
