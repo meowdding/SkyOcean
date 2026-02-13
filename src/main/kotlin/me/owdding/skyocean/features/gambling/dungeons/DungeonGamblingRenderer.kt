@@ -1,8 +1,8 @@
-package me.owdding.skyocean.features.dungeons.gambling
+package me.owdding.skyocean.features.gambling.dungeons
 
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
-import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonItems
+import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonChestType
+import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonItems
 import me.owdding.skyocean.utils.rendering.applyPostEffect
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.sounds.SoundEvents

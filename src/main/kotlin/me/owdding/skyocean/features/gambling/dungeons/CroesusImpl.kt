@@ -1,8 +1,8 @@
-package me.owdding.skyocean.features.dungeons.gambling
+package me.owdding.skyocean.features.gambling.dungeons
 
-import me.owdding.skyocean.config.features.dungeons.DungeonsConfig
-import me.owdding.skyocean.features.dungeons.gambling.DungeonGambling.allowedDungeonGamblingChests
-import me.owdding.skyocean.features.dungeons.gambling.chest.DungeonChestType
+import me.owdding.skyocean.config.features.gambling.GamblingConfig
+import me.owdding.skyocean.features.gambling.dungeons.DungeonGambling.allowedDungeonGamblingChests
+import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonChestType
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.utils.Utils.add
@@ -22,7 +22,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.obfuscated
 
 @ItemModifier
 object CroesusImpl : AbstractItemModifier() {
-    private val enabled get() = DungeonsConfig.gamblingScreenEnabled && DungeonsConfig.gamblingInCroesus
+    private val enabled get() = GamblingConfig.dungeonsGambling && GamblingConfig.gamblingInCroesus
     val croesusLoreToFloor = mapOf(
         "Catacombs - Floor I" to DungeonFloor.F1,
         "Catacombs - Floor II" to DungeonFloor.F2,

@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.dungeons.gambling.chest
+package me.owdding.skyocean.features.gambling.dungeons.chest
 
 enum class DungeonChestType {
     WOODEN,

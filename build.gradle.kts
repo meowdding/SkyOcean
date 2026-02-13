@@ -174,7 +174,7 @@ compactingResources {
 
     configureTask(tasks.named<AbstractCopyTask>("processResources").get())
 
-    removeComments("unobtainable_ids")
+    removeComments("vanguard") // when does this just auto remove comments from all .jsoncs, why do i need to specify this
     downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/dyes.json", "dyes.json")
     downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/animatedskulls.json", "skulls.json")
     downloadResource(

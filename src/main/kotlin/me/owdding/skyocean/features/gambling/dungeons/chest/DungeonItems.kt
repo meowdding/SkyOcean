@@ -1,4 +1,4 @@
-package me.owdding.skyocean.features.dungeons.gambling.chest
+package me.owdding.skyocean.features.gambling.dungeons.chest
 
 import com.mojang.serialization.Codec
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection

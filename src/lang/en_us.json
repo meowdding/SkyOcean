@@ -1346,21 +1346,39 @@
           }
         }
       },
-      "dungeons": {
-        "@value": "Dungeons",
-        "gambling": {
-          "enabled": {
-            "@value": "CSGO Case Opening",
-            "desc": [
-              "Shows a CSGO case opening animation when opening a dungeon chest.",
-              "",
-              "This feature is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>."
-            ]
+      "gambling": {
+        "@value": "Gambling",
+        "dungeons": {
+          "separator": {
+            "@value": "Dungeon Chest Gambling",
+            "desc": ""
           },
+          "@value": "Dungeon Chest CSGO Case Opening",
+          "desc": "Shows a CSGO case opening animation when opening a dungeon chest.",
           "croesus": {
             "@value": "Also Show Case Opening in Croesus",
             "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
           }
+        },
+        "vanguard": {
+          "separator": {
+            "@value": "Vanguard Gambling",
+            "desc": ""
+          },
+          "@value": "Vanguard Slot Machine",
+          "desc": "Shows a slot machine animation when looting a Vanguard.",
+          "hide_chat": {
+            "@value": "Hide Chat While Gambling",
+            "desc": "Hides the chat messages while the gambling animation is playing so you don't get spoiled."
+          }
+        },
+        "credits": {
+          "@value": "Credits",
+          "desc": [
+            "Dungeon Chest Gambling is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>.",
+            "",
+            "Slot Machine textures are created by <hover 'Click to visit her BlueSky'><url 'https://bsky.app/profile/vrachel.bsky.social'><color:#4FB1FF>rachel</color></copy_to_clipboard></hover>."
+          ]
         }
       }
     },
