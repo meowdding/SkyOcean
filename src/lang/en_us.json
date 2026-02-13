@@ -1362,6 +1362,21 @@
             "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
           }
         }
+      },
+      "hotkeys": {
+        "@value": "Custom Hotkeys",
+        "enabled": {
+          "@value": "Enabled",
+          "desc": "Whether the custom hotkeys are enabled or not."
+        },
+        "sequence_input_delay": {
+          "@value": "Sequence input delay",
+          "desc": "The max delay between two keypresses in a sequence. (in ms)"
+        },
+        "edit": {
+          "@value": "Edit hotkeys",
+          "desc": "Opens the hotkey edit screen."
+        }
       }
     },
     "garden": {
