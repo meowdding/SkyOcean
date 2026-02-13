@@ -7,9 +7,9 @@ import me.owdding.skyocean.features.inventory.accessories.AccessoriesAPI.isDisal
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.*
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
-import me.owdding.skyocean.utils.Utils.getRealRarity
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.Icons
+import me.owdding.skyocean.utils.extensions.getRealRarity
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockCategory

@@ -52,16 +52,12 @@ import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import org.joml.Vector3dc
-import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
-import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
-import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 //? < 1.21.11
 /*import tech.thatgravyboat.skyblockapi.helpers.McClient*/
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.identifier
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
-import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
@@ -384,15 +380,6 @@ object Utils {
         runCatching {
             this.init()
         }
-    }
-
-    // TODO: add more sources to this
-    fun ItemStack.getRealRarity(): SkyBlockRarity? {
-        var rarity = this[DataTypes.RARITY] ?: return null
-        if (this[DataTypes.RECOMBOBULATOR] == true) rarity = rarity.previous() ?: return rarity
-        // TODO: get max dungeon quality from repo maybe?
-        if (this[DataTypes.DUNGEON_QUALITY] == 50) rarity = rarity.previous() ?: return rarity
-        return rarity
     }
 
     fun Component.asDisplay(): Display = Displays.text(this)

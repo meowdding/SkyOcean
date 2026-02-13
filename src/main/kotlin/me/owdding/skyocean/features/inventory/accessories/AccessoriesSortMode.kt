@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.inventory.accessories
 
-import me.owdding.skyocean.utils.Utils.getRealRarity
+import me.owdding.skyocean.utils.extensions.getRealRarity
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
@@ -9,7 +9,7 @@ enum class AccessoriesSortMode(vararg sortModes: Comparator<TrackedAccessory>, d
     MP(Mode.MP, Mode.PRICE, Mode.RARITY, displayName = "MP"),
     PRICE(Mode.PRICE, Mode.MP, Mode.RARITY),
     RARITY(Mode.RARITY, Mode.PRICE, Mode.MP),
-    PRICE_PER_MP(Mode.PRICE_PER_MP, Mode.RARITY),
+    PRICE_PER_MP(Mode.PRICE_PER_MP, Mode.RARITY, displayName = "Price per MP"),
     ;
 
     val displayName: String = displayName ?: toFormattedName()
