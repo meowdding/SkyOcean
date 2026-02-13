@@ -238,6 +238,18 @@
             "desc": "The source to use for the price of items in sacks.",
             "bazaar": "BZ",
             "npc": "NPC"
+          },
+          "show_in_sack_of_sacks": {
+            "@value": "Show in Sack of Sacks",
+            "desc": "Whether to show the total sack value in the sack of sacks."
+          },
+          "hide_items_with_no_value": {
+            "@value": "Hide items with no value",
+            "desc": "Hides items that have no value from the total sack value."
+          },
+          "show_total_value": {
+            "@value": "Show Total Value",
+            "desc": "Shows the total value of all items in the sack."
           }
         },
         "inventory_buttons": {
@@ -1369,7 +1381,10 @@
       "open_sack": "<dark_gray>Open Sack</dark_gray>"
     },
     "inventory": {
-      "sack_value": "<dark_gray>Sack Value</dark_gray>",
+      "sack_value": {
+        "@value": "<dark_gray>Sack Value</dark_gray>",
+        "total_value": "Total: "
+      },
       "buttons": {
         "configuration": "<white>Button Configuration",
         "item": "Item ID / Skyblock ID",

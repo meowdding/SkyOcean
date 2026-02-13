@@ -9,7 +9,6 @@ import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.screens.Screen
 import org.intellij.lang.annotations.Language
-import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
@@ -24,33 +23,38 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
     var oldList: LayoutWidget<*>? = null
     var oldWidget: AbstractWidget? = null
 
-    abstract val enabled: Boolean
+    private var lastEvent: ContainerInitializedEvent? = null
 
-    init {
-        SkyBlockAPI.eventBus.register<REIRenderOverlayEvent> { reiBeingAStupidMod(it) }
-        SkyBlockAPI.eventBus.register<ContainerCloseEvent> { onContainerClose() }
-        SkyBlockAPI.eventBus.register<ScreenInitializedEvent> { onScreenInit(it) }
-        SkyBlockAPI.eventBus.register<ContainerInitializedEvent>(priority = Subscription.LOW) { onInvChange(it) }
-    }
+    abstract val enabled: Boolean
 
     protected abstract fun ContainerInitializedEvent.getLayout(): Layout?
 
-    private fun onInvChange(event: ContainerInitializedEvent) {
-        if (!enabled) return
-        if (!regex.matches(event.screen.title.stripped)) return
+    fun refresh() {
+        val event = lastEvent ?: return
         val screen = event.screen
 
+        if (!enabled || !regex.matches(screen.title.stripped)) return
+
         val layout = event.getLayout() ?: return
-        val widget = BackgroundWidget(SkyOcean.id("blank"), layout, 5).apply { this.setPosition(screen.right + 5, screen.top) }
+
+        val widget = BackgroundWidget(SkyOcean.id("blank"), layout, 5).apply {
+            this.setPosition(screen.right + 5, screen.top)
+        }
         screen.addWidget(widget)
     }
 
     // Used so that when Hypixel resends the entire screen we can
     // show the list before the items are resent so it doesn't
     // fall in and out.
-    private fun onScreenInit(event: ScreenInitializedEvent) {
-        if (!enabled) return
-        if (!regex.matches(event.screen.title.stripped)) return
+    @Subscription(inherited = true, priority = Subscription.LOW)
+    fun onInvChange(event: ContainerInitializedEvent) {
+        this.lastEvent = event
+        refresh()
+    }
+
+    @Subscription(inherited = true)
+    fun onScreenInit(event: ScreenInitializedEvent) {
+        if (!enabled || !regex.matches(event.screen.title.stripped)) return
         val widget = this.oldWidget ?: return
 
         event.screen.addWidget(widget)
@@ -63,15 +67,18 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
         this.`skyocean$addRenderableWidget`(widget)
     }
 
-    private fun reiBeingAStupidMod(event: REIRenderOverlayEvent) {
+    @Subscription(inherited = true)
+    fun onReiRender(event: REIRenderOverlayEvent) {
         oldWidget?.let {
             event.register(it.x, it.y, it.width, it.height)
         }
     }
 
-    private fun onContainerClose() {
+    @Subscription(ContainerCloseEvent::class, inherited = true)
+    fun onContainerClose() {
         oldWidget = null
         oldList = null
+        lastEvent = null
     }
 
 }
