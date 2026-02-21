@@ -1,6 +1,5 @@
 package me.owdding.skyocean
 
-import kotlin.jvm.optionals.getOrNull
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import me.owdding.ktmodules.Module
@@ -15,6 +14,7 @@ import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.registries.VanillaRegistries
@@ -31,6 +31,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.url
+import kotlin.jvm.optionals.getOrNull
 
 @Module
 object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
@@ -59,7 +60,9 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         SkyOceanModules.init {
             SkyBlockAPI.eventBus.register(it)
         }
-        if (RepoAPI.isInitialized()) {
+
+        @Suppress("UnstableApiUsage")
+        if (RepoAPI.isInitialized() && !FabricDataGenHelper.ENABLED) {
             onRepoReady()
         }
     }
@@ -79,9 +82,9 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
             Text.of().send()
             Text.join(
                 "New version found! (",
-                Text.of(current).withColor(TextColor.RED),
-                Text.of(" -> ").withColor(TextColor.GRAY),
-                Text.of(new).withColor(TextColor.GREEN),
+                Text.of(current, TextColor.RED),
+                Text.of(" -> ", TextColor.GRAY),
+                Text.of(new, TextColor.GREEN),
                 ")",
             ).withLink().sendWithPrefix()
             Text.of("Click to download.").withLink().sendWithPrefix()

@@ -3,6 +3,7 @@ accessible method net/minecraft/network/chat/MutableComponent <init> (Lnet/minec
 accessible class net/minecraft/client/gui/layouts/FrameLayout$ChildContainer
 accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher renderers Ljava/util/Map;
 accessible field net/minecraft/client/gui/Gui subtitle Lnet/minecraft/network/chat/Component;
+accessible field net/minecraft/client/gui/screens/inventory/AbstractContainerScreen imageWidth I
 
 # 1.21.9
 accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$GlyphInstance

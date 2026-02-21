@@ -175,8 +175,6 @@ compactingResources {
     configureTask(tasks.named<AbstractCopyTask>("processResources").get())
 
     removeComments("unobtainable_ids")
-    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/dyes.json", "dyes.json")
-    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/animatedskulls.json", "skulls.json")
     downloadResource(
         "https://raw.githubusercontent.com/Campionnn/SkyShards-Parser/55483450ff83e1bf1e453f31797cedb08b0c2733/shard-data.json",
         "skyshards_data.json"

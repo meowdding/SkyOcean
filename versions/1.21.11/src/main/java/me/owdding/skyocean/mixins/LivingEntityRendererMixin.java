@@ -3,9 +3,12 @@ package me.owdding.skyocean.mixins;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.blaze3d.vertex.PoseStack;
+import kotlin.time.Instant;
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import me.owdding.skyocean.features.misc.fun.animal.PlayerAnimals;
+import me.owdding.skyocean.utils.PlayerUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -71,6 +74,12 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
             AvatarRenderStateAccessor.setAnimalState(state, null);
             if (!PlayerAnimals.shouldPlayerBeAnimal(state)) {
                 return;
+            }
+            AvatarRenderStateAccessor.setHeldItemStack(state, avatar.getMainHandItem());
+
+            if (avatar instanceof AbstractClientPlayer) {
+                Instant lastMoveTime = PlayerUtils.INSTANCE.getLastMoveTime(avatar.getUUID());
+                AvatarRenderStateAccessor.setLastMoveTime(state, lastMoveTime);
             }
 
             var type = PlayerAnimals.getEntityType();
