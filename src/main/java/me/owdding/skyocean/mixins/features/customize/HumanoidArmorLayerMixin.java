@@ -4,7 +4,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper;
+import me.owdding.skyocean.utils.Utils;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +16,17 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(HumanoidArmorLayer.class)
 public class HumanoidArmorLayerMixin {
+
+    @WrapOperation(
+        method = {
+            "shouldRender(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;)Z",
+            "renderArmorPiece"
+        },
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;")
+    )
+    private static <T> T get(ItemStack instance, DataComponentType<T> dataComponentType, Operation<T> original) {
+        return Utils.nonNullElseGet(CustomItemsHelper.getData(instance, dataComponentType), () -> original.call(instance, dataComponentType));
+    }
 
     @WrapOperation(
         method = "shouldRender(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;)Z",

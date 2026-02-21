@@ -278,6 +278,13 @@
         "sack_notification_items": {
           "@value": "Sack Notification Items",
           "desc": "The items to show notifications for."
+        },
+        "reply_boop": {
+          "@value": "Reply Boop",
+          "desc": [
+            "Adds a <light_purple>/rboop</light_purple> command that runs /boop on the last person that messaged you.",
+            "<red>Requires to change servers to take into effect.</red>"
+          ]
         }
       },
       "garden": {
@@ -579,6 +586,22 @@
                 "random": "Random",
                 "red": "Red",
                 "snow": "Snow"
+              },
+              "own_eepy": {
+                "@value": "Own Eepy",
+                "desc": "zzzZZzzZ"
+              },
+              "other_eepy": {
+                "@value": "Other Eepy",
+                "desc": "zzzZZzzZ"
+              },
+              "own_sleep_delay": {
+                "@value": "Own Sleep Delay",
+                "desc": "Delay before eep zzZZz..."
+              },
+              "other_sleep_delay": {
+                "@value": "Other Sleep Delay",
+                "desc": "Delay before eep zzZZz..."
               }
             },
             "wolf": {
@@ -1014,6 +1037,7 @@
               ]
             },
             "outside_skyblock": {
+              "@value": "Outside SkyBlock",
               "desc": "Whether player animals should also be visible outside of SkyBlock."
             }
           }
