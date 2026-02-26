@@ -2,16 +2,16 @@ package me.owdding.skyocean.features.misc
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
-//? < 1.21.11{
-/*import net.minecraft.client.renderer.ShapeRenderer
-import net.minecraft.client.renderer.rendertype.RenderTypes
-*///?}
 import net.minecraft.client.gui.components.debug.DebugScreenEntries
 //? > 1.21.10 {
 import net.minecraft.gizmos.GizmoStyle
 import net.minecraft.gizmos.Gizmos
 //?}
 import net.minecraft.world.entity.ai.attributes.Attributes
+//? < 1.21.11{
+/*import net.minecraft.client.renderer.ShapeRenderer
+import net.minecraft.client.renderer.rendertype.RenderTypes
+*///?}
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.phys.AABB
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -42,14 +42,12 @@ object RatHitboxes {
             McLevel.level.getEntities(
                 player,
                 AABB(player.blockPosition()).inflate(20.0),
-            ).filterIsInstance<Zombie>()
-                .filter { it.isBaby }
-                .filter { abs(it.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) - 0.23000000417232513) <= 0.000001 }
-                .toList(),
+            ).filterIsInstance<Zombie>().filter { it.isBaby }
+                .filter { abs(it.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) - 0.23000000417232513) <= 0.000001 }.toList(),
         )
     }
 
-    private fun renderHitbox(): Boolean =  McClient.self.debugEntries.isCurrentlyEnabled(DebugScreenEntries.ENTITY_HITBOXES)
+    private fun renderHitbox(): Boolean = McClient.self.debugEntries.isCurrentlyEnabled(DebugScreenEntries.ENTITY_HITBOXES)
 
     @Subscription
     @OnlyIn(SkyBlockIsland.HUB)
