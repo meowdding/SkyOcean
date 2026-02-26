@@ -27,7 +27,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 @Module
 object DungeonGambling {
 
-    private val regex = "(?<type>\\w+) Chest".toRegex()
+    private val regex = "(?:(?<type>\\w+) Chest|Obsidian|Bedrock)".toRegex() // TODO: remove old broken titles
 
     val allowedDungeonGamblingChests = listOf(DungeonChestType.OBSIDIAN, DungeonChestType.BEDROCK)
 
