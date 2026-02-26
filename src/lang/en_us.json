@@ -1303,6 +1303,10 @@
           "left": "Left",
           "middle": "Middle",
           "right": "Right"
+        },
+        "midas_bid_breakdown": {
+          "@value": "Midas Bid Breakdown",
+          "desc": "Shows the original bid and added coins on Midas Weapons."
         }
       },
       "foraging": {
