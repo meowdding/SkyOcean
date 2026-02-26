@@ -45,4 +45,8 @@ object LoreModifierConfig : CategoryKt("lore_modifiers") {
         this.translation = "skyocean.config.lore_modifiers.dye_pos"
         searchTerms += listOf("left", "middle", "right")
     }
+
+    var midasBidBreakdown by boolean(false) {
+        this.translation = "skyocean.config.lore_modifiers.midas_bid_breakdown"
+    }
 }

@@ -12,9 +12,6 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import kotlin.jvm.optionals.getOrNull
 
-//? if = 1.21.5
-/*import net.fabricmc.fabric.api.renderer.v1.material.BlendMode*/
-
 class FakeBlockStateDefinition(
     val model: BlockModelDefinition,
     val blend: BlendMode?,
