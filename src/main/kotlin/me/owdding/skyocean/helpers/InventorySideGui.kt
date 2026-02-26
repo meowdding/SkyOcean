@@ -76,7 +76,6 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
 
     @Subscription(ContainerCloseEvent::class, inherited = true)
     fun onContainerClose() {
-        oldWidget = null
         oldList = null
         lastEvent = null
     }
