@@ -14,12 +14,14 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
+import net.minecraft.client.renderer.entity.state.HoldingEntityRenderState
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
+import net.minecraft.world.item.ItemDisplayContext
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 
 object PlayerAnimals {
@@ -27,6 +29,7 @@ object PlayerAnimals {
     private val modifiers: MutableMap<EntityType<*>, AnimalModifier<*, *>> = HashMap()
 
     lateinit var renderer: LivingEntityRenderer<LivingEntity, LivingEntityRenderState, *>
+    var context: EntityRendererProvider.Context? = null
 
     fun registerModifiers() {
         SkyOceanAnimalModifiers.collected.forEach { register(it) }
@@ -82,18 +85,32 @@ object PlayerAnimals {
             state.legsEquipment = avatarState.legsEquipment
             state.feetEquipment = avatarState.feetEquipment
         }
+        if (state is HoldingEntityRenderState) {
+            appendItemLayer(state, avatarState)
+        }
         getModifier<State>(state.entityType)?.apply(avatarState, state, partialTicks)
     }
     @JvmStatic
     fun getEntityType(): EntityType<*> = FunConfig.entityType
 
     fun createRenderer(context: EntityRendererProvider.Context) {
+        this.context = context
         renderer = object : LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>(context, null, 20f) {
             override fun getTextureLocation(renderState: LivingEntityRenderState): Identifier = SkyOcean.id("none")
             override fun createRenderState(): LivingEntityRenderState? = null
         }
     }
 
+    fun appendItemLayer(state: HoldingEntityRenderState, avatarState: AvatarRenderState) {
+        context?.itemModelResolver?.appendItemLayers(
+            state.heldItem,
+            AvatarRenderStateAccessor.getHeldItemStack(avatarState),
+            ItemDisplayContext.GROUND,
+            null,
+            null,
+            avatarState.id + ItemDisplayContext.GROUND.ordinal,
+        )
+    }
 
     enum class PlayerAnimalState : Translatable {
         NONE,

@@ -1,7 +1,7 @@
-//? if > 1.21.5 {
 package me.owdding.skyocean.utils.rendering
 
-import com.mojang.blaze3d.systems.RenderSystem
+//? < 1.21.11
+/*import com.mojang.blaze3d.systems.RenderSystem*/
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
@@ -130,5 +130,3 @@ class PolyInventoryPipRenderer(source: MultiBufferSource.BufferSource) : Picture
     override fun getTextureLabel() = "skyocean_poly_inventory"
 
 }
-
-//?}
