@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefullib.common.collections.WeightedCollection
 import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.TickTracker
+import me.owdding.skyocean.utils.animation.EasingFunctions
 import me.owdding.skyocean.utils.chat.ComponentAnimator
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.RenderPipelines
@@ -27,7 +28,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.math.pow
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.times
@@ -85,14 +85,12 @@ class SlotMachineSpinner(
 
         slots.clear()
         for (i in 0..2) {
-            val slotLength = 50 + (i * 20)
+            val slotLength = 250 + (i * 20)
             val slot = MutableList(slotLength) { random() }
             slot[slotLength - 2] = final[i]
             slots.add(slot)
         }
     }
-
-    private fun easeOutCubic(x: Float): Float = 1f - (1f - x).pow(3)
 
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
         val elapsedTime = startTime.since()
@@ -132,10 +130,7 @@ class SlotMachineSpinner(
         val scaledSpriteHeight = scaledHeight * 3
 
         graphics.blitSprite(
-            //? if > 1.21.5 {
             RenderPipelines.GUI_TEXTURED,
-            //? } else
-            // RenderType::guiTextured,
             armTexture,
             scaledWidth, // spriteWidth
             scaledSpriteHeight, // spriteHeight
@@ -154,7 +149,7 @@ class SlotMachineSpinner(
         val spinDuration = baseDuration + (index * waitDelay)
 
         val rawProgress = (elapsedTime.inWholeMilliseconds / spinDuration.inWholeMilliseconds.toFloat()).coerceIn(0f, 1f)
-        val easedProgress = easeOutCubic(rawProgress)
+        val easedProgress = EasingFunctions.easeOutQuad(rawProgress)
 
         val xPos = (width / 2) + ((index - 1) * 24 * scale).toInt()
         val yPos = height / 2
@@ -173,7 +168,7 @@ class SlotMachineSpinner(
 
             if (elapsedTime < spinDuration && currentBaseIndex > lastScrollIndex[index]) {
                 if (lastScrollIndex[index] != -1 && ticktracker.consume()) {
-                    val sound = if (ThreadLocalRandom.current().nextInt(0, 1) == 0) {
+                    val sound = if (ThreadLocalRandom.current().nextBoolean()) {
                         SoundEvents.VAULT_INSERT_ITEM
                     } else {
                         SoundEvents.VAULT_INSERT_ITEM_FAIL
