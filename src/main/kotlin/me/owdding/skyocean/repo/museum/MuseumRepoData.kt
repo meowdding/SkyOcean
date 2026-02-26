@@ -3,6 +3,9 @@ package me.owdding.skyocean.repo.museum
 import com.mojang.serialization.Codec
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.NamedCodec
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
@@ -10,7 +13,7 @@ import me.owdding.skyocean.utils.Utils.replaceTrim
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
 @LateInitModule
-object MuseumRepoData {
+object MuseumRepoData : MeowddingLogger by SkyOcean.featureLogger() {
 
     private val prefixRegex = Regex("[✖✔]")
 
@@ -30,14 +33,30 @@ object MuseumRepoData {
     )
 
     init {
-        Utils.loadRepoData<Data>("museum_data").let {
-            this.armor = it.armor
-            this.weapons = it.weapons
-            this.rarities = it.rarities
+        var armor: List<MuseumArmour>? = null
+        var weapons: List<MuseumItem>? = null
+        var rarities: List<MuseumItem>? = null
+        var armorNameExceptions: Map<String, String>? = null
+        var itemNameExceptions: Map<String, String>? = null
+
+        try {
+            Utils.loadRepoData<Data>("museum_data").let {
+                armor = it.armor
+                weapons = it.weapons
+                rarities = it.rarities
+            }
+            val exceptions = Utils.loadRepoData("museum_exceptions", CodecUtils.map(Codec.STRING, CodecUtils.map(Codec.STRING, Codec.STRING)))
+            armorNameExceptions = exceptions["armor"] ?: emptyMap()
+            itemNameExceptions = exceptions["items"] ?: emptyMap()
+        } catch (exception: Exception) {
+            error("Failed to load museum data!", exception)
         }
-        val exceptions = Utils.loadRepoData("museum_exceptions", CodecUtils.map(Codec.STRING, CodecUtils.map(Codec.STRING, Codec.STRING)))
-        armorNameExceptions = exceptions["armor"] ?: emptyMap()
-        itemNameExceptions = exceptions["items"] ?: emptyMap()
+
+        this.armor = armor ?: emptyList()
+        this.weapons = weapons ?: emptyList()
+        this.rarities = rarities ?: emptyList()
+        this.armorNameExceptions = armorNameExceptions ?: emptyMap()
+        this.itemNameExceptions = itemNameExceptions ?: emptyMap()
     }
 
     var armorNames: Set<String> = setOf(

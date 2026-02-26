@@ -3,8 +3,6 @@ package me.owdding.skyocean.helpers
 import com.google.gson.JsonParser
 import com.mojang.logging.LogUtils
 import com.mojang.serialization.JsonOps
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Executor
 import me.owdding.skyocean.events.RegisterFakeBlocksEvent
 import me.owdding.skyocean.utils.LateInitModule
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
@@ -12,14 +10,12 @@ import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlu
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.FileToIdConverter
 import net.minecraft.resources.Identifier
+import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
-//? if > 1.21.8 {
-import net.minecraft.server.packs.resources.PreparableReloadListener
-
-//?} else
-/*import net.minecraft.server.packs.resources.ResourceManager*/
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executor
 
 typealias FakeBlockEntry = Pair<Identifier, (BlockState, BlockPos) -> Boolean>
 typealias FakeBlockUnbakedEntry = Pair<FakeBlockStateDefinition, (BlockState, BlockPos) -> Boolean>
@@ -47,11 +43,8 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<Identifier, FakeBlockStateD
         fakeBlocks.getOrPut(block, ::mutableListOf).add(FakeBlockEntry(definition, predicate))
     }
 
-    //? if > 1.21.8 {
     fun init(manager: PreparableReloadListener.SharedState, executor: Executor): CompletableFuture<Map<Identifier, FakeBlockStateDefinition>> {
         val manager = manager.resourceManager()
-        //?} else
-        /*fun init(manager:  ResourceManager, executor: Executor): CompletableFuture<Map<Identifier, FakeBlockStateDefinition>> {*/
         fakeBlocks.clear()
         RegisterFakeBlocksEvent(this::register).post(SkyBlockAPI.eventBus)
 

@@ -24,27 +24,6 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Function
 import kotlin.jvm.optionals.getOrNull
 
-//? if < 1.21.9 {
-/*private val componentTypes = arrayOf(
-    PlainTextContents.TYPE,
-    TranslatableContents.TYPE,
-    KeybindContents.TYPE,
-    ScoreContents.TYPE,
-    SelectorContents.TYPE,
-    NbtContents.TYPE,
-)
-
-internal fun createContentCodec(): MapCodec<ComponentContents> = ComponentSerialization.createLegacyComponentMatcher(
-    componentTypes,
-    ComponentContents.Type<*>::codec,
-    { it!!.type() },
-    "type",
-)
-*///?} else {
-
-
-
-
 internal fun createContentCodec(): MapCodec<ComponentContents> {
     val idMapper = ExtraCodecs.LateBoundIdMapper<String, MapCodec<out ComponentContents>>()
     idMapper.put("text", PlainTextContents.MAP_CODEC)
@@ -57,8 +36,6 @@ internal fun createContentCodec(): MapCodec<ComponentContents> {
 
     return ComponentSerialization.createLegacyComponentMatcher(idMapper, ComponentContents::codec, "type")
 }
-
-//?}
 
 val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
 
@@ -84,18 +61,8 @@ object CodecHelpers {
 
     @IncludedCodec
     val CLIENT_ASSET_CODEC: Codec<ClientAsset> = Identifier.CODEC.xmap(
-        {
-            //? if > 1.21.8 {
-            ClientAsset.ResourceTexture(it)
-            //?} else
-            /*ClientAsset(it.withPath { "textures/$it.png" })*/
-        },
-        {
-            //? if > 1.21.8 {
-            it.id()
-            //?} else
-            /*it.id.withPath { it.removeSurrounding("textures/", ".png") }*/
-        },
+        { ClientAsset.ResourceTexture(it) },
+        { it.id() },
     )
 
     val BLOCK_POS_STRING_CODEC: Codec<BlockPos> = Codec.STRING.xmap(

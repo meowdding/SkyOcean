@@ -2,6 +2,9 @@ package me.owdding.skyocean.repo.customization
 
 import com.google.gson.JsonElement
 import com.mojang.serialization.Codec
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
@@ -9,7 +12,7 @@ import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 
 @LateInitModule
-object DyeData {
+object DyeData : MeowddingLogger by SkyOcean.featureLogger() {
     val animatedDyes: MutableMap<String, List<Int>> = mutableMapOf()
     val staticDyes: MutableMap<String, Int> = mutableMapOf()
 
@@ -23,7 +26,7 @@ object DyeData {
             animatedDyes.putAll(element.get("animated").toDataOrThrow(CodecUtils.map(lower, hexCodec.listOf())))
             staticDyes.putAll(element.get("static").toDataOrThrow(CodecUtils.map(lower, hexCodec)))
         }.onFailure {
-            throw RuntimeException("Failed to load dye data!", it)
+            error("Failed to load dyes from remote repo", it)
         }
     }
 

@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.skyocean.utils.rendering
 
 import com.mojang.blaze3d.buffers.Std140Builder
@@ -49,5 +48,3 @@ data class PolyInventoryUniform(
             RenderPipelineUniformsStorage.register<PolyInventoryUniform>("SkyOcean Poly Inventory UBO", 5, Std140SizeCalculator().putIVec2())
     }
 }
-
-//?}

@@ -2,13 +2,13 @@ package me.owdding.skyocean.features.item.custom
 
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
-import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.customize.ItemStackAccessor
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.DataStorage
 import net.minecraft.world.item.ItemStack
@@ -24,7 +24,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlin.uuid.toJavaUuid
 
-@Module
+@LateInitModule
 object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
 
     private val map: MutableMap<ItemKey, CustomItemData> = mutableMapOf()

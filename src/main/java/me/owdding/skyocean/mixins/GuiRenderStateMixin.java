@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.skyocean.mixins;
 
 import me.owdding.skyocean.utils.rendering.PostEffectApplicator;
