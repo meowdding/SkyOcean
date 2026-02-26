@@ -2,7 +2,15 @@ package me.owdding.skyocean.features.misc
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
+//? < 1.21.11{
+/*import net.minecraft.client.renderer.ShapeRenderer
+import net.minecraft.client.renderer.rendertype.RenderTypes
+*///?}
 import net.minecraft.client.gui.components.debug.DebugScreenEntries
+//? > 1.21.10 {
+import net.minecraft.gizmos.GizmoStyle
+import net.minecraft.gizmos.Gizmos
+//?}
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.phys.AABB
@@ -17,14 +25,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import java.util.concurrent.CopyOnWriteArraySet
 import kotlin.math.abs
-
-//? > 1.21.10 {
-import net.minecraft.gizmos.GizmoStyle
-import net.minecraft.gizmos.Gizmos
-//?} else {
-/*import net.minecraft.client.renderer.ShapeRenderer
-import net.minecraft.client.renderer.rendertype.RenderTypes
-*///?}
 
 @Module
 object RatHitboxes {
@@ -49,9 +49,7 @@ object RatHitboxes {
         )
     }
 
-    private fun renderHitbox(): Boolean {
-        return McClient.self.debugEntries.isCurrentlyEnabled(DebugScreenEntries.ENTITY_HITBOXES)
-    }
+    private fun renderHitbox(): Boolean =  McClient.self.debugEntries.isCurrentlyEnabled(DebugScreenEntries.ENTITY_HITBOXES)
 
     @Subscription
     @OnlyIn(SkyBlockIsland.HUB)
