@@ -1,4 +1,3 @@
-//? if > 1.21.5 {
 package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig

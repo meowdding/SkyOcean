@@ -5,9 +5,9 @@ import com.mojang.serialization.Codec
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.NamedCodec
-import me.owdding.ktmodules.Module
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
@@ -15,10 +15,8 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import kotlin.math.max
 
-@Module
+@LateInitModule
 object AnimatedSkulls {
-
-    val ids: MutableList<String> = mutableListOf()
     val skins: MutableMap<SkyBlockId, AnimatedSkullData> = mutableMapOf()
 
     @IncludedCodec(named = "min_1")
@@ -29,10 +27,9 @@ object AnimatedSkulls {
 
     init {
         runCatching {
-            val skulls = Utils.loadFromRepo<JsonElement>("skulls")!!.asJsonObject
-            ids.addAll(skulls.get("help").toDataOrThrow(CodecUtils.map(CodecHelpers.STRING_LOWER, CodecUtils.JSON_ELEMENT_CODEC)).keys)
+            val skulls = Utils.loadFromRemoteRepo<JsonElement>("skyocean/skulls")!!.asJsonObject
             skins.putAll(
-                skulls.get("skins").toDataOrThrow(
+                skulls.toDataOrThrow(
                     CodecUtils.map(
                         CodecHelpers.STRING_LOWER,
                         SkyOceanCodecs.AnimatedSkullDataCodec.codec(),

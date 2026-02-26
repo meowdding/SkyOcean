@@ -11,7 +11,7 @@ in vec3 Position;
 in vec2 UV0;
 
 void main() {
-    gl_Position = /*? if > 1.21.5 {*/ ProjMat * ModelViewMat */*?}*/ vec4(Position, 1.0);
+    gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);
 
     texCoord0 = UV0;
     vertexColor = Color;

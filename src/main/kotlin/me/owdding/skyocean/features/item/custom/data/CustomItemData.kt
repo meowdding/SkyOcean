@@ -78,10 +78,24 @@ object CustomItemDataComponents {
         CustomItemComponent<*>::codec,
     ).xmap({ HashMap(it) }, { it })
 
+    @JvmStatic
+    @get:JvmName("model")
     val MODEL = register("model", SkyOceanCodecs.ItemModelCodec)
+
+    @JvmStatic
+    @get:JvmName("name")
     val NAME: CustomItemComponent<Component> = register("name", CodecHelpers.CUSTOM_COMPONENT_CODEC)
+
+    @JvmStatic
+    @get:JvmName("armorTrim")
     val ARMOR_TRIM: CustomItemComponent<ArmorTrim> = register("armor_trim", SkyOceanCodecs.ArmorTrimCodec)
+
+    @JvmStatic
+    @get:JvmName("color")
     val COLOR = register("color", SkyOceanCodecs.ItemColorCodec)
+
+    @JvmStatic
+    @get:JvmName("skin")
     val SKIN = register("skin", SkyOceanCodecs.ItemSkinCodec)
 
     //val BLOCKING_ANIMATION: CustomItemComponent<Boolean> = register("block", Codec.BOOL)

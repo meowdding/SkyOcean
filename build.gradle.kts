@@ -73,9 +73,9 @@ dependencies {
     includeImplementation(versionedCatalog["placeholders"])
     includeImplementation(libs.resourceful.config.kotlin)
     includeImplementation(versionedCatalog["olympus"])
-    includeImplementation(libs.meowdding.remote.repo)
 
     modRuntimeOnly(libs.hypixel.modapi.fabric)
+    implementation(libs.moulberry.mixinconstraints) // Already included in mlib
 
     implementation(libs.keval)
     include(libs.keval)
@@ -132,6 +132,9 @@ ksp {
 
 afterEvaluate {
     loom {
+        log4jConfigs.removeAll { true }
+        log4jConfigs.from(rootProject.layout.projectDirectory.file("gradle/log4j.config.xml"))
+
         runs.named("datagen") {
             this.vmArgs.add("-Dskyocean.extraPaths=\"\"")
         }
@@ -172,8 +175,6 @@ compactingResources {
     configureTask(tasks.named<AbstractCopyTask>("processResources").get())
 
     removeComments("unobtainable_ids")
-    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/dyes.json", "dyes.json")
-    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/animatedskulls.json", "skulls.json")
     downloadResource(
         "https://raw.githubusercontent.com/Campionnn/SkyShards-Parser/55483450ff83e1bf1e453f31797cedb08b0c2733/shard-data.json",
         "skyshards_data.json"

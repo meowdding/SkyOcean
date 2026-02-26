@@ -40,7 +40,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
     private val storage: DataStorage<MutableList<CustomItemData>> = DataStorage(
         { mutableListOf() },
         "custom_items",
-        CodecHelpers.list(),
+        CodecHelpers.mutableList(),
     )
 
     init {

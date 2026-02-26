@@ -95,7 +95,7 @@ object ChestTracker {
         container = this.inventory
     }
 
-    @Subscription(event = [ContainerCloseEvent::class])
+    @Subscription(ContainerCloseEvent::class)
     @OnlyIn(SkyBlockIsland.PRIVATE_ISLAND)
     fun onClose() {
         val container = container ?: return

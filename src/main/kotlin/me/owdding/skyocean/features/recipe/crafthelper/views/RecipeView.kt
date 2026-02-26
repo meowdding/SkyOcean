@@ -19,7 +19,6 @@ import me.owdding.skyocean.features.recipe.crafthelper.StandardRecipeNode
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
 import me.owdding.skyocean.utils.Utils.not
-import me.owdding.skyocean.utils.chat.ChatUtils.append
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.ComponentIcons
 import me.owdding.skyocean.utils.chat.Icons
@@ -64,11 +63,9 @@ fun interface RecipeView {
                 val childState = childContext.toState()
                 state.childStates.add(childState)
                 childState.isLast = context.node.nodes.first() == node
-                state.childrenDone = state.childrenDone && (childState.isDone() || childState.childrenDone)
             }
-        } else {
-            state.childrenDone = false
         }
+        state.childrenDone = state.childStates.isNotEmpty() && state.childStates.all { it.isDone() || it.childrenDone }
     }
 
     fun create(state: CraftHelperState, widget: WidgetBuilder, widgetConsumer: (AbstractWidget) -> Unit)

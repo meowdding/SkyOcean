@@ -111,16 +111,15 @@ object MetalDetectorSolver {
             }
 
             else -> {
-                possibleChests.run {
-                    if (isNotEmpty()) {
-                        retainAll(candidates)
-                        if (size == 1) foundPosition(first().getBlockPos())
-                    } else addAll(candidates)
-                }
-                @Suppress("SelfAssignment") // this needs this, cry about it
-                possibleChests = possibleChests
+                possibleChests = candidates.toMutableList()
+
+                if (possibleChests.size == 1) foundPosition(possibleChests.first().getBlockPos())
+
                 if (possibleChests.size != previousCurrentChests) {
-                    Text.of("Found §c${possibleChests.size}§f chests, Keep moving around!").sendWithPrefix()
+                    Text.of("Found ") {
+                        append("${possibleChests.size} ") { color = TextColor.RED }
+                        append("chests, Keep moving around!")
+                    }.sendWithPrefix()
                 }
                 previousCurrentChests = possibleChests.size
             }

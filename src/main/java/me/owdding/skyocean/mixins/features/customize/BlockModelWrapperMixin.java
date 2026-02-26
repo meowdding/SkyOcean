@@ -5,12 +5,14 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper;
+import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents;
 import net.minecraft.client.color.item.Constant;
 import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.BlockModelWrapper;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,5 +38,17 @@ public class BlockModelWrapperMixin {
         foundFirst.set(true);
         return ARGB.opaque(customColor);
     }
+
+    //? if > 1.21.10 {
+    @WrapOperation(method = "method_76557", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"))
+    private static Item wrap(ItemStack instance, Operation<Item> original) {
+        var model = CustomItemsHelper.getCustomData(instance, CustomItemDataComponents.model());
+        if (model != null) {
+            return model.resolveToItem();
+        }
+
+        return original.call(instance);
+    }
+    //?}
 
 }

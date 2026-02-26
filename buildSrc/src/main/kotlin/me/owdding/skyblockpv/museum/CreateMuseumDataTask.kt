@@ -17,7 +17,17 @@ import kotlin.io.path.writeBytes
 import kotlin.time.Duration.Companion.hours
 
 const val HYPIXEL_ITEM_LIST = "https://api.hypixel.net/v2/resources/skyblock/items"
-const val MUSEUM_DATA_CACHE_ENTRY = "museum_data_meow_:3"
+const val MUSEUM_DATA_CACHE_ENTRY = "museum_data_v2"
+
+data class ParserInstance(
+    val items: ItemParser = ItemParser(),
+    val armors: ArmorParser = ArmorParser(),
+) {
+    fun parse(museumData: JsonObject, item: JsonObject) {
+        val isArmorSet = museumData.has("armor_set_donation_xp")
+        (if (isArmorSet) armors else items).process(item)
+    }
+}
 
 @CacheableTask
 abstract class CreateMuseumDataTask : DefaultTask() {
@@ -26,6 +36,8 @@ abstract class CreateMuseumDataTask : DefaultTask() {
 
     @Internal
     val cacheKey = downloadCache.getKey(MUSEUM_DATA_CACHE_ENTRY)
+
+    private val map: MutableMap<String, ParserInstance> = mutableMapOf()
 
     init {
         val configuration = project.extensions.getByType<CompactingResourcesExtension>()
@@ -39,7 +51,7 @@ abstract class CreateMuseumDataTask : DefaultTask() {
         doFirst {
             if (downloadCache.isCached(cacheKey)) {
                 write(downloadCache.read(cacheKey))
-                return@doFirst
+                //return@doFirst
             }
 
             val itemList = JsonParser.parseString(downloadCache.getOrDownload(HYPIXEL_ITEM_LIST).toString(Charsets.UTF_8)).asJsonObject["items"].asJsonArray
@@ -48,8 +60,9 @@ abstract class CreateMuseumDataTask : DefaultTask() {
                 val item = it.asJsonObject
                 if (item.has("museum_data")) {
                     item.getAsJsonObject("museum_data")?.let { museumData ->
-                        val valueOf = MuseumParser.valueOf(museumData.get("type").asString)
-                        valueOf.processor.process(item)
+                        val category = museumData.get("category").asString.lowercase()
+                        val parser = map.getOrPut(category, ::ParserInstance)
+                        parser.parse(museumData, item)
                     }
                 } else if (item.has("museum")) {
                     special.add(item.get("id"))
@@ -57,15 +70,21 @@ abstract class CreateMuseumDataTask : DefaultTask() {
             }
 
             val output = JsonObject()
-            MuseumParser.values().forEach { parser ->
-                val processor = parser.processor
-                val postProcess = processor.postProcess()
-                output.add(processor.key, postProcess)
+            map.forEach { (key, value) ->
+                output.add(
+                    key,
+                    JsonObject().apply {
+                        add("armors", value.armors.postProcess())
+                        add("items", value.items.postProcess())
+                    },
+                )
             }
-            //output.add("special", special)
-            downloadCache.write(cacheKey, output.toString().toByteArray())
+            val out = JsonObject()
+            out.add("special", special)
+            out.add("categories", output)
+            downloadCache.write(cacheKey, out.toString().toByteArray())
 
-            write(GsonBuilder().setPrettyPrinting().create().toJson(output).toByteArray())
+            write(GsonBuilder().setPrettyPrinting().create().toJson(out).toByteArray())
         }
 
         outputs.dir(project.layout.buildDirectory.file("generated/meowdding/museum_data"))

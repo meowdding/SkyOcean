@@ -1,4 +1,3 @@
-//? if > 1.21.8 {
 package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
@@ -63,5 +62,3 @@ object CopperGolemModifier : AnimalModifier<CopperGolem, CopperGolemRenderState>
         override fun getTranslationKey(): String = "skyocean.config.misc.fun.player_animals.copper_golem.state.${name.lowercase()}"
     }
 }
-
-//?}

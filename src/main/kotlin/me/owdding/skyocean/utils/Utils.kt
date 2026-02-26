@@ -24,7 +24,8 @@ import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.chat.ChatUtils
-import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
+//? < 1.21.11
+/*import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow*/
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -38,8 +39,8 @@ import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.Identifier
+import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
@@ -49,9 +50,10 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
-import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
-import tech.thatgravyboat.skyblockapi.helpers.McClient
+import org.joml.Vector3dc
+//? < 1.21.11
+/*import tech.thatgravyboat.skyblockapi.helpers.McClient*/
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.identifier
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
@@ -70,7 +72,7 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import java.util.Optional
+import java.util.*
 import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -152,6 +154,7 @@ object Utils {
             null
         }
     }
+
     inline fun <reified T : Any> loadFromRemoteRepo(file: String): T? = runBlocking {
         try {
             val json = RemoteRepo.getFileContentAsJson("$file.json") ?: return@runBlocking null
@@ -195,7 +198,7 @@ object Utils {
         SkyOcean.error("Failed to load '$file' from remote repo!", it)
     }.getOrNull()
 
-    internal fun <B : Any> loadRemoteRepoData(file: String, codec: Codec<B>): B? = loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(codec)
+    internal fun <B : Any> loadRemoteRepoData(file: String, codec: Codec<B>): B = loadFromRemoteRepo<JsonElement>(file).toDataOrThrow(codec)
 
     val ItemLike.id get() = BuiltInRegistries.ITEM.getKey(this.asItem())
 
