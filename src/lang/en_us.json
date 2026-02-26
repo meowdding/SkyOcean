@@ -404,6 +404,10 @@
           "@value": "Show museum armour pieces",
           "desc": "Displays all pieces required to finish an armor set in the tooltip in the museum."
         },
+        "ratHitbox": {
+          "@value": "Rat hitboxes",
+          "desc": "Renders extra hitboxes for rats in the hub."
+        },
         "crafthelper": {
           "@value": "Craft Helper",
           "desc": [
@@ -1299,6 +1303,10 @@
           "left": "Left",
           "middle": "Middle",
           "right": "Right"
+        },
+        "midas_bid_breakdown": {
+          "@value": "Midas Bid Breakdown",
+          "desc": "Shows the original bid and added coins on Midas Weapons."
         }
       },
       "foraging": {

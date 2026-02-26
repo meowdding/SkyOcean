@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadTransform
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBlockStateModel
 import net.minecraft.client.renderer.block.model.BlockModelPart
 import net.minecraft.client.renderer.block.model.BlockStateModel
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.ModelBaker
 import net.minecraft.client.resources.model.ResolvableModel
@@ -15,11 +16,6 @@ import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import java.util.function.Predicate
-//? if = 1.21.5 {
-/*import net.fabricmc.fabric.api.renderer.v1.material.BlendMode
-import net.fabricmc.fabric.api.renderer.v1.Renderer
-*///?} else {
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer
 
 enum class BlendMode {
     DEFAULT,
@@ -37,7 +33,6 @@ enum class BlendMode {
         TRANSLUCENT -> ChunkSectionLayer.TRANSLUCENT
     }
 }
-//?}
 
 data class FakeBlockModelEntry(
     val blend: BlendMode? = null,
@@ -46,14 +41,9 @@ data class FakeBlockModelEntry(
 ) {
 
     val transform: QuadTransform by lazy {
-        //? if = 1.21.5
-        /*val materials = Renderer.get().materialFinder()*/
         if (blend != null) {
             QuadTransform { quad ->
-                //? if > 1.21.5 {
                 quad.renderLayer(blend.toSectionLayer())
-                //?} else
-                /*quad.material(materials.copyFrom(quad.material()).blendMode(blend).find())*/
                 true
             }
         } else {

@@ -4,9 +4,11 @@ import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.RemoteConfig
+import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.overlays.EditOverlaysScreen
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingUpdateChecker
+import me.owdding.repo.RemoteRepo
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
@@ -14,7 +16,6 @@ import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.fabricmc.api.ClientModInitializer
-import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.registries.VanillaRegistries
@@ -35,6 +36,9 @@ import kotlin.jvm.optionals.getOrNull
 
 @Module
 object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
+
+    private var meowddingRepo: Boolean = false
+    private var apiRepo: Boolean = false
 
     val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createLookup() }
     val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
@@ -61,14 +65,26 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
             SkyBlockAPI.eventBus.register(it)
         }
 
-        @Suppress("UnstableApiUsage")
-        if (RepoAPI.isInitialized() && !FabricDataGenHelper.ENABLED) {
-            onRepoReady()
-        }
+        apiRepo = RepoAPI.isInitialized()
+        meowddingRepo = RemoteRepo.isInitialized()
+
+        onRepoReady()
     }
 
-    @Subscription(RepoStatusEvent::class)
+    @Subscription
+    private fun RepoStatusEvent.repoReady() {
+        apiRepo = true
+        onRepoReady()
+    }
+
+    @Subscription
+    private fun FinishRepoLoadingEvent.repoReady() {
+        meowddingRepo = true
+        onRepoReady()
+    }
+
     fun onRepoReady() {
+        if (!apiRepo || !meowddingRepo) return
         SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
     }
 

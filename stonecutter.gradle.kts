@@ -9,6 +9,7 @@ stonecutter active "1.21.11"
 private val animalReplacementPrefix = "import net.minecraft.world.entity."
 private val animalsReplacements = mapOf(
     "monster.skeleton.Bogged" to "monster.Bogged",
+    "monster.zombie.Zombie" to "monster.Zombie",
     "animal.feline.Cat" to "animal.Cat",
     "animal.chicken.Chicken" to "animal.Chicken",
     "animal.cow.Cow" to "animal.Cow",
