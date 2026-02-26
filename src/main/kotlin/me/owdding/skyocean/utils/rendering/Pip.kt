@@ -1,7 +1,7 @@
 package me.owdding.skyocean.utils.rendering
 
 //? < 1.21.11
-import com.mojang.blaze3d.systems.RenderSystem
+/*import com.mojang.blaze3d.systems.RenderSystem*/
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator

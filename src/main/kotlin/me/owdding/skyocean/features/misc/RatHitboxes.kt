@@ -2,12 +2,9 @@ package me.owdding.skyocean.features.misc
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
-//? if > 1.21.8
 import net.minecraft.client.gui.components.debug.DebugScreenEntries
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.world.entity.ai.attributes.Attributes
-import net.minecraft.world.entity.monster.Zombie
+import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.phys.AABB
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
@@ -21,6 +18,13 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import java.util.concurrent.CopyOnWriteArraySet
 import kotlin.math.abs
 
+//? > 1.21.10 {
+import net.minecraft.gizmos.GizmoStyle
+import net.minecraft.gizmos.Gizmos
+//?} else {
+/*import net.minecraft.client.renderer.ShapeRenderer
+import net.minecraft.client.renderer.rendertype.RenderTypes
+*///?}
 
 @Module
 object RatHitboxes {
@@ -46,11 +50,7 @@ object RatHitboxes {
     }
 
     private fun renderHitbox(): Boolean {
-        //? if > 1.21.8 {
         return McClient.self.debugEntries.isCurrentlyEnabled(DebugScreenEntries.ENTITY_HITBOXES)
-        //?} else {
-        /*return McClient.self.entityRenderDispatcher.shouldRenderHitBoxes()
-        *///?}
     }
 
     @Subscription
@@ -61,16 +61,16 @@ object RatHitboxes {
         event.atCamera {
             if (!McLevel.hasLevel) return@atCamera
             rats.forEach {
-                ShapeRenderer.renderLineBox(
-                    //? if > 1.21.8 {
+                //? > 1.21.10 {
+                Gizmos.cuboid(it.boundingBox, GizmoStyle.stroke(-1))
+                //?} else {
+                /*ShapeRenderer.renderLineBox(
                     event.poseStack.last(),
-                    //?} else {
-                    /*event.poseStack,
-                    *///?}
-                    event.buffer.getBuffer(RenderType.LINES),
+                    event.buffer.getBuffer(RenderTypes.LINES),
                     it.boundingBox,
                     1f, 1f, 1f, 1f,
                 )
+                *///?}
             }
         }
     }
