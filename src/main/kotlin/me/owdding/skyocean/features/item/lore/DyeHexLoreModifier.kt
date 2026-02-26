@@ -1,15 +1,15 @@
 package me.owdding.skyocean.features.item.lore
 
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
-import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @ItemModifier
 object DyeHexLoreModifier : AbstractItemModifier() {
@@ -27,9 +27,44 @@ object DyeHexLoreModifier : AbstractItemModifier() {
         val dyeColor = item.get(DataComponents.DYED_COLOR) ?: return@withMerger null
 
         copy()
-        add("Color: ${String.format("#%06X", dyeColor.rgb)}") {
-            this.color = TextColor.DARK_GRAY
+        add {
+            val colorText = Text.of("Color: ", TextColor.DARK_GRAY)
+            val hexText = Text.of(String.format("#%06X", dyeColor.rgb), TextColor.DARK_GRAY)
+            val square = Text.of("█", dyeColor.rgb)
+
+            when (LoreModifierConfig.dyePosition) {
+                DyePosition.LEFT -> {
+                    append(square)
+                    append(" ")
+                    append(colorText)
+                    append(hexText)
+                }
+
+                DyePosition.MIDDLE -> {
+                    append(colorText)
+                    append(square)
+                    append(" ")
+                    append(hexText)
+                }
+
+                DyePosition.RIGHT -> {
+                    append(colorText)
+                    append(hexText)
+                    append(" ")
+                    append(square)
+                }
+            }
         }
+
         Result.modified
+    }
+
+    enum class DyePosition : Translatable {
+        LEFT,
+        MIDDLE,
+        RIGHT,
+        ;
+
+        override fun getTranslationKey() = "skyocean.config.lore_modifiers.dye_pos.${name.lowercase()}"
     }
 }

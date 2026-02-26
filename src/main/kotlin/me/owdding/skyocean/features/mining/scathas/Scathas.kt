@@ -3,7 +3,6 @@ package me.owdding.skyocean.features.mining.scathas
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.ScathaConfig
 import me.owdding.skyocean.utils.chat.ChatUtils
-import me.owdding.skyocean.utils.chat.ChatUtils.append
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity

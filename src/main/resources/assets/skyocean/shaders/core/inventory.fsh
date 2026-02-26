@@ -2,12 +2,9 @@
 
 uniform sampler2D Sampler0;
 
-//? if > 1.21.5 {
 layout (std140) uniform PolyInventoryUniform {
     ivec2 Size;
 };
-//?} else
-/*uniform vec2 Size;*/
 
 in vec2 texCoord0;
 in vec4 vertexColor;

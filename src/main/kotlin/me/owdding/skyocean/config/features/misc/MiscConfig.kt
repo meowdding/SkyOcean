@@ -123,5 +123,9 @@ object MiscConfig : CategoryKt("misc") {
     var transparentArmorOthers by transparency(100) {
         translation = "skyocean.config.misc.transparentArmor.others"
     }
+
+    var ratHitbox by boolean(false) {
+        translation = "skyocean.config.misc.ratHitbox"
+    }
 }
 

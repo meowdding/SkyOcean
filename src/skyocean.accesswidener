@@ -2,6 +2,7 @@ accessWidener v2 named
 accessible method net/minecraft/network/chat/MutableComponent <init> (Lnet/minecraft/network/chat/ComponentContents;Ljava/util/List;Lnet/minecraft/network/chat/Style;)V
 accessible class net/minecraft/client/gui/layouts/FrameLayout$ChildContainer
 accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher renderers Ljava/util/Map;
+accessible field net/minecraft/client/gui/screens/inventory/AbstractContainerScreen imageWidth I
 
 # 1.21.9
 accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$GlyphInstance
