@@ -74,6 +74,9 @@ jobs:
                 with:
                     name: detekt-output
                     path: detekt_output.txt
+            -   name: Fail job
+                if: ${{ steps.run_detekt.outcome == 'failure' && steps.check_sarif.outputs.exists == 'true' }}
+                run: exit 1
 
     detekt_comment:
         name: Comment detekt failures on PR
