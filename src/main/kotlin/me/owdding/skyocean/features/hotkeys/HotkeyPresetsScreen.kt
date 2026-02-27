@@ -30,7 +30,6 @@ import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.CommonComponents
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -103,9 +102,9 @@ class HotkeyPresetsScreen(
                     ) {
                         color = CatppuccinColors.Mocha.text
                     },
-                    parent = background
+                    parent = background,
                 )
-            }
+            },
         ).withPadding(4).add(middleRight)
     }
 
