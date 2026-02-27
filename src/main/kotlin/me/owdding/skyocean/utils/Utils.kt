@@ -389,6 +389,13 @@ object Utils {
     fun LevelableTreeNode.totalPowder() = powderForInterval(1 exclusiveInclusive maxLevel)
     fun LevelableTreeNode.powderForInterval(intRange: IntRange) = intRange.sumOf { costForLevel(it).second }
 
+    context(logger: MeowddingLogger)
+    fun <T> Result<T>.warn(message: String) {
+        this.onFailure {
+            logger.warn(message, it)
+        }
+    }
+
     fun nextUp(amount: Int, divider: Int) = if (amount % divider == 0) amount else amount - (amount % divider) + divider
 
     fun <T : Enum<T>> T.next(): T {
