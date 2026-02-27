@@ -33,6 +33,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
+import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
@@ -98,6 +99,18 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
                             }
                         },
                     ).add()
+                    val presets = HotkeyPresets.presets
+                    if (presets.isNotEmpty()) {
+                        createButton(
+                            texture = null,
+                            icon = UIIcons.BOOKMARK,
+                            color = unhovered,
+                            hoveredColor = hovered,
+                            hover = Text.of("Import preset", CatppuccinColors.Mocha.text),
+                            leftClick = setScreen { HotkeyPresetsScreen() },
+                        ).add()
+                    }
+
                     createButton(
                         texture = null,
                         icon = UIIcons.DOWNLOAD,
