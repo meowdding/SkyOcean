@@ -15,6 +15,6 @@ data class HotkeyCategory(
     fun getHotkeysInCategory(): Collection<Hotkey> = if (isDefault()) {
         HotkeyManager.hotkeys().filter { it.group == null }
     } else {
-        HotkeyManager.hotkeys().filter { it.group == this }
+        HotkeyManager.hotkeys().filter { it.group == identifier }
     }
 }

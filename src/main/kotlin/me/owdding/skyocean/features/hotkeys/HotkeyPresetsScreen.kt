@@ -10,18 +10,18 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.layouts.asWidget
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen.SPACER
-import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen.currentMainScroll
+import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen.currentCategory
 import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen.headerSprite
+import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.asScrollable
-import me.owdding.skyocean.utils.extensions.asScrollableWidget
 import me.owdding.skyocean.utils.extensions.createButton
 import me.owdding.skyocean.utils.extensions.createSeparator
 import me.owdding.skyocean.utils.extensions.createText
-import me.owdding.skyocean.utils.extensions.framed
 import me.owdding.skyocean.utils.extensions.middleLeft
 import me.owdding.skyocean.utils.extensions.middleRight
+import me.owdding.skyocean.utils.extensions.setScreen
 import me.owdding.skyocean.utils.extensions.withPadding
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -29,9 +29,13 @@ import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.network.chat.CommonComponents
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.math.min
 
@@ -64,6 +68,44 @@ class HotkeyPresetsScreen(
             color = CatppuccinColors.Mocha.lavenderColor,
             width = 30,
             height = PADDING * 3,
+            click = setScreen {
+                val data = HotkeyUtils.readData(preset.data)
+                data.exceptionOrNull()?.let {
+                    it.printStackTrace()
+                    return@setScreen ShowMessageModal(
+                        titleComponent = "An error occurred".asComponent {
+                            color = CatppuccinColors.Mocha.red
+                        },
+                        message = "Failed to import preset!\n".asComponent {
+                            color = CatppuccinColors.Mocha.red
+                            append("See the logs for more details!", CatppuccinColors.Mocha.text)
+                        },
+                    )
+                }
+
+                val result = data.getOrThrow()
+                val category = HotkeyManager.createCategory(result.category.name, McPlayer.name)
+
+                result.hotkeys.forEach {
+                    HotkeyManager.register(it.copy(group = category.identifier))
+                }
+                currentCategory = category
+
+                ShowMessageModal(
+                    titleComponent = "Imported Hotkey Preset!".asComponent {
+                        color = CatppuccinColors.Mocha.green
+                    },
+                    message = Text.multiline(
+                        Text.of("Successfully added preset!", CatppuccinColors.Mocha.green),
+                        CommonComponents.EMPTY,
+                        Text.of("Imported Preset"),
+                        Text.of("Hotkeys: ${result.hotkeys.size}"),
+                    ) {
+                        color = CatppuccinColors.Mocha.text
+                    },
+                    parent = background
+                )
+            }
         ).withPadding(4).add(middleRight)
     }
 
@@ -71,10 +113,12 @@ class HotkeyPresetsScreen(
         super.init()
 
         val content = LayoutFactory.vertical {
-            HotkeyPresets.presets.forEach { preset ->
+            HotkeyPresets.presets.forEachIndexed { index, preset ->
                 createEntry(preset, width / 3, SPACER * 7).add()
-                createSeparator(width / 3 - SPACER * 2).add {
-                    alignHorizontallyCenter()
+                if (index + 1 < HotkeyPresets.presets.size) {
+                    createSeparator(width / 3 - SPACER * 2).add {
+                        alignHorizontallyCenter()
+                    }
                 }
             }
         }
