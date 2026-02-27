@@ -74,6 +74,10 @@ jobs:
                 with:
                     name: detekt-output
                     path: detekt_output.txt
+            -   name: Fail job
+                id: fail_job
+                if: ${{ steps.run_detekt.outcome == 'failure' && steps.check_sarif.outputs.exists == 'true' }}
+                run: exit 1
 
     detekt_comment:
         name: Comment detekt failures on PR
@@ -85,6 +89,7 @@ jobs:
         if: ${{
             needs.detekt.outputs.sarif_exists == 'true' &&
             needs.detekt.outputs.detekt_failed == 'true' &&
+            needs.detekt.steps.fail_job.outcome == 'failure' &&
             !github.event.pull_request.draft
             }}
         permissions:

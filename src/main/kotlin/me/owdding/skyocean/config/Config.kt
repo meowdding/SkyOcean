@@ -7,10 +7,10 @@ import com.teamresourceful.resourcefulconfigkt.api.ConfigKt
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.chat.ChatConfig
 import me.owdding.skyocean.config.features.combat.SlayerConfig
-import me.owdding.skyocean.config.features.dungeons.DungeonsConfig
 import me.owdding.skyocean.config.features.fishing.FishingConfig
 import me.owdding.skyocean.config.features.foraging.ForagingConfig
 import me.owdding.skyocean.config.features.foraging.GalateaConfig
+import me.owdding.skyocean.config.features.gambling.GamblingConfig
 import me.owdding.skyocean.config.features.garden.GardenConfig
 import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
 import me.owdding.skyocean.config.features.inventory.Buttons
@@ -47,7 +47,7 @@ object Config : ConfigKt("skyocean/config") {
             categories(MiningRetexture, ScathaConfig, MineshaftConfig)
         }
         category(HotkeyConfig)
-        category(DungeonsConfig)
+        category(GamblingConfig)
         category(MiscConfig) {
             categories(MobIconsConfig, CraftHelperConfig, FunConfig)
         }
