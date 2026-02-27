@@ -4,13 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 
-enum class MuseumParser(val processor: MuseumProcessor) {
-    WEAPONS(ItemParser("weapons")),
-    ARMOR_SETS(ArmorParser()),
-    RARITIES(ItemParser("rarities")),
-}
-
-abstract class MuseumProcessor(val key: String) {
+abstract class MuseumProcessor {
     val value: JsonArray = JsonArray()
 
     abstract fun process(item: JsonObject)

@@ -30,7 +30,6 @@ import kotlin.math.sin
 import me.owdding.lib.rendering.world.RenderTypes as MLibRenderTypes
 
 
-//? if > 1.21.5 {
 interface PostEffectApplicator {
     fun `skyocean$applyPostEffect`(id: Identifier)
 
@@ -42,19 +41,6 @@ fun GuiGraphics.applyPostEffect(id: Identifier) {
     (this.guiRenderState as? PostEffectApplicator)?.`skyocean$applyPostEffect`(id)
     this.fill(0, 0, this.guiWidth(), this.guiHeight(), 0)
 }
-//?} else {
-/*import tech.thatgravyboat.skyblockapi.helpers.McClient
-import me.owdding.skyocean.mixins.GameRendererAccessor
-import net.minecraft.client.renderer.LevelTargetBundle
-
-fun GuiGraphics.applyPostEffect(id: Identifier) {
-    val mc = McClient.self
-    val pool = (mc.gameRenderer as GameRendererAccessor).resourcePool
-    val shaders = mc.shaderManager
-    shaders.getPostChain(id, LevelTargetBundle.MAIN_TARGETS)?.process(mc.mainRenderTarget, pool) {}
-}
-
-*///?}
 
 internal fun renderFace(
     poseStack: PoseStack,

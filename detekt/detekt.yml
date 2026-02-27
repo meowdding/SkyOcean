@@ -102,6 +102,8 @@ ktlint:
         active: false
     PackageName:
         active: false
+    ImportOrdering:
+        active: false
 
 naming:
     NoNameShadowing:

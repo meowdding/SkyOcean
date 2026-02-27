@@ -12,10 +12,7 @@ import java.util.concurrent.CompletableFuture
 
 class EntityTagProvider(output: FabricDataOutput, future: CompletableFuture<HolderLookup.Provider>) : FabricTagProvider.EntityTypeTagProvider(output, future) {
     override fun addTags(wrapperLookup: HolderLookup.Provider) {
-        //? if > 1.21.5 {
         val builder = valueLookupBuilder(EntityTagKey.LIVING_ENTITIES.key)
-        //?} else
-        /*val builder = getOrCreateTagBuilder(EntityTagKey.LIVING_ENTITIES.key)*/
 
         EntityType::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) && EntityType::class.java.isAssignableFrom(it.type) }
             .associate { (it.genericType as? ParameterizedType)?.actualTypeArguments?.firstOrNull() as? Class<*> to it.get(null) as EntityType<*> }
