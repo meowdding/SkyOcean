@@ -1,4 +1,3 @@
-//? > 1.21.8 {
 package me.owdding.skyocean.features.hotkeys
 
 import com.mojang.blaze3d.platform.InputConstants
@@ -397,4 +396,3 @@ class EditHotkeyModal(
     }
 
 }
-//?}

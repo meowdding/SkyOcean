@@ -1,4 +1,3 @@
-//? > 1.21.8 {
 package me.owdding.skyocean.mixins.features.keybinds;
 
 import com.llamalad7.mixinextras.expression.Definition;
@@ -26,4 +25,3 @@ public class KeyboardHandlerMixin {
     }
 
 }
-//?}

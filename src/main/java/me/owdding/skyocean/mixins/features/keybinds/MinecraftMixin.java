@@ -1,4 +1,3 @@
-//? > 1.21.8 {
 package me.owdding.skyocean.mixins.features.keybinds;
 
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager;
@@ -18,4 +17,3 @@ public class MinecraftMixin {
     }
 
 }
-//?}

@@ -1,4 +1,3 @@
-//? > 1.21.8 {
 package me.owdding.skyocean.config.features.hotkey
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
@@ -34,4 +33,3 @@ object HotkeyConfig : CategoryKt("hotkeys") {
     val disabled get() = !enabled
 
 }
-//? }

@@ -12,6 +12,7 @@ import me.owdding.skyocean.config.features.fishing.FishingConfig
 import me.owdding.skyocean.config.features.foraging.ForagingConfig
 import me.owdding.skyocean.config.features.foraging.GalateaConfig
 import me.owdding.skyocean.config.features.garden.GardenConfig
+import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
 import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
@@ -45,8 +46,7 @@ object Config : ConfigKt("skyocean/config") {
         category(MiningConfig) {
             categories(MiningRetexture, ScathaConfig, MineshaftConfig)
         }
-        //? > 1.21.8
-        category(me.owdding.skyocean.config.features.hotkey.HotkeyConfig)
+        category(HotkeyConfig)
         category(DungeonsConfig)
         category(MiscConfig) {
             categories(MobIconsConfig, CraftHelperConfig, FunConfig)

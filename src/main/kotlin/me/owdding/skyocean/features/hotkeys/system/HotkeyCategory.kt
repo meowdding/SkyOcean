@@ -10,7 +10,6 @@ data class HotkeyCategory(
     var name: String,
     var username: String = McPlayer.name,
 ) {
-    //? > 1.21.8 {
     fun isDefault(): Boolean = this === HotkeyManager.defaultCategory
 
     fun getHotkeysInCategory(): Collection<Hotkey> = if (isDefault()) {
@@ -18,5 +17,4 @@ data class HotkeyCategory(
     } else {
         HotkeyManager.hotkeys().filter { it.group == this }
     }
-    //?}
 }

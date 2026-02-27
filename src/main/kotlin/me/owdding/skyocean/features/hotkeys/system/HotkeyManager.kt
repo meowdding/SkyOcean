@@ -1,4 +1,3 @@
-//? > 1.21.8 {
 package me.owdding.skyocean.features.hotkeys.system
 
 import com.google.common.collect.EvictingQueue
@@ -217,4 +216,3 @@ object HotkeyManager {
         this.storage.save()
     }
 }
-//?}
