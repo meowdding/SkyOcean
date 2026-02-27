@@ -174,6 +174,7 @@ compactingResources {
 
     configureTask(tasks.named<AbstractCopyTask>("processResources").get())
 
+    removeComments("vanguard") // when does this just auto remove comments from all .jsoncs, why do i need to specify this
     removeComments("unobtainable_ids")
     downloadResource(
         "https://raw.githubusercontent.com/Campionnn/SkyShards-Parser/55483450ff83e1bf1e453f31797cedb08b0c2733/shard-data.json",
@@ -222,6 +223,7 @@ tasks.processResources {
 autoMixins {
     mixinPackage = "me.owdding.skyocean.mixins"
     projectName = "skyocean"
+    mixinExtrasVersion = "0.5.0"
 }
 
 tasks.withType<ProcessResources>().configureEach {
