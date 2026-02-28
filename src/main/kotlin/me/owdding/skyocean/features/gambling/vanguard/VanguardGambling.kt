@@ -7,6 +7,8 @@ import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.gambling.SlotMachineSpinner
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.chat.ComponentAnimator
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
@@ -36,9 +38,10 @@ object VanguardGambling {
     private val SLOT = SkyOcean.id("gambling/vanguard_slot")
 
     // TODO: ENCHANTED BOOK SUPPORT MAYBE
-    private val startRegex = " +VANGUARD CORPSE LOOT! ?".toRegex()
-    private val itemRegex = " +(?<item>.+?)(?: x(?<amount>[\\d,]+)|$)".toRegex()
-    private val endRegex = "▬{64}".toRegex()
+    private val group = RemoteStrings.resolve()
+    private val startRegex by group.regex(" +VANGUARD CORPSE LOOT! ?")
+    private val itemRegex by group.regex(" +(?<item>.+?)(?: x(?<amount>[\\d,]+)|$)")
+    private val endRegex by group.regex("▬{64}")
 
     private var parsing = false
     private val loot = mutableListOf<Pair<SkyBlockId, Int>>()

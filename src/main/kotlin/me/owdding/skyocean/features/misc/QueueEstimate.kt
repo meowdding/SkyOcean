@@ -6,6 +6,8 @@ import me.owdding.lib.displays.centerIn
 import me.owdding.lib.extensions.toReadableString
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.chat.ChatUtils
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderHudEvent
@@ -28,7 +30,9 @@ object QueueEstimate {
     private val history = mutableListOf<Pair<Instant, Int>>()
     private var estimate: Instant? = null
     private var lastTitle: String? = null
-    private val regex = Regex("You are #(?<position>\\d+) in the queue!")
+
+    private val group = RemoteStrings.resolve()
+    private val regex by group.regex("You are #(?<position>\\d+) in the queue!")
 
     @Subscription
     fun onTick(event: TickEvent) {

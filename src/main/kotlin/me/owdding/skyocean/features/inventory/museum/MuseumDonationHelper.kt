@@ -25,6 +25,8 @@ import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
 import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.*
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.Utils.contains
@@ -66,7 +68,8 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
     private val logger: MeowddingLogger = SkyOcean.featureLogger()
     private val modifierCache: MutableMap<String, Pair<ComponentModifier?, TooltipComponentModifier?>> = mutableMapOf()
 
-    val museumRegex = Regex(".*[Mm]useum.*")
+    private val group = RemoteStrings.resolve()
+    val museumRegex by group.regex(".*[Mm]useum.*")
 
     private val itemCache = CachedValue { ItemTracker() }
     private val itemTracker by itemCache

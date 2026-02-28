@@ -2,6 +2,8 @@ package me.owdding.skyocean.features.mining.scathas
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.ScathaConfig
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
@@ -16,7 +18,6 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
-import tech.thatgravyboat.skyblockapi.utils.regex.component.ComponentRegex
 import tech.thatgravyboat.skyblockapi.utils.regex.component.match
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -31,7 +32,9 @@ object Scathas {
 
     private var worm: SpawnedWorm? = null
     private var cooldown: Boolean = false
-    private val scathaPetDropRegex = ComponentRegex("PET DROP! (?<pet>Scatha)(?: \\(\\+(?<mf>\\d+)✯ Magic Find\\))?")
+
+    private val group = RemoteStrings.resolve()
+    private val scathaPetDropRegex by group.componentRegex("PET DROP! (?<pet>Scatha)(?: \\(\\+(?<mf>\\d+)✯ Magic Find\\))?")
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)

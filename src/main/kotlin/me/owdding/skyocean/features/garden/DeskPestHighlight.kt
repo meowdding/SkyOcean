@@ -2,6 +2,8 @@ package me.owdding.skyocean.features.garden
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.garden.GardenConfig
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -15,7 +17,8 @@ import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.anyMatch
 
 @Module
 object DeskPestHighlight {
-    private val regex = "ൠ This plot has (?<amount>.*) ൠ Pests?!".toRegex()
+    private val group = RemoteStrings.resolve()
+    private val regex by group.regex("ൠ This plot has (?<amount>.*) ൠ Pests?!")
 
     @Subscription
     @InventoryTitle("Configure Plots")

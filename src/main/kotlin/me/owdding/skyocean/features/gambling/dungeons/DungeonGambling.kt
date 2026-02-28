@@ -6,6 +6,8 @@ import me.owdding.lib.utils.type.EnumArgumentType
 import me.owdding.skyocean.config.features.gambling.GamblingConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonChestType
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.containerItems
 import me.owdding.skyocean.utils.Utils.getArgument
 import net.minecraft.client.gui.screens.inventory.ContainerScreen
@@ -26,8 +28,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
 @Module
 object DungeonGambling {
-
-    private val regex = "(?<type>Obsidian|Bedrock)(?: Chest)?".toRegex()
+    private val group = RemoteStrings.resolve()
+    private val regex by group.regex("(?<type>Obsidian|Bedrock)(?: Chest)?")
 
     val allowedDungeonGamblingChests = listOf(DungeonChestType.OBSIDIAN, DungeonChestType.BEDROCK)
 

@@ -3,6 +3,8 @@ package me.owdding.skyocean.features.foraging.galatea
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.foraging.GalateaConfig
 import me.owdding.skyocean.repo.misc.GalateaRepoData
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import net.minecraft.core.BlockPos
 import net.minecraft.util.ARGB
 import net.minecraft.world.level.block.entity.BeaconBeamOwner
@@ -20,7 +22,8 @@ object MoongladeBeacon {
 
     private var beaconActive: Boolean = false
 
-    private val inactiveRegex = " Cooldown: AVAILABLE".toRegex()
+    private val group = RemoteStrings.resolve()
+    private val inactiveRegex by group.regex(" Cooldown: AVAILABLE")
 
     private val redSection = listOf(BeaconBeamOwner.Section(ARGB.color(32, TextColor.RED)))
     private val greenSection = listOf(BeaconBeamOwner.Section(ARGB.color(32, TextColor.GREEN)))

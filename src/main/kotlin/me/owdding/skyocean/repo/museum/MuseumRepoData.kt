@@ -8,6 +8,8 @@ import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.replaceTrim
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
@@ -15,7 +17,8 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 @LateInitModule
 object MuseumRepoData : MeowddingLogger by SkyOcean.featureLogger() {
 
-    private val prefixRegex = Regex("[✖✔]")
+    private val group = RemoteStrings.resolve()
+    private val prefixRegex by group.regex("[✖✔]")
 
     val armor: List<MuseumArmour>
     val weapons: List<MuseumItem>

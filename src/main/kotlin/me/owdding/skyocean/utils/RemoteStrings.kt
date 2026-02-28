@@ -9,6 +9,7 @@ import me.owdding.lib.utils.FeatureName
 import me.owdding.repo.RemoteRepo
 import org.intellij.lang.annotations.Language
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.utils.regex.component.ComponentRegex
 import kotlin.reflect.KProperty
 
 data class CompletedElementDelegate<Type>(
@@ -46,16 +47,20 @@ data class ElementDelegate<Type>(
 
 private fun join(vararg parts: String?) = listOfNotNull(*parts).takeUnless { it.isEmpty() }?.joinToString(".")
 
-interface StringProvider {
+interface StringGroup {
     fun string(default: String, path: String? = null, prefix: String? = null): ElementDelegate<String>
 
+    fun componentRegex(@Language("RegExp") regex: String, path: String? = null, prefix: String? = null): ElementDelegate<ComponentRegex> =
+        componentRegex(regex.toRegex(), path, prefix)
+
+    fun componentRegex(regex: Regex, path: String? = null, prefix: String? = null): ElementDelegate<ComponentRegex>
     fun regex(regex: Regex, path: String? = null, prefix: String? = null): ElementDelegate<Regex>
     fun regex(@Language("RegExp") regex: String, path: String? = null, prefix: String? = null): ElementDelegate<Regex> = regex(regex.toRegex(), path, prefix)
-    fun resolve(path: String): StringProvider
+    fun resolve(path: String): StringGroup
 
     companion object {
         internal val STACK_WALKER = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
-        fun StringProvider.resolve(): StringProvider {
+        fun StringGroup.resolve(): StringGroup {
             val name = STACK_WALKER.callerClass.let { it.annotations.filterIsInstance<FeatureName>().firstOrNull()?.name ?: it.simpleName }
 
             return resolve(name)
@@ -63,14 +68,17 @@ interface StringProvider {
     }
 }
 
-data class StringProviderImpl(val prefix: String, val parent: StringProvider) : StringProvider {
+data class StringGroupImpl(val prefix: String, val parent: StringGroup) : StringGroup {
     override fun string(default: String, path: String?, prefix: String?): ElementDelegate<String> = parent.string(default, path, join(this.prefix, prefix))
     override fun regex(regex: Regex, path: String?, prefix: String?): ElementDelegate<Regex> = parent.regex(regex, path, join(this.prefix, prefix))
-    override fun resolve(path: String): StringProvider = StringProviderImpl(join(prefix, path) ?: path, this)
+    override fun componentRegex(regex: Regex, path: String?, prefix: String?): ElementDelegate<ComponentRegex> =
+        parent.componentRegex(regex, path, join(this.prefix, prefix))
+
+    override fun resolve(path: String): StringGroup = StringGroupImpl(join(prefix, path) ?: path, this)
 }
 
 @Module
-object RemoteStrings : StringProvider {
+object RemoteStrings : StringGroup {
     private val list: MutableList<CompletedElementDelegate<*>> = mutableListOf()
     val stringOverwrites: MutableMap<String, String> = mutableMapOf()
 
@@ -104,9 +112,15 @@ object RemoteStrings : StringProvider {
 
     override fun string(default: String, path: String?, prefix: String?): ElementDelegate<String> = ElementDelegate(path, prefix, transformer = { it }, default)
 
+    override fun componentRegex(
+        regex: Regex,
+        path: String?,
+        prefix: String?,
+    ): ElementDelegate<ComponentRegex> = ElementDelegate(path, prefix, transformer = { ComponentRegex(it) }, ComponentRegex(regex))
+
     override fun regex(regex: Regex, path: String?, prefix: String?): ElementDelegate<Regex> = ElementDelegate(path, prefix, transformer = { Regex(it) }, regex)
 
-    override fun resolve(path: String): StringProvider = StringProviderImpl(path, this)
+    override fun resolve(path: String): StringGroup = StringGroupImpl(path, this)
 
     fun register(delegate: CompletedElementDelegate<*>) {
         list.add(delegate)
