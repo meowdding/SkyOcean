@@ -30,7 +30,7 @@ exceptions:
 
 ktlint:
     BlankLineBetweenWhenConditions:
-        active: true
+        active: false
     SpacingAroundSquareBrackets:
         active: true
     ChainMethodContinuation:
@@ -137,7 +137,7 @@ style:
     AlsoCouldBeApply:
         active: true
     ClassOrdering:
-        active: true
+        active: false
     DoubleNegativeLambda:
         active: true
     MagicNumber: # valid, but awful for ui design
