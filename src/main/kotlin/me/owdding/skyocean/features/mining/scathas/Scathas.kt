@@ -1,6 +1,9 @@
 package me.owdding.skyocean.features.mining.scathas
 
 import me.owdding.ktmodules.Module
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.mining.ScathaConfig
 import me.owdding.skyocean.utils.Utils.derpyMaxHp
 import me.owdding.skyocean.utils.RemoteStrings
@@ -15,18 +18,15 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityEquipmentUpdateEvent
-import tech.thatgravyboat.skyblockapi.api.events.entity.EntityInfoLineEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityRemovedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHelmet
 import tech.thatgravyboat.skyblockapi.utils.extentions.getTexture
-import tech.thatgravyboat.skyblockapi.utils.extentions.serverMaxHealth
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import tech.thatgravyboat.skyblockapi.utils.regex.component.match
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
@@ -40,14 +40,16 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
 @Module
-object Scathas {
+object Scathas : MeowddingLogger by SkyOcean.featureLogger() {
     private var lastSpawn: Instant = Instant.DISTANT_PAST
 
     private var worm: SpawnedWorm? = null
     private var cooldown: Boolean = false
 
     private val group = RemoteStrings.resolve()
-    private val SKULL_TEXTURE by group.string("d9k296WS79Ha4wIzRD1L5WdKRklU8OCa+9lv/6B1OHqa0ZPMSJV0Vc8dx/RX+4FxfNYG/ZOohmhcs1KRcU81Ty6SV+7o/6jNBQ14HWbsmb4W+hv/aaLvcO8Jkua7QFUgLs01AHU+K3qFKrW1+5mwvzzbPu8Po0zpj1MjpsDV67Urvf6AMXrLlY2P+wuGXdR7tkireZ/IWvOXYQ3IoptKS8ejSGfxE3rHsVNMG146OsEH9Khv+zV8V48yQDA6S1KBBI9PI3pQQMT1ktrsV6delHw9EQxG1voehNpNfBSraeGQ8S6tKUhZgX/aAdd5R00Fp+i1DyDnXcXB4eehLvTEnIkcwBeYuMC6PbyqFqI2Fr2FF8dTQay6IoxNEG7A8DLubfjVRBI6HXwq2iHkZPzywCSzLs6fleHtstmiY0Gmtay/RU4DrW13AE2+HHWSNalPX8Uu8zqfLCjt1JXTfDEKtFw3h1sKE2Mqy3XZPAnSJS7WNon6nnW7e+n9Z4ed4mrvzxuyZR1clz9YBjaSxJEBcO5XswOq/BSWh7IVo/rBgvM4zrB4+gM4S8U4gvBBXW6eysxEU3lcsRjK3ugrV21wvxNfndugyXwjbLawRw0ny3DAe9Zz/+RYDNM/N+wSYnBSETfSejymhZp155wVGyB+DtkDWzCd3TVyQ0iQydDxuIg=")
+
+    @Suppress("MaxLineLength")
+    private val SKULL_TEXTURE by group.string("ewogICJ0aW1lc3RhbXAiIDogMTYyMDQ0NTc2NDQ1MSwKICAicHJvZmlsZUlkIiA6ICJmNDY0NTcxNDNkMTU0ZmEwOTkxNjBlNGJmNzI3ZGNiOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJSZWxhcGFnbzA1IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RmMDNhZDk2MDkyZjNmNzg5OTAyNDM2NzA5Y2RmNjlkZTZiNzI3YzEyMWIzYzJkYWVmOWZmYTFjY2FlZDE4NmMiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==")
     private val spawnWormRegex by group.regex("You hear the sound of something approaching\\.\\.\\.")
     private val scathaPetDropRegex by group.componentRegex("PET DROP! (?<pet>Scatha)(?: \\(\\+(?<mf>\\d+)✯ Magic Find\\))?")
 
@@ -59,12 +61,20 @@ object Scathas {
 
         val entity = event.entity as? ArmorStand ?: return
         if (entity.getHelmet().getTexture() != SKULL_TEXTURE) return
-        if (worm?.entity == entity) return
-        val isScatha = when (entity.derpyMaxHp().roundToInt()) {
+        debug("Found entity with correct skull texture")
+        if (worm?.entity == entity) {
+            warn("Worm is already found!")
+            return
+        }
+        val isScatha = when (val hp = entity.derpyMaxHp().roundToInt()) {
             5 -> false
             10 -> true
-            else -> return
+            else -> {
+                error("Worm has invalid hp: $hp")
+                return
+            }
         }
+        debug("worm found is scatha: $isScatha")
 
         val worm = SpawnedWorm(entity, isScatha)
         this.worm = worm
@@ -155,7 +165,7 @@ object Scathas {
                 McClient.setTitle(
                     Text.join(
                         ChatUtils.ICON_SPACE_COMPONENT,
-                        Text.of("Scatha Pet!", TextColor.GOLD)
+                        Text.of("Scatha Pet!", TextColor.GOLD),
                     ),
                     Text.of(rarity.name) {
                         color = rarity.color
