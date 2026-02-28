@@ -11,12 +11,15 @@ import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.decoration.ArmorStand
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
+import tech.thatgravyboat.skyblockapi.api.events.entity.EntityAttributesUpdateEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityEquipmentUpdateEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityRemovedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
@@ -28,6 +31,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHelmet
 import tech.thatgravyboat.skyblockapi.utils.extentions.getTexture
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
+import tech.thatgravyboat.skyblockapi.utils.extentions.toReadableTime
 import tech.thatgravyboat.skyblockapi.utils.regex.component.match
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -53,13 +57,24 @@ object Scathas : MeowddingLogger by SkyOcean.featureLogger() {
     private val spawnWormRegex by group.regex("You hear the sound of something approaching\\.\\.\\.")
     private val scathaPetDropRegex by group.componentRegex("PET DROP! (?<pet>Scatha)(?: \\(\\+(?<mf>\\d+)✯ Magic Find\\))?")
 
+
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
     fun onEntityEquipment(event: EntityEquipmentUpdateEvent) {
         if (!ScathaConfig.wormAnnouncer) return
-        if (lastSpawn.since() > 10.seconds) return
+        tryAdd(event.entity)
+    }
 
-        val entity = event.entity as? ArmorStand ?: return
+    @Subscription
+    @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
+    fun onEntityHealthChange(event: EntityAttributesUpdateEvent) {
+        if (!ScathaConfig.wormAnnouncer) return
+        if (Attributes.MAX_HEALTH !in event.changed) return
+        tryAdd(event.entity)
+    }
+
+    private fun tryAdd(entity: LivingEntity) {
+        if (entity !is ArmorStand) return
         if (entity.getHelmet().getTexture() != SKULL_TEXTURE) return
         debug("Found entity with correct skull texture")
         if (worm?.entity == entity) {
@@ -76,6 +91,10 @@ object Scathas : MeowddingLogger by SkyOcean.featureLogger() {
         }
         debug("worm found is scatha: $isScatha")
 
+        if (lastSpawn.since() > 10.seconds) {
+            debug("too long since last spawn: ${lastSpawn.since().toReadableTime()}")
+            return
+        }
         val worm = SpawnedWorm(entity, isScatha)
         this.worm = worm
 
