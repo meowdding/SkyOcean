@@ -20,34 +20,38 @@ object MuseumRepoData : MeowddingLogger by SkyOcean.featureLogger() {
     private val group = RemoteStrings.resolve()
     private val prefixRegex by group.regex("[✖✔]")
 
-    val armor: List<MuseumArmour>
-    val weapons: List<MuseumItem>
-    val rarities: List<MuseumItem>
-    val allItems: List<MuseumItem> by lazy { listOf(weapons, rarities).flatten() }
-    val armorNameExceptions: Map<String, String>
-    val itemNameExceptions: Map<String, String>
 
     @GenerateCodec
     @NamedCodec("MuseumData")
     data class Data(
-        val armor: List<MuseumArmour>,
-        @NamedCodec("museum§item") val weapons: List<MuseumItem>,
-        @NamedCodec("museum§item") val rarities: List<MuseumItem>,
+        val special: List<String>,
+        val categories: Map<String, MuseumCategory>,
     )
 
+    @GenerateCodec
+    data class MuseumCategory(
+        @NamedCodec("museum§item") val items: List<MuseumItem>,
+        val armors: List<MuseumArmour>,
+    )
+
+    val categories: Map<String, MuseumCategory>
+    val special: List<String>
+    val allItems: List<MuseumItem> by lazy { categories.values.flatMap { it.items } }
+    val armor: List<MuseumArmour> by lazy { categories.values.flatMap { it.armors } }
+    val armorNameExceptions: Map<String, String>
+    val itemNameExceptions: Map<String, String>
+
     init {
-        var armor: List<MuseumArmour>? = null
-        var weapons: List<MuseumItem>? = null
-        var rarities: List<MuseumItem>? = null
+        var categories: Map<String, MuseumCategory>? = null
+        var special: List<String>? = null
         var armorNameExceptions: Map<String, String>? = null
         var itemNameExceptions: Map<String, String>? = null
 
         try {
-            Utils.loadRepoData<Data>("museum_data").let {
-                armor = it.armor
-                weapons = it.weapons
-                rarities = it.rarities
-            }
+            val (_special, _categories) = Utils.loadRepoData<Data>("museum_data")
+            categories = _categories
+            special = _special
+
             val exceptions = Utils.loadRepoData("museum_exceptions", CodecUtils.map(Codec.STRING, CodecUtils.map(Codec.STRING, Codec.STRING)))
             armorNameExceptions = exceptions["armor"] ?: emptyMap()
             itemNameExceptions = exceptions["items"] ?: emptyMap()
@@ -55,9 +59,8 @@ object MuseumRepoData : MeowddingLogger by SkyOcean.featureLogger() {
             error("Failed to load museum data!", exception)
         }
 
-        this.armor = armor ?: emptyList()
-        this.weapons = weapons ?: emptyList()
-        this.rarities = rarities ?: emptyList()
+        this.categories = categories ?: emptyMap()
+        this.special = special ?: emptyList()
         this.armorNameExceptions = armorNameExceptions ?: emptyMap()
         this.itemNameExceptions = itemNameExceptions ?: emptyMap()
     }
