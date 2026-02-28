@@ -42,6 +42,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
@@ -52,6 +53,7 @@ import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import org.joml.Vector3dc
+import tech.thatgravyboat.skyblockapi.api.data.MayorPerks
 //? < 1.21.11
 /*import tech.thatgravyboat.skyblockapi.helpers.McClient*/
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -59,6 +61,7 @@ import tech.thatgravyboat.skyblockapi.platform.identifier
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
+import tech.thatgravyboat.skyblockapi.utils.extentions.serverMaxHealth
 import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
@@ -368,6 +371,10 @@ object Utils {
     }.getOrThrow()
 
     fun <T> DataResult<T>.resultOrError() = error().map { it.message() }.orElse(this.result().get().toString())
+
+    fun LivingEntity.derpyMaxHp(): Float = serverMaxHealth.let {
+        if (MayorPerks.DOUBLE_MOBS_HP.active) it / 2 else it
+    }
 
     context(logger: MeowddingLogger)
     fun <T> Result<T>.debug(message: String): Result<T> = apply {
