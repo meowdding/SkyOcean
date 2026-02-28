@@ -14,6 +14,7 @@ import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
+import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
@@ -85,7 +86,12 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
 
     fun onRepoReady() {
         if (!apiRepo || !meowddingRepo) return
-        SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
+        SkyOceanLateInitModules.collected.forEach {
+            SkyBlockAPI.eventBus.register(it)
+            if (it is LateInitLoader) {
+                it.load()
+            }
+        }
     }
 
     fun sendUpdateMessage(link: String, current: String, new: String) {

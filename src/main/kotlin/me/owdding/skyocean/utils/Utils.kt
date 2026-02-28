@@ -419,6 +419,10 @@ enum class SkyOceanModifyIndicator : Translatable {
 @Retention(AnnotationRetention.SOURCE)
 annotation class LateInitModule
 
+fun interface LateInitLoader {
+    fun load()
+}
+
 @AutoCollect("PreInitModules")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)

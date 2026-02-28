@@ -16,6 +16,7 @@ import me.owdding.skyocean.features.item.custom.data.IdAndTimeKey
 import me.owdding.skyocean.features.item.custom.data.IdKey
 import me.owdding.skyocean.features.item.custom.data.ItemKey
 import me.owdding.skyocean.features.item.custom.data.UuidKey
+import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.DataStorage
@@ -33,7 +34,7 @@ import kotlin.uuid.Uuid
 import kotlin.uuid.toJavaUuid
 
 @LateInitModule
-object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
+object CustomItems : MeowddingLogger by SkyOcean.featureLogger(), LateInitLoader {
 
     private val map: MutableMap<ItemKey, CustomItemData> = mutableMapOf()
     val staticMap: MutableMap<ItemKey, CustomItemData> = mutableMapOf()
@@ -53,7 +54,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger() {
         )
     }
 
-    init {
+    override fun load() {
         map.putAll(storage.get().associateBy { it.key })
     }
 
