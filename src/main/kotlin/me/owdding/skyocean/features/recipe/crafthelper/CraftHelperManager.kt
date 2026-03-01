@@ -19,6 +19,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -75,6 +76,15 @@ object CraftHelperManager {
         val reiHovered = REIRuntimeCompatability.getReiHoveredItemStack()
         val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
         val item = mcScreenHovered ?: reiHovered ?: return
+
+        if (item.getSkyBlockId() == null) {
+            Text.of("Item ") {
+                append(item.hoverName)
+                append(" does not have a SkyBlockId, cannot be selected as CraftHelper item")
+                color = TextColor.RED
+            }.sendWithPrefix("crafthelper_no_id")
+            return
+        }
 
         setSelected(SkyBlockId.fromItem(item))
         McScreen.refreshScreen()
