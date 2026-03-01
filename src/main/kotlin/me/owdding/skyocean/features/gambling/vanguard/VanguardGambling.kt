@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.gambling.vanguard
 
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.gambling.GamblingConfig
@@ -49,9 +50,12 @@ object VanguardGambling {
     private fun gamblingTime() {
         val sortedLoot = loot.sortedByDescending { it.first.toItem().getItemValue().price * it.second }
 
-        val (id, _) = sortedLoot.find { it.first in data.valuables } ?: (null to 0)
+        val (winItem, _) = when (GamblingConfig.vanguardMode) {
+            VanguardMode.PREDEFINED -> sortedLoot.find { it.first in data.valuables } ?: (null to 0)
+            VanguardMode.MOST_EXPENSIVE -> sortedLoot.firstOrNull() ?: (null to 0)
+        }
         val animator = ComponentAnimator("VANGUARD", 0x55FFFF, 0x33DDDDDD)
-        McClient.setScreenAsync { SlotMachineSpinner(data.items, id, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat, animator) }
+        McClient.setScreenAsync { SlotMachineSpinner(data.items, winItem, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat, animator) }
     }
 
     @Subscription
@@ -121,5 +125,11 @@ object VanguardGambling {
         val items: Map<SkyBlockId, Int>,
         val valuables: List<SkyBlockId>,
     )
+
+    enum class VanguardMode : Translatable{
+        PREDEFINED, MOST_EXPENSIVE;
+
+        override fun getTranslationKey() = "skyocean.config.gambling.vanguard.mode.$name".lowercase()
+    }
 
 }

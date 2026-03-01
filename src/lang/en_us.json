@@ -1394,6 +1394,12 @@
           "hide_chat": {
             "@value": "Hide Chat While Gambling",
             "desc": "Hides the chat messages while the gambling animation is playing so you don't get spoiled."
+          },
+          "mode": {
+            "@value": "Mode",
+            "desc": "Changes the mode of the slot machine between most expensive item or a predefined set of rare items (Weight <= 10).",
+            "predefined": "Predefined",
+            "most_expensive": "Most expensive"
           }
         },
         "credits": {
@@ -1401,7 +1407,7 @@
           "desc": [
             "Dungeon Chest Gambling is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>.",
             "",
-            "Slot Machine textures are created by <hover 'Click to visit her BlueSky'><url 'https://bsky.app/profile/vrachel.bsky.social'><color:#4FB1FF>rachel</color></copy_to_clipboard></hover>."
+            "Slot Machine textures are created by <hover 'Click to visit her BlueSky'><url 'https://bsky.app/profile/vrachel.bsky.social'><color:#4FB1FF>rachel</color></url></hover>."
           ]
         }
       },
