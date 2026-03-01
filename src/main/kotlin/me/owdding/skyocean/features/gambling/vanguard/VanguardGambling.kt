@@ -126,8 +126,9 @@ object VanguardGambling {
         val valuables: List<SkyBlockId>,
     )
 
-    enum class VanguardMode : Translatable{
-        PREDEFINED, MOST_EXPENSIVE;
+    enum class VanguardMode : Translatable {
+        PREDEFINED,
+        MOST_EXPENSIVE;
 
         override fun getTranslationKey() = "skyocean.config.gambling.vanguard.mode.$name".lowercase()
     }
