@@ -58,6 +58,10 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.hideEntityFire"
     }
 
+    var hideImplosions by boolean(false) {
+        translation = "skyocean.config.misc.hideImplosions"
+    }
+
     var islandCloudHider by defaultEnabledMessage(
         select(*defaultCloudIslands.toTypedArray()) {
             translation = "skyocean.config.misc.islandCloudHider"
