@@ -42,7 +42,11 @@ public abstract class LivingEntityRendererMixin<T extends Mob, S extends Humanoi
         method = "extractHumanoidRenderState",
         at = @At(
             value = "INVOKE",
+            //? > 1.21.10 {
             target = "Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;extractArmedEntityRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;Lnet/minecraft/client/renderer/item/ItemModelResolver;F)V",
+            //?} else {
+            /*target = "Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;extractArmedEntityRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;Lnet/minecraft/client/renderer/item/ItemModelResolver;)V",
+            *///?}
             shift = At.Shift.AFTER
         )
     )

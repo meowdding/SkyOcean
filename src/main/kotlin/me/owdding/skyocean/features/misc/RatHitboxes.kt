@@ -8,7 +8,7 @@ import net.minecraft.gizmos.GizmoStyle
 import net.minecraft.gizmos.Gizmos
 //?}
 import net.minecraft.world.entity.ai.attributes.Attributes
-//? < 1.21.11{
+//? < 1.21.11 {
 /*import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.client.renderer.rendertype.RenderTypes
 *///?}

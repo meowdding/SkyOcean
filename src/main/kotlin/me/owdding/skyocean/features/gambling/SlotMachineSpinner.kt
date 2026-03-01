@@ -1,8 +1,5 @@
 package me.owdding.skyocean.features.gambling
 
-//? > 1.21.5 {
-//? } else
-//import net.minecraft.client.renderer.RenderType
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection
 import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.skyocean.SkyOcean
