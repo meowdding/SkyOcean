@@ -96,7 +96,7 @@ object HotkeyManager {
         buffer = EvictingQueue.create(tree.maxDepth())
 
         this.storage.edit {
-            hotkeys.remove(hotkey)
+            hotkeys.removeIf { it === hotkey }
         }
     }
 
