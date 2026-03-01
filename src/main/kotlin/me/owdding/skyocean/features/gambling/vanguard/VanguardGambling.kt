@@ -128,7 +128,8 @@ object VanguardGambling {
 
     enum class VanguardMode : Translatable {
         PREDEFINED,
-        MOST_EXPENSIVE;
+        MOST_EXPENSIVE,
+        ;
 
         override fun getTranslationKey() = "skyocean.config.gambling.vanguard.mode.$name".lowercase()
     }
