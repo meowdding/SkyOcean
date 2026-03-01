@@ -22,6 +22,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI;
+import tech.thatgravyboat.skyblockapi.api.events.render.LivingEntityRenderEvent;
 
 import java.util.Objects;
 
@@ -36,7 +38,14 @@ public abstract class LivingEntityRendererMixin<T extends Mob, S extends Humanoi
         super(context, adultModel, babyModel, scale);
     }
 
-    @Inject(method = "extractHumanoidRenderState", at = @At("RETURN"))
+    @Inject(
+        method = "extractHumanoidRenderState",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;extractArmedEntityRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;Lnet/minecraft/client/renderer/item/ItemModelResolver;F)V",
+            shift = At.Shift.AFTER
+        )
+    )
     private static void replaceSkull(LivingEntity entity, HumanoidRenderState state, float partialTick, ItemModelResolver itemModelResolver, CallbackInfo ci) {
         var item = entity.getItemBySlot(EquipmentSlot.HEAD);
         state.wornHeadProfile = Utils.nonNullElse(CustomItemsHelper.getData(item, DataComponents.PROFILE), state.wornHeadProfile);
@@ -57,5 +66,11 @@ public abstract class LivingEntityRendererMixin<T extends Mob, S extends Humanoi
             state.wornHeadType = null;
             state.wornHeadProfile = null;
         }
+
+        var event = LivingEntityRenderEvent.INSTANCE;
+        event.setEntity(entity);
+        event.setState(state);
+        event.post(SkyBlockAPI.getEventBus());
+        event.clear();
     }
 }

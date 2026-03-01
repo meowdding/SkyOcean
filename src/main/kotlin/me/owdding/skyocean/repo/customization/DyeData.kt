@@ -31,7 +31,7 @@ object DyeData : MeowddingLogger by SkyOcean.featureLogger() {
     }
 
     fun getAnimated(id: String, offset: Int): Int {
-        val colors = animatedDyes[id]!!
+        val colors = animatedDyes[id] ?: listOf(0)
         return colors[(TickEvent.ticks / 2 + offset) % colors.size]
     }
 }
