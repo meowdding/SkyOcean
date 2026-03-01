@@ -22,7 +22,7 @@ object SalvagingHelper {
     private val highlightedItems = mutableSetOf<Int>()
     private val salvagingUndonated: Boolean
         get() = highlightedItems.isNotEmpty()
-    private val salvageItemsSlot = 40
+    private const val SALVAGE_ITEMS_SLOT = 40
 
     @Subscription
     @InventoryTitle("Salvage Items")
@@ -30,7 +30,7 @@ object SalvagingHelper {
         if (!InventoryConfig.salvagingHelper || event.isInPlayerInventory) return
 
         val slotsByIndex = event.inventory.associateBy { it.index }
-        val salvageSlot = slotsByIndex[salvageItemsSlot] ?: return
+        val salvageSlot = slotsByIndex[SALVAGE_ITEMS_SLOT] ?: return
 
         highlightedItems.removeAll { index ->
             slotsByIndex[index]?.item?.isEmpty != false
@@ -61,7 +61,7 @@ object SalvagingHelper {
     @InventoryTitle("Salvage Items")
     fun onInventoryClick(event: SlotClickEvent) {
         if (!InventoryConfig.salvagingHelper) return
-        if (event.slot.index != salvageItemsSlot) return
+        if (event.slot.index != SALVAGE_ITEMS_SLOT) return
         if (!salvagingUndonated) return
 
         if (InventoryConfig.salvagingHelperBlockSalvage) {
