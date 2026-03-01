@@ -33,12 +33,15 @@ object SalvagingHelper {
         val salvageSlot = slotsByIndex[SALVAGE_ITEMS_SLOT] ?: return
 
         highlightedItems.removeAll { index ->
-            slotsByIndex[index]?.item?.isEmpty != false
+            val stack = slotsByIndex[index]?.item ?: return@removeAll true
+            val skyblockId = stack.getSkyBlockId() ?: return@removeAll true
+
+            stack.isEmpty || MuseumAPI.isDonated(skyblockId) || !MuseumAPI.isMuseumItem(skyblockId)
         }
 
         val itemStack = event.item
         val skyblockId = itemStack.getSkyBlockId()
-        if (skyblockId != null && !MuseumAPI.isDonated(skyblockId)) {
+        if (skyblockId != null && !MuseumAPI.isDonated(skyblockId) && MuseumAPI.isMuseumItem(skyblockId)) {
             highlightedItems.add(event.slot.index)
         }
 
