@@ -27,7 +27,7 @@ object SackNotification {
         Text.join(
             "Sack Notification",
             ChatUtils.SEPERATOR_COMPONENT,
-            Text.join(amount.map { Text.of("${it.first} x${it.second}", OceanColors.HIGHLIGHT) }, separator = Text.of(", "))
+            Text.join(amount.map { Text.of("${it.first} x${it.second}", OceanColors.HIGHLIGHT) }, separator = Text.of(", ")),
         ) {
             color = OceanColors.BASE_TEXT
         }.sendWithPrefix()
