@@ -34,7 +34,22 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @LateInitModule
 object VanguardGambling {
 
-    private val data = Utils.loadRepoData<VanguardRepoData>("vanguard") { SkyOceanCodecs.getCodec<VanguardRepoData>() }
+    private val data by lazy {
+        Utils.loadRemoteRepoData<VanguardRepoData>("skyocean/vanguard") {
+            SkyOceanCodecs.getCodec<VanguardRepoData>()
+        } ?: VanguardRepoData(
+            mapOf(
+                SkyBlockId.item("dye_frostbitten") to 1,
+                SkyBlockId.item("shattered_pendant") to 5,
+                SkyBlockId.item("caged_wisp") to 10,
+            ),
+            listOf(
+                SkyBlockId.item("dye_frostbitten"),
+                SkyBlockId.item("shattered_pendant"),
+                SkyBlockId.item("caged_wisp"),
+            ),
+        )
+    }
     private val BACKGROUND = SkyOcean.id("gambling/vanguard")
     private val SLOT = SkyOcean.id("gambling/vanguard_slot")
 
