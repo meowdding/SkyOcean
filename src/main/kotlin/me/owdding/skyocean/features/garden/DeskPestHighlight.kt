@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.garden
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
 import me.owdding.skyocean.config.features.garden.GardenConfig
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
@@ -27,6 +28,7 @@ object DeskPestHighlight {
         if (!GardenConfig.deskPestHighlight) return
         regex.anyMatch(event.item.getRawLore(), "amount") { (amount) ->
             val amount = amount.toIntValue().takeUnless { it == 0 } ?: return@anyMatch
+            event.item.disableCatharsisModifications()
             event.item.skyoceanReplace {
                 backgroundItem = Items.RED_STAINED_GLASS_PANE.defaultInstance
                 customSlotText = "§6$amount"

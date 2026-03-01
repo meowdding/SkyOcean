@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.misc
 import com.mojang.authlib.properties.Property
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import net.minecraft.core.component.DataComponents
@@ -34,6 +35,7 @@ object MinisterInCalendar {
         val minister = ElectionAPI.currentMinister ?: return
         val texture = RepoMobsAPI.getMobOrNull("${minister.name}_MAYOR")?.texture() ?: return
 
+        event.item.disableCatharsisModifications()
         event.item.skyoceanReplace {
             item = Items.PLAYER_HEAD
 
