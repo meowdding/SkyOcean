@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.misc
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
@@ -33,6 +34,7 @@ object AnvilHelper {
             .mapNotNull { it?.entries?.map { (key, value) -> key to value } }.flatten().distinct().takeIf { it.size == 1 }?.first() ?: return
         val itemEnchants = event.item.getData(DataTypes.ENCHANTMENTS) ?: return
         if (itemEnchants[enchants.first] != enchants.second) return
+        event.item.disableCatharsisModifications()
         event.item.skyoceanReplace {
             this.item = Items.KNOWLEDGE_BOOK
         }

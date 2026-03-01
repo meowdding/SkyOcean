@@ -1,9 +1,9 @@
 {
   "items": {
     "item:dye_frostbitten": 1, // Assumed odds
-    "item:shattered_locket": 5,
+    "item:shattered_pendant": 5,
     "item:caged_wisp": 10,
-    "item:frosted_scute": 10,
+    "item:frozen_scute": 10,
     "item:skeleton_key": 10,
     "item:umber_plate": 30,
     "item:tungsten_plate": 30,
@@ -29,9 +29,9 @@
   },
   "valuables": [
     "item:dye_frostbitten",
-    "item:shattered_locket",
+    "item:shattered_pendant",
     "item:caged_wisp",
-    "item:frosted_scute",
+    "item:frozen_scute",
     "item:skeleton_key"
   ]
 }

@@ -1,8 +1,8 @@
 package me.owdding.skyocean.mixins.features.customize;
 
+import me.owdding.skyocean.compat.CatharsisSupport;
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper;
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents;
-import me.owdding.skyocean.utils.Utils;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.AgeableMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -22,8 +22,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI;
-import tech.thatgravyboat.skyblockapi.api.events.render.LivingEntityRenderEvent;
 
 import java.util.Objects;
 
@@ -52,9 +50,13 @@ public abstract class LivingEntityRendererMixin<T extends Mob, S extends Humanoi
     )
     private static void replaceSkull(LivingEntity entity, HumanoidRenderState state, float partialTick, ItemModelResolver itemModelResolver, CallbackInfo ci) {
         var item = entity.getItemBySlot(EquipmentSlot.HEAD);
-        state.wornHeadProfile = Utils.nonNullElse(CustomItemsHelper.getData(item, DataComponents.PROFILE), state.wornHeadProfile);
+        var profile = CustomItemsHelper.getData(item, DataComponents.PROFILE);
         var model = CustomItemsHelper.getCustomData(item, CustomItemDataComponents.model());
+
+        if (profile == null && model == null) return;
         var itemModel = model == null ? item.getItem() : Objects.requireNonNullElse(model.resolveToItem(), item.getItem());
+
+        state.wornHeadProfile = profile;
         if (itemModel instanceof BlockItem blockItem && blockItem.getBlock() instanceof AbstractSkullBlock abstractSkullBlock) {
             state.wornHeadType = abstractSkullBlock.getType();
             state.headItem.clear();
@@ -71,10 +73,6 @@ public abstract class LivingEntityRendererMixin<T extends Mob, S extends Humanoi
             state.wornHeadProfile = null;
         }
 
-        var event = LivingEntityRenderEvent.INSTANCE;
-        event.setEntity(entity);
-        event.setState(state);
-        event.post(SkyBlockAPI.getEventBus());
-        event.clear();
+        CatharsisSupport.INSTANCE.disableCatharsisModifications(item);
     }
 }

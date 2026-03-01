@@ -5,6 +5,7 @@ import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
@@ -130,6 +131,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
                 ARMOR_NOT_FOUND -> Items.RED_DYE
             }
 
+            event.item.disableCatharsisModifications()
             event.item.skyoceanReplace {
                 this.item = item
 

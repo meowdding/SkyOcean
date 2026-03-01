@@ -12,6 +12,12 @@
         "value": "me.owdding.skyocean.SkyOcean",
         "adapter": "kotlin"
       }
+    ],
+    "catharsis:imc/item_id": [
+      "me.owdding.skyocean.compat.CatharsisSupport::id"
+    ],
+    "catharsis:imc/disabled": [
+      "me.owdding.skyocean.compat.CatharsisSupport::disabled"
     ]
   },
   "mixins": [

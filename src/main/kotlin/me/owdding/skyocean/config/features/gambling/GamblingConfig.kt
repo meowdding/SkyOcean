@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.gambling
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.separator
+import me.owdding.skyocean.features.gambling.vanguard.VanguardGambling
 
 object GamblingConfig : CategoryKt("gambling") {
     override val name = Translated("skyocean.config.gambling")
@@ -28,6 +29,10 @@ object GamblingConfig : CategoryKt("gambling") {
 
     var vanguardHideChat by boolean(true) {
         this.translation = "skyocean.config.gambling.vanguard.hide_chat"
+    }
+
+    var vanguardMode by enum(VanguardGambling.VanguardMode.PREDEFINED) {
+        this.translation = "skyocean.config.gambling.vanguard.mode"
     }
 
     init {
