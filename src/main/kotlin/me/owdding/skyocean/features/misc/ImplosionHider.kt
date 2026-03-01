@@ -24,17 +24,19 @@ object ImplosionHider {
         if (!MiscConfig.hideImplosions) return
         val self = McPlayer.self ?: return
         if (event.particle !is HugeExplosionParticle) return
-        if (event.particle.getQuadSize(1f).absoluteValue <= 25 && (self.distanceToSqr(
-                event.particle.x,
-                event.particle.y,
-                event.particle.z,
-            ) <= 4.0 || players.any { player ->
-                player.distanceToSqr(
+        if (event.particle.getQuadSize(1f).absoluteValue <= 25 && (
+                self.distanceToSqr(
                     event.particle.x,
                     event.particle.y,
                     event.particle.z,
-                ) <= 4.0
-            })
+                ) <= 4.0 || players.any { player ->
+                    player.distanceToSqr(
+                        event.particle.x,
+                        event.particle.y,
+                        event.particle.z,
+                    ) <= 4.0
+                }
+                )
         ) {
             event.cancel()
         }
