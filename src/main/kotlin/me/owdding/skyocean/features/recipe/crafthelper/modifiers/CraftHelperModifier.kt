@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
@@ -38,15 +39,24 @@ abstract class AbstractCraftHelperModifier {
                 },
             )
             tooltip {
-                add("Set as selected craft helper item!") {
+                add("Click to set as selected craft helper item!") {
+                    this.color = TextColor.GRAY
+                }
+                add("Shift-Click to add 1 to custom recipe!") {
                     this.color = TextColor.GRAY
                 }
             }
 
             onClick {
-                setSelected(ingredient.id)
-                val amount = SimpleRecipeApi.getBestRecipe(ingredient.id)?.output?.amount ?: 1
-                setAmount(Utils.nextUp(ingredient.amount, amount))
+                if (McScreen.isShiftDown) {
+                    val storage = CraftHelperStorage.getAndOrSetCustomRecipe()
+                    storage.inputs[ingredient.id.id] = (storage.inputs[ingredient.id.id] ?: 0) + 1
+                    CraftHelperStorage.save()
+                } else {
+                    setSelected(ingredient.id)
+                    val amount = SimpleRecipeApi.getBestRecipe(ingredient.id)?.output?.amount ?: 1
+                    setAmount(Utils.nextUp(ingredient.amount, amount))
+                }
                 McScreen.refreshScreen()
             }
         }
