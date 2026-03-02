@@ -81,7 +81,7 @@ class EditHotkeyModal(
     private val allowExtraKeys = ListenableState.of(keybind?.settings?.allowExtraKeys ?: false)
 
     private val priority = ListenableState.of(keybind?.settings?.priority ?: 0)
-    private val context: ListenableState<ConflictContext> = ListenableState.of(keybind?.settings?.context ?: ConflictContext.GLOBAL)
+    private val context: ListenableState<ConflictContext> = ListenableState.of(keybind?.settings?.context ?: ConflictContext.IN_GAME)
 
     var lastScrollGetter = { 0 }
 
