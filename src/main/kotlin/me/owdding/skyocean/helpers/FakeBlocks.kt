@@ -32,7 +32,6 @@ object FakeBlocks : PreparableModelLoadingPlugin<Map<Identifier, FakeBlockStateD
         PreparableModelLoadingPlugin.register(FakeBlocks::init, FakeBlocks)
     }
 
-    @Suppress("unused")
     private fun register(
         block: Block,
         texture: Block,
