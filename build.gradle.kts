@@ -221,6 +221,7 @@ tasks.processResources {
 autoMixins {
     mixinPackage = "me.owdding.skyocean.mixins"
     projectName = "skyocean"
+    mixinExtrasVersion = "0.5.0"
 }
 
 tasks.withType<ProcessResources>().configureEach {
@@ -256,7 +257,6 @@ detekt {
     source.setFrom(project.sourceSets.map { it.allSource })
     config.from(files("$rootDir/detekt/detekt.yml"))
     baseline = file("$rootDir/detekt/${project.name}-baseline.xml")
-    buildUponDefaultConfig = true
     parallel = true
 }
 

@@ -4,11 +4,12 @@ import com.teamresourceful.resourcefullib.common.color.ConstantColors
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
-import tech.thatgravyboat.skyblockapi.utils.regex.component.ComponentRegex
 import tech.thatgravyboat.skyblockapi.utils.regex.component.matchOrNull
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
@@ -63,7 +64,9 @@ object StarStackSizeModifier : AbstractItemModifier() {
 object RevertMasterStarModifier : AbstractItemModifier() {
     override val displayName: Component get() = Text.translatable("skyocean.config.misc.revertMasterStars")
     override val isEnabled: Boolean get() = MiscConfig.revertMasterStars
-    private val regex = ComponentRegex("(?<first>.*)✪✪✪✪✪[➊➋➌➍➎](?<second>.*)")
+
+    private val group = RemoteStrings.resolve()
+    private val regex by group.componentRegex("(?<first>.*)✪✪✪✪✪[➊➋➌➍➎](?<second>.*)")
 
     override fun appliesTo(itemStack: ItemStack): Boolean {
         val stars = itemStack[DataTypes.STAR_COUNT] ?: return false

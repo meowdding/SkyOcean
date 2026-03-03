@@ -2,6 +2,8 @@ package me.owdding.skyocean.features.chat
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.chat.ChatConfig
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
@@ -12,7 +14,9 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.command
 @Module
 object PiggyBankRepairHelper {
 
-    private val regex = "You died(?: and your piggy bank cracked!|, lost [\\d.,]* coins and your piggy bank broke!)".toRegex()
+
+    private val group = RemoteStrings.resolve()
+    private val regex by group.regex("You died(?: and your piggy bank cracked!|, lost [\\d.,]* coins and your piggy bank broke!)")
 
     @Subscription
     fun onChat(event: ChatReceivedEvent.Pre) {

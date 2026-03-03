@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.mining
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
@@ -21,6 +22,7 @@ object CommissionHighlighter {
         if (event.item !in Items.WRITABLE_BOOK) return
 
         val stripped = event.item.getRawLore().last().trim()
+        event.item.disableCatharsisModifications()
         event.item.skyoceanReplace {
             item = when (stripped) {
                 "Click to claim rewards!" -> Items.KNOWLEDGE_BOOK

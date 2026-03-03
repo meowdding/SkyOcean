@@ -6,7 +6,7 @@ fabric-api = "0.133.4"
 
 kotlin-symbol-processor = "2.2.0-2.0.2"
 gson = "2.12.1"
-skyblockapi = "4.0.7"
+skyblockapi = "4.0.9"
 skyblockapi-repo = "3.0.2"
 keval = "1.1.1"
 
@@ -16,11 +16,11 @@ rconfigkt = "3.5.15"
 
 detekt = "2.0.0-alpha.0"
 
-meowdding-lib = "4.0.5"
+meowdding-lib = "4.0.8"
 meowdding-ktmodules = "1.0.6"
 meowdding-ktcodecs = "1.1.9"
 meowdding-resources = "1.0.21"
-meowdding-auto-mixins = "1.0.7"
+meowdding-auto-mixins = "1.0.10"
 
 moulberry-mixinconstraints = "1.0.8"
 

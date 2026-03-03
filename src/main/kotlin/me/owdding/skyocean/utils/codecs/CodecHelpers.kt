@@ -1,5 +1,7 @@
 package me.owdding.skyocean.utils.codecs
 
+import com.mojang.blaze3d.platform.InputConstants
+import com.mojang.blaze3d.platform.InputConstants.getKey
 import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
@@ -64,6 +66,9 @@ object CodecHelpers {
         { ClientAsset.ResourceTexture(it) },
         { it.id() },
     )
+
+    @IncludedCodec(keyable = true)
+    val keyCodec: Codec<InputConstants.Key> = Codec.STRING.xmap(InputConstants::getKey, InputConstants.Key::getName)
 
     val BLOCK_POS_STRING_CODEC: Codec<BlockPos> = Codec.STRING.xmap(
         { it.split(",").map { it.toInt() }.let { BlockPos(it[0], it[1], it[2]) } },
@@ -134,6 +139,7 @@ object CodecHelpers {
         CodecUtils.map(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
 
     internal inline fun <reified T> mutableList() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
+    internal inline fun <reified T> mutableSet() = CodecUtils.mutableSet(SkyOceanCodecs.getCodec<T>())
     internal inline fun <reified T> list(): Codec<List<T>> = SkyOceanCodecs.getCodec<T>().listOf()
 
 

@@ -2,6 +2,8 @@ package me.owdding.skyocean.commands
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.chat.ChatConfig
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -20,7 +22,9 @@ object ReplyBoop {
 
     private var lastIgn: String? = null
     private var time = Instant.DISTANT_PAST
-    private val regex = "^From (?!stash)(?:\\[.+] )?(?<author>[^:]*): (?<message>.*)".toRegex()
+
+    private val group = RemoteStrings.resolve()
+    private val regex by group.regex("^From (?!stash)(?:\\[.+] )?(?<author>[^:]*): (?<message>.*)")
 
     private fun noUser() {
         Text.of("You haven't been messaged by anyone in the past 5 minutes!", OceanColors.WARNING).sendWithPrefix()

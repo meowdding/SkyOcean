@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.gambling.vanguard
 
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.gambling.GamblingConfig
@@ -7,6 +8,8 @@ import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.gambling.SlotMachineSpinner
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.chat.ComponentAnimator
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
@@ -31,14 +34,30 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @LateInitModule
 object VanguardGambling {
 
-    private val data = Utils.loadRepoData<VanguardRepoData>("vanguard") { SkyOceanCodecs.getCodec<VanguardRepoData>() }
+    private val data by lazy {
+        Utils.loadRemoteRepoData<VanguardRepoData>("skyocean/vanguard") {
+            SkyOceanCodecs.getCodec<VanguardRepoData>()
+        } ?: VanguardRepoData(
+            mapOf(
+                SkyBlockId.item("dye_frostbitten") to 1,
+                SkyBlockId.item("shattered_pendant") to 5,
+                SkyBlockId.item("caged_wisp") to 10,
+            ),
+            listOf(
+                SkyBlockId.item("dye_frostbitten"),
+                SkyBlockId.item("shattered_pendant"),
+                SkyBlockId.item("caged_wisp"),
+            ),
+        )
+    }
     private val BACKGROUND = SkyOcean.id("gambling/vanguard")
     private val SLOT = SkyOcean.id("gambling/vanguard_slot")
 
     // TODO: ENCHANTED BOOK SUPPORT MAYBE
-    private val startRegex = " +VANGUARD CORPSE LOOT! ?".toRegex()
-    private val itemRegex = " +(?<item>.+?)(?: x(?<amount>[\\d,]+)|$)".toRegex()
-    private val endRegex = "▬{64}".toRegex()
+    private val group = RemoteStrings.resolve()
+    private val startRegex by group.regex(" +VANGUARD CORPSE LOOT! ?")
+    private val itemRegex by group.regex(" +(?<item>.+?)(?: x(?<amount>[\\d,]+)|$)")
+    private val endRegex by group.regex("▬{64}")
 
     private var parsing = false
     private val loot = mutableListOf<Pair<SkyBlockId, Int>>()
@@ -46,9 +65,12 @@ object VanguardGambling {
     private fun gamblingTime() {
         val sortedLoot = loot.sortedByDescending { it.first.toItem().getItemValue().price * it.second }
 
-        val (id, _) = sortedLoot.find { it.first in data.valuables } ?: (null to 0)
+        val (winItem, _) = when (GamblingConfig.vanguardMode) {
+            VanguardMode.PREDEFINED -> sortedLoot.find { it.first in data.valuables } ?: (null to 0)
+            VanguardMode.MOST_EXPENSIVE -> sortedLoot.firstOrNull() ?: (null to 0)
+        }
         val animator = ComponentAnimator("VANGUARD", 0x55FFFF, 0x33DDDDDD)
-        McClient.setScreenAsync { SlotMachineSpinner(data.items, id, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat, animator) }
+        McClient.setScreenAsync { SlotMachineSpinner(data.items, winItem, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat, animator) }
     }
 
     @Subscription
@@ -118,5 +140,13 @@ object VanguardGambling {
         val items: Map<SkyBlockId, Int>,
         val valuables: List<SkyBlockId>,
     )
+
+    enum class VanguardMode : Translatable {
+        PREDEFINED,
+        MOST_EXPENSIVE,
+        ;
+
+        override fun getTranslationKey() = "skyocean.config.gambling.vanguard.mode.$name".lowercase()
+    }
 
 }
