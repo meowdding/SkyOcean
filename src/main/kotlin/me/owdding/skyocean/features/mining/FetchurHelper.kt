@@ -4,7 +4,8 @@ import me.owdding.ktcodecs.Compact
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
-import me.owdding.skyocean.utils.RemoteRepoDelegate
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
@@ -21,14 +22,43 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.findGroup
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
 object FetchurHelper {
+    private val group = RemoteStrings.resolve()
+    private val correctItem by group.string("thanks thats probably what i needed")
+    private val regex by group.regex("^\\[NPC] Fetchur: (?<message>.+)")
 
-    private const val CORRECT_ITEM = "thanks thats probably what i needed"
+    private val fetchurItems = Utils.loadRepoData("mining/fetchur", CodecHelpers.list<FetchurItem>())
+    private var fetchurItem: FetchurItem? = null
 
-    private val regex = "^\\[NPC] Fetchur: (?<message>.+)".toRegex()
+    @Subscription
+    @OnlyIn(DWARVEN_MINES)
+    fun onChatReceived(event: ChatReceivedEvent.Pre) {
+        val message = regex.findGroup(event.text, "message") ?: return
+        if (message.equals(correctItem, true)) {
+            reset()
+            return
+        }
+        if (!MiningConfig.fetchurHelper) return
+        val item = fetchurItems.find { it.message.equals(message, true) } ?: return
+        fetchurItem = item
+        McClient.runNextTick {
+            text {
+                append("Fetchur wants: ", OceanColors.BASE_TEXT)
+                append("${item.amount}x ", TextColor.BLUE)
+                append(item.itemName, OceanColors.HIGHLIGHT)
+            }.sendWithPrefix()
+            // TODO: do item tracker stuff
+        }
+    }
+
+    private fun reset() {
+        fetchurItem = null
+    }
+
+    @Subscription(ProfileChangeEvent::class)
+    fun onProfileChange() = reset()
 
     @GenerateCodec
     data class FetchurItem(
@@ -42,35 +72,4 @@ object FetchurHelper {
             items.single().toItem().cleanName
         }
     }
-
-    private val fetchurItems = Utils.loadRepoData("mining/fetchur", CodecHelpers.list<FetchurItem>())
-    private var fetchurItem: FetchurItem? = null
-
-    @Subscription
-    @OnlyIn(DWARVEN_MINES)
-    fun onChatReceived(event: ChatReceivedEvent.Pre) {
-        val message = regex.findGroup(event.text, "message") ?: return
-        if (message.equals(CORRECT_ITEM, true)) {
-            reset()
-            return
-        }
-        if (!MiningConfig.fetchurHelper) return
-        val item = fetchurItems.find { it.message.equals(message, true) } ?: return
-        fetchurItem = item
-        McClient.runNextTick {
-            text {
-                append("Fetchur wants: ") { color = OceanColors.BASE_TEXT }
-                append("${item.amount}x ") { color = TextColor.BLUE }
-                append(item.itemName) { color = OceanColors.HIGHLIGHT }
-            }.sendWithPrefix()
-            // TODO: do item tracker stuff
-        }
-    }
-
-    private fun reset() {
-        fetchurItem = null
-    }
-
-    @Subscription(ProfileChangeEvent::class)
-    fun onProfileChange() = reset()
 }
