@@ -19,7 +19,6 @@ import me.owdding.skyocean.features.recipe.crafthelper.StandardRecipeNode
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
 import me.owdding.skyocean.utils.Utils.not
-import me.owdding.skyocean.utils.chat.ChatUtils.append
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.ComponentIcons
 import me.owdding.skyocean.utils.chat.Icons

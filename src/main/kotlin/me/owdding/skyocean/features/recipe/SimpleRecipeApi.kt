@@ -1,19 +1,17 @@
 package me.owdding.skyocean.features.recipe
 
-import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.extensions.addAll
 import me.owdding.skyocean.utils.extensions.runCatching
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
-import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.misc.RepoStatusEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockItemId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -23,7 +21,7 @@ import me.owdding.skyocean.features.recipe.RepoApiRecipe as RepoApiRecipeWrapper
 import tech.thatgravyboat.repolib.api.recipes.Recipe as RepoApiRecipe
 
 @LateInitModule
-object SimpleRecipeApi : MeowddingLogger by SkyOcean.featureLogger() {
+object SimpleRecipeApi : MeowddingLogger by SkyOcean.featureLogger(), LateInitLoader {
 
     internal val supportedTypes = arrayOf(
         RepoApiRecipe.Type.FORGE to RecipeType.FORGE,
@@ -37,8 +35,7 @@ object SimpleRecipeApi : MeowddingLogger by SkyOcean.featureLogger() {
     internal val idToRecipes: MutableMap<SkyBlockId, List<Recipe>> = ConcurrentHashMap()
     internal val illegalShopRecipes = CopyOnWriteArrayList<SkyBlockItemId>()
 
-    @Subscription(FinishRepoLoadingEvent::class, RepoStatusEvent::class)
-    fun onRepoLoad() {
+    override fun load() {
         recipes.clear()
         idToRecipes.clear()
         illegalIngredients.clear()

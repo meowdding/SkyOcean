@@ -5,6 +5,7 @@ import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
@@ -25,6 +26,8 @@ import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
 import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.*
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.addAll
 import me.owdding.skyocean.utils.Utils.contains
@@ -66,7 +69,8 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
     private val logger: MeowddingLogger = SkyOcean.featureLogger()
     private val modifierCache: MutableMap<String, Pair<ComponentModifier?, TooltipComponentModifier?>> = mutableMapOf()
 
-    val museumRegex = Regex(".*[Mm]useum.*")
+    private val group = RemoteStrings.resolve()
+    val museumRegex by group.regex(".*[Mm]useum.*")
 
     private val itemCache = CachedValue { ItemTracker() }
     private val itemTracker by itemCache
@@ -127,6 +131,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
                 ARMOR_NOT_FOUND -> Items.RED_DYE
             }
 
+            event.item.disableCatharsisModifications()
             event.item.skyoceanReplace {
                 this.item = item
 

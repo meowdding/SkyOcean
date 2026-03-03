@@ -155,6 +155,25 @@
             "desc": "Send a chat message how many keys of the current mineshaft corpses you have in your sacks."
           }
         },
+        "scatha": {
+          "@value": "Scathas",
+          "wormAnnouncer": {
+            "@value": "Enable Worm Announcer",
+            "desc": "Announce worm type when spawned."
+          },
+          "wormCooldown": {
+            "@value": "Enable Cooldown Notifier",
+            "desc": "Notifies you when you can spawn another worm."
+          },
+          "wormPetMessage": {
+            "@value": "Include Rarity in Pet Drop",
+            "desc": "Changes the pet drop message to include the pet rarity."
+          },
+          "wormPetTitle": {
+            "@value": "Enable Pet Drop Titles",
+            "desc": "Notifies you via title when you drop a pet."
+          }
+        },
         "hotm": {
           "@value": "Heart of the Mountain Perk Modifier",
           "shiftCost": {
@@ -223,6 +242,18 @@
             "desc": "The source to use for the price of items in sacks.",
             "bazaar": "BZ",
             "npc": "NPC"
+          },
+          "show_in_sack_of_sacks": {
+            "@value": "Show in Sack of Sacks",
+            "desc": "Whether to show the total sack value in the sack of sacks."
+          },
+          "hide_items_with_no_value": {
+            "@value": "Hide items with no value",
+            "desc": "Hides items that have no value from the total sack value."
+          },
+          "show_total_value": {
+            "@value": "Show Total Value",
+            "desc": "Shows the total value of all items in the sack."
           }
         },
         "inventory_buttons": {
@@ -263,6 +294,13 @@
         "sack_notification_items": {
           "@value": "Sack Notification Items",
           "desc": "The items to show notifications for."
+        },
+        "reply_boop": {
+          "@value": "Reply Boop",
+          "desc": [
+            "Adds a <light_purple>/rboop</light_purple> command that runs /boop on the last person that messaged you.",
+            "<red>Requires to change servers to take into effect.</red>"
+          ]
         }
       },
       "garden": {
@@ -293,6 +331,14 @@
         "anvilHelper": {
           "@value": "Anvil helper",
           "desc": "Highlights books that have the same enchantment as the ones in the anvil."
+        },
+        "itemStarStacksize": {
+          "@value": "Item Star Stacksize",
+          "desc": "Shows the Item Star amount as the stacksize."
+        },
+        "revertMasterStars": {
+          "@value": "Revert Master Stars",
+          "desc": "Reverts the Master Star back to the stacked colored look."
         },
         "previousServer": {
           "@value": "Previous Server",
@@ -334,6 +380,10 @@
             "<yellow>(Doesn't currently work with skins that allow variant selection or pets)</yellow>"
           ]
         },
+        "queueEstimation": {
+          "@value": "Queue Estimation",
+          "desc": "Estimates your alpha/main server queue time based on the current queue size and average queue speed."
+        },
         "hideEntityFire": {
           "@value": "Hide entity fire",
           "desc": "Removes the fire effect from all entities."
@@ -353,6 +403,10 @@
             "@value": "Highlight Time",
             "desc": "Amount of time that items will be highlighted for, in seconds."
           },
+          "useReiSearchBar": {
+            "@value": "Use REI Search Bar",
+            "desc": "Replaces REI's inventory highlighting with SkyOcean's"
+          },
           "preserve_search": {
             "@value": "Preserve Search",
             "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
@@ -369,6 +423,10 @@
         "museumArmourPieces": {
           "@value": "Show museum armour pieces",
           "desc": "Displays all pieces required to finish an armor set in the tooltip in the museum."
+        },
+        "ratHitbox": {
+          "@value": "Rat hitboxes",
+          "desc": "Renders extra hitboxes for rats in the hub."
         },
         "crafthelper": {
           "@value": "Craft Helper",
@@ -552,6 +610,22 @@
                 "random": "Random",
                 "red": "Red",
                 "snow": "Snow"
+              },
+              "own_eepy": {
+                "@value": "Own Eepy",
+                "desc": "zzzZZzzZ"
+              },
+              "other_eepy": {
+                "@value": "Other Eepy",
+                "desc": "zzzZZzzZ"
+              },
+              "own_sleep_delay": {
+                "@value": "Own Sleep Delay",
+                "desc": "Delay before eep zzZZz..."
+              },
+              "other_sleep_delay": {
+                "@value": "Other Sleep Delay",
+                "desc": "Delay before eep zzZZz..."
               }
             },
             "wolf": {
@@ -987,6 +1061,7 @@
               ]
             },
             "outside_skyblock": {
+              "@value": "Outside SkyBlock",
               "desc": "Whether player animals should also be visible outside of SkyBlock."
             }
           }
@@ -1237,6 +1312,21 @@
         "museum_donation": {
           "@value": "Museum Donation",
           "desc": "Shows what items haven't been donated to museum in the tooltip."
+        },
+        "dye_hex": {
+          "@value": "Dye Hex Color",
+          "desc": "Shows the hex code of the dye on armors."
+        },
+        "dye_pos": {
+          "@value": "Dye Hex Color square position",
+          "desc": "Select where the color display square is positioned.",
+          "left": "Left",
+          "middle": "Middle",
+          "right": "Right"
+        },
+        "midas_bid_breakdown": {
+          "@value": "Midas Bid Breakdown",
+          "desc": "Shows the original bid and added coins on Midas Weapons."
         }
       },
       "foraging": {
@@ -1284,21 +1374,60 @@
           }
         }
       },
-      "dungeons": {
-        "@value": "Dungeons",
-        "gambling": {
-          "enabled": {
-            "@value": "CSGO Case Opening",
-            "desc": [
-              "Shows a CSGO case opening animation when opening a dungeon chest.",
-              "",
-              "This feature is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>."
-            ]
+      "gambling": {
+        "@value": "Gambling",
+        "dungeons": {
+          "separator": {
+            "@value": "Dungeon Chest Gambling",
+            "desc": ""
           },
+          "@value": "Dungeon Chest CSGO Case Opening",
+          "desc": "Shows a CSGO case opening animation when opening a dungeon chest.",
           "croesus": {
             "@value": "Also Show Case Opening in Croesus",
             "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
           }
+        },
+        "vanguard": {
+          "separator": {
+            "@value": "Vanguard Gambling",
+            "desc": ""
+          },
+          "@value": "Vanguard Slot Machine",
+          "desc": "Shows a slot machine animation when looting a Vanguard.",
+          "hide_chat": {
+            "@value": "Hide Chat While Gambling",
+            "desc": "Hides the chat messages while the gambling animation is playing so you don't get spoiled."
+          },
+          "mode": {
+            "@value": "Mode",
+            "desc": "Changes the mode of the slot machine between most expensive item or a predefined set of rare items (Weight <= 10).",
+            "predefined": "Predefined",
+            "most_expensive": "Most expensive"
+          }
+        },
+        "credits": {
+          "@value": "Credits",
+          "desc": [
+            "Dungeon Chest Gambling is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>.",
+            "",
+            "Slot Machine textures are created by <hover 'Click to visit her BlueSky'><url 'https://bsky.app/profile/vrachel.bsky.social'><color:#4FB1FF>rachel</color></url></hover>."
+          ]
+        }
+      },
+      "hotkeys": {
+        "@value": "Custom Hotkeys",
+        "enabled": {
+          "@value": "Enabled",
+          "desc": "Whether the custom hotkeys are enabled or not."
+        },
+        "sequence_input_delay": {
+          "@value": "Sequence input delay",
+          "desc": "The max delay between two keypresses in a sequence. (in ms)"
+        },
+        "edit": {
+          "@value": "Edit hotkeys",
+          "desc": "Opens the hotkey edit screen."
         }
       }
     },
@@ -1307,7 +1436,10 @@
       "open_sack": "<dark_gray>Open Sack</dark_gray>"
     },
     "inventory": {
-      "sack_value": "<dark_gray>Sack Value</dark_gray>",
+      "sack_value": {
+        "@value": "<dark_gray>Sack Value</dark_gray>",
+        "total_value": "Total: "
+      },
       "buttons": {
         "configuration": "<white>Button Configuration",
         "item": "Item ID / Skyblock ID",

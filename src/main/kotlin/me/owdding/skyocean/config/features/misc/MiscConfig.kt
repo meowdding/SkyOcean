@@ -1,6 +1,7 @@
 package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.lib.utils.KnownMods
 import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.config.duration
 import me.owdding.skyocean.config.separator
@@ -31,6 +32,14 @@ object MiscConfig : CategoryKt("misc") {
 
     var anvilHelper by boolean(false) {
         translation = "skyocean.config.misc.anvilHelper"
+    }
+
+    var itemStarStacksize by boolean(false) {
+        translation = "skyocean.config.misc.itemStarStacksize"
+    }
+
+    var revertMasterStars by boolean(false) {
+        translation = "skyocean.config.misc.revertMasterStars"
     }
 
     var hideLightning by boolean(false) {
@@ -68,6 +77,10 @@ object MiscConfig : CategoryKt("misc") {
         this.translation = "skyocean.config.misc.customization_vanilla_integration"
     }
 
+    var queueEstimation by boolean(true) {
+        translation = "skyocean.config.misc.queueEstimation"
+    }
+
     init {
         separator("skyocean.config.misc.itemSearch")
     }
@@ -85,6 +98,11 @@ object MiscConfig : CategoryKt("misc") {
         slider = true
         range = 10L..60L
     }.duration(SECONDS)
+
+    var useReiSearchBar by boolean(true) {
+        translation = "skyocean.config.misc.itemSearch.useReiSearchBar"
+        condition = KnownMods.REI::installed
+    }
 
     var preserveLastSearch by boolean(false) {
         translation = "skyocean.config.misc.itemSearch.preserve_search"
@@ -108,6 +126,10 @@ object MiscConfig : CategoryKt("misc") {
 
     var transparentArmorOthers by transparency(100) {
         translation = "skyocean.config.misc.transparentArmor.others"
+    }
+
+    var ratHitbox by boolean(false) {
+        translation = "skyocean.config.misc.ratHitbox"
     }
 }
 

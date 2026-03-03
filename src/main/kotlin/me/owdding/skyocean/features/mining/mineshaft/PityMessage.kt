@@ -2,6 +2,8 @@ package me.owdding.skyocean.features.mining.mineshaft
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
@@ -21,7 +23,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 @Module
 object PityMessage {
 
-    private val regex = " Glacite Mineshafts: (?<current>[\\d,]+)/(?<max>[\\d,]+)".toRegex()
+    private val group = RemoteStrings.resolve()
+    private val regex by group.regex(" Glacite Mineshafts: (?<current>[\\d,]+)/(?<max>[\\d,]+)")
     private var lastPity = -1
     private var maxPity = 2000
 

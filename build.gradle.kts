@@ -75,6 +75,7 @@ dependencies {
     includeImplementation(versionedCatalog["olympus"])
 
     modRuntimeOnly(libs.hypixel.modapi.fabric)
+    implementation(libs.moulberry.mixinconstraints) // Already included in mlib
 
     implementation(libs.keval)
     include(libs.keval)
@@ -173,9 +174,8 @@ compactingResources {
 
     configureTask(tasks.named<AbstractCopyTask>("processResources").get())
 
+    removeComments("vanguard") // when does this just auto remove comments from all .jsoncs, why do i need to specify this
     removeComments("unobtainable_ids")
-    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/dyes.json", "dyes.json")
-    downloadResource("https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/refs/heads/master/constants/animatedskulls.json", "skulls.json")
     downloadResource(
         "https://raw.githubusercontent.com/Campionnn/SkyShards-Parser/55483450ff83e1bf1e453f31797cedb08b0c2733/shard-data.json",
         "skyshards_data.json"
@@ -221,6 +221,7 @@ tasks.processResources {
 autoMixins {
     mixinPackage = "me.owdding.skyocean.mixins"
     projectName = "skyocean"
+    mixinExtrasVersion = "0.5.0"
 }
 
 tasks.withType<ProcessResources>().configureEach {
@@ -256,7 +257,6 @@ detekt {
     source.setFrom(project.sourceSets.map { it.allSource })
     config.from(files("$rootDir/detekt/detekt.yml"))
     baseline = file("$rootDir/detekt/${project.name}-baseline.xml")
-    buildUponDefaultConfig = true
     parallel = true
 }
 

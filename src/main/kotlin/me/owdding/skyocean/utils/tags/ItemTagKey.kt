@@ -9,6 +9,7 @@ import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTagKey
 enum class ItemTagKey(path: String) : ItemTagKey {
     HOTM_PERK_ITEMS("hotm_perk_items"),
     TRIM_PATTERS("trim_patterns"),
+    DYEABLE("dyeable"),
     ;
 
     override val key: TagKey<Item> = TagKey.create(Registries.ITEM, SkyOcean.id(path))

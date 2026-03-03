@@ -7,6 +7,8 @@ import me.owdding.lib.waypoints.MeowddingWaypoint
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.ReplaceMessage
@@ -43,8 +45,9 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object MetalDetectorSolver {
 
     private const val DETECTOR = "DWARVEN_METAL_DETECTOR"
-    private val actionbarDistanceRegex = "TREASURE: (?<distance>[\\d.]+)m".toRegex()
-    private val foundTreasureRegex = "You found .* with your Metal Detector!".toRegex()
+    private val group = RemoteStrings.resolve()
+    private val actionbarDistanceRegex by group.regex("TREASURE: (?<distance>[\\d.]+)m")
+    private val foundTreasureRegex by group.regex("You found .* with your Metal Detector!")
 
     private val keeperOffset = mapOf(
         "Gold" to Vec3i(3, 0, -33),
@@ -111,16 +114,15 @@ object MetalDetectorSolver {
             }
 
             else -> {
-                possibleChests.run {
-                    if (isNotEmpty()) {
-                        retainAll(candidates)
-                        if (size == 1) foundPosition(first().getBlockPos())
-                    } else addAll(candidates)
-                }
-                @Suppress("SelfAssignment") // this needs this, cry about it
-                possibleChests = possibleChests
+                possibleChests = candidates.toMutableList()
+
+                if (possibleChests.size == 1) foundPosition(possibleChests.first().getBlockPos())
+
                 if (possibleChests.size != previousCurrentChests) {
-                    Text.of("Found §c${possibleChests.size}§f chests, Keep moving around!").sendWithPrefix()
+                    Text.of("Found ") {
+                        append("${possibleChests.size} ") { color = TextColor.RED }
+                        append("chests, Keep moving around!")
+                    }.sendWithPrefix()
                 }
                 previousCurrentChests = possibleChests.size
             }
