@@ -4,6 +4,7 @@ import me.owdding.ktcodecs.Compact
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
+import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils
@@ -22,6 +23,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.findGroup
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 
 @Module
 object FetchurHelper {
@@ -31,6 +33,24 @@ object FetchurHelper {
 
     private val fetchurItems = Utils.loadRepoData("mining/fetchur", CodecHelpers.list<FetchurItem>())
     private var fetchurItem: FetchurItem? = null
+
+    // tbh this doenst really work as i expected,
+    // since you obvisouly cant craft mithril
+    // so idk if we should even do this
+    private val craftHelperButton by lazy {
+        text {
+            append(" [", TextColor.YELLOW)
+            append("Craft Helper", TextColor.GOLD)
+            append("]", TextColor.YELLOW)
+
+            onClick {
+                val item = fetchurItem ?: return@onClick
+                // TODO: what the fuck do we do with the items that have multiple answers
+                //  maybe marie's pr?? #186
+                CraftHelperStorage.setSelectedWithNextUpAmount(item.items.firstOrNull(), item.amount)
+            }
+        }
+    }
 
     @Subscription
     @OnlyIn(DWARVEN_MINES)
@@ -48,6 +68,7 @@ object FetchurHelper {
                 append("Fetchur wants: ", OceanColors.BASE_TEXT)
                 append("${item.amount}x ", TextColor.BLUE)
                 append(item.itemName, OceanColors.HIGHLIGHT)
+                append(craftHelperButton)
             }.sendWithPrefix()
             // TODO: do item tracker stuff
         }
