@@ -2,7 +2,6 @@ package me.owdding.skyocean.features.misc
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
-import me.owdding.skyocean.events.ParticleEmitEvent
 import net.minecraft.client.particle.HugeExplosionParticle
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes

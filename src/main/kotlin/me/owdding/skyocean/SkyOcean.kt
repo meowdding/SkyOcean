@@ -1,5 +1,8 @@
 package me.owdding.skyocean
 
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.FieldNamingStrategy
+import com.google.gson.GsonBuilder
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import me.owdding.ktmodules.Module
