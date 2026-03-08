@@ -130,4 +130,5 @@ object EasingFunctions {
 fun interface EasingFunction {
     fun ease(double: Double): Double
     operator fun invoke(double: Double) = ease(double)
+    operator fun invoke(float: Float) = ease(float.toDouble()).toFloat()
 }

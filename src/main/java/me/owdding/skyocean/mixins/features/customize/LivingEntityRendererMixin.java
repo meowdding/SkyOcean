@@ -1,8 +1,8 @@
 package me.owdding.skyocean.mixins.features.customize;
 
+import me.owdding.skyocean.compat.CatharsisSupport;
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper;
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents;
-import me.owdding.skyocean.utils.Utils;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.AgeableMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -36,12 +36,27 @@ public abstract class LivingEntityRendererMixin<T extends Mob, S extends Humanoi
         super(context, adultModel, babyModel, scale);
     }
 
-    @Inject(method = "extractHumanoidRenderState", at = @At("RETURN"))
+    @Inject(
+        method = "extractHumanoidRenderState",
+        at = @At(
+            value = "INVOKE",
+            //? > 1.21.10 {
+            target = "Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;extractArmedEntityRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;Lnet/minecraft/client/renderer/item/ItemModelResolver;F)V",
+            //?} else {
+            /*target = "Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;extractArmedEntityRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;Lnet/minecraft/client/renderer/item/ItemModelResolver;)V",
+            *///?}
+            shift = At.Shift.AFTER
+        )
+    )
     private static void replaceSkull(LivingEntity entity, HumanoidRenderState state, float partialTick, ItemModelResolver itemModelResolver, CallbackInfo ci) {
         var item = entity.getItemBySlot(EquipmentSlot.HEAD);
-        state.wornHeadProfile = Utils.nonNullElse(CustomItemsHelper.getData(item, DataComponents.PROFILE), state.wornHeadProfile);
+        var profile = CustomItemsHelper.getData(item, DataComponents.PROFILE);
         var model = CustomItemsHelper.getCustomData(item, CustomItemDataComponents.model());
+
+        if (profile == null && model == null) return;
         var itemModel = model == null ? item.getItem() : Objects.requireNonNullElse(model.resolveToItem(), item.getItem());
+
+        state.wornHeadProfile = profile;
         if (itemModel instanceof BlockItem blockItem && blockItem.getBlock() instanceof AbstractSkullBlock abstractSkullBlock) {
             state.wornHeadType = abstractSkullBlock.getType();
             state.headItem.clear();
@@ -57,5 +72,7 @@ public abstract class LivingEntityRendererMixin<T extends Mob, S extends Humanoi
             state.wornHeadType = null;
             state.wornHeadProfile = null;
         }
+
+        CatharsisSupport.INSTANCE.disableCatharsisModifications(item);
     }
 }

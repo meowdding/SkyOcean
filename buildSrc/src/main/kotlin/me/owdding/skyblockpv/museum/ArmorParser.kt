@@ -4,7 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 
-class ArmorParser : MuseumProcessor("armor") {
+class ArmorParser : MuseumProcessor() {
     val armorMap: MutableMap<String, MutableList<String>> = mutableMapOf()
 
     override fun process(item: JsonObject) {

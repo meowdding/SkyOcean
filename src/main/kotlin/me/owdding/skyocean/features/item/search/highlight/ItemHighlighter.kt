@@ -2,7 +2,11 @@ package me.owdding.skyocean.features.item.search.highlight
 
 import com.google.common.collect.Queues
 import com.teamresourceful.resourcefullib.common.color.Color
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.ChestItem
@@ -12,13 +16,19 @@ import me.owdding.skyocean.events.ItemStackCreateEvent
 import me.owdding.skyocean.features.item.search.search.ItemFilter
 import me.owdding.skyocean.repo.SackData
 import me.owdding.skyocean.repo.SackData.sackRegex
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderBox
 import net.minecraft.core.BlockPos
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.base.predicates.*
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.InventoryTitle
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyNonGuest
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
@@ -35,7 +45,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.clearAnd
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import java.util.*
-import java.util.Queue
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -52,6 +61,10 @@ object ItemHighlighter {
 
     private val queue: Queue<ItemStack> = Queues.newConcurrentLinkedQueue()
     private var scheduled = AtomicBoolean(false)
+
+    private val group = RemoteStrings.resolve()
+    private val enderchest by group.regex("Ender Chest Page (\\d)")
+    private val backpack by group.regex("Backpack Slot (\\d+)")
 
     private fun scheduleAdd(item: ItemStack) {
         queue.add(item)
@@ -91,6 +104,7 @@ object ItemHighlighter {
     fun addChests(chests: Collection<BlockPos>) = McClient.self.executeIfPossible {
         this.chests.addAll(chests)
     }
+
     fun addChest(chest: BlockPos) = McClient.self.executeIfPossible {
         this.chests.add(chest)
     }
@@ -193,9 +207,6 @@ object ItemHighlighter {
             }
         }
     }
-
-    private val enderchest = Regex("Ender Chest Page (\\d)")
-    private val backpack = Regex("Backpack Slot (\\d+)")
 
     @Subscription
     @OnlyOnSkyBlock

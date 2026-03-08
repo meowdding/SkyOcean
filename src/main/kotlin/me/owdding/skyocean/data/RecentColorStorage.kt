@@ -1,12 +1,12 @@
 package me.owdding.skyocean.data
 
-import me.owdding.ktmodules.Module
 import me.owdding.skyocean.features.item.custom.data.ItemColor
+import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.extensions.truncate
 import me.owdding.skyocean.utils.storage.DataStorage
 
-@Module
+@LateInitModule
 object RecentColorStorage {
 
     internal val storage: DataStorage<MutableList<ItemColor>> = DataStorage({ mutableListOf() }, "recent_colors", CodecHelpers.mutableList())

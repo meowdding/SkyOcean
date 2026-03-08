@@ -2,6 +2,8 @@ package me.owdding.skyocean.features.mining
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.plus
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.block.ModelBlockRenderer
@@ -32,7 +34,8 @@ object PuzzlerSolver {
         '▼' to Vector3d(0.0, 0.0, -1.0),
     )
 
-    private val regex = Regex("\\[NPC] Puzzler: [▲◀▶▼]+")
+    private val group = RemoteStrings.resolve()
+    private val regex by group.regex("\\[NPC] Puzzler: [▲◀▶▼]+")
 
     private val location: BlockPos = BlockPos(181, 195, 135)
     private var solution: BlockPos? = null

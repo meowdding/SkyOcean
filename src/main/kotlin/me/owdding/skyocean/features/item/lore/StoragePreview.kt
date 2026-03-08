@@ -3,6 +3,8 @@ package me.owdding.skyocean.features.item.lore
 import me.owdding.skyocean.config.features.lorecleanup.LoreModifierConfig
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
@@ -18,7 +20,9 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 object StoragePreview : AbstractItemModifier() {
     override val displayName: Component = +"skyocean.config.lore_modifiers.storage_preview"
     override val isEnabled: Boolean get() = LoreModifierConfig.enableStoragePreview
-    private val regex = Regex("Ender Chest Page .|Backpack Slot .{1,2}")
+
+    private val group = RemoteStrings.resolve()
+    private val regex by group.regex("Ender Chest Page .|Backpack Slot .{1,2}")
 
     override fun appliesTo(itemStack: ItemStack): Boolean {
         val screen = McScreen.asMenu ?: return false

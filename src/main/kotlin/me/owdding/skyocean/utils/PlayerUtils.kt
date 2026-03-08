@@ -22,8 +22,9 @@ object PlayerUtils {
 
     @Subscription
     fun onPacket(event: PacketReceivedEvent) {
+        val level = McLevel.selfOrNull ?: return
         val packet = event.packet as? ClientboundPlayerPositionPacket ?: return
-        val player = McLevel.level.getEntity(packet.id) as? Player ?: return
+        val player = level.getEntity(packet.id) as? Player ?: return
 
         val delta = packet.change.deltaMovement
         updatePlayerMovement(player, delta)

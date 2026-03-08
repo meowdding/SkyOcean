@@ -238,6 +238,18 @@
             "desc": "The source to use for the price of items in sacks.",
             "bazaar": "BZ",
             "npc": "NPC"
+          },
+          "show_in_sack_of_sacks": {
+            "@value": "Show in Sack of Sacks",
+            "desc": "Whether to show the total sack value in the sack of sacks."
+          },
+          "hide_items_with_no_value": {
+            "@value": "Hide items with no value",
+            "desc": "Hides items that have no value from the total sack value."
+          },
+          "show_total_value": {
+            "@value": "Show Total Value",
+            "desc": "Shows the total value of all items in the sack."
           }
         },
         "inventory_buttons": {
@@ -278,6 +290,13 @@
         "sack_notification_items": {
           "@value": "Sack Notification Items",
           "desc": "The items to show notifications for."
+        },
+        "reply_boop": {
+          "@value": "Reply Boop",
+          "desc": [
+            "Adds a <light_purple>/rboop</light_purple> command that runs /boop on the last person that messaged you.",
+            "<red>Requires to change servers to take into effect.</red>"
+          ]
         }
       },
       "garden": {
@@ -357,6 +376,10 @@
             "<yellow>(Doesn't currently work with skins that allow variant selection or pets)</yellow>"
           ]
         },
+        "queueEstimation": {
+          "@value": "Queue Estimation",
+          "desc": "Estimates your alpha/main server queue time based on the current queue size and average queue speed."
+        },
         "hideEntityFire": {
           "@value": "Hide entity fire",
           "desc": "Removes the fire effect from all entities."
@@ -396,6 +419,10 @@
         "museumArmourPieces": {
           "@value": "Show museum armour pieces",
           "desc": "Displays all pieces required to finish an armor set in the tooltip in the museum."
+        },
+        "ratHitbox": {
+          "@value": "Rat hitboxes",
+          "desc": "Renders extra hitboxes for rats in the hub."
         },
         "crafthelper": {
           "@value": "Craft Helper",
@@ -1292,6 +1319,10 @@
           "left": "Left",
           "middle": "Middle",
           "right": "Right"
+        },
+        "midas_bid_breakdown": {
+          "@value": "Midas Bid Breakdown",
+          "desc": "Shows the original bid and added coins on Midas Weapons."
         }
       },
       "foraging": {
@@ -1339,21 +1370,60 @@
           }
         }
       },
-      "dungeons": {
-        "@value": "Dungeons",
-        "gambling": {
-          "enabled": {
-            "@value": "CSGO Case Opening",
-            "desc": [
-              "Shows a CSGO case opening animation when opening a dungeon chest.",
-              "",
-              "This feature is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>."
-            ]
+      "gambling": {
+        "@value": "Gambling",
+        "dungeons": {
+          "separator": {
+            "@value": "Dungeon Chest Gambling",
+            "desc": ""
           },
+          "@value": "Dungeon Chest CSGO Case Opening",
+          "desc": "Shows a CSGO case opening animation when opening a dungeon chest.",
           "croesus": {
             "@value": "Also Show Case Opening in Croesus",
             "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
           }
+        },
+        "vanguard": {
+          "separator": {
+            "@value": "Vanguard Gambling",
+            "desc": ""
+          },
+          "@value": "Vanguard Slot Machine",
+          "desc": "Shows a slot machine animation when looting a Vanguard.",
+          "hide_chat": {
+            "@value": "Hide Chat While Gambling",
+            "desc": "Hides the chat messages while the gambling animation is playing so you don't get spoiled."
+          },
+          "mode": {
+            "@value": "Mode",
+            "desc": "Changes the mode of the slot machine between most expensive item or a predefined set of rare items (Weight <= 10).",
+            "predefined": "Predefined",
+            "most_expensive": "Most expensive"
+          }
+        },
+        "credits": {
+          "@value": "Credits",
+          "desc": [
+            "Dungeon Chest Gambling is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>.",
+            "",
+            "Slot Machine textures are created by <hover 'Click to visit her BlueSky'><url 'https://bsky.app/profile/vrachel.bsky.social'><color:#4FB1FF>rachel</color></url></hover>."
+          ]
+        }
+      },
+      "hotkeys": {
+        "@value": "Custom Hotkeys",
+        "enabled": {
+          "@value": "Enabled",
+          "desc": "Whether the custom hotkeys are enabled or not."
+        },
+        "sequence_input_delay": {
+          "@value": "Sequence input delay",
+          "desc": "The max delay between two keypresses in a sequence. (in ms)"
+        },
+        "edit": {
+          "@value": "Edit hotkeys",
+          "desc": "Opens the hotkey edit screen."
         }
       }
     },
@@ -1362,7 +1432,10 @@
       "open_sack": "<dark_gray>Open Sack</dark_gray>"
     },
     "inventory": {
-      "sack_value": "<dark_gray>Sack Value</dark_gray>",
+      "sack_value": {
+        "@value": "<dark_gray>Sack Value</dark_gray>",
+        "total_value": "Total: "
+      },
       "buttons": {
         "configuration": "<white>Button Configuration",
         "item": "Item ID / Skyblock ID",

@@ -6,6 +6,8 @@ import me.owdding.lib.builder.LayoutBuilder
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ClickToExpandWidget
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.chat.OceanColors.BETTER_GOLD
 import net.minecraft.client.gui.layouts.Layout
@@ -41,7 +43,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object SourceToWidget {
 
-    private val regex = Regex("(.*)_([^_]+)")
+    private val group = RemoteStrings.resolve()
+    private val regex by group.regex("(.*)_([^_]+)")
     private fun text(string: String, init: MutableComponent.() -> Unit = {}) = text(Text.of(string, init))
     private fun text(init: MutableComponent.() -> Unit) = text(Text.of(init))
     private fun text(text: Component): TextWidget = Widgets.text(text)
