@@ -72,7 +72,7 @@ object ItemSearch {
                             }
                             text("Copied search tag parsing errors to clipboard!").sendWithPrefix()
                         }
-                    }
+                    }.sendWithPrefix()
                 }
                 // We can apply the search before opening the screen, as it only resets the search on close and not open
                 ItemSearchScreen.search = filter

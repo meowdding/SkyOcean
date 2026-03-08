@@ -21,6 +21,7 @@ import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.matcher.ItemMatcher
 import me.owdding.skyocean.features.item.search.search.ItemFilter
@@ -125,7 +126,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                             textBox = Widgets.textInput(state) { box ->
                                 box.withChangeCallback(::refreshSearch)
                                 box.withPlaceholder("Search...")
-                                box.withSize(200, 20)
+                                box.withSize(200.coerceAtMost(width - 100 - PADDING), 20)
                             }
                             textBox.add {
                                 alignVerticallyMiddle()

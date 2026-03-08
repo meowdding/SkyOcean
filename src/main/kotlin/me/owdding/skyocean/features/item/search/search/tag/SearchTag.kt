@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.item.search.search.tag
 
+import com.google.common.base.Predicates
 import me.owdding.skyocean.features.item.search.search.ItemFilter
 import me.owdding.skyocean.features.item.search.search.NameLoreSearchFilter
 import me.owdding.skyocean.features.item.search.search.tag.tags.DataTypeSearchTag
@@ -44,7 +45,7 @@ fun interface SearchTag {
 }
 
 object SearchTagsParser {
-    fun parse(string: String): Pair<ItemFilter, List<TagException>>? {
+    fun parse(string: String): Pair<ItemFilter, List<TagException>> {
         val reader = StringReader(string)
         val string = StringBuilder()
         var expr: ItemFilter? = null
@@ -61,7 +62,7 @@ object SearchTagsParser {
         }
 
         val result = string.toString().trim()
-        if (result.isEmpty()) return null
+        if (result.isEmpty()) return (expr ?: Predicates.alwaysTrue()) to exceptions
 
         var filter: ItemFilter = NameLoreSearchFilter(result)
         if (expr != null) filter = filter.and(expr)

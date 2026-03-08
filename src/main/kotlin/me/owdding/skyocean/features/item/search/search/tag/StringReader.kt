@@ -155,7 +155,7 @@ class StringReader {
                 append("Didn't find ")
                 if (chars.size == 1) append("char '${chars.first()}'")
                 else append("one of '${chars.joinToString()}' chars")
-                append("in string")
+                append(" in string")
             }
             throw TagException(msg)
         }
