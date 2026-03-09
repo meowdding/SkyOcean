@@ -21,9 +21,12 @@ import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.matcher.ItemMatcher
+import me.owdding.skyocean.features.item.search.search.ItemFilter
 import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
+import me.owdding.skyocean.features.item.search.search.tag.SearchTagsParser
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.item.sources.SackItemContext
 import me.owdding.skyocean.features.item.sources.system.BundledItemContext
@@ -51,7 +54,7 @@ object ItemSearchScreen : SkyOceanScreen() {
     val state: ListenableState<String> = ListenableState.of("")
     val dropdownState: DropdownState<SortModes> = DropdownState.of(SortModes.AMOUNT)
     val ascending: ListenableState<Boolean> = ListenableState.of(true)
-    var search: String? = null
+    var search: ItemFilter? = null
     var category: SearchCategory = SearchCategory.ALL
     val currentWidgets = mutableListOf<AbstractWidget>()
 
@@ -123,7 +126,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                             textBox = Widgets.textInput(state) { box ->
                                 box.withChangeCallback(::refreshSearch)
                                 box.withPlaceholder("Search...")
-                                box.withSize(100, 20)
+                                box.withSize(200.coerceAtMost(width - 100 - PADDING), 20)
                             }
                             textBox.add {
                                 alignVerticallyMiddle()
@@ -267,11 +270,7 @@ object ItemSearchScreen : SkyOceanScreen() {
         }.center().applyAndGetElements().let(currentWidgets::addAll)
     }
 
-    fun matches(itemStack: ItemStack): Boolean {
-        val search = search ?: return true
-        if (itemStack.cleanName.contains(search, true)) return true
-        return itemStack.getRawLore().any { it.contains(search, true) }
-    }
+    fun matches(itemStack: ItemStack): Boolean = search?.test(itemStack) ?: true
 
     fun buildItems(width: Int, height: Int): Layout {
         val columns = (width - 5) / 20
@@ -280,7 +279,7 @@ object ItemSearchScreen : SkyOceanScreen() {
         val items = this.items.filter { (itemStack) -> matches(itemStack) }.map { (itemStack, context, price) ->
             val item = Displays.item(
                 itemStack,
-                customStackText = if (itemStack.count > 1) itemStack.count.shorten(0) else null,
+                customStackText = if (itemStack.count > 1) itemStack.count.shorten() else null,
             ).withTooltip {
                 add(itemStack.hoverName)
                 itemStack.getLore().forEach(::add)
@@ -352,7 +351,7 @@ object ItemSearchScreen : SkyOceanScreen() {
     }
 
     fun refreshSearch(search: String) {
-        this.search = search.takeUnless { it.isEmpty() }
+        this.search = search.takeUnless { it.isEmpty() }?.let(SearchTagsParser::parse)?.first
         addItems()
     }
 

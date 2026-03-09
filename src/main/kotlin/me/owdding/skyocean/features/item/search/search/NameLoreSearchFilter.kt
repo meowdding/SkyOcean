@@ -4,7 +4,7 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 
-data class SearchItemFilter(val search: String) : ItemFilter {
+data class NameLoreSearchFilter(val search: String) : ItemFilter {
     override fun test(item: ItemStack): Boolean =
         item.cleanName.contains(search, ignoreCase = true) || item.getRawLore().any { it.contains(search, ignoreCase = true) }
 }

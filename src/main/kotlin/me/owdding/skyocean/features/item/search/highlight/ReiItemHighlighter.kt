@@ -3,11 +3,16 @@ package me.owdding.skyocean.features.item.search.highlight
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.REIRuntimeCompatability
 import me.owdding.skyocean.config.features.misc.MiscConfig
-import me.owdding.skyocean.features.item.search.search.SearchItemFilter
+import me.owdding.skyocean.features.item.search.search.NameLoreSearchFilter
+import me.owdding.skyocean.features.item.search.search.tag.SearchTagsParser
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 
 @Module
 object ReiItemHighlighter {
@@ -35,9 +40,10 @@ object ReiItemHighlighter {
             return
         }
         highlighting = true
-        // TODO: maybe add some search tags, so you can do more advanced searching
-        //  (for example, searching by id, item category/rarity, etc)
-        ItemHighlighter.setHighlight(SearchItemFilter(search), scheduleClear = false)
+        // TODO: show text on top of search bar showing the errors
+        val (filter, exceptions) = SearchTagsParser.parse(search) ?: return
+        ItemHighlighter.setHighlight(filter, scheduleClear = false)
+
     }
 
     fun stop() {
