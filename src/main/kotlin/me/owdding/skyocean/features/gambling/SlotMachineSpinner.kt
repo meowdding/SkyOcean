@@ -58,8 +58,8 @@ class SlotMachineSpinner(
         createSlots()
     }
 
-    override fun onClose() {
-        super.onClose()
+    override fun removed() {
+        super.removed()
         SkyBlockAPI.eventBus.unregister(this)
     }
 
