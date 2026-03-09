@@ -2,6 +2,7 @@ package me.owdding.skyocean
 
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
+import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.RemoteConfig
 import me.owdding.lib.events.FinishRepoLoadingEvent
@@ -10,12 +11,14 @@ import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.repo.RemoteRepo
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.generated.SkyOceanApiDebug
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
 import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.debug.RegisterSkyOceanDebugEvent
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.HolderLookup
@@ -25,6 +28,7 @@ import net.minecraft.resources.Identifier
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.misc.DebugBuilder
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.RepoStatusEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -138,7 +142,38 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         }
     }
 
+
+    @Subscription
+    private fun registerDebugs(event: RegisterSkyOceanDebugEvent) {
+        SkyOceanApiDebug.collected.forEach {
+            val debug = it.annotations.filterIsInstance<ApiDebug>().first()
+            val name = debug.name
+            val commandName = debug.commandName.takeUnless(String::isEmpty) ?: name.lowercase().replace(" ", "_")
+
+            event.register(name, commandName) {
+                it.invoke(this)
+            }
+        }
+    }
+
     fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(MOD_ID, path)
     fun minecraft(path: String): Identifier = Identifier.withDefaultNamespace(path)
     fun olympus(path: String): Identifier = Identifier.fromNamespaceAndPath("olympus", path)
+
+
+    @ApiDebug("General Info", commandName = "general")
+    internal fun debug(builder: DebugBuilder) = with(builder) {
+        field("Version", VERSION)
+        field("Modules", SkyOceanModules.collected.size)
+        field("Meowdding Repo", meowddingRepo)
+        field("Api Repo", apiRepo)
+    }
 }
+
+@AutoCollect
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION)
+internal annotation class ApiDebug(
+    val name: String,
+    val commandName: String = ""
+)
