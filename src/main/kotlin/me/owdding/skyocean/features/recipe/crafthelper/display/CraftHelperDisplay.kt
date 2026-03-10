@@ -1,5 +1,7 @@
 package me.owdding.skyocean.features.recipe.crafthelper.display
 
+import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.compat.REIRenderOverlayEvent
@@ -23,6 +25,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.chat.Icons
+import me.owdding.skyocean.utils.debugToggle
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.extensions.tryClear
 import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
@@ -47,14 +50,16 @@ import kotlin.math.max
 @LateInitModule
 object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
 
+    private val ignoreChecks by debugToggle("cafthelper/ignore_checks")
+
     private var craftHelperLayout: LayoutElement? = null
 
     private const val BACKGROUND_PADDING = 14
 
     @Subscription
     fun onScreenInit(event: ScreenInitializedEvent) {
-        if (!CraftHelperConfig.enabled) return
-        if (!LocationAPI.isOnSkyBlock) return
+        if (!CraftHelperConfig.enabled && !ignoreChecks) return
+        if (!LocationAPI.isOnSkyBlock && !ignoreChecks) return
 
         val screen = event.screen as? AbstractContainerScreen<*> ?: return
 
@@ -72,7 +77,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             val (tree, output) = CraftHelperStorage.data?.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
             resetLayout()
             layout.tryClear()
-            layout.addChild(visualize(tree, output, maxAvailableWidth) { callback })
+                layout.addChild(visualize(tree, output, maxAvailableWidth) { callback })
             layout.arrangeElements()
             layout.setPosition(CraftHelperConfig.position.position(layout.width, layout.height))
             layout.visitWidgets { event.widgets.add(it) }

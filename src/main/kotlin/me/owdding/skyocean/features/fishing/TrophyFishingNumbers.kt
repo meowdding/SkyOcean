@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.fishing
 
 import me.owdding.ktmodules.Module
 import me.owdding.lib.extensions.ordinal
+import me.owdding.skyocean.ApiDebug
 import me.owdding.skyocean.config.features.fishing.FishingConfig
 import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.CommonComponents
@@ -12,6 +13,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.location.isle.TrophyFishCaughtEvent
+import tech.thatgravyboat.skyblockapi.api.events.misc.DebugBuilder
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -71,4 +73,10 @@ object TrophyFishingNumbers {
         }
     }
 
+
+    @ApiDebug("Trophy Fishing Numbers")
+    internal fun debug(builder: DebugBuilder) = with(builder) {
+        field("lastFishTier", lastFishTier)
+        field("lastFishCaught", lastFishCaught)
+    }
 }

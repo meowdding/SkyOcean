@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
+import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.render.HudElement
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderHudElementEvent
@@ -55,6 +56,11 @@ class SlotMachineSpinner(
     override fun init() {
         super.init()
         createSlots()
+    }
+
+    override fun removed() {
+        super.removed()
+        SkyBlockAPI.eventBus.unregister(this)
     }
 
     @Subscription(inherited = true)
