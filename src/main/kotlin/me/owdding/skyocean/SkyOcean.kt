@@ -18,6 +18,7 @@ import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
 import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.debug.DebugBuilder
 import me.owdding.skyocean.utils.debug.RegisterSkyOceanDebugEvent
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
@@ -28,7 +29,6 @@ import net.minecraft.resources.Identifier
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.misc.DebugBuilder
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
 import tech.thatgravyboat.skyblockapi.api.events.misc.RepoStatusEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -150,7 +150,7 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
             val name = debug.name
             val commandName = debug.commandName.takeUnless(String::isEmpty) ?: name.lowercase().replace(" ", "_")
 
-            event.register(name, commandName) {
+            event.oceanRegister(name, commandName) {
                 it.invoke(this)
             }
         }
@@ -164,7 +164,7 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     @ApiDebug("General Info", commandName = "general")
     internal fun debug(builder: DebugBuilder) = with(builder) {
         field("Version", VERSION)
-        field("Modules", SkyOceanModules.collected.size)
+        field("Modules Loaded", SkyOceanModules.collected.size)
         field("Meowdding Repo", meowddingRepo)
         field("Api Repo", apiRepo)
     }

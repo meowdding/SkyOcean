@@ -3,6 +3,7 @@ package me.owdding.skyocean.api
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.ApiDebug
 import me.owdding.skyocean.events.fishing.FishCatchEvent
+import me.owdding.skyocean.utils.debug.DebugBuilder
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
@@ -10,7 +11,6 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.location.IslandChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.minecraft.sounds.SoundPlayedEvent
-import tech.thatgravyboat.skyblockapi.api.events.misc.DebugBuilder
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
@@ -74,9 +74,9 @@ object FishingCatchApi {
 
     @ApiDebug("Fishing Catch Api")
     internal fun debug(builder: DebugBuilder) = with(builder) {
-        field("lastHookPos", lastHookPos)
-        field("lastPlingSound", lastPlingSound)
-        field("lastCatchSound", lastCatchSound)
+        field(::lastHookPos)
+        field(::lastPlingSound)
+        field(::lastCatchSound)
     }
 
 }

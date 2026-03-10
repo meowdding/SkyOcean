@@ -301,7 +301,7 @@ object Utils {
         tooltip { lines().addAll(merger.destination) }
     }
 
-    fun TooltipBuilder.addAll(iterable: Collection<Component>) = lines().addAll(iterable)
+    fun TooltipBuilder.addAll(iterable: Iterable<Component>) = lines().addAll(iterable)
     fun ListMerger<Component>.space() = add(CommonComponents.EMPTY)
     fun ListMerger<Component>.add(init: MutableComponent.() -> Unit) = add(Text.of(init))
     fun ListMerger<Component>.add(text: String, init: MutableComponent.() -> Unit = {}) = add(Text.of(text, init))
@@ -409,6 +409,8 @@ object Utils {
         val constants = if (this.javaClass.isEnum) this.javaClass.enumConstants else this.javaClass.superclass.enumConstants
         return constants[(this.ordinal + 1) % constants.size].unsafeCast()
     }
+
+    fun componentList(init: TooltipBuilder.() -> Unit) = TooltipBuilder().apply(init).lines()
 }
 
 enum class SkyOceanModifyIndicator : Translatable {
