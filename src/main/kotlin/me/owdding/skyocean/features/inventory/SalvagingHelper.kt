@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.inventory
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
+import me.owdding.skyocean.utils.Utils.modifyTooltip
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import net.minecraft.sounds.SoundEvents
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -13,6 +14,7 @@ import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.api.profile.items.museum.MuseumAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @Module
 object SalvagingHelper {
@@ -56,6 +58,20 @@ object SalvagingHelper {
         if (salvagingUndonated) {
             salvageSlot.item.skyoceanReplace {
                 this.backgroundColor = red
+                this.modifyTooltip {
+                    add(
+                        Text.of(
+                            "Skyocean blocked you from salvaging as one or more",
+                            color = 0xFF5555
+                        )
+                    )
+                    add(
+                        Text.of(
+                            "of the items haven't been donated to the museum!",
+                            color = 0xFF5555
+                        )
+                    )
+                }
             }
         }
     }
