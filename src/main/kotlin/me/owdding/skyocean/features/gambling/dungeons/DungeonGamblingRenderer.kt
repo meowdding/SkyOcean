@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.gambling.dungeons
 
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.features.gambling.GamblingConfig
 import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonChestType
 import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonItems
 import me.owdding.skyocean.utils.rendering.applyPostEffect
@@ -15,17 +16,21 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSky
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.*
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
+import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.pow
 import kotlin.math.sqrt
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Instant
+import kotlin.time.isDistantPast
 
 private const val ITEM_SCALE = 4
 private const val ITEM_SIZE = 50
 private const val WINNER_INDEX = ITEM_SIZE - 10
 private const val ITEM_GAP = 5
-private const val TIME = 5 * 1000f
 
 private const val FULL_CARD_WIDTH = (DungeonCard.WIDTH * ITEM_SCALE) + ITEM_GAP
 private const val FULL_CARD_HEIGHT = (DungeonCard.HEIGHT * ITEM_SCALE)
@@ -34,11 +39,11 @@ object DungeonGamblingRenderer {
 
     private val items = mutableListOf<ItemStack>()
     private var randomOffset = 0
-    private var start = 0L
+    private var start = Instant.DISTANT_PAST
     private var lastSound = 0
 
     fun init(floor: DungeonFloor, chest: DungeonChestType, winner: ItemStack? = null) {
-        start = System.currentTimeMillis()
+        start = currentInstant()
         lastSound = 0
         randomOffset = ((4 * ITEM_SCALE) + ThreadLocalRandom.current().nextInt(4 * ITEM_SCALE)) * (if (ThreadLocalRandom.current().nextBoolean()) 1 else -1)
         items.clear()
@@ -54,7 +59,7 @@ object DungeonGamblingRenderer {
     }
 
     fun cancel() {
-        start = 0
+        start = Instant.DISTANT_PAST
         items.clear()
     }
 
@@ -64,11 +69,11 @@ object DungeonGamblingRenderer {
 
     fun render(graphics: GuiGraphics): Boolean {
         if (items.isEmpty()) return false
-        if (start == 0L) return false
+        if (start.isDistantPast) return false
 
         graphics.fill(0, 0, graphics.guiWidth(), graphics.guiHeight(), 0x80000000.toInt())
 
-        val rawProgress = (((System.currentTimeMillis() - start) / TIME))
+        val rawProgress = (start.since() / GamblingConfig.dungeonTime).toFloat()
         val progress = (rawProgress + 0.25f).coerceIn(0f, 1f)
         val endOffset = (WINNER_INDEX * FULL_CARD_WIDTH) * ease(progress)
 

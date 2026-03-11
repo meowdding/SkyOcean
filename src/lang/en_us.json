@@ -1382,6 +1382,10 @@
           "croesus": {
             "@value": "Also Show Case Opening in Croesus",
             "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
+          },
+          "time": {
+            "@value": "Animation Time",
+            "desc": "Changes the time the animation takes. (in seconds)"
           }
         },
         "vanguard": {
