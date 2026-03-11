@@ -7,6 +7,7 @@ import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.prefix
@@ -112,7 +113,8 @@ open class DebugBuilder : ApiDebugBuilder(CommonComponents.EMPTY, CommonComponen
     }
 
     override fun <T> format(value: T?): Component {
-        when (value) {
+        var superValue: Any? = value
+        return when (value) {
             is Number -> Text.of(value.toFormattedString()) {
                 color = TextColor.AQUA
                 append(
@@ -127,8 +129,14 @@ open class DebugBuilder : ApiDebugBuilder(CommonComponents.EMPTY, CommonComponen
                     },
                 )
             }
+            else -> {
+                when (value) {
+                    is SkyBlockId -> superValue = value.id
+                }
+
+                super.format(superValue)
+            }
         }
-        return super.format(value)
     }
 
     override fun asComponents(depth: Int): List<Component> = entries.flatMap { it.asComponents(depth + 1) }.map { it.prefix("  ") }
