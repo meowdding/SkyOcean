@@ -1,11 +1,13 @@
 package me.owdding.skyocean.compat
 
+import me.owdding.lib.utils.KnownMods
 import me.owdding.skyocean.ApiDebug
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.utils.debug.DebugBuilder
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import tech.thatgravyboat.skyblockapi.api.events.misc.DebugBuilder
 import java.util.function.BiConsumer
 
 object CatharsisSupport {
@@ -39,7 +41,8 @@ object CatharsisSupport {
 
     @ApiDebug("Catharsis Support")
     internal fun debug(builder: DebugBuilder) = with(builder) {
-        field("hasIdConsumer", hasIdConsumer)
-        field("hasDisabledConsumer", hasDisabledConsumer)
+        field("Catharsis Installed", FabricLoader.getInstance().isModLoaded("catharsis"))
+        field(::hasIdConsumer)
+        field(::hasDisabledConsumer)
     }
 }
