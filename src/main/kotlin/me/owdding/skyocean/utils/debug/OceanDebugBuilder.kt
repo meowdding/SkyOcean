@@ -7,9 +7,11 @@ import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.prefix
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.clipboard
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -46,13 +48,17 @@ open class DebugBuilder : ApiDebugBuilder(CommonComponents.EMPTY, CommonComponen
     }
 
     open fun <T> iterable(field: Component, iterable: Iterable<T>, converter: DebugBuilder.(T) -> Unit) {
-        entries.add(ListDebugBuilder(field).apply {
-            iterable.forEach {
-                addEntry(DebugBuilder().apply {
-                    converter(it)
-                })
-            }
-        })
+        entries.add(
+            ListDebugBuilder(field).apply {
+                iterable.forEach {
+                    addEntry(
+                        DebugBuilder().apply {
+                            converter(it)
+                        },
+                    )
+                }
+            },
+        )
     }
 
     @Suppress("NOTHING_TO_INLINE")
@@ -66,22 +72,63 @@ open class DebugBuilder : ApiDebugBuilder(CommonComponents.EMPTY, CommonComponen
         field(property.name, property.get(receiver), description, copyValue)
     }
 
+    fun literal(name: String, description: Component? = null, copyValue: String = name) {
+        literal(!name, description, copyValue)
+    }
+
+    fun literal(name: Component, description: Component? = null, copyValue: String = name.stripped) {
+        entries.add(
+            FieldEntry(
+                Text.of {
+                    append(name)
+                    if (description != null) {
+                        hover = description
+                    }
+                    clipboard = copyValue
+                },
+                copyValue
+            ),
+        )
+    }
+
     override fun <T> field(field: String, value: T?, description: Component?, copyValue: String?) {
         val copyValue = copyValue ?: value.toString()
-        entries.add(FieldEntry(
-            Text.of {
-                append(field)
-                append(": ")
-                append(format(value))
+        entries.add(
+            FieldEntry(
+                Text.of {
+                    append(field)
+                    append(": ")
+                    append(format(value))
 
-                if (description != null) {
-                    hover = description
-                }
+                    if (description != null) {
+                        hover = description
+                    }
 
-                clipboard = copyValue
-            },
-            "$field: $copyValue"
-        ))
+                    clipboard = copyValue
+                },
+                "$field: $copyValue",
+            ),
+        )
+    }
+
+    override fun <T> format(value: T?): Component {
+        when (value) {
+            is Number -> Text.of(value.toFormattedString()) {
+                color = TextColor.AQUA
+                append(
+                    when (value) {
+                        is Double -> "d"
+                        is Long -> "L"
+                        is Float -> "f"
+                        is Short -> "s"
+                        is Byte -> "b"
+                        is Int -> ""
+                        else -> " - ${value.javaClass.simpleName}"
+                    },
+                )
+            }
+        }
+        return super.format(value)
     }
 
     override fun asComponents(depth: Int): List<Component> = entries.flatMap { it.asComponents(depth + 1) }.map { it.prefix("  ") }
@@ -106,7 +153,9 @@ class ListDebugBuilder(val field: Component) : DebugBuilder() {
 
         add {
             append(field)
-            append(":")
+            append(" (")
+            append(parts.size.toString(), CatppuccinColors.Mocha.lavender)
+            append(")")
         }
         parts.forEach { components ->
             components.forEachIndexed { index, line ->
@@ -114,7 +163,7 @@ class ListDebugBuilder(val field: Component) : DebugBuilder() {
                     if (index != 0) {
                         append(" ")
                     } else {
-                        append("- ") { color = depthColor[depth % depthColor.size]}
+                        append("- ") { color = depthColor[depth % depthColor.size] }
                     }
                     append(line)
                 }
@@ -122,23 +171,26 @@ class ListDebugBuilder(val field: Component) : DebugBuilder() {
         }
     }
 
-    override val copyValue: String get() = buildString {
-        val parts = entries.map { it.entries.map { it.copyValue } }
+    override val copyValue: String
+        get() = buildString {
+            val parts = entries.map { it.entries.map { it.copyValue } }
 
-        append(this@ListDebugBuilder.field.stripped).appendLine(":")
-        append(parts.joinToString("\n") { values ->
-            values.mapIndexed { index, line ->
-                buildString {
-                    if (index == 0) {
-                        append("- ")
-                    } else {
-                        append("  ")
-                    }
-                    append(line)
-                }
-            }.joinToString("\n")
-        })
-    }
+            append(this@ListDebugBuilder.field.stripped).append(" (${parts.size})").appendLine(":")
+            append(
+                parts.joinToString("\n") { values ->
+                    values.mapIndexed { index, line ->
+                        buildString {
+                            if (index == 0) {
+                                append("- ")
+                            } else {
+                                append("  ")
+                            }
+                            append(line)
+                        }
+                    }.joinToString("\n")
+                },
+            )
+        }
 }
 
 data class RootDebugBuilder(val displayName: Component) : DebugBuilder() {
@@ -158,11 +210,12 @@ data class RootDebugBuilder(val displayName: Component) : DebugBuilder() {
         addAll(lines)
     }
 
-    override val copyValue: String get() = buildString {
-        appendLine("```")
-        append(displayName.stripped)
-        append("\n")
-        appendLine(super.entries.joinToString("\n") { it.copyValue })
-        append("```")
-    }
+    override val copyValue: String
+        get() = buildString {
+            appendLine("```")
+            append(displayName.stripped)
+            append("\n")
+            appendLine(super.entries.joinToString("\n") { it.copyValue })
+            append("```")
+        }
 }
