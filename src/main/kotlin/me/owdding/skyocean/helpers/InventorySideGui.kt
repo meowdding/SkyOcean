@@ -24,6 +24,7 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
     var oldWidget: AbstractWidget? = null
 
     private var lastEvent: ContainerInitializedEvent? = null
+    private var isBeingShown: Boolean = false
 
     abstract val enabled: Boolean
 
@@ -33,7 +34,8 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
         val event = lastEvent ?: return
         val screen = event.screen
 
-        if (!enabled || !regex.matches(screen.title.stripped)) return
+        isBeingShown = enabled && regex.matches(screen.title.stripped)
+        if (!isBeingShown) return
 
         val layout = event.getLayout() ?: return
 
@@ -54,7 +56,9 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
 
     @Subscription(inherited = true)
     fun onScreenInit(event: ScreenInitializedEvent) {
-        if (!enabled || !regex.matches(event.screen.title.stripped)) return
+        isBeingShown = enabled && regex.matches(screen.title.stripped)
+        if (!isBeingShown) return
+
         val widget = this.oldWidget ?: return
 
         event.screen.addWidget(widget)
@@ -69,6 +73,8 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
 
     @Subscription(inherited = true)
     fun onReiRender(event: REIRenderOverlayEvent) {
+        if (!isBeingShown) return
+
         oldWidget?.let {
             event.register(it.x, it.y, it.width, it.height)
         }
@@ -76,6 +82,7 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
 
     @Subscription(ContainerCloseEvent::class, inherited = true)
     fun onContainerClose() {
+        isBeingShown = false
         oldList = null
         lastEvent = null
     }
