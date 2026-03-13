@@ -1,3 +1,4 @@
+//~named_identifier
 package me.owdding.skyocean.mixins.features.customize;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
