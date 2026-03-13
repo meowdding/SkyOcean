@@ -1071,7 +1071,7 @@
         },
         "hook_text_scale_toggle": {
           "@value": "Toggle Hook Text Scale",
-          "desc": "Whether to show the setting to change the hook text scale or not."
+          "desc": "Whether to enable the hook text scaling or not."
         },
         "hook_text_scale": {
           "@value": "Hook Text Scale",
