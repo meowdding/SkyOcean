@@ -1069,6 +1069,10 @@
           "@value": "Trophy Numbers",
           "desc": "Displays the amount of trophy fishes you caught upon catching one."
         },
+        "hook_text_scale_toggle": {
+          "@value": "Toggle Hook Text Scale",
+          "desc": "Whether to show the setting to change the hook text scale or not."
+        },
         "hook_text_scale": {
           "@value": "Hook Text Scale",
           "desc": "Changes the scale of the text above your fishing hook/bobber."
