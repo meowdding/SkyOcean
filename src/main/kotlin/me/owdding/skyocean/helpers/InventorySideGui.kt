@@ -56,7 +56,7 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
 
     @Subscription(inherited = true)
     fun onScreenInit(event: ScreenInitializedEvent) {
-        isBeingShown = enabled && regex.matches(screen.title.stripped)
+        isBeingShown = enabled && regex.matches(event.screen.title.stripped)
         if (!isBeingShown) return
 
         val widget = this.oldWidget ?: return
