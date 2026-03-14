@@ -52,6 +52,7 @@ data object HotkeyConditions {
         idMapper.put("or", SkyOceanCodecs.OrHotkeyConditionCodec)
         idMapper.put("dungeon_floor", SkyOceanCodecs.DungeonFloorHotkeyConditionCodec)
         idMapper.put("dungeon_class", SkyOceanCodecs.DungeonClassHotkeyConditionCodec)
+        idMapper.put("mayor_perk", SkyOceanCodecs.MayorPerkHotkeyConditionCodec)
     }
 }
 
@@ -64,4 +65,5 @@ enum class HotkeyConditionType(val builder: (() -> HotkeyCondition)? = null, val
     OR(builder = ::OrHotkeyCondition, nested = true),
     DUNGEON_FLOOR(builder = ::DungeonFloorHotkeyCondition),
     DUNGEON_CLASS(builder = ::DungeonClassHotkeyCondition),
+    MAYOR_PERK(builder = ::MayorPerkHotkeyCondition),
 }
