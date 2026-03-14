@@ -42,15 +42,18 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
         Operation<Void> original,
         @Local(argsOnly = true) EntityRenderState state
     ) {
+        float scale = 1f;
         if (state instanceof EntityRenderStateAccessor stateAccessor) {
-            float scale = stateAccessor.ocean$getNameTagScale();
+            scale = stateAccessor.ocean$getNameTagScale();
+        }
+        if (scale != 1f) {
             poseStack.pushPose();
             poseStack.translate(0, -0.7 * (scale / 5), 0);
-            poseStack.scale(1 * scale, 1 * scale, 1 * scale);
-            original.call(instance, poseStack, vec3, i, component, b, i2, v, cameraRenderState);
+            poseStack.scale(scale, scale, scale);
+        }
+        original.call(instance, poseStack, vec3, i, component, b, i2, v, cameraRenderState);
+        if (scale != 1f) {
             poseStack.popPose();
-        } else {
-            original.call(instance, poseStack, vec3, i, component, b, i2, v, cameraRenderState);
         }
     }
 }
