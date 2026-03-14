@@ -34,7 +34,7 @@ object DungeonGambling {
     val allowedDungeonGamblingChests = listOf(DungeonChestType.OBSIDIAN, DungeonChestType.BEDROCK)
 
     private var rendering = false
-    private var menu = -1
+    private var menu: Int? = null
 
     private fun cancelIfRendering(event: CancellableSkyBlockEvent) {
         if (!rendering) return
@@ -75,7 +75,7 @@ object DungeonGambling {
     @Subscription
     fun onScreenRender(event: RenderScreenBackgroundEvent) {
         val menu = (event.screen as? ContainerScreen)?.menu
-        rendering = menu?.containerId == this.menu && DungeonGamblingRenderer.render(event.graphics)
+        rendering = menu != null && menu.containerId == this.menu && DungeonGamblingRenderer.render(event.graphics)
         if (rendering) event.cancel()
     }
 
@@ -83,7 +83,7 @@ object DungeonGambling {
     fun onScreenClose() {
         DungeonGamblingRenderer.cancel()
         rendering = false
-        menu = -1
+        menu = null
     }
 
     @Subscription
@@ -99,9 +99,7 @@ object DungeonGambling {
     fun onScreenKeyPressed(event: ScreenKeyPressedEvent) {
         cancelIfRendering(event)
         if (event.key == InputConstants.KEY_ESCAPE && rendering) {
-            DungeonGamblingRenderer.cancel()
-            rendering = false
-            menu = -1
+            onScreenClose()
         }
     }
 
