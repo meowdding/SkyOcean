@@ -45,8 +45,7 @@ stonecutter parameters {
     }
     replacements.regex {
         direction = eval(current.version, "< 1.21.9")
-        replace("import net.minecraft.client.renderer.entity.state.AvatarRenderState(?!;)", "import net.minecraft.client.renderer.entity.state.PlayerRenderState as AvatarRenderState")
-        reverse("import net.minecraft.client.renderer.entity.state.PlayerRenderState as AvatarRenderState", "import net.minecraft.client.renderer.entity.state.AvatarRenderState")
+        replace("import net.minecraft.client.renderer.entity.state.AvatarRenderState(?!;)", "import net.minecraft.client.renderer.entity.state.PlayerRenderState as AvatarRenderState", "import net.minecraft.client.renderer.entity.state.PlayerRenderState as AvatarRenderState", "import net.minecraft.client.renderer.entity.state.AvatarRenderState")
     }
 
     filters.include("**/*.fsh", "**/*.vsh")
@@ -60,8 +59,7 @@ stonecutter parameters {
 
             is RegexReplacement if replacement.named -> replacements.regex(name) {
                 direction = eval(current.version, replacement.condition)
-                replace(replacement.regex, replacement.to)
-                reverse(replacement.reverseRegex, replacement.reverse)
+                replace(replacement.regex, replacement.to, replacement.reverseRegex, replacement.reverse)
             }
 
             is StringReplacement -> replacements.string {
@@ -71,13 +69,12 @@ stonecutter parameters {
 
             is RegexReplacement -> replacements.regex {
                 direction = eval(current.version, replacement.condition)
-                replace(replacement.regex, replacement.to)
-                reverse(replacement.reverseRegex, replacement.reverse)
+                replace(replacement.regex, replacement.to, replacement.reverseRegex, replacement.reverse)
             }
         }
     }
 
-    animalsReplacements.forEach { new, old ->
+    animalsReplacements.forEach { (new, old) ->
         replacements.string {
             direction = eval(current.version, "< 1.21.11")
             replace(animalReplacementPrefix + new, animalReplacementPrefix + old)

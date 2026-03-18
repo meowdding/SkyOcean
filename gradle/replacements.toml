@@ -6,12 +6,6 @@ to = "import net.minecraft.resources.ResourceLocation as Identifier"
 reverseRegex = "import net.minecraft.resources.ResourceLocation as Identifier"
 reverse = "import net.minecraft.resources.Identifier"
 
-[named_identifier_temp]
-type = "string"
-condition = "< 1.21.11"
-from = "Identifier"
-to = "ResourceLocation"
-
 [named_identifier]
 type = "string"
 condition = "< 1.21.11"
