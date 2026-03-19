@@ -660,6 +660,42 @@
                 "angry": "Angry"
               }
             },
+            "horse": {
+              "own_color": {
+                "@value": "Own Horse Color",
+                "desc": "Changes the horse color used for yourself."
+              },
+              "other_color": {
+                "@value": "Other Horse Color",
+                "desc": "Changes the horse color used for others."
+              },
+              "own_markings": {
+                "@value": "Own Horse Markings",
+                "desc": "Changes the horse markings used for yourself."
+              },
+              "other_markings": {
+                "@value": "Other Horse Markings",
+                "desc": "Changes the horse markings used for others."
+              },
+              "color": {
+                "random": "Random",
+                "white": "White",
+                "creamy": "Creamy",
+                "chestnut": "Chestnut",
+                "brown": "Brown",
+                "black": "Black",
+                "gray": "Gray",
+                "dark_brown": "Dark Brown"
+              },
+              "markings": {
+                "random": "Random",
+                "none": "None",
+                "white": "White",
+                "white_field": "White Field",
+                "white_dots": "White Dots",
+                "black_dots": "Black Dots"
+              }
+            },
             "axolotl": {
               "own_variant": {
                 "@value": "Own Axolotl Variant",
