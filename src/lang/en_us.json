@@ -669,11 +669,11 @@
                 "@value": "Other Horse Color",
                 "desc": "Changes the horse color used for others."
               },
-              "own_markings": {
+              "own_marking": {
                 "@value": "Own Horse Markings",
                 "desc": "Changes the horse markings used for yourself."
               },
-              "other_markings": {
+              "other_marking": {
                 "@value": "Other Horse Markings",
                 "desc": "Changes the horse markings used for others."
               },
@@ -687,7 +687,7 @@
                 "gray": "Gray",
                 "dark_brown": "Dark Brown"
               },
-              "markings": {
+              "marking": {
                 "random": "Random",
                 "none": "None",
                 "white": "White",

@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
-import earth.terrarium.olympus.client.utils.Translatable
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey

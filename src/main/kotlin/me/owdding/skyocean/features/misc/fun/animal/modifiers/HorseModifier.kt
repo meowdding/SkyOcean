@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
-import earth.terrarium.olympus.client.utils.Translatable
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
@@ -16,8 +16,11 @@ import net.minecraft.world.entity.animal.equine.Markings as HorseMarkings
 object HorseModifier : AnimalModifier<Horse, HorseRenderState> {
     override val type: EntityType<Horse> = EntityType.HORSE
 
-    var horseColor = PlayerAnimalConfig.createEntry("horse_color") { id, type ->
-        enum(id, Color.RANDOM) {
+    val horseVariants = Variant.entries
+    val horseMarkings = HorseMarkings.entries
+
+    var horseVariant = PlayerAnimalConfig.createEntry("horse_variant") { id, type ->
+        enum(id, Variants.RANDOM) {
             this.translation = createTranslationKey("horse", "${type}_color")
             condition = isSelected(EntityType.HORSE)
         }
@@ -35,11 +38,11 @@ object HorseModifier : AnimalModifier<Horse, HorseRenderState> {
         state: HorseRenderState,
         partialTicks: Float,
     ) {
-        state.variant = horseColor.select(avatarState).variant ?: state.variant
-        state.markings = horseMarking.select(avatarState).horseVariant ?: state.markings
+        state.variant = horseVariant.select(avatarState).variant ?: getRandom(avatarState, horseVariants)
+        state.markings = horseMarking.select(avatarState).horseVariant ?: getRandom(avatarState, horseMarkings)
     }
 
-    enum class Color(val variant: Variant?) : Translatable {
+    enum class Variants(val variant: Variant?) : Translatable {
         RANDOM(null),
 
         WHITE(Variant.WHITE),
@@ -50,12 +53,6 @@ object HorseModifier : AnimalModifier<Horse, HorseRenderState> {
         GRAY(Variant.GRAY),
         DARK_BROWN(Variant.DARK_BROWN),
         ;
-
-        fun select(state: AvatarRenderState) = if (this == RANDOM) {
-            getRandom(state, Variant.entries.filterNot { it == RANDOM.variant })
-        } else {
-            this
-        }
 
         override fun getTranslationKey(): String = createTranslationKey("horse", "color", name)
     }
@@ -69,12 +66,6 @@ object HorseModifier : AnimalModifier<Horse, HorseRenderState> {
         WHITE_DOTS(HorseMarkings.WHITE_DOTS),
         BLACK_DOTS(HorseMarkings.BLACK_DOTS)
         ;
-
-        fun select(state: AvatarRenderState) = if (this == RANDOM) {
-            getRandom(state, HorseMarkings.entries.filterNot { it == RANDOM.horseVariant })
-        } else {
-            this
-        }
 
         override fun getTranslationKey(): String = createTranslationKey("horse", "marking", name)
     }
