@@ -42,6 +42,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
@@ -50,15 +51,17 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
-import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import org.joml.Vector3dc
+import tech.thatgravyboat.skyblockapi.api.data.MayorPerks
 //? < 1.21.11
 /*import tech.thatgravyboat.skyblockapi.helpers.McClient*/
+import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.identifier
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
 import tech.thatgravyboat.skyblockapi.utils.builders.TooltipBuilder
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
+import tech.thatgravyboat.skyblockapi.utils.extentions.serverMaxHealth
 import tech.thatgravyboat.skyblockapi.utils.json.Json
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
@@ -154,7 +157,6 @@ object Utils {
             null
         }
     }
-
     inline fun <reified T : Any> loadFromRemoteRepo(file: String): T? = runBlocking {
         try {
             val json = RemoteRepo.getFileContentAsJson("$file.json") ?: return@runBlocking null
@@ -298,7 +300,7 @@ object Utils {
         tooltip { lines().addAll(merger.destination) }
     }
 
-    fun TooltipBuilder.addAll(iterable: Collection<Component>) = lines().addAll(iterable)
+    fun TooltipBuilder.addAll(iterable: Iterable<Component>) = lines().addAll(iterable)
     fun ListMerger<Component>.space() = add(CommonComponents.EMPTY)
     fun ListMerger<Component>.add(init: MutableComponent.() -> Unit) = add(Text.of(init))
     fun ListMerger<Component>.add(text: String, init: MutableComponent.() -> Unit = {}) = add(Text.of(text, init))
@@ -369,6 +371,10 @@ object Utils {
 
     fun <T> DataResult<T>.resultOrError() = error().map { it.message() }.orElse(this.result().get().toString())
 
+    fun LivingEntity.derpyMaxHp(): Float = serverMaxHealth.let {
+        if (MayorPerks.DOUBLE_MOBS_HP.active) it / 2 else it
+    }
+
     context(logger: MeowddingLogger)
     fun <T> Result<T>.debug(message: String): Result<T> = apply {
         this.onFailure {
@@ -389,7 +395,21 @@ object Utils {
     fun LevelableTreeNode.totalPowder() = powderForInterval(1 exclusiveInclusive maxLevel)
     fun LevelableTreeNode.powderForInterval(intRange: IntRange) = intRange.sumOf { costForLevel(it).second }
 
+    context(logger: MeowddingLogger)
+    fun <T> Result<T>.warn(message: String) {
+        this.onFailure {
+            logger.warn(message, it)
+        }
+    }
+
     fun nextUp(amount: Int, divider: Int) = if (amount % divider == 0) amount else amount - (amount % divider) + divider
+
+    fun <T : Enum<T>> T.next(): T {
+        val constants = if (this.javaClass.isEnum) this.javaClass.enumConstants else this.javaClass.superclass.enumConstants
+        return constants[(this.ordinal + 1) % constants.size].unsafeCast()
+    }
+
+    fun componentList(init: TooltipBuilder.() -> Unit) = TooltipBuilder().apply(init).lines()
 }
 
 enum class SkyOceanModifyIndicator : Translatable {
@@ -406,6 +426,10 @@ enum class SkyOceanModifyIndicator : Translatable {
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class LateInitModule
+
+fun interface LateInitLoader {
+    fun load()
+}
 
 @AutoCollect("PreInitModules")
 @Target(AnnotationTarget.CLASS)

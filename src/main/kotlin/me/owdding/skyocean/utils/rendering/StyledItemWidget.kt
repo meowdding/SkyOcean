@@ -1,14 +1,22 @@
 package me.owdding.skyocean.utils.rendering
 
+import com.mojang.blaze3d.platform.Lighting
+import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen
 import earth.terrarium.olympus.client.components.base.BaseWidget
 import earth.terrarium.olympus.client.ui.UIConstants
+import me.owdding.lib.rendering.MeowddingPipState
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.WidgetSprites
+import net.minecraft.client.gui.navigation.ScreenRectangle
+import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.item.TrackingItemStackRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.component.DataComponents
 import net.minecraft.sounds.SoundEvents
@@ -26,27 +34,11 @@ import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.platform.showTooltip
 import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-
-//? if > 1.21.8
-import net.minecraft.client.input.MouseButtonEvent
-
-//? if > 1.21.5 {
-import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.item.TrackingItemStackRenderState
-import net.minecraft.client.gui.navigation.ScreenRectangle
-import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import java.util.function.Function
-import me.owdding.lib.rendering.MeowddingPipState
-import com.mojang.blaze3d.platform.Lighting
-import com.mojang.blaze3d.vertex.PoseStack
 
-//?} else {
-/*import org.joml.Matrix4f
-*///?}
 
 private const val BUTTON_SIZE = 5
 
-//? if > 1.21.5 {
 data class ItemWidgetItemState(
     override val x0: Int,
     override val y0: Int,
@@ -79,7 +71,6 @@ class ItemWidgetRenderer(source: MultiBufferSource.BufferSource) : PictureInPict
 
         McClient.self.gameRenderer.lighting.setupFor(if (state.item.usesBlockLight()) Lighting.Entry.ITEMS_3D else Lighting.Entry.ITEMS_FLAT)
 
-        //? if > 1.21.8 {
         state.item.submit(
             stack,
             McClient.self.gameRenderer.featureRenderDispatcher.submitNodeStorage,
@@ -87,14 +78,11 @@ class ItemWidgetRenderer(source: MultiBufferSource.BufferSource) : PictureInPict
             OverlayTexture.NO_OVERLAY,
             0,
         )
-        //?} else
-        /*state.item.render(stack, this.bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY)*/
 
         stack.popPose()
     }
 }
 
-//?}
 
 class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
 
@@ -131,24 +119,17 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
                 val angle = Quaternionf().rotateYXZ(rotation * 0.017453292f, 180 * 0.017453292f, 0f)
                 renderEntityInInventory(
                     graphics,
-                    //? if > 1.21.5 {
                     x,
                     y,
                     x + width,
                     y + height,
                     25f,
-                    //?} else {
-                    /*x + width / 2f,
-                    y + (height -5) / 2f,
-                    20f,
-                    *///?}
                     Vector3f(0f, 1f, 0f),
                     angle,
                     null,
                     this.entity,
                 )
             } else {
-                //? if > 1.21.5 {
                 val itemState = TrackingItemStackRenderState()
                 McClient.self.itemModelResolver.updateForTopItem(itemState, this.stack, ItemDisplayContext.NONE, McLevel.self, null, 0)
                 graphics.guiRenderState.submitPicturesInPictureState(
@@ -160,31 +141,6 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
                         itemState,
                     ),
                 )
-                //?} else {
-                /*val pose = graphics.pose()
-                pose.pushPose()
-                pose.translate(this.x + width / 2f, this.y + height / 2f + 10f, 150f)
-                pose.mulPose(Matrix4f().scaling(1.0F, -1.0F, 1.0F))
-                pose.scale(40f, 40f, 40f)
-                pose.translate(0f, 0.25f, 0f)
-                pose.mulPose(Axis.YN.rotationDegrees(this.rotation))
-
-                graphics.drawSpecial { buffer ->
-                    McClient.self.itemRenderer.renderStatic(
-                        null,
-                        this.stack,
-                        ItemDisplayContext.NONE,
-                        pose,
-                        buffer,
-                        McLevel.self,
-                        LightTexture.FULL_BRIGHT,
-                        OverlayTexture.NO_OVERLAY,
-                        0,
-                    )
-                }
-
-                pose.popPose()
-                *///?}
             }
         }
 
@@ -203,21 +159,15 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
         }
     }
 
-    //? if > 1.21.8 {
     override fun onDrag(event: MouseButtonEvent, deltaX: Double, deltaY: Double) {
-    //?} else
-    /*override fun onDrag(mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double) {*/
         this.isAutoRotating = false
         this.rotation -= deltaX.toFloat() * 3
         this.rotation = (this.rotation + 360) % 360
     }
 
-    //? if > 1.21.8 {
     override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
         val mouseX = event.x
         val mouseY = event.y
-    //?} else
-    /*override fun onClick(mouseX: Double, mouseY: Double) {*/
         if (isMouseOverButton(mouseX.toInt(), mouseY.toInt()) && !this.isAutoRotating) {
             McClient.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0f, 0.25f)
             this.isAutoRotating = true
@@ -237,27 +187,20 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
 @Suppress("SameParameterValue")
 private fun renderEntityInInventory(
     graphics: GuiGraphics,
-    //? if > 1.21.5 {
-    
+
     x0: Int,
     y0: Int,
     width: Int,
     height: Int,
-    //?} else {
-    /*x: Float,
-    y: Float,
-    *///?}
     scale: Float,
     translation: Vector3f,
     rotation: Quaternionf,
     overrideCameraAngle: Quaternionf?,
     entity: LivingEntity,
 ) {
-    //? if 1.21.5 {
-    /*InventoryScreen.renderEntityInInventory(graphics, x, y, scale, translation, rotation, overrideCameraAngle, entity)
-    *///?} else if < 1.21.11 {
-     /*InventoryScreen.renderEntityInInventory(graphics, x0, y0, width, height, scale, translation, rotation, overrideCameraAngle, entity)
-    *///?} else {
+    //? if < 1.21.11 {
+    /*InventoryScreen.renderEntityInInventory(graphics, x0, y0, width, height, scale, translation, rotation, overrideCameraAngle, entity)
+   *///?} else {
     val renderState = InventoryScreen.extractRenderState(entity)
     graphics.submitEntityRenderState(renderState, scale, translation, rotation, overrideCameraAngle, x0, y0, width, height)
     //?}

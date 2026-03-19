@@ -1,5 +1,7 @@
 package me.owdding.skyocean.features.recipe.crafthelper.display
 
+import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.compat.REIRenderOverlayEvent
@@ -23,6 +25,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.chat.Icons
+import me.owdding.skyocean.utils.debugToggle
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.extensions.tryClear
 import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
@@ -38,6 +41,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.utils.extentions.left
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -46,16 +50,25 @@ import kotlin.math.max
 @LateInitModule
 object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
 
+    private val ignoreChecks by debugToggle("cafthelper/ignore_checks")
+
     private var craftHelperLayout: LayoutElement? = null
+
+    private const val BACKGROUND_PADDING = 14
 
     @Subscription
     fun onScreenInit(event: ScreenInitializedEvent) {
-        if (!CraftHelperConfig.enabled) return
-        if (!LocationAPI.isOnSkyBlock) return
-        if (event.screen !is AbstractContainerScreen<*>) return
+        if (!CraftHelperConfig.enabled && !ignoreChecks) return
+        if (!LocationAPI.isOnSkyBlock && !ignoreChecks) return
+
+        val screen = event.screen as? AbstractContainerScreen<*> ?: return
 
         val layout = LayoutFactory.empty() as FrameLayout
         lateinit var callback: (save: Boolean) -> Unit
+
+        // - CraftHelperConfig.margin * 2 (customizable left/right margin)
+        // - BACKGROUND_PADDING * 2 (Background padding)
+        val maxAvailableWidth = max(50, screen.left - (CraftHelperConfig.margin * 2) - (BACKGROUND_PADDING * 2))
 
         fun resetLayout() {
             layout.visitWidgets { event.widgets.remove(it) }
@@ -64,7 +77,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             val (tree, output) = CraftHelperStorage.data?.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
             resetLayout()
             layout.tryClear()
-            layout.addChild(visualize(tree, output) { callback })
+                layout.addChild(visualize(tree, output, maxAvailableWidth) { callback })
             layout.arrangeElements()
             layout.setPosition(CraftHelperConfig.position.position(layout.width, layout.height))
             layout.visitWidgets { event.widgets.add(it) }
@@ -86,7 +99,8 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
         craftHelperLayout = null
     }
 
-    private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
+    @Suppress("LongMethod")
+    private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, maxWidth: Int, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
         val sources = ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()
         val tracker = ItemTracker(sources)
         val callback = callback()
@@ -121,13 +135,15 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                     }
             }.apply { visitChildren { child -> maxLine = maxOf(maxLine, child.width + 10) } }
 
+            val contentWidth = minOf(maxLine, maxWidth)
+
             horizontal(5, MIDDLE) {
                 val item = ExtraDisplays.inventoryBackground(1, 1, Displays.item(output.item, showTooltip = true).withPadding(2))
                 if (!output.item.isEmpty) {
                     display(item)
                 }
                 vertical(alignment = MIDDLE) {
-                    spacer(maxLine - item.getWidth() - 10)
+                    spacer(max(0, contentWidth - item.getWidth() - 10))
                     display(Displays.component(output.itemName))
                     horizontal {
                         widget(
@@ -193,12 +209,13 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                 }
             }
 
-            body.let {
-                widget(it.asScrollable(it.width + 10, McFont.height * 20.coerceAtMost(lines)))
-            }
+            widget(body.asScrollable(contentWidth, McFont.height * 20.coerceAtMost(lines)))
         }.asWidget().let {
-            val background = BackgroundWidget(SkyOcean.minecraft("tooltip/background"), SkyOcean.minecraft("tooltip/frame"), widget = it, padding = 14)
-            background.setPosition(10, (McScreen.self?.height?.div(2) ?: 0) - (it.height / 2))
+            val background = BackgroundWidget(
+                SkyOcean.minecraft("tooltip/background"), SkyOcean.minecraft("tooltip/frame"),
+                widget = it, padding = BACKGROUND_PADDING,
+            )
+            background.setPosition(CraftHelperConfig.margin, (McScreen.self?.height?.div(2) ?: 0) - (it.height / 2))
             background
         }
     }

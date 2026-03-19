@@ -1,19 +1,25 @@
 package me.owdding.skyocean
 
-import kotlin.jvm.optionals.getOrNull
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
+import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.RemoteConfig
+import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.overlays.EditOverlaysScreen
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingUpdateChecker
+import me.owdding.repo.RemoteRepo
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.generated.SkyOceanApiDebug
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
+import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.debug.DebugBuilder
+import me.owdding.skyocean.utils.debug.RegisterSkyOceanDebugEvent
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.HolderLookup
@@ -31,9 +37,13 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.url
+import kotlin.jvm.optionals.getOrNull
 
 @Module
 object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
+
+    private var meowddingRepo: Boolean = false
+    private var apiRepo: Boolean = false
 
     val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createLookup() }
     val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
@@ -59,14 +69,33 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         SkyOceanModules.init {
             SkyBlockAPI.eventBus.register(it)
         }
-        if (RepoAPI.isInitialized()) {
-            onRepoReady()
-        }
+
+        apiRepo = RepoAPI.isInitialized()
+        meowddingRepo = RemoteRepo.isInitialized()
+
+        onRepoReady()
     }
 
-    @Subscription(RepoStatusEvent::class)
+    @Subscription
+    private fun RepoStatusEvent.repoReady() {
+        apiRepo = true
+        onRepoReady()
+    }
+
+    @Subscription
+    private fun FinishRepoLoadingEvent.repoReady() {
+        meowddingRepo = true
+        onRepoReady()
+    }
+
     fun onRepoReady() {
-        SkyOceanLateInitModules.collected.forEach { SkyBlockAPI.eventBus.register(it) }
+        if (!apiRepo || !meowddingRepo) return
+        SkyOceanLateInitModules.collected.forEach {
+            SkyBlockAPI.eventBus.register(it)
+            if (it is LateInitLoader) {
+                it.load()
+            }
+        }
     }
 
     fun sendUpdateMessage(link: String, current: String, new: String) {
@@ -79,9 +108,9 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
             Text.of().send()
             Text.join(
                 "New version found! (",
-                Text.of(current).withColor(TextColor.RED),
-                Text.of(" -> ").withColor(TextColor.GRAY),
-                Text.of(new).withColor(TextColor.GREEN),
+                Text.of(current, TextColor.RED),
+                Text.of(" -> ", TextColor.GRAY),
+                Text.of(new, TextColor.GREEN),
                 ")",
             ).withLink().sendWithPrefix()
             Text.of("Click to download.").withLink().sendWithPrefix()
@@ -113,7 +142,38 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         }
     }
 
+
+    @Subscription
+    private fun registerDebugs(event: RegisterSkyOceanDebugEvent) {
+        SkyOceanApiDebug.collected.forEach {
+            val debug = it.annotations.filterIsInstance<ApiDebug>().first()
+            val name = debug.name
+            val commandName = debug.commandName.takeUnless(String::isEmpty) ?: name.lowercase().replace(" ", "_")
+
+            event.oceanRegister(name, commandName) {
+                it.invoke(this)
+            }
+        }
+    }
+
     fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(MOD_ID, path)
     fun minecraft(path: String): Identifier = Identifier.withDefaultNamespace(path)
     fun olympus(path: String): Identifier = Identifier.fromNamespaceAndPath("olympus", path)
+
+
+    @ApiDebug("General Info", commandName = "general")
+    internal fun debug(builder: DebugBuilder) = with(builder) {
+        field("Version", VERSION)
+        field("Modules Loaded", SkyOceanModules.collected.size)
+        field("Meowdding Repo", meowddingRepo)
+        field("Api Repo", apiRepo)
+    }
 }
+
+@AutoCollect
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION)
+internal annotation class ApiDebug(
+    val name: String,
+    val commandName: String = ""
+)

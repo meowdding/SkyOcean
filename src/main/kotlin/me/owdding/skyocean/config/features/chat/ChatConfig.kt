@@ -26,6 +26,10 @@ object ChatConfig : CategoryKt("chat") {
         this.translation = "skyocean.config.chat.piggy_repair_helper"
     }
 
+    var replyBoop by boolean(true) {
+        this.translation = "skyocean.config.chat.reply_boop"
+    }
+
     init {
         separator {
             title = "Sack Notification"
@@ -38,9 +42,5 @@ object ChatConfig : CategoryKt("chat") {
 
     var sackNotificationItems by strings("Glossy Gemstone") {
         this.translation = "skyocean.config.chat.sack_notification_items"
-    }
-
-    var replyBoop by boolean(true) {
-        this.translation = "skyocean.config.chat.reply_boop"
     }
 }

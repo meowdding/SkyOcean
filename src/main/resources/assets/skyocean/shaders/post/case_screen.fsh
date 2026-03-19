@@ -11,13 +11,10 @@ const float BLUR_SIZE = 8.0;
 
 uniform sampler2D InSampler;
 
-//? if > 1.21.5 {
 layout (std140) uniform SamplerInfo {
     vec2 OutSize;
     vec2 InSize;
 };
-//?} else
-/*uniform vec2 InSize;*/
 
 in vec2 texCoord;
 out vec4 fragColor;

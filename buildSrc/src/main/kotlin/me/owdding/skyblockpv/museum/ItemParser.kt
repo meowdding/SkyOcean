@@ -4,7 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 
-class ItemParser(key: String) : MuseumProcessor(key) {
+class ItemParser : MuseumProcessor() {
     override fun process(item: JsonObject) {
         val id = item["id"].asString
         val museumData = item["museum_data"].asJsonObject

@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.recipe.crafthelper
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.REIRuntimeCompatability
+import me.owdding.skyocean.ApiDebug
 import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
@@ -14,13 +15,16 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.SimpleRecipeView
 import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.debug.DebugBuilder
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -76,6 +80,15 @@ object CraftHelperManager {
         val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
         val item = mcScreenHovered ?: reiHovered ?: return
 
+        if (item.getSkyBlockId() == null) {
+            Text.of("Item ") {
+                append(item.hoverName)
+                append(" does not have a SkyBlockId, cannot be selected as CraftHelper item")
+                color = TextColor.RED
+            }.sendWithPrefix("crafthelper_no_id")
+            return
+        }
+
         if (McScreen.isShiftDown) {
             val storage = CraftHelperStorage.getAndOrSetCustomRecipe()
             val id = SkyBlockId.fromItem(item) ?: return
@@ -96,5 +109,16 @@ object CraftHelperManager {
             }.sendWithPrefix()
         }
         McScreen.refreshScreen()
+    }
+
+    @ApiDebug("Craft Helper")
+    internal fun debug(builder: DebugBuilder) = with(builder) {
+        field("Selected", CraftHelperStorage.selectedItem)
+        field("Amount", CraftHelperStorage.selectedAmount)
+        iterable("Allowed Sources", ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()) {
+            literal(it.name)
+        }
+        val itemTracker = ItemTracker(ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet())
+        field("Total Items Tracked", itemTracker.items.values.flatten().sumOf { it.amount })
     }
 }

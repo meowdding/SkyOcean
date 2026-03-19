@@ -1,5 +1,7 @@
 package me.owdding.skyocean.utils.codecs
 
+import com.mojang.blaze3d.platform.InputConstants
+import com.mojang.blaze3d.platform.InputConstants.getKey
 import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
@@ -24,27 +26,6 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Function
 import kotlin.jvm.optionals.getOrNull
 
-//? if < 1.21.9 {
-/*private val componentTypes = arrayOf(
-    PlainTextContents.TYPE,
-    TranslatableContents.TYPE,
-    KeybindContents.TYPE,
-    ScoreContents.TYPE,
-    SelectorContents.TYPE,
-    NbtContents.TYPE,
-)
-
-internal fun createContentCodec(): MapCodec<ComponentContents> = ComponentSerialization.createLegacyComponentMatcher(
-    componentTypes,
-    ComponentContents.Type<*>::codec,
-    { it!!.type() },
-    "type",
-)
-*///?} else {
-
-
-
-
 internal fun createContentCodec(): MapCodec<ComponentContents> {
     val idMapper = ExtraCodecs.LateBoundIdMapper<String, MapCodec<out ComponentContents>>()
     idMapper.put("text", PlainTextContents.MAP_CODEC)
@@ -57,8 +38,6 @@ internal fun createContentCodec(): MapCodec<ComponentContents> {
 
     return ComponentSerialization.createLegacyComponentMatcher(idMapper, ComponentContents::codec, "type")
 }
-
-//?}
 
 val PACK_FORMAT: Codec<PackMetadata> = SkyOceanCodecs.PackMetadataCodec.codec()
 
@@ -79,24 +58,17 @@ object CodecHelpers {
     @IncludedCodec(keyable = true, named = "str_low")
     val STRING_LOWER: Codec<String> = Codec.STRING.xmap({ it.lowercase() }, { it })
 
-    @IncludedCodec
+    @IncludedCodec(keyable = true)
     val SKYBLOCK_ID_UNKNOWN: Codec<SkyBlockId> = SkyBlockId.UNKNOWN_CODEC
 
     @IncludedCodec
     val CLIENT_ASSET_CODEC: Codec<ClientAsset> = Identifier.CODEC.xmap(
-        {
-            //? if > 1.21.8 {
-            ClientAsset.ResourceTexture(it)
-            //?} else
-            /*ClientAsset(it.withPath { "textures/$it.png" })*/
-        },
-        {
-            //? if > 1.21.8 {
-            it.id()
-            //?} else
-            /*it.id.withPath { it.removeSurrounding("textures/", ".png") }*/
-        },
+        { ClientAsset.ResourceTexture(it) },
+        { it.id() },
     )
+
+    @IncludedCodec(keyable = true)
+    val keyCodec: Codec<InputConstants.Key> = Codec.STRING.xmap(InputConstants::getKey, InputConstants.Key::getName)
 
     val BLOCK_POS_STRING_CODEC: Codec<BlockPos> = Codec.STRING.xmap(
         { it.split(",").map { it.toInt() }.let { BlockPos(it[0], it[1], it[2]) } },
@@ -167,6 +139,7 @@ object CodecHelpers {
         CodecUtils.map(SkyOceanCodecs.getCodec<K>(), SkyOceanCodecs.getCodec<V>())
 
     internal inline fun <reified T> mutableList() = CodecUtils.mutableList(SkyOceanCodecs.getCodec<T>())
+    internal inline fun <reified T> mutableSet() = CodecUtils.mutableSet(SkyOceanCodecs.getCodec<T>())
     internal inline fun <reified T> list(): Codec<List<T>> = SkyOceanCodecs.getCodec<T>().listOf()
 
 

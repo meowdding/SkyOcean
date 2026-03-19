@@ -35,6 +35,10 @@ fun CategoryBuilder.category(category: CategoryKt, init: CategoryKt.() -> Unit) 
     category.init()
 }
 
+fun CategoryBuilder.categories(vararg entries: CategoryKt) {
+    entries.forEach(::category)
+}
+
 fun CategoryBuilder.separator(translation: String) = this.separator { this.translation = translation }
 
 fun ConfigDelegateProvider<RConfigKtEntry<Long>>.duration(unit: DurationUnit): CachedTransformedEntry<Long, Duration> {

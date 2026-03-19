@@ -6,11 +6,21 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
-import me.owdding.skyocean.events.ArgumentCommandBuilder
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.custom.CustomItems
 import me.owdding.skyocean.features.item.custom.CustomItems.getKey
-import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.features.item.custom.data.AnimatedSkyBlockDye
+import me.owdding.skyocean.features.item.custom.data.AnimatedSkyblockSkin
+import me.owdding.skyocean.features.item.custom.data.ArmorTrim
+import me.owdding.skyocean.features.item.custom.data.CustomItemComponent
+import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.GradientItemColor
+import me.owdding.skyocean.features.item.custom.data.IdKey
+import me.owdding.skyocean.features.item.custom.data.SkyBlockDye
+import me.owdding.skyocean.features.item.custom.data.SkyblockModel
+import me.owdding.skyocean.features.item.custom.data.SkyblockSkin
+import me.owdding.skyocean.features.item.custom.data.StaticItemColor
+import me.owdding.skyocean.features.item.custom.data.StaticModel
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.repo.customization.AnimatedSkulls
@@ -20,6 +30,7 @@ import me.owdding.skyocean.utils.Utils.get
 import me.owdding.skyocean.utils.Utils.getArgument
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.Utils.wrapWithNotItalic
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.commands.HexColorArgumentType
@@ -27,6 +38,7 @@ import me.owdding.skyocean.utils.commands.SkyBlockIdArgument
 import me.owdding.skyocean.utils.commands.VirtualResourceArgument
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.copy
+import me.owdding.skyocean.utils.tags.ItemTagKey
 import net.minecraft.commands.arguments.ResourceKeyArgument
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
@@ -37,6 +49,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.equipment.trim.TrimMaterial
 import net.minecraft.world.item.equipment.trim.TrimPattern
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.misc.ArgumentCommandBuilder
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
@@ -213,7 +226,14 @@ object CustomizeCommand {
                     val success = CustomItems.modify(item) {
                         this[CustomItemDataComponents.COLOR] = StaticItemColor(color)
                     }
+
                     if (success) {
+                        if (item !in ItemTagKey.DYEABLE) {
+                            text("Item might not support coloring!") {
+                                this.color = CatppuccinColors.Mocha.red
+                            }.sendWithPrefix()
+                        }
+
                         text("Successfully set color to ") {
                             append("#${color.toString(16).padStart(6, '0')}") {
                                 this.color = color
