@@ -16,13 +16,19 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 @GenerateCodec
 data class SkyShardsRecipe(
     var tree: SkyShardsMethod,
-) : CraftHelperRecipe(CraftHelperRecipeType.SKY_SHARDS, false) {
+) : CraftHelperRecipe(CraftHelperRecipeType.SKY_SHARDS, false), CraftHelperRecipe.SkyblockId {
+    override val amount: Int
+        get() = tree.quantity
+
     override fun resolve(
         resetLayout: () -> Unit,
         clear: () -> Unit,
     ): Pair<ContextAwareRecipeTree, ItemLikeIngredient> {
         return SkyShardsTreeResolver.resolve(this, resetLayout, clear)
     }
+
+    override val resultId: SkyBlockId
+        get() = tree.shard
 }
 
 abstract class SkyShardsMethod(

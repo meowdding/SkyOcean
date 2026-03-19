@@ -8,7 +8,7 @@ import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
-import me.owdding.skyocean.features.recipe.crafthelper.data.Meow
+import me.owdding.skyocean.features.recipe.crafthelper.data.CustomCraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsCycleElement
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.display.CraftHelperDisplay
@@ -180,9 +180,9 @@ object CraftHelperCommand {
         }
         val itemId = item?.id
 
-        val current = CraftHelperStorage.data as? Meow ?: run {
-            CraftHelperStorage.setStorage(Meow(CustomRoot(), mutableMapOf()))
-            CraftHelperStorage.data as Meow
+        val current = CraftHelperStorage.data as? CustomCraftHelperTree ?: run {
+            CraftHelperStorage.setStorage(CustomCraftHelperTree(CustomRoot(), mutableMapOf()))
+            CraftHelperStorage.data as CustomCraftHelperTree
         }
 
         current.inputs[itemId!!] = (current.inputs[itemId] ?: 0) + amount
@@ -204,9 +204,9 @@ object CraftHelperCommand {
         }
         val itemId = item?.id
 
-        val current = CraftHelperStorage.data as? Meow ?: run {
-            CraftHelperStorage.setStorage(Meow(CustomRoot(), mutableMapOf()))
-            CraftHelperStorage.data as Meow
+        val current = CraftHelperStorage.data as? CustomCraftHelperTree ?: run {
+            CraftHelperStorage.setStorage(CustomCraftHelperTree(CustomRoot(), mutableMapOf()))
+            CraftHelperStorage.data as CustomCraftHelperTree
         }
 
         current.inputs[itemId!!] = amount
@@ -227,9 +227,9 @@ object CraftHelperCommand {
         }
         val itemId = item?.id
 
-        val current = CraftHelperStorage.data as? Meow ?: run {
-            CraftHelperStorage.setStorage(Meow(CustomRoot(), mutableMapOf()))
-            CraftHelperStorage.data as Meow
+        val current = CraftHelperStorage.data as? CustomCraftHelperTree ?: run {
+            CraftHelperStorage.setStorage(CustomCraftHelperTree(CustomRoot(), mutableMapOf()))
+            CraftHelperStorage.data as CustomCraftHelperTree
         }
 
         current.inputs.remove(itemId)
@@ -243,7 +243,7 @@ object CraftHelperCommand {
 
     private fun customRecipeReset() {
         CraftHelperStorage.setStorage(
-            Meow(
+            CustomCraftHelperTree(
                 CustomRoot(),
                 mutableMapOf(),
             ),
