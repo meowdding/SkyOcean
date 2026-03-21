@@ -360,6 +360,10 @@
           "@value": "Show Hidden Pet Candy",
           "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
         },
+        "totemAnimation": {
+          "@value": "Totem Animation",
+          "desc": "Plays the Totem of Undying animation when an invulnerability item (like the Bonzo Mask) is used up."
+        },
         "islandCloudHider": {
           "@value": "Island Cloud Hider",
           "desc": [
