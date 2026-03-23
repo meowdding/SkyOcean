@@ -1,9 +1,10 @@
 plugins {
     id("dev.kikugie.stonecutter")
-    id("fabric-loom") version "1.15-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom-remap") apply false
+    id("net.fabricmc.fabric-loom") apply false
 }
 
-stonecutter active "1.21.11"
+stonecutter active "26.1"
 
 //region 1.21.11 animal package changes
 private val animalReplacementPrefix = "import net.minecraft.world.entity."
@@ -45,31 +46,35 @@ stonecutter parameters {
     }
     replacements.regex {
         direction = eval(current.version, "< 1.21.9")
-        replace("import net.minecraft.client.renderer.entity.state.AvatarRenderState(?!;)", "import net.minecraft.client.renderer.entity.state.PlayerRenderState as AvatarRenderState", "import net.minecraft.client.renderer.entity.state.PlayerRenderState as AvatarRenderState", "import net.minecraft.client.renderer.entity.state.AvatarRenderState")
+        replace(
+            "import net.minecraft.client.renderer.entity.state.AvatarRenderState(?!;)",
+            "import net.minecraft.client.renderer.entity.state.PlayerRenderState as AvatarRenderState",
+            "import net.minecraft.client.renderer.entity.state.PlayerRenderState as AvatarRenderState",
+            "import net.minecraft.client.renderer.entity.state.AvatarRenderState"
+        )
     }
 
     filters.include("**/*.fsh", "**/*.vsh")
 
     Replacements.read(project).replacements.forEach { (name, replacement) ->
         when (replacement) {
-            is StringReplacement if replacement.named -> replacements.string(name) {
-                direction = eval(current.version, replacement.condition)
-                replace(replacement.from, replacement.to)
-            }
-
-            is RegexReplacement if replacement.named -> replacements.regex(name) {
-                direction = eval(current.version, replacement.condition)
-                replace(replacement.regex, replacement.to, replacement.reverseRegex, replacement.reverse)
-            }
-
             is StringReplacement -> replacements.string {
+                if (replacement.named) {
+                    id = name
+                }
                 direction = eval(current.version, replacement.condition)
                 replace(replacement.from, replacement.to)
             }
 
             is RegexReplacement -> replacements.regex {
+                if (replacement.named) {
+                    id = name
+                }
                 direction = eval(current.version, replacement.condition)
-                replace(replacement.regex, replacement.to, replacement.reverseRegex, replacement.reverse)
+                replace(
+                    replacement.regex to replacement.to,
+                    replacement.reverseRegex to replacement.reverse
+                )
             }
         }
     }

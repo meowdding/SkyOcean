@@ -46,3 +46,12 @@ regex = "import net.minecraft.client.renderer.(rendertype.)?RenderTypes(?!;)"
 to = "import net.minecraft.client.renderer.RenderType as RenderTypes"
 reverseRegex = "import net.minecraft.client.renderer.(rendertype.)?RenderType as RenderTypes"
 reverse = "import net.minecraft.client.renderer.rendertype.RenderTypes"
+
+
+[gui_graphics]
+type = "regex"
+condition = "< 26.1"
+regex = "import net.minecraft.client.gui.GuiGraphicsExtractor(?!;)"
+to = "import net.minecraft.client.gui.GuiGraphics as GuiGraphicsExtractor"
+reverseRegex = "import net.minecraft.client.gui.GuiGraphics as GuiGraphicsExtractor"
+reverse = "import net.minecraft.client.gui.GuiGraphicsExtractor"
