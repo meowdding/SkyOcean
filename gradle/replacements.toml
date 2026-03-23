@@ -39,7 +39,7 @@ condition = "< 1.21.11"
 from = "net.minecraft.util.Util"
 to = "net.minecraft.Util"
 
-[replacements]
+[render_types]
 type = "regex"
 condition = "< 1.21.11"
 regex = "import net.minecraft.client.renderer.(rendertype.)?RenderTypes(?!;)"
