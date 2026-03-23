@@ -27,7 +27,7 @@ class FakeBlockStateDefinition(
                     //? if > 1.21.10 {
                     .identifier()
                     //?} else
-                    /*.location()*/
+                    //.location()
                     .toString()
             }
         }

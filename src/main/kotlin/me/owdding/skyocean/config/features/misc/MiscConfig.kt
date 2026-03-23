@@ -77,6 +77,11 @@ object MiscConfig : CategoryKt("misc") {
         this.translation = "skyocean.config.misc.customization_vanilla_integration"
     }
 
+    var totemAnimation by boolean(false) {
+        translation = "skyocean.config.misc.totemAnimation"
+        searchTerms = listOf("bonzo", "spirit", "mask", "phoenix", "pet", "remnant", "eye")
+    }
+
     var queueEstimation by boolean(true) {
         translation = "skyocean.config.misc.queueEstimation"
     }
