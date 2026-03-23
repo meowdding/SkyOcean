@@ -34,9 +34,9 @@ object ExtraDisplays {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
 
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphics) {
                 InventoryRenderer.renderNormalInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), columns, rows, color)
-                display.render(graphics)
+                display.extract(graphics)
             }
         }
     }
@@ -45,7 +45,7 @@ object ExtraDisplays {
         override fun getWidth() = width
         override fun getHeight() = height
 
-        override fun render(graphics: GuiGraphics) {
+        override fun extract(graphics: GuiGraphics) {
             graphics.draw()
         }
     }
@@ -55,7 +55,7 @@ object ExtraDisplays {
         override fun getWidth() = width
         override fun getHeight() = height
 
-        override fun render(graphics: GuiGraphics) {
+        override fun extract(graphics: GuiGraphics) {
             graphics.drawFilledBox(
                 0, 0,
                 getWidth(), getHeight(),

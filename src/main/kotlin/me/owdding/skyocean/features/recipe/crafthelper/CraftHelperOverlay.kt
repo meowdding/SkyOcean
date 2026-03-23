@@ -61,7 +61,7 @@ object CraftHelperOverlay : SkyOceanOverlay() {
 
     override val enabled: Boolean get() = CraftHelperConfig.enableOverlay && state != null && LocationAPI.isOnSkyBlock
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extract(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
         if (padding != 0) {
             graphics.drawSprite(OceanTextures.overlayBackground, 0, 0, bounds.first, bounds.second)
         }
