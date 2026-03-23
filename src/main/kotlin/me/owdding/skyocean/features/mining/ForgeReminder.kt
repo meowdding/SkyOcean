@@ -20,7 +20,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.command
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
-import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import kotlin.time.Duration.Companion.minutes
 
 @Module

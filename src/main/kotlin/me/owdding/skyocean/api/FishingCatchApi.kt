@@ -13,8 +13,8 @@ import tech.thatgravyboat.skyblockapi.api.events.location.IslandChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.minecraft.sounds.SoundPlayedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
-import tech.thatgravyboat.skyblockapi.utils.time.since
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
