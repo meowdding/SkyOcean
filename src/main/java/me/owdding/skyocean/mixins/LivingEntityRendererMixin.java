@@ -17,7 +17,8 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+//~ if >= 26.1 'CameraRenderState' -> 'level.CameraRenderState'
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -34,7 +35,8 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
         super(context);
     }
 
-    @WrapMethod(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V")
+    //~ if >= 26.1 'CameraRenderState' -> 'level/CameraRenderState'
+    @WrapMethod(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V")
     protected <S extends LivingEntityRenderState> void submit(
         S renderState,
         PoseStack poseStack,

@@ -61,7 +61,7 @@ import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import me.owdding.skyocean.utils.rendering.StyledItemWidget
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.Layout
@@ -314,9 +314,11 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         val trimMaterialWidget = ItemCache.trimMaterials.associateWithNotNull {
             it.components()
                 .get(DataComponents.PROVIDES_TRIM_MATERIAL)
-                ?.material()
+                //? < 26.1 {
+                /* ?.material()
                 ?.unwrap(SkyOcean.registryLookup)
                 ?.getOrNull()
+                *///? }
                 ?.value()
         }.trimButton(trimMaterial)
             .chunked(4)
@@ -561,15 +563,19 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         FrameLayout.centerInRectangle(this.layout!!, this.rectangle)
     }
 
-    override fun render(p0: GuiGraphics, p1: Int, p2: Int, p3: Float) {
+    //~ if >= 26.1 'render' -> 'extractRenderState'
+    override fun extractRenderState(p0: GuiGraphicsExtractor, p1: Int, p2: Int, p3: Float) {
         animationManager?.update()
-        super.render(p0, p1, p2, p3)
+        //~ if >= 26.1 'render' -> 'extractRenderState'
+        super.extractRenderState(p0, p1, p2, p3)
     }
 
-    override fun renderBackground(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+    //~ if >= 26.1 'render' -> 'extract' {
+    override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         val layout = layout ?: return
-        super.renderBackground(graphics, mouseX, mouseY, partialTick)
-        this.renderTransparentBackground(graphics)
+        super.extractBackground(graphics, mouseX, mouseY, partialTick)
+        this.extractTransparentBackground(graphics)
+    //~ }
 
         graphics.drawSprite(
             UIConstants.MODAL,

@@ -3,18 +3,18 @@ package me.owdding.skyocean.utils.rendering
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
-import com.teamresourceful.resourcefullib.client.screens.CursorScreen
 import earth.terrarium.olympus.client.components.base.BaseWidget
 import earth.terrarium.olympus.client.ui.UIConstants
 import me.owdding.lib.rendering.MeowddingPipState
 import me.owdding.skyocean.SkyOcean
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.client.input.MouseButtonEvent
-import net.minecraft.client.renderer.LightTexture
+//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
+import net.minecraft.util.LightCoordsUtil as LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -104,7 +104,8 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
 
     private var isButtonHovered = false
 
-    override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    //~ if >= 26.1 'render(' -> 'extractWidgetRenderState('
+    override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         graphics.drawSprite(UIConstants.MODAL_INSET, x, y, width, height)
 
         if (this.stack.isEmpty) return
@@ -132,7 +133,9 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
             } else {
                 val itemState = TrackingItemStackRenderState()
                 McClient.self.itemModelResolver.updateForTopItem(itemState, this.stack, ItemDisplayContext.NONE, McLevel.self, null, 0)
-                graphics.guiRenderState.submitPicturesInPictureState(
+
+                //~ if >= 26.1 'submit' -> 'add'
+                graphics.guiRenderState.addPicturesInPictureState(
                     ItemWidgetItemState(
                         x, y, x + width, y + height,
                         graphics.scissorStack.peek(),
@@ -174,19 +177,13 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
         }
     }
 
-    override fun getCursor(): CursorScreen.Cursor? = when {
-        this.isButtonHovered && !this.isAutoRotating -> CursorScreen.Cursor.POINTER
-        this.isHovered -> CursorScreen.Cursor.RESIZE_EW
-        else -> super.cursor
-    }
-
     private fun isMouseOverButton(mouseX: Int, mouseY: Int): Boolean = mouseX in buttonX until (buttonX + BUTTON_SIZE) &&
         mouseY in buttonY until (buttonY + BUTTON_SIZE)
 }
 
 @Suppress("SameParameterValue")
 private fun renderEntityInInventory(
-    graphics: GuiGraphics,
+    graphics: GuiGraphicsExtractor,
 
     x0: Int,
     y0: Int,
@@ -202,7 +199,8 @@ private fun renderEntityInInventory(
     /*InventoryScreen.renderEntityInInventory(graphics, x0, y0, width, height, scale, translation, rotation, overrideCameraAngle, entity)
    *///?} else {
     val renderState = InventoryScreen.extractRenderState(entity)
-    graphics.submitEntityRenderState(renderState, scale, translation, rotation, overrideCameraAngle, x0, y0, width, height)
+    //~ if >= 26.1 'submitEntityRenderState(' -> 'entity('
+    graphics.entity(renderState, scale, translation, rotation, overrideCameraAngle, x0, y0, width, height)
     //?}
 
 }

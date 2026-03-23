@@ -8,10 +8,13 @@ import me.owdding.skyocean.features.item.custom.CustomItems;
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper;
 import me.owdding.skyocean.features.item.custom.data.ItemKey;
 import me.owdding.skyocean.helpers.MixinHelper;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+//? < 26.1
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,8 +33,10 @@ public class ItemStackMixin implements ItemStackAccessor {
     @Unique
     private ItemKey key;
 
-    @Inject(method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("RETURN"), order = 1200)
-    public void init(ItemLike itemLike, int count, PatchedDataComponentMap patches, CallbackInfo ci) {
+    //~ if >= 26.1 'world/level/ItemLike' -> 'core/Holder'
+    @Inject(method = "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("RETURN"), order = 1200)
+    //~ if >= 26.1 'ItemLike' -> 'Holder<Item>'
+    public void init(Holder<Item> itemLike, int count, PatchedDataComponentMap patches, CallbackInfo ci) {
         if (!MixinHelper.isStarted() || COPYING.get()) {
             return;
         }
@@ -44,8 +49,10 @@ public class ItemStackMixin implements ItemStackAccessor {
         return Objects.requireNonNullElse(CustomItemsHelper.getData(self(), DataComponents.CUSTOM_NAME), original);
     }
 
-    @WrapOperation(method = "copy", at = @At(value = "NEW", target = "(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)Lnet/minecraft/world/item/ItemStack;"))
-    private ItemStack copy(ItemLike item, int count, PatchedDataComponentMap patches, Operation<ItemStack> original) {
+    //~ if >= 26.1 'world/level/ItemLike' -> 'Holder'
+    @WrapOperation(method = "copy", at = @At(value = "NEW", target = "(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/PatchedDataComponentMap;)Lnet/minecraft/world/item/ItemStack;"))
+    //~ if >= 26.1 'ItemLike' -> 'Holder<Item>'
+    private ItemStack copy(Holder<Item> item, int count, PatchedDataComponentMap patches, Operation<ItemStack> original) {
         COPYING.set(true);
         var other = original.call(item, count, patches);
         ((ItemStackMixin) (Object) other).key = key;

@@ -1,7 +1,6 @@
 package me.owdding.skyocean.utils.extensions
 
 import com.teamresourceful.resourcefullib.common.color.Color
-import com.teamresourceful.resourcefullib.common.utils.TriState
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.buttons.Button
@@ -39,6 +38,8 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
+//~ if >= 26.1 'com.teamresourceful.resourcefullib.common.utils.TriState' -> 'net.minecraft.util.TriState'
+import net.minecraft.util.TriState
 import org.jetbrains.annotations.Contract
 import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -88,7 +89,8 @@ fun AbstractWidget.asScrollable(
     alwaysShowScrollBar: Boolean = false,
 ): LayoutWidget<FrameLayout> {
     val scrollable = Widgets.frame { frame ->
-        frame.withScrollableY(TriState.of(alwaysShowScrollBar.takeIf { it }))
+        //~ if >= 26.1 'UNDEFINED' -> 'DEFAULT'
+        frame.withScrollableY(alwaysShowScrollBar.takeIf { it }?.let { TriState.TRUE } ?: TriState.DEFAULT)
             .withSize(width, this.height.coerceAtMost(height))
             .withAutoFocus(false)
             .withContents { contents ->

@@ -10,10 +10,14 @@ resourceful-config = "4.0.0-beta.2"
 olympus = "1.8.0-beta.1"
 placeholders = "3.0.0-beta.2+26.1"
 
+rconfigkt = "4.0.0-beta.1"
+
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+
+resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-26.1-rc-1", version.ref = "rconfigkt" }
 
 resourceful-lib = { module = "com.teamresourceful.resourcefullib:resourcefullib-fabric-26.1-rc-1", version.ref = "resourceful-lib" }
 resourceful-config = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.1-rc-1", version.ref = "resourceful-config" }

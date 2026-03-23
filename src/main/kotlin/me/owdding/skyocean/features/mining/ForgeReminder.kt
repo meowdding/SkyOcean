@@ -58,7 +58,7 @@ object ForgeReminder {
             if (!MiningConfig.forgeReminder) return@CooldownHelper
             val now = currentInstant()
             val forgeSlots = ForgeAPI.getForgeSlots().values.filter { it.expiryTime <= now }.nullIfEmpty() ?: return@CooldownHelper
-            val items = forgeSlots.groupBy { it.id }.values.joinToComponent(", ") {
+            val items = forgeSlots.groupBy { it.skyBlockId }.values.joinToComponent(", ") {
                 Text.of {
                     append("${it.size}x ") { color = TextColor.GRAY }
                     append(it.first().skyBlockId.toItem().cleanName)
