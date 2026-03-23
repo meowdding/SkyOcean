@@ -2,20 +2,12 @@ import com.google.devtools.ksp.gradle.KspAATask
 import com.google.devtools.ksp.gradle.KspExtension
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
-import net.fabricmc.loom.LoomGradleExtension
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 import net.fabricmc.loom.api.fabricapi.FabricApiExtension
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
-import org.gradle.kotlin.dsl.add
-import org.gradle.kotlin.dsl.from
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import kotlin.apply
 import kotlin.io.path.createDirectories
-import kotlin.jvm.java
 
 plugins {
     kotlin("jvm")
@@ -172,10 +164,16 @@ compactingResources {
 
 
 tasks.processResources {
+    val range = if (versionedCatalog.versions.has("minecraft.range")) {
+        versionedCatalog.versions.get("minecraft.range").toString()
+    } else {
+        val start = versionedCatalog.versions.getOrFallback("minecraft.start", "minecraft")
+        val end = versionedCatalog.versions.getOrFallback("minecraft.end", "minecraft")
+        ">=$start <=$end"
+    }
     val replacements = mapOf(
         "version" to version,
-        "minecraft_start" to versionedCatalog.versions.getOrFallback("minecraft.start", "minecraft"),
-        "minecraft_end" to versionedCatalog.versions.getOrFallback("minecraft.end", "minecraft"),
+        "minecraft_range" to range,
         "fabric_lang_kotlin" to versionedCatalog.versions["fabric.language.kotlin"],
         "sbapi" to versionedCatalog.versions["skyblockapi"],
         "rlib" to versionedCatalog.versions["resourceful.lib"],
