@@ -24,6 +24,7 @@ import me.owdding.skyocean.utils.suggestions.RecipeIdSuggestionProvider
 import me.owdding.skyocean.utils.suggestions.RecipeNameSuggestionProvider
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent.Companion.argument
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
@@ -60,30 +61,30 @@ object CraftHelperCommand {
             }
 
             then("custom") {
-                then("add") {
-                    then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
-                        callback {
-                            val input = this.getArgument("recipe", String::class.java)
-                            customRecipeAdd(input)
-                        }
-                    }
+                thenCallback(
+                    "add recipe",
+                    StringArgumentType.greedyString(),
+                    CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider),
+                ) {
+                    customRecipeAdd(argument<String>("recipe"))
                 }
-                then("set") {
-                    then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
-                        callback {
-                            val input = this.getArgument("recipe", String::class.java)
-                            customRecipeSet(input)
-                        }
-                    }
+
+                thenCallback(
+                    "set recipe",
+                    StringArgumentType.greedyString(),
+                    CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider),
+                ) {
+                    customRecipeSet(argument<String>("recipe"))
                 }
-                then("remove") {
-                    then("recipe", StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) {
-                        callback {
-                            val input = this.getArgument("recipe", String::class.java)
-                            customRecipeRemove(input)
-                        }
-                    }
+
+                thenCallback(
+                    "remove recipe",
+                    StringArgumentType.greedyString(),
+                    CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider),
+                ) {
+                    customRecipeRemove(argument<String>("recipe"))
                 }
+
                 thenCallback("reset") { customRecipeReset() }
                 callback {
                     text("Please specify an action!") { this.color = TextColor.RED }
@@ -91,6 +92,7 @@ object CraftHelperCommand {
             }
         }
     }
+
 
     private fun clear() {
         CraftHelperManager.clear()
