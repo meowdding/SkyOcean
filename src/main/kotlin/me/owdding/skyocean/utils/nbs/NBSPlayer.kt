@@ -79,7 +79,7 @@ class NBSPlayer(private val song: NoteBlockSong) {
             val volume = (instrument.layer.volume * instrument.noteBlockVelocity) / 100f
             val pitch = getPitch(instrument)
 
-            McClient.self.execute {
+            McClient.runNextTick {
                 McClient.self.soundManager.play(SimpleSoundInstance.forUI(soundEvent, pitch, volume))
             }
         }
@@ -88,7 +88,7 @@ class NBSPlayer(private val song: NoteBlockSong) {
     }
 
     private fun loop() {
-        if (this.position >= this.song.songLengthTicks) {
+        if (this.position > this.song.songLengthTicks) {
             if (!this.song.loop) return
             if (this.loopedAmount >= this.song.maxLoopCount.toInt() && this.song.maxLoopCount.toInt() != 0) return
             if (this.position >= this.song.songLengthTicks.toInt()) {
