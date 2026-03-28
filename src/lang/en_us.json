@@ -311,11 +311,53 @@
         },
         "pest_warning": {
           "@value": "Pest Warning",
-          "desc": "Warns you when you reach 4 or more pests while farming."
+          "desc": "Warns you when you reach the configured amount or more pests while farming."
+        },
+        "pest_warning_amount": {
+          "@value": "Pest Warning Minimum Amount",
+          "desc": [
+            "The minimum amount of pests to trigger the warning.",
+            "If you don't know what number to put here, you can calculate the amount of pests that start reducing your <gold>Farming Fortune</gold> using this formula:",
+            "<italic>\"floor(4 + <dark_green>Bonus Pest Chance</dark_green>/100)\"</italic>"
+          ]
         },
         "pest_warning_delay": {
           "@value": "Pest Warning Delay",
           "desc": "The delay between reminders in seconds."
+        },
+        "crop_fever_effect": {
+          "@value": "Crop Fever Effects",
+          "desc": [
+            "When you trigger a Crop Fever this adds many visual effects.",
+            "<red>IF YOU ARE SENSITIVE TO FLASHING COLORS PLEASE DON'T ENABLE THE HUE SHIFT OPTION, OTHERWISE YOU WILL HAVE A VERY BAD TIME.</red>"
+          ],
+          "overlay_title": {
+            "@value": "Crop Fever Config"
+          },
+          "enabled": {
+            "@value": "Enabled",
+            "desc": "Enables the entire feature."
+          },
+          "backgroundMusic": {
+            "@value": "Background Music",
+            "desc": "Plays a looping soundtrack while a Crop Fever is active."
+          },
+          "coinsDropping": {
+            "@value": "Coins Dropping during Start",
+            "desc": "Shows an animation of skyblock coins dropping when starting a Crop Fever."
+          },
+          "coinsDroppingDuration": {
+            "@value": "Coins Dropping Duration",
+            "desc": "The duration for the coins drop animation."
+          },
+          "startingSound": {
+            "@value": "Jackpot Sound",
+            "desc": "Plays a Jackpot sound when starting a Crop Fever."
+          },
+          "hueShiftingShader": {
+            "@value": "Color Cycling Effect",
+            "desc": "Applies a color cycling post-processing effect to the screen during a Crop Fever."
+          }
         }
       },
       "misc": {
