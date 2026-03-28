@@ -5,8 +5,8 @@ import me.owdding.skyocean.mixins.ScreenAccessor
 import me.owdding.skyocean.utils.MathUtils
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
-import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
-import tech.thatgravyboat.skyblockapi.utils.time.since
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import kotlin.time.Duration
 import kotlin.time.Instant
 import kotlin.time.isDistantPast

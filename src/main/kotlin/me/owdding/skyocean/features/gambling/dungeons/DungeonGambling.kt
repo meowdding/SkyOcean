@@ -75,7 +75,7 @@ object DungeonGambling {
     @Subscription
     fun onScreenRender(event: RenderScreenBackgroundEvent) {
         val menu = (event.screen as? ContainerScreen)?.menu
-        rendering = menu != null && menu.containerId == this.menu && DungeonGamblingRenderer.render(event.graphics)
+        rendering = menu != null && menu.containerId == this.menu && DungeonGamblingRenderer.extract(event.graphics)
         if (rendering) event.cancel()
     }
 

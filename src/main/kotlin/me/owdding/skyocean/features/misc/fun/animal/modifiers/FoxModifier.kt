@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.FoxRenderState
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.animal.fox.Fox
-import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import kotlin.time.Duration.Companion.milliseconds
 
 @RegisterAnimalModifier

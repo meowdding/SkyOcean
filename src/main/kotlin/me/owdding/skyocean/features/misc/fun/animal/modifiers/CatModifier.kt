@@ -21,7 +21,10 @@ import kotlin.jvm.optionals.getOrNull
 object CatModifier : AnimalModifier<Cat, CatRenderState> {
     override val type: EntityType<Cat> = EntityType.CAT
 
-    private val catVariants: List<CatVariant> = Registries.CAT_VARIANT.list().sortedBy { it.assetInfo.id.toString() }
+    private val catVariants: List<CatVariant> = Registries.CAT_VARIANT.list().sortedBy {
+        //~ if >= 26.1 'assetInfo' -> 'babyAssetInfo()'
+        it.babyAssetInfo().id.toString()
+    }
 
     var catVariant = PlayerAnimalConfig.createEntry("cat_variant") { id, type ->
         enum(id, Variant.DEFAULT) {
@@ -37,7 +40,8 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
         state: CatRenderState,
         partialTicks: Float,
     ) {
-        state.texture = getCatVariant(avatarState).assetInfo().texturePath()
+        //~ if >= 26.1 'assetInfo()' -> 'assetInfo(state.isBaby)'
+        state.texture = getCatVariant(avatarState).assetInfo(state.isBaby).texturePath()
         state.collarColor = getCollarColor(avatarState)
         state.isSitting = state.isCrouching
     }
