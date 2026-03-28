@@ -388,6 +388,10 @@
           "@value": "Hide entity fire",
           "desc": "Removes the fire effect from all entities."
         },
+        "hideImplosions": {
+          "@value": "Hide Implosion Particles",
+          "desc": "Removes the wither blade implosion particles."
+        },
         "itemSearch": {
           "@value": "Item Search",
           "desc": "Item Search is a feature that allows you to search for items in your inventory, backpacks, storage, sacks, island chests and more.",
