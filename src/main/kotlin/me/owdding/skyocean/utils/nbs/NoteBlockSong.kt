@@ -68,7 +68,7 @@ data class NoteBlockSong(
         val author: String?,
         val originalAuthor: String?,
         val description: String?,
-        @param:Nullable val link: String?,
+        val link: String?,
         val data: Map<String, String>
     )
 }

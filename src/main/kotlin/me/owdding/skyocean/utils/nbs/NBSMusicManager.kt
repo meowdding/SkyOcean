@@ -1,11 +1,10 @@
 package me.owdding.skyocean.utils.nbs
 
 import me.owdding.skyocean.SkyOcean
-import org.slf4j.LoggerFactory
+import me.owdding.lib.utils.MeowddingLogger
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
-object NBSMusicManager {
-    private val LOGGER = LoggerFactory.getLogger(NBSMusicManager::class.java)
+object NBSMusicManager: MeowddingLogger by SkyOcean.featureLogger("NBS Music Manager") {
     private val activePlayers = HashMap<String, NBSPlayer>()
 
     fun play(id: String, songResourceLocation: String) {
@@ -24,7 +23,7 @@ object NBSMusicManager {
             activePlayers[id] = player
             player.start()
         } catch (e: Exception) {
-            LOGGER.error("Failed to play $songResourceLocation with id: $id", e)
+            error("Failed to play $songResourceLocation with id: $id", e)
         }
     }
 

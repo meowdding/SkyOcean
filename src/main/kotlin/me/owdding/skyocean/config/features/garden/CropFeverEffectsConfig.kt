@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.garden
 
 import me.owdding.skyocean.config.duration
 import me.owdding.skyocean.config.overlays.OverlayConfig
+import me.owdding.skyocean.config.separator
 import kotlin.time.DurationUnit
 
 object CropFeverEffectsConfig : OverlayConfig("skyocean.config.garden.crop_fever_effect.overlay_title") {
@@ -32,4 +33,7 @@ object CropFeverEffectsConfig : OverlayConfig("skyocean.config.garden.crop_fever
         this.translation = "skyocean.config.garden.crop_fever_effect.hueShiftingShader"
     }
 
+    init {
+        separator("skyocean.config.garden.crop_fever_effect.credits")
+    }
 }

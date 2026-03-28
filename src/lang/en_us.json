@@ -340,11 +340,13 @@
           },
           "backgroundMusic": {
             "@value": "Background Music",
-            "desc": "Plays a looping soundtrack while a Crop Fever is active."
+            "desc": [
+              "Plays a looping soundtrack while a Crop Fever is active."
+            ]
           },
           "coinsDropping": {
             "@value": "Coins Dropping during Start",
-            "desc": "Shows an animation of skyblock coins dropping when starting a Crop Fever."
+            "desc": "Shows an animation of SkyBlock coins dropping when starting a Crop Fever."
           },
           "coinsDroppingDuration": {
             "@value": "Coins Dropping Duration",
@@ -357,6 +359,10 @@
           "hueShiftingShader": {
             "@value": "Color Cycling Effect",
             "desc": "Applies a color cycling post-processing effect to the screen during a Crop Fever."
+          },
+          "credits": {
+            "@value": "Credits",
+            "desc": "Background Music is sourced from <hover 'Click to visit their site'><url 'https://noteblock.world'><color #6294FD>noteblock.world:</color></url></hover> <hover 'Click to visit the Page for the Song'><url 'https://noteblock.world/song/bGGNXKGUKP'><color #4AE84A>Invincibility Theme - Super Mario Bros. by Sandriix701</color></url></hover>"
           }
         }
       },

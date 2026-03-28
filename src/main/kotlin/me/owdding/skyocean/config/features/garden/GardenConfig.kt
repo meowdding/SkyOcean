@@ -18,7 +18,7 @@ object GardenConfig : CategoryKt("garden") {
         this.translation = "skyocean.config.garden.pest_warning"
     }
 
-        var pestWarningAmount by int(4) {
+    var pestWarningAmount by int(4) {
         this.translation = "skyocean.config.garden.pest_warning_amount"
     }
 
