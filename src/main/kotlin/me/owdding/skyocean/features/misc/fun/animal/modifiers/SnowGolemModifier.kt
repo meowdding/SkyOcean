@@ -9,6 +9,7 @@ import me.owdding.skyocean.utils.Utils.list
 import net.minecraft.client.renderer.block.model.BlockDisplayContext
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.SnowGolemRenderState
+//? >= 26.1
 import net.minecraft.client.renderer.item.properties.select.DisplayContext
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.entity.EntityType

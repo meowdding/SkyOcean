@@ -25,6 +25,7 @@ import kotlin.jvm.optionals.getOrNull
 object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
     override val type: EntityType<Wolf> = EntityType.WOLF
 
+    //~ if >= 26.1 'assetInfo' -> 'babyInfo'
     private val wolfVariants: List<WolfVariant> = Registries.WOLF_VARIANT.list().sortedBy { it.babyInfo.tame.toString() }
     private val states = listOf(TAME, WILD, ANGRY)
 

@@ -104,7 +104,7 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
 
     private var isButtonHovered = false
 
-    //~ if >= 26.1 'render(' -> 'extractWidgetRenderState('
+    //~ if >= 26.1 'renderWidget(' -> 'extractWidgetRenderState('
     override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         graphics.drawSprite(UIConstants.MODAL_INSET, x, y, width, height)
 
