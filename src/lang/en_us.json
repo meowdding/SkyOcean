@@ -233,6 +233,10 @@
           "@value": "Sack Value",
           "desc": "Shows the value of all items in your sacks.",
           "edit": "Edit Sack Value",
+          "alignment": {
+            "@value": "Alignment",
+            "desc": "The alignment of the sack value element."
+          },
           "price_source": {
             "@value": "Price Source",
             "desc": "The source to use for the price of items in sacks.",
@@ -304,6 +308,10 @@
         "pest_bait_type": {
           "@value": "Pest Bait Type",
           "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
+        },
+        "pest_bait_alignment": {
+          "@value": "Pest Bait Alignment",
+          "desc": "The alignment of the pest bait type element."
         },
         "desk_pest_highlight": {
           "@value": "Desk Pest Highlight",
