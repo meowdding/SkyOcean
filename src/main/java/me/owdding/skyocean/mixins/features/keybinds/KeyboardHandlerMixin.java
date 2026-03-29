@@ -20,7 +20,7 @@ public class KeyboardHandlerMixin {
     @Inject(method = "keyPress", at = @At(value = "MIXINEXTRAS:EXPRESSION",
         //? >= 26.1
         ordinal = 0
-        //? >= 1.21.11
+        //? = 1.21.11
         //ordinal = 3
         //? < 1.21.11
         //ordinal = 2

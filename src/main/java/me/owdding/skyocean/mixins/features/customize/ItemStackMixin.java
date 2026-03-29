@@ -15,7 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 //? < 26.1
-import net.minecraft.world.level.ItemLike;
+//import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -49,7 +49,7 @@ public class ItemStackMixin implements ItemStackAccessor {
         return Objects.requireNonNullElse(CustomItemsHelper.getData(self(), DataComponents.CUSTOM_NAME), original);
     }
 
-    //~ if >= 26.1 'world/level/ItemLike' -> 'Holder'
+    //~ if >= 26.1 'world/level/ItemLike' -> 'core/Holder'
     @WrapOperation(method = "copy", at = @At(value = "NEW", target = "(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/PatchedDataComponentMap;)Lnet/minecraft/world/item/ItemStack;"))
     //~ if >= 26.1 'ItemLike' -> 'Holder<Item>'
     private ItemStack copy(Holder<Item> item, int count, PatchedDataComponentMap patches, Operation<ItemStack> original) {

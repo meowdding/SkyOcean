@@ -289,6 +289,8 @@ dependencies {
     implementation(versionedCatalog["keval"])
     "include"(versionedCatalog["keval"])
 
+    maybeModRuntimeOnly(versionedCatalog["hypixel.modapi.fabric"])
+
     maybeModImplementation(versionedCatalog["fabric.api"])
     maybeModRuntimeOnly(versionedCatalog["fabric.language.kotlin"])
     compileOnly(versionedCatalog["skyblockapi.repo"])

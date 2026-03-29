@@ -56,14 +56,16 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
         }
     }
 
-    //~ if >= 26.1 'render' -> 'extract' {
+    //~ if >= 26.1 'render' -> 'extract'
     override fun extractBackground(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+        //~ if >= 26.1 'render' -> 'extract'
         super.extractBackground(guiGraphics, mouseX, mouseY, partialTick)
 
         if (renderBackground) {
+            //~ if >= 26.1 'render' -> 'extract'
             extractMenuBackground(guiGraphics)
         }
-    //~ }
+
         val textureX = (this.width - backgroundWidth) / 2
         val textureY = (this.height - backgroundHeight) / 2
 

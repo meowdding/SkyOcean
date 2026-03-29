@@ -26,7 +26,7 @@
   "depends": {
     "fabricloader": ">=0.16.10",
     "minecraft": "${minecraft_range}",
-    "fabric": "*",
+    "fabric-api": "*",
     "fabric-language-kotlin": ">=${fabric_lang_kotlin}",
     "resourcefullib": ">=${rlib}",
     "olympus": ">=${olympus}",

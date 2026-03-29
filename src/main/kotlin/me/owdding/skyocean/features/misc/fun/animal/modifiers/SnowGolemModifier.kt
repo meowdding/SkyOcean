@@ -6,17 +6,15 @@ import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
+//? >= 26.1
 import net.minecraft.client.renderer.block.model.BlockDisplayContext
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.SnowGolemRenderState
-//? >= 26.1
-import net.minecraft.client.renderer.item.properties.select.DisplayContext
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.animal.golem.SnowGolem
 import net.minecraft.world.level.block.Blocks
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.helpers.McLevel
 
 @RegisterAnimalModifier
 object SnowGolemModifier : AnimalModifier<SnowGolem, SnowGolemRenderState> {
@@ -34,13 +32,13 @@ object SnowGolemModifier : AnimalModifier<SnowGolem, SnowGolemRenderState> {
         }
     }
     //? } else {
-    var snowGolemPumpkin = PlayerAnimalConfig.createEntry("snow_golem_pumpkin") { id, type ->
+    /*var snowGolemPumpkin = PlayerAnimalConfig.createEntry("snow_golem_pumpkin") { id, type ->
         enum(id, AnimalModifier.BooleanState.RANDOM) {
             this.translation = createTranslationKey("snow_golem", "${type}_pumpkin")
             condition = isSelected(EntityType.SNOW_GOLEM)
         }
     }
-    //? }
+    *///? }
 
 
     override fun apply(
