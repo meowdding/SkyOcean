@@ -61,3 +61,11 @@ condition = "< 26.1"
 from = "GuiGraphicsExtractor"
 to = "GuiGraphics"
 named = true
+
+[pack_output]
+type = "regex"
+condition = "< 26.1"
+regex = "import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput(?!;)"
+to = "import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput as FabricPackOutput"
+reverseRegex = "import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput as FabricPackOutput"
+reverse = "import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput"

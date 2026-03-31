@@ -16,7 +16,7 @@ hypixel-modapi-fabric = "1.0.1+build.1+mc1.21"
 
 rconfigkt = "3.5.15"
 
-detekt = "2.0.0-alpha.0"
+detekt = "2.0.0-alpha.2"
 
 meowdding-lib = "4.1.1+38eabf5c"
 meowdding-ktmodules = "1.0.6"

@@ -17,6 +17,8 @@ import me.owdding.lib.platform.screens.Overlay
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
+//? < 26.1
+//import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component

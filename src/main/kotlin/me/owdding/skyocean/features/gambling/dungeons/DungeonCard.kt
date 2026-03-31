@@ -17,6 +17,6 @@ object DungeonCard {
         graphics.drawGradient(0, 0, WIDTH, HEIGHT - 1, BACKGROUND_COLOR, ARGB.color(0x60, color), ARGB.color(0x60, color), BACKGROUND_COLOR)
         graphics.drawGradient(0, HEIGHT - 1, WIDTH, 1, color, color, color, color)
 
-        Displays.item(item).render(graphics, WIDTH / 2 - 8, HEIGHT / 2 - 8)
+        Displays.item(item).extract(graphics, WIDTH / 2 - 8, HEIGHT / 2 - 8)
     }
 }

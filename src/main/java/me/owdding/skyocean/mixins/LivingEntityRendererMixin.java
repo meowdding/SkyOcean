@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.time.Instant;
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
+import me.owdding.skyocean.accessors.WalkAnimationStateAccessor;
 import me.owdding.skyocean.features.misc.fun.animal.PlayerAnimals;
 import me.owdding.skyocean.utils.PlayerUtils;
 import net.minecraft.client.Minecraft;
@@ -83,6 +84,7 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
                 Instant lastMoveTime = PlayerUtils.INSTANCE.getLastMoveTime(avatar.getUUID());
                 AvatarRenderStateAccessor.setLastMoveTime(state, lastMoveTime);
             }
+            AvatarRenderStateAccessor.setMoveStartTime(state, WalkAnimationStateAccessor.getMoveStartTime(avatar.walkAnimation));
 
             var type = PlayerAnimals.getEntityType();
             var renderer = Minecraft.getInstance().getEntityRenderDispatcher().renderers.get(type);

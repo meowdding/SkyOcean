@@ -250,9 +250,7 @@ tasks.withType<Detekt>().configureEach {
     exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.get().asFile.toPath()) }
     reports {
         html.required.set(true)
-        xml.required.set(true)
         sarif.required.set(true)
-        md.required.set(true)
     }
 }
 
