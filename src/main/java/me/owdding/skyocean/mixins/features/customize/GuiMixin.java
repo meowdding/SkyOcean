@@ -15,7 +15,8 @@ import java.util.Objects;
 @Mixin(Gui.class)
 public class GuiMixin {
 
-    @WrapOperation(method = {"renderSelectedItemName", "tick()V"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getHoverName()Lnet/minecraft/network/chat/Component;"))
+    //~ if >= 26.1 'renderSelectedItemName' -> 'extractSelectedItemName'
+    @WrapOperation(method = {"extractSelectedItemName", "tick()V"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getHoverName()Lnet/minecraft/network/chat/Component;"))
     public Component renderSelectedItemName(ItemStack instance, Operation<Component> original) {
         return Objects.requireNonNullElseGet(CustomItemsHelper.getData(instance, DataComponents.CUSTOM_NAME), () -> original.call(instance));
     }

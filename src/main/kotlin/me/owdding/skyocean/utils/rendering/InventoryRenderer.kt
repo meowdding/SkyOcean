@@ -1,14 +1,17 @@
 package me.owdding.skyocean.utils.rendering
 
 import com.mojang.blaze3d.pipeline.BlendFunction
+//? >= 26.1
+import com.mojang.blaze3d.pipeline.ColorTargetState
+//~ if >= 26.1 'platform.DepthTestFunction' -> 'pipeline.DepthStencilState'
+import com.mojang.blaze3d.pipeline.DepthStencilState
 import com.mojang.blaze3d.pipeline.RenderPipeline
-import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.shaders.UniformType
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import earth.terrarium.olympus.client.utils.Orientation
 import me.owdding.skyocean.SkyOcean
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.RenderPipelines
 import org.joml.Matrix3x2f
 import org.joml.Vector2i
@@ -21,8 +24,13 @@ object InventoryRenderer {
             .withVertexShader(SkyOcean.id("core/inventory"))
             .withFragmentShader(SkyOcean.id("core/inventory"))
             .withCull(false)
-            .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
+            //? >= 26.1 {
+            .withDepthStencilState(DepthStencilState.DEFAULT)
+            .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT))
+            //? } else {
+            /*.withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
             .withBlend(BlendFunction.TRANSLUCENT)
+            *///? }
             .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
             .withSampler("Sampler0")
             .withUniform(POLY_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
@@ -36,8 +44,13 @@ object InventoryRenderer {
             .withVertexShader(SkyOcean.id("core/inventory"))
             .withFragmentShader(SkyOcean.id("core/mono_inventory"))
             .withCull(false)
-            .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
+            //? >= 26.1 {
+            .withDepthStencilState(DepthStencilState.DEFAULT)
+            .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT))
+            //? } else {
+            /*.withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
             .withBlend(BlendFunction.TRANSLUCENT)
+            *///? }
             .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
             .withSampler("Sampler0")
             .withUniform(MONO_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
@@ -47,8 +60,9 @@ object InventoryRenderer {
     )
 
 
-    fun renderMonoInventory(graphics: GuiGraphics, x: Int, y: Int, width: Int, height: Int, size: Int, orientation: Orientation, color: Int) {
-        graphics.guiRenderState.submitPicturesInPictureState(
+    fun renderMonoInventory(graphics: GuiGraphicsExtractor, x: Int, y: Int, width: Int, height: Int, size: Int, orientation: Orientation, color: Int) {
+        //~ if >= 26.1 'submit' -> 'add'
+        graphics.guiRenderState.addPicturesInPictureState(
             MonoInventoryPipState(
                 x,
                 y,
@@ -63,8 +77,9 @@ object InventoryRenderer {
         )
     }
 
-    fun renderNormalInventory(graphics: GuiGraphics, x: Int, y: Int, width: Int, height: Int, columns: Int, rows: Int, color: Int) {
-        graphics.guiRenderState.submitPicturesInPictureState(
+    fun renderNormalInventory(graphics: GuiGraphicsExtractor, x: Int, y: Int, width: Int, height: Int, columns: Int, rows: Int, color: Int) {
+        //~ if >= 26.1 'submit' -> 'add'
+        graphics.guiRenderState.addPicturesInPictureState(
             PolyInventoryPipState(
                 x,
                 y,

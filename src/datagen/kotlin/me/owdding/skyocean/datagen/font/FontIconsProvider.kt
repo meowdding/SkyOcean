@@ -4,9 +4,9 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.datagen.providers.SkyOceanFontProvider
 import me.owdding.skyocean.utils.chat.ComponentIcon
 import me.owdding.skyocean.utils.chat.ComponentIcons
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput
 
-class FontIconsProvider(output: FabricDataOutput) : SkyOceanFontProvider(output, ComponentIcons.ID) {
+class FontIconsProvider(output: FabricPackOutput) : SkyOceanFontProvider(output, ComponentIcons.ID) {
 
     override fun SkyOceanFontProviderHolder.create() {
         ComponentIcon.entries.forEach {
