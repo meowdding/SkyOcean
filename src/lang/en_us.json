@@ -233,6 +233,10 @@
           "@value": "Sack Value",
           "desc": "Shows the value of all items in your sacks.",
           "edit": "Edit Sack Value",
+          "alignment": {
+            "@value": "Alignment",
+            "desc": "The alignment of the sack value element."
+          },
           "price_source": {
             "@value": "Price Source",
             "desc": "The source to use for the price of items in sacks.",
@@ -305,6 +309,10 @@
           "@value": "Pest Bait Type",
           "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
         },
+        "pest_bait_alignment": {
+          "@value": "Pest Bait Alignment",
+          "desc": "The alignment of the pest bait type element."
+        },
         "desk_pest_highlight": {
           "@value": "Desk Pest Highlight",
           "desc": "Highlights on what Plot how many pests are on in the 'Configure Plots' menu."
@@ -359,6 +367,10 @@
         "showHiddenPetCandy": {
           "@value": "Show Hidden Pet Candy",
           "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
+        },
+        "totemAnimation": {
+          "@value": "Totem Animation",
+          "desc": "Plays the Totem of Undying animation when an invulnerability item (like the Bonzo Mask) is used up."
         },
         "islandCloudHider": {
           "@value": "Island Cloud Hider",
@@ -658,6 +670,42 @@
                 "tame": "Tame",
                 "wild": "Wild",
                 "angry": "Angry"
+              }
+            },
+            "horse": {
+              "own_color": {
+                "@value": "Own Horse Color",
+                "desc": "Changes the horse color used for yourself."
+              },
+              "other_color": {
+                "@value": "Other Horse Color",
+                "desc": "Changes the horse color used for others."
+              },
+              "own_marking": {
+                "@value": "Own Horse Markings",
+                "desc": "Changes the horse markings used for yourself."
+              },
+              "other_marking": {
+                "@value": "Other Horse Markings",
+                "desc": "Changes the horse markings used for others."
+              },
+              "color": {
+                "random": "Random",
+                "white": "White",
+                "creamy": "Creamy",
+                "chestnut": "Chestnut",
+                "brown": "Brown",
+                "black": "Black",
+                "gray": "Gray",
+                "dark_brown": "Dark Brown"
+              },
+              "marking": {
+                "random": "Random",
+                "none": "None",
+                "white": "White",
+                "white_field": "White Field",
+                "white_dots": "White Dots",
+                "black_dots": "Black Dots"
               }
             },
             "axolotl": {
@@ -1069,6 +1117,10 @@
           "@value": "Trophy Numbers",
           "desc": "Displays the amount of trophy fishes you caught upon catching one."
         },
+        "hook_text_scale_toggle": {
+          "@value": "Toggle Hook Text Scale",
+          "desc": "Whether to enable the hook text scaling or not."
+        },
         "hook_text_scale": {
           "@value": "Hook Text Scale",
           "desc": "Changes the scale of the text above your fishing hook/bobber."
@@ -1382,6 +1434,10 @@
           "croesus": {
             "@value": "Also Show Case Opening in Croesus",
             "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
+          },
+          "time": {
+            "@value": "Animation Time",
+            "desc": "Changes the time the animation takes. (in seconds)"
           }
         },
         "vanguard": {

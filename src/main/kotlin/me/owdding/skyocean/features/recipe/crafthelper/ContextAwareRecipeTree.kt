@@ -1,7 +1,13 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
 import me.owdding.lib.extensions.ceil
-import me.owdding.skyocean.features.recipe.*
+import me.owdding.skyocean.features.recipe.Ingredient
+import me.owdding.skyocean.features.recipe.ItemLikeIngredient
+import me.owdding.skyocean.features.recipe.ParentRecipe
+import me.owdding.skyocean.features.recipe.Recipe
+import me.owdding.skyocean.features.recipe.SimpleRecipeApi
+import me.owdding.skyocean.features.recipe.mergeSameTypes
+import me.owdding.skyocean.features.recipe.serialize
 
 interface ChildlessNode : StandardRecipeNode {
     override val recipe: Recipe?
@@ -38,11 +44,12 @@ interface StandardRecipeNode {
         get() = null
     val totalChildren: Int
 
-    fun evaluateChildren(amount: Int, context: RecipeRemainder) {
+    fun evaluateChildren(amount: Int, context: RecipeRemainder, visitedRecipes: Set<Recipe?>) {
         if (this !is NodeWithChildren) return
 
         recipe?.inputs?.mergeSameTypes()?.forEach {
             val recipe = (recipe as? ParentRecipe)?.getRecipe(it) ?: SimpleRecipeApi.getBestRecipe(it)
+            if (visitedRecipes.contains(recipe)) return@forEach
             val recipeOutput = recipe?.output?.amount ?: 1
             val totalRequired = it.amount * amount
             val carriedOver = context[it].coerceAtMost(totalRequired)
@@ -53,7 +60,11 @@ interface StandardRecipeNode {
             context[it] = remainder + carriedOverOver
 
             if (recipe != null) {
-                addChild(RecipeNode(recipe, craftsRequired, requiredAmount, totalRequired, carriedOver, it, context))
+                addChild(
+                    RecipeNode(recipe, craftsRequired, requiredAmount, totalRequired, carriedOver, it, context).apply {
+                        evaluateChildren(visitedRecipes + recipe)
+                    },
+                )
             } else {
                 addChild(LeafNode(it.withAmount(requiredAmount)))
             }
@@ -88,11 +99,11 @@ data class RecipeNode(
         totalChildren = nodes.size + nodes.sumOf { it.totalChildren }
     }
 
+    fun evaluateChildren(recipes: Set<Recipe?>) = evaluateChildren(requiredCrafts, context, recipes)
+
     init {
-        evaluateChildren(requiredCrafts, context)
         recalculateChildren()
     }
-
 }
 
 open class ContextAwareRecipeTree(override val recipe: Recipe?, override val output: ItemLikeIngredient, val amount: Int = output.amount) : NodeWithChildren {
@@ -104,7 +115,7 @@ open class ContextAwareRecipeTree(override val recipe: Recipe?, override val out
     override val outputWithAmount: Ingredient by lazy { output.withAmount(amount) }
 
     init {
-        evaluateChildren(amount / amountPerCraft, context)
+        evaluateChildren(amount / amountPerCraft, context, LinkedHashSet(setOf(recipe)))
     }
 
 }

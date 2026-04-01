@@ -25,7 +25,7 @@ import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.chat.ChatUtils
 //? < 1.21.11
-/*import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow*/
+//import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -51,11 +51,11 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
-import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.api.data.MayorPerks
 //? < 1.21.11
-/*import tech.thatgravyboat.skyblockapi.helpers.McClient*/
+//import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.identifier
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
@@ -301,7 +301,7 @@ object Utils {
         tooltip { lines().addAll(merger.destination) }
     }
 
-    fun TooltipBuilder.addAll(iterable: Collection<Component>) = lines().addAll(iterable)
+    fun TooltipBuilder.addAll(iterable: Iterable<Component>) = lines().addAll(iterable)
     fun ListMerger<Component>.space() = add(CommonComponents.EMPTY)
     fun ListMerger<Component>.add(init: MutableComponent.() -> Unit) = add(Text.of(init))
     fun ListMerger<Component>.add(text: String, init: MutableComponent.() -> Unit = {}) = add(Text.of(text, init))
@@ -408,6 +408,8 @@ object Utils {
     inline fun <reified E : Enum<E>> E.nextCycling(offset: Int = 1): E = enumValues<E>().let { it[ordinal + offset % it.size] }
     inline fun <reified E : Enum<E>> E.next(offset: Int = 1): E? = enumValues<E>().getOrNull(ordinal + offset)
     inline fun <reified E : Enum<E>> E.previous(offset: Int = 1): E? = enumValues<E>().getOrNull(ordinal - offset)
+
+    fun componentList(init: TooltipBuilder.() -> Unit) = TooltipBuilder().apply(init).lines()
 }
 
 enum class SkyOceanModifyIndicator : Translatable {

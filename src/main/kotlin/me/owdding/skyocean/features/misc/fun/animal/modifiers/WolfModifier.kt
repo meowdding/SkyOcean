@@ -1,6 +1,6 @@
 package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 
-import earth.terrarium.olympus.client.utils.Translatable
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
@@ -25,7 +25,8 @@ import kotlin.jvm.optionals.getOrNull
 object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
     override val type: EntityType<Wolf> = EntityType.WOLF
 
-    private val wolfVariants: List<WolfVariant> = Registries.WOLF_VARIANT.list().sortedBy { it.assetInfo.tame.toString() }
+    //~ if >= 26.1 'assetInfo' -> 'babyInfo'
+    private val wolfVariants: List<WolfVariant> = Registries.WOLF_VARIANT.list().sortedBy { it.babyInfo.tame.toString() }
     private val states = listOf(TAME, WILD, ANGRY)
 
     var wolfVariant = PlayerAnimalConfig.createEntry("wolf_variant") { id, type ->
@@ -49,23 +50,33 @@ object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
     ) {
         state.collarColor = getCollarColor(avatarState)
         val variant = wolfVariant.select(avatarState).wolfVariant ?: getRandom(avatarState, wolfVariants)
-        state.texture = wolfState.select(avatarState).select(avatarState, variant).texturePath()
+        state.texture = wolfState.select(avatarState).select(avatarState, variant, state).texturePath()
         state.isSitting = avatarState.isCrouching
     }
 
-    enum class State(val selector: ((WolfVariant) -> ClientAsset.ResourceTexture)) : Translatable {
-        RANDOM({ it.assetInfo.tame }),
+    @Suppress("NOTHING_TO_INLINE")
+    inline fun WolfVariant.info(state: WolfRenderState): WolfVariant.AssetInfo {
+        //? >= 26.1 {
+        return if (state.isBaby) babyInfo else adultInfo
+        //? } else
+        //return assetInfo
+    }
 
-        TAME({ it.assetInfo.tame }),
-        WILD({ it.assetInfo.wild }),
-        ANGRY({ it.assetInfo.angry }),
+    enum class State(val selector: ((WolfVariant, WolfRenderState) -> ClientAsset.ResourceTexture)) : Translatable {
+        RANDOM({ info, state -> info.info(state).tame }),
+
+        TAME({ info, state -> info.info(state).tame }),
+        WILD({ info, state -> info.info(state).wild }),
+        ANGRY({ info, state -> info.info(state).angry }),
         ;
 
-        fun select(state: AvatarRenderState, wolfVariant: WolfVariant) = if (this == RANDOM) {
+
+
+        fun select(state: AvatarRenderState, wolfVariant: WolfVariant, wolfState: WolfRenderState) = if (this == RANDOM) {
             getRandom(state, states)
         } else {
             this
-        }.selector(wolfVariant)
+        }.selector(wolfVariant, wolfState)
 
         override fun getTranslationKey(): String = createTranslationKey("wolf", "state", name)
     }

@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
+import me.owdding.skyocean.compat.CatharsisSupport.withCatharsisId
 import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
@@ -30,7 +31,7 @@ abstract class AbstractCraftHelperModifier {
     }
 
     private fun modify(event: InventoryChangeEvent, ingredient: SkyOceanItemIngredient) {
-        event.item.disableCatharsisModifications()
+        event.item.disableCatharsisModifications().withCatharsisId("crafthelper")
         event.item.skyoceanReplace {
             this.item = Items.DIAMOND_PICKAXE
             set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT.withHidden(DataComponents.ATTRIBUTE_MODIFIERS, true))

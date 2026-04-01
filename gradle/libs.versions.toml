@@ -4,9 +4,11 @@ fabric-loader = "0.18.3"
 fabric-language-kotlin = "1.13.6+kotlin.2.2.20"
 fabric-api = "0.133.4"
 
-kotlin-symbol-processor = "2.2.0-2.0.2"
+kotlin = "2.3.0"
+kotlin-gradle-plugin = "2.3.0"
+kotlin-symbol-processor = "2.3.5"
 gson = "2.12.1"
-skyblockapi = "4.0.9"
+skyblockapi = "4.1.2+5d47f628"
 skyblockapi-repo = "3.0.2"
 keval = "1.1.1"
 
@@ -14,15 +16,17 @@ hypixel-modapi-fabric = "1.0.1+build.1+mc1.21"
 
 rconfigkt = "3.5.15"
 
-detekt = "2.0.0-alpha.0"
+detekt = "2.0.0-alpha.2"
 
-meowdding-lib = "4.0.8"
+meowdding-lib = "4.1.1+38eabf5c"
 meowdding-ktmodules = "1.0.6"
 meowdding-ktcodecs = "1.1.9"
 meowdding-resources = "1.0.21"
 meowdding-auto-mixins = "1.0.10"
 
 moulberry-mixinconstraints = "1.0.8"
+
+fabric-loom = "1.15-SNAPSHOT"
 
 [libraries]
 
@@ -48,9 +52,17 @@ moulberry-mixinconstraints = { module = "com.moulberry:mixinconstraints", versio
 
 detekt-ktlintWrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
 
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin-gradle-plugin" }
+
 [plugins]
 meowdding-auto-mixins = { id = "me.owdding.auto-mixins", version.ref = "meowdding-auto-mixins" }
 meowdding-resources = { id = "me.owdding.resources" }
 
 kotlin-symbol-processor = { id = "com.google.devtools.ksp", version.ref = "kotlin-symbol-processor" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
+
+fabric-loom-remap = { id = "net.fabricmc.fabric-loom-remap", version.ref = "fabric-loom" }
+fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }

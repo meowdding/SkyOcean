@@ -1,12 +1,11 @@
 package me.owdding.skyocean.utils.rendering
 
 //? if < 1.21.11
-/*import com.mojang.blaze3d.systems.RenderSystem*/
+//import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.gui.Font
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.ShapeRenderer
 import net.minecraft.core.BlockPos
@@ -28,6 +27,8 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 import me.owdding.lib.rendering.world.RenderTypes as MLibRenderTypes
+//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
+import net.minecraft.util.LightCoordsUtil as LightTexture
 
 
 interface PostEffectApplicator {
@@ -36,7 +37,7 @@ interface PostEffectApplicator {
     fun `skyocean$getPostEffect`(): Identifier?
 }
 
-fun GuiGraphics.applyPostEffect(id: Identifier) {
+fun GuiGraphicsExtractor.applyPostEffect(id: Identifier) {
     this.nextStratum()
     (this.guiRenderState as? PostEffectApplicator)?.`skyocean$applyPostEffect`(id)
     this.fill(0, 0, this.guiWidth(), this.guiHeight(), 0)
@@ -177,11 +178,11 @@ object RenderUtils {
         }
     }
 
-    fun drawSlotHighlightBack(graphics: GuiGraphics, slotX: Int, slotY: Int) {
+    fun drawSlotHighlightBack(graphics: GuiGraphicsExtractor, slotX: Int, slotY: Int) {
         graphics.drawSprite(SLOT_HIGHLIGHT_BACK_SPRITE, slotX - 4, slotY - 4, 24, 24)
     }
 
-    fun drawSlotHighlightFront(graphics: GuiGraphics, slotX: Int, slotY: Int) {
+    fun drawSlotHighlightFront(graphics: GuiGraphicsExtractor, slotX: Int, slotY: Int) {
         graphics.drawSprite(SLOT_HIGHLIGHT_FRONT_TEXTURE, slotX - 4, slotY - 4, 24, 24)
     }
 

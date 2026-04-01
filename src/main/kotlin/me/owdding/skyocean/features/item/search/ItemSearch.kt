@@ -38,7 +38,7 @@ object ItemSearch {
             return
         }
         ItemSearchScreen.search = query
-        ItemSearchScreen.state.set(query)
+        ItemSearchScreen.state.set(query ?: "")
         McClient.setScreenAsync { ItemSearchScreen }
     }
 

@@ -21,6 +21,7 @@ object FishingWarningScale {
     @Subscription
     @OnlyOnSkyBlock
     fun onEntityNameChange(event: NameChangedEvent) {
+        if (!FishingConfig.hookTextScaleToggle) return
         if (!event.component.stripped.matches(hookWarningRegex)) return
         if (event.attachedTo != McPlayer.self?.fishing) return
         val armorStand = event.infoLineEntity as? LivingEntity ?: return

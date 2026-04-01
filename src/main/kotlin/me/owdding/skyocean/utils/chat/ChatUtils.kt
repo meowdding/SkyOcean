@@ -30,8 +30,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.font
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
-import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
-import tech.thatgravyboat.skyblockapi.utils.time.since
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import kotlin.time.Duration
 import kotlin.time.Instant
 
@@ -133,7 +133,6 @@ internal object ChatUtils {
         this.textShader = if (useSelected) Config.prefixGradient else OceanGradients.DEFAULT
     }
 
-    // Unused on 1.21.11+ bc minecraft added their own withoutShadow()
     fun MutableComponent.withoutShadow(): MutableComponent = this.apply {
         this.shadowColor = null
         this.siblings.filterIsInstance<MutableComponent>().forEach { it.withoutShadow() }

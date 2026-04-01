@@ -33,7 +33,7 @@ import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.util.ARGB
@@ -236,15 +236,17 @@ object ItemSearchScreen : SkyOceanScreen() {
         focused = widget
     }
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
+    //~ if >= 26.1 'render(' -> 'extractRenderState(' {
+    override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, f: Float) {
         if (McClient.self.screen !is ItemSearchScreen) {
             Displays.disableTooltips {
-                super.render(graphics, mouseX, mouseY, f)
+                super.extractRenderState(graphics, mouseX, mouseY, f)
             }
         } else {
-            super.render(graphics, mouseX, mouseY, f)
+            super.extractRenderState(graphics, mouseX, mouseY, f)
         }
     }
+    //~ }
 
     fun addItems() {
         val width = widgetWidth

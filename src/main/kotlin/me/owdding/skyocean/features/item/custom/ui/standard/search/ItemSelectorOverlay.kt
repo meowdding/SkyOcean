@@ -1,7 +1,6 @@
 package me.owdding.skyocean.features.item.custom.ui.standard.search
 
 import com.google.common.primitives.Ints
-import com.teamresourceful.resourcefullib.common.utils.TriState
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.buttons.Button
@@ -18,11 +17,13 @@ import me.owdding.lib.platform.screens.Overlay
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
-import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+//? < 26.1
+//import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
+//~ if >= 26.1 'com.teamresourceful.resourcefullib.common.utils.TriState' -> 'net.minecraft.util.TriState'
+import net.minecraft.util.TriState
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
@@ -38,7 +39,8 @@ class ItemSelectorOverlay(
         LayoutWidget(ClearableGridLayout()).apply {
             withPosition(bounds.x, bounds.y + bounds.height)
             withContentMargin(1)
-            withScrollableY(TriState.UNDEFINED)
+            //~ if >= 26.1 'UNDEFINED' -> 'DEFAULT'
+            withScrollableY(TriState.DEFAULT)
             withTexture(UIConstants.LIST_BG)
             withScrollbarBackground(UIConstants.MODAL_INSET)
             withLayoutCallback { widget, layout ->
@@ -70,10 +72,6 @@ class ItemSelectorOverlay(
 
         this.addRenderableWidget(this.entries)
         update(query.get())
-    }
-
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        super.render(graphics, mouseX, mouseY, partialTicks)
     }
 
     override fun resize(/*? if < 1.21.11 {*/ /*minecraft: Minecraft,  *//*?}*/width: Int, height: Int) {

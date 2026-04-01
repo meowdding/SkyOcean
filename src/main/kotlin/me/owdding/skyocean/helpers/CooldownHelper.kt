@@ -4,8 +4,8 @@ import me.owdding.ktmodules.Module
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
-import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
-import tech.thatgravyboat.skyblockapi.utils.time.since
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import kotlin.time.Duration
 import kotlin.time.Instant
 

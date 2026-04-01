@@ -5,7 +5,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererCon
 import earth.terrarium.olympus.client.components.buttons.Button
 import me.owdding.skyocean.SkyOcean.minecraft
 import me.owdding.skyocean.config.features.inventory.ButtonConfig
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
@@ -25,30 +25,32 @@ class InvButton(
 ) : Button() {
     var highlight = false
 
-    fun renderButtons(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    fun renderButtons(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         graphics.pushPop {
             val sprite = if (bottom) {
                 SELECTED_BOTTOM_TABS[rowIndex]
             } else {
                 SELECTED_TOP_TABS[rowIndex]
             }
-            renderPrevious(graphics, mouseX, mouseY, partialTicks, sprite)
+            extractPrevious(graphics, mouseX, mouseY, partialTicks, sprite)
 
         }
     }
 
-    fun renderItem(graphics: GuiGraphics) {
+    fun renderItem(graphics: GuiGraphicsExtractor) {
         val itemX = baseWidth / 2 - 8 + this@InvButton.x
         val itemY = if (bottom) {
             baseHeight + this@InvButton.y - (baseWidth / 2) - 8
         } else {
             baseWidth / 2 - 8 + this@InvButton.y
         }
-        graphics.renderItem(button.itemStack, itemX, itemY)
 
+        //~ if >= 26.1 'renderItem(' -> 'item('
+        graphics.item(button.itemStack.value, itemX, itemY)
     }
 
-    override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+    //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
+    override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         this.isHovered = graphics.containsPointInScissor(mouseX, mouseY) && isMouseOver(mouseX.toDouble(), mouseY.toDouble())
         this.highlight = screen.title.stripped.trim().matches(button.regex) || (screen is ButtonConfigScreen && screen.selectedButtonIndex == this.index)
 
@@ -69,7 +71,7 @@ class InvButton(
         return
     }
 
-    fun renderPrevious(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float, sprite: Identifier) {
+    fun extractPrevious(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float, sprite: Identifier) {
         graphics.drawSprite(
             sprite,
             this.x,

@@ -17,7 +17,14 @@ public class KeyboardHandlerMixin {
 
     @Definition(id = "screen", local = @Local(type = Screen.class))
     @Expression("screen != null")
-    @Inject(method = "keyPress", at = @At(value = "MIXINEXTRAS:EXPRESSION", ordinal = 3), cancellable = true)
+    @Inject(method = "keyPress", at = @At(value = "MIXINEXTRAS:EXPRESSION",
+        //? >= 26.1
+        ordinal = 0
+        //? = 1.21.11
+        //ordinal = 3
+        //? < 1.21.11
+        //ordinal = 2
+    ), cancellable = true)
     public void meow(long window, int action, KeyEvent event, CallbackInfo ci) {
         if (HotkeyManager.handle(action, event)) {
             ci.cancel();
