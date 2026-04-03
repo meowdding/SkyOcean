@@ -2,7 +2,8 @@
 package me.owdding.skyocean.mixins;
 
 import me.owdding.skyocean.utils.rendering.PostEffectApplicator;
-import net.minecraft.client.gui.render.state.GuiRenderState;
+//~ if >= 26.1 'gui.render.state' -> 'renderer.state.gui'
+import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

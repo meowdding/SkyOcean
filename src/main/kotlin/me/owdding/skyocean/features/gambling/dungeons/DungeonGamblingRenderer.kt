@@ -5,7 +5,7 @@ import me.owdding.skyocean.config.features.gambling.GamblingConfig
 import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonChestType
 import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonItems
 import me.owdding.skyocean.utils.rendering.applyPostEffect
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
@@ -23,7 +23,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.pow
 import kotlin.math.sqrt
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Instant
 import kotlin.time.isDistantPast
 
@@ -67,7 +66,7 @@ object DungeonGamblingRenderer {
         return if (t < 0.5) (1 - sqrt(1 - (2 * t).pow(2.0f))) / 2f else (sqrt(1 - (-2 * t + 2).pow(2.0f)) + 1) / 2f
     }
 
-    fun render(graphics: GuiGraphics): Boolean {
+    fun extract(graphics: GuiGraphicsExtractor): Boolean {
         if (items.isEmpty()) return false
         if (start.isDistantPast) return false
 

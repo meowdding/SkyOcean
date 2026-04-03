@@ -15,12 +15,13 @@ import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.mixins.AbstractRecipeBookScreenAccessor
 import me.owdding.skyocean.utils.Utils.resetCursor
 import me.owdding.skyocean.utils.Utils.unaryPlus
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.navigation.ScreenPosition
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
-import net.minecraft.world.inventory.ClickType
+//~ if >= 26.1 'ClickType' -> 'ContainerInput'
+import net.minecraft.world.inventory.ContainerInput
 import net.minecraft.world.inventory.Slot
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
@@ -47,18 +48,26 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
     val resetButton: Button = Widgets.button().withRenderer(WidgetRenderers.text(+"skyocean.inventory.buttons.reset"))
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean = false
-    @Suppress("WRONG_NULLABILITY_FOR_JAVA_OVERRIDE")
+    //? < 26.1 {
+    /*@Suppress("WRONG_NULLABILITY_FOR_JAVA_OVERRIDE")
     override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, type: ClickType) {
     }
+    *///? } else {
+    override fun slotClicked(slot: Slot, slotId: Int, buttonNum: Int, containerInput: ContainerInput) {
+        super.slotClicked(slot, slotId, buttonNum, containerInput)
+    }
+    //? }
 
-    override fun renderSlots(guiGraphics: GuiGraphics, /*? if > 1.21.10 {*/ i: Int, j: Int /*?}*/) {}
+    //~ if >= 26.1 'renderSlots' -> 'extractSlots'
+    override fun extractSlots(guiGraphics: GuiGraphicsExtractor, /*? if > 1.21.10 {*/ i: Int, j: Int /*?}*/) {}
     override fun onRecipeBookButtonClick() {}
 
     // Crazy workaround, why the fuck is the whole inventory tied to the recipe book holy shit
     override fun getRecipeBookButtonPosition(): ScreenPosition = ScreenPosition(1000, 1000)
     override fun showsActiveEffects(): Boolean = false
 
-    override fun renderTooltip(guiGraphics: GuiGraphics, x: Int, y: Int) {}
+    //~ if >= 26.1 'renderTooltip' -> 'extractTooltip'
+    override fun extractTooltip(guiGraphics: GuiGraphicsExtractor, x: Int, y: Int) {}
 
     fun refresh(selectedButtonIndex: Int) {
         itemWidget.resetCursor()
