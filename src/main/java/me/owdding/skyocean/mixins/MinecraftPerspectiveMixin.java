@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import me.owdding.skyocean.features.garden.CropFeverEffects;
+import me.owdding.skyocean.features.garden.cropfever.CropFeverEffects;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftPerspectiveMixin {

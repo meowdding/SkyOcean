@@ -19,7 +19,7 @@ object CropFeverEffectsConfig : OverlayConfig("skyocean.config.garden.crop_fever
         this.translation = "skyocean.config.garden.crop_fever_effect.coinsDropping"
     }
 
-    var coinsDroppingDuration by long(5) {
+    var coinsDroppingDuration by long(3) {
         this.translation = "skyocean.config.garden.crop_fever_effect.coinsDroppingDuration"
         this.slider = true
         this.range = 1L..60
