@@ -11,7 +11,6 @@ import me.owdding.skyocean.config.hidden.OverlayPositions
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.rendering.Overlay
 import me.owdding.skyocean.utils.rendering.SkyOceanOverlay
-import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
@@ -25,6 +24,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import java.util.UUID
 import kotlin.time.Instant
 import me.owdding.lib.overlays.Rect
+import net.minecraft.client.gui.GuiGraphicsExtractor
 
 @Overlay
 object CoinRainOverlay : SkyOceanOverlay() {
@@ -68,7 +68,7 @@ object CoinRainOverlay : SkyOceanOverlay() {
         )
     }
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
         val now = currentInstant()
         val width = McClient.window.guiScaledWidth
         val height = McClient.window.guiScaledHeight
@@ -86,7 +86,7 @@ object CoinRainOverlay : SkyOceanOverlay() {
             graphics.pushPop {
                 graphics.translate(coin.x, y)
                 graphics.scale(3, 3)
-                Displays.item(coin.item).render(graphics, -8, -(height * 0.05).toInt())
+                Displays.item(coin.item).extract(graphics, -8, -(height * 0.05).toInt())
             }
         }
 
