@@ -12,6 +12,7 @@ import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.SimpleRecipeView
+import me.owdding.skyocean.features.recipe.crafthelper.visitors.CompactedResourceCutoffTreeTransformer
 import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
@@ -24,13 +25,13 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
-import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.atomic.AtomicReference
+import java.util.function.UnaryOperator
 
 @Module
 object CraftHelperManager {
@@ -45,15 +46,28 @@ object CraftHelperManager {
         CraftHelperStorage.save()
     }
 
+    fun resolve(resetLayout: () -> Unit, clear: () -> Unit): CraftHelperTree? {
+        val tree = CraftHelperStorage.data?.resolve(resetLayout, clear) ?: return null
+        return getTransformers().fold(tree) { tree, op -> op.apply(tree) }
+    }
+
+    fun getTransformers(): List<UnaryOperator<CraftHelperTree>> = buildList {
+
+        CraftHelperConfig.compactedCutoffDegree.takeIf { it > 0 }?.let {
+            add { tree -> CompactedResourceCutoffTreeTransformer.apply(it, tree) }
+        }
+
+    }
+
     @Subscription(TickEvent::class)
-    @TimePassed("5t")
+    @TimePassed("200t")
     fun onTick() {
         if (lastData != CraftHelperStorage.data) {
             this.lastData = CraftHelperStorage.data
             hasBeenNotified = false
             lastEvaluatedRoot.set(null)
         }
-        val (tree) = CraftHelperStorage.data?.resolve({}, ::clear) ?: return
+        val tree = resolve({}, ::clear) ?: return
         SimpleRecipeView {
             if (it.path != "root") return@SimpleRecipeView
             lastEvaluatedRoot.set(it)
