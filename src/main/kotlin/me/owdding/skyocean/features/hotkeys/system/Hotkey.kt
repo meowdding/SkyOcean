@@ -17,7 +17,6 @@ import java.util.UUID
  *
  * Hotkey    Any one action that can be bound to keys
  * Keybind   The key combination that invokes a hotkey
- *
  */
 @GenerateCodec
 data class Hotkey(
