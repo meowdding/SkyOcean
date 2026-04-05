@@ -60,7 +60,7 @@ object CraftHelperManager {
     }
 
     @Subscription(TickEvent::class)
-    @TimePassed("200t")
+    @TimePassed("5t")
     fun onTick() {
         if (lastData != CraftHelperStorage.data) {
             this.lastData = CraftHelperStorage.data
