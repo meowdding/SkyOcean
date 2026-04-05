@@ -26,7 +26,7 @@ public class KeyboardHandlerMixin {
         //ordinal = 2
     ), cancellable = true)
     public void meow(long window, int action, KeyEvent event, CallbackInfo ci) {
-        if (HotkeyManager.handle(action, event)) {
+        if (HotkeyManager.handle(event, action)) {
             ci.cancel();
         }
     }
