@@ -12,10 +12,11 @@ import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.features.item.sources.ForgeItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.*
-import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
-import me.owdding.skyocean.features.recipe.crafthelper.NodeWithChildren
-import me.owdding.skyocean.features.recipe.crafthelper.RecipeNode
-import me.owdding.skyocean.features.recipe.crafthelper.StandardRecipeNode
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperEntry
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperParentNode
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipeNode
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperNode
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
 import me.owdding.skyocean.utils.Utils.not
@@ -41,7 +42,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.until
 fun interface RecipeView {
 
     fun format(
-        tree: ContextAwareRecipeTree,
+        tree: CraftHelperTree,
         itemTracker: ItemTracker,
         widget: WidgetBuilder,
         widgetConsumer: (AbstractWidget) -> Unit,
@@ -54,7 +55,7 @@ fun interface RecipeView {
     fun evaluateNode(context: CraftHelperContext) {
         val state = context.toState()
 
-        if (context.node is NodeWithChildren) {
+        if (context.node is CraftHelperParentNode) {
             for (node in context.node.nodes.reversed()) {
                 state.hasChildren = true
 
@@ -125,7 +126,7 @@ data class CraftHelperState(
 data class CraftHelperContext(
     val path: String,
     val tracker: ItemTracker,
-    val node: StandardRecipeNode,
+    val node: CraftHelperEntry,
     val ingredient: Ingredient,
     val state: CraftHelperState = CraftHelperState(
         ingredient = ingredient,
@@ -139,10 +140,10 @@ data class CraftHelperContext(
     val parent: CraftHelperContext? = null,
 ) {
     companion object {
-        fun create(recipe: ContextAwareRecipeTree, tracker: ItemTracker) = CraftHelperContext("root", tracker, recipe, recipe.outputWithAmount)
+        fun create(recipe: CraftHelperTree, tracker: ItemTracker) = CraftHelperContext("root", tracker, recipe, recipe.outputWithAmount)
     }
 
-    fun push(node: StandardRecipeNode): CraftHelperContext = CraftHelperContext(
+    fun push(node: CraftHelperNode): CraftHelperContext = CraftHelperContext(
         node = node,
         ingredient = node.outputWithAmount,
         path = path + node.output.serialize(),
@@ -165,7 +166,7 @@ data class CraftHelperContext(
     }
 
     fun getRequired() = when (node) {
-        is RecipeNode -> node.requiredAmount
+        is CraftHelperRecipeNode -> node.requiredAmount
         else -> node.outputWithAmount.amount
     }
 
@@ -177,8 +178,8 @@ data class CraftHelperContext(
         return amount.coerceIn(0..getRequired())
     }
 
-    fun getCarryOver() = (node as? RecipeNode)?.carriedOver ?: 0
-    fun getRequiredCrafts() = (node as? RecipeNode)?.requiredCrafts ?: 0
+    fun getCarryOver() = (node as? CraftHelperRecipeNode)?.carriedOver ?: 0
+    fun getRequiredCrafts() = (node as? CraftHelperRecipeNode)?.requiredCrafts ?: 0
 
     fun getMax() = node.outputWithAmount.amount
 

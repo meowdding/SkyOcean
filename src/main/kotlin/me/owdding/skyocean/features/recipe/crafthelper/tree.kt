@@ -9,17 +9,11 @@ import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.mergeSameTypes
 import me.owdding.skyocean.features.recipe.serialize
 
-interface ChildlessNode : StandardRecipeNode {
-    override val recipe: Recipe?
-        get() = null
-}
-
-interface NodeWithChildren : StandardRecipeNode {
-    override val amountPerCraft: Int
-    val nodes: MutableList<StandardRecipeNode>
+sealed interface CraftHelperParentNode : CraftHelperEntry{
+    val nodes: MutableList<CraftHelperNode>
     override val recipe: Recipe?
 
-    fun addChild(node: StandardRecipeNode) {
+    fun addChild(node: CraftHelperNode) {
         this.nodes.add(node)
         this.nodes.sortBy { it.totalChildren }
         recalculateChildren()
@@ -27,26 +21,8 @@ interface NodeWithChildren : StandardRecipeNode {
 
     fun recalculateChildren() {}
 
-    fun visit(visitor: (node: StandardRecipeNode, depth: Int) -> Boolean) = visit(0, false, visitor)
-    override fun visit(depth: Int, onlyLeafs: Boolean, visitor: (node: StandardRecipeNode, depth: Int) -> Boolean) {
-        if (onlyLeafs || visitor(this, depth)) nodes.forEach {
-            it.visit(depth + 1, onlyLeafs, visitor)
-        }
-    }
-}
-
-interface StandardRecipeNode {
-    val outputWithAmount: Ingredient
-    val output: Ingredient
-    val amountPerCraft: Int
-        get() = 1
-    val recipe: Recipe?
-        get() = null
-    val totalChildren: Int
 
     fun evaluateChildren(amount: Int, context: RecipeRemainder, visitedRecipes: Set<Recipe?>) {
-        if (this !is NodeWithChildren) return
-
         recipe?.inputs?.mergeSameTypes()?.forEach {
             val recipe = (recipe as? ParentRecipe)?.getRecipe(it) ?: SimpleRecipeApi.getBestRecipe(it)
             if (visitedRecipes.contains(recipe)) return@forEach
@@ -61,28 +37,36 @@ interface StandardRecipeNode {
 
             if (recipe != null) {
                 addChild(
-                    RecipeNode(recipe, craftsRequired, requiredAmount, totalRequired, carriedOver, it, context).apply {
+                    CraftHelperRecipeNode(recipe, craftsRequired, requiredAmount, totalRequired, carriedOver, it, context).apply {
                         evaluateChildren(visitedRecipes + recipe)
                     },
                 )
             } else {
-                addChild(LeafNode(it.withAmount(requiredAmount)))
+                addChild(CraftHelperLeafNode(it.withAmount(requiredAmount)))
             }
         }
-    }
-
-    fun visit(depth: Int = 0, onlyLeafs: Boolean = false, visitor: (node: StandardRecipeNode, depth: Int) -> Boolean) {
-        visitor(this, depth)
+        recalculateChildren()
     }
 }
 
-data class LeafNode(override val output: Ingredient) : ChildlessNode {
-    override val outputWithAmount: Ingredient
-        get() = output
-    override val totalChildren: Int = 0
+sealed interface CraftHelperEntry {
+    val outputWithAmount: Ingredient
+    val output: Ingredient
+    val amountPerCraft: Int
+        get() = 1
+    val recipe: Recipe?
+        get() = null
+    val totalChildren: Int
+        get() = 0
 }
 
-data class RecipeNode(
+sealed interface CraftHelperNode: CraftHelperEntry
+
+data class CraftHelperLeafNode(override val output: Ingredient) : CraftHelperNode {
+    override val outputWithAmount: Ingredient get() = output
+}
+
+data class CraftHelperRecipeNode(
     override val recipe: Recipe?,
     val requiredCrafts: Int,
     val requiredAmount: Int,
@@ -90,9 +74,9 @@ data class RecipeNode(
     val carriedOver: Int,
     override val output: Ingredient,
     val context: RecipeRemainder,
-) : NodeWithChildren {
+) : CraftHelperParentNode, CraftHelperNode {
     override val amountPerCraft: Int = recipe?.output?.amount ?: 1
-    override val nodes: MutableList<StandardRecipeNode> = mutableListOf()
+    override val nodes: MutableList<CraftHelperNode> = mutableListOf()
     override var totalChildren: Int = 0
     override val outputWithAmount: Ingredient by lazy { output.withAmount(requiredAmount) }
     override fun recalculateChildren() {
@@ -100,16 +84,15 @@ data class RecipeNode(
     }
 
     fun evaluateChildren(recipes: Set<Recipe?>) = evaluateChildren(requiredCrafts, context, recipes)
-
-    init {
-        recalculateChildren()
-    }
 }
 
-open class ContextAwareRecipeTree(override val recipe: Recipe?, override val output: ItemLikeIngredient, val amount: Int = output.amount) : NodeWithChildren {
+data class CraftHelperTree(
+    override val recipe: Recipe?,
+    override val output: ItemLikeIngredient,
+    val amount: Int = output.amount,
+) : CraftHelperParentNode {
     override val amountPerCraft: Int = recipe?.output?.amount ?: 1
-    override val nodes: MutableList<StandardRecipeNode> = mutableListOf()
-    override val totalChildren: Int get() = nodes.size + nodes.sumOf { it.totalChildren }
+    override val nodes: MutableList<CraftHelperNode> = mutableListOf()
 
     val context = RecipeRemainder()
     override val outputWithAmount: Ingredient by lazy { output.withAmount(amount) }
@@ -117,7 +100,6 @@ open class ContextAwareRecipeTree(override val recipe: Recipe?, override val out
     init {
         evaluateChildren(amount / amountPerCraft, context, LinkedHashSet(setOf(recipe)))
     }
-
 }
 
 @JvmInline

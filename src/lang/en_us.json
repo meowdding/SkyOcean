@@ -502,6 +502,19 @@
           "overlay_background": {
             "@value": "Enable overlay background",
             "desc": "Adds a background behind the overlay to make it more readable."
+          },
+          "transformers": {
+            "@value": "Tree transformers",
+            "desc": "The following settings will alter the recipe tree in different ways, letting you customize the appearance and complexity.",
+            "compacted_cutoff_degree": {
+              "@value": "Compacted Cutoff Degree",
+              "desc": [
+                "Removes raw resources of the Nth degree from the tree",
+                "",
+                "For example if it's set to 1, Flawed Ruby will be the final node rather then having Rough as child,",
+                "if set to 2 Fine Ruby would be the final node, and so on..."
+              ]
+            }
           }
         },
         "transparentArmor": {
