@@ -21,9 +21,8 @@ object CompactedResourceCutoffTreeTransformer : TreeTransformer<Int>, TreeVisito
     context(node: CraftHelperRecipeNode)
     override fun transformRecipeNode(data: Int): CraftHelperNode {
         val result = node.visitRecipeNode(no)
-        println(result)
         if (result.mayBeCollapsed && result.depth <= data) {
-            return CraftHelperLeafNode(node.output)
+            return CraftHelperLeafNode(node.outputWithAmount)
         }
 
         return node.transformChildren(data)
