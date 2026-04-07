@@ -83,6 +83,8 @@ class EditHotkeyModal(
     private val priority = ListenableState.of(keybind?.settings?.priority ?: 0)
     private val context: ListenableState<ConflictContext> = ListenableState.of(keybind?.settings?.context ?: ConflictContext.IN_GAME)
 
+    private var keysWidget: AbstractWidget = Widgets.frame()
+
     var lastScrollGetter = { 0 }
 
     private fun withRebuild(action: () -> Unit): () -> Unit = {
@@ -185,6 +187,8 @@ class EditHotkeyModal(
                             )
                         },
                     )
+                }.also {
+                    keysWidget = it
                 }.add()
             }
             vertical {
@@ -362,7 +366,17 @@ class EditHotkeyModal(
         FrameLayout.centerInRectangle(this.layout, this.rectangle)
     }
 
-    override fun mouseClicked(event: MouseButtonEvent?, isDoubleClick: Boolean): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, isDoubleClick: Boolean): Boolean {
+        if (this.keysWidget.isMouseOver(event.x, event.y) && recordKeys) {
+            val key = InputConstants.Type.MOUSE.getOrCreate(event.button())
+            if (this.orderSensitive.get()) {
+                this.keys.add(key)
+            } else if (!this.keys.contains(key)) {
+                this.keys.add(key)
+            }
+            return true
+        }
+
         this.recordKeys = false
         return super.mouseClicked(event, isDoubleClick)
     }
@@ -379,6 +393,7 @@ class EditHotkeyModal(
             } else if (!this.keys.contains(key)) {
                 this.keys.add(key)
             }
+            return true
         }
         return super.keyPressed(event)
     }

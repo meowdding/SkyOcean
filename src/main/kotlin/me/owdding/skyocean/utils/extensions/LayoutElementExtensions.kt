@@ -441,7 +441,7 @@ fun <T> createMultiselectDropdown(
         ContextMenu.open {
             it.withAutoCloseOff()
             it.withBounds(entryWidth, 150)
-            it.withAlignment(OverlayAlignment.BOTTOM_LEFT, state)
+            it.withAlignment(null, state)
             it.withCloseCallback { state.isOpened = false }
             backgroundTexture?.let(it::withTexture)
 
