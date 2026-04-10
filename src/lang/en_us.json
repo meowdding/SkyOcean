@@ -270,6 +270,21 @@
               "<italic>Also accessible through <gray>/skyocean buttons</gray></italic>"
             ]
           }
+        },
+        "salvaging_helper": {
+          "@value": "Salvaging Helper",
+          "enabled": {
+            "@value": "Enabled",
+            "desc": ""
+          },
+          "highlight": {
+            "@value": "Highlight Undonated Museum Items",
+            "desc": "Highlights items that can be donated to the museum and haven't been donated yet when salvaging items."
+          },
+          "block_salvage": {
+            "@value": "Block Salvage of Donatable Items",
+            "desc": "Blocks salvaging items that can be donated to the museum and haven't been donated yet."
+          }
         }
       },
       "chat": {
