@@ -36,5 +36,8 @@
     "resourcefulconfig": ">=${rconfig}",
     "placeholder-api": ">=${placeholder_api}"
   },
+  "breaks": {
+    "clientspoofer": "*"
+  }
   "accessWidener": "skyocean.accesswidener"
 }
