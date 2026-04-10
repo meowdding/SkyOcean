@@ -7,13 +7,13 @@ import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import net.minecraft.sounds.SoundEvents
-import net.minecraft.world.level.block.Blocks
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyNonGuest
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.LeftClickBlockEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.GARDEN
+import tech.thatgravyboat.skyblockapi.api.area.farming.garden.Crop
 import tech.thatgravyboat.skyblockapi.api.profile.garden.PlotAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
@@ -28,22 +28,15 @@ import kotlin.time.Instant
 @Module
 object PestWarning {
 
-    private const val PEST_AMOUNT = 4
     private var lastWarning = Instant.DISTANT_PAST
-
-    // TODO: Maybe move to Crop enum in sbapi
-    private val cropBlocks = setOf(
-        Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.CARROTS, Blocks.POTATOES, Blocks.WHEAT,
-        Blocks.COCOA, Blocks.CARVED_PUMPKIN, Blocks.PUMPKIN, Blocks.MELON, Blocks.SUGAR_CANE, Blocks.CACTUS, Blocks.NETHER_WART,
-    )
 
     @Subscription
     @OnlyIn(GARDEN)
     @OnlyNonGuest
     fun onBlockClick(event: LeftClickBlockEvent) {
-        if (McLevel[event.pos].block !in cropBlocks) return
+        if (Crop.entries.none { it.isCrop(McLevel[event.pos]) }) return
         val pests = PlotAPI.currentPestAmount
-        if (pests < PEST_AMOUNT) return
+        if (pests < GardenConfig.pestWarningAmount) return
         if (GardenConfig.pestWarning && lastWarning.since() > GardenConfig.pestWarningDelay) {
             lastWarning = currentInstant()
             val title = Text.of {

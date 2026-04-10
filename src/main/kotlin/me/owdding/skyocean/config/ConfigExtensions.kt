@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulconfigkt.api.*
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.SeparatorBuilder
+import me.owdding.skyocean.config.overlays.OverlayConfig
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
@@ -40,6 +41,8 @@ fun CategoryBuilder.categories(vararg entries: CategoryKt) {
 }
 
 fun CategoryBuilder.separator(translation: String) = this.separator { this.translation = translation }
+
+fun OverlayConfig.separator(translation: String) = this.separator { this.translation = translation }
 
 fun ConfigDelegateProvider<RConfigKtEntry<Long>>.duration(unit: DurationUnit): CachedTransformedEntry<Long, Duration> {
     val timeUnit = unit.toTimeUnit()

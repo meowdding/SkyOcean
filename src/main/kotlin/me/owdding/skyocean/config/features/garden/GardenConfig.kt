@@ -23,11 +23,18 @@ object GardenConfig : CategoryKt("garden") {
         this.translation = "skyocean.config.garden.pest_warning"
     }
 
+    var pestWarningAmount by int(4) {
+        this.translation = "skyocean.config.garden.pest_warning_amount"
+    }
+
     var pestWarningDelay by long(30) {
         this.translation = "skyocean.config.garden.pest_warning_delay"
         this.slider = true
         this.range = 1L..60L
     }.duration(SECONDS)
 
+    init {
+        obj("crop_fever_effect", CropFeverEffectsConfig) { this.translation = "skyocean.config.garden.crop_fever_effect" }
+    }
 }
 
