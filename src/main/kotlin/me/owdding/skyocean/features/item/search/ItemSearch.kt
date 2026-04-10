@@ -34,7 +34,7 @@ object ItemSearch {
 
     private fun open(query: String? = null) {
         if (!LocationAPI.isOnSkyBlock) {
-            Text.of("You must be on Skyblock!") { this.color = TextColor.RED }.sendWithPrefix()
+            Text.of("You must be on SkyBlock!") { this.color = TextColor.RED }.sendWithPrefix()
             return
         }
         ItemSearchScreen.search = query

@@ -9,6 +9,7 @@ import me.owdding.lib.extensions.shorten
 import me.owdding.skyocean.config.features.inventory.SackValueConfig
 import me.owdding.skyocean.helpers.InventorySideGui
 import me.owdding.skyocean.utils.Utils.next
+import me.owdding.skyocean.utils.Utils.nextCycling
 import me.owdding.skyocean.utils.Utils.unaryMinus
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.OceanColors.BETTER_GOLD
@@ -65,7 +66,7 @@ object SackValue : InventorySideGui(".* Sack|Sack of Sacks", { SackValueConfig.a
                         withRenderer(WidgetRenderers.text(translation))
                         withTooltip(Text.of("Click to switch price source"))
                         withCallback {
-                            SackValueConfig.priceSource = SackValueConfig.priceSource.next()
+                            SackValueConfig.priceSource = SackValueConfig.priceSource.nextCycling()
                             refresh()
                         }
                     }
