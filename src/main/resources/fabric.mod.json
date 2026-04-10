@@ -38,6 +38,6 @@
   },
   "breaks": {
     "clientspoofer": "*"
-  }
+  },
   "accessWidener": "skyocean.accesswidener"
 }
