@@ -405,10 +405,9 @@ object Utils {
 
     fun nextUp(amount: Int, divider: Int) = if (amount % divider == 0) amount else amount - (amount % divider) + divider
 
-    fun <T : Enum<T>> T.next(): T {
-        val constants = if (this.javaClass.isEnum) this.javaClass.enumConstants else this.javaClass.superclass.enumConstants
-        return constants[(this.ordinal + 1) % constants.size].unsafeCast()
-    }
+    inline fun <reified E : Enum<E>> E.nextCycling(offset: Int = 1): E = enumValues<E>().let { it[ordinal + offset % it.size] }
+    inline fun <reified E : Enum<E>> E.next(offset: Int = 1): E? = enumValues<E>().getOrNull(ordinal + offset)
+    inline fun <reified E : Enum<E>> E.previous(offset: Int = 1): E? = enumValues<E>().getOrNull(ordinal - offset)
 
     fun componentList(init: TooltipBuilder.() -> Unit) = TooltipBuilder().apply(init).lines()
 }
