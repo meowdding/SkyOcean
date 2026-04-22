@@ -97,13 +97,8 @@ object CropFeverEffects {
         }
     }
 
-    @Subscription(ServerChangeEvent::class)
-    fun onServerChange() {
-        turnOff()
-    }
-
-    @Subscription(ServerDisconnectEvent::class)
-    fun onServerDisconnect() {
+    @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class)
+    fun onServerChange(){
         turnOff()
     }
 
