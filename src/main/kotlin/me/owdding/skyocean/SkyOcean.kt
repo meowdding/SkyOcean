@@ -160,7 +160,6 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     fun minecraft(path: String): Identifier = Identifier.withDefaultNamespace(path)
     fun olympus(path: String): Identifier = Identifier.fromNamespaceAndPath("olympus", path)
 
-
     @ApiDebug("General Info", commandName = "general")
     internal fun debug(builder: DebugBuilder) = with(builder) {
         field("Version", VERSION)

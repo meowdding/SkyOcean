@@ -104,7 +104,7 @@ object MiscConfig : CategoryKt("misc") {
         range = 10L..60L
     }.duration(SECONDS)
 
-    var useReiSearchBar by boolean(true) {
+    var useReiSearchBar by boolean(false) {
         translation = "skyocean.config.misc.itemSearch.useReiSearchBar"
         condition = KnownMods.REI::installed
     }
