@@ -19,7 +19,11 @@ import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.extensions.withPadding
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
+//? if <26.1 {
+/*
 import net.minecraft.client.gui.GuiGraphics
+*/
+//?}
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.util.ARGB
@@ -145,7 +149,8 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
 
         addItems()
     }
-
+    //? if <26.1 {
+    /*
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
         if (!McScreen.isOf<AccessoriesHelperScreen>()) {
             Displays.disableTooltips {
@@ -155,7 +160,8 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
             super.render(graphics, mouseX, mouseY, f)
         }
     }
-
+     */
+    //?}
 
     fun addItems() {
         val width = widgetWidth
