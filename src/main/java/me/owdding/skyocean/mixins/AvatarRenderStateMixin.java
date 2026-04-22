@@ -24,6 +24,18 @@ public class AvatarRenderStateMixin implements AvatarRenderStateAccessor {
     private ItemStack skyocean$heldItemStack;
     @Unique
     private Instant skyocean$lastMoveTime;
+    @Unique
+    private Integer skyocean$startMoveTime;
+
+    @Override
+    public Integer ocean$getStartMoveTime() {
+        return this.skyocean$startMoveTime;
+    }
+
+    @Override
+    public void ocean$setStartMoveTime(Integer startMoveTime) {
+        this.skyocean$startMoveTime = startMoveTime;
+    }
 
     @Override
     public UUID ocean$getUUID() {

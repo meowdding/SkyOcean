@@ -32,8 +32,8 @@ object MinisterInCalendar {
             SkyOcean.warn("Failed to place minister item in calendar, item is not a glass pane")
             return
         }
-        val minister = ElectionAPI.currentMinister ?: return
-        val texture = RepoMobsAPI.getMobOrNull("${minister.name}_MAYOR")?.texture() ?: return
+        val minister = ElectionAPI.minister ?: return
+        val texture = RepoMobsAPI.getMobOrNull("${minister.candidateName}_MAYOR")?.texture() ?: return
 
         event.item.disableCatharsisModifications()
         event.item.skyoceanReplace {

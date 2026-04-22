@@ -1,3 +1,4 @@
+//~ named_identifier
 package me.owdding.skyocean.mixins;
 
 import net.minecraft.client.renderer.item.ItemModel;

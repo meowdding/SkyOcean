@@ -1,13 +1,13 @@
 package me.owdding.skyocean.features.recipe.crafthelper.views
 
-import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import net.minecraft.client.gui.components.AbstractWidget
 
 class SimpleRecipeView(val stateVisitor: (CraftHelperState) -> Unit) : RecipeView {
 
     fun visit(
-        tree: ContextAwareRecipeTree,
+        tree: CraftHelperTree,
         itemTracker: ItemTracker,
     ) = format(tree, itemTracker, WidgetBuilder.noOp) {}
 

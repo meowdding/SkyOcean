@@ -7,7 +7,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
+//~ if >= 26.1 'ClientCommandManager as ClientCommands' -> 'ClientCommands'
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.CommandBuildContext
 import tech.thatgravyboat.skyblockapi.api.events.misc.AbstractModRegisterCommandsEvent
@@ -20,7 +21,6 @@ import tech.thatgravyboat.skyblockapi.api.events.misc.LiteralCommandBuilder as S
 typealias LiteralCommandBuilder = SkyOceanCommandBuilder<LiteralArgumentBuilder<FabricClientCommandSource>>
 typealias ArgumentCommandBuilder<T> = SkyOceanCommandBuilder<RequiredArgumentBuilder<FabricClientCommandSource, T>>
 
-
 class RegisterSkyOceanCommandEvent(
     val dispatcher: CommandDispatcher<FabricClientCommandSource>,
     val context: CommandBuildContext,
@@ -28,7 +28,7 @@ class RegisterSkyOceanCommandEvent(
     private val prefixes = listOf("skyocean", "so")
 
     fun register(command: LiteralArgumentBuilder<FabricClientCommandSource>) = prefixes.forEach {
-        ClientCommandManager.literal(it)
+        ClientCommands.literal(it)
             .then(command)
             .let(dispatcher::register)
     }
@@ -40,7 +40,7 @@ class RegisterSkyOceanCommandEvent(
     }
 
     override fun register(command: String, builder: SbApiLiteralBuilder.() -> Unit) = prefixes.forEach {
-        ClientCommandManager.literal(it)
+        ClientCommands.literal(it)
             .apply { LiteralCommandBuilder(this, context).then(command, action = builder) }
             .let(dispatcher::register)
     }
@@ -55,6 +55,7 @@ class RegisterSkyOceanCommandEvent(
 
 }
 
+@Suppress("UPPER_BOUND_VIOLATED_BASED_ON_JAVA_ANNOTATIONS", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class SkyOceanCommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal constructor(
     builder: ArgumentBuilder<FabricClientCommandSource, B>,
     private val context: CommandBuildContext,
@@ -62,12 +63,12 @@ class SkyOceanCommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> 
     override fun then(vararg names: String, action: SbApiLiteralBuilder.() -> Unit): SkyOceanCommandBuilder<B> {
         for (name in names) {
             if (name.contains(" ")) {
-                val builder = SkyOceanCommandBuilder(ClientCommandManager.literal(name.substringBefore(" ")), context)
+                val builder = SkyOceanCommandBuilder(ClientCommands.literal(name.substringBefore(" ")), context)
                 builder.then(name.substringAfter(" "), action = action)
                 this.builder.then(builder.builder)
                 continue
             }
-            val builder = SkyOceanCommandBuilder(ClientCommandManager.literal(name), context)
+            val builder = SkyOceanCommandBuilder(ClientCommands.literal(name), context)
             builder.action()
             this.builder.then(builder.builder)
         }
@@ -81,13 +82,13 @@ class SkyOceanCommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> 
         action: SbApiArgumentBuilder<T>.() -> Unit,
     ): CommandBuilder<B> {
         if (name.contains(" ")) {
-            val builder = SkyOceanCommandBuilder(ClientCommandManager.literal(name.substringBefore(" ")), context)
+            val builder = SkyOceanCommandBuilder(ClientCommands.literal(name.substringBefore(" ")), context)
             builder.then(name.substringAfter(" "), argument, suggestions, action)
             this.builder.then(builder.builder)
             return this
         }
         val builder = SkyOceanCommandBuilder(
-            ClientCommandManager.argument(name, argument).apply {
+            ClientCommands.argument(name, argument).apply {
                 if (suggestions != null) suggests(suggestions)
             },
             context,

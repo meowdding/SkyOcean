@@ -11,6 +11,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.suggestions.SkyOceanSuggestionProvider
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
+//~ if > 1.21.10 'ResourceLocationException as IdentifierException' -> 'IdentifierException'
 import net.minecraft.IdentifierException
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
@@ -44,6 +45,7 @@ class VirtualResourceArgument(
     @Throws(CommandSyntaxException::class)
     private fun fromCommandInput(reader: StringReader): Identifier {
         val i = reader.cursor
+        //~ if > 1.21.10 'isAllowedInResourceLocation' -> 'isAllowedInIdentifier'
         while (reader.canRead() && Identifier.isAllowedInIdentifier(reader.peek())) {
             reader.skip()
         }

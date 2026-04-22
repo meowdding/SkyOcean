@@ -75,7 +75,7 @@ class ButtonConfig(
     var tooltip by string(tooltipName)
     var disabled by boolean(false)
 
-    var itemStack: ItemStack = toItem(item)
+    var itemStack: Lazy<ItemStack> = toItem(item)
 
     fun reset() {
         item = itemName
@@ -85,8 +85,8 @@ class ButtonConfig(
         disabled = false
     }
 
-    private fun toItem(id: String) = Identifier.tryParse(id.lowercase())?.let {
+    private fun toItem(id: String) = lazy { Identifier.tryParse(id.lowercase())?.let {
         BuiltInRegistries.ITEM.getOptional(it).getOrNull()?.defaultInstance
-    } ?: RepoItemsAPI.getItem(id.uppercase())
+    } ?: RepoItemsAPI.getItem(id.uppercase()) }
 }
 

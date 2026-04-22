@@ -6,7 +6,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.gui.font.glyphs.BakedSheetGlyph;
-import org.joml.Matrix4f;
+//~ if >= 26.1 'Matrix4f' -> 'Matrix4fc'
+import org.joml.Matrix4fc;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -14,7 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class BakedGlyphMixin {
     @WrapOperation(
         method = "renderChar",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedSheetGlyph;render(ZFFFLorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", ordinal = 0)
+        //~ if >= 26.1 'Matrix4f' -> 'Matrix4fc'
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedSheetGlyph;render(ZFFFLorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", ordinal = 0)
     )
     public void onRenderShadow(
         BakedSheetGlyph instance,
@@ -22,11 +24,12 @@ public abstract class BakedGlyphMixin {
         float x,
         float y,
         float z,
-        Matrix4f pose,
-        VertexConsumer buffer,
+        //~ if >= 26.1 'Matrix4f' -> 'Matrix4fc'
+        Matrix4fc pose,
+        VertexConsumer builder,
         int color,
         boolean bold,
-        int packedLight,
+        int packedLightCoords,
         Operation<Void> original,
         @Local(argsOnly = true) BakedSheetGlyph.GlyphInstance glyph
     ) {
@@ -36,18 +39,19 @@ public abstract class BakedGlyphMixin {
                     if (j != 0 || k != 0) {
                         float xShadowOffset = glyph.shadowOffset() * j;
                         float yShadowOffset = glyph.shadowOffset() * k;
-                        original.call(instance, italic, glyph.x() + xShadowOffset, glyph.y() + yShadowOffset, z, pose, buffer, color, bold, packedLight);
+                        original.call(instance, italic, glyph.x() + xShadowOffset, glyph.y() + yShadowOffset, z, pose, builder, color, bold, packedLightCoords);
                     }
                 }
             }
         } else {
-            original.call(instance, italic, x, y, z, pose, buffer, color, bold, packedLight);
+            original.call(instance, italic, x, y, z, pose, builder, color, bold, packedLightCoords);
         }
     }
 
     @WrapOperation(
         method = "renderChar",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedSheetGlyph;render(ZFFFLorg/joml/Matrix4f;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", ordinal = 1)
+        //~ if >= 26.1 'Matrix4f' -> 'Matrix4fc'
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedSheetGlyph;render(ZFFFLorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", ordinal = 1)
     )
     public void onRenderShadowBold(
         BakedSheetGlyph instance,
@@ -55,7 +59,8 @@ public abstract class BakedGlyphMixin {
         float x,
         float y,
         float z,
-        Matrix4f pose,
+        //~ if >= 26.1 'Matrix4f' -> 'Matrix4fc'
+        Matrix4fc pose,
         VertexConsumer buffer,
         int color,
         boolean bold,

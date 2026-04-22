@@ -6,12 +6,6 @@ to = "import net.minecraft.resources.ResourceLocation as Identifier"
 reverseRegex = "import net.minecraft.resources.ResourceLocation as Identifier"
 reverse = "import net.minecraft.resources.Identifier"
 
-[named_identifier_temp]
-type = "string"
-condition = "< 1.21.11"
-from = "Identifier"
-to = "ResourceLocation"
-
 [named_identifier]
 type = "string"
 condition = "< 1.21.11"
@@ -45,10 +39,33 @@ condition = "< 1.21.11"
 from = "net.minecraft.util.Util"
 to = "net.minecraft.Util"
 
-[replacements]
+[render_types]
 type = "regex"
 condition = "< 1.21.11"
 regex = "import net.minecraft.client.renderer.(rendertype.)?RenderTypes(?!;)"
 to = "import net.minecraft.client.renderer.RenderType as RenderTypes"
 reverseRegex = "import net.minecraft.client.renderer.(rendertype.)?RenderType as RenderTypes"
 reverse = "import net.minecraft.client.renderer.rendertype.RenderTypes"
+
+[gui_graphics_unnamed]
+type = "regex"
+condition = "< 26.1"
+regex = "import net.minecraft.client.gui.GuiGraphicsExtractor(?!;)"
+to = "import net.minecraft.client.gui.GuiGraphics as GuiGraphicsExtractor"
+reverseRegex = "import net.minecraft.client.gui.GuiGraphics as GuiGraphicsExtractor"
+reverse = "import net.minecraft.client.gui.GuiGraphicsExtractor"
+
+[gui_graphics]
+type = "string"
+condition = "< 26.1"
+from = "GuiGraphicsExtractor"
+to = "GuiGraphics"
+named = true
+
+[pack_output]
+type = "regex"
+condition = "< 26.1"
+regex = "import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput(?!;)"
+to = "import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput as FabricPackOutput"
+reverseRegex = "import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput as FabricPackOutput"
+reverse = "import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput"

@@ -14,7 +14,6 @@ import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockItemId
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import me.owdding.skyocean.features.recipe.RepoApiRecipe as RepoApiRecipeWrapper
@@ -76,16 +75,6 @@ object SimpleRecipeApi : MeowddingLogger by SkyOcean.featureLogger(), LateInitLo
         }
 
         rebuildRecipes()
-
-        McClient.runNextTick {
-            val amount = recipes.flatMap {
-                buildList {
-                    add(it.output)
-                    addAll(it.inputs)
-                }.filterIsInstance<ItemLikeIngredient>()
-            }.distinct().onEach { it.itemName }.count() // calls itemName to construct the itemstacks
-            debug("Preloaded $amount items")
-        }
     }
 
     fun rebuildRecipes() {

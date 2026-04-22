@@ -6,7 +6,7 @@ import me.owdding.lib.utils.matches
 import me.owdding.skyocean.helpers.ClientSideInventory.Slot.Companion.asSlots
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.rendering.RenderUtils
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
@@ -36,8 +36,10 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
         slots = items.asSlots().toMutableList()
     }
 
-    override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick)
+    //~ if >= 26.1 'render(' -> 'extractRenderState(' {
+        override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
+    //~ }
         if (titleComponent != null) {
             guiGraphics.drawString(Text.of(titleComponent) { color = TextColor.DARK_GRAY }, this.x + 8, this.y + 6, -1, false)
         }
@@ -45,21 +47,25 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
         val offsetY = y + 18
         guiGraphics.translated(offsetX, offsetY) {
             slots.forEach {
-                renderSlot(guiGraphics, it, mouseX - offsetX, mouseY - offsetY)
+                extractSlot(guiGraphics, it, mouseX - offsetX, mouseY - offsetY)
             }
 
             Slot.playerInventoryAsSlots(rows).forEach {
-                renderSlot(guiGraphics, it, mouseX - offsetX, mouseY - offsetY)
+                extractSlot(guiGraphics, it, mouseX - offsetX, mouseY - offsetY)
             }
         }
     }
 
-    override fun renderBackground(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick)
+    //~ if >= 26.1 'render' -> 'extract'
+    override fun extractBackground(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+        //~ if >= 26.1 'render' -> 'extract'
+        super.extractBackground(guiGraphics, mouseX, mouseY, partialTick)
 
         if (renderBackground) {
-            renderMenuBackground(guiGraphics)
+            //~ if >= 26.1 'render' -> 'extract'
+            extractMenuBackground(guiGraphics)
         }
+
         val textureX = (this.width - backgroundWidth) / 2
         val textureY = (this.height - backgroundHeight) / 2
 
@@ -85,10 +91,12 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
         )
     }
 
-    private fun renderSlot(graphics: GuiGraphics, slot: Slot, mouseX: Int, mouseY: Int) {
+    private fun extractSlot(graphics: GuiGraphicsExtractor, slot: Slot, mouseX: Int, mouseY: Int) {
         val itemStack = slot.itemStack.takeUnless { it?.isEmpty == true } ?: return
-        graphics.renderItem(itemStack, slot.x, slot.y)
-        graphics.renderItemDecorations(McFont.self, itemStack, slot.x, slot.y)
+        //~ if >= 26.1 'renderItem(' -> 'item('
+        graphics.item(itemStack, slot.x, slot.y)
+        //~ if >= 26.1 'renderItemDecorations(' -> 'itemDecorations('
+        graphics.itemDecorations(McFont.self, itemStack, slot.x, slot.y)
 
         if (slot.mouseOver(mouseX, mouseY)) {
             RenderUtils.drawSlotHighlightBack(graphics, slot.x, slot.y)

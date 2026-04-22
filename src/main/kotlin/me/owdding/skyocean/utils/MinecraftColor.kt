@@ -28,7 +28,7 @@ enum class MinecraftColor(val dye: DyeColor, val paneItem: Item) : Translatable 
     // ARGB, opaque
     val color: Int = dye.textureDiffuseColor
 
-    val paneStack: ItemStack = paneItem.defaultInstance
+    val paneStack: ItemStack by lazy { paneItem.defaultInstance }
 
     override fun getTranslationKey(): String = "skyocean.minecraft_colors.${name.lowercase()}"
 

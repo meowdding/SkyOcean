@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.time.Instant;
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
+import me.owdding.skyocean.accessors.WalkAnimationStateAccessor;
 import me.owdding.skyocean.features.misc.fun.animal.PlayerAnimals;
 import me.owdding.skyocean.utils.PlayerUtils;
 import net.minecraft.client.Minecraft;
@@ -17,7 +18,8 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+//~ if >= 26.1 'CameraRenderState' -> 'level.CameraRenderState'
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -34,7 +36,8 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
         super(context);
     }
 
-    @WrapMethod(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V")
+    //~ if >= 26.1 'CameraRenderState' -> 'level/CameraRenderState'
+    @WrapMethod(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V")
     protected <S extends LivingEntityRenderState> void submit(
         S renderState,
         PoseStack poseStack,
@@ -81,6 +84,7 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
                 Instant lastMoveTime = PlayerUtils.INSTANCE.getLastMoveTime(avatar.getUUID());
                 AvatarRenderStateAccessor.setLastMoveTime(state, lastMoveTime);
             }
+            AvatarRenderStateAccessor.setMoveStartTime(state, WalkAnimationStateAccessor.getMoveStartTime(avatar.walkAnimation));
 
             var type = PlayerAnimals.getEntityType();
             var renderer = Minecraft.getInstance().getEntityRenderDispatcher().renderers.get(type);

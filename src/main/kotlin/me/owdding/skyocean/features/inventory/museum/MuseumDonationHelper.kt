@@ -16,7 +16,7 @@ import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
-import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperContext
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
@@ -213,7 +213,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
 
     fun ItemTracker.toState(id: SkyBlockId): CraftHelperState? {
         val recipe = SimpleRecipeApi.getBestRecipe(id) ?: return null
-        val tree = ContextAwareRecipeTree(recipe, SkyOceanItemIngredient(id, 1), 1)
+        val tree = CraftHelperTree(recipe, SkyOceanItemIngredient(id, 1), 1)
         val context = CraftHelperContext.create(tree, this)
         evaluateNode(context)
         return context.toState()

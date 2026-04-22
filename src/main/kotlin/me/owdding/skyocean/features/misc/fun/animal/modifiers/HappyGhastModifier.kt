@@ -22,25 +22,27 @@ object HappyGhastModifier : AnimalModifier<HappyGhast, HappyGhastRenderState> {
         }
     }
 
-    val bodyItemMap = mapOf(
-        CollarColor.WHITE to Items.WHITE_HARNESS,
-        CollarColor.ORANGE to Items.ORANGE_HARNESS,
-        CollarColor.MAGENTA to Items.MAGENTA_HARNESS,
-        CollarColor.LIGHT_BLUE to Items.LIGHT_BLUE_HARNESS,
-        CollarColor.YELLOW to Items.YELLOW_HARNESS,
-        CollarColor.LIME to Items.LIME_HARNESS,
-        CollarColor.PINK to Items.PINK_HARNESS,
-        CollarColor.GRAY to Items.GRAY_HARNESS,
-        CollarColor.LIGHT_GRAY to Items.LIGHT_GRAY_HARNESS,
-        CollarColor.CYAN to Items.CYAN_HARNESS,
-        CollarColor.PURPLE to Items.PURPLE_HARNESS,
-        CollarColor.BLUE to Items.BLUE_HARNESS,
-        CollarColor.BROWN to Items.BROWN_HARNESS,
-        CollarColor.GREEN to Items.GREEN_HARNESS,
-        CollarColor.RED to Items.RED_HARNESS,
-        CollarColor.BLACK to Items.BLACK_HARNESS,
-    ).mapValues { (_, item) -> item.defaultInstance }
-    val values = bodyItemMap.values.toList()
+    val bodyItemMap by lazy {
+        mapOf(
+            CollarColor.WHITE to Items.WHITE_HARNESS,
+            CollarColor.ORANGE to Items.ORANGE_HARNESS,
+            CollarColor.MAGENTA to Items.MAGENTA_HARNESS,
+            CollarColor.LIGHT_BLUE to Items.LIGHT_BLUE_HARNESS,
+            CollarColor.YELLOW to Items.YELLOW_HARNESS,
+            CollarColor.LIME to Items.LIME_HARNESS,
+            CollarColor.PINK to Items.PINK_HARNESS,
+            CollarColor.GRAY to Items.GRAY_HARNESS,
+            CollarColor.LIGHT_GRAY to Items.LIGHT_GRAY_HARNESS,
+            CollarColor.CYAN to Items.CYAN_HARNESS,
+            CollarColor.PURPLE to Items.PURPLE_HARNESS,
+            CollarColor.BLUE to Items.BLUE_HARNESS,
+            CollarColor.BROWN to Items.BROWN_HARNESS,
+            CollarColor.GREEN to Items.GREEN_HARNESS,
+            CollarColor.RED to Items.RED_HARNESS,
+            CollarColor.BLACK to Items.BLACK_HARNESS,
+        ).mapValues { (_, item) -> item.defaultInstance }
+    }
+    val values by lazy { bodyItemMap.values.toList() }
 
     override fun apply(
         avatarState: AvatarRenderState,

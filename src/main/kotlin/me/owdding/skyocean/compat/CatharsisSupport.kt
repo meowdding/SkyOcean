@@ -27,7 +27,7 @@ object CatharsisSupport {
         this.disabledConsumer = consumer
     }
 
-    fun ItemStack.disableCatharsisModifications() {
+    fun ItemStack.disableCatharsisModifications() = apply {
         disabledConsumer.accept(this, true)
     }
 

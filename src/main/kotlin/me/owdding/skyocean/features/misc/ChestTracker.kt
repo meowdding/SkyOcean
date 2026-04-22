@@ -9,6 +9,8 @@ import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.tags.BlockTagKey
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
+import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.contents.TranslatableContents
 import net.minecraft.world.entity.player.Inventory
@@ -110,7 +112,7 @@ object ChestTracker {
             } else if (second != null) {
                 IslandChestStorage.addItem(slot.item, slot.savableIndex, second, first)
             } else {
-                SkyOcean.warn("Failed to save item ${slot.item.item.name.stripped} at position ($first, $second)")
+                SkyOcean.warn("Failed to save item ${slot.item.item.components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY).stripped} at position ($first, $second)")
             }
         }
         IslandChestStorage.save()

@@ -1,4 +1,4 @@
-accessWidener v2 named
+accessWidener v2 official
 accessible method net/minecraft/network/chat/MutableComponent <init> (Lnet/minecraft/network/chat/ComponentContents;Ljava/util/List;Lnet/minecraft/network/chat/Style;)V
 accessible class net/minecraft/client/gui/layouts/FrameLayout$ChildContainer
 accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher renderers Ljava/util/Map;
@@ -12,3 +12,5 @@ accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$GlyphInsta
 accessible method net/minecraft/client/gui/screens/inventory/InventoryScreen extractRenderState (Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/client/renderer/entity/state/EntityRenderState;
 
 accessible field net/minecraft/client/KeyMapping clickCount I
+accessible method net/minecraft/client/renderer/feature/BlockFeatureRenderer renderBlockModelSubmits (Lnet/minecraft/client/renderer/SubmitNodeCollection;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;Lnet/minecraft/client/renderer/OutlineBufferSource;Z)V
+accessible field net/minecraft/client/Minecraft blockModelResolver Lnet/minecraft/client/renderer/block/BlockModelResolver;

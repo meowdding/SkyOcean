@@ -1,7 +1,5 @@
 package me.owdding.skyocean.features.recipe.crafthelper.display
 
-import earth.terrarium.olympus.client.components.Widgets
-import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.compat.REIRenderOverlayEvent
@@ -17,7 +15,7 @@ import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
-import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
@@ -74,7 +72,8 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             layout.visitWidgets { event.widgets.remove(it) }
         }
         callback = callback@{ save ->
-            val (tree, output) = CraftHelperStorage.data?.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
+            val tree = CraftHelperManager.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
+            val output = tree.output
             resetLayout()
             layout.tryClear()
                 layout.addChild(visualize(tree, output, maxAvailableWidth) { callback })
@@ -100,7 +99,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
     }
 
     @Suppress("LongMethod")
-    private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, maxWidth: Int, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
+    private fun visualize(tree: CraftHelperTree, output: ItemLikeIngredient, maxWidth: Int, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
         val sources = ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()
         val tracker = ItemTracker(sources)
         val callback = callback()

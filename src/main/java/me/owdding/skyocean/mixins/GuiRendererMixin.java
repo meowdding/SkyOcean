@@ -6,7 +6,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.owdding.skyocean.utils.rendering.PostEffectApplicator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.GuiRenderer;
-import net.minecraft.client.gui.render.state.GuiRenderState;
+//~ if >= 26.1 'gui.render.state' -> 'renderer.state.gui'
+import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelTargetBundle;
 import net.minecraft.resources.Identifier;

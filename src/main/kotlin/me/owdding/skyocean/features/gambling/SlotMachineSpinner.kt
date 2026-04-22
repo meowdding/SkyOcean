@@ -6,7 +6,7 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.TickTracker
 import me.owdding.skyocean.utils.animation.EasingFunctions
 import me.owdding.skyocean.utils.chat.ComponentAnimator
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
@@ -95,7 +95,8 @@ class SlotMachineSpinner(
         }
     }
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
+    //~ if >= 26.1 'render' -> 'extractRenderState'
+    override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, f: Float) {
         val elapsedTime = startTime.since()
         val scale = 1.5
 
@@ -145,10 +146,11 @@ class SlotMachineSpinner(
             scaledHeight, // height
         )
 
-        super.render(graphics, mouseX, mouseY, f)
+        //~ if >= 26.1 'render' -> 'extractRenderState'
+        super.extractRenderState(graphics, mouseX, mouseY, f)
     }
 
-    private fun GuiGraphics.renderSlot(index: Int, scale: Double, elapsedTime: Duration) {
+    private fun GuiGraphicsExtractor.renderSlot(index: Int, scale: Double, elapsedTime: Duration) {
         val spinDuration = baseDuration + (index * waitDelay)
 
         val rawProgress = (elapsedTime.inWholeMilliseconds / spinDuration.inWholeMilliseconds.toFloat()).coerceIn(0f, 1f)
@@ -195,7 +197,8 @@ class SlotMachineSpinner(
                 val targetIndex = (currentBaseIndex + offset).coerceIn(0, slot.size - 1)
                 val item = slot[targetIndex]
                 val itemY = yPos + pixelOffset - (offset * slotHeight * scale).toInt()
-                renderItem(item.toItem(), xPos - 8, itemY - 8)
+                //~ if >= 26.1 'renderItem(' -> 'item('
+                item(item.toItem(), xPos - 8, itemY - 8)
             }
         }
     }

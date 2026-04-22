@@ -8,7 +8,7 @@ import net.minecraft.client.model.Model;
 //? > 1.21.10 {
 import net.minecraft.client.renderer.rendertype.RenderType;
 //? } else
-//import net.minecraft.client.renderer.RenderType;
+//import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
