@@ -1,9 +1,8 @@
 package me.owdding.skyocean.features.recipe.crafthelper.resolver
 
 import me.owdding.skyocean.data.profile.CraftHelperStorage
-import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
-import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.data.CraftHelperRecipeType
 import me.owdding.skyocean.features.recipe.crafthelper.data.CustomCraftHelperTree
 import me.owdding.skyocean.features.recipe.custom.CustomRecipe
@@ -16,7 +15,7 @@ object CustomTreeResolver : TreeResolver<CustomCraftHelperTree> {
         recipe: CustomCraftHelperTree,
         resetLayout: () -> Unit,
         clear: () -> Unit,
-    ): Pair<ContextAwareRecipeTree, ItemLikeIngredient> {
+    ): CraftHelperTree {
         val customRecipe = CustomRecipe(
             recipe.output,
             recipe.inputs.map { (id, amount) ->
@@ -29,6 +28,6 @@ object CustomTreeResolver : TreeResolver<CustomCraftHelperTree> {
 
         val output = recipe.output
 
-        return ContextAwareRecipeTree(customRecipe, output, CraftHelperStorage.selectedAmount.coerceAtLeast(1)) to output
+        return CraftHelperTree(customRecipe, output, CraftHelperStorage.selectedAmount.coerceAtLeast(1))
     }
 }
