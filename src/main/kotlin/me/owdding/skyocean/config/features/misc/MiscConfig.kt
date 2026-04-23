@@ -81,6 +81,11 @@ object MiscConfig : CategoryKt("misc") {
         this.translation = "skyocean.config.misc.customization_vanilla_integration"
     }
 
+    var totemAnimation by boolean(false) {
+        translation = "skyocean.config.misc.totemAnimation"
+        searchTerms = listOf("bonzo", "spirit", "mask", "phoenix", "pet", "remnant", "eye")
+    }
+
     var queueEstimation by boolean(true) {
         translation = "skyocean.config.misc.queueEstimation"
     }
@@ -103,7 +108,7 @@ object MiscConfig : CategoryKt("misc") {
         range = 10L..60L
     }.duration(SECONDS)
 
-    var useReiSearchBar by boolean(true) {
+    var useReiSearchBar by boolean(false) {
         translation = "skyocean.config.misc.itemSearch.useReiSearchBar"
         condition = KnownMods.REI::installed
     }

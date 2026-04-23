@@ -2,7 +2,7 @@ package me.owdding.skyocean.utils.rendering
 
 import earth.terrarium.olympus.client.utils.Orientation
 import me.owdding.lib.displays.Display
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.util.ARGB
 import tech.thatgravyboat.skyblockapi.platform.drawFilledBox
 
@@ -15,9 +15,9 @@ object ExtraDisplays {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
 
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 InventoryRenderer.renderMonoInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), size, orientation, color)
-                display.render(graphics)
+                display.extract(graphics)
             }
         }
     }
@@ -34,18 +34,18 @@ object ExtraDisplays {
             override fun getWidth() = display.getWidth()
             override fun getHeight() = display.getHeight()
 
-            override fun render(graphics: GuiGraphics) {
+            override fun extract(graphics: GuiGraphicsExtractor) {
                 InventoryRenderer.renderNormalInventory(graphics, 0, 0, display.getWidth(), display.getHeight(), columns, rows, color)
-                display.render(graphics)
+                display.extract(graphics)
             }
         }
     }
 
-    fun passthrough(width: Int, height: Int, draw: GuiGraphics.() -> Unit) = object : Display {
+    fun passthrough(width: Int, height: Int, draw: GuiGraphicsExtractor.() -> Unit) = object : Display {
         override fun getWidth() = width
         override fun getHeight() = height
 
-        override fun render(graphics: GuiGraphics) {
+        override fun extract(graphics: GuiGraphicsExtractor) {
             graphics.draw()
         }
     }
@@ -55,7 +55,7 @@ object ExtraDisplays {
         override fun getWidth() = width
         override fun getHeight() = height
 
-        override fun render(graphics: GuiGraphics) {
+        override fun extract(graphics: GuiGraphicsExtractor) {
             graphics.drawFilledBox(
                 0, 0,
                 getWidth(), getHeight(),

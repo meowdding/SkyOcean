@@ -5,12 +5,15 @@ import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.plus
-import net.minecraft.client.renderer.LightTexture
-import net.minecraft.client.renderer.block.ModelBlockRenderer
+//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
+import net.minecraft.util.LightCoordsUtil as LightTexture
+//~ if >= 26.1 'ModelBlockRenderer' -> 'dispatch.BlockStateModelPart'
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart
 import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.core.BlockPos
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.StairBlock
 import org.joml.Vector3d
@@ -50,10 +53,11 @@ object PuzzlerSolver {
     fun onRenderWorld(event: RenderWorldEvent.AfterTranslucent) {
         if (!MiningConfig.puzzlerSolver) return
         val solution = solution ?: return
+        val level = McLevel.self ?: return
         event.atCamera {
             translate(solution.x.toFloat(), solution.y.toFloat(), solution.z.toFloat())
 
-            val worldBlock = McLevel.self.getBlockState(solution)
+            val worldBlock = level.getBlockState(solution)
 
             val state = if (worldBlock.block is StairBlock) {
                 Blocks.WARPED_STAIRS.withPropertiesOf(worldBlock)
@@ -61,7 +65,21 @@ object PuzzlerSolver {
                 Blocks.WARPED_PLANKS.defaultBlockState()
             }
 
-            ModelBlockRenderer.renderModel(
+
+            //? if >= 26.1 {
+            val list = mutableListOf<BlockStateModelPart>()
+            McClient.self.modelManager.blockStateModelSet.get(state).collectParts(RandomSource.create(-1), list)
+            McClient.self.gameRenderer.submitNodeStorage.submitBlockModel(
+                event.poseStack,
+                RenderTypes.entityCutoutZOffset(TextureAtlas.LOCATION_BLOCKS),
+                list,
+                IntArray(0),
+                LightTexture.FULL_BRIGHT,
+                OverlayTexture.NO_OVERLAY,
+                1
+            )
+            //? } else {
+            /*ModelBlockRenderer.renderModel(
                 event.poseStack.last(),
                 // RenderTypes instead of RenderType but how
                 event.buffer.getBuffer(RenderTypes.entityCutoutNoCullZOffset(TextureAtlas.LOCATION_BLOCKS)),
@@ -72,6 +90,7 @@ object PuzzlerSolver {
                 LightTexture.FULL_BRIGHT,
                 OverlayTexture.NO_OVERLAY,
             )
+            *///? }
         }
     }
 

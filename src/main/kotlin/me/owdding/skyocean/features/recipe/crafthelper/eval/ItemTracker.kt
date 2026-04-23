@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.area.farming.TrapperAPI
 import tech.thatgravyboat.skyblockapi.api.area.hub.FarmhouseAPI
 import tech.thatgravyboat.skyblockapi.api.area.rift.RiftAPI
-import tech.thatgravyboat.skyblockapi.api.profile.CurrencyAPI
+import tech.thatgravyboat.skyblockapi.api.profile.currency.CurrencyAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import kotlin.math.min

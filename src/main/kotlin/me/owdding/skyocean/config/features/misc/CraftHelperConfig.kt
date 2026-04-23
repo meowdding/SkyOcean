@@ -64,4 +64,14 @@ object CraftHelperConfig : CategoryKt("crafthelper") {
     var overlayBackground by boolean(false) {
         translation = "skyocean.config.misc.crafthelper.overlay_background"
     }
+
+    init {
+        separator("skyocean.config.misc.crafthelper.transformers")
+    }
+
+    var compactedCutoffDegree by int(0) {
+        translation = "skyocean.config.misc.crafthelper.transformers.compacted_cutoff_degree"
+        range = 0..5
+        slider = true
+    }
 }

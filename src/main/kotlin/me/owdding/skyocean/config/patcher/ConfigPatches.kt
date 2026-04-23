@@ -25,6 +25,7 @@ object ConfigPatches {
         register(RemovePatch.ID, RemovePatch.CODEC)
         register(AddPatch.ID, SkyOceanCodecs.AddPatchCodec)
         register(AddListPatch.ID, SkyOceanCodecs.AddListPatchCodec)
+        register(CodeConfigPatch.ID, SkyOceanCodecs.CodeConfigPatchCodec)
     }
 
     fun register(id: Identifier, codec: MapCodec<out Patch>) {

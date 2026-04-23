@@ -2,10 +2,8 @@ package me.owdding.skyocean.data.profile
 
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.lib.repo.PowderType
-import me.owdding.lib.repo.SkillTreeCurrency
 import me.owdding.lib.repo.WhisperType
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.storage.ProfileStorage
 
 object PerkUpgradeStorage {
@@ -24,25 +22,31 @@ object PerkUpgradeStorage {
     val hotf: Map<WhisperType, String>
         get() = data?.hotf.orEmpty()
 
-    operator fun <T : SkillTreeCurrency> set(type: T, perk: String) {
-        val storage = getStorage(type) ?: return
-        if (storage[type] == perk) return
-        storage[type] = perk
+    operator fun set(type: PowderType, perk: String) {
+        val data = data ?: return
+        if (data.hotm[type] == perk) return
+        data.hotm[type] = perk
         save()
     }
 
-    fun <T : SkillTreeCurrency> remove(type: T) {
-        val storage = getStorage(type) ?: return
-        if (storage.remove(type) != null) save()
+    fun remove(type: PowderType) {
+        val data = data ?: return
+        if (data.hotm.remove(type) != null) save()
     }
 
-    private fun <T : SkillTreeCurrency> getStorage(currency: T) = when (currency) {
-        is PowderType -> data?.hotm
-        is WhisperType -> data?.hotf
-        else -> null
-    }?.unsafeCast<MutableMap<T, String>>()
+    operator fun set(type: WhisperType, perk: String) {
+        val data = data ?: return
+        if (data.hotf[type] == perk) return
+        data.hotf[type] = perk
+    }
+
+    fun remove(type: WhisperType) {
+        val data = data ?: return
+        if (data.hotf.remove(type) != null) save()
+    }
 
     private fun save() = STORAGE.save()
+
 }
 
 @GenerateCodec

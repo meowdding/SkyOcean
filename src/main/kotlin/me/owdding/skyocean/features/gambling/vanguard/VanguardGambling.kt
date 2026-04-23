@@ -70,7 +70,11 @@ object VanguardGambling {
             VanguardMode.MOST_EXPENSIVE -> sortedLoot.firstOrNull() ?: (null to 0)
         }
         val animator = ComponentAnimator("VANGUARD", 0x55FFFF, 0x33DDDDDD)
-        McClient.setScreenAsync { SlotMachineSpinner(data.items, winItem, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat, animator) }
+        McClient.setScreenAsync {
+            SlotMachineSpinner(data.items, winItem, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat, animator).apply {
+                SkyBlockAPI.eventBus.register(this)
+            }
+        }
     }
 
     @Subscription

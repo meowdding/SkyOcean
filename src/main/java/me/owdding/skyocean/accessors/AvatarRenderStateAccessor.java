@@ -1,11 +1,11 @@
 package me.owdding.skyocean.accessors;
 
-import java.util.UUID;
-
 import kotlin.time.Instant;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public interface AvatarRenderStateAccessor {
 
@@ -75,6 +75,19 @@ public interface AvatarRenderStateAccessor {
         }
     }
 
+    static Integer getMoveStartTime(Object renderState) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            return accessor.ocean$getStartMoveTime();
+        }
+        return null;
+    }
+
+    static void setMoveStartTime(Object renderState, Integer time) {
+        if (renderState instanceof AvatarRenderStateAccessor accessor) {
+            accessor.ocean$setStartMoveTime(time);
+        }
+    }
+
     static Instant getLastMoveTime(Object renderState) {
         if (renderState instanceof AvatarRenderStateAccessor accessor) {
             return accessor.ocean$getLastMoveTime();
@@ -87,6 +100,10 @@ public interface AvatarRenderStateAccessor {
             accessor.ocean$setLastMoveTime(time);
         }
     }
+
+    Integer ocean$getStartMoveTime();
+
+    void ocean$setStartMoveTime(Integer startMoveTime);
 
     void ocean$setUUID(UUID uuid);
 

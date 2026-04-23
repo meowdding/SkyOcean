@@ -93,7 +93,7 @@ object QueueEstimate {
             }
         }
 
-        display.centerIn(McClient.window.guiScaledWidth, McClient.window.guiScaledHeight / 3).render(event.graphics)
+        display.centerIn(McClient.window.guiScaledWidth, McClient.window.guiScaledHeight / 3).extract(event.graphics)
     }
 
     private fun predict(): Instant? {

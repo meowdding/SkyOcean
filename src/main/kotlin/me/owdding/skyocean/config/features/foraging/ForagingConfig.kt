@@ -1,34 +1,33 @@
 package me.owdding.skyocean.config.features.foraging
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
-import me.owdding.skyocean.helpers.skilltree.SkillTreeConfig
 
 
-object ForagingConfig : CategoryKt("foraging"), SkillTreeConfig {
+object ForagingConfig : CategoryKt("foraging") {
 
     override val name get() = Translated("skyocean.config.foraging")
 
-    override var stackSize by boolean("hotfStackSize", true) {
+    var hotfStackSize by boolean(true) {
         translation = "skyocean.config.foraging.hotf.stackSize"
     }
 
-    override var totalProgress by boolean("hotfTotalProgress", true) {
+    var hotfTotalProgress by boolean(true) {
         translation = "skyocean.config.foraging.hotf.totalProgress"
     }
 
-    override var displayShiftCost by boolean("hotfDisplayShiftCost", true) {
+    var hotfDisplayShiftCost by boolean(true) {
         translation = "skyocean.config.foraging.hotf.shiftCost"
     }
 
-    override var displayTotalLeft by boolean("hotfDisplayTotalLeft", true) {
+    var hotfDisplayTotalLeft by boolean(true) {
         translation = "skyocean.config.foraging.hotf.totalLeft"
     }
 
-    override var reminder by boolean("hotfReminder", true) {
+    var hotfReminder by boolean(true) {
         translation = "skyocean.config.foraging.hotf.reminder"
     }
 
-    override var reminderTitle by boolean(true) {
+    var reminderTitle by boolean(true) {
         translation = "skyocean.config.foraging.hotf.reminderTitle"
     }
 

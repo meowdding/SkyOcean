@@ -15,7 +15,7 @@ import me.owdding.skyocean.config.features.misc.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
-import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
@@ -23,6 +23,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
 import me.owdding.skyocean.features.recipe.crafthelper.views.tree.TreeFormatter
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.chat.Icons
+import me.owdding.skyocean.utils.debugToggle
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.extensions.tryClear
 import me.owdding.skyocean.utils.extensions.withoutTooltipDelay
@@ -47,14 +48,16 @@ import kotlin.math.max
 @LateInitModule
 object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
 
+    private val ignoreChecks by debugToggle("cafthelper/ignore_checks")
+
     private var craftHelperLayout: LayoutElement? = null
 
     private const val BACKGROUND_PADDING = 14
 
     @Subscription
     fun onScreenInit(event: ScreenInitializedEvent) {
-        if (!CraftHelperConfig.enabled) return
-        if (!LocationAPI.isOnSkyBlock) return
+        if (!CraftHelperConfig.enabled && !ignoreChecks) return
+        if (!LocationAPI.isOnSkyBlock && !ignoreChecks) return
 
         val screen = event.screen as? AbstractContainerScreen<*> ?: return
 
@@ -69,10 +72,11 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             layout.visitWidgets { event.widgets.remove(it) }
         }
         callback = callback@{ save ->
-            val (tree, output) = CraftHelperStorage.data?.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
+            val tree = CraftHelperManager.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
+            val output = tree.output
             resetLayout()
             layout.tryClear()
-            layout.addChild(visualize(tree, output, maxAvailableWidth) { callback })
+                layout.addChild(visualize(tree, output, maxAvailableWidth) { callback })
             layout.arrangeElements()
             layout.setPosition(CraftHelperConfig.position.position(layout.width, layout.height))
             layout.visitWidgets { event.widgets.add(it) }
@@ -95,7 +99,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
     }
 
     @Suppress("LongMethod")
-    private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, maxWidth: Int, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
+    private fun visualize(tree: CraftHelperTree, output: ItemLikeIngredient, maxWidth: Int, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
         val sources = ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()
         val tracker = ItemTracker(sources)
         val callback = callback()

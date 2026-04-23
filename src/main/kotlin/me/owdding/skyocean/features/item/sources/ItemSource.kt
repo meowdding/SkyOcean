@@ -34,7 +34,6 @@ enum class ItemSources(val itemSource: ItemSource?, vararg val disabledIn: ItemS
     SACK_OF_SACKS(SackOfSacksItemSource),
     HUNTING_BOX(HuntingBoxItemSource, ItemSourceTag.ITEM_SEARCH),
     ;
-    // todo SACK_OF_SACKS(TODO()),
     // todo POTION_BAG(TODO()),
 
     init {

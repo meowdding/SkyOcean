@@ -7,118 +7,88 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
+//~ if >= 26.1 'ClientCommandManager as ClientCommands' -> 'ClientCommands'
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.CommandBuildContext
-import net.minecraft.commands.SharedSuggestionProvider
-import tech.thatgravyboat.skyblockapi.api.events.base.SkyBlockEvent
+import tech.thatgravyboat.skyblockapi.api.events.misc.AbstractModRegisterCommandsEvent
+import tech.thatgravyboat.skyblockapi.api.events.misc.CommandBuilder
+import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
+import tech.thatgravyboat.skyblockapi.api.events.misc.ArgumentCommandBuilder as SbApiArgumentBuilder
+import tech.thatgravyboat.skyblockapi.api.events.misc.LiteralCommandBuilder as SbApiLiteralBuilder
 
-typealias LiteralCommandBuilder = CommandBuilder<LiteralArgumentBuilder<FabricClientCommandSource>>
-typealias ArgumentCommandBuilder<T> = CommandBuilder<RequiredArgumentBuilder<FabricClientCommandSource, T>>
 
+typealias LiteralCommandBuilder = SkyOceanCommandBuilder<LiteralArgumentBuilder<FabricClientCommandSource>>
+typealias ArgumentCommandBuilder<T> = SkyOceanCommandBuilder<RequiredArgumentBuilder<FabricClientCommandSource, T>>
 
 class RegisterSkyOceanCommandEvent(
-    private val dispatcher: CommandDispatcher<FabricClientCommandSource>,
-    private val context: CommandBuildContext,
-) : SkyBlockEvent() {
+    val dispatcher: CommandDispatcher<FabricClientCommandSource>,
+    val context: CommandBuildContext,
+) : AbstractModRegisterCommandsEvent(RegisterCommandsEvent(dispatcher), "skyocean") {
+    private val prefixes = listOf("skyocean", "so")
 
-    fun register(command: LiteralArgumentBuilder<FabricClientCommandSource>) {
-        ClientCommandManager.literal("skyocean")
+    fun register(command: LiteralArgumentBuilder<FabricClientCommandSource>) = prefixes.forEach {
+        ClientCommands.literal(it)
             .then(command)
             .let(dispatcher::register)
     }
 
-    fun register(command: String, builder: LiteralCommandBuilder.() -> Unit) {
-        ClientCommandManager.literal("skyocean")
-            ?.apply { LiteralCommandBuilder(this, context).then(command, action = builder) }
-            ?.let(dispatcher::register)
-    }
-
-    fun registerWithCallback(command: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
-        register(command) {
-            this.callback(callback)
+    override fun registerBaseCallback(callback: CommandContext<FabricClientCommandSource>.() -> Unit) = prefixes.forEach {
+        register(it) {
+            callback(callback)
         }
     }
 
-    fun registerDev(command: LiteralArgumentBuilder<FabricClientCommandSource>) {
-        register(ClientCommandManager.literal("dev").then(command))
+    override fun register(command: String, builder: SbApiLiteralBuilder.() -> Unit) = prefixes.forEach {
+        ClientCommands.literal(it)
+            .apply { LiteralCommandBuilder(this, context).then(command, action = builder) }
+            .let(dispatcher::register)
     }
 
     fun registerDevWithCallback(command: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
-        registerDev(command) {
-            this.callback(callback)
-        }
+        registerWithCallback("dev $command", callback)
     }
 
-    fun registerDev(command: String, builder: LiteralCommandBuilder.() -> Unit) {
-        register(
-            ClientCommandManager.literal("dev").apply {
-                LiteralCommandBuilder(this, context).then(command, action = builder)
-            },
-        )
+    fun registerDev(command: String, builder: SbApiLiteralBuilder.() -> Unit) {
+        register("dev $command", builder)
     }
 
 }
 
-class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal constructor(
-    private val builder: ArgumentBuilder<FabricClientCommandSource, B>,
+@Suppress("UPPER_BOUND_VIOLATED_BASED_ON_JAVA_ANNOTATIONS", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+class SkyOceanCommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal constructor(
+    builder: ArgumentBuilder<FabricClientCommandSource, B>,
     private val context: CommandBuildContext,
-) {
-
-    fun callback(callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
-        this.builder.executes {
-            callback(it)
-            1
-        }
-    }
-
-    fun then(vararg names: String, action: LiteralCommandBuilder.() -> Unit): CommandBuilder<B> {
+) : CommandBuilder<B>(builder) {
+    override fun then(vararg names: String, action: SbApiLiteralBuilder.() -> Unit): SkyOceanCommandBuilder<B> {
         for (name in names) {
             if (name.contains(" ")) {
-                val builder = CommandBuilder(ClientCommandManager.literal(name.substringBefore(" ")), context)
+                val builder = SkyOceanCommandBuilder(ClientCommands.literal(name.substringBefore(" ")), context)
                 builder.then(name.substringAfter(" "), action = action)
                 this.builder.then(builder.builder)
                 continue
             }
-            val builder = CommandBuilder(ClientCommandManager.literal(name), context)
+            val builder = SkyOceanCommandBuilder(ClientCommands.literal(name), context)
             builder.action()
             this.builder.then(builder.builder)
         }
         return this
     }
 
-    fun thenCallback(vararg name: String, callback: CommandContext<FabricClientCommandSource>.() -> Unit) {
-        then(*name) {
-            callback(callback)
-        }
-    }
-
-    fun <T> then(
+    override fun <T> then(
         name: String,
         argument: ArgumentType<T>,
-        suggestions: Collection<String>,
-        action: ArgumentCommandBuilder<T>.() -> Unit,
-    ): CommandBuilder<B> = then(
-        name,
-        argument,
-        { _, builder -> SharedSuggestionProvider.suggest(suggestions, builder) },
-        action,
-    )
-
-    fun <T> then(
-        name: String,
-        argument: ArgumentType<T>,
-        suggestions: SuggestionProvider<FabricClientCommandSource>? = null,
-        action: ArgumentCommandBuilder<T>.() -> Unit,
+        suggestions: SuggestionProvider<FabricClientCommandSource>?,
+        action: SbApiArgumentBuilder<T>.() -> Unit,
     ): CommandBuilder<B> {
         if (name.contains(" ")) {
-            val builder = CommandBuilder(ClientCommandManager.literal(name.substringBefore(" ")), context)
+            val builder = SkyOceanCommandBuilder(ClientCommands.literal(name.substringBefore(" ")), context)
             builder.then(name.substringAfter(" "), argument, suggestions, action)
             this.builder.then(builder.builder)
             return this
         }
-        val builder = CommandBuilder(
-            ClientCommandManager.argument(name, argument).apply {
+        val builder = SkyOceanCommandBuilder(
+            ClientCommands.argument(name, argument).apply {
                 if (suggestions != null) suggests(suggestions)
             },
             context,
@@ -128,14 +98,6 @@ class CommandBuilder<B : ArgumentBuilder<FabricClientCommandSource, B>> internal
         return this
     }
 
-    fun <T> thenCallback(
-        name: String,
-        argument: ArgumentType<T>,
-        suggestions: SuggestionProvider<FabricClientCommandSource>? = null,
-        callback: CommandContext<FabricClientCommandSource>.() -> Unit,
-    ): CommandBuilder<B> = then(name, argument, suggestions) {
-        callback(callback)
-    }
-
     fun context() = context
 }
+

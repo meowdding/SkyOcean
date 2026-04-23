@@ -38,11 +38,12 @@ object RatHitboxes {
         if (!MiscConfig.ratHitbox) return
         if (!SkyBlockIsland.HUB.inIsland()) return
         val player = McPlayer.self ?: return
+        val entities = McLevel.selfOrNull?.getEntities(
+            player,
+            AABB(player.blockPosition()).inflate(20.0),
+        ) ?: return
         rats.addAll(
-            McLevel.level.getEntities(
-                player,
-                AABB(player.blockPosition()).inflate(20.0),
-            ).filterIsInstance<Zombie>().filter { it.isBaby }
+            entities.filterIsInstance<Zombie>().filter { it.isBaby }
                 .filter { abs(it.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) - 0.23000000417232513) <= 0.000001 }.toList(),
         )
     }

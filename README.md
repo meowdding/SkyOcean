@@ -217,9 +217,7 @@ seamless way.
     - Pet drop message modifiers (includes rarity and drops title alerts).
 - Metal Detector Solver
     - Helps find treasures in the Mines of Divan with optional Ding sounds and titles upon finding.
-- Retextures
-    - Retexture carpets, Glacite Tunnel blocks, mist, gemstones, and Crystal Hollows blocks.
-    - Crystal Hollows Area Walls.
+- Retexture carpets to red.
 - Puzzler Solver.
 
 </details>

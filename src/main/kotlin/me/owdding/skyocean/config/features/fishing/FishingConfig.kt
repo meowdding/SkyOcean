@@ -10,6 +10,10 @@ object FishingConfig : CategoryKt("fishing") {
         this.translation = "skyocean.config.fishing.trophy_numbers"
     }
 
+    var hookTextScaleToggle by boolean(false) {
+        this.translation = "skyocean.config.fishing.hook_text_scale_toggle"
+    }
+
     var hookTextScale by float(1f) {
         this.range = 0.25f..5f
         this.slider = true
