@@ -8,6 +8,7 @@ import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
+import tech.thatgravyboat.skyblockapi.api.events.level.ParticleEmitEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
@@ -18,25 +19,19 @@ object ImplosionHider {
 
     private val players: MutableSet<Vec3> = mutableSetOf()
 
+    fun Vec3.isInRange(event: ParticleEmitEvent) = this.distanceToSqr(
+        event.particle.x,
+        event.particle.y,
+        event.particle.z
+    ) >= 4.0
+
     @Subscription
     fun onParticle(event: ParticleEmitEvent) {
         if (!MiscConfig.hideImplosions) return
         val self = McPlayer.self ?: return
-        if (event.particle !is HugeExplosionParticle) return
-        if (event.particle.getQuadSize(1f).absoluteValue <= 25 && (
-                self.distanceToSqr(
-                    event.particle.x,
-                    event.particle.y,
-                    event.particle.z,
-                ) <= 4.0 || players.any { player ->
-                    player.distanceToSqr(
-                        event.particle.x,
-                        event.particle.y,
-                        event.particle.z,
-                    ) <= 4.0
-                }
-                )
-        ) {
+        val particle = event.particle
+        if (particle !is HugeExplosionParticle) return
+        if (particle.getQuadSize(1f).absoluteValue <= 25 && (self.position().isInRange(event) || players.any { player -> player.isInRange(event) })) {
             event.cancel()
         }
     }
@@ -47,7 +42,7 @@ object ImplosionHider {
         if (!MiscConfig.hideImplosions) return
         players.clear()
         McLevel.players.filter {
-            it.mainHandItem.getData(DataTypes.NECRON_SCROLLS) != null && it == McPlayer.self
+            it.mainHandItem.getData(DataTypes.ID) != null && it == McPlayer.self
         }.forEach { players.add(it.position()) }
     }
 
