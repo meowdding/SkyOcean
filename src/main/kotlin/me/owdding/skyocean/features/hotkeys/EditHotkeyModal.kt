@@ -40,7 +40,7 @@ import me.owdding.skyocean.utils.extensions.topRight
 import me.owdding.skyocean.utils.extensions.withPadding
 import me.owdding.skyocean.utils.extensions.withTexturedBackground
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.Layout
@@ -82,6 +82,8 @@ class EditHotkeyModal(
 
     private val priority = ListenableState.of(keybind?.settings?.priority ?: 0)
     private val context: ListenableState<ConflictContext> = ListenableState.of(keybind?.settings?.context ?: ConflictContext.IN_GAME)
+
+    private var keysWidget: AbstractWidget = Widgets.frame()
 
     var lastScrollGetter = { 0 }
 
@@ -185,6 +187,8 @@ class EditHotkeyModal(
                             )
                         },
                     )
+                }.also {
+                    keysWidget = it
                 }.add()
             }
             vertical {
@@ -362,7 +366,17 @@ class EditHotkeyModal(
         FrameLayout.centerInRectangle(this.layout, this.rectangle)
     }
 
-    override fun mouseClicked(event: MouseButtonEvent?, isDoubleClick: Boolean): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, isDoubleClick: Boolean): Boolean {
+        if (this.keysWidget.isMouseOver(event.x, event.y) && recordKeys) {
+            val key = InputConstants.Type.MOUSE.getOrCreate(event.button())
+            if (this.orderSensitive.get()) {
+                this.keys.add(key)
+            } else if (!this.keys.contains(key)) {
+                this.keys.add(key)
+            }
+            return true
+        }
+
         this.recordKeys = false
         return super.mouseClicked(event, isDoubleClick)
     }
@@ -379,13 +393,16 @@ class EditHotkeyModal(
             } else if (!this.keys.contains(key)) {
                 this.keys.add(key)
             }
+            return true
         }
         return super.keyPressed(event)
     }
 
-    override fun renderBackground(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        super.renderBackground(graphics, mouseX, mouseY, partialTick)
-        this.renderTransparentBackground(graphics)
+    //~ if >= 26.1 'render' -> 'extract' {
+    override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick)
+        this.extractTransparentBackground(graphics)
+    //~ }
 
         graphics.blitSprite(
             RenderPipelines.GUI_TEXTURED,

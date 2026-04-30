@@ -28,7 +28,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
-object SackValue : InventorySideGui(".* Sack|Sack of Sacks") {
+object SackValue : InventorySideGui(".* Sack|Sack of Sacks", { SackValueConfig.alignment }) {
 
     private const val SCROLLBAR_WIDTH = 10
     private val gemstoneLevel = listOf("ROUGH", "FLAWED", "FINE")

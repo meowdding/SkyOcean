@@ -25,7 +25,7 @@ object ExtraWidgetRenderers {
             widget.render(graphics, context, partial)
         }
 
-    fun <T : AbstractWidget> display(display: Display): WidgetRenderer<T> = WidgetRenderer<T> { graphics, ctx, _ -> display.render(graphics, ctx.x, ctx.y) }
+    fun <T : AbstractWidget> display(display: Display): WidgetRenderer<T> = WidgetRenderer<T> { graphics, ctx, _ -> display.extract(graphics, ctx.x, ctx.y) }
 
     fun <T : AbstractWidget> supplied(function: () -> WidgetRenderer<T>): WidgetRenderer<T> = WidgetRenderer<T> { graphics, ctx, partial ->
         function().render(graphics, ctx, partial)

@@ -1,4 +1,6 @@
-package me.owdding.skyocean.mixins.features.hidearmour;
+//TODO
+//? < 26.1 {
+/*package me.owdding.skyocean.mixins.features.hidearmour;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -78,3 +80,4 @@ public class ItemRendererMixin {
     }
 
 }
+*///? }

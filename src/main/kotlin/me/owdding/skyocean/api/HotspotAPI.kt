@@ -30,7 +30,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.forEachBelow
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt

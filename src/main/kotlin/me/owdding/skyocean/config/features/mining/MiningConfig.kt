@@ -3,9 +3,8 @@ package me.owdding.skyocean.config.features.mining
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.features.mining.ForgeReminder
-import me.owdding.skyocean.helpers.skilltree.SkillTreeConfig
 
-object MiningConfig : CategoryKt("mining"), SkillTreeConfig {
+object MiningConfig : CategoryKt("mining") {
 
     override val name get() = Translated("skyocean.config.mining")
 
@@ -40,27 +39,27 @@ object MiningConfig : CategoryKt("mining"), SkillTreeConfig {
         separator("skyocean.config.mining.hotm")
     }
 
-    override var stackSize by boolean("hotmStackSize", true) {
+    var hotmStackSize by boolean(true) {
         translation = "skyocean.config.mining.hotm.stackSize"
     }
 
-    override var totalProgress by boolean("hotmTotalProgress", true) {
+    var hotmTotalProgress by boolean(true) {
         translation = "skyocean.config.mining.hotm.totalProgress"
     }
 
-    override var displayShiftCost by boolean("hotmDisplayShiftCost", true) {
+    var hotmDisplayShiftCost by boolean(true) {
         translation = "skyocean.config.mining.hotm.shiftCost"
     }
 
-    override var displayTotalLeft by boolean("hotmDisplayTotalLeft", true) {
+    var hotmDisplayTotalLeft by boolean(true) {
         translation = "skyocean.config.mining.hotm.totalLeft"
     }
 
-    override var reminder by boolean("hotmReminder", true) {
+    var hotmReminder by boolean(true) {
         translation = "skyocean.config.mining.hotm.reminder"
     }
 
-    override var reminderTitle by boolean(true) {
+    var reminderTitle by boolean(true) {
         translation = "skyocean.config.mining.hotm.reminderTitle"
     }
 

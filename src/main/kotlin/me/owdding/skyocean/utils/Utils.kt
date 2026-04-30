@@ -25,7 +25,7 @@ import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.chat.ChatUtils
 //? < 1.21.11
-/*import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow*/
+//import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -51,11 +51,11 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.component.TooltipDisplay
 import net.minecraft.world.level.ItemLike
-import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import org.joml.Vector3dc
 import tech.thatgravyboat.skyblockapi.api.data.MayorPerks
 //? < 1.21.11
-/*import tech.thatgravyboat.skyblockapi.helpers.McClient*/
+//import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.identifier
 import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder

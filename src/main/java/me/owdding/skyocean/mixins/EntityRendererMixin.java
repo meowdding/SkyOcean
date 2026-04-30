@@ -1,0 +1,68 @@
+package me.owdding.skyocean.mixins;
+
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.vertex.PoseStack;
+import me.owdding.skyocean.helpers.EntityAccessor;
+import me.owdding.skyocean.helpers.EntityRenderStateAccessor;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+//~ if >= 26.1 'CameraRenderState' -> 'level.CameraRenderState'
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(EntityRenderer.class)
+public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> {
+
+    @Inject(method = "extractRenderState", at = @At("TAIL"))
+    public void extractRenderState(T entity, S reusedState, float partialTick, CallbackInfo ci) {
+        if (reusedState instanceof EntityRenderStateAccessor stateAccessor && entity instanceof EntityAccessor entityAccessor) {
+            stateAccessor.ocean$setNameTagScale(entityAccessor.ocean$getNameTagScale());
+        }
+    }
+
+
+    @WrapOperation(
+        //~ if >= 26.1 'submitNameTag' -> 'submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V'
+        method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V",
+        at = @At(
+            //~ if >= 26.1 'CameraRenderState' -> 'level/CameraRenderState'
+            value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/level/CameraRenderState;)V"
+        )
+    )
+    public void scaleNameTag(
+        SubmitNodeCollector instance,
+        PoseStack poseStack,
+        Vec3 vec3,
+        int i,
+        Component component,
+        boolean b,
+        int i2,
+        double v,
+        CameraRenderState cameraRenderState,
+        Operation<Void> original,
+        @Local(argsOnly = true) EntityRenderState state
+    ) {
+        float scale = 1f;
+        if (state instanceof EntityRenderStateAccessor stateAccessor) {
+            scale = stateAccessor.ocean$getNameTagScale();
+        }
+        if (scale != 1f) {
+            poseStack.pushPose();
+            poseStack.translate(0, -0.7 * (scale / 5), 0);
+            poseStack.scale(scale, scale, scale);
+        }
+        original.call(instance, poseStack, vec3, i, component, b, i2, v, cameraRenderState);
+        if (scale != 1f) {
+            poseStack.popPose();
+        }
+    }
+}

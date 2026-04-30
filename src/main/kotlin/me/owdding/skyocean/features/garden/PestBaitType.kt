@@ -21,7 +21,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
-object PestBaitType : InventorySideGui("(?:Pest|Mouse|Vermin) Trap") {
+object PestBaitType : InventorySideGui("(?:Pest|Mouse|Vermin) Trap", { GardenConfig.pestBaitAlignment }) {
 
     override val enabled: Boolean get() = GardenConfig.pestBaitType && SkyBlockIsland.GARDEN.inIsland()
 

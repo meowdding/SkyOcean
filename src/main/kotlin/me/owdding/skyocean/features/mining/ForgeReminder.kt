@@ -20,7 +20,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.command
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
-import tech.thatgravyboat.skyblockapi.utils.time.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import kotlin.time.Duration.Companion.minutes
 
 @Module
@@ -58,7 +58,7 @@ object ForgeReminder {
             if (!MiningConfig.forgeReminder) return@CooldownHelper
             val now = currentInstant()
             val forgeSlots = ForgeAPI.getForgeSlots().values.filter { it.expiryTime <= now }.nullIfEmpty() ?: return@CooldownHelper
-            val items = forgeSlots.groupBy { it.id }.values.joinToComponent(", ") {
+            val items = forgeSlots.groupBy { it.skyBlockId }.values.joinToComponent(", ") {
                 Text.of {
                     append("${it.size}x ") { color = TextColor.GRAY }
                     append(it.first().skyBlockId.toItem().cleanName)
