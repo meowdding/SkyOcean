@@ -12,12 +12,14 @@ import tech.thatgravyboat.skyblockapi.api.events.level.ParticleEmitEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.absoluteValue
 
 @Module
 object ImplosionHider {
 
-    private val players: MutableSet<Vec3> = mutableSetOf()
+    private val witherBladeIds = setOf("HYPERION", "ASTRAEA", "VALKYRIE", "SCYLLA")
+    private val players: MutableSet<Vec3> = ConcurrentHashMap.newKeySet()
 
     fun Vec3.isInRange(event: ParticleEmitEvent) = this.distanceToSqr(
         event.particle.x,
@@ -42,7 +44,7 @@ object ImplosionHider {
         if (!MiscConfig.hideImplosions) return
         players.clear()
         McLevel.players.filter {
-            it.mainHandItem.getData(DataTypes.ID) != null && it == McPlayer.self
+            it.mainHandItem.getData(DataTypes.ID) in witherBladeIds || it == McPlayer.self
         }.forEach { players.add(it.position()) }
     }
 
