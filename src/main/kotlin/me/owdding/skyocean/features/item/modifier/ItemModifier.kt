@@ -83,6 +83,8 @@ abstract class AbstractItemModifier {
     open fun itemCountOverride(itemStack: ItemStack): Component? = null
     open fun itemOverride(itemStack: ItemStack): Item? = null
     open fun backgroundItem(itemStack: ItemStack): ItemStack? = null
+    open fun backgroundColor(itemStack: ItemStack): Int? = null
+    open fun clickAction(itemStack: ItemStack): ((Int) -> Unit?)? = null
     open fun getExtraComponents(itemStack: ItemStack): DataComponentPatch? = null
     open fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?): Result = Result.unmodified
     open fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>): Result = Result.unmodified
@@ -231,6 +233,8 @@ object ItemModifiers {
                 context(state) {
                     modifier.extract(DataMarker.ITEM, AbstractItemModifier::itemOverride)
                     modifier.extract(DataMarker.BACKGROUND_ITEM, AbstractItemModifier::backgroundItem)
+                    modifier.extract(DataMarker.BACKGROUND_COLOR, AbstractItemModifier::backgroundColor)
+                    modifier.extract(DataMarker.CLICK_ACTION, AbstractItemModifier::clickAction)
                     modifier.extract(DataMarker.ITEM_COUNT, AbstractItemModifier::itemCountOverride)
                     modifier.getExtraComponents(itemStack)?.entrySet()?.forEach { (key, value) ->
                         if (value.isEmpty) return@forEach
@@ -248,6 +252,8 @@ object ItemModifiers {
                 when (key) {
                     DataMarker.ITEM -> item = value.unsafeCast()
                     DataMarker.BACKGROUND_ITEM -> backgroundItem = value.unsafeCast()
+                    DataMarker.BACKGROUND_COLOR -> backgroundColor = value.unsafeCast()
+                    DataMarker.CLICK_ACTION -> onClick(value.unsafeCast())
                     DataMarker.ITEM_COUNT -> customSlotComponent = value.unsafeCast()
                     is DataMarker.ComponentDataMarker -> set(key.component, value.unsafeCast())
                     else -> {}
@@ -279,6 +285,8 @@ object ItemModifiers {
         companion object {
             val ITEM = DefaultDataMarker<Item>()
             val BACKGROUND_ITEM = DefaultDataMarker<ItemStack>()
+            val BACKGROUND_COLOR = DefaultDataMarker<Int>()
+            val CLICK_ACTION = DefaultDataMarker<((Int) -> Unit?)>()
             val ITEM_COUNT = DefaultDataMarker<Component>()
         }
 
