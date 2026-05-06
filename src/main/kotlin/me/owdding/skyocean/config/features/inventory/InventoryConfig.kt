@@ -29,5 +29,24 @@ object InventoryConfig : CategoryKt("inventory") {
                 McClient.setScreen(McScreen.self?.let { ButtonConfigScreen(it) })
             }
         }
+
+        separator {
+            title = "skyocean.config.inventory.salvaging_helper"
+        }
+    }
+
+    var salvagingHelper by boolean(false) {
+        translation = "skyocean.config.inventory.salvaging_helper.enabled"
+        this.searchTerms += listOf("salvage", "salvaging", "helper")
+    }
+
+    var salvagingHelperHighlight by boolean(true) {
+        translation = "skyocean.config.inventory.salvaging_helper.highlight"
+        this.searchTerms += listOf("salvage", "salvaging", "helper")
+    }
+
+    var salvagingHelperBlockSalvage by boolean(false) {
+        translation = "skyocean.config.inventory.salvaging_helper.block_salvage"
+        this.searchTerms += listOf("salvage", "salvaging", "helper")
     }
 }
