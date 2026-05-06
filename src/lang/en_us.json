@@ -321,7 +321,7 @@
       "garden": {
         "@value": "Garden",
         "pest_bait_type": {
-          "@value": "Pest Bait Type",
+          "@value": "Pest Bait Type - Click on the text to get from sack!",
           "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
         },
         "pest_bait_alignment": {
