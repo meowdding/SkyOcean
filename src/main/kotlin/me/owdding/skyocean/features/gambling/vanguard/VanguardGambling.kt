@@ -71,7 +71,7 @@ object VanguardGambling {
         }
         val animator = ComponentAnimator("VANGUARD", 0x55FFFF, 0x33DDDDDD)
         McClient.setScreenAsync {
-            SlotMachineSpinner(data.items, winItem, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat, animator).apply {
+            SlotMachineSpinner(data.items, winItem, BACKGROUND, SLOT, GamblingConfig.vanguardHideChat, animator, GamblingConfig.vanguardTime).apply {
                 SkyBlockAPI.eventBus.register(this)
             }
         }

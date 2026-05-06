@@ -1488,6 +1488,10 @@
             "desc": "Changes the mode of the slot machine between most expensive item or a predefined set of rare items (Weight <= 10).",
             "predefined": "Predefined",
             "most_expensive": "Most expensive"
+          },
+          "time": {
+            "@value": "Animation Time",
+            "desc": "Changes the time the animation takes. (in seconds)"
           }
         },
         "credits": {
