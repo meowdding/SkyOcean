@@ -12,13 +12,12 @@ import net.minecraft.world.item.ItemStack
 
 @GenerateCodec
 data class DimensionInventory(
-    @FieldName("inventory") val inventoryTemplate: MutableList<ItemStackBlueprint> = mutableListOf(),
-    @FieldName("armour") val armourTemplate: MutableMap<EquipmentSlot, ItemStackBlueprint> = mutableMapOf(),
+    @FieldName("inventory") var inventoryTemplate: List<ItemStackBlueprint> = mutableListOf(),
+    @FieldName("armour") var armourTemplate: MutableMap<EquipmentSlot, ItemStackBlueprint> = mutableMapOf(),
 ) {
     fun updateInventory(list: List<ItemStack>) {
         inventoryDelegate.invalidate()
-        inventoryTemplate.clear()
-        inventoryTemplate.addAll(list.map { it.asBlueprint() })
+        inventoryTemplate = list.map { it.asBlueprint() }
     }
 
     fun updateArmour(slot: EquipmentSlot, item: ItemStack) {
@@ -29,6 +28,7 @@ data class DimensionInventory(
 
     private val inventoryDelegate = levelBound { inventoryTemplate.mapTo(ArrayList()) { it.create() } }
     val inventory: List<ItemStack> by inventoryDelegate
+
     private val armourDelegate = levelBound { armourTemplate.mapValuesTo(LinkedHashMap(armourTemplate.size)) { (_, value) -> value.create() } }
     val armour: Map<EquipmentSlot, ItemStack> by armourDelegate
 }

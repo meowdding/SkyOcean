@@ -58,7 +58,7 @@ object SackValue : InventorySideGui(".* Sack|Sack of Sacks", { SackValueConfig.a
                     string(ChatUtils.ICON_SPACE_COMPONENT)
                     string(-"inventory.sack_value")
                     string(" - ")
-                    buton {
+                    button {
                         val translation = -SackValueConfig.priceSource.translationKey
                         withSize(McFont.width(translation), McFont.height)
                         withTexture(null)

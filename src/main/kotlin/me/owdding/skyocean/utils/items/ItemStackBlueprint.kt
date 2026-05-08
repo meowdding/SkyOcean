@@ -9,6 +9,7 @@ import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.core.Holder
 import net.minecraft.core.component.DataComponentPatch
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -29,7 +30,8 @@ sealed interface ItemStackBlueprint {
         @IncludedCodec
         val MAP_CODEC: MapCodec<ItemStackBlueprint> = RecordCodecBuilder.mapCodec {
             it.group(
-                Item.CODEC.fieldOf("id").forGetter(ItemStackBlueprint::item),
+                // allows to load/save air as item
+                BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("id").forGetter(ItemStackBlueprint::item),
                 ExtraCodecs.intRange(1, 99).optionalFieldOf("count", 1).forGetter(ItemStackBlueprint::count),
                 DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(ItemStackBlueprint::components),
             ).apply(it, ItemStackBlueprint::of)

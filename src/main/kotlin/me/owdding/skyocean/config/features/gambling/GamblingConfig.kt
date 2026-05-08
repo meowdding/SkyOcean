@@ -44,6 +44,12 @@ object GamblingConfig : CategoryKt("gambling") {
         this.translation = "skyocean.config.gambling.vanguard.mode"
     }
 
+    var vanguardTime by long(3) {
+        this.translation = "skyocean.config.gambling.vanguard.time"
+        this.slider = true
+        this.range = 1L..10
+    }.duration(DurationUnit.SECONDS)
+
     init {
         separator("skyocean.config.gambling.credits")
     }

@@ -25,6 +25,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -133,6 +134,25 @@ object CraftHelperManager {
             literal(it.name)
         }
         val itemTracker = ItemTracker(ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet())
-        field("Total Items Tracked", itemTracker.items.values.flatten().sumOf { it.amount })
+        field("Total Items Tracked", itemTracker.items.values.flatten().sumOf { it.amount }, copyValue = buildString {
+            appendLine("Currencies")
+            appendLine()
+            itemTracker.currencies.entries.sortedByDescending { (_, amount) -> amount }.forEach { (type, amount) ->
+                appendLine("- $type: ${amount.toFormattedString()}")
+            }
+            appendLine()
+            appendLine("Items")
+            itemTracker.items.entries.sortedByDescending { (_, value) -> value.sumOf { it.amount } }.forEach { (id, sources) ->
+                append("- ")
+                append(id)
+                append(": ")
+                append(sources.sumOf { it.amount }.toFormattedString())
+                append(" (")
+                append(sources.map { 1 shl it.source.ordinal }.reduce(Int::or).toString(32))
+                append(")")
+                appendLine()
+            }
+
+        })
     }
 }

@@ -138,9 +138,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                             Widgets.dropdown(
                                 dropdownState,
                                 SortModes.entries,
-                                { modes ->
-                                    Text.of(modes.name.toTitleCase())
-                                },
+                                { modes -> Text.translatable(modes.translationKey) },
                                 { button -> button.withSize(80, 20) },
                             ) { builder ->
                                 builder.withCallback(::refreshSort)
@@ -157,7 +155,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                                         factory.isFocused = false
                                     }
                                 }
-                                factory.withRenderer { graphics, widget, partialTick ->
+                                factory.withRenderer { graphics, widget, _ ->
                                     val texture = if (ascending.get()) {
                                         UIIcons.CHEVRON_UP
                                     } else {
