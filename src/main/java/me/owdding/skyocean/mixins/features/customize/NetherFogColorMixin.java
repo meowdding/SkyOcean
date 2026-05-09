@@ -1,5 +1,6 @@
 package me.owdding.skyocean.mixins.features.customize;
 
+import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -31,6 +32,7 @@ public class NetherFogColorMixin {
         CallbackInfo ci
     ) {
         if (!SkyBlockIsland.CRIMSON_ISLE.inIsland()) return;
+        if (!MiscConfig.INSTANCE.getNetherFogDarkening()) return;
         if (Minecraft.getInstance().player != null
             && (!Minecraft.getInstance().player.hasEffect(MobEffects.NIGHT_VISION))) return;
         color.set(color.x * 0.20f, color.y * 0.20f, color.z * 0.20f, color.w);
@@ -46,6 +48,7 @@ public class NetherFogColorMixin {
         CallbackInfoReturnable<Vector4f> cir
     ) {
         if (!SkyBlockIsland.CRIMSON_ISLE.inIsland()) return;
+        if (!MiscConfig.INSTANCE.getNetherFogDarkening()) return;
         if (Minecraft.getInstance().player != null
         && (!Minecraft.getInstance().player.hasEffect(MobEffects.NIGHT_VISION))) return;
         Vector4f color = cir.getReturnValue();

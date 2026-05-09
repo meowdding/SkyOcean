@@ -395,6 +395,11 @@
           ],
           "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
         },
+        "netherFogDarkening": {
+          "@value": "Nether Fog Darkening",
+          "desc": "Darkens the Crimson Isle sky",
+          "warning": "<yellow>SkyOcean now darkens Crimson Isle's sky! You can disable it in the misc config by searching <gold>Nether Fog Darkening</gold>."
+        },
         "customization_vanilla_integration": {
           "@value": "Animate dyes and skins in inventories",
           "desc": [

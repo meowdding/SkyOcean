@@ -86,6 +86,15 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.queueEstimation"
     }
 
+    var netherFogDarkening by defaultEnabledMessage(
+        boolean(true) {
+            translation = "skyocean.config.misc.netherFogDarkening"
+        },
+        { +"skyocean.config.misc.netherFogDarkening.warning" }, "netherFogDarkening",
+        predicate = { SkyBlockIsland.CRIMSON_ISLE.inIsland() },
+    )
+
+
     init {
         separator("skyocean.config.misc.itemSearch")
     }
