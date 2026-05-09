@@ -37,6 +37,7 @@ class SlotMachineSpinner(
     val slotTexture: Identifier,
     val hideChat: Boolean,
     val titleAnimator: ComponentAnimator,
+    val baseDuration: Duration,
 ) : MeowddingScreen("Slot Machine Spinner") {
     private val armTexture = SkyOcean.id("gambling/arm")
     private val weightedCollection = WeightedCollection.of(spinPool.entries) { it.value.toDouble() }
@@ -48,7 +49,6 @@ class SlotMachineSpinner(
     private val lastScrollIndex = IntArray(3) { -1 }
 
     private var startTime = currentInstant() + 0.2.seconds
-    private val baseDuration = 3.seconds
     private val waitDelay = 1.seconds
     private val slotHeight = 18
 

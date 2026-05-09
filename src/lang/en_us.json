@@ -321,7 +321,7 @@
       "garden": {
         "@value": "Garden",
         "pest_bait_type": {
-          "@value": "Pest Bait Type",
+          "@value": "Pest Bait Type - Click on the text to get from sack!",
           "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
         },
         "pest_bait_alignment": {
@@ -415,6 +415,10 @@
         "hideEntityFire": {
           "@value": "Hide entity fire",
           "desc": "Removes the fire effect from all entities."
+        },
+        "hideImplosions": {
+          "@value": "Hide Implosion Particles",
+          "desc": "Removes the wither blade implosion particles."
         },
         "itemSearch": {
           "@value": "Item Search",
@@ -1489,6 +1493,10 @@
             "desc": "Changes the mode of the slot machine between most expensive item or a predefined set of rare items (Weight <= 10).",
             "predefined": "Predefined",
             "most_expensive": "Most expensive"
+          },
+          "time": {
+            "@value": "Animation Time",
+            "desc": "Changes the time the animation takes. (in seconds)"
           }
         },
         "credits": {
