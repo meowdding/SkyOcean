@@ -95,11 +95,12 @@ object CoinRainOverlay : SkyOceanOverlay() {
         }
 
         val shouldCoinsKeepSpawning = (now - CropFeverEffects.startTime) < CropFeverEffectsConfig.coinRainDuration
-        val timeSinceLastCoin = (now - (fallingCoinsList.lastOrNull()?.spawnTime ?: Instant.DISTANT_PAST)).inWholeMilliseconds
         val coinMultiplier = if (CropFeverEffectsConfig.coinRainSpawnMultiplier.ordinal > 0) {
             CropFeverEffectsConfig.coinRainSpawnMultiplier.mult
         } else {
-            5 // TODO: make this automatically determine how many coins to spawn based on something (screen size?)
+            val referenceArea = 480f * 270f //1920x1080 at GUI Scale 4
+            val scaledArea = width * height
+            (scaledArea / referenceArea).coerceAtLeast(1f).toInt()
         }
         if (shouldCoinsKeepSpawning && ticktracker.consume()) {
             repeat(coinMultiplier) {
