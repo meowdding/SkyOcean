@@ -40,8 +40,9 @@ object CropFeverEffects {
     @JvmStatic
     var isFeverActive = false
         private set
-
+    //TODO: Add dye rng drop sound
     var startTime = Instant.DISTANT_PAST
+    private const val LANG_KEY_PATH = CropFeverEffectsConfig.PATH
     private const val BG_MUSIC_SOUND_ID = "farming.crop_fever.music"
     private const val START_SOUND_ID = "farming.crop_fever.start"
     private const val SHADER_ID = "crop_fever_hue_shift"
@@ -55,7 +56,21 @@ object CropFeverEffects {
         FASTER(2.5f),
         INSANE(10.0f);
 
-        override fun getTranslationKey(): String = "skyocean.config.garden.crop_fever_effect.hueShiftingShader.shiftingSpeed.options.${name.lowercase()}"
+        override fun getTranslationKey(): String = "$LANG_KEY_PATH.hueShiftingShader.shiftingSpeed.options.${name.lowercase()}"
+    }
+
+    enum class coinRainSpawnMultiplierOptions(val mult: Int) : Translatable {
+        AUTO(0),
+        ONE(1),
+        TWO(2),
+        THREE(3),
+        FOUR(4),
+        FIVE(5),
+        TEN(10),
+        FIFTEEN(15),
+        TWENTY(20);
+
+        override fun getTranslationKey(): String = "$LANG_KEY_PATH.coinRain.spawnMultiplier.options.${name.lowercase()}"
     }
 
     val UBO_SIZE = Std140SizeCalculator().putFloat().get()
@@ -115,7 +130,7 @@ object CropFeverEffects {
             if (CropFeverEffectsConfig.backgroundMusic) {
                 NBSMusicManager.play(BG_MUSIC_SOUND_ID, "farming/crop_fever_music")
             }
-            if (CropFeverEffectsConfig.coinsDropping) {
+            if (CropFeverEffectsConfig.coinRain) {
                 startTime = currentInstant()
             }
             if (CropFeverEffectsConfig.hueShiftingShader) {

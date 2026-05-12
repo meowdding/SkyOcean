@@ -24,6 +24,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import java.util.UUID
 import kotlin.time.Instant
 import me.owdding.lib.overlays.Rect
+import me.owdding.skyocean.utils.TickTracker
 import net.minecraft.client.gui.GuiGraphicsExtractor
 
 @Overlay
@@ -39,7 +40,7 @@ object CoinRainOverlay : SkyOceanOverlay() {
 
     val fallingCoinsList = mutableListOf<FallingCoin>()
     private val random = java.util.concurrent.ThreadLocalRandom.current()
-    private const val COIN_SPAWN_INTERVAL_MS = 40
+    private val ticktracker = TickTracker()
 
     fun headItemStackFromTexture(texture: String): ItemStack { // this should maybe be moved somewhere else?
         val stack = ItemStack(Items.PLAYER_HEAD)
@@ -53,6 +54,7 @@ object CoinRainOverlay : SkyOceanOverlay() {
 
     private val coinRainItems by lazy {
         listOf(
+            // Taken from https://github.com/meowdding/catharsis/blob/development/repo/misc_items.json
             // Iron Coin
             headItemStackFromTexture("ewogICJ0aW1lc3RhbXAiIDogMTcxOTYwMDMwOTQ4MywKICAicHJvZmlsZUlkIiA6ICI1OTgyOWY1ZGY3MmM0ZmFlOTBmOGVhYmM0MjFjMzJkYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJQZXBwZXJEcmlua2VyIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzE2YjkwZjRmYTNlYzEwNmJmZWYyMWYzYjc1ZjU0MWExOGU0NzU3Njc0ZjdkNTgyNTBmYTdlNzQ5NTJmMDg3ZGMiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ=="),
             // Gold Coin
@@ -61,8 +63,8 @@ object CoinRainOverlay : SkyOceanOverlay() {
             headItemStackFromTexture("ewogICJ0aW1lc3RhbXAiIDogMTYwMTQ0OTA2NDY5NSwKICAicHJvZmlsZUlkIiA6ICI5ZDEzZjcyMTcxM2E0N2U0OTAwZTMyZGVkNjBjNDY3MyIsCiAgInByb2ZpbGVOYW1lIiA6ICJUYWxvZGFvIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzc0MGQ2ZTM2MmJjN2VlZTRmOTExZGJkMDQ0NjMwN2U3NDU4ZDEwNTBkMDlhZWU1MzhlYmNiMDI3M2NmNzU3NDIiCiAgICB9CiAgfQp9"),
             // Emerald Coin
             headItemStackFromTexture("ewogICJ0aW1lc3RhbXAiIDogMTYxMzQwODkzNjg0OCwKICAicHJvZmlsZUlkIiA6ICI5MWYwNGZlOTBmMzY0M2I1OGYyMGUzMzc1Zjg2ZDM5ZSIsCiAgInByb2ZpbGVOYW1lIiA6ICJTdG9ybVN0b3JteSIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9lOWQ2MTViZDI3ZGU4ZTU4MGYzOTEzYTFhNDM5ODgwNDI5NTYxN2E2ZjcwYWY1MzJiNDYxMzdkYTVmMGU1ZTJkIiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0KICB9Cn0="),
-            // Redstone Coin - https://namemc.com/skin/157e4ebb7160dbb6
-            headItemStackFromTexture("e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDdjNGY2NjMwNTk3YTQ5YWQyMjNkMTJjZjY0OGFmMjI4M2QzNGE2NWJmOWRkMDU3ZDE5OGQyOTgwNzc5YzM0In19fQ=="),
+            // Redstone Coin
+            headItemStackFromTexture("ewogICJ0aW1lc3RhbXAiIDogMTU5ODg0NzE5NTU3NiwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDdjNGY2NjMwNTk3YTQ5YWQyMjNkMTJjZjY0OGFmMjI4M2QzNGE2NWJmOWRkMDU3ZDE5OGQyOTgwNzc5YzM0IgogICAgfQogIH0KfQ=="),
             // Lapis Coin
             headItemStackFromTexture("ewogICJ0aW1lc3RhbXAiIDogMTU5OTIxNDA2OTUyMCwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWMwZTkxNDQ3NmUxYjE1ZGEyYTkxZjQ1Njk2ZGQyMTc2NjlkNGRhYzRmYTYyMTY1MDkyOWJhY2UwM2RlMjI1NCIKICAgIH0KICB9Cn0="),
         )
@@ -72,6 +74,8 @@ object CoinRainOverlay : SkyOceanOverlay() {
         val now = currentInstant()
         val width = McClient.window.guiScaledWidth
         val height = McClient.window.guiScaledHeight
+        val minFallSpeed = height * 0.9f
+        val maxFallSpeed = height * 1.1f
 
         val iterator = fallingCoinsList.iterator()
         while (iterator.hasNext()) {
@@ -90,22 +94,24 @@ object CoinRainOverlay : SkyOceanOverlay() {
             }
         }
 
-        val shouldCoinsKeepSpawning = (now - CropFeverEffects.startTime) < CropFeverEffectsConfig.coinsDroppingDuration
+        val shouldCoinsKeepSpawning = (now - CropFeverEffects.startTime) < CropFeverEffectsConfig.coinRainDuration
         val timeSinceLastCoin = (now - (fallingCoinsList.lastOrNull()?.spawnTime ?: Instant.DISTANT_PAST)).inWholeMilliseconds
-
-        if (shouldCoinsKeepSpawning && timeSinceLastCoin >= COIN_SPAWN_INTERVAL_MS) {
-
-            val minFallSpeed = height * 0.9f
-            val maxFallSpeed = height * 1.1f
-
-            fallingCoinsList.add(
-                FallingCoin(
-                    x = random.nextFloat() * width,
-                    spawnTime = now,
-                    speed = minFallSpeed + random.nextFloat() * (maxFallSpeed - minFallSpeed),
-                    item = coinRainItems.random(),
-                ),
-            )
+        val coinMultiplier = if (CropFeverEffectsConfig.coinRainSpawnMultiplier.ordinal > 0) {
+            CropFeverEffectsConfig.coinRainSpawnMultiplier.mult
+        } else {
+            5 // TODO: make this automatically determine how many coins to spawn based on something (screen size?)
+        }
+        if (shouldCoinsKeepSpawning && ticktracker.consume()) {
+            repeat(coinMultiplier) {
+                fallingCoinsList.add(
+                    FallingCoin(
+                        x = random.nextFloat() * width,
+                        spawnTime = now,
+                        speed = minFallSpeed + random.nextFloat() * (maxFallSpeed - minFallSpeed),
+                        item = coinRainItems.random(),
+                    ),
+                )
+            }
         }
     }
 }

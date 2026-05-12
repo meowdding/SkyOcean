@@ -10,7 +10,7 @@ import kotlin.time.DurationUnit
 
 object CropFeverEffectsConfig : ObjectKt(), Translatable  {
 
-    private const val PATH = "skyocean.config.garden.crop_fever_effect"
+    const val PATH = "skyocean.config.garden.crop_fever_effect"
     override fun getTranslationKey(): String = "$PATH.config_title"
 
     var enabled by boolean(false) {
@@ -21,15 +21,19 @@ object CropFeverEffectsConfig : ObjectKt(), Translatable  {
         this.translation = "$PATH.backgroundMusic"
     }
 
-    var coinsDropping by boolean(true) {
-        this.translation = "$PATH.coinsDropping"
+    var coinRain by boolean(true) {
+        this.translation = "$PATH.coinRain"
     }
 
-    var coinsDroppingDuration by long(3) {
-        this.translation = "$PATH.coinsDroppingDuration"
+    var coinRainDuration by long(3) {
+        this.translation = "$PATH.coinRain.duration"
         this.slider = true
         this.range = 1L..60
     }.duration(DurationUnit.SECONDS)
+
+    var coinRainSpawnMultiplier by enum(CropFeverEffects.coinRainSpawnMultiplierOptions.AUTO) {
+        this.translation = "$PATH.coinRain.spawnMultiplier"
+    }
 
     var startingSound by boolean(true) {
         this.translation = "$PATH.startingSound"

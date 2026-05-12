@@ -362,16 +362,49 @@
             "@value": "Background Music",
             "desc": [
               "Plays a looping soundtrack while a Crop Fever is active.",
-              "<red>Disable if you have Hypixel's own music enabled</red>"
+              "<red>Disable if you have Hypixel's own music enabled.</red>"
             ]
           },
-          "coinsDropping": {
-            "@value": "Coins Dropping during Start",
-            "desc": "Shows an animation of SkyBlock coins dropping when starting a Crop Fever."
-          },
-          "coinsDroppingDuration": {
-            "@value": "Coins Dropping Duration",
-            "desc": "The duration for the coins drop animation."
+          "coinRain": {
+            "@value": "Coin Rain",
+            "desc": "Shows an animation of SkyBlock coins raining from the top of the screen when starting a Crop Fever.",
+            "duration": {
+              "@value": "Coin Rain Duration",
+              "desc": "The duration for the coin rain animation."
+            },
+            "spawnMultiplier": {
+              "@value": "Coin Rain Spawn Multiplier",
+              "desc": "Controls how many coins spawn per spawn cycle (one cycle every 50ms).",
+              "options": {
+                "auto": {
+                  "@value": "Automatic"
+                },
+                "one": {
+                  "@value": "1x"
+                },
+                "two": {
+                  "@value": "2x"
+                },
+                "three": {
+                  "@value": "3x"
+                },
+                "four": {
+                  "@value": "4x"
+                },
+                "five": {
+                  "@value": "5x"
+                },
+                "ten": {
+                  "@value": "10x"
+                },
+                "fifteen": {
+                  "@value": "15x"
+                },
+                "twenty": {
+                  "@value": "20x"
+                }
+              }
+            }
           },
           "startingSound": {
             "@value": "Jackpot Sound",
