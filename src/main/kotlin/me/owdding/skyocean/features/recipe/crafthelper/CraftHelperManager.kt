@@ -5,7 +5,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.REIRuntimeCompatability
 import me.owdding.skyocean.ApiDebug
 import me.owdding.skyocean.config.SkyOceanKeybind
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperNotificationTypes
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.features.item.sources.ItemSources
@@ -15,6 +16,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.SimpleRecipeView
 import me.owdding.skyocean.features.recipe.crafthelper.visitors.CompactedResourceCutoffTreeTransformer
 import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.debug.DebugBuilder
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -23,6 +25,7 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
@@ -72,18 +75,41 @@ object CraftHelperManager {
         SimpleRecipeView {
             if (it.path != "root") return@SimpleRecipeView
             lastEvaluatedRoot.set(it)
-            if (!CraftHelperConfig.doneMessage) return@SimpleRecipeView
             if (!it.childrenDone) return@SimpleRecipeView
             if (hasBeenNotified) return@SimpleRecipeView
             hasBeenNotified = true
-            text("You have all materials to craft ") {
-                CraftHelperStorage.selectedItem?.toItem()?.hoverName?.let { item ->
-                    append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }
-                    append(item)
-                } ?: append("your selected craft helper tree")
-                append("!")
-            }.sendWithPrefix()
+            CraftHelperConfig.doneNotificationConfig.doneTypes.forEach(::doneNotification)
         }.visit(tree, ItemTracker(ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()))
+    }
+
+    fun doneNotification(type: CraftHelperNotificationTypes) {
+        when (type) {
+            CraftHelperNotificationTypes.DONE_MESSAGE -> {
+                text("You have all materials to craft ") {
+                    CraftHelperStorage.selectedItem?.toItem()?.hoverName?.let { item ->
+                        append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }
+                        append(item)
+                    } ?: append("your selected craft helper tree")
+                    append("!")
+                }.sendWithPrefix()
+            }
+            CraftHelperNotificationTypes.DONE_TITLE -> {
+                val title = CraftHelperStorage.selectedItem?.let {
+                    Text.of {
+                        append(ChatUtils.ICON_WITH_SPACE)
+                        append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }
+                        append(it.toItem().hoverName)
+                        append(" Craftable!") { color = TextColor.GREEN }
+                    }
+                } ?: Text.of {
+                    append("CraftHelper Item Craftable!") { this.color = TextColor.GREEN }
+                }
+                McClient.setTitle(title, null, 0f, 3f, 0.5f)
+            }
+            CraftHelperNotificationTypes.DONE_SOUND -> {
+                McClient.playSound(CraftHelperConfig.doneNotificationConfig.soundEvent)
+            }
+        }
     }
 
 
