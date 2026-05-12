@@ -103,7 +103,7 @@ object CoinRainOverlay : SkyOceanOverlay() {
             (scaledArea / referenceArea).coerceAtLeast(1f).toInt()
         }
         if (shouldCoinsKeepSpawning && ticktracker.consume()) {
-            repeat(coinMultiplier) {
+            repeat(coinMultiplier) { // this might cause a performance issues at high resolutions, im not sure
                 fallingCoinsList.add(
                     FallingCoin(
                         x = random.nextFloat() * width,

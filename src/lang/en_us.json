@@ -340,9 +340,37 @@
           "@value": "Pest Warning Minimum Amount",
           "desc": [
             "The minimum amount of pests to trigger the warning.",
-            "If you don't know what number to put here, you can calculate the amount of pests that start reducing your <gold>Farming Fortune</gold> using this formula:",
-            "<italic>\"floor(4 + <dark_green>Bonus Pest Chance</dark_green>/100)\"</italic>"
-          ]
+            "❬Automatic❭ only triggers the warning while you have a <gold>☘</gold> reduction."
+          ],
+          "options": {
+            "auto": {
+              "@value": "Automatic"
+            },
+            "one": {
+              "@value": "1"
+            },
+            "two": {
+              "@value": "2"
+            },
+            "three": {
+              "@value": "3"
+            },
+            "four": {
+              "@value": "4"
+            },
+            "five": {
+              "@value": "5"
+            },
+            "six": {
+              "@value": "6"
+            },
+            "seven": {
+              "@value": "7"
+            },
+            "eight": {
+              "@value": "8"
+            }
+          }
         },
         "pest_warning_delay": {
           "@value": "Pest Warning Delay",
@@ -374,7 +402,7 @@
             },
             "spawnMultiplier": {
               "@value": "Coin Rain Spawn Multiplier",
-              "desc": "Controls how many coins spawn per spawn cycle (one cycle every 50ms).",
+              "desc": "Controls how many coins spawn per tick.",
               "options": {
                 "auto": {
                   "@value": "Automatic"

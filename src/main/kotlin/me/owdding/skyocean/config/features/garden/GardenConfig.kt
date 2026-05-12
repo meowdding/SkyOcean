@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.garden
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.duration
+import me.owdding.skyocean.features.garden.PestWarning
 import me.owdding.skyocean.helpers.InventorySideGui
 
 object GardenConfig : CategoryKt("garden") {
@@ -23,7 +24,7 @@ object GardenConfig : CategoryKt("garden") {
         this.translation = "skyocean.config.garden.pest_warning"
     }
 
-    var pestWarningAmount by int(4) {
+    var pestWarningAmount by enum(PestWarning.PestWarningAmountOptions.AUTO) {
         this.translation = "skyocean.config.garden.pest_warning_amount"
     }
 

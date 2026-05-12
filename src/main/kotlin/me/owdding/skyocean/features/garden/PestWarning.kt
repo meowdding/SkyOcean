@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.garden
 
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.garden.GardenConfig
 import me.owdding.skyocean.utils.SoundUtils
@@ -30,13 +31,31 @@ object PestWarning {
 
     private var lastWarning = Instant.DISTANT_PAST
 
+    enum class PestWarningAmountOptions(val amount: Int): Translatable{
+        AUTO(0),
+        ONE(1),
+        TWO(2),
+        THREE(3),
+        FOUR(4),
+        FIVE(5),
+        SIX(6),
+        SEVEN(7),
+        EIGHT(8);
+        override fun getTranslationKey(): String = "skyocean.config.garden.pest_warning_amount.options.${name.lowercase()}"
+    }
+
     @Subscription
     @OnlyIn(GARDEN)
     @OnlyNonGuest
     fun onBlockClick(event: LeftClickBlockEvent) {
         if (Crop.entries.none { it.isCrop(McLevel[event.pos]) }) return
         val pests = PlotAPI.currentPestAmount
-        if (pests < GardenConfig.pestWarningAmount) return
+        val minAmount = GardenConfig.pestWarningAmount.amount
+        if (minAmount == 0){
+            if (!PlotAPI.hasPestDebuff || pests < 8) return // the pests condition is here in case the player has more than 500 bpc which stops pests from ever giving you a debuff
+        }else{
+            if (pests < minAmount) return
+        }
         if (GardenConfig.pestWarning && lastWarning.since() > GardenConfig.pestWarningDelay) {
             lastWarning = currentInstant()
             val title = Text.of {
