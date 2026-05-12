@@ -27,7 +27,7 @@ object InventoryStorage {
             when (it) {
                 0 -> CodecUtils.map(
                     SkyOceanCodecs.getCodec<InventoryType>(),
-                    CodecUtils.mutableList(ItemStackBlueprint.CODEC),
+                    CodecUtils.list(ItemStackBlueprint.CODEC),
                 ).xmap(
                     { it.mapValues { (_, value) -> DimensionInventory(value) }.toMutableMap() },
                     { it.mapValues { (_, value) -> value.inventoryTemplate }.toMutableMap() },
