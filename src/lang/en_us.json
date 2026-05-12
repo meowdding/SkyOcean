@@ -350,11 +350,8 @@
         },
         "crop_fever_effect": {
           "@value": "Crop Fever Effects",
-          "desc": [
-            "When you trigger a Crop Fever this adds many visual effects.",
-            "<red>IF YOU ARE SENSITIVE TO FLASHING COLORS PLEASE DON'T ENABLE THE HUE SHIFT OPTION, OTHERWISE YOU WILL HAVE A VERY BAD TIME.</red>"
-          ],
-          "overlay_title": {
+          "desc": "When you trigger a Crop Fever this adds many visual effects.",
+          "config_title": {
             "@value": "Crop Fever Config"
           },
           "enabled": {
@@ -364,7 +361,8 @@
           "backgroundMusic": {
             "@value": "Background Music",
             "desc": [
-              "Plays a looping soundtrack while a Crop Fever is active."
+              "Plays a looping soundtrack while a Crop Fever is active.",
+              "<red>Disable if you have Hypixel's own music enabled</red>"
             ]
           },
           "coinsDropping": {
@@ -381,7 +379,34 @@
           },
           "hueShiftingShader": {
             "@value": "Color Cycling Effect",
-            "desc": "Applies a color cycling post-processing effect to the screen during a Crop Fever."
+            "desc": "Applies a color cycling post-processing effect to the screen during a Crop Fever.",
+            "shiftingSpeed": {
+              "@value": "Cycling Speed",
+              "desc": [
+                "Controls how fast the colors cylce.",
+                "<red>If you are sensitive to flashing colors don't go above <color #B22222>❬<color #727378>Normal</color>❭.</red>"
+              ],
+              "options": {
+                "slower": {
+                  "@value": "<color #5F9EA0>Slower (0.25x)</color>"
+                },
+                "slow": {
+                  "@value": "<color #708587>Slow (0.5x)</color>"
+                },
+                "normal": {
+                  "@value": "<color #727378>Normal (1.0x)</color>"
+                },
+                "fast": {
+                  "@value": "<color #915454>Fast (1.5x)</color>"
+                },
+                "faster": {
+                  "@value": "<color #A13B3B>Faster (2.5x)</color>"
+                },
+                "insane": {
+                  "@value": "<color #B22222>Insane (10.0x)</color>"
+                }
+              }
+            }
           },
           "credits": {
             "@value": "Credits",

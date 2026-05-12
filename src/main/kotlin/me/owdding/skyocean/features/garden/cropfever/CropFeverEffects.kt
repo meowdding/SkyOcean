@@ -1,5 +1,9 @@
 package me.owdding.skyocean.features.garden.cropfever
 
+import com.mojang.blaze3d.buffers.Std140Builder
+import com.mojang.blaze3d.buffers.Std140SizeCalculator
+import com.mojang.blaze3d.systems.RenderSystem
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.garden.CropFeverEffectsConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
@@ -17,6 +21,8 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.GARDEN
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.garden.cropfever.CoinRainOverlay.fallingCoinsList
+import me.owdding.skyocean.mixins.PostChainAccessor
+import me.owdding.skyocean.mixins.PostPassAccessor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
@@ -26,6 +32,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import kotlin.time.Instant
 import me.owdding.skyocean.utils.nbs.NBSMusicManager
+import net.minecraft.client.renderer.LevelTargetBundle
+import org.lwjgl.system.MemoryStack
 
 @Module
 object CropFeverEffects {
@@ -37,6 +45,32 @@ object CropFeverEffects {
     private const val BG_MUSIC_SOUND_ID = "farming.crop_fever.music"
     private const val START_SOUND_ID = "farming.crop_fever.start"
     private const val SHADER_ID = "crop_fever_hue_shift"
+    const val UNIFORM_ID = "SkyOceanCropFeverHueShift"
+
+    enum class ShiftingSpeedOptions(val speed: Float) : Translatable {
+        SLOWER(0.25f),
+        SLOW(0.5f),
+        NORMAL(1.0f),
+        FAST(1.5f),
+        FASTER(2.5f),
+        INSANE(10.0f);
+
+        override fun getTranslationKey(): String = "skyocean.config.garden.crop_fever_effect.hueShiftingShader.shiftingSpeed.options.${name.lowercase()}"
+    }
+
+    val UBO_SIZE = Std140SizeCalculator().putFloat().get()
+    fun updateShaderBuffer() {
+        val postChain = McClient.self.shaderManager.getPostChain(SkyOcean.id(SHADER_ID), LevelTargetBundle.MAIN_TARGETS)
+        val pass = (postChain as PostChainAccessor).`skyocean$getPasses`().firstOrNull() ?: return
+        val buffer = (pass as PostPassAccessor).`skyocean$getCustomUniforms`()[UNIFORM_ID] ?: return
+
+        MemoryStack.stackPush().use { stack ->
+            val buf = Std140Builder.onStack(stack, UBO_SIZE)
+                .putFloat(CropFeverEffectsConfig.shiftingShaderSpeed.speed)
+                .get()
+            RenderSystem.getDevice().createCommandEncoder().writeToBuffer(buffer.slice(),buf)
+        }
+    }
 
     private fun turnOff() {
         if (!isFeverActive) return
@@ -88,6 +122,7 @@ object CropFeverEffects {
                 val gameRenderer = McClient.self.gameRenderer ?: return
                 val accessor = gameRenderer as GameRendererAccessor
                 if (gameRenderer.currentPostEffect() != SkyOcean.id(SHADER_ID)) {
+                    updateShaderBuffer()
                     accessor.invokeSetPostEffect(SkyOcean.id(SHADER_ID))
                 }
             }
@@ -98,7 +133,7 @@ object CropFeverEffects {
     }
 
     @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class)
-    fun onServerChange(){
+    fun onServerChange() {
         turnOff()
     }
 

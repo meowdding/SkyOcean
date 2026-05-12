@@ -5,12 +5,13 @@ import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.duration
 import me.owdding.skyocean.config.translation
+import me.owdding.skyocean.features.garden.cropfever.CropFeverEffects
 import kotlin.time.DurationUnit
 
 object CropFeverEffectsConfig : ObjectKt(), Translatable  {
 
     private const val PATH = "skyocean.config.garden.crop_fever_effect"
-    override fun getTranslationKey(): String = "$PATH.overlay_title"
+    override fun getTranslationKey(): String = "$PATH.config_title"
 
     var enabled by boolean(false) {
         this.translation = "$PATH.enabled"
@@ -34,8 +35,12 @@ object CropFeverEffectsConfig : ObjectKt(), Translatable  {
         this.translation = "$PATH.startingSound"
     }
 
-    var hueShiftingShader by boolean(false) {
+    var hueShiftingShader by boolean(true) {
         this.translation = "$PATH.hueShiftingShader"
+    }
+
+    var shiftingShaderSpeed by enum(CropFeverEffects.ShiftingSpeedOptions.NORMAL) {
+        this.translation = "$PATH.hueShiftingShader.shiftingSpeed"
     }
 
     init {

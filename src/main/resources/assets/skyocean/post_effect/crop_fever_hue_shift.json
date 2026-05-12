@@ -13,7 +13,15 @@
         }
       ],
       "output": "swap",
-      "uniforms": {}
+      "uniforms": {
+        "SkyOceanCropFeverHueShift": [
+          {
+            "name": "speedMultiplier",
+            "type": "float",
+            "value": 0.0
+          }
+        ]
+      }
     },
     {
       "vertex_shader": "minecraft:core/screenquad",

@@ -6,9 +6,13 @@ uniform sampler2D InSampler;
 in vec2 texCoord;
 out vec4 fragColor;
 
+layout(std140) uniform SkyOceanCropFeverHueShift {
+    float speedMultiplier;
+};
+
 // Source - https://stackoverflow.com/a/17897228
 // Posted by sam hocevar, modified by community. See post 'Timeline' for change history
-// Retrieved 2026-03-25, License - CC BY-SA 4.0
+// Retrieved 2026-03-25, License - WTFPL
 
 // All components are in the range [0…1], including hue.
 vec3 rgb2hsv(vec3 c)
@@ -32,7 +36,7 @@ vec3 hsv2rgb(vec3 c)
 
 vec3 hue_shift (vec3 rgb) {
     vec3 hsv = rgb2hsv(rgb);
-    float delta = fract(GameTime * 600.0);// Magnifies GameTime so it cycles through the entire hue shift every 2 seconds, should probably be configurable but idk how to do that.
+    float delta = fract(GameTime * 600.0 * speedMultiplier);
     hsv.x = fract(hsv.x + delta);
     return hsv2rgb(hsv);
 }
