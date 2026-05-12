@@ -1,39 +1,48 @@
 package me.owdding.skyocean.config.features.garden
 
+import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
+import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.duration
-import me.owdding.skyocean.config.overlays.OverlayConfig
-import me.owdding.skyocean.config.separator
+import me.owdding.skyocean.config.translation
 import kotlin.time.DurationUnit
 
-object CropFeverEffectsConfig : OverlayConfig("skyocean.config.garden.crop_fever_effect.overlay_title") {
+object CropFeverEffectsConfig : ObjectKt(), Translatable  {
 
-    var enabled by boolean(true) {
-        this.translation = "skyocean.config.garden.crop_fever_effect.enabled"
+    private const val PATH = "skyocean.config.garden.crop_fever_effect"
+    override fun getTranslationKey(): String = "$PATH.overlay_title"
+
+    var enabled by boolean(false) {
+        this.translation = "$PATH.enabled"
     }
 
     var backgroundMusic by boolean(true) {
-        this.translation = "skyocean.config.garden.crop_fever_effect.backgroundMusic"
+        this.translation = "$PATH.backgroundMusic"
     }
 
     var coinsDropping by boolean(true) {
-        this.translation = "skyocean.config.garden.crop_fever_effect.coinsDropping"
+        this.translation = "$PATH.coinsDropping"
     }
 
     var coinsDroppingDuration by long(3) {
-        this.translation = "skyocean.config.garden.crop_fever_effect.coinsDroppingDuration"
+        this.translation = "$PATH.coinsDroppingDuration"
         this.slider = true
         this.range = 1L..60
     }.duration(DurationUnit.SECONDS)
 
     var startingSound by boolean(true) {
-        this.translation = "skyocean.config.garden.crop_fever_effect.startingSound"
+        this.translation = "$PATH.startingSound"
     }
 
     var hueShiftingShader by boolean(false) {
-        this.translation = "skyocean.config.garden.crop_fever_effect.hueShiftingShader"
+        this.translation = "$PATH.hueShiftingShader"
     }
 
     init {
-        separator("skyocean.config.garden.crop_fever_effect.credits")
+        separator("$PATH.credits")
+    }
+
+    private fun EntriesBuilder.separator(translation: String) = separator {
+        this.translation = translation
     }
 }
