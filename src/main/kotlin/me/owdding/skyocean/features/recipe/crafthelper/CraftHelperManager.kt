@@ -6,7 +6,7 @@ import me.owdding.lib.compat.REIRuntimeCompatability
 import me.owdding.skyocean.ApiDebug
 import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
-import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperNotificationTypes
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperNotificationType
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.features.item.sources.ItemSources
@@ -82,9 +82,9 @@ object CraftHelperManager {
         }.visit(tree, ItemTracker(ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()))
     }
 
-    fun doneNotification(type: CraftHelperNotificationTypes) {
+    fun doneNotification(type: CraftHelperNotificationType) {
         when (type) {
-            CraftHelperNotificationTypes.DONE_MESSAGE -> {
+            CraftHelperNotificationType.DONE_MESSAGE -> {
                 text("You have all materials to craft ") {
                     CraftHelperStorage.selectedItem?.toItem()?.hoverName?.let { item ->
                         append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }
@@ -93,7 +93,7 @@ object CraftHelperManager {
                     append("!")
                 }.sendWithPrefix()
             }
-            CraftHelperNotificationTypes.DONE_TITLE -> {
+            CraftHelperNotificationType.DONE_TITLE -> {
                 val title = CraftHelperStorage.selectedItem?.let {
                     Text.of {
                         append(ChatUtils.ICON_WITH_SPACE)
@@ -106,7 +106,7 @@ object CraftHelperManager {
                 }
                 McClient.setTitle(title, null, 0f, 3f, 0.5f)
             }
-            CraftHelperNotificationTypes.DONE_SOUND -> {
+            CraftHelperNotificationType.DONE_SOUND -> {
                 McClient.playSound(CraftHelperConfig.doneNotificationConfig.soundEvent)
             }
         }

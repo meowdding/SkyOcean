@@ -6,12 +6,12 @@ import net.minecraft.sounds.SoundEvents
 
 object CraftHelperNotificationsConfig : ObjectKt() {
 
-    var doneTypes by select<CraftHelperNotificationTypes> {
+    var doneTypes by select<CraftHelperNotificationType> {
         translation = "skyocean.config.misc.crafthelper.done_notifications.types"
     }
 
     var soundEvent by soundDropdown(SoundEvents.PLAYER_LEVELUP) {
         translation = "skyocean.config.misc.crafthelper.done_notifications.sound_event"
-        condition = { CraftHelperNotificationTypes.DONE_SOUND in doneTypes }
+        condition = { CraftHelperNotificationType.DONE_SOUND in doneTypes }
     }
 }
