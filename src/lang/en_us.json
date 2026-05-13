@@ -510,6 +510,12 @@
             "sound_event": {
               "@value": "Done Sound",
               "desc": "The sound you will hear when your Item becomes craftable."
+            },
+            "notification_type": {
+              "@value": "Notification Type",
+              "done_message": "Done Message",
+              "done_title": "Done Title",
+              "done_sound": "Done Sound"
             }
           },
           "tree_formatter": {

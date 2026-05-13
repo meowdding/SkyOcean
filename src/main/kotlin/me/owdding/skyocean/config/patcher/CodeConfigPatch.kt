@@ -28,7 +28,6 @@ data class CodeConfigPatch(val name: String) : Patch {
                             add("DONE_MESSAGE")
                         }
                         add("doneTypes", doneTypes)
-                        addProperty("soundEvent", "minecraft:entity.player.levelup")
                     }
                     craftHelper.add("doneNotificationConfig", doneNotificationConfig)
                     it.add("misc.crafthelper", craftHelper)
