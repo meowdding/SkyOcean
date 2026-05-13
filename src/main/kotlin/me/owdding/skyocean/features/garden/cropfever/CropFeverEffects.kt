@@ -59,7 +59,7 @@ object CropFeverEffects {
         override fun getTranslationKey(): String = "$LANG_KEY_PATH.hueShiftingShader.shiftingSpeed.options.${name.lowercase()}"
     }
 
-    enum class coinRainSpawnMultiplierOptions(val mult: Int) : Translatable {
+    enum class CoinRainSpawnMultiplierOptions(val mult: Int) : Translatable {
         AUTO(0),
         ONE(1),
         TWO(2),

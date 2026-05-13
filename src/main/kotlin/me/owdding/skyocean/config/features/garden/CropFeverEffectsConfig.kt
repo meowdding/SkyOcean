@@ -31,7 +31,7 @@ object CropFeverEffectsConfig : ObjectKt(), Translatable  {
         this.range = 1L..60
     }.duration(DurationUnit.SECONDS)
 
-    var coinRainSpawnMultiplier by enum(CropFeverEffects.coinRainSpawnMultiplierOptions.AUTO) {
+    var coinRainSpawnMultiplier by enum(CropFeverEffects.CoinRainSpawnMultiplierOptions.AUTO) {
         this.translation = "$PATH.coinRain.spawnMultiplier"
     }
 
