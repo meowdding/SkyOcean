@@ -1,7 +1,7 @@
 package me.owdding.skyocean.features.text
 
 import net.minecraft.util.FormattedCharSequence
-import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import java.util.Arrays
 
 object TextReplacements {
@@ -21,14 +21,10 @@ object TextReplacements {
         return array
     }
 
-    val replacements: MutableList<Pair<String, FormattedCharSequence>> = ArrayList()
-
-    init {
-        replacements.add("meowo" to Text.of("mrow").visualOrderText)
-    }
-
     @JvmStatic
     fun apply(instance: FormattedCharSequence): FormattedCharSequence = runCatching {
+        if (McScreen.self is DisableReplacements) return@runCatching instance
+
         val builder = StringBuilder()
         instance.accept { _, _, codepoint ->
             builder.appendCodePoint(codepoint)
@@ -38,22 +34,24 @@ object TextReplacements {
 
         val arrayThingy = checkArray(content.length)
 
-        replaceAll(arrayThingy, content)
+        val replacements = TextReplacementManager.replacements.filter { it.isEnabled() }
+
+        replaceAll(arrayThingy, content, replacements)
 
         FormattedCharSequence { sink ->
             var accumulator = 0
             var position = 0
-            instance.accept { _, style, codepoint ->
-                val index = arrayThingy[accumulator++] ?: return@accept sink.accept(position++, style, codepoint)
+            instance.accept { _, originalStyle, codepoint ->
+                val index = arrayThingy[accumulator++] ?: return@accept sink.accept(position++, originalStyle, codepoint)
 
                 if (index == MINUS_ONE) {
                     return@accept true
                 }
 
-                val (_, replacement) = replacements[index.toInt()]
+                val replacement = replacements[index.toInt()].formattedValue
 
                 replacement.accept { _, style, codepoint ->
-                    sink.accept(position++, style, codepoint)
+                    sink.accept(position++, style.applyTo(originalStyle), codepoint)
                 }
 
                 true
@@ -61,12 +59,11 @@ object TextReplacements {
         }
     }.getOrElse { instance}
 
-
-    fun replaceAll(array: Array<Short?>, content: String) {
+    fun replaceAll(array: Array<Short?>, content: String, replacements: List<TextReplacement>) {
         val length = content.length
         replacements.forEachIndexed { replacementIndex, pair ->
             var start = 0
-            val (key) = pair
+            val key = pair.key
 
             while (start < length) {
                 val index = content.indexOf(key, start)
