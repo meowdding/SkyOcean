@@ -2,9 +2,13 @@ package me.owdding.skyocean.mixins;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import me.owdding.skyocean.features.text.MarkdownChat;
+import me.owdding.skyocean.features.text.TextReplacementUtils;
 import me.owdding.skyocean.features.text.TextReplacements;
 import net.minecraft.client.StringSplitter;
 import net.minecraft.client.gui.Font;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.FormattedCharSink;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +20,11 @@ public class FontMixin {
     @WrapOperation(method = "prepareText(Lnet/minecraft/util/FormattedCharSequence;FFIZZI)Lnet/minecraft/client/gui/Font$PreparedText;", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/FormattedCharSequence;accept(Lnet/minecraft/util/FormattedCharSink;)Z"))
     public boolean prepareText(FormattedCharSequence instance, FormattedCharSink formattedCharSink, Operation<Boolean> original) {
         return original.call(TextReplacements.apply(instance), formattedCharSink);
+    }
+
+    @WrapOperation(method = "width(Lnet/minecraft/network/chat/FormattedText;)I", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/StringSplitter;stringWidth(Lnet/minecraft/network/chat/FormattedText;)F"))
+    public float width(StringSplitter instance, FormattedText content, Operation<Float> original) {
+        return original.call(instance, MarkdownChat.INSTANCE.toComponent(TextReplacements.apply(Language.getInstance().getVisualOrder(content))));
     }
 
     @WrapOperation(method = "width(Lnet/minecraft/util/FormattedCharSequence;)I", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/StringSplitter;stringWidth(Lnet/minecraft/util/FormattedCharSequence;)F"))

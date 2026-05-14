@@ -66,7 +66,7 @@ object TextReplacements {
             val key = pair.key
 
             while (start < length) {
-                val index = content.indexOf(key, start)
+                val index = content.indexOf(key, start, ignoreCase = true)
                 if (index == -1) break
 
                 start = index + 1
