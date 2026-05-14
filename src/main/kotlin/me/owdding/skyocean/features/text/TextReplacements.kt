@@ -2,9 +2,24 @@ package me.owdding.skyocean.features.text
 
 import net.minecraft.util.FormattedCharSequence
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import java.util.Arrays
 
 object TextReplacements {
     const val MINUS_ONE: Short = -1
+    var array: Array<Short?> = Array(20) { null }
+
+    fun createArray(length: Int): Array<Short?> {
+        return Array(length) { null }
+    }
+
+    fun checkArray(length: Int): Array<Short?> {
+        if (length > array.size) {
+            array = createArray(length)
+            return array
+        }
+        Arrays.fill(array, null)
+        return array
+    }
 
     val replacements: MutableList<Pair<String, FormattedCharSequence>> = ArrayList()
 
@@ -21,7 +36,7 @@ object TextReplacements {
         }
         val content = builder.toString()
 
-        val arrayThingy = Array<Short?>(content.length) { null }
+        val arrayThingy = checkArray(content.length)
 
         replaceAll(arrayThingy, content)
 
