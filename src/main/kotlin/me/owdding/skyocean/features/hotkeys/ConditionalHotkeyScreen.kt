@@ -399,6 +399,7 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
                 height = 15,
                 click = withRebuild {
                     hotkey.enabled = !hotkey.enabled
+                    HotkeyManager.save()
                 },
             ).add()
             horizontal(1) {
