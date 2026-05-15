@@ -393,6 +393,10 @@
               "<red>Disable if you have Hypixel's own music enabled.</red>"
             ]
           },
+          "rngSound": {
+            "@value": "RNG Sound",
+            "desc": "Plays the sound effect from dropping something that is really rare (e.g., Ray of Helios or Strawberry Dye)."
+          },
           "coinRain": {
             "@value": "Coin Rain",
             "desc": "Shows an animation of SkyBlock coins raining from the top of the screen when starting a Crop Fever.",

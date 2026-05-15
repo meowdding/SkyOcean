@@ -40,9 +40,11 @@ object CropFeverEffects {
     @JvmStatic
     var isFeverActive = false
         private set
+
     //TODO: Add dye rng drop sound
     var startTime = Instant.DISTANT_PAST
     private const val LANG_KEY_PATH = CropFeverEffectsConfig.PATH
+    private const val RNG_SOUND_ID = "farming.crop_fever.rng"
     private const val BG_MUSIC_SOUND_ID = "farming.crop_fever.music"
     private const val START_SOUND_ID = "farming.crop_fever.start"
     private const val SHADER_ID = "crop_fever_hue_shift"
@@ -83,7 +85,7 @@ object CropFeverEffects {
             val buf = Std140Builder.onStack(stack, UBO_SIZE)
                 .putFloat(CropFeverEffectsConfig.shiftingShaderSpeed.speed)
                 .get()
-            RenderSystem.getDevice().createCommandEncoder().writeToBuffer(buffer.slice(),buf)
+            RenderSystem.getDevice().createCommandEncoder().writeToBuffer(buffer.slice(), buf)
         }
     }
 
@@ -94,13 +96,9 @@ object CropFeverEffects {
         startTime = Instant.DISTANT_PAST
         if (fallingCoinsList.isNotEmpty()) fallingCoinsList.clear()
 
-
-        if (NBSMusicManager.isMusicActive(BG_MUSIC_SOUND_ID)) {
-            NBSMusicManager.stop(BG_MUSIC_SOUND_ID)
-        }
-        if (NBSMusicManager.isMusicActive(START_SOUND_ID)) {
-            NBSMusicManager.stop(START_SOUND_ID)
-        }
+        NBSMusicManager.stop(RNG_SOUND_ID)
+        NBSMusicManager.stop(BG_MUSIC_SOUND_ID)
+        NBSMusicManager.stop(START_SOUND_ID)
 
         val gameRenderer = McClient.self.gameRenderer
         if (gameRenderer != null) {
@@ -126,6 +124,9 @@ object CropFeverEffects {
 
             if (CropFeverEffectsConfig.startingSound) {
                 NBSMusicManager.play(START_SOUND_ID, "farming/crop_fever_start")
+            }
+            if (CropFeverEffectsConfig.rngSound) {
+                NBSMusicManager.play(RNG_SOUND_ID, "farming/crop_fever_rng")
             }
             if (CropFeverEffectsConfig.backgroundMusic) {
                 NBSMusicManager.play(BG_MUSIC_SOUND_ID, "farming/crop_fever_music")

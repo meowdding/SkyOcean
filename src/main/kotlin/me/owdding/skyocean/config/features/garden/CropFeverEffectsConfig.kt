@@ -21,6 +21,10 @@ object CropFeverEffectsConfig : ObjectKt(), Translatable  {
         this.translation = "$PATH.backgroundMusic"
     }
 
+    var rngSound by boolean(true) {
+        this.translation = "$PATH.rngSound"
+    }
+
     var coinRain by boolean(true) {
         this.translation = "$PATH.coinRain"
     }
