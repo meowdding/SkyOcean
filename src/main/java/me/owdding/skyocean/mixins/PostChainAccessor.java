@@ -9,6 +9,6 @@ import java.util.List;
 
 @Mixin(PostChain.class)
 public interface PostChainAccessor {
-@Accessor("passes")
-List<PostPass> skyocean$getPasses();
+    @Accessor("passes")
+    List<PostPass> skyocean$getPasses();
 }

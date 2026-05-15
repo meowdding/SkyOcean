@@ -343,33 +343,15 @@
             "❬Automatic❭ only triggers the warning while you have a <gold>☘</gold> reduction."
           ],
           "options": {
-            "auto": {
-              "@value": "Automatic"
-            },
-            "one": {
-              "@value": "1"
-            },
-            "two": {
-              "@value": "2"
-            },
-            "three": {
-              "@value": "3"
-            },
-            "four": {
-              "@value": "4"
-            },
-            "five": {
-              "@value": "5"
-            },
-            "six": {
-              "@value": "6"
-            },
-            "seven": {
-              "@value": "7"
-            },
-            "eight": {
-              "@value": "8"
-            }
+            "auto": "Automatic",
+            "one": "1",
+            "two": "2",
+            "three": "3",
+            "four": "4",
+            "five": "5",
+            "six": "6",
+            "seven": "7",
+            "eight": "8"
           }
         },
         "pest_warning_delay": {
@@ -418,24 +400,12 @@
                   "<red>If you are sensitive to flashing colors don't go above <color #B22222>❬<color #727378>Normal</color>❭.</red>"
                 ],
                 "options": {
-                  "slower": {
-                    "@value": "<color #5F9EA0>Slower (0.25x)</color>"
-                  },
-                  "slow": {
-                    "@value": "<color #708587>Slow (0.5x)</color>"
-                  },
-                  "normal": {
-                    "@value": "<color #727378>Normal (1.0x)</color>"
-                  },
-                  "fast": {
-                    "@value": "<color #915454>Fast (1.5x)</color>"
-                  },
-                  "faster": {
-                    "@value": "<color #A13B3B>Faster (2.5x)</color>"
-                  },
-                  "insane": {
-                    "@value": "<color #B22222>Insane (10.0x)</color>"
-                  }
+                  "slower": "<color #5F9EA0>Slower (0.25x)</color>",
+                  "slow": "<color #708587>Slow (0.5x)</color>",
+                  "normal": "<color #727378>Normal (1.0x)</color>",
+                  "fast": "<color #915454>Fast (1.5x)</color>",
+                  "faster": "<color #A13B3B>Faster (2.5x)</color>",
+                  "insane": "<color #B22222>Insane (10.0x)</color>"
                 }
               }
             },
@@ -450,33 +420,15 @@
                 "@value": "Coin Rain Spawn Multiplier",
                 "desc": "Controls how many coins spawn per tick.",
                 "options": {
-                  "auto": {
-                    "@value": "Automatic"
-                  },
-                  "one": {
-                    "@value": "1x"
-                  },
-                  "two": {
-                    "@value": "2x"
-                  },
-                  "three": {
-                    "@value": "3x"
-                  },
-                  "four": {
-                    "@value": "4x"
-                  },
-                  "five": {
-                    "@value": "5x"
-                  },
-                  "ten": {
-                    "@value": "10x"
-                  },
-                  "fifteen": {
-                    "@value": "15x"
-                  },
-                  "twenty": {
-                    "@value": "20x"
-                  }
+                  "auto": "Automatic",
+                  "one": "1x",
+                  "two": "2x",
+                  "three": "3x",
+                  "four": "4x",
+                  "five": "5x",
+                  "ten": "10x",
+                  "fifteen": "15x",
+                  "twenty": "20x"
                 }
               }
             }

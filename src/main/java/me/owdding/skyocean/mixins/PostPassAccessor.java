@@ -9,6 +9,6 @@ import java.util.Map;
 
 @Mixin(PostPass.class)
 public interface PostPassAccessor {
-@Accessor("customUniforms")
-Map<String, GpuBuffer> skyocean$getCustomUniforms();
+    @Accessor("customUniforms")
+    Map<String, GpuBuffer> skyocean$getCustomUniforms();
 }
