@@ -15,7 +15,6 @@ import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.layouts.withPadding
 import me.owdding.lib.rendering.text.textShader
-import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.features.hotkeys.ShowMessageModal
@@ -26,17 +25,7 @@ import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.chat.OceanGradients
 import me.owdding.skyocean.utils.components.TagComponentSerialization
-import me.owdding.skyocean.utils.extensions.bottomLeft
-import me.owdding.skyocean.utils.extensions.createButton
-import me.owdding.skyocean.utils.extensions.createIntInput
-import me.owdding.skyocean.utils.extensions.createText
-import me.owdding.skyocean.utils.extensions.createTextInput
-import me.owdding.skyocean.utils.extensions.createToggleButton
-import me.owdding.skyocean.utils.extensions.middleCenter
-import me.owdding.skyocean.utils.extensions.middleLeft
-import me.owdding.skyocean.utils.extensions.middleRight
-import me.owdding.skyocean.utils.extensions.withPadding
-import me.owdding.skyocean.utils.rendering.ExtraDisplays
+import me.owdding.skyocean.utils.extensions.*
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -58,12 +47,12 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
-import kotlin.collections.chunked
 
 class EditReplacementModal(
     val parent: Screen?,
     val textReplacement: TextReplacement?,
-    val callback: (key: String, value: Component, priority: Int, enabled: Boolean) -> Unit,
+    maxPriority: Int? = null,
+    val callback: (key: String, value: Component, priority: Int, wholeWord: Boolean, enabled: Boolean) -> Unit,
 ) : Overlay(parent), IgnoreHotkeyInputs, DisableReplacements {
 
 
@@ -78,8 +67,8 @@ class EditReplacementModal(
     }
 
     private val enabled = ListenableState.of(textReplacement?.enabled ?: true)
-    private val priority = ListenableState.of(textReplacement?.priority ?: 0)
-
+    private val priority = ListenableState.of(textReplacement?.priority ?: maxPriority?.plus(1) ?: 0)
+    private val wholeWord = ListenableState.of(textReplacement?.wholeWord ?: false)
 
     fun content(width: Int): Layout {
 
@@ -109,13 +98,51 @@ class EditReplacementModal(
                 }.add(middleRight)
             }.add(middleCenter)
 
-            createText("Original", CatppuccinColors.Mocha.text).withPadding(1).add(middleLeft)
-            createTextInput(
-                key,
-                placeholder = "Original",
-                texture = id("text_replacements/inset"),
-                width = width - PADDING * 2
-            ).add()
+            LayoutFactory.frame(width - PADDING * 2) {
+                LayoutFactory.vertical {
+                    vertical {
+                        createText("Original", CatppuccinColors.Mocha.text).withPadding(1).add(bottomLeft)
+                        createTextInput(
+                            key,
+                            placeholder = "Original",
+                            texture = id("text_replacements/inset"),
+                            width = (width * (2f / 3f)).toInt() - PADDING * 2
+                        ).add()
+                    }
+                }.add(middleLeft)
+                LayoutFactory.vertical {
+                    vertical {
+                        horizontal {
+                            createText("Whole Words", CatppuccinColors.Mocha.text).withPadding(1).add(middleLeft)
+                            Displays.sprite(id("info"), 7, 7).withTooltip {
+                                add("Whole Words means that replacements will only replace whole words.")
+                                space()
+                                add {
+                                    this.color = CatppuccinColors.Mocha.text
+                                    append("If you have a replacement for '")
+                                    append("bal") { this.color = CatppuccinColors.Mocha.red }
+                                    append("', it will only get replaced if it is surrounded by spaces.")
+                                }
+                                add {
+                                    this.color = CatppuccinColors.Mocha.subtext1
+                                    append(" The '")
+                                    append("bal") { this.color = CatppuccinColors.Mocha.red }
+                                    append("' in '")
+                                    append("bal") { this.color = CatppuccinColors.Mocha.red }
+                                    append("loon") { this.color = CatppuccinColors.Mocha.green }
+                                    append("' will not get replaced.")
+                                }
+                            }.add()
+                        }
+                        createToggleButton(
+                            wholeWord,
+                            width = (width * (1f / 3f)).toInt() - PADDING * 2,
+                            height = 20,
+                            onClick = ::rebuildWidgets,
+                        ).add()
+                    }
+                }.add(middleRight)
+            }.add(middleCenter)
             horizontal {
                 createText("Replacement", CatppuccinColors.Mocha.text).withPadding(1).add(middleLeft)
                 Displays.sprite(id("info"), 7, 7).withTooltip {
@@ -269,6 +296,7 @@ class EditReplacementModal(
                                             return@createButton
                                         },
                                         priority.get(),
+                                        wholeWord.get(),
                                         enabled.get(),
                                     )
                                     this.onClose()

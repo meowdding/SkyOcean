@@ -61,13 +61,19 @@ object TextReplacements {
 
     fun replaceAll(array: Array<Short?>, content: String, replacements: List<TextReplacement>) {
         val length = content.length
-        replacements.forEachIndexed { replacementIndex, pair ->
+        replacements.forEachIndexed { replacementIndex, textReplacement ->
             var start = 0
-            val key = pair.key
+            val key = textReplacement.key
+            val matchWholeWord = textReplacement.wholeWord
 
             while (start < length) {
                 val index = content.indexOf(key, start, ignoreCase = true)
                 if (index == -1) break
+
+                if (matchWholeWord && !content.isWholeWord(index, key.length)) {
+                    start = index + 1
+                    continue
+                }
 
                 start = index + 1
 
@@ -78,6 +84,13 @@ object TextReplacements {
                 array[index] = replacementIndex.toShort()
             }
         }
+    }
+
+    fun CharSequence.isWholeWord(index: Int, length: Int): Boolean {
+        val before = if (index - 1 >= 0) this[index - 1] else null
+        val after = if (index + length < this.length) this[index + length] else null
+
+        return (before == null || before.isWhitespace()) && (after == null || after.isWhitespace())
     }
 
 }

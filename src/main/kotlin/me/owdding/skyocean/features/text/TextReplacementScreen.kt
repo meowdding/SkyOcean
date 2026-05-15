@@ -10,21 +10,7 @@ import me.owdding.skyocean.features.hotkeys.ShowMessageModal
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils
-import me.owdding.skyocean.utils.extensions.asScrollableWidget
-import me.owdding.skyocean.utils.extensions.asWidget
-import me.owdding.skyocean.utils.extensions.bottomCenter
-import me.owdding.skyocean.utils.extensions.createButton
-import me.owdding.skyocean.utils.extensions.createSeparator
-import me.owdding.skyocean.utils.extensions.createText
-import me.owdding.skyocean.utils.extensions.framed
-import me.owdding.skyocean.utils.extensions.middleCenter
-import me.owdding.skyocean.utils.extensions.middleLeft
-import me.owdding.skyocean.utils.extensions.middleRight
-import me.owdding.skyocean.utils.extensions.setScreen
-import me.owdding.skyocean.utils.extensions.string
-import me.owdding.skyocean.utils.extensions.topCenter
-import me.owdding.skyocean.utils.extensions.withPadding
-import me.owdding.skyocean.utils.extensions.withTexturedBackground
+import me.owdding.skyocean.utils.extensions.*
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.network.chat.CommonComponents
@@ -247,7 +233,7 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
 
     fun createRightPanel(sliceWidth: Int, height: Int): LayoutElement {
         val panelWidth = sliceWidth * 2 + SPACER
-        val entry = getReplacementsInCategory().sortedBy { it.timeCreated }
+        val entry = getReplacementsInCategory().sortedBy { it.priority }
         val header = createHeader(sliceWidth, panelWidth, entry)
 
         val mainSectionHeight = height - header.height - SPACER
@@ -270,11 +256,12 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                     EditReplacementModal(
                         this@TextReplacementScreen,
                         null,
-                    ) { key, value, priority, enabled ->
+                        entry.maxOf(TextReplacement::priority),
+                    ) { key, value, priority, wholeWord, enabled ->
                         TextReplacementManager.register(
                             TextReplacement(
                                 currentCategory.takeUnless { it.isDefault() }?.identifier,
-                                key, value, enabled, priority,
+                                key, value, enabled, priority, wholeWord,
                                 System.currentTimeMillis(),
                             ),
                         )
@@ -363,10 +350,22 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
 
     private fun createEntry(textReplacement: TextReplacement, width: Int, height: Int): LayoutElement = LayoutFactory.frame(width, height) {
         LayoutFactory.vertical {
-            createText(Text.join(textReplacement.key.chars().mapToObj { Char(it) }.toList(), separator = Text.of("\u200c"))) {
-                color = CatppuccinColors.Mocha.text
-            }.withPadding(bottom = 2).add()
-            createText(textReplacement.value).withPadding(4).withTexturedBackground("text_replacements/header").add()
+            horizontal {
+                createText(
+                    Text.of(textReplacement.priority.toString()) {
+                        color = CatppuccinColors.Mocha.subtext0
+                    }
+                ).withPadding(SPACER).add(middleLeft)
+                vertical {
+                    createText(Text.join(
+                        textReplacement.key.chars().mapToObj { Char(it) }.toList(),
+                        separator = Text.of("\u200c")
+                    )) {
+                        color = CatppuccinColors.Mocha.text
+                    }.withPadding(bottom = 2).add()
+                    createText(textReplacement.value).withPadding(4).withTexturedBackground("text_replacements/header").add()
+                }
+            }
         }.withPadding(left = SPACER).add(middleLeft)
         LayoutFactory.vertical(alignment = RIGHT, spacing = 1) {
             createButton(
@@ -387,11 +386,12 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                     color = unhovered,
                     height = 15,
                     click = setScreen {
-                        EditReplacementModal(this@TextReplacementScreen, textReplacement) {  key, value, priority, enabled ->
+                        EditReplacementModal(this@TextReplacementScreen, textReplacement) { key, value, priority, wholeWord, enabled ->
                             textReplacement.key = key
                             textReplacement.value = value
                             textReplacement.priority = priority
                             textReplacement.enabled = enabled
+                            textReplacement.wholeWord = wholeWord
                             TextReplacementManager.save()
                         }
                     },
