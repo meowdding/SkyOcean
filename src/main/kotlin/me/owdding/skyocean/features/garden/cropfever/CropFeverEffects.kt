@@ -43,7 +43,7 @@ object CropFeverEffects {
 
     //TODO: Add dye rng drop sound
     var startTime = Instant.DISTANT_PAST
-    private const val LANG_KEY_PATH = CropFeverEffectsConfig.PATH
+    private const val LANG_KEY_PATH = CropFeverEffectsConfig.VISUAL_PATH
     private const val RNG_SOUND_ID = "farming.crop_fever.rng"
     private const val BG_MUSIC_SOUND_ID = "farming.crop_fever.music"
     private const val START_SOUND_ID = "farming.crop_fever.start"

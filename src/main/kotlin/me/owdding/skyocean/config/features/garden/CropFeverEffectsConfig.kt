@@ -8,51 +8,61 @@ import me.owdding.skyocean.config.translation
 import me.owdding.skyocean.features.garden.cropfever.CropFeverEffects
 import kotlin.time.DurationUnit
 
-object CropFeverEffectsConfig : ObjectKt(), Translatable  {
+object CropFeverEffectsConfig : ObjectKt(), Translatable {
 
-    const val PATH = "skyocean.config.garden.crop_fever_effect"
-    override fun getTranslationKey(): String = "$PATH.config_title"
+    const val ROOT_PATH = "skyocean.config.garden.crop_fever_effect"
+    const val SOUND_PATH = "$ROOT_PATH.sound_section"
+    const val VISUAL_PATH = "$ROOT_PATH.visual_section"
+    override fun getTranslationKey(): String = "$ROOT_PATH.config_title"
 
     var enabled by boolean(false) {
-        this.translation = "$PATH.enabled"
+        this.translation = "$ROOT_PATH.enabled"
     }
 
-    var backgroundMusic by boolean(true) {
-        this.translation = "$PATH.backgroundMusic"
+    init {
+        separator(SOUND_PATH)
+    }
+
+    var startingSound by boolean(true) {
+        this.translation = "$SOUND_PATH.startingSound"
     }
 
     var rngSound by boolean(true) {
-        this.translation = "$PATH.rngSound"
+        this.translation = "$SOUND_PATH.rngSound"
+    }
+
+    var backgroundMusic by boolean(true) {
+        this.translation = "$SOUND_PATH.backgroundMusic"
+    }
+
+    init {
+        separator(VISUAL_PATH)
+    }
+
+    var hueShiftingShader by boolean(true) {
+        this.translation = "$VISUAL_PATH.hueShiftingShader"
+    }
+
+    var shiftingShaderSpeed by enum(CropFeverEffects.ShiftingSpeedOptions.NORMAL) {
+        this.translation = "$VISUAL_PATH.hueShiftingShader.shiftingSpeed"
     }
 
     var coinRain by boolean(true) {
-        this.translation = "$PATH.coinRain"
+        this.translation = "$VISUAL_PATH.coinRain"
     }
 
     var coinRainDuration by long(3) {
-        this.translation = "$PATH.coinRain.duration"
+        this.translation = "$VISUAL_PATH.coinRain.duration"
         this.slider = true
         this.range = 1L..60
     }.duration(DurationUnit.SECONDS)
 
     var coinRainSpawnMultiplier by enum(CropFeverEffects.CoinRainSpawnMultiplierOptions.AUTO) {
-        this.translation = "$PATH.coinRain.spawnMultiplier"
-    }
-
-    var startingSound by boolean(true) {
-        this.translation = "$PATH.startingSound"
-    }
-
-    var hueShiftingShader by boolean(true) {
-        this.translation = "$PATH.hueShiftingShader"
-    }
-
-    var shiftingShaderSpeed by enum(CropFeverEffects.ShiftingSpeedOptions.NORMAL) {
-        this.translation = "$PATH.hueShiftingShader.shiftingSpeed"
+        this.translation = "$VISUAL_PATH.coinRain.spawnMultiplier"
     }
 
     init {
-        separator("$PATH.credits")
+        separator("$ROOT_PATH.credits")
     }
 
     private fun EntriesBuilder.separator(translation: String) = separator {

@@ -386,89 +386,97 @@
             "@value": "Enabled",
             "desc": "Enables the entire feature."
           },
-          "backgroundMusic": {
-            "@value": "Background Music",
-            "desc": [
-              "Plays a looping soundtrack while a Crop Fever is active.",
-              "<red>Disable if you have Hypixel's own music enabled.</red>"
-            ]
-          },
-          "rngSound": {
-            "@value": "RNG Sound",
-            "desc": "Plays the sound effect from dropping something that is really rare (e.g., Ray of Helios or Strawberry Dye)."
-          },
-          "coinRain": {
-            "@value": "Coin Rain",
-            "desc": "Shows an animation of SkyBlock coins raining from the top of the screen when starting a Crop Fever.",
-            "duration": {
-              "@value": "Coin Rain Duration",
-              "desc": "The duration for the coin rain animation."
+          "sound_section": {
+            "@value": "Sound Changes",
+            "desc": "",
+            "startingSound": {
+              "@value": "Jackpot Sound",
+              "desc": "Plays a Jackpot sound when starting a Crop Fever."
             },
-            "spawnMultiplier": {
-              "@value": "Coin Rain Spawn Multiplier",
-              "desc": "Controls how many coins spawn per tick.",
-              "options": {
-                "auto": {
-                  "@value": "Automatic"
-                },
-                "one": {
-                  "@value": "1x"
-                },
-                "two": {
-                  "@value": "2x"
-                },
-                "three": {
-                  "@value": "3x"
-                },
-                "four": {
-                  "@value": "4x"
-                },
-                "five": {
-                  "@value": "5x"
-                },
-                "ten": {
-                  "@value": "10x"
-                },
-                "fifteen": {
-                  "@value": "15x"
-                },
-                "twenty": {
-                  "@value": "20x"
-                }
-              }
+            "rngSound": {
+              "@value": "RNG Sound",
+              "desc": "Plays the sound effect from dropping something that is really rare (e.g., Ray of Helios or Strawberry Dye)."
+            },
+            "backgroundMusic": {
+              "@value": "Background Music",
+              "desc": [
+                "Plays a looping soundtrack while a Crop Fever is active.",
+                "<red>Disable if you have Hypixel's own music enabled.</red>"
+              ]
             }
           },
-          "startingSound": {
-            "@value": "Jackpot Sound",
-            "desc": "Plays a Jackpot sound when starting a Crop Fever."
-          },
-          "hueShiftingShader": {
-            "@value": "Color Cycling Effect",
-            "desc": "Applies a color cycling post-processing effect to the screen during a Crop Fever.",
-            "shiftingSpeed": {
-              "@value": "Cycling Speed",
-              "desc": [
-                "Controls how fast the colors cylce.",
-                "<red>If you are sensitive to flashing colors don't go above <color #B22222>❬<color #727378>Normal</color>❭.</red>"
-              ],
-              "options": {
-                "slower": {
-                  "@value": "<color #5F9EA0>Slower (0.25x)</color>"
-                },
-                "slow": {
-                  "@value": "<color #708587>Slow (0.5x)</color>"
-                },
-                "normal": {
-                  "@value": "<color #727378>Normal (1.0x)</color>"
-                },
-                "fast": {
-                  "@value": "<color #915454>Fast (1.5x)</color>"
-                },
-                "faster": {
-                  "@value": "<color #A13B3B>Faster (2.5x)</color>"
-                },
-                "insane": {
-                  "@value": "<color #B22222>Insane (10.0x)</color>"
+          "visual_section": {
+            "@value": "Visual Changes",
+            "desc": "",
+            "hueShiftingShader": {
+              "@value": "Color Cycling Effect",
+              "desc": "Applies a color cycling post-processing effect to the screen during a Crop Fever.",
+              "shiftingSpeed": {
+                "@value": "Cycling Speed",
+                "desc": [
+                  "Controls how fast the colors cylce.",
+                  "<red>If you are sensitive to flashing colors don't go above <color #B22222>❬<color #727378>Normal</color>❭.</red>"
+                ],
+                "options": {
+                  "slower": {
+                    "@value": "<color #5F9EA0>Slower (0.25x)</color>"
+                  },
+                  "slow": {
+                    "@value": "<color #708587>Slow (0.5x)</color>"
+                  },
+                  "normal": {
+                    "@value": "<color #727378>Normal (1.0x)</color>"
+                  },
+                  "fast": {
+                    "@value": "<color #915454>Fast (1.5x)</color>"
+                  },
+                  "faster": {
+                    "@value": "<color #A13B3B>Faster (2.5x)</color>"
+                  },
+                  "insane": {
+                    "@value": "<color #B22222>Insane (10.0x)</color>"
+                  }
+                }
+              }
+            },
+            "coinRain": {
+              "@value": "Coin Rain",
+              "desc": "Shows an animation of SkyBlock coins raining from the top of the screen when starting a Crop Fever.",
+              "duration": {
+                "@value": "Coin Rain Duration",
+                "desc": "The duration for the coin rain animation."
+              },
+              "spawnMultiplier": {
+                "@value": "Coin Rain Spawn Multiplier",
+                "desc": "Controls how many coins spawn per tick.",
+                "options": {
+                  "auto": {
+                    "@value": "Automatic"
+                  },
+                  "one": {
+                    "@value": "1x"
+                  },
+                  "two": {
+                    "@value": "2x"
+                  },
+                  "three": {
+                    "@value": "3x"
+                  },
+                  "four": {
+                    "@value": "4x"
+                  },
+                  "five": {
+                    "@value": "5x"
+                  },
+                  "ten": {
+                    "@value": "10x"
+                  },
+                  "fifteen": {
+                    "@value": "15x"
+                  },
+                  "twenty": {
+                    "@value": "20x"
+                  }
                 }
               }
             }
