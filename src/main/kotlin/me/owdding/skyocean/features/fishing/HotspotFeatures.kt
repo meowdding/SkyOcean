@@ -29,7 +29,7 @@ object HotspotFeatures {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onRenderWorldEvent(event: RenderWorldEvent.AfterTranslucent) {
+    fun onRenderWorldEvent(event: RenderWorldEvent.AfterEntities) {
         if (!isEnabled()) return
 
         HotspotAPI.hotspots.forEach { (_, type, pos, radius) ->
