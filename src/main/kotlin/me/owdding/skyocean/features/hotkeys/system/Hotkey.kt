@@ -34,6 +34,18 @@ data class Hotkey(
         action()
     }
 
+    fun duplicate(newName: String = "$name (Copy)"): Hotkey {
+        return Hotkey(
+            keybind = keybind,
+            action = action,
+            condition = condition,
+            name = newName,
+            enabled = false,
+            group = group,
+            timeCreated = System.currentTimeMillis(),
+        )
+    }
+
     fun formatKeys(override: Boolean? = null) = formatKeys(keybind.keys, override ?: keybind.settings.orderSensitive)
     companion object {
         fun formatKeys(keys: List<InputConstants.Key>, orderSensitive: Boolean) = Text.join(
