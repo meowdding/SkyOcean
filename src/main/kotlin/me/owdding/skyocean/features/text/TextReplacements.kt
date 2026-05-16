@@ -42,8 +42,9 @@ object TextReplacements {
             var accumulator = 0
             var position = 0
             instance.accept { _, originalStyle, codepoint ->
-                val index = arrayThingy[accumulator] ?: return@accept sink.accept(position++, originalStyle, codepoint)
+                val index = arrayThingy[accumulator]
                 accumulator += codepoint.charLength
+                index ?: return@accept sink.accept(position++, originalStyle, codepoint)
 
                 if (index == MINUS_ONE) {
                     return@accept true
