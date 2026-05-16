@@ -257,11 +257,11 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                         this@TextReplacementScreen,
                         null,
                         entry.maxOf(TextReplacement::priority),
-                    ) { key, value, priority, wholeWord, enabled ->
+                    ) { key, value, priority, wholeWord, ignoreCase, enabled ->
                         TextReplacementManager.register(
                             TextReplacement(
                                 currentCategory.takeUnless { it.isDefault() }?.identifier,
-                                key, value, enabled, priority, wholeWord,
+                                key, value, enabled, priority, wholeWord, ignoreCase,
                                 System.currentTimeMillis(),
                             ),
                         )
@@ -386,12 +386,16 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                     color = unhovered,
                     height = 15,
                     click = setScreen {
-                        EditReplacementModal(this@TextReplacementScreen, textReplacement) { key, value, priority, wholeWord, enabled ->
+                        EditReplacementModal(
+                            this@TextReplacementScreen,
+                            textReplacement
+                        ) { key, value, priority, wholeWord, ignoreCase, enabled ->
                             textReplacement.key = key
                             textReplacement.value = value
                             textReplacement.priority = priority
                             textReplacement.enabled = enabled
                             textReplacement.wholeWord = wholeWord
+                            textReplacement.ignoreCase = ignoreCase
                             TextReplacementManager.save()
                         }
                     },

@@ -52,7 +52,7 @@ class EditReplacementModal(
     val parent: Screen?,
     val textReplacement: TextReplacement?,
     maxPriority: Int? = null,
-    val callback: (key: String, value: Component, priority: Int, wholeWord: Boolean, enabled: Boolean) -> Unit,
+    val callback: (key: String, value: Component, priority: Int, wholeWord: Boolean, ignoreCase: Boolean, enabled: Boolean) -> Unit,
 ) : Overlay(parent), IgnoreHotkeyInputs, DisableReplacements {
 
 
@@ -69,6 +69,7 @@ class EditReplacementModal(
     private val enabled = ListenableState.of(textReplacement?.enabled ?: true)
     private val priority = ListenableState.of(textReplacement?.priority ?: maxPriority?.plus(1) ?: 0)
     private val wholeWord = ListenableState.of(textReplacement?.wholeWord ?: false)
+    private val ignoreCase = ListenableState.of(textReplacement?.ignoreCase ?: true)
 
     fun content(width: Int): Layout {
 
@@ -106,41 +107,54 @@ class EditReplacementModal(
                             key,
                             placeholder = "Original",
                             texture = id("text_replacements/inset"),
-                            width = (width * (2f / 3f)).toInt() - PADDING * 2
+                            width = width / 2 - PADDING * 2
                         ).add()
                     }
                 }.add(middleLeft)
-                LayoutFactory.vertical {
-                    vertical {
-                        horizontal {
-                            createText("Whole Words", CatppuccinColors.Mocha.text).withPadding(1).add(middleLeft)
-                            Displays.sprite(id("info"), 7, 7).withTooltip {
-                                add("Whole Words means that replacements will only replace whole words.")
-                                space()
-                                add {
-                                    this.color = CatppuccinColors.Mocha.text
-                                    append("If you have a replacement for '")
-                                    append("bal") { this.color = CatppuccinColors.Mocha.red }
-                                    append("', it will only get replaced if it is surrounded by spaces.")
-                                }
-                                add {
-                                    this.color = CatppuccinColors.Mocha.subtext1
-                                    append(" The '")
-                                    append("bal") { this.color = CatppuccinColors.Mocha.red }
-                                    append("' in '")
-                                    append("bal") { this.color = CatppuccinColors.Mocha.red }
-                                    append("loon") { this.color = CatppuccinColors.Mocha.green }
-                                    append("' will not get replaced.")
-                                }
-                            }.add()
+                LayoutFactory.frame(width / 2 - PADDING * 2) {
+                    LayoutFactory.vertical {
+                        vertical {
+                            horizontal {
+                                createText("Whole Words", CatppuccinColors.Mocha.text).withPadding(1).add(middleLeft)
+                                Displays.sprite(id("info"), 7, 7).withTooltip {
+                                    add("Whole Words means that replacements will only replace whole words.")
+                                    space()
+                                    add {
+                                        this.color = CatppuccinColors.Mocha.text
+                                        append("If you have a replacement for '")
+                                        append("bal") { this.color = CatppuccinColors.Mocha.red }
+                                        append("', it will only get replaced if it is surrounded by spaces.")
+                                    }
+                                    add {
+                                        this.color = CatppuccinColors.Mocha.subtext1
+                                        append(" The '")
+                                        append("bal") { this.color = CatppuccinColors.Mocha.red }
+                                        append("' in '")
+                                        append("bal") { this.color = CatppuccinColors.Mocha.red }
+                                        append("loon") { this.color = CatppuccinColors.Mocha.green }
+                                        append("' will not get replaced.")
+                                    }
+                                }.add()
+                            }
+                            createToggleButton(
+                                wholeWord,
+                                width = width / 4 - PADDING * 2,
+                                height = 20,
+                                onClick = ::rebuildWidgets,
+                            ).add()
                         }
-                        createToggleButton(
-                            wholeWord,
-                            width = (width * (1f / 3f)).toInt() - PADDING * 2,
-                            height = 20,
-                            onClick = ::rebuildWidgets,
-                        ).add()
-                    }
+                    }.add(middleLeft)
+                    LayoutFactory.vertical {
+                        vertical {
+                            createText("Ignore Case", CatppuccinColors.Mocha.text).withPadding(1).add(middleLeft)
+                            createToggleButton(
+                                ignoreCase,
+                                width = width / 4 - PADDING * 2,
+                                height = 20,
+                                onClick = ::rebuildWidgets,
+                            ).add()
+                        }
+                    }.add(middleRight)
                 }.add(middleRight)
             }.add(middleCenter)
             horizontal {
@@ -297,6 +311,7 @@ class EditReplacementModal(
                                         },
                                         priority.get(),
                                         wholeWord.get(),
+                                        ignoreCase.get(),
                                         enabled.get(),
                                     )
                                     this.onClose()

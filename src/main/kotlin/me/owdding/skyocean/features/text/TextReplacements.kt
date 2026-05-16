@@ -77,7 +77,7 @@ object TextReplacements {
             val matchWholeWord = textReplacement.wholeWord
 
             while (start < length) {
-                val index = content.indexOf(key, start, ignoreCase = true)
+                val index = content.indexOf(key, start, ignoreCase = textReplacement.ignoreCase)
                 if (index == -1) break
 
                 if (matchWholeWord && !content.isWholeWord(index, key.length)) {

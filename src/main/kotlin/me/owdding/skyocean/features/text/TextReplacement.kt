@@ -16,6 +16,7 @@ data class TextReplacement(
     @OptionalBoolean(true) var enabled: Boolean = true,
     var priority: Int,
     var wholeWord: Boolean = false,
+    var ignoreCase: Boolean = true,
     @FieldName("created_at") val timeCreated: Long = System.currentTimeMillis(),
 ) {
     val formattedValue: FormattedCharSequence get() = value.visualOrderText
