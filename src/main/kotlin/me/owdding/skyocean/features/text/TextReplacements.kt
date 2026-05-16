@@ -42,7 +42,8 @@ object TextReplacements {
             var accumulator = 0
             var position = 0
             instance.accept { _, originalStyle, codepoint ->
-                val index = arrayThingy[accumulator++] ?: return@accept sink.accept(position++, originalStyle, codepoint)
+                val index = arrayThingy[accumulator] ?: return@accept sink.accept(position++, originalStyle, codepoint)
+                accumulator += codepoint.charLength
 
                 if (index == MINUS_ONE) {
                     return@accept true
@@ -57,7 +58,15 @@ object TextReplacements {
                 true
             }
         }
-    }.getOrElse { instance}
+    }.getOrElse { instance }
+
+    val Int.charLength: Int get() {
+        if (Character.isBmpCodePoint(this)) {
+            return 1
+        }
+
+        return 2
+    }
 
     fun replaceAll(array: Array<Short?>, content: String, replacements: List<TextReplacement>) {
         val length = content.length
