@@ -4,6 +4,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.features.chat.ChatConfig
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.FormattedText
@@ -20,7 +21,10 @@ object MarkdownChat : MeowddingLogger by SkyOcean.featureLogger() {
     const val ZERO: Byte = 0
     const val MINUS_ONE: Byte = -1
 
+    private val enabled get() = ChatConfig.markdownChat
+
     fun tryModify(sequence: FormattedText): FormattedText {
+        if (!enabled) return sequence
         try {
             val string = sequence.string.stripColor()
             val array = Array(string.length) { 0.toByte() }
