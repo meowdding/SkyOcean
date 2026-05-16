@@ -103,7 +103,7 @@ object HotspotAPI {
 
         val maxHotspotSize = when (LocationAPI.island) {
             SkyBlockIsland.CRIMSON_ISLE -> 25.0
-            else -> 9.0
+            else -> 16.0
         }
 
         for (entry in _hotspots.values) {
