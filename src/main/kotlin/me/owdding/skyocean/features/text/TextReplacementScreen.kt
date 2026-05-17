@@ -256,7 +256,7 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                     EditReplacementModal(
                         this@TextReplacementScreen,
                         null,
-                        entry.maxOf(TextReplacement::priority),
+                        entry.maxOfOrNull(TextReplacement::priority),
                     ) { key, value, priority, wholeWord, ignoreCase, enabled ->
                         TextReplacementManager.register(
                             TextReplacement(
