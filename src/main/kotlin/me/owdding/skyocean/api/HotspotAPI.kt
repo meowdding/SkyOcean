@@ -121,7 +121,7 @@ object HotspotAPI {
 
         match.first.radius = sqrt(match.second).roundToHalf()
 
-        // Hotspot particles are cancelled here to avoid having to check them again inside the HotspotFeatures object.
+        // hotspot particles are cancelled here
         if (HotspotFeatures.isEnabled()) event.cancel()
     }
 
@@ -133,8 +133,7 @@ object HotspotAPI {
         val options = this.particle as? DustParticleOptions ?: return false
         if (options.color != PARTICLE_COLOR) return false
 
-        // Hotspot particles should be exact-position dust packets.
-        // This filters out many cosmetic/rune particles that use spread/offset/speed.
+        // hotspot particles should be exact pos. This filters out many rune particles that use spread/offset/speed.
         if (this.count != 1) return false
         if (this.xDist != 0f || this.yDist != 0f || this.zDist != 0f) return false
         if (this.maxSpeed != 0f) return false
