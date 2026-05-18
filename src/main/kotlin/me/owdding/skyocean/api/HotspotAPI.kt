@@ -39,7 +39,6 @@ import kotlin.time.Instant
 object HotspotAPI {
 
     private val PARTICLE_COLOR = Vector3f(1.0f, 0.4117647f, 0.7058824f)
-    private const val PARTICLE_Y_TOLERANCE = 1.5
 
     private val _hotspots = mutableMapOf<Vector2d, HotspotData>()
     val hotspots: Collection<HotspotData> get() = _hotspots.values
@@ -94,7 +93,6 @@ object HotspotAPI {
         }
     }
 
-
     @Subscription
     @OnlyOnSkyBlock
     fun onParticle(event: PacketReceivedEvent) {
@@ -112,7 +110,6 @@ object HotspotAPI {
 
         val match = _hotspots.values.asSequence().mapNotNull { entry ->
             val pos = entry.pos ?: return@mapNotNull null
-            if (abs(packet.y - pos.y) > PARTICLE_Y_TOLERANCE) return@mapNotNull null
 
             val deltaX = packet.x - pos.x
             val deltaZ = packet.z - pos.z
@@ -123,6 +120,7 @@ object HotspotAPI {
         }.minByOrNull { it.second } ?: return
 
         match.first.radius = sqrt(match.second).roundToHalf()
+
         // Hotspot particles are cancelled here to avoid having to check them again inside the HotspotFeatures object.
         if (HotspotFeatures.isEnabled()) event.cancel()
     }
@@ -131,8 +129,17 @@ object HotspotAPI {
         if (LocationAPI.island == SkyBlockIsland.CRIMSON_ISLE) {
             return this.particle.type == ParticleTypes.SMOKE && (this.count == 5 || this.count == 2)
         }
+
         val options = this.particle as? DustParticleOptions ?: return false
-        return options.color == PARTICLE_COLOR
+        if (options.color != PARTICLE_COLOR) return false
+
+        // Hotspot particles should be exact-position dust packets.
+        // This filters out many cosmetic/rune particles that use spread/offset/speed.
+        if (this.count != 1) return false
+        if (this.xDist != 0f || this.yDist != 0f || this.zDist != 0f) return false
+        if (this.maxSpeed != 0f) return false
+
+        return true
     }
 
     private fun Vec3.toVec2d(): Vector2d = Vector2d(this.x, this.z)
