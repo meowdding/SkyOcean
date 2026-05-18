@@ -89,7 +89,8 @@ object MetalDetectorSolver {
             MeowddingWaypoint(it, false) {
                 withName(Text.of("Possible Treasure").withColor(TextColor.GRAY))
                 withColor(0xFF808080.toInt())
-                withAllRenderTypes()
+                // Dont enable WaypointRenderType.TRACER here, Meowdding-Lib 4.1.5 crashes on 1.21.11 while rendering tracer lines because the LineWidth vertex element is written after normal
+                withNormalRenderTypes()
                 inLocatorBar()
             }
         }
@@ -133,7 +134,8 @@ object MetalDetectorSolver {
         foundChest = MeowddingWaypoint(blockPos, false) {
             withName(Text.of("Treasure").withColor(TextColor.ORANGE))
             withColor(0xFFFFFF00.toInt())
-            withAllRenderTypes()
+            // dont enable WaypointRenderType.TRACER here, check comment above
+            withNormalRenderTypes()
             inLocatorBar()
         }
         Text.of("Chest found at §a${blockPos.x}§f, §a${blockPos.y}§f, §a${blockPos.z}").sendWithPrefix()
