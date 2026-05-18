@@ -32,6 +32,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import kotlin.math.abs
+import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.time.Instant
 
@@ -106,14 +107,12 @@ object HotspotAPI {
         }
 
         val maxDistance = maxHotspotSize + 0.5
-        val maxDistanceSquared = maxDistance * maxDistance
+        val maxDistanceSquared = maxDistance.pow(2)
 
         val match = _hotspots.values.asSequence().mapNotNull { entry ->
             val pos = entry.pos ?: return@mapNotNull null
 
-            val deltaX = packet.x - pos.x
-            val deltaZ = packet.z - pos.z
-            val distanceSquared = deltaX * deltaX + deltaZ * deltaZ
+            val distanceSquared = (packet.x - pos.x).pow(2) + (packet.z - pos.z).pow(2)
             if (distanceSquared > maxDistanceSquared) return@mapNotNull null
 
             entry to distanceSquared
@@ -121,7 +120,7 @@ object HotspotAPI {
 
         match.first.radius = sqrt(match.second).roundToHalf()
 
-        // hotspot particles are cancelled here
+        // particles cancelled
         if (HotspotFeatures.isEnabled()) event.cancel()
     }
 
@@ -133,7 +132,7 @@ object HotspotAPI {
         val options = this.particle as? DustParticleOptions ?: return false
         if (options.color != PARTICLE_COLOR) return false
 
-        // hotspot particles should be exact pos. This filters out many rune particles that use spread/offset/speed.
+        // strict bs :-D
         if (this.count != 1) return false
         if (this.xDist != 0f || this.yDist != 0f || this.zDist != 0f) return false
         if (this.maxSpeed != 0f) return false
