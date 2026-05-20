@@ -74,8 +74,8 @@ class ItemSelectorOverlay(
         update(query.get())
     }
 
-    override fun resize(/*? if < 1.21.11 {*/ /*minecraft: Minecraft,  *//*?}*/width: Int, height: Int) {
-        super.resize(/*? < 1.21.11 >>*//*minecraft,*/ width, height)
+    override fun resize(width: Int, height: Int) {
+        super.resize(width, height)
         McClient.runNextTick(this::onClose)
     }
 

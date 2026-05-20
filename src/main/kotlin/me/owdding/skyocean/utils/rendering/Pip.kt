@@ -1,7 +1,5 @@
 package me.owdding.skyocean.utils.rendering
 
-//? < 1.21.11
-//import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
@@ -75,13 +73,9 @@ class MonoInventoryPipRenderer(source: MultiBufferSource.BufferSource) : Picture
         buffer.addVertex(scaledWidth, 0f, 0f).setUv(1f, 0f).setColor(state.color)
 
         val texture = McClient.self.textureManager.getTexture(MONO_TEXTURE)
-        //? if < 1.21.11
-        //RenderSystem.setShaderTexture(0, texture.textureView)
-
 
         PipelineRenderer.builder(InventoryRenderer.MONO_INVENTORY_BACKGROUND, buffer.buildOrThrow())
             .uniform(MonoInventoryUniform.STORAGE, MonoInventoryUniform(state.size, if (state.vertical) 1 else 0))
-            //? if > 1.21.10
             .textures(TextureSetup.singleTexture(texture.textureView, texture.sampler))
             .color(state.color)
             .draw()
@@ -114,12 +108,8 @@ class PolyInventoryPipRenderer(source: MultiBufferSource.BufferSource) : Picture
         buffer.addVertex(scaledWidth, 0f, 0f).setUv(1f, 0f).setColor(state.color)
 
         val texture = McClient.self.textureManager.getTexture(POLY_TEXTURE)
-        //? if < 1.21.11
-        //RenderSystem.setShaderTexture(0, texture.textureView)
-
         PipelineRenderer.builder(InventoryRenderer.INVENTORY_BACKGROUND, buffer.buildOrThrow())
             .uniform(PolyInventoryUniform.STORAGE, PolyInventoryUniform(state.size))
-            //? if > 1.21.10
             .textures(TextureSetup.singleTexture(texture.textureView, texture.sampler))
             .color(state.color)
             .draw()

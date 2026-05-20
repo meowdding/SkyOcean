@@ -422,6 +422,17 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
                     },
                 ).add()
 
+                val duplicate = Text.of("⎘")
+                createButton(
+                    texture = headerSprite,
+                    text = duplicate,
+                    width = McFont.width(duplicate) + SPACER * 2,
+                    color = unhovered,
+                    height = 15,
+                    click = withRebuild {
+                        HotkeyManager.register(hotkey.duplicate())
+                    }
+                ).add()
 
                 val instantDelete = tryDeleting === hotkey
                 val text = if (instantDelete) {
