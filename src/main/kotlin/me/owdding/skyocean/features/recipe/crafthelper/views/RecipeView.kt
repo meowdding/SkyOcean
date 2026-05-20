@@ -357,10 +357,7 @@ class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallb
                 append("/") { color = TextColor.GRAY }
                 append(needed.toFormattedString())
 
-                //? if > 1.21.10 {
                 this.color = ARGB.linearLerp(available.toFloat() / needed.toFloat(), TextColor.RED, TextColor.GREEN)
-                //?} else
-                //this.color = ARGB.lerp(available.toFloat() / needed.toFloat(), TextColor.RED, TextColor.GREEN)
             }
 
             append(" ")

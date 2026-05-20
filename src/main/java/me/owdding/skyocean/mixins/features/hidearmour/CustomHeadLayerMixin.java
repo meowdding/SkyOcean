@@ -7,13 +7,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import me.owdding.skyocean.helpers.HeadLayerAlphaHolder;
-//? > 1.21.10 {
 import net.minecraft.client.model.object.skull.SkullModelBase;
 import net.minecraft.client.renderer.rendertype.RenderType;
-//? } else {
-/*import net.minecraft.client.model.SkullModelBase;
-import net.minecraft.client.renderer.rendertype.RenderType;
-*///? }
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;

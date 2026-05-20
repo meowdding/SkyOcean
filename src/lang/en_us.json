@@ -1213,7 +1213,7 @@
             "desc": "Render a \"solid\" outline instead of the particle outline."
           },
           "outline_transparency": {
-            "@value": "Surface Transparency",
+            "@value": "Outline Transparency",
             "desc": [
               "Changes the transparency of the outline.",
               {

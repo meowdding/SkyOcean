@@ -59,7 +59,7 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
     //? }
 
     //~ if >= 26.1 'renderSlots' -> 'extractSlots'
-    override fun extractSlots(guiGraphics: GuiGraphicsExtractor, /*? if > 1.21.10 {*/ i: Int, j: Int /*?}*/) {}
+    override fun extractSlots(guiGraphics: GuiGraphicsExtractor, i: Int, j: Int) {}
     override fun onRecipeBookButtonClick() {}
 
     // Crazy workaround, why the fuck is the whole inventory tied to the recipe book holy shit

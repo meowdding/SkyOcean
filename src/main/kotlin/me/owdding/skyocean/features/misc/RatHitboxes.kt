@@ -3,15 +3,9 @@ package me.owdding.skyocean.features.misc
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import net.minecraft.client.gui.components.debug.DebugScreenEntries
-//? > 1.21.10 {
 import net.minecraft.gizmos.GizmoStyle
 import net.minecraft.gizmos.Gizmos
-//?}
 import net.minecraft.world.entity.ai.attributes.Attributes
-//? < 1.21.11 {
-/*import net.minecraft.client.renderer.ShapeRenderer
-import net.minecraft.client.renderer.rendertype.RenderTypes
-*///?}
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.phys.AABB
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -58,16 +52,7 @@ object RatHitboxes {
         event.atCamera {
             if (!McLevel.hasLevel) return@atCamera
             rats.forEach {
-                //? > 1.21.10 {
                 Gizmos.cuboid(it.boundingBox, GizmoStyle.stroke(-1))
-                //?} else {
-                /*ShapeRenderer.renderLineBox(
-                    event.poseStack.last(),
-                    event.buffer.getBuffer(RenderTypes.LINES),
-                    it.boundingBox,
-                    1f, 1f, 1f, 1f,
-                )
-                *///?}
             }
         }
     }
