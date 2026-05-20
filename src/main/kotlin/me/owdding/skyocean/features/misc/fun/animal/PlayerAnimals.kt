@@ -61,7 +61,7 @@ object PlayerAnimals {
                 entity,
                 state,
                 Minecraft.getInstance().itemModelResolver,
-                /*? > 1.21.10 >>*/partialTicks,
+                partialTicks,
             )
         }
         if (state is HumanoidRenderState) {

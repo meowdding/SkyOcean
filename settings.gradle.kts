@@ -3,7 +3,7 @@ rootProject.name = "SkyOcean"
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
+        maven("https://maven.teamresourceful.com/repository/maven-public/")
         maven("https://maven.kikugie.dev/snapshots")
         maven("https://maven.fabricmc.net/")
     }
@@ -14,7 +14,7 @@ plugins {
     id("dev.kikugie.stonecutter") version "0.9"
 }
 
-val versions = listOf("26.1", "1.21.11", "1.21.10")
+val versions = listOf("26.1", "1.21.11")
 
 stonecutter {
     create(rootProject) {
