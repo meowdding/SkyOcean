@@ -1,4 +1,3 @@
-//~ named_identifier
 package me.owdding.skyocean.mixins;
 
 import me.owdding.skyocean.utils.rendering.PostEffectApplicator;
