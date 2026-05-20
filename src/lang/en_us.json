@@ -500,9 +500,23 @@
             "@value": "Margin",
             "desc": "How much space to leave between the inventory/screen edges and the craft helper element."
           },
-          "done_message": {
-            "@value": "Send a message when your recipe is complete",
-            "desc": "Sends a chat message whenever the mod detects your recipe tree as completed."
+          "done_notifications": {
+            "@value": "Done Notifications",
+            "desc": "Notification types for when your CraftHelper tree is craftable.",
+            "types": {
+              "@value": "Notification Types",
+              "desc": "The types of notifications you want to receive when your CraftHelper tree is craftable."
+            },
+            "sound_event": {
+              "@value": "Done Sound",
+              "desc": "The sound you will hear when your Item becomes craftable."
+            },
+            "notification_type": {
+              "@value": "Notification Type",
+              "done_message": "Done Message",
+              "done_title": "Done Title",
+              "done_sound": "Done Sound"
+            }
           },
           "tree_formatter": {
             "@value": "Craft helper formatter",

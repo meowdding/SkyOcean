@@ -19,6 +19,7 @@ import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Block
@@ -53,6 +54,7 @@ class GenericDropdown<T>(
                     EntityType.getKey(it).toLanguageKey("entity")
                 }
                 fun blockWrapper(block: Block) = TranslatableWrapper(block) { it.descriptionId }
+                fun soundEventWrapper(soundEvent: SoundEvent) = TranslatableWrapper(soundEvent) { it.location.toShortLanguageKey() }
             }
         }
 
@@ -71,6 +73,24 @@ class GenericDropdown<T>(
                 init = init,
             ),
             from = { TranslatableWrapper.entityWrapper(it) },
+            to = { it.value },
+        )
+
+        fun EntriesBuilder.soundDropdown(
+            default: SoundEvent,
+            options: List<SoundEvent> = BuiltInRegistries.SOUND_EVENT.toList(),
+            id: String? = null,
+            init: TypeBuilder.() -> Unit = {},
+        ): ConfigDelegateProvider<RConfigKtEntry<SoundEvent>> = this.cachedTransform(
+            entry = this.genericDropdown(
+                default = TranslatableWrapper.soundEventWrapper(default),
+                options = options.map { TranslatableWrapper.soundEventWrapper(it) },
+                toString = { it.value.location.toString() },
+                fromString = { TranslatableWrapper.soundEventWrapper(BuiltInRegistries.SOUND_EVENT.getValue(Identifier.parse(it))) },
+                id = id,
+                init = init,
+            ),
+            from = { TranslatableWrapper.soundEventWrapper(it) },
             to = { it.value },
         )
 
