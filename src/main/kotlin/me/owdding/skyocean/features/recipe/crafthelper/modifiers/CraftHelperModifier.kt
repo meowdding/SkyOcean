@@ -4,7 +4,7 @@ import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
 import me.owdding.skyocean.compat.CatharsisSupport.withCatharsisId
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected

@@ -7,6 +7,7 @@ import net.minecraft.world.phys.Vec3
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.level.ParticleEmitEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
@@ -40,12 +41,13 @@ object ImplosionHider {
 
     @TimePassed("2t")
     @Subscription(TickEvent::class)
+    @OnlyOnSkyBlock
     fun tick() {
         if (!MiscConfig.hideImplosions) return
         players.clear()
-        McLevel.players.filter {
+        McLevel.selfOrNull?.players()?.filter {
             it.mainHandItem.getData(DataTypes.ID) in witherBladeIds || it == McPlayer.self
-        }.forEach { players.add(it.position()) }
+        }?.forEach { players.add(it.position()) }
     }
 
 }

@@ -22,8 +22,6 @@ public class KeyboardHandlerMixin {
         ordinal = 0
         //? = 1.21.11
         //ordinal = 3
-        //? < 1.21.11
-        //ordinal = 2
     ), cancellable = true)
     public void meow(long window, int action, KeyEvent event, CallbackInfo ci) {
         if (HotkeyManager.handle(event, action)) {

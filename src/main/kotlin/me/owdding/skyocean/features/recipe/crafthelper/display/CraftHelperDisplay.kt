@@ -11,7 +11,7 @@ import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient

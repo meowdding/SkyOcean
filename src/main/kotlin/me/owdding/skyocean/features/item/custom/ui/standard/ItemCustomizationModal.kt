@@ -584,7 +584,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         )
     }
 
-    override fun resize(/*? if < 1.21.11 {*/ /*mc: Minecraft,  *//*?}*/width: Int, height: Int) {
+    override fun resize(width: Int, height: Int) {
         this.width = width
         this.height = height
         this.repositionElements()

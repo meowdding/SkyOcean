@@ -8,7 +8,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.InventoryBuilder
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.lib.extensions.withTooltip
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import me.owdding.skyocean.helpers.ClientSideInventory

@@ -6,7 +6,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.overlays.Position
 import me.owdding.skyocean.config.CachedValue
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.config.hidden.OverlayPositions
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
