@@ -46,8 +46,8 @@ data class HuntaxeItemContext(override val parent: SimpleTrackedItem) : ParentIt
 
 
 object HuntingToolkitItemSource : ItemSource, ItemContext {
-    override val type = ItemSources.HUNTING_TOOLKIT
-    override val source: ItemSources = ItemSources.HUNTING_TOOLKIT
+    override val type = ItemSources.TOOLKIT
+    override val source: ItemSources = ItemSources.TOOLKIT
 
     override fun getAll(): List<SimpleTrackedItem> = GalateaItemStorage.data?.toolkitItems?.map {
         SimpleTrackedItem(it, this)
