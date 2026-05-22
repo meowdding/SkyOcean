@@ -45,9 +45,6 @@ object FarmingItemStorage {
 data class FarmingItems(
     @FieldName("toolkit_items") var toolkitItemsTemplate: List<ItemStackBlueprint>,
 ) {
-    //? >= 26.1
-    constructor(toolkitItems: List<ItemStack>) : this(toolkitItems.map { it.asBlueprint() })
-
     var toolkitItems by levelBound { toolkitItemsTemplate.map { it.create() } }.withSetter {
         toolkitItemsTemplate = it.map { it.asBlueprint() }
     }
