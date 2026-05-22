@@ -31,7 +31,7 @@ object PestWarning {
 
     private var lastWarning = Instant.DISTANT_PAST
 
-    enum class PestWarningAmountOptions(val amount: Int): Translatable{
+    enum class PestWarningAmountOptions(val amount: Int) : Translatable {
         AUTO(0),
         ONE(1),
         TWO(2),
@@ -41,6 +41,7 @@ object PestWarning {
         SIX(6),
         SEVEN(7),
         EIGHT(8);
+
         override fun getTranslationKey(): String = "skyocean.config.garden.pest_warning_amount.options.${name.lowercase()}"
     }
 
@@ -51,9 +52,9 @@ object PestWarning {
         if (Crop.entries.none { it.isCrop(McLevel[event.pos]) }) return
         val pests = PlotAPI.currentPestAmount
         val minAmount = GardenConfig.pestWarningAmount.amount
-        if (minAmount == 0){
+        if (minAmount == 0) {
             if (!PlotAPI.hasPestDebuff || pests < 8) return // the pests condition is here in case the player has more than 500 bpc which stops pests from ever giving you a debuff
-        }else{
+        } else {
             if (pests < minAmount) return
         }
         if (GardenConfig.pestWarning && lastWarning.since() > GardenConfig.pestWarningDelay) {
