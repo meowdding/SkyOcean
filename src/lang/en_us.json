@@ -256,6 +256,10 @@
             "desc": "Shows the total value of all items in the sack."
           }
         },
+        "minion_helper": {
+          "@value": "Minion Helper",
+          "desc": "Shows the cheapest minion upgrades in the \"Crafted Minions\" inventory."
+        },
         "inventory_buttons": {
           "@value": "Inventory Buttons",
           "desc": "Settings to configure and change inventory buttons.",
