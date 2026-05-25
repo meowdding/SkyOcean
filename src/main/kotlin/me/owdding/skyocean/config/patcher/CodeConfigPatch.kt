@@ -1,5 +1,6 @@
 package me.owdding.skyocean.config.patcher
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.SkyOcean
@@ -16,6 +17,20 @@ data class CodeConfigPatch(val name: String) : Patch {
                     val fishing = it.getAsJsonObject("fishing") ?: JsonObject()
                     fishing.addProperty("hookTextScaleToggle", true)
                     it.add("fishing", fishing)
+                }
+            }
+            put("craft_helper_done_message") {
+                val doneMessage = it.getPath("misc.crafthelper.doneMessage")?.asBoolean ?: false
+                if (doneMessage) {
+                    val craftHelper = it.getAsJsonObject("misc.crafthelper") ?: JsonObject()
+                    val doneNotificationConfig = JsonObject().apply {
+                        val doneTypes = JsonArray().apply {
+                            add("DONE_MESSAGE")
+                        }
+                        add("doneTypes", doneTypes)
+                    }
+                    craftHelper.add("doneNotificationConfig", doneNotificationConfig)
+                    it.add("misc.crafthelper", craftHelper)
                 }
             }
         }

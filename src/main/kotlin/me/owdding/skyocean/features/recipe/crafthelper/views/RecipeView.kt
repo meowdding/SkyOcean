@@ -8,7 +8,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.floor
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.features.item.sources.ForgeItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.*
@@ -357,10 +357,7 @@ class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallb
                 append("/") { color = TextColor.GRAY }
                 append(needed.toFormattedString())
 
-                //? if > 1.21.10 {
                 this.color = ARGB.linearLerp(available.toFloat() / needed.toFloat(), TextColor.RED, TextColor.GREEN)
-                //?} else
-                //this.color = ARGB.lerp(available.toFloat() / needed.toFloat(), TextColor.RED, TextColor.GREEN)
             }
 
             append(" ")

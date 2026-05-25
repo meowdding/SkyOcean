@@ -1,7 +1,5 @@
 package me.owdding.skyocean.utils.rendering
 
-//? if < 1.21.11
-//import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.gui.Font
@@ -110,19 +108,12 @@ internal fun renderShape(
     color: Int,
     lineWidth: Float = 1f,
 ) {
-    //? if < 1.21.11 {
-    /*val prevLineWidth = RenderSystem.getShaderLineWidth()
-    RenderSystem.lineWidth(lineWidth)
-    *///?}
     ShapeRenderer.renderShape(
         poseStack,
         vertexConsumer,
         shape,
-        offsetX, offsetY, offsetZ, color, /*? > 1.21.10 >>*/lineWidth,
+        offsetX, offsetY, offsetZ, color, lineWidth,
     )
-    //? if < 1.21.11 {
-    /*RenderSystem.lineWidth(prevLineWidth)
-    *///?}
 }
 
 

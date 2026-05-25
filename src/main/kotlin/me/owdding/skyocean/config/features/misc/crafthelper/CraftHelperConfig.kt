@@ -1,4 +1,4 @@
-package me.owdding.skyocean.config.features.misc
+package me.owdding.skyocean.config.features.misc.crafthelper
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.separator
@@ -45,8 +45,8 @@ object CraftHelperConfig : CategoryKt("crafthelper") {
         translation = "skyocean.config.misc.crafthelper.margin"
     }
 
-    var doneMessage by boolean(false) {
-        translation = "skyocean.config.misc.crafthelper.done_message"
+    val doneNotificationConfig by obj(CraftHelperNotificationsConfig) {
+        translation = "skyocean.config.misc.crafthelper.done_notifications"
     }
 
     var formatter by enum(CraftHelperFormat.TREE) {
