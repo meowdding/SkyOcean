@@ -62,6 +62,7 @@ object InvButtons {
         }
     }
 
+    @Subscription
     fun onScreenBackgroundAfter(screen: AbstractContainerScreen<*>, graphics: GuiGraphicsExtractor) {
         if (!shouldShowButtons(screen)) return
         //~ if >= 26.1 'getButtons' -> 'getWidgets'
@@ -75,12 +76,14 @@ object InvButtons {
     @Subscription
     fun onScreenBackground(event: RenderScreenBackgroundEvent) {
         if (!shouldShowButtons(event.screen)) return
+        val screen = event.screen as? AbstractContainerScreen<*> ?: return
         //~ if >= 26.1 'getButtons' -> 'getWidgets'
         Screens.getWidgets(event.screen).forEach {
             if (it is InvButton && !it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
             }
         }
+        onScreenBackgroundAfter(screen, event.graphics)
     }
 
     @Subscription
