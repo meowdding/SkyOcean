@@ -24,4 +24,5 @@ public class AbstractContainerScreenMixin {
     *///? }
     public void onBackgroundDrawEnd(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         InvButtons.INSTANCE.onScreenBackgroundAfter((AbstractContainerScreen<?>) (Object) this, graphics);
-    }}
+    }
+}
