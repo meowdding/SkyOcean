@@ -75,7 +75,6 @@ object InvButtons {
     @Subscription
     fun onScreenBackground(event: RenderScreenBackgroundEvent) {
         if (!shouldShowButtons(event.screen)) return
-        val screen = event.screen as? AbstractContainerScreen<*> ?: return
         //~ if >= 26.1 'getButtons' -> 'getWidgets'
         Screens.getWidgets(event.screen).forEach {
             if (it is InvButton && !it.highlight) {
