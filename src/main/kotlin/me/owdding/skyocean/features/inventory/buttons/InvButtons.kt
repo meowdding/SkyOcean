@@ -82,7 +82,6 @@ object InvButtons {
                 it.renderButtons(event.graphics, 0, 0, 0F)
             }
         }
-        onScreenBackgroundAfter(screen, event.graphics)
     }
 
     @Subscription

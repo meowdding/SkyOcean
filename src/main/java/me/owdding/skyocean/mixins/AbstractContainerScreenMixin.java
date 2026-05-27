@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class AbstractContainerScreenMixin {
     //? >= 26.1 {
     @Inject(
-        method = "extractRenderState",
-        at = @At(value = "HEAD", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderBg(Lnet/minecraft/client/gui/GuiGraphicsExtractor;FII)V")
+        method = "extractContents",
+        at = @At("TAIL")
     )
     //? } else {
     /*@Inject(
@@ -24,5 +24,4 @@ public class AbstractContainerScreenMixin {
     *///? }
     public void onBackgroundDrawEnd(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         InvButtons.INSTANCE.onScreenBackgroundAfter((AbstractContainerScreen<?>) (Object) this, graphics);
-    }
-}
+    }}
