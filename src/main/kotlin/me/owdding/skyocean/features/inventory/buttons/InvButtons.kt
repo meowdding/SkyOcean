@@ -62,7 +62,6 @@ object InvButtons {
         }
     }
 
-    @Subscription
     fun onScreenBackgroundAfter(screen: AbstractContainerScreen<*>, graphics: GuiGraphicsExtractor) {
         if (!shouldShowButtons(screen)) return
         //~ if >= 26.1 'getButtons' -> 'getWidgets'
