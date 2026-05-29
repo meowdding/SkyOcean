@@ -13,7 +13,13 @@ import earth.terrarium.olympus.client.ui.modals.Modals
 import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.Orientation
 import earth.terrarium.olympus.client.utils.State
-import me.owdding.lib.displays.*
+import me.owdding.lib.displays.Display
+import me.owdding.lib.displays.DisplayWidget
+import me.owdding.lib.displays.Displays
+import me.owdding.lib.displays.asWidget
+import me.owdding.lib.displays.withPadding
+import me.owdding.lib.displays.withTooltip
+import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.data.RecentColorStorage
@@ -22,7 +28,12 @@ import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrTryCreateCustomData
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper
-import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.features.item.custom.data.AnimatedSkyBlockDye
+import me.owdding.skyocean.features.item.custom.data.ArmorTrim
+import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.ItemColor
+import me.owdding.skyocean.features.item.custom.data.SkyBlockDye
+import me.owdding.skyocean.features.item.custom.data.StaticItemColor
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.anyUpdated
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttonClick
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttons
@@ -45,13 +56,14 @@ import me.owdding.skyocean.utils.animation.EasingFunctions
 import me.owdding.skyocean.utils.asColumn
 import me.owdding.skyocean.utils.asLayoutWidget
 import me.owdding.skyocean.utils.asWidgetTable
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
 import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.chat.OceanGradients
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.asScrollableWidget
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
+import me.owdding.skyocean.utils.extensions.joinToComponent
 import me.owdding.skyocean.utils.extensions.setFrameContent
 import me.owdding.skyocean.utils.extensions.withPadding
 import me.owdding.skyocean.utils.items.ItemCache
@@ -60,7 +72,6 @@ import me.owdding.skyocean.utils.rendering.ExtraUiConstants
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import me.owdding.skyocean.utils.rendering.StyledItemWidget
 import net.minecraft.ChatFormatting
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
@@ -90,7 +101,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
-import kotlin.jvm.optionals.getOrNull
 import kotlin.math.max
 import kotlin.time.Duration.Companion.seconds
 
@@ -228,6 +238,23 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                                 append("#color1") { this.color = TextColor.BLUE }
                                 append(">")
                             }
+                            space()
+                            add("You can also customize the direction and speed of the gradient.")
+                            add("<") {
+                                color = CatppuccinColors.Mocha.overlay0
+                                append("trans ", CatppuccinColors.Mocha.green)
+                                append("dir", CatppuccinColors.Mocha.yellow)
+                                append(":<[")
+                                append(GradientTextShader.Direction.entries.joinToComponent(Text.of("|", CatppuccinColors.Mocha.overlay0)) {
+                                    Text.of(it.toString().lowercase(), CatppuccinColors.Mocha.text)
+                                })
+                                append("]>")
+                                append(" speed", CatppuccinColors.Mocha.yellow)
+                                append(":")
+                                append("<number>", CatppuccinColors.Mocha.lavender)
+                                append(" ...>")
+                            }
+                            add("This also works for the generic gradient.")
                             space()
                             add("Note! To get a gradient that loops perfectly you\n must include the start color at the end again!") {
                                 this.color = TextColor.YELLOW
