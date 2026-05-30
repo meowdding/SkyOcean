@@ -120,7 +120,7 @@ object HotspotAPI {
         match.first.radius = sqrt(match.second).roundToHalf()
 
         // particles cancelled
-        if (HotspotFeatures.isEnabled()) event.cancel()
+        if (HotspotFeatures.shouldHideParticles()) event.cancel()
     }
 
     private fun ClientboundLevelParticlesPacket.isHotSpotParticle(): Boolean {
