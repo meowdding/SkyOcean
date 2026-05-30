@@ -1299,7 +1299,7 @@
           "highlight": "Highlight",
           "circle_surface": {
             "@value": "Surface",
-            "desc": "Render a \"solid\" circle instead of the particle outline."
+            "desc": "Render a \"solid\" circle for hotspots."
           },
           "surface_transparency": {
             "@value": "Surface Transparency",
@@ -1312,7 +1312,7 @@
           },
           "circle_outline": {
             "@value": "Outline",
-            "desc": "Render a \"solid\" outline instead of the particle outline."
+            "desc": "Render a \"solid\" outline for hotspots."
           },
           "outline_transparency": {
             "@value": "Outline Transparency",
@@ -1322,6 +1322,10 @@
                 "@id": "transparency"
               }
             ]
+          },
+          "hide_particles": {
+            "@value": "Hide Particles",
+            "desc": "Hide hotspot particles (requires Highlight or Outline to be enabled)."
           }
         }
       },
