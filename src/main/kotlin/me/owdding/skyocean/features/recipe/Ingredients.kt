@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.ktcodecs.IncludedCodec
+import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.extensions.sanitizeNeu
 import net.minecraft.network.chat.Component
@@ -21,7 +22,7 @@ import tech.thatgravyboat.repolib.api.recipes.ingredient.ItemIngredient as RepoI
 import tech.thatgravyboat.repolib.api.recipes.ingredient.PetIngredient as RepoPetIngredient
 
 @GenerateDispatchCodec(Ingredient::class)
-enum class IngredientType(override val type: KClass<out Ingredient>) : me.owdding.skyocean.generated.DispatchHelper<Ingredient> {
+enum class IngredientType(override val type: KClass<out Ingredient>) : DispatchHelper<Ingredient> {
     ITEM(SkyOceanItemIngredient::class),
     CURRENCY(CurrencyIngredient::class),
     ;

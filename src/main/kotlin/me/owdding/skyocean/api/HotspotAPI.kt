@@ -121,7 +121,7 @@ object HotspotAPI {
         match.first.radius = sqrt(match.second).roundToHalf()
 
         // particles cancelled
-        if (HotspotFeatures.isEnabled()) event.cancel()
+        if (HotspotFeatures.shouldHideParticles()) event.cancel()
     }
 
     private fun ClientboundLevelParticlesPacket.isHotSpotParticle(): Boolean {
@@ -132,10 +132,10 @@ object HotspotAPI {
         val options = this.particle as? DustParticleOptions ?: return false
         if (options.color != PARTICLE_COLOR) return false
 
-        // strict bs :-D
-        if (this.count != 1) return false
-        if (this.xDist != 0f || this.yDist != 0f || this.zDist != 0f) return false
-        if (this.maxSpeed != 0f) return false
+        // (a bit less) strict bs :-D
+        if (this.count != 0) return false
+        if (this.xDist != 1f) return false
+        if (this.maxSpeed != 1f)  return false
 
         return true
     }

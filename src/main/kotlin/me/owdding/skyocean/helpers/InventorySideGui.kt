@@ -4,6 +4,7 @@ import earth.terrarium.olympus.client.components.compound.LayoutWidget
 import me.owdding.lib.compat.REIRenderOverlayEvent
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.helpers.InventorySideGui.Alignment
 import me.owdding.skyocean.mixins.ScreenAccessor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
@@ -20,7 +21,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
-abstract class InventorySideGui(@Language("RegExp") titleRegex: String, val alignment: () -> Alignment) {
+abstract class InventorySideGui(@Language("RegExp") titleRegex: String, val alignment: () -> Alignment = { Alignment.RIGHT_OF_INVENTORY }) {
 
     private val regex = titleRegex.toRegex()
     var oldList: LayoutWidget<*>? = null
