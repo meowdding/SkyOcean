@@ -1576,7 +1576,8 @@
       "item_search": "Open Item Search",
       "item_value": "Open Item Value",
       "crafthelper": "Set as active Craft Helper Item",
-      "item_highlight": "Highlight matching Items"
+      "item_highlight": "Highlight matching Items",
+      "customize": "Customize Item"
     },
     "gradients": {
       "default": "Default",
