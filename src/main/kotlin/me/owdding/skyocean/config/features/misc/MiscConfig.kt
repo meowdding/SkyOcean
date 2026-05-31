@@ -98,6 +98,11 @@ object MiscConfig : CategoryKt("misc") {
         predicate = { SkyBlockIsland.CRIMSON_ISLE.inIsland() },
     )
 
+    var netherFogScale by float(0.25f) {
+        translation = "skyocean.config.misc.netherFogScale"
+        slider = true
+        range = 0f..1f
+    }
 
     init {
         separator("skyocean.config.misc.itemSearch")
