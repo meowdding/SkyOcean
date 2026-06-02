@@ -338,11 +338,109 @@
         },
         "pest_warning": {
           "@value": "Pest Warning",
-          "desc": "Warns you when you reach 4 or more pests while farming."
+          "desc": "Warns you when you reach the configured amount or more pests while farming."
+        },
+        "pest_warning_amount": {
+          "@value": "Pest Warning Minimum Amount",
+          "desc": [
+            "The minimum amount of pests to trigger the warning.",
+            "❬Automatic❭ only triggers the warning while you have a <gold>☘</gold> reduction."
+          ],
+          "options": {
+            "auto": "Automatic",
+            "one": "1",
+            "two": "2",
+            "three": "3",
+            "four": "4",
+            "five": "5",
+            "six": "6",
+            "seven": "7",
+            "eight": "8"
+          }
         },
         "pest_warning_delay": {
           "@value": "Pest Warning Delay",
           "desc": "The delay between reminders in seconds."
+        },
+        "crop_fever_effect": {
+          "@value": "Crop Fever Effects",
+          "desc": "When you trigger a Crop Fever this adds many visual effects.",
+          "config_title": {
+            "@value": "Crop Fever Config"
+          },
+          "enabled": {
+            "@value": "Enabled",
+            "desc": "Enables the entire feature."
+          },
+          "sound_section": {
+            "@value": "Sound Changes",
+            "desc": "",
+            "startingSound": {
+              "@value": "Jackpot Sound",
+              "desc": "Plays a Jackpot sound when starting a Crop Fever."
+            },
+            "rngSound": {
+              "@value": "RNG Sound",
+              "desc": "Plays the sound effect from dropping something that is really rare (e.g., Ray of Helios or Strawberry Dye)."
+            },
+            "backgroundMusic": {
+              "@value": "Background Music",
+              "desc": [
+                "Plays a looping soundtrack while a Crop Fever is active.",
+                "<red>Disable if you have Hypixel's own music enabled.</red>"
+              ]
+            }
+          },
+          "visual_section": {
+            "@value": "Visual Changes",
+            "desc": "",
+            "hueShiftingShader": {
+              "@value": "Color Cycling Effect",
+              "desc": "Applies a color cycling post-processing effect to the screen during a Crop Fever.",
+              "shiftingSpeed": {
+                "@value": "Cycling Speed",
+                "desc": [
+                  "Controls how fast the colors cylce.",
+                  "<red>If you are sensitive to flashing colors don't go above <color #B22222>❬<color #727378>Normal</color>❭.</red>"
+                ],
+                "options": {
+                  "slower": "<color #5F9EA0>Slower (0.25x)</color>",
+                  "slow": "<color #708587>Slow (0.5x)</color>",
+                  "normal": "<color #727378>Normal (1.0x)</color>",
+                  "fast": "<color #915454>Fast (1.5x)</color>",
+                  "faster": "<color #A13B3B>Faster (2.5x)</color>",
+                  "insane": "<color #B22222>Insane (10.0x)</color>"
+                }
+              }
+            },
+            "coinRain": {
+              "@value": "Coin Rain",
+              "desc": "Shows an animation of SkyBlock coins raining from the top of the screen when starting a Crop Fever.",
+              "duration": {
+                "@value": "Coin Rain Duration",
+                "desc": "The duration for the coin rain animation."
+              },
+              "spawnMultiplier": {
+                "@value": "Coin Rain Spawn Multiplier",
+                "desc": "Controls how many coins spawn per tick.",
+                "options": {
+                  "auto": "Automatic",
+                  "one": "1x",
+                  "two": "2x",
+                  "three": "3x",
+                  "four": "4x",
+                  "five": "5x",
+                  "ten": "10x",
+                  "fifteen": "15x",
+                  "twenty": "20x"
+                }
+              }
+            }
+          },
+          "credits": {
+            "@value": "Credits",
+            "desc": "Background Music is sourced from <hover 'Click to visit their site'><url 'https://noteblock.world'><color #6294FD>noteblock.world:</color></url></hover> <hover 'Click to visit the Page for the Song'><url 'https://noteblock.world/song/bGGNXKGUKP'><color #4AE84A>Invincibility Theme - Super Mario Bros. by Sandriix701</color></url></hover>"
+          }
         }
       },
       "misc": {
