@@ -7,7 +7,7 @@ kotlin = "2.3.0"
 kotlin-gradle-plugin = "2.3.0"
 kotlin-symbol-processor = "2.3.5"
 gson = "2.12.1"
-skyblockapi = "4.1.10"
+skyblockapi = "4.1.11"
 skyblockapi-repo = "3.0.2"
 keval = "1.1.1"
 

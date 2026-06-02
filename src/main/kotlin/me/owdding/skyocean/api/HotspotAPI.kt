@@ -102,12 +102,11 @@ object HotspotAPI {
 
         val maxHotspotSize = when (LocationAPI.island) {
             SkyBlockIsland.CRIMSON_ISLE -> 25.0
-            SkyBlockIsland.JERRYS_WORKSHOP -> 16.0
+            SkyBlockIsland.JERRYS_WORKSHOP, SkyBlockIsland.LOTUS_ATOLL -> 16.0
             else -> 9.0
         }
 
-        val maxDistance = maxHotspotSize + 0.5
-        val maxDistanceSquared = maxDistance.pow(2)
+        val maxDistanceSquared = maxHotspotSize + 0.5
 
         val match = _hotspots.values.asSequence().mapNotNull { entry ->
             val pos = entry.pos ?: return@mapNotNull null
@@ -156,7 +155,7 @@ enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
     FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+☂ Fishing Speed"),
     DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+⚓ Double Hook Chance"),
     TREASURE(MinecraftColors.GOLD, "\\+\\d+⛃ Treasure Chance"),
-    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Fish Chance"),
+    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Chance"),
     UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
     ;
 
