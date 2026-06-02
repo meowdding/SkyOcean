@@ -10,7 +10,6 @@ import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import me.owdding.skyocean.utils.levelBound
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import me.owdding.skyocean.utils.withSetter
-import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
@@ -18,10 +17,10 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 
 @Module
 object FarmingItemStorage {
-    private val storage: ProfileStorage<GalateaItems> = ProfileStorage(
-        defaultData = { GalateaItems.DEFAULT },
+    private val storage: ProfileStorage<FarmingItems> = ProfileStorage(
+        defaultData = { FarmingItems.DEFAULT },
         fileName = "farming_items",
-        codec = { SkyOceanCodecs.GalateaItemsCodec.codec() },
+        codec = { SkyOceanCodecs.FarmingItemsCodec.codec() },
     )
 
     val data get() = storage.get()
@@ -43,13 +42,13 @@ object FarmingItemStorage {
 
 @GenerateCodec
 data class FarmingItems(
-    @FieldName("toolkit_items") var toolkitItemsTemplate: List<ItemStackBlueprint>,
+    @FieldName("toolkit_items") var toolkitItemsTemplate: List<ItemStackBlueprint> = listOf(),
 ) {
     var toolkitItems by levelBound { toolkitItemsTemplate.map { it.create() } }.withSetter {
         toolkitItemsTemplate = it.map { it.asBlueprint() }
     }
 
     companion object {
-        val DEFAULT = GalateaItems(null, emptyList())
+        val DEFAULT = FarmingItems(listOf())
     }
 }
