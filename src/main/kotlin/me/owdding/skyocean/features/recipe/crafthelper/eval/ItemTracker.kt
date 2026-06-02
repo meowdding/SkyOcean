@@ -41,7 +41,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
                 addAll(sources.mapNotNull { it.itemSource?.postProcess(items) }.flatten())
             }
         }.mapNotNull { item ->
-            val source = item.context.source
+            val source = item.context.source ?: return@mapNotNull null
             item.itemStack.getSkyBlockId()?.asDerived(false)?.let {
                 TrackedItem(it.id.sanitizeNeu(), item.itemStack, item.itemStack.count, item.context, source)
             }
