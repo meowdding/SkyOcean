@@ -6,33 +6,6 @@ plugins {
 
 stonecutter active "26.1"
 
-//region 1.21.11 animal package changes
-private val animalReplacementPrefix = "import net.minecraft.world.entity."
-private val animalsReplacements = mapOf(
-    "monster.skeleton.Bogged" to "monster.Bogged",
-    "monster.zombie.Zombie" to "monster.Zombie",
-    "animal.feline.Cat" to "animal.Cat",
-    "animal.chicken.Chicken" to "animal.Chicken",
-    "animal.cow.Cow" to "animal.Cow",
-    "animal.fox.Fox" to "animal.Fox",
-    "animal.happyghast.HappyGhast" to "animal.HappyGhast",
-    "animal.golem.IronGolem" to "animal.IronGolem",
-    "animal.equine." to "animal.horse.",
-    "animal.cow.MushroomCow" to "animal.MushroomCow",
-    "animal.panda.Panda" to "animal.Panda",
-    "animal.parrot.Parrot" to "animal.Parrot",
-    "animal.pig.Pig" to "animal.Pig",
-    "animal.rabbit.Rabbit" to "animal.Rabbit",
-    "animal.fish.Salmon" to "animal.Salmon",
-    "animal.golem.SnowGolem" to "animal.SnowGolem",
-    "animal.fish.TropicalFish" to "animal.TropicalFish",
-    "npc.villager.Villager" to "npc.Villager",
-    "monster.zombie.ZombieVillager" to "monster.ZombieVillager",
-    "animal.golem.CopperGolem" to "animal.coppergolem.CopperGolem",
-)
-//endregion
-
-
 stonecutter parameters {
     // Used for temporarily removing classes from the latest version.
     constants["TODO"] = current.version != "1.21.11"
@@ -75,13 +48,6 @@ stonecutter parameters {
                     replacement.reverseRegex to replacement.reverse
                 )
             }
-        }
-    }
-
-    animalsReplacements.forEach { (new, old) ->
-        replacements.string {
-            direction = eval(current.version, "< 1.21.11")
-            replace(animalReplacementPrefix + new, animalReplacementPrefix + old)
         }
     }
 

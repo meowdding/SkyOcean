@@ -195,12 +195,8 @@ private fun renderEntityInInventory(
     overrideCameraAngle: Quaternionf?,
     entity: LivingEntity,
 ) {
-    //? if < 1.21.11 {
-    /*InventoryScreen.renderEntityInInventory(graphics, x0, y0, width, height, scale, translation, rotation, overrideCameraAngle, entity)
-   *///?} else {
     val renderState = InventoryScreen.extractRenderState(entity)
     //~ if >= 26.1 'submitEntityRenderState(' -> 'entity('
     graphics.entity(renderState, scale, translation, rotation, overrideCameraAngle, x0, y0, width, height)
-    //?}
 
 }

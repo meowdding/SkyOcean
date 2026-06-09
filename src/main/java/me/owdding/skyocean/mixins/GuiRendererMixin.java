@@ -1,4 +1,3 @@
-//~named_identifier
 package me.owdding.skyocean.mixins;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

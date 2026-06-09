@@ -30,9 +30,10 @@ enum class ItemSources(val itemSource: ItemSource?, vararg val disabledIn: ItemS
     DRILL_UPGRADE(DrillUpgradeItemSource),
     ROD_UPGRADE(RodUpgradesItemSource),
     HUNT_AXE(HuntaxeItemSource),
-    TOOLKIT(ToolkitItemSource),
+    TOOLKIT(HuntingToolkitItemSource),
     SACK_OF_SACKS(SackOfSacksItemSource),
     HUNTING_BOX(HuntingBoxItemSource, ItemSourceTag.ITEM_SEARCH),
+    FARMING_TOOLKIT(FarmingToolkitSource),
     ;
     // todo POTION_BAG(TODO()),
 

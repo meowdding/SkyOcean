@@ -94,7 +94,6 @@ object HotspotAPI {
         }
     }
 
-
     @Subscription
     @OnlyOnSkyBlock
     fun onParticle(event: PacketReceivedEvent) {
@@ -103,29 +102,41 @@ object HotspotAPI {
 
         val maxHotspotSize = when (LocationAPI.island) {
             SkyBlockIsland.CRIMSON_ISLE -> 25.0
-            SkyBlockIsland.JERRYS_WORKSHOP -> 16.0
+            SkyBlockIsland.JERRYS_WORKSHOP, SkyBlockIsland.LOTUS_ATOLL -> 16.0
             else -> 9.0
         }
 
-        for (entry in _hotspots.values) {
-            if (entry.pos == null) continue
+        val maxDistanceSquared = maxHotspotSize + 0.5
 
-            val distance = ((packet.x - entry.pos!!.x).pow(2) + (packet.z - entry.pos!!.z).pow(2))
-            if (distance <= maxHotspotSize + 0.5) {
-                entry.radius = sqrt(distance).roundToHalf()
-                // Hotspot particles are cancelled here to avoid having to check them again inside the HotspotFeatures object.
-                if (HotspotFeatures.isEnabled()) event.cancel()
-                return
-            }
-        }
+        val match = _hotspots.values.asSequence().mapNotNull { entry ->
+            val pos = entry.pos ?: return@mapNotNull null
+
+            val distanceSquared = (packet.x - pos.x).pow(2) + (packet.z - pos.z).pow(2)
+            if (distanceSquared > maxDistanceSquared) return@mapNotNull null
+
+            entry to distanceSquared
+        }.minByOrNull { it.second } ?: return
+
+        match.first.radius = sqrt(match.second).roundToHalf()
+
+        // particles cancelled
+        if (HotspotFeatures.shouldHideParticles()) event.cancel()
     }
 
     private fun ClientboundLevelParticlesPacket.isHotSpotParticle(): Boolean {
         if (LocationAPI.island == SkyBlockIsland.CRIMSON_ISLE) {
             return this.particle.type == ParticleTypes.SMOKE && (this.count == 5 || this.count == 2)
         }
+
         val options = this.particle as? DustParticleOptions ?: return false
-        return options.color == PARTICLE_COLOR
+        if (options.color != PARTICLE_COLOR) return false
+
+        // (a bit less) strict bs :-D
+        if (this.count != 0) return false
+        if (this.xDist != 1f) return false
+        if (this.maxSpeed != 1f)  return false
+
+        return true
     }
 
     private fun Vec3.toVec2d(): Vector2d = Vector2d(this.x, this.z)
@@ -144,7 +155,7 @@ enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
     FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+☂ Fishing Speed"),
     DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+⚓ Double Hook Chance"),
     TREASURE(MinecraftColors.GOLD, "\\+\\d+⛃ Treasure Chance"),
-    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Fish Chance"),
+    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Chance"),
     UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
     ;
 

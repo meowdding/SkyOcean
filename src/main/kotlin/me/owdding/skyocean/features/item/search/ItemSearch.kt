@@ -7,9 +7,13 @@ import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -20,6 +24,21 @@ object ItemSearch {
     val key = SkyOceanKeybind("item_search", InputConstants.KEY_O) keybind@{
         if (!LocationAPI.isOnSkyBlock) return@keybind
         McClient.setScreen(ItemSearchScreen)
+    }
+
+    @Subscription
+    fun onKey(event: ScreenKeyReleasedEvent) {
+        if (!key.matches(event)) return
+        val screen = event.screen as? AbstractContainerScreen<*> ?: return
+        val item = screen.getHoveredSlot()?.item ?: return
+
+        if (item.isEmpty) {
+            Text.of("You aren't hovering an item!").sendWithPrefix()
+            return
+        }
+
+        screen.onClose()
+        open(item.cleanName)
     }
 
     @Subscription
@@ -34,7 +53,7 @@ object ItemSearch {
 
     private fun open(query: String? = null) {
         if (!LocationAPI.isOnSkyBlock) {
-            Text.of("You must be on Skyblock!") { this.color = TextColor.RED }.sendWithPrefix()
+            Text.of("You must be on Skyblock to open Item Search!") { this.color = TextColor.RED }.sendWithPrefix()
             return
         }
         ItemSearchScreen.search = query
