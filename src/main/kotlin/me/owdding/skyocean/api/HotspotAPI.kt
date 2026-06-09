@@ -102,12 +102,11 @@ object HotspotAPI {
 
         val maxHotspotSize = when (LocationAPI.island) {
             SkyBlockIsland.CRIMSON_ISLE -> 25.0
-            SkyBlockIsland.JERRYS_WORKSHOP -> 16.0
+            SkyBlockIsland.JERRYS_WORKSHOP, SkyBlockIsland.LOTUS_ATOLL -> 16.0
             else -> 9.0
         }
 
-        val maxDistance = maxHotspotSize + 0.5
-        val maxDistanceSquared = maxDistance.pow(2)
+        val maxDistanceSquared = maxHotspotSize + 0.5
 
         val match = _hotspots.values.asSequence().mapNotNull { entry ->
             val pos = entry.pos ?: return@mapNotNull null
@@ -121,7 +120,7 @@ object HotspotAPI {
         match.first.radius = sqrt(match.second).roundToHalf()
 
         // particles cancelled
-        if (HotspotFeatures.isEnabled()) event.cancel()
+        if (HotspotFeatures.shouldHideParticles()) event.cancel()
     }
 
     private fun ClientboundLevelParticlesPacket.isHotSpotParticle(): Boolean {
@@ -132,10 +131,10 @@ object HotspotAPI {
         val options = this.particle as? DustParticleOptions ?: return false
         if (options.color != PARTICLE_COLOR) return false
 
-        // strict bs :-D
-        if (this.count != 1) return false
-        if (this.xDist != 0f || this.yDist != 0f || this.zDist != 0f) return false
-        if (this.maxSpeed != 0f) return false
+        // (a bit less) strict bs :-D
+        if (this.count != 0) return false
+        if (this.xDist != 1f) return false
+        if (this.maxSpeed != 1f)  return false
 
         return true
     }
@@ -156,7 +155,7 @@ enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
     FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+☂ Fishing Speed"),
     DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+⚓ Double Hook Chance"),
     TREASURE(MinecraftColors.GOLD, "\\+\\d+⛃ Treasure Chance"),
-    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Fish Chance"),
+    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Chance"),
     UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
     ;
 

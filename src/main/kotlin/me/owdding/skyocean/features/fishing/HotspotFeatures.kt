@@ -27,6 +27,8 @@ object HotspotFeatures {
 
     fun isEnabled() = HotspotFeaturesConfig.circleOutline || HotspotFeaturesConfig.circleSurface
 
+    fun shouldHideParticles() = isEnabled() && HotspotFeaturesConfig.hideParticles
+
     @Subscription
     @OnlyOnSkyBlock
     fun onRenderWorldEvent(event: RenderWorldEvent.AfterEntities) {

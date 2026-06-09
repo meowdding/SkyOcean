@@ -12,6 +12,10 @@ object InventoryConfig : CategoryKt("inventory") {
         obj("sackValue", SackValueConfig) { this.translation = "skyocean.config.inventory.sack_value" }
     }
 
+    var minionHelper by boolean(true) {
+        translation = "skyocean.config.inventory.minion_helper"
+    }
+
     init {
         separator { title = "skyocean.config.inventory.inventory_buttons" }
     }

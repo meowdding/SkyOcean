@@ -23,6 +23,10 @@ object HotspotFeaturesConfig : ObjectKt() {
         this.translation = "skyocean.config.fishing.hotspot.circle_outline"
     }
 
+    var hideParticles by boolean(true) {
+        this.translation = "skyocean.config.fishing.hotspot.hide_particles"
+    }
+
     var surfaceTransparency by transparency(50) {
         this.translation = "skyocean.config.fishing.hotspot.surface_transparency"
     }
