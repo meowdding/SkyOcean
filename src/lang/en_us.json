@@ -569,6 +569,10 @@
           "@value": "Rat hitboxes",
           "desc": "Renders extra hitboxes for rats in the hub."
         },
+        "stereoPantsMute": {
+          "@value": "Mutes Stereo Pants Music",
+          "desc": "Mutes the sometimes really annoying music that plays from Players wearing Stereo Pants."
+        },
         "crafthelper": {
           "@value": "Craft Helper",
           "desc": [

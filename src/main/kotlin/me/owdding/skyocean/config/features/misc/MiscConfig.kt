@@ -104,6 +104,14 @@ object MiscConfig : CategoryKt("misc") {
         range = 0f..1f
     }
 
+    var ratHitbox by boolean(false) {
+        translation = "skyocean.config.misc.ratHitbox"
+    }
+
+    var stereoPantsMute by boolean(false) {
+        translation = "skyocean.config.misc.stereoPantsMute"
+    }
+
     init {
         separator("skyocean.config.misc.itemSearch")
     }
@@ -149,10 +157,6 @@ object MiscConfig : CategoryKt("misc") {
 
     var transparentArmorOthers by transparency(100) {
         translation = "skyocean.config.misc.transparentArmor.others"
-    }
-
-    var ratHitbox by boolean(false) {
-        translation = "skyocean.config.misc.ratHitbox"
     }
 }
 
