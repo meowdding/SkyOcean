@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Player
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityAttributesUpdateEvent
+import tech.thatgravyboat.skyblockapi.api.events.entity.EntityEquipmentUpdateEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityRemovedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.minecraft.sounds.SoundPlayedEvent
@@ -34,7 +35,7 @@ object MuteTheFuckingStereoPants {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onEntity(event: EntityAttributesUpdateEvent) {
+    fun onEntity(event: EntityEquipmentUpdateEvent) {
         val player = event.entity as? Player ?: return
         if (players.containsKey(player)) return
         if (player.getLeggings().getSkyBlockId()?.equals("MUSIC_PANTS", true) == true) {
