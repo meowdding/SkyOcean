@@ -153,10 +153,10 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
 
                                 val value = CraftHelperStorage.selectedAmount / (tree.amountPerCraft)
-                                val newValue = if (McScreen.isShiftDown) {
-                                    value - 10
-                                } else {
-                                    value - 1
+                                val newValue = when {
+                                    McScreen.isControlDown -> value - 64
+                                    McScreen.isShiftDown -> value - 10
+                                    else -> value - 1
                                 }
                                 CraftHelperStorage.setAmount(max(1, newValue) * tree.amountPerCraft)
                                 callback(true)
@@ -164,6 +164,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                                 Text.multiline(
                                     "§eClick§r to decrease by §c1",
                                     "§eShift + Click§r to decrease by §c10",
+                                    "§eCtrl + Click§r to decrease by §c64",
                                 ).apply { this.color = TextColor.GRAY },
                             ).withoutTooltipDelay(),
                         )
@@ -179,10 +180,10 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                             ).asButtonLeft {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
                                 val value = CraftHelperStorage.selectedAmount / tree.amountPerCraft
-                                val newValue = if (McScreen.isShiftDown) {
-                                    value + 10
-                                } else {
-                                    value + 1
+                                val newValue = when {
+                                    McScreen.isControlDown -> value + 64
+                                    McScreen.isShiftDown -> value + 10
+                                    else -> value + 1
                                 }
                                 CraftHelperStorage.setAmount(newValue * tree.amountPerCraft)
                                 callback(true)
@@ -190,6 +191,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                                 Text.multiline(
                                     "§eClick§r to increase by §a1",
                                     "§eShift + Click§r to increase by §a10",
+                                    "§eCtrl + Click§r to increase by §a64",
                                 ).apply { this.color = TextColor.GRAY },
                             ).withoutTooltipDelay(),
                         )
