@@ -1,10 +1,9 @@
 package me.owdding.skyocean.helpers
 
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
-import me.owdding.lib.compat.REIRenderOverlayEvent
+import me.owdding.lib.events.ItemListEvent
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.helpers.InventorySideGui.Alignment
 import me.owdding.skyocean.mixins.ScreenAccessor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
@@ -13,7 +12,6 @@ import org.intellij.lang.annotations.Language
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenMouseClickEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.utils.extentions.left
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
@@ -80,7 +78,7 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String, val alig
     }
 
     @Subscription(inherited = true)
-    fun onReiRender(event: REIRenderOverlayEvent) {
+    fun onItemListRender(event: ItemListEvent.RegisterExclusionZones) {
         if (!isBeingShown) return
 
         oldWidget?.let {

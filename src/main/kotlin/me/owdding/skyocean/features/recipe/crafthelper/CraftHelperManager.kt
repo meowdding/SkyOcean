@@ -3,12 +3,15 @@ package me.owdding.skyocean.features.recipe.crafthelper
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.REIRuntimeCompatability
+import me.owdding.lib.events.ItemListEvent
 import me.owdding.skyocean.ApiDebug
 import me.owdding.skyocean.config.SkyOceanKeybind
 import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperNotificationType
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
+import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
+import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
@@ -19,7 +22,9 @@ import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.debug.DebugBuilder
+import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
@@ -114,12 +119,25 @@ object CraftHelperManager {
 
 
     @Subscription
-    fun onKeybind(event: ScreenKeyReleasedEvent.Pre) {
+    @OnlyOnSkyBlock
+    fun onItemListKeybind(event: ScreenKeyReleasedEvent.Pre) {
         if (!keybind.matches(event)) return
+        highlight(McScreen.asMenu?.getHoveredSlot()?.item)
+    }
 
-        val reiHovered = REIRuntimeCompatability.getReiHoveredItemStack()
-        val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
-        val item = mcScreenHovered ?: reiHovered ?: return
+    @Subscription
+    @OnlyOnSkyBlock
+    fun onItemListKeybind(event: ItemListEvent.HoveredItemKeyPress) {
+        if (!keybind.key.matches(event.event)) return
+        setItem(event.stack)
+    }
+
+    private fun highlight(stack: ItemStack?) {
+        setItem(stack?.takeUnless { it.isEmpty })
+    }
+
+    fun setItem(item: ItemStack?) {
+        val item = item?.takeUnless { it.isEmpty } ?: return
 
         if (item.getSkyBlockId() == null) {
             Text.of("Item ") {
