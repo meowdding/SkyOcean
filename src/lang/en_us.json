@@ -389,6 +389,14 @@
                 "Plays a looping soundtrack while a Crop Fever is active.",
                 "<red>Disable if you have Hypixel's own music enabled.</red>"
               ]
+            },
+            "useRegularSounds": {
+              "@value": "[RP Only] Use .OGG sound files.",
+              "desc": [
+                "Use .ogg sounds instead of .nbs sounds",
+                "To modify them just look for the corresponding files in assets/skyocean/sounds/ogg/farming",
+                "<red>Only enable this if you have a resourcepack that replaces the .ogg sound files, otherwise you will get no sounds</red>"
+              ]
             }
           },
           "visual_section": {
