@@ -15,8 +15,11 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.SkyOcean.id
+import me.owdding.skyocean.features.hotkeys.actions.CommandHotkeyAction
 import me.owdding.skyocean.features.hotkeys.actions.HotkeyAction
 import me.owdding.skyocean.features.hotkeys.actions.HotkeyActionType
+import me.owdding.skyocean.features.hotkeys.actions.KeybindActions
+import me.owdding.skyocean.features.hotkeys.conditions.AlwaysHotkeyCondition
 import me.owdding.skyocean.features.hotkeys.conditions.HotkeyCondition
 import me.owdding.skyocean.features.hotkeys.system.ConflictContext
 import me.owdding.skyocean.features.hotkeys.system.Hotkey
@@ -71,8 +74,8 @@ class EditHotkeyModal(
 
     private val name = ListenableState.of(hotkey?.name ?: "New Hotkey")
     private val keybind = hotkey?.keybind
-    private var action = hotkey?.action
-    private var condition = hotkey?.condition
+    private var action = hotkey?.action ?: CommandHotkeyAction("")
+    private var condition = hotkey?.condition ?: AlwaysHotkeyCondition
 
     private val keys = keybind?.keys?.toMutableList() ?: mutableListOf()
 
@@ -342,14 +345,8 @@ class EditHotkeyModal(
                                                 context = context.get(),
                                             ),
                                         ),
-                                        action ?: run {
-                                            require("Action")
-                                            return@createButton
-                                        },
-                                        condition ?: run {
-                                            require("Condition")
-                                            return@createButton
-                                        },
+                                        action,
+                                        condition,
                                         name.get(),
                                         enabled.get(),
                                     )
