@@ -1,8 +1,16 @@
 package me.owdding.skyocean.features.text
 
+import me.owdding.skyocean.features.text.MarkdownChat.toComponent
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
 import net.minecraft.util.FormattedCharSequence
+import net.minecraft.util.FormattedCharSink
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import java.util.Arrays
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
+import java.util.*
+import java.util.function.Supplier
+import kotlin.to
 
 object TextReplacements {
     const val MINUS_ONE: Short = -1
@@ -19,6 +27,47 @@ object TextReplacements {
         }
         Arrays.fill(array, null)
         return array
+    }
+
+    @JvmStatic
+    @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+    fun wrapSink(formattedCharSink: FormattedCharSink): Pair<FormattedCharSink, Supplier<Boolean>> {
+        val (sink, component) = toComponentCharSink()
+
+        return sink to Supplier {
+            val component = component()
+            apply(component.visualOrderText).accept(formattedCharSink)
+        }
+    }
+
+
+    fun toComponentCharSink(): Pair<FormattedCharSink, () -> MutableComponent> {
+        val result = Text.of()
+        var currentStyle: Style? = null
+        var current = Text.of()
+        var builder = StringBuilder()
+
+        return FormattedCharSink { _, style, codepoint ->
+            if (currentStyle == null) {
+                currentStyle = style
+                current.style = style
+            }
+            if (currentStyle != style) {
+                currentStyle = style
+                current.append(builder.toString())
+                result.append(current)
+                builder = StringBuilder()
+                current = Text.of()
+                current.style = currentStyle
+            }
+            builder.appendCodePoint(codepoint)
+
+            true
+        } to {
+            current.append(builder.toString())
+            current.style = currentStyle ?: Style.EMPTY
+            result.append(current)
+        }
     }
 
     @JvmStatic
@@ -61,13 +110,14 @@ object TextReplacements {
         }
     }.getOrElse { instance }
 
-    val Int.charLength: Int get() {
-        if (Character.isBmpCodePoint(this)) {
-            return 1
-        }
+    val Int.charLength: Int
+        get() {
+            if (Character.isBmpCodePoint(this)) {
+                return 1
+            }
 
-        return 2
-    }
+            return 2
+        }
 
     fun replaceAll(array: Array<Short?>, content: String, replacements: List<TextReplacement>) {
         val length = content.length
@@ -102,5 +152,8 @@ object TextReplacements {
 
         return (before == null || before.isWhitespace()) && (after == null || after.isWhitespace())
     }
+
+    @JvmStatic
+    fun apply(content: String): String = apply(content.asComponent().visualOrderText).toComponent().string
 
 }
