@@ -17,3 +17,6 @@ accessible field net/minecraft/client/Minecraft blockModelResolver Lnet/minecraf
 accessible field net/minecraft/client/particle/Particle x D
 accessible field net/minecraft/client/particle/Particle y D
 accessible field net/minecraft/client/particle/Particle z D
+
+# 26.1
+accessible field net/minecraft/client/renderer/block/FluidStateModelSet WATER_MODEL Lnet/minecraft/client/renderer/block/FluidModel$Unbaked;

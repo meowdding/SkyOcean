@@ -1,8 +1,5 @@
 package me.owdding.skyocean
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.FieldNamingStrategy
-import com.google.gson.GsonBuilder
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import me.owdding.ktmodules.AutoCollect
@@ -67,7 +64,7 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
 
     override fun onInitializeClient() {
         MixinHelper.isStarted = true
-        RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
+        if (!McClient.isDev) RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
         SkyOceanModules.init {
             SkyBlockAPI.eventBus.register(it)
