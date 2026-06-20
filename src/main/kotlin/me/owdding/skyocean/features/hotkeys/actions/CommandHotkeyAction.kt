@@ -12,6 +12,7 @@ import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.bottomCenter
+import me.owdding.skyocean.utils.extensions.createInfo
 import me.owdding.skyocean.utils.extensions.createText
 import me.owdding.skyocean.utils.extensions.createTextInput
 import me.owdding.skyocean.utils.extensions.createToggleButton
@@ -20,6 +21,7 @@ import me.owdding.skyocean.utils.extensions.topLeft
 import me.owdding.skyocean.utils.extensions.withPadding
 import net.minecraft.client.gui.layouts.LayoutElement
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 @GenerateCodec
 data class CommandHotkeyAction(
@@ -34,7 +36,12 @@ data class CommandHotkeyAction(
         vertical(PADDING) {
             widget(selector, topLeft)
             LayoutFactory.vertical {
-                createText("Allow Client Commands", CatppuccinColors.Mocha.surface0).withPadding(left = PADDING).add(middleLeft)
+                horizontal {
+                    createText("Allow Client Commands", CatppuccinColors.Mocha.surface0).withPadding(left = PADDING).add(middleLeft)
+                    createInfo(Text.of {
+                        append("Allows running commands that are provided by mods.")
+                    }, CatppuccinColors.Mocha.surface0).add()
+                }
                 val state = ListenableState.of(allowClientCommands)
                 state.registerListener {
                     allowClientCommands = it

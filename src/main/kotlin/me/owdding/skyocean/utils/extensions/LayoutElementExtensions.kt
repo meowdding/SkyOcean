@@ -32,6 +32,7 @@ import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.components.StringWidget
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.layouts.*
 import net.minecraft.client.gui.screens.Screen
@@ -45,7 +46,9 @@ import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitToWidth
 import kotlin.math.min
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
@@ -409,6 +412,11 @@ fun createButton(
     withTexture(texture)
     withSize(width, height)
 }.apply(builder)
+
+fun createInfo(hover: Component, color: Int): TextWidget = Widgets.text(Text.of("\uD83D\uDEC8", color)).apply {
+    withTooltip(hover)
+    withSize(12)
+}
 
 fun setScreen(provider: () -> Screen?): () -> Unit = { McClient.setScreenAsync(provider) }
 
