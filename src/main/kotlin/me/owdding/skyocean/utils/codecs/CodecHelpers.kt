@@ -97,6 +97,7 @@ object CodecHelpers {
         }
     }
 
+    @IncludedCodec(named = "customComponentCodec")
     val CUSTOM_COMPONENT_CODEC: Codec<Component> = Codec.recursive("SkyOceanComponentCodec") { self ->
         val componentMatcher = createContentCodec()
 

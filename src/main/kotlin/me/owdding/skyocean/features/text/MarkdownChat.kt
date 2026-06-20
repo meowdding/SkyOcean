@@ -86,35 +86,10 @@ object MarkdownChat : MeowddingLogger by SkyOcean.featureLogger() {
         }
     }
 
-
     fun FormattedCharSequence.toComponent(): Component {
-        val result: MutableComponent = Text.of()
-        var currentStyle: Style? = null
-        var current = Text.of()
-        var builder = StringBuilder()
-
-        this.accept { _, style, codepoint ->
-            if (currentStyle == null) {
-                currentStyle = style
-                current.style = style
-            }
-            if (currentStyle != style) {
-                currentStyle = style
-                current.append(builder.toString())
-                result.append(current)
-                builder = StringBuilder()
-                current = Text.of()
-                current.style = currentStyle
-            }
-            builder.appendCodePoint(codepoint)
-
-            true
-        }
-
-        current.append(builder.toString())
-        current.style = currentStyle ?: Style.EMPTY
-        result.append(current)
-        return result
+        val (sink, component) = TextReplacements.toComponentCharSink()
+        this.accept(sink)
+        return component()
     }
 
     fun findSections(modifiers: Array<Byte>, cursor: Int, content: String, spanEnd: Int, modifier: Byte) {
