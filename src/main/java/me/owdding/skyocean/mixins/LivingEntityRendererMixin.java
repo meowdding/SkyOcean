@@ -115,6 +115,9 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
         ) {
             var otherState = AvatarRenderStateAccessor.getAnimalState(avatarState);
             if (otherState != null) {
+                otherState.xRot = avatarState.xRot;
+                otherState.yRot = avatarState.yRot;
+                otherState.bodyRot = avatarState.bodyRot;
                 Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(otherState).submit(otherState, poseStack, nodeCollector, cameraRenderState);
             } else {
                 original.call(avatarState, poseStack, nodeCollector, cameraRenderState);

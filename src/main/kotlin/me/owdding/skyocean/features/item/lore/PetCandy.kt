@@ -21,7 +21,9 @@ object PetCandy : AbstractItemModifier() {
     override val displayName: Component get() = +"skyocean.config.misc.showHiddenPetCandy"
     override val isEnabled: Boolean get() = MiscConfig.showHiddenPetCandy
 
-    override fun appliesTo(itemStack: ItemStack) = itemStack.getSkyBlockId() == "PET" && itemStack.getRawLore().contains("MAX LEVEL")
+    override fun appliesTo(itemStack: ItemStack): Boolean {
+        return itemStack.getSkyBlockId() == "PET" && itemStack.getRawLore().contains("MAX LEVEL") && !itemStack.getRawLore().contains(") Pet Candy Used")
+    }
 
     override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {
         val candy = item.getData(DataTypes.PET_DATA)?.candyUsed?.takeUnless { it == 0 } ?: return@withMerger Result.unmodified

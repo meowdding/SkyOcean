@@ -56,6 +56,9 @@ object PlayerAnimals {
     @JvmStatic
     fun <State : LivingEntityRenderState> apply(entity: LivingEntity, avatarState: AvatarRenderState, state: State, partialTicks: Float) {
         state.isBaby = PlayerAnimalConfig.isBaby.select(avatarState)
+        state.bodyRot = avatarState.bodyRot
+        state.yRot = avatarState.yRot
+        state.xRot = avatarState.xRot
         if (state is ArmedEntityRenderState) {
             ArmedEntityRenderState.extractArmedEntityRenderState(
                 entity,
