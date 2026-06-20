@@ -8,11 +8,13 @@ import me.owdding.skyocean.config.features.chat.ChatConfig
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.FormattedText
+import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.util.FormattedCharSequence
 import tech.thatgravyboat.skyblockapi.utils.extentions.stripColor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.substring
 import kotlin.experimental.and
 import kotlin.experimental.or
 
@@ -27,7 +29,7 @@ object MarkdownChat : MeowddingLogger by SkyOcean.featureLogger() {
         if (!enabled) return sequence
         try {
             val string = sequence.string.stripColor()
-            val array = Array(string.length) { 0.toByte() }
+            val array = Array(string.length) { ZERO }
             findSections(array, 0, string, string.length - 1, 0)
 
             val sequence = Language.getInstance().getVisualOrder(sequence)
@@ -35,6 +37,7 @@ object MarkdownChat : MeowddingLogger by SkyOcean.featureLogger() {
             return FormattedCharSequence { sink ->
                 var offset = 0
                 var accumulator = 0
+                var obfuscatedStart: Int? = null
                 sequence.accept { position, style, codepoint ->
                     val modifier = array.getOrNull(accumulator++) ?: 0
                     val style = when (modifier) {
@@ -49,10 +52,28 @@ object MarkdownChat : MeowddingLogger by SkyOcean.featureLogger() {
 
                         else -> {
                             style
-                                .withBold(modifier.and(Formattings.BOLD.mask) == Formattings.BOLD.mask || style.isBold)
-                                .withItalic(modifier.and(Formattings.ITALIC.mask) == Formattings.ITALIC.mask || style.isItalic)
-                                .withUnderlined(modifier.and(Formattings.UNDERLINE.mask) == Formattings.UNDERLINE.mask || style.isUnderlined)
-                                .withStrikethrough(modifier.and(Formattings.STRIKETHROUGH.mask) == Formattings.STRIKETHROUGH.mask || style.isStrikethrough)
+                                .withBold(Formattings.BOLD.isActive(modifier) || style.isBold)
+                                .withItalic(Formattings.ITALIC.isActive(modifier) || style.isItalic)
+                                .withUnderlined(Formattings.UNDERLINE.isActive(modifier) || style.isUnderlined)
+                                .withStrikethrough(Formattings.STRIKETHROUGH.isActive(modifier) || style.isStrikethrough)
+                                .let {
+                                    if (Formattings.OBFUSCATED.isActive(modifier)) {
+                                        val start = obfuscatedStart ?: run {
+                                            obfuscatedStart = accumulator
+                                            accumulator
+                                        }
+                                        var obfuscatedRun = 0
+                                        while (Formattings.OBFUSCATED.isActive(array.getOrNull(start + obfuscatedRun + 1) ?: ZERO)) {
+                                            obfuscatedRun++
+                                        }
+
+
+                                        return@let it.withObfuscated(true).withHoverEvent(HoverEvent.ShowText(sequence.toComponent().substring(start - 1, start + obfuscatedRun - 1)))
+                                    }
+                                    obfuscatedStart = null
+
+                                    it
+                                }
                         }
                     }
 
@@ -106,33 +127,12 @@ object MarkdownChat : MeowddingLogger by SkyOcean.featureLogger() {
 
             var untilNext: String? = null
             var formatting: Byte? = null
-            when (ch) {
-                '*' if previous == '*' -> {
-                    untilNext = "**"
-                    formatting = Formattings.BOLD.mask
-                }
-                '_' if previous == '_' -> {
-                    untilNext = "__"
-                    formatting = Formattings.UNDERLINE.mask
-                }
-                '|' if previous == '|' -> {
-                    untilNext = "||"
-                    formatting = Formattings.OBFUSCATED.mask
-                }
-                '~' if previous == '~' -> {
-                    untilNext = "~~"
-                    formatting = Formattings.STRIKETHROUGH.mask
-                }
-                else if previous == '*' -> {
-                    untilNext = "*"
-                    formatting = Formattings.ITALIC.mask
-                }
-                else if previous == '_' -> {
-                    untilNext = "_"
-                    formatting = Formattings.ITALIC.mask
-                }
-                else -> {
-                    previous = ch
+            for (format in Formattings.entries) {
+                val until = format.matches(ch, previous)
+                if (until != null) {
+                    untilNext = until
+                    formatting = format.mask
+                    break
                 }
             }
 
@@ -151,19 +151,37 @@ object MarkdownChat : MeowddingLogger by SkyOcean.featureLogger() {
                 modifiers[current - 1] = -1
                 findSections(modifiers, current + untilNext.length - 1, content, end - 1, (modifier or formatting))
                 modifiers[end] = -1
+            } else {
+                previous = ch
             }
         }
     }
 
-    enum class Formattings {
-        ITALIC,
-        BOLD,
-        UNDERLINE,
-        STRIKETHROUGH,
-        OBFUSCATED,
+    private fun requireDouble(char: Char): (Char, Char?) -> String? {
+        val until = "$char$char"
+
+        return { current, previous ->
+            until.takeIf { current == char && previous == char }
+        }
+    }
+
+    enum class Formattings(val matcher: (Char, Char?) -> String?) {
+        BOLD(requireDouble('*')),
+        UNDERLINE(requireDouble('_')),
+        OBFUSCATED(requireDouble('|')),
+        STRIKETHROUGH(requireDouble('~')),
+        ITALIC({ _, previous ->
+            if (previous == '_' || previous == '*') {
+                "$previous"
+            } else null
+        }),
         ;
 
+
         val mask = (1 shl ordinal).toByte()
+
+        fun isActive(modifier: Byte) = (modifier and mask) == mask
+        fun matches(current: Char, previous: Char?): String? = matcher(current, previous)
     }
 
 }
