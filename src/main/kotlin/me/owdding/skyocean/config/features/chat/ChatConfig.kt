@@ -43,4 +43,16 @@ object ChatConfig : CategoryKt("chat") {
     var sackNotificationItems by strings("Glossy Gemstone") {
         this.translation = "skyocean.config.chat.sack_notification_items"
     }
+
+    init {
+        // Allow for Text replacement config options as well probably
+        separator {
+            title = "Text Modification"
+        }
+    }
+
+    var markdownChat by boolean(false) {
+        this.searchTerms += "md"
+        this.translation = "skyocean.config.chat.markdown_chat"
+    }
 }
