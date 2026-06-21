@@ -167,7 +167,7 @@ object ItemModifiers {
 
     @Subscription
     private fun PlayerInventoryChangeEvent.onInventoryChange() {
-        tryModify(item, slot.toSource(36))
+        tryModify(item, slotIndex.toSource(36))
     }
 
     @Subscription
