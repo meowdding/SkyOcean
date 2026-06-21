@@ -5,11 +5,20 @@ import com.mojang.blaze3d.buffers.Std140SizeCalculator
 import com.mojang.blaze3d.systems.RenderSystem
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.garden.CropFeverEffectsConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
+import me.owdding.skyocean.features.garden.cropfever.CoinRainOverlay.fallingCoinsList
 import me.owdding.skyocean.mixins.GameRendererAccessor
+import me.owdding.skyocean.mixins.PostChainAccessor
+import me.owdding.skyocean.mixins.PostPassAccessor
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
+import me.owdding.skyocean.utils.nbs.NBSMusicManager
+import net.minecraft.client.renderer.LevelTargetBundle
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource
+import org.lwjgl.system.MemoryStack
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
@@ -19,21 +28,15 @@ import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.GARDEN
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.features.garden.cropfever.CoinRainOverlay.fallingCoinsList
-import me.owdding.skyocean.mixins.PostChainAccessor
-import me.owdding.skyocean.mixins.PostPassAccessor
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
+import java.util.*
 import kotlin.time.Instant
-import me.owdding.skyocean.utils.nbs.NBSMusicManager
-import net.minecraft.client.renderer.LevelTargetBundle
-import org.lwjgl.system.MemoryStack
 
 @Module
 object CropFeverEffects {
@@ -41,12 +44,11 @@ object CropFeverEffects {
     var isFeverActive = false
         private set
 
-    //TODO: Add dye rng drop sound
     var startTime = Instant.DISTANT_PAST
     private const val LANG_KEY_PATH = CropFeverEffectsConfig.VISUAL_PATH
-    private const val RNG_SOUND_ID = "farming.crop_fever.rng"
-    private const val BG_MUSIC_SOUND_ID = "farming.crop_fever.music"
-    private const val START_SOUND_ID = "farming.crop_fever.start"
+    private const val RNG_SOUND_ID = "garden.crop_fever.rng"
+    private const val BG_MUSIC_SOUND_ID = "garden.crop_fever.music"
+    private const val START_SOUND_ID = "garden.crop_fever.start"
     private const val SHADER_ID = "crop_fever_hue_shift"
     const val UNIFORM_ID = "SkyOceanCropFeverHueShift"
 
@@ -76,7 +78,7 @@ object CropFeverEffects {
     }
 
     val UBO_SIZE = Std140SizeCalculator().putFloat().get()
-    fun updateShaderBuffer() {
+    private fun updateShaderBuffer() {
         val postChain = McClient.self.shaderManager.getPostChain(SkyOcean.id(SHADER_ID), LevelTargetBundle.MAIN_TARGETS)
         val pass = (postChain as PostChainAccessor).`skyocean$getPasses`().firstOrNull() ?: return
         val buffer = (pass as PostPassAccessor).`skyocean$getCustomUniforms`()[UNIFORM_ID] ?: return
@@ -89,12 +91,24 @@ object CropFeverEffects {
         }
     }
 
+    private fun playSound(id: String, nbsPath: String = "") {
+        if (CropFeverEffectsConfig.useRegularSounds) {
+            McClient.playSound(SoundEvent(SkyOcean.id(id), Optional.of(1f)), 1f, 1f)
+        } else {
+            NBSMusicManager.play(id, nbsPath)
+        }
+    }
+
     private fun turnOff() {
         if (!isFeverActive) return
         isFeverActive = false
 
         startTime = Instant.DISTANT_PAST
         if (fallingCoinsList.isNotEmpty()) fallingCoinsList.clear()
+
+        McClient.self.soundManager.stop(SkyOcean.id(RNG_SOUND_ID), SoundSource.PLAYERS)
+        McClient.self.soundManager.stop(SkyOcean.id(BG_MUSIC_SOUND_ID), SoundSource.PLAYERS)
+        McClient.self.soundManager.stop(SkyOcean.id(START_SOUND_ID), SoundSource.PLAYERS)
 
         NBSMusicManager.stop(RNG_SOUND_ID)
         NBSMusicManager.stop(BG_MUSIC_SOUND_ID)
@@ -123,13 +137,13 @@ object CropFeverEffects {
             isFeverActive = true
 
             if (CropFeverEffectsConfig.startingSound) {
-                NBSMusicManager.play(START_SOUND_ID, "farming/crop_fever_start")
+                playSound(START_SOUND_ID, "garden/crop_fever_start")
             }
             if (CropFeverEffectsConfig.rngSound) {
-                NBSMusicManager.play(RNG_SOUND_ID, "farming/crop_fever_rng")
+                playSound(RNG_SOUND_ID, "garden/crop_fever_rng")
             }
             if (CropFeverEffectsConfig.backgroundMusic) {
-                NBSMusicManager.play(BG_MUSIC_SOUND_ID, "farming/crop_fever_music")
+                playSound(BG_MUSIC_SOUND_ID, "garden/crop_fever_music")
             }
             if (CropFeverEffectsConfig.coinRain) {
                 startTime = currentInstant()

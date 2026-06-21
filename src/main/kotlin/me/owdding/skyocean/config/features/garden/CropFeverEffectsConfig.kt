@@ -35,6 +35,10 @@ object CropFeverEffectsConfig : ObjectKt(), Translatable {
         this.translation = "$SOUND_PATH.backgroundMusic"
     }
 
+    var useRegularSounds by boolean(false) {
+        this.translation = "$SOUND_PATH.useRegularSounds"
+    }
+
     init {
         separator(VISUAL_PATH)
     }
