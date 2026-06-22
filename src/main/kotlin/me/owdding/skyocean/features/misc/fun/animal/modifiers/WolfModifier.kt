@@ -4,12 +4,14 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.ANGRY
 import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.TAME
 import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.WILD
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.WolfRenderState
 import net.minecraft.core.ClientAsset
@@ -23,7 +25,7 @@ import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier
 object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
-    override val type: EntityType<Wolf> = EntityType.WOLF
+    override val type: EntityType<Wolf> = EntityTypes.WOLF
 
     //~ if >= 26.1 'assetInfo' -> 'babyInfo'
     private val wolfVariants: List<WolfVariant> = Registries.WOLF_VARIANT.list().sortedBy { it.babyInfo.tame.toString() }
@@ -32,18 +34,19 @@ object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
     var wolfVariant = PlayerAnimalConfig.createEntry("wolf_variant") { id, type ->
         enum(id, Variant.RANDOM) {
             this.translation = createTranslationKey("wolf", "${type}_variant")
-            condition = isSelected(EntityType.WOLF)
+            condition = isSelected(EntityTypes.WOLF)
         }
     }
 
     var wolfState = PlayerAnimalConfig.createEntry("wolf_state") { id, type ->
         enum(id, State.RANDOM) {
             this.translation = createTranslationKey("wolf", "${type}_state")
-            condition = isSelected(EntityType.WOLF)
+            condition = isSelected(EntityTypes.WOLF)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: WolfRenderState,
         partialTicks: Float,

@@ -23,7 +23,7 @@ public class NetherFogColorMixin {
         at = @At(
             value = "INVOKE",
             //~ if >= 26.2 'getNightVisionScale' -> 'nightVisionScale'
-            target = "Lnet/minecraft/client/renderer/GameRenderer;getNightVisionScale(Lnet/minecraft/world/entity/LivingEntity;F)F"
+            target = "Lnet/minecraft/client/renderer/GameRenderer;nightVisionScale(Lnet/minecraft/world/entity/LivingEntity;F)F"
         )
     )
     private float skyocean$darkenNetherFog(

@@ -6,6 +6,7 @@ import me.owdding.skyocean.features.misc.`fun`.animal.PlayerAnimals
 import me.owdding.skyocean.utils.tags.EntityTagKey
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.EntityTypes
 
 object FunConfig : CategoryKt("fun") {
     override val name get() = Translated("skyocean.config.misc.fun")
@@ -15,7 +16,7 @@ object FunConfig : CategoryKt("fun") {
     }
 
     val entityType: EntityType<*> by entityTypeDropdown(
-        EntityType.CAT,
+        EntityTypes.CAT,
         BuiltInRegistries.ENTITY_TYPE.toList().filter { it in EntityTagKey.LIVING_ENTITIES },
     ) {
         this.translation = "skyocean.config.misc.fun.player_animals.type"

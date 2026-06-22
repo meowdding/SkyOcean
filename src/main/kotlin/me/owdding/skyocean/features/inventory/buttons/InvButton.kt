@@ -46,7 +46,7 @@ class InvButton(
         }
 
         //~ if >= 26.1 'renderItem(' -> 'item('
-        graphics.item(button.itemStack.value, itemX, itemY)
+        graphics.item(button.itemStack, itemX, itemY)
     }
 
     //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'

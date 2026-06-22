@@ -101,7 +101,8 @@ class ItemSelectorOverlay(
             .toArray { arrayOfNulls<Button>(it) }
 
         this.entries.withContents { layout ->
-            layout.clear()
+            //~ if >= 26.2 'clear' -> 'removeChildren'
+            layout.removeChildren()
             for ((index, value) in entries.withIndex()) {
                 layout.addChild(value, index, 0)
             }

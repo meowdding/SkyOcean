@@ -4,8 +4,10 @@ import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.config.utils.GenericDropdown.Companion.blockDropdown
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
+import net.minecraft.client.renderer.block.BlockModelResolver
 //? >= 26.1
 import net.minecraft.client.renderer.block.model.BlockDisplayContext
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
@@ -18,7 +20,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 @RegisterAnimalModifier
 object SnowGolemModifier : AnimalModifier<SnowGolem, SnowGolemRenderState> {
-    override val type: EntityType<SnowGolem> = EntityType.SNOW_GOLEM
+    override val type: EntityType<SnowGolem> = EntityTypes.SNOW_GOLEM
 
     //? >= 26.1 {
     var blockSelector = PlayerAnimalConfig.createEntry("snow_golem_block") { id, type ->
@@ -28,7 +30,7 @@ object SnowGolemModifier : AnimalModifier<SnowGolem, SnowGolemRenderState> {
             options = Registries.BLOCK.list(),
         ) {
             this.translation = createTranslationKey("snow_golem", "${type}_block")
-            condition = isSelected(EntityType.SNOW_GOLEM)
+            condition = isSelected(EntityTypes.SNOW_GOLEM)
         }
     }
     //? } else {
@@ -42,12 +44,13 @@ object SnowGolemModifier : AnimalModifier<SnowGolem, SnowGolemRenderState> {
 
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: SnowGolemRenderState,
         partialTicks: Float,
     ) {
         //? if >= 26.1 {
-        McClient.self.blockModelResolver.update(state.headBlock, blockSelector.select(avatarState).defaultBlockState(), BlockDisplayContext.create())
+        resolver.update(state.headBlock, blockSelector.select(avatarState).defaultBlockState(), BlockDisplayContext.create())
         //? } else
         //state.hasPumpkin = snowGolemPumpkin.select(avatarState).select(avatarState)
     }

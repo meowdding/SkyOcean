@@ -4,7 +4,9 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.AxolotlRenderState
 import net.minecraft.world.entity.EntityType
@@ -12,17 +14,18 @@ import net.minecraft.world.entity.animal.axolotl.Axolotl
 
 @RegisterAnimalModifier
 object AxolotlModifier : AnimalModifier<Axolotl, AxolotlRenderState> {
-    override val type: EntityType<Axolotl> = EntityType.AXOLOTL
+    override val type: EntityType<Axolotl> = EntityTypes.AXOLOTL
     private val variants = Axolotl.Variant.entries
 
     var axolotlVariant = PlayerAnimalConfig.createEntry("axolotl_variant") { id, type ->
         enum(id, Variant.RANDOM) {
             this.translation = createTranslationKey("axolotl", "${type}_variant")
-            condition = isSelected(EntityType.AXOLOTL)
+            condition = isSelected(EntityTypes.AXOLOTL)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: AxolotlRenderState,
         partialTicks: Float,

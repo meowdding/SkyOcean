@@ -69,7 +69,7 @@ object PuzzlerSolver {
             //? if >= 26.1 {
             val list = mutableListOf<BlockStateModelPart>()
             McClient.self.modelManager.blockStateModelSet.get(state).collectParts(RandomSource.create(-1), list)
-            McClient.self.gameRenderer.submitNodeStorage.submitBlockModel(
+            event.submitNodeCollector.submitBlockModel(
                 event.poseStack,
                 RenderTypes.entityCutoutZOffset(TextureAtlas.LOCATION_BLOCKS),
                 list,
