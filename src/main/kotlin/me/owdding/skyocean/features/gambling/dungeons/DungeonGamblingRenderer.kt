@@ -1,5 +1,7 @@
 package me.owdding.skyocean.features.gambling.dungeons
 
+import me.owdding.ktmodules.Module
+import me.owdding.lib.events.ItemListEvent
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.gambling.GamblingConfig
 import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonChestType
@@ -12,6 +14,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.area.dungeon.DungeonFloor
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
@@ -34,6 +37,7 @@ private const val ITEM_GAP = 5
 private const val FULL_CARD_WIDTH = (DungeonCard.WIDTH * ITEM_SCALE) + ITEM_GAP
 private const val FULL_CARD_HEIGHT = (DungeonCard.HEIGHT * ITEM_SCALE)
 
+@Module
 object DungeonGamblingRenderer {
 
     private val items = mutableListOf<ItemStack>()
@@ -60,6 +64,13 @@ object DungeonGamblingRenderer {
     fun cancel() {
         start = Instant.DISTANT_PAST
         items.clear()
+    }
+
+    @Subscription
+    fun onItemList(event: ItemListEvent.RegisterExcludedScreen) {
+        if (start.isDistantPast) return
+
+        event.exclude("SkyOcean Dungeon Gambling")
     }
 
     private fun ease(t: Float): Float {
