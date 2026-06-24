@@ -320,14 +320,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         val recentDyeWidget = getRecentDyes()
 
         val trimMaterialWidget = ItemCache.trimMaterials.associateWithNotNull {
-            it.components()
-                .get(DataComponents.PROVIDES_TRIM_MATERIAL)
-                //? < 26.1 {
-                /* ?.material()
-                ?.unwrap(SkyOcean.registryLookup)
-                ?.getOrNull()
-                *///? }
-                ?.value()
+            it.components().get(DataComponents.PROVIDES_TRIM_MATERIAL)?.value()
         }.trimButton(trimMaterial)
             .chunked(4)
             .asWidgetTable()
@@ -571,19 +564,15 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         FrameLayout.centerInRectangle(this.layout!!, this.rectangle)
     }
 
-    //~ if >= 26.1 'render' -> 'extractRenderState'
     override fun extractRenderState(p0: GuiGraphicsExtractor, p1: Int, p2: Int, p3: Float) {
         animationManager?.update()
-        //~ if >= 26.1 'render' -> 'extractRenderState'
         super.extractRenderState(p0, p1, p2, p3)
     }
 
-    //~ if >= 26.1 'render' -> 'extract' {
     override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         val layout = layout ?: return
         super.extractBackground(graphics, mouseX, mouseY, partialTick)
         this.extractTransparentBackground(graphics)
-    //~ }
 
         graphics.drawSprite(
             UIConstants.MODAL,

@@ -1,6 +1,5 @@
 package me.owdding.skyocean.hooks;
 
-//? if >= 26.1 {
 import com.mojang.blaze3d.platform.Transparency;
 
 public interface FluidModelTransparencyOverride {
@@ -13,4 +12,3 @@ public interface FluidModelTransparencyOverride {
         throw new UnsupportedOperationException("Implemented via mixin");
     }
 }
-//? }

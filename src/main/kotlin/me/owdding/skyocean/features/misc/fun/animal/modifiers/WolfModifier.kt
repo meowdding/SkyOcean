@@ -27,7 +27,6 @@ import kotlin.jvm.optionals.getOrNull
 object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
     override val type: EntityType<Wolf> = EntityTypes.WOLF
 
-    //~ if >= 26.1 'assetInfo' -> 'babyInfo'
     private val wolfVariants: List<WolfVariant> = Registries.WOLF_VARIANT.list().sortedBy { it.babyInfo.tame.toString() }
     private val states = listOf(TAME, WILD, ANGRY)
 
@@ -59,10 +58,7 @@ object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
 
     @Suppress("NOTHING_TO_INLINE")
     inline fun WolfVariant.info(state: WolfRenderState): WolfVariant.AssetInfo {
-        //? >= 26.1 {
         return if (state.isBaby) babyInfo else adultInfo
-        //? } else
-        //return assetInfo
     }
 
     enum class State(val selector: ((WolfVariant, WolfRenderState) -> ClientAsset.ResourceTexture)) : Translatable {

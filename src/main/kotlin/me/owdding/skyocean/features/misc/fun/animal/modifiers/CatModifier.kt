@@ -24,7 +24,6 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
     override val type: EntityType<Cat> = EntityTypes.CAT
 
     private val catVariants: List<CatVariant> = Registries.CAT_VARIANT.list().sortedBy {
-        //~ if >= 26.1 'assetInfo' -> 'babyAssetInfo()'
         it.babyAssetInfo().id.toString()
     }
 
@@ -43,7 +42,6 @@ object CatModifier : AnimalModifier<Cat, CatRenderState> {
         state: CatRenderState,
         partialTicks: Float,
     ) {
-        //~ if >= 26.1 'assetInfo()' -> 'assetInfo(state.isBaby)'
         state.texture = getCatVariant(avatarState).assetInfo(state.isBaby).texturePath()
         state.collarColor = getCollarColor(avatarState)
         state.isSitting = state.isCrouching

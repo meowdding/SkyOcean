@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(Options.class)
 public class OptionsMixin {
 
-    //~ if >= 26.1 'getCloudsType' -> 'getCloudStatus'
     @WrapMethod(method = "getCloudStatus")
     private CloudStatus modifyCloudsType(Operation<CloudStatus> original) {
         if (MiscConfig.INSTANCE.getShouldHideClouds()) {

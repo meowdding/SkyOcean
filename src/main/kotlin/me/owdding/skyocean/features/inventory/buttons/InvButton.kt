@@ -45,11 +45,9 @@ class InvButton(
             baseWidth / 2 - 8 + this@InvButton.y
         }
 
-        //~ if >= 26.1 'renderItem(' -> 'item('
         graphics.item(button.itemStack, itemX, itemY)
     }
 
-    //~ if >= 26.1 'renderWidget' -> 'extractWidgetRenderState'
     override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         this.isHovered = graphics.containsPointInScissor(mouseX, mouseY) && isMouseOver(mouseX.toDouble(), mouseY.toDouble())
         this.highlight = screen.title.stripped.trim().matches(button.regex) || (screen is ButtonConfigScreen && screen.selectedButtonIndex == this.index)

@@ -7,8 +7,6 @@ plugins {
 stonecutter active "26.2"
 
 stonecutter parameters {
-    // Used for temporarily removing classes from the latest version.
-    constants["TODO"] = current.version != "1.21.11"
 
     swaps["mod_version"] = "\"" + property("version") + "\";"
     swaps["minecraft"] = "\"" + node.metadata.version + "\";"

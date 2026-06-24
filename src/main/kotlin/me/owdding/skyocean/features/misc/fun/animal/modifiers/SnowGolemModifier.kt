@@ -8,7 +8,6 @@ import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
 import net.minecraft.client.renderer.block.BlockModelResolver
-//? >= 26.1
 import net.minecraft.client.renderer.block.model.BlockDisplayContext
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.SnowGolemRenderState
@@ -16,13 +15,11 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.animal.golem.SnowGolem
 import net.minecraft.world.level.block.Blocks
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 @RegisterAnimalModifier
 object SnowGolemModifier : AnimalModifier<SnowGolem, SnowGolemRenderState> {
     override val type: EntityType<SnowGolem> = EntityTypes.SNOW_GOLEM
 
-    //? >= 26.1 {
     var blockSelector = PlayerAnimalConfig.createEntry("snow_golem_block") { id, type ->
         blockDropdown(
             id = id,
@@ -33,14 +30,6 @@ object SnowGolemModifier : AnimalModifier<SnowGolem, SnowGolemRenderState> {
             condition = isSelected(EntityTypes.SNOW_GOLEM)
         }
     }
-    //? } else {
-    /*var snowGolemPumpkin = PlayerAnimalConfig.createEntry("snow_golem_pumpkin") { id, type ->
-        enum(id, AnimalModifier.BooleanState.RANDOM) {
-            this.translation = createTranslationKey("snow_golem", "${type}_pumpkin")
-            condition = isSelected(EntityType.SNOW_GOLEM)
-        }
-    }
-    *///? }
 
 
     override fun apply(
@@ -49,9 +38,6 @@ object SnowGolemModifier : AnimalModifier<SnowGolem, SnowGolemRenderState> {
         state: SnowGolemRenderState,
         partialTicks: Float,
     ) {
-        //? if >= 26.1 {
         resolver.update(state.headBlock, blockSelector.select(avatarState).defaultBlockState(), BlockDisplayContext.create())
-        //? } else
-        //state.hasPumpkin = snowGolemPumpkin.select(avatarState).select(avatarState)
     }
 }

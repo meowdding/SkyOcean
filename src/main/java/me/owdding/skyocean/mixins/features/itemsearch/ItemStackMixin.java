@@ -15,9 +15,7 @@ public class ItemStackMixin {
     @Unique
     private static boolean inEventExecution = false;
 
-    //~ if >= 26.1 'world/level/ItemLike' -> 'core/Holder'
     @Inject(method = "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("RETURN"), order = 1100)
-    //~ if >= 26.1 'ItemLike' -> 'Holder<Item>'
     void init(CallbackInfo ci) {
         if (inEventExecution) {
             return;

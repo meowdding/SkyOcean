@@ -13,7 +13,6 @@ import earth.terrarium.olympus.client.components.renderers.ColorableWidget
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.components.string.TextWidget
 import earth.terrarium.olympus.client.constants.MinecraftColors
-import earth.terrarium.olympus.client.ui.OverlayAlignment
 import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.ui.context.ContextMenu
@@ -32,23 +31,19 @@ import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import net.minecraft.client.gui.components.AbstractWidget
-import net.minecraft.client.gui.components.StringWidget
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.layouts.*
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
-//~ if >= 26.1 'com.teamresourceful.resourcefullib.common.utils.TriState' -> 'net.minecraft.util.TriState'
 import net.minecraft.util.TriState
 import org.jetbrains.annotations.Contract
 import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitToWidth
 import kotlin.math.min
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
@@ -92,7 +87,6 @@ fun AbstractWidget.asScrollable(
     alwaysShowScrollBar: Boolean = false,
 ): LayoutWidget<FrameLayout> {
     val scrollable = Widgets.frame { frame ->
-        //~ if >= 26.1 'UNDEFINED' -> 'DEFAULT'
         frame.withScrollableY(alwaysShowScrollBar.takeIf { it }?.let { TriState.TRUE } ?: TriState.DEFAULT)
             .withSize(width, this.height.coerceAtMost(height))
             .withAutoFocus(false)

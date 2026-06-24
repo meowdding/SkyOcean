@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.owdding.skyocean.features.text.MarkdownChat;
 import net.minecraft.client.gui.Font;
-//~ if >= 26.1 'client.' -> 'client.multiplayer.chat.'
 import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FormattedCharSequence;

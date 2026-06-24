@@ -8,7 +8,6 @@ import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
 import net.minecraft.client.renderer.block.BlockModelResolver
-//? >= 26.1
 import net.minecraft.client.renderer.block.model.BlockDisplayContext
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.CopperGolemRenderState
@@ -17,8 +16,6 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.animal.golem.CopperGolem
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.WeatheringCopper
-import tech.thatgravyboat.skyblockapi.helpers.McClient
-import java.util.*
 
 @RegisterAnimalModifier
 object CopperGolemModifier : AnimalModifier<CopperGolem, CopperGolemRenderState> {
@@ -53,10 +50,7 @@ object CopperGolemModifier : AnimalModifier<CopperGolem, CopperGolemRenderState>
     ) {
         state.weathering = getWeatherState(avatarState)
         val block = blockSelector.select(avatarState).takeUnless { it == Blocks.AIR }
-        //? >= 26.1 {
         resolver.update(state.blockOnAntenna, block?.defaultBlockState() ?: return, BlockDisplayContext.create())
-        //? } else
-        //state.blockOnAntenna = Optional.ofNullable(block?.defaultBlockState())
     }
 
     enum class WeatherState(val state: WeatheringCopper.WeatherState?) : Translatable {

@@ -12,5 +12,4 @@ fun ItemLike.getEquipmentSlot() = asItem().components().get(DataComponents.EQUIP
 operator fun Item.contains(item: ItemStackBlueprint) = this.builtInRegistryHolder().`is`(item.item)
 
 fun Item.asBlueprint() = ItemStackBlueprint(this)
-//~ if >= 26.1 'getItemHolder' -> 'typeHolder'
 fun ItemStack.asBlueprint() = ItemStackBlueprint(this.typeHolder(), this.count, this.componentsPatch)

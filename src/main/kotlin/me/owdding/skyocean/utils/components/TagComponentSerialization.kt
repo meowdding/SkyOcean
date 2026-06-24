@@ -141,7 +141,6 @@ object TagComponentSerialization {
         return list
     }
 
-    //~ if >= 26.1 'parseText' -> 'parseComponent'
     fun deserialize(text: String): Component = tagParser.parseComponent(text, context)
 
 }

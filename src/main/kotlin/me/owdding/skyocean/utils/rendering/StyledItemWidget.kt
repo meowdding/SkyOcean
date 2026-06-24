@@ -115,7 +115,6 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
 
     private var isButtonHovered = false
 
-    //~ if >= 26.1 'renderWidget(' -> 'extractWidgetRenderState('
     override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         graphics.drawSprite(UIConstants.MODAL_INSET, x, y, width, height)
 
@@ -145,7 +144,6 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
                 val itemState = TrackingItemStackRenderState()
                 McClient.self.itemModelResolver.updateForTopItem(itemState, this.stack, ItemDisplayContext.NONE, McLevel.self, null, 0)
 
-                //~ if >= 26.1 'submit' -> 'add'
                 graphics.guiRenderState.addPicturesInPictureState(
                     ItemWidgetItemState(
                         x, y, x + width, y + height,
@@ -207,7 +205,6 @@ private fun renderEntityInInventory(
     entity: LivingEntity,
 ) {
     val renderState = InventoryScreen.extractRenderState(entity)
-    //~ if >= 26.1 'submitEntityRenderState(' -> 'entity('
     graphics.entity(renderState, scale, translation, rotation, overrideCameraAngle, x0, y0, width, height)
 
 }

@@ -1,6 +1,5 @@
 package me.owdding.skyocean.mixins.features.fishing;
 
-//? if >= 26.1 {
 import me.owdding.skyocean.hooks.FluidModelTransparencyOverride;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.blaze3d.platform.Transparency;
@@ -33,4 +32,3 @@ public class FluidModelMixin implements FluidModelTransparencyOverride {
         return original;
     }
 }
-//? }
