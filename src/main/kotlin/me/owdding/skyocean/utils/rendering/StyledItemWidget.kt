@@ -13,9 +13,10 @@ import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.client.input.MouseButtonEvent
-//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
-import net.minecraft.util.LightCoordsUtil as LightTexture
-import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.SubmitNodeCollector
+import net.minecraft.util.LightCoordsUtil
+//? 26.1
+//import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.component.DataComponents
@@ -34,7 +35,9 @@ import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.platform.showTooltip
 import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import java.util.function.Function
+//? 26.1
+//import java.util.function.Function
+import java.util.function.Supplier
 
 
 private const val BUTTON_SIZE = 5
@@ -51,16 +54,19 @@ data class ItemWidgetItemState(
 ) : MeowddingPipState<ItemWidgetItemState>() {
     override val shrinkToScissor: Boolean = false
 
-    override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<ItemWidgetItemState>> =
-        Function { buffer -> ItemWidgetRenderer(buffer) }
+    //? if >= 26.2 {
+    override fun getFactory(): Supplier<PictureInPictureRenderer<ItemWidgetItemState>> = Supplier { ItemWidgetRenderer() }
+    //? } else
+    //override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<ItemWidgetItemState>> = Function { buffer -> ItemWidgetRenderer(buffer) }
 }
 
-class ItemWidgetRenderer(source: MultiBufferSource.BufferSource) : PictureInPictureRenderer<ItemWidgetItemState>(source) {
+//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> '() : ', '(buffer)' -> '()'
+class ItemWidgetRenderer() : PictureInPictureRenderer<ItemWidgetItemState>() {
 
     override fun getRenderStateClass(): Class<ItemWidgetItemState> = ItemWidgetItemState::class.java
     override fun getTextureLabel(): String = "skyocean_item_widget"
 
-    override fun renderToTexture(state: ItemWidgetItemState, stack: PoseStack) {
+    override fun renderToTexture(state: ItemWidgetItemState, stack: PoseStack/*? >= 26.2 >> ')'*/, submitNodeCollector: SubmitNodeCollector ) {
         val bounds = state.bounds ?: return
 
         stack.pushPose()
@@ -69,12 +75,17 @@ class ItemWidgetRenderer(source: MultiBufferSource.BufferSource) : PictureInPict
         stack.mulPose(Axis.ZN.rotationDegrees(180f))
         stack.mulPose(Axis.YN.rotationDegrees(state.rotation))
 
-        McClient.self.gameRenderer.lighting.setupFor(if (state.item.usesBlockLight()) Lighting.Entry.ITEMS_3D else Lighting.Entry.ITEMS_FLAT)
+        //~ if >= 26.2 '.lighting' -> '.lighting()'
+        McClient.self.gameRenderer.lighting().setupFor(if (state.item.usesBlockLight()) Lighting.Entry.ITEMS_3D else Lighting.Entry.ITEMS_FLAT)
 
+        //? 26.1 {
+        /*val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
+        val submitNodeCollector = featureRenderer.submitNodeStorage
+        *///? }
         state.item.submit(
             stack,
-            McClient.self.gameRenderer.featureRenderDispatcher.submitNodeStorage,
-            LightTexture.FULL_BRIGHT,
+            submitNodeCollector,
+            LightCoordsUtil.FULL_BRIGHT,
             OverlayTexture.NO_OVERLAY,
             0,
         )

@@ -39,7 +39,8 @@ public class GuiRendererMixin {
             var mc = Minecraft.getInstance();
             var chain = mc.getShaderManager().getPostChain(this.skyocean$currentEffect, LevelTargetBundle.MAIN_TARGETS);
             if (chain != null) {
-                chain.process(mc.getMainRenderTarget(), accessor.getResourcePool());
+                //~ if >= 26.2 'getMainRenderTarget()' -> 'gameRenderer.mainRenderTarget()'
+                chain.process(mc.gameRenderer.mainRenderTarget(), accessor.getResourcePool());
                 return;
             }
         }

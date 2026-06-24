@@ -22,7 +22,6 @@ import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.level.block.Block
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
@@ -69,7 +68,7 @@ class GenericDropdown<T>(
                 default = TranslatableWrapper.entityWrapper(default),
                 options = options.map { TranslatableWrapper.entityWrapper(it) },
                 toString = { EntityType.getKey(it.value).toString() },
-                fromString = { TranslatableWrapper.entityWrapper(BuiltInRegistries.ENTITY_TYPE.get(Identifier.parse(it)).getOrNull()!!.unsafeCast()) },
+                fromString = { TranslatableWrapper.entityWrapper(BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.parse(it))) },
                 id = id,
                 init = init,
             ),
@@ -87,7 +86,7 @@ class GenericDropdown<T>(
                 default = TranslatableWrapper.soundEventWrapper(default),
                 options = options.map { TranslatableWrapper.soundEventWrapper(it) },
                 toString = { it.value.location.toString() },
-                fromString = { TranslatableWrapper.soundEventWrapper(BuiltInRegistries.SOUND_EVENT.getValue(Identifier.parse(it))) },
+                fromString = { TranslatableWrapper.soundEventWrapper(BuiltInRegistries.SOUND_EVENT.getValue(Identifier.parse(it))!!) },
                 id = id,
                 init = init,
             ),

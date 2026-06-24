@@ -12,13 +12,5 @@ public interface FluidModelTransparencyOverride {
     default void skyocean$setTransparency(Transparency value) {
         throw new UnsupportedOperationException("Implemented via mixin");
     }
-
-    default Transparency getTransparency() {
-        return skyocean$getTransparency();
-    }
-
-    default void setTransparency(Transparency value) {
-        skyocean$setTransparency(value);
-    }
 }
 //? }

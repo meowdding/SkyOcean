@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.world.entity.EntityType
+//? >= 26.2
 import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
@@ -20,7 +21,7 @@ annotation class RegisterAnimalModifier
 
 private val dyeColors = DyeColor.entries
 
-//~ if >= 26.2 '= EntityType' -> '= EntityTypes'
+//~ if >= 26.2 '= EntityType<*>' -> '= EntityTypes'
 typealias EntityTypes = EntityTypes
 
 interface AnimalModifier<Type : LivingEntity, State : LivingEntityRenderState> {

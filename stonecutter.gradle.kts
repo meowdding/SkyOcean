@@ -41,7 +41,7 @@ stonecutter parameters {
 
     // Taken from Luna :3
     replacements.string {
-        direction = eval(current.version, "< 26.1")
+        direction = eval(current.version, "<= 26.1")
 
         val dyeColors = mapOf(
             "black" to "BLACK",
