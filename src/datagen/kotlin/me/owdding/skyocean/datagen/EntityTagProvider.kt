@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture
 class EntityTagProvider(output: FabricPackOutput, future: CompletableFuture<HolderLookup.Provider>)
     : FabricTagsProvider.EntityTypeTagsProvider(output, future) {
     override fun addTags(wrapperLookup: HolderLookup.Provider) {
-        //~ if >= 26.2 'valueLookupBuilder' -> 'builder'
+        //~ if >= 26.2 'valueLookupBuilder(' -> 'builder('
         val builder = builder(EntityTagKey.LIVING_ENTITIES.key)
 
         EntityTypes::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) && EntityType::class.java.isAssignableFrom(it.type) }
