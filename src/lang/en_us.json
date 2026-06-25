@@ -94,6 +94,10 @@
           "call_fred": "Call Fred",
           "both": "Both"
         },
+        "forge_reminder_busy": {
+          "@value": "Don't Forge Remind when busy",
+          "desc": "Busy means if you're inside a Dungeon Run, Kuudra, ..."
+        },
         "retexture": {
           "@value": "Retexture",
           "carpets": {

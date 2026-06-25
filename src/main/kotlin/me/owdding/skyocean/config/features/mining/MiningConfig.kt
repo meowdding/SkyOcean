@@ -35,6 +35,10 @@ object MiningConfig : CategoryKt("mining") {
         searchTerms += listOf("call", "fred", "warp")
     }
 
+    var forgeReminderBusy by boolean(false) {
+        translation = "skyocean.config.mining.forge_reminder_busy"
+    }
+
     init {
         separator("skyocean.config.mining.hotm")
     }
