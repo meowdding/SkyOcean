@@ -4,7 +4,9 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.LlamaRenderState
 import net.minecraft.world.entity.EntityType
@@ -12,24 +14,25 @@ import net.minecraft.world.entity.animal.equine.Llama
 
 @RegisterAnimalModifier
 object LlamaModifier : AnimalModifier<Llama, LlamaRenderState> {
-    override val type: EntityType<Llama> = EntityType.LLAMA
+    override val type: EntityType<Llama> = EntityTypes.LLAMA
     val variants = Llama.Variant.entries
 
     var llamaVariant = PlayerAnimalConfig.createEntry("llama_variant") { id, type ->
         enum(id, Variant.RANDOM) {
             this.translation = createTranslationKey("llama", "${type}_variant")
-            condition = isSelected(EntityType.LLAMA)
+            condition = isSelected(EntityTypes.LLAMA)
         }
     }
 
     var llamaTrader = PlayerAnimalConfig.createEntry("llama_trader") { id, type ->
         enum(id, AnimalModifier.BooleanState.RANDOM) {
             this.translation = createTranslationKey("llama", "${type}_trader")
-            condition = isSelected(EntityType.LLAMA)
+            condition = isSelected(EntityTypes.LLAMA)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: LlamaRenderState,
         partialTicks: Float,

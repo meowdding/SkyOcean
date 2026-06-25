@@ -22,8 +22,8 @@ object VisitorModifier : AbstractCraftHelperModifier() {
         if (event.slot.index != 22) return null
 
         val acceptOffer = event.itemStacks[29]
-        if (acceptOffer !in Items.GREEN_TERRACOTTA) return null
-        if (event.itemStacks[33] !in Items.RED_TERRACOTTA) return null
+        if (acceptOffer !in Items.DYED_TERRACOTTA.green()) return null
+        if (event.itemStacks[33] !in Items.DYED_TERRACOTTA.red()) return null
 
         if (event.item !in ItemTag.GLASS_PANES) {
             SkyOcean.warn("Failed to place craft helper item in visitor, item is not a glass pane")

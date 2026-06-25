@@ -114,7 +114,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
     @Subscription
     fun inventoryChangeEvent(event: InventoryChangeEvent) {
         if (!museumRegex.matches(event.title)) return
-        if (event.item !in Items.GRAY_DYE) return
+        if (event.item !in Items.DYE.gray()) return
         if (!MiscConfig.museumArmourPieces && !MiscConfig.itemSearchMuseumIntegration) return
 
         try {
@@ -128,7 +128,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
             val item: Item = when (error.type) {
                 ITEM_NOT_FOUND -> Items.BLACKSTONE
                 NO_MATCHING_MUSEUM_ITEM -> Items.BARRIER
-                ARMOR_NOT_FOUND -> Items.RED_DYE
+                ARMOR_NOT_FOUND -> Items.DYE.red()
             }
 
             event.item.disableCatharsisModifications()
@@ -154,7 +154,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
         val amount = items.sumOf { it.amount }
         event.item.skyoceanReplace(false) {
             if (amount >= 1) {
-                this.item = Items.GREEN_DYE
+                this.item = Items.DYE.green()
                 registerModifier {
                     beforeWiki()
                     add("This item was found on your profile!") { this.color = TextColor.GREEN }
@@ -174,7 +174,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
 
             if (rootState == null) {
                 logger.debug("Recipe is null $id")
-                this.item = Items.RED_DYE
+                this.item = Items.DYE.red()
 
                 registerModifier {
                     beforeWiki()
@@ -185,7 +185,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
             }
 
             if (rootState.childrenDone) {
-                this.item = Items.YELLOW_DYE
+                this.item = Items.DYE.yellow()
                 registerModifier {
                     beforeWiki()
                     add("You have all materials to craft this item!") { this.color = TextColor.GREEN }
@@ -193,7 +193,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
                     skipRemaining()
                 }
             } else {
-                this.item = Items.ORANGE_DYE
+                this.item = Items.DYE.orange()
                 registerModifier {
                     beforeWiki()
                     add("This item can be crafted!") { this.color = TextColor.GRAY }

@@ -11,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MouseHandler.class)
 public class MouseHandlerMixin {
 
-    @Inject(method = "onButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getOverlay()Lnet/minecraft/client/gui/screens/Overlay;", ordinal = 0), cancellable = true)
+    //~ if >= 26.2 'Minecraft;getOverlay' -> 'gui/Gui;overlay'
+    @Inject(method = "onButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;overlay()Lnet/minecraft/client/gui/screens/Overlay;", ordinal = 0), cancellable = true)
     public void onButton(long handle, MouseButtonInfo rawButtonInfo, int action, CallbackInfo ci) {
         if (HotkeyManager.handle(rawButtonInfo, action)) {
             ci.cancel();

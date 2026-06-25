@@ -4,7 +4,9 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.HorseRenderState
 import net.minecraft.world.entity.EntityType
@@ -14,7 +16,7 @@ import net.minecraft.world.entity.animal.equine.Markings as HorseMarkings
 
 @RegisterAnimalModifier
 object HorseModifier : AnimalModifier<Horse, HorseRenderState> {
-    override val type: EntityType<Horse> = EntityType.HORSE
+    override val type: EntityType<Horse> = EntityTypes.HORSE
 
     val horseVariants = Variant.entries
     val horseMarkings = HorseMarkings.entries
@@ -22,18 +24,19 @@ object HorseModifier : AnimalModifier<Horse, HorseRenderState> {
     var horseVariant = PlayerAnimalConfig.createEntry("horse_variant") { id, type ->
         enum(id, Variants.RANDOM) {
             this.translation = createTranslationKey("horse", "${type}_color")
-            condition = isSelected(EntityType.HORSE)
+            condition = isSelected(EntityTypes.HORSE)
         }
     }
 
     var horseMarking = PlayerAnimalConfig.createEntry("horse_marking") { id, type ->
         enum(id, Markings.RANDOM) {
             this.translation = createTranslationKey("horse", "${type}_marking")
-            condition = isSelected(EntityType.HORSE)
+            condition = isSelected(EntityTypes.HORSE)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: HorseRenderState,
         partialTicks: Float,

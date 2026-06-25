@@ -36,10 +36,8 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
         slots = items.asSlots().toMutableList()
     }
 
-    //~ if >= 26.1 'render(' -> 'extractRenderState(' {
         override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
-    //~ }
         if (titleComponent != null) {
             guiGraphics.drawString(Text.of(titleComponent) { color = TextColor.DARK_GRAY }, this.x + 8, this.y + 6, -1, false)
         }
@@ -56,13 +54,10 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
         }
     }
 
-    //~ if >= 26.1 'render' -> 'extract'
     override fun extractBackground(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
-        //~ if >= 26.1 'render' -> 'extract'
         super.extractBackground(guiGraphics, mouseX, mouseY, partialTick)
 
         if (renderBackground) {
-            //~ if >= 26.1 'render' -> 'extract'
             extractMenuBackground(guiGraphics)
         }
 
@@ -93,9 +88,7 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
 
     private fun extractSlot(graphics: GuiGraphicsExtractor, slot: Slot, mouseX: Int, mouseY: Int) {
         val itemStack = slot.itemStack.takeUnless { it?.isEmpty == true } ?: return
-        //~ if >= 26.1 'renderItem(' -> 'item('
         graphics.item(itemStack, slot.x, slot.y)
-        //~ if >= 26.1 'renderItemDecorations(' -> 'itemDecorations('
         graphics.itemDecorations(McFont.self, itemStack, slot.x, slot.y)
 
         if (slot.mouseOver(mouseX, mouseY)) {

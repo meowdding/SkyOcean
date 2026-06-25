@@ -7,17 +7,17 @@ kotlin = "2.3.0"
 kotlin-gradle-plugin = "2.3.0"
 kotlin-symbol-processor = "2.3.5"
 gson = "2.12.1"
-skyblockapi = "4.1.11"
+skyblockapi = "4.2.0"
 skyblockapi-repo = "3.0.2"
 keval = "1.1.1"
 
-hypixel-modapi-fabric = "1.0.1+build.1+mc1.21"
+hypixel-modapi-fabric = "1.0.2+build.1+mc26.1"
 
-rconfigkt = "3.5.15"
+rconfigkt = "4.0.0-beta.1"
 
 detekt = "2.0.0-alpha.2"
 
-meowdding-lib = "4.1.9"
+meowdding-lib = "4.2.0-beta.1"
 meowdding-ktmodules = "1.0.6"
 meowdding-ktcodecs = "1.1.9"
 meowdding-resources = "1.0.21"
@@ -40,7 +40,7 @@ hypixel-modapi-fabric = { module = "maven.modrinth:hypixel-mod-api", version.ref
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
-resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-fabric-1.21.5", version.ref = "rconfigkt" }
+resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-26.1-rc-1", version.ref = "rconfigkt" }
 
 meowdding-lib = { module = "me.owdding.meowdding-lib:meowdding-lib", version.ref = "meowdding-lib" }
 meowdding-ktmodules = { module = "me.owdding.ktmodules:KtModules", version.ref = "meowdding-ktmodules" }

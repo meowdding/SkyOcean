@@ -1,6 +1,5 @@
 package me.owdding.skyocean.mixins.features.fishing;
 
-//? if >= 26.1 {
 import me.owdding.skyocean.features.fishing.LavaReplacement;
 import me.owdding.skyocean.hooks.FluidModelTransparencyOverride;
 import com.google.common.collect.ImmutableMap;
@@ -50,4 +49,3 @@ public class FluidStateModelSetMixin {
         return orig;
     }
 }
-//? }

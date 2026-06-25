@@ -139,10 +139,13 @@ object MetalDetectorSolver {
         Text.of("Chest found at §a${blockPos.x}§f, §a${blockPos.y}§f, §a${blockPos.z}").sendWithPrefix()
         if (MiningConfig.playDingOnFind) McPlayer.self?.playSound(SoundEvents.NOTE_BLOCK_PLING.value())
         if (MiningConfig.showTitleOnFind) {
-            val gui = McClient.self.gui
-            gui.setTimes(5, 20, 5)
-            gui.setSubtitle(Text.of("§a${blockPos.x}§f, §a${blockPos.y}§f, §a${blockPos.z}"))
-            gui.setTitle(Text.of("Treasure Found!").withColor(TextColor.YELLOW))
+            //? >= 26.2 {
+            val hud = McClient.self.gui.hud
+            //?} else
+            //val hud = McClient.self.gui
+            hud.setTimes(5, 20, 5)
+            hud.setSubtitle(Text.of("§a${blockPos.x}§f, §a${blockPos.y}§f, §a${blockPos.z}"))
+            hud.setTitle(Text.of("Treasure Found!").withColor(TextColor.YELLOW))
         }
     }
 

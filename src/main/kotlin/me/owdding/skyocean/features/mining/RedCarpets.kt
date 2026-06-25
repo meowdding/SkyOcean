@@ -17,7 +17,7 @@ object RedCarpets {
     fun onBlockModel(event: BlockModelEvent) {
         if (!MiningRetexture.recolorCarpets) return
         if (event.block !in BlockTagKey.DWARVEN_MINES_CARPETS) return
-        event.block = Blocks.RED_CARPET
+        event.block = Blocks.CARPET.red()
     }
 
 }

@@ -25,7 +25,17 @@ import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.chat.OceanGradients
 import me.owdding.skyocean.utils.components.TagComponentSerialization
-import me.owdding.skyocean.utils.extensions.*
+import me.owdding.skyocean.utils.extensions.bottomLeft
+import me.owdding.skyocean.utils.extensions.createButton
+import me.owdding.skyocean.utils.extensions.createIntInput
+import net.minecraft.network.chat.TextColor as McTextColor
+import me.owdding.skyocean.utils.extensions.createText
+import me.owdding.skyocean.utils.extensions.createTextInput
+import me.owdding.skyocean.utils.extensions.createToggleButton
+import me.owdding.skyocean.utils.extensions.middleCenter
+import me.owdding.skyocean.utils.extensions.middleLeft
+import me.owdding.skyocean.utils.extensions.middleRight
+import me.owdding.skyocean.utils.extensions.withPadding
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -107,7 +117,7 @@ class EditReplacementModal(
                             key,
                             placeholder = "Original",
                             texture = id("text_replacements/inset"),
-                            width = width / 2 - PADDING * 2
+                            width = width / 2 - PADDING * 2,
                         ).add()
                     }
                 }.add(middleLeft)
@@ -174,9 +184,10 @@ class EditReplacementModal(
                         append("<underlined>") { this.underlined = true }
                         append(" and <obfuscated>")
                     }
-                    ChatFormatting.entries.filter { it.isColor }.map {
-                        text("<${it.serializedName}>") {
-                            this.color = it.color!!
+                    ChatFormatting.entries.filter { it <= ChatFormatting.WHITE }.map {
+                        text("<${it.name}>") {
+                            //~ if >= 26.2 'it.color' -> 'McTextColor.fromLegacyFormat(it)?.value'
+                            this.color = McTextColor.fromLegacyFormat(it)?.value!!
                         }
                     }.chunked(5).forEach {
                         add {
@@ -221,7 +232,7 @@ class EditReplacementModal(
                 value,
                 placeholder = "Replacement",
                 texture = id("text_replacements/inset"),
-                width = width - PADDING * 2
+                width = width - PADDING * 2,
             ).add()
             Widgets.button()
                 .withSize(width - PADDING * 2, 10)
@@ -263,7 +274,7 @@ class EditReplacementModal(
                     },
             )
             .withChildren(
-                content.withPadding(PADDING, top = 0)
+                content.withPadding(PADDING, top = 0),
             )
             .withChild(
                 Widgets.frame()
@@ -327,13 +338,9 @@ class EditReplacementModal(
         FrameLayout.centerInRectangle(this.layout, this.rectangle)
     }
 
-
-
-    //~ if >= 26.1 'render' -> 'extract' {
     override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick)
         this.extractTransparentBackground(graphics)
-        //~ }
 
         graphics.blitSprite(
             RenderPipelines.GUI_TEXTURED,

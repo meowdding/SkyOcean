@@ -4,9 +4,11 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.FrogRenderState
 import net.minecraft.core.registries.Registries
@@ -19,19 +21,20 @@ import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier
 object FrogModifier : AnimalModifier<Frog, FrogRenderState> {
-    override val type: EntityType<Frog> = EntityType.FROG
+    override val type: EntityType<Frog> = EntityTypes.FROG
     val variants = Registries.FROG_VARIANT.list()
 
     var frogVariant = PlayerAnimalConfig.createEntry("frog_variant") { id, type ->
         enum(id, Variant.RANDOM) {
             this.translation = createTranslationKey("frog", "${type}_variant")
-            condition = isSelected(EntityType.FROG)
+            condition = isSelected(EntityTypes.FROG)
         }
     }
 
     fun getFrogVariant(state: AvatarRenderState): FrogVariant = frogVariant.select(state).frogVariant ?: getRandom(state, variants)
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: FrogRenderState,
         partialTicks: Float,

@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper;
 import me.owdding.skyocean.utils.Utils;
-//~ if >= 26.1 'BlockModelWrapper' -> 'CuboidItemModelWrapper'
 import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.client.renderer.item.SpecialModelWrapper;
 import net.minecraft.core.component.DataComponents;
@@ -12,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-//~ if >= 26.1 'BlockModelWrapper' -> 'CuboidItemModelWrapper'
 @Mixin(value = {CuboidItemModelWrapper.class, SpecialModelWrapper.class})
 public class ItemEnchantmentGlintMixin {
 

@@ -2,14 +2,16 @@ package me.owdding.skyocean.config.features.inventory
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
+import me.owdding.skyocean.utils.LevelBoundValue
 import me.owdding.skyocean.utils.Utils.id
+import me.owdding.skyocean.utils.levelBound
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.ItemLike
 import org.intellij.lang.annotations.Language
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
 import kotlin.jvm.optionals.getOrNull
 
 object Buttons : CategoryKt("buttons") {
@@ -64,7 +66,7 @@ class ButtonConfig(
         private set
 
     var item by observable(string(itemName)) { _, new ->
-        this.itemStack = toItem(new)
+        itemStackDelegate.invalidate()
     }
     var command by string(commandName)
     var title by observable(string(titleName)) { _, new ->
@@ -75,7 +77,8 @@ class ButtonConfig(
     var tooltip by string(tooltipName)
     var disabled by boolean(false)
 
-    var itemStack: Lazy<ItemStack> = toItem(item)
+    val itemStackDelegate: LevelBoundValue<ItemStack> = levelBound { toItem(item) }
+    val itemStack: ItemStack by itemStackDelegate
 
     fun reset() {
         item = itemName
@@ -85,8 +88,8 @@ class ButtonConfig(
         disabled = false
     }
 
-    private fun toItem(id: String) = lazy { Identifier.tryParse(id.lowercase())?.let {
+    private fun toItem(id: String) = Identifier.tryParse(id.lowercase())?.let {
         BuiltInRegistries.ITEM.getOptional(it).getOrNull()?.defaultInstance
-    } ?: RepoItemsAPI.getItem(id.uppercase()) }
+    } ?: SkyBlockItemsRepo.getItemStackOrDefault(id.uppercase())
 }
 

@@ -30,7 +30,11 @@ object TagComponentSerialization {
                 "strikethrough",
                 "color",
             ),
-            ChatFormatting.entries.filter { it.isColor }.map { it.serializedName },
+
+            ChatFormatting.entries.filter { it <= ChatFormatting.WHITE }.map {
+                //~ if >= 26.2 'serializedName' -> 'name'
+                it.name
+            },
         ).flatten()
         val tagRegistry = TagRegistry.builder().apply {
             copies.forEach { default.getTag(it)?.let { tag -> this.add(tag) } }
@@ -137,7 +141,6 @@ object TagComponentSerialization {
         return list
     }
 
-    //~ if >= 26.1 'parseText' -> 'parseComponent'
     fun deserialize(text: String): Component = tagParser.parseComponent(text, context)
 
 }
