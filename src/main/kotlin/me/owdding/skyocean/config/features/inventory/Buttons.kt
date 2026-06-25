@@ -18,7 +18,7 @@ object Buttons : CategoryKt("buttons") {
     val button0: ButtonConfig by obj(ButtonConfig(Items.DIAMOND_SWORD, "Skills", "Your Skills"))
     val button1: ButtonConfig by obj(ButtonConfig(Items.PAINTING, "Collections", "Collections"))
     val button2: ButtonConfig by obj(ButtonConfig(Items.BONE, "Pets", "(?:\\(\\d+/\\d+\\) )?Pets(?: \\(\\d+/\\d+\\))?"))
-    val button3: ButtonConfig by obj(ButtonConfig("ARMOR_OF_YOG_CHESTPLATE", "Wardrobe", "(?:Wardrobe )?\((?<currentPage>\d+)\/\d+\)(?: Armor Sets)?"))
+    val button3: ButtonConfig by obj(ButtonConfig("ARMOR_OF_YOG_CHESTPLATE", "Wardrobe", "(?:Wardrobe )?\\((?<currentPage>\\d+)/\\d+\\)(?: Armor Sets)?"))
     val button4: ButtonConfig by obj(ButtonConfig(Items.BUNDLE, "Sacks", "Sack of Sacks"))
     val button5: ButtonConfig by obj(ButtonConfig("RUNEBOOK", "Accessories", "Accessory Bag(?: \\(\\d+/\\d+\\))?"))
     val button6: ButtonConfig by obj(ButtonConfig(Items.ENDER_CHEST, "Storage", "Storage"))
