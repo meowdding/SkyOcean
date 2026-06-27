@@ -1,22 +1,23 @@
 package me.owdding.skyocean.utils.rendering
 
 //? >= 26.2
-import com.mojang.blaze3d.PrimitiveTopology
-//? >= 26.2
 import com.mojang.blaze3d.pipeline.BindGroupLayout
-import com.mojang.blaze3d.pipeline.BlendFunction
-import com.mojang.blaze3d.pipeline.ColorTargetState
-import com.mojang.blaze3d.pipeline.DepthStencilState
+//? 26.1 {
+//import com.mojang.blaze3d.pipeline.BlendFunction
+//import com.mojang.blaze3d.pipeline.ColorTargetState
+//import com.mojang.blaze3d.pipeline.DepthStencilState
+//? }
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import com.mojang.blaze3d.shaders.UniformType
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
-//? 26.1
+//? 26.1 {
+//import com.mojang.blaze3d.vertex.DefaultVertexFormat
 //import com.mojang.blaze3d.vertex.VertexFormat
+//? }
 import earth.terrarium.olympus.client.utils.Orientation
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.GuiGraphicsExtractor
-//? 26.1
-//import net.minecraft.client.renderer.RenderPipelines
+//? 26.2
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.RenderPipelines.register
 import org.joml.Matrix3x2f
 import org.joml.Vector2i
@@ -24,24 +25,18 @@ import org.joml.Vector2i
 object InventoryRenderer {
 
     val INVENTORY_BACKGROUND = register(
-        RenderPipeline.builder()
+        RenderPipeline.builder(/*? >= 26.2 >> ')'*/RenderPipelines.GUI_TEXTURED_SNIPPET)
             .withLocation(SkyOcean.id("inventory"))
-            .withVertexShader(SkyOcean.id("core/inventory"))
             .withFragmentShader(SkyOcean.id("core/inventory"))
             .withCull(false)
-            .withDepthStencilState(DepthStencilState.DEFAULT)
-            .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT))
             //? >= 26.2 {
-            .withPrimitiveTopology(PrimitiveTopology.QUADS)
-            .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
             .withBindGroupLayout(BindGroupLayout.builder()
                 .withUniform(POLY_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
-                .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
-                .withUniform("Projection", UniformType.UNIFORM_BUFFER)
-                .withSampler("Sampler0")
                 .build())
             //?} else {
             /*.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+            .withDepthStencilState(DepthStencilState.DEFAULT)
+            .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT))
             .withSampler("Sampler0")
             .withUniform(POLY_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
             .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
@@ -49,25 +44,20 @@ object InventoryRenderer {
              *///?}
             .build(),
     )
+
     val MONO_INVENTORY_BACKGROUND: RenderPipeline = register(
-        RenderPipeline.builder()
+        RenderPipeline.builder(/*? >= 26.2 >> ')'*/RenderPipelines.GUI_TEXTURED_SNIPPET)
             .withLocation(SkyOcean.id("mono_inventory"))
-            .withVertexShader(SkyOcean.id("core/inventory"))
             .withFragmentShader(SkyOcean.id("core/mono_inventory"))
             .withCull(false)
-            .withDepthStencilState(DepthStencilState.DEFAULT)
-            .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT))
             //? >= 26.2 {
-            .withPrimitiveTopology(PrimitiveTopology.QUADS)
-            .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
             .withBindGroupLayout(BindGroupLayout.builder()
                 .withUniform(MONO_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
-                .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
-                .withUniform("Projection", UniformType.UNIFORM_BUFFER)
-                .withSampler("Sampler0")
                 .build())
             //?} else {
             /*.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+            .withDepthStencilState(DepthStencilState.DEFAULT)
+            .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT))
             .withSampler("Sampler0")
             .withUniform(MONO_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
             .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
