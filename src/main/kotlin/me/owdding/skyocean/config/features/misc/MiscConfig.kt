@@ -42,6 +42,15 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.revertMasterStars"
     }
 
+    var quickJoinButton by boolean(true) {
+        translation = "skyocean.config.misc.quickJoinButton"
+        searchTerms = listOf("hypixel", "quick", "join", "server")
+    }
+
+    var quickJoinIp by string("mc.hypixel.net") {
+        translation = "skyocean.config.misc.quickJoinIp"
+    }
+
     var hideLightning by boolean(false) {
         translation = "skyocean.config.misc.hideLightning"
     }
