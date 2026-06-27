@@ -488,6 +488,14 @@
           "@value": "Revert Master Stars",
           "desc": "Reverts the Master Star back to the stacked colored look."
         },
+        "quickJoinButton": {
+          "@value": "Quick Join Button",
+          "desc": "Quickly Join a Server with one less button click."
+        },
+        "quickJoinIp": {
+          "@value": "The IP for Quick Join",
+          "desc": "Customize what Server to quickly join."
+        },
         "previousServer": {
           "@value": "Previous Server",
           "desc": "Sends a chat message when you join a server you were previously in."
