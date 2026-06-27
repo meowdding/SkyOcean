@@ -13,6 +13,7 @@ import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -21,6 +22,12 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor;
 
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
+
+    @Unique
+    private Button skyocean$quickJoinButton;
+
+    @Unique
+    private Button skyocean$multiplayerButton;
 
     protected TitleScreenMixin(Component title) {
         super(title);
@@ -46,7 +53,7 @@ public abstract class TitleScreenMixin extends Screen {
             multiplayerButton.setWidth(98);
 
             String serverIp = MiscConfig.INSTANCE.getQuickJoinIp();
-            Button quickJoin = Button.builder(Component.literal("Join " + serverIp), button -> {
+            this.skyocean$quickJoinButton = Button.builder(Component.literal("Join " + serverIp), button -> {
                     ServerData serverData = new ServerData("Quick Join", serverIp, ServerData.Type.OTHER);
                     ServerAddress serverAddress = ServerAddress.parseString(serverIp);
                     ConnectScreen.startConnecting(this, this.minecraft, serverAddress, serverData, false, null);
@@ -55,7 +62,16 @@ public abstract class TitleScreenMixin extends Screen {
                 .tooltip(Tooltip.create(Text.INSTANCE.of("Added by SkyOcean. Customize it in Config", TextColor.GRAY)))
                 .build();
 
-            Screens.getWidgets(this).add(quickJoin);
+            this.skyocean$multiplayerButton = multiplayerButton;
+            Screens.getWidgets(this).add(this.skyocean$quickJoinButton);
+        }
+    }
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void enforceQuickJoinPosition(CallbackInfo ci) {
+        if (this.skyocean$quickJoinButton != null && this.skyocean$multiplayerButton != null) {
+            this.skyocean$quickJoinButton.setY(this.skyocean$multiplayerButton.getY());
+            this.skyocean$quickJoinButton.setX(this.skyocean$multiplayerButton.getX() + 102);
         }
     }
 }
