@@ -27,6 +27,9 @@ object InventoryRenderer {
     val INVENTORY_BACKGROUND = register(
         RenderPipeline.builder(/*? >= 26.2 >> ')'*/RenderPipelines.GUI_TEXTURED_SNIPPET)
             .withLocation(SkyOcean.id("inventory"))
+            //? 26.1 {
+            //.withVertexShader(SkyOcean.id("core/inventory"))
+            //? }
             .withFragmentShader(SkyOcean.id("core/inventory"))
             .withCull(false)
             //? >= 26.2 {
@@ -48,6 +51,9 @@ object InventoryRenderer {
     val MONO_INVENTORY_BACKGROUND: RenderPipeline = register(
         RenderPipeline.builder(/*? >= 26.2 >> ')'*/RenderPipelines.GUI_TEXTURED_SNIPPET)
             .withLocation(SkyOcean.id("mono_inventory"))
+            //? 26.1 {
+            //.withVertexShader(SkyOcean.id("core/inventory"))
+            //? }
             .withFragmentShader(SkyOcean.id("core/mono_inventory"))
             .withCull(false)
             //? >= 26.2 {
