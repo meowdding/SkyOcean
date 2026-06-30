@@ -34,7 +34,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 
 @Module
-object MinionHelper : InventorySideGui("\\(\\d+/\\d+\\) Crafted Minions") {
+object MinionHelper : InventorySideGui("inventorySideGui.minionHelper.title", "\\(\\d+/\\d+\\) Crafted Minions") {
     override val enabled: Boolean get() = InventoryConfig.minionHelper
 
     private const val SCROLLBAR_WIDTH = 10
