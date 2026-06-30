@@ -60,7 +60,7 @@ object HotspotAPI {
             val fluid = McLevel[it].fluidState
 
             if (!fluid.isEmpty) {
-                hotspot.pos = Vector3f(pos.x.toFloat(), it.y + fluid.getHeight(McLevel.self, it), pos.z.toFloat())
+                hotspot.pos = Vector3f(pos.x.toFloat(), it.y + fluid.getHeight(McLevel.self, it) + 0.1f, pos.z.toFloat())
                 HotspotEvent.Spawn(hotspot).post(SkyBlockAPI.eventBus)
                 return
             }
