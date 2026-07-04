@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.inventory.buttons
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.compat.CatharsisSupport
 import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
@@ -104,6 +105,8 @@ object InvButtons {
     }
 
     private fun shouldShowButtons(screen: Screen): Boolean {
+        if (CatharsisSupport.isModElementHidden("skyocean:inventory_buttons")) return false
+
         return screen is AbstractContainerScreen<*> && InventoryConfig.inventoryButtons && (LocationAPI.isOnSkyBlock || screen is ButtonConfigScreen)
     }
 
