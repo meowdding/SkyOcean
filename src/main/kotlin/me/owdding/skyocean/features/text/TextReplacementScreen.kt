@@ -5,6 +5,9 @@ import earth.terrarium.olympus.client.ui.UIIcons
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.RIGHT
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
+import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.config.features.text_replacements.TextReplacementConfig
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.features.hotkeys.ShowMessageModal
 import me.owdding.skyocean.utils.SkyOceanScreen
@@ -19,6 +22,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import kotlin.math.max
@@ -304,6 +308,10 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                     spacer(sliceWidth * 3 + SPACER * 2, SPACER * 4)
                     Text.of {
                         append(ChatUtils.prefix)
+
+                        if (!TextReplacementConfig.enabled) {
+                            append(" Currently disabled, enable it in the config!", CatppuccinColors.Mocha.red)
+                        }
                     }.asWidget().withPadding(left = SPACER).add(middleCenter)
                 }.withTexturedBackground("text_replacements/background").add()
                 horizontal(SPACER) {

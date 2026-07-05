@@ -5,6 +5,8 @@ import earth.terrarium.olympus.client.ui.UIIcons
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.RIGHT
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.hotkeys.system.Hotkey
 import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
@@ -339,6 +341,10 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
                     spacer(sliceWidth * 3 + SPACER * 2, SPACER * 4)
                     Text.of {
                         append(ChatUtils.prefix)
+
+                        if (HotkeyConfig.disabled) {
+                            append(" Currently disabled, enable it in the config!", CatppuccinColors.Mocha.red)
+                        }
                     }.asWidget().withPadding(left = SPACER).add(middleCenter)
                 }.withTexturedBackground("hotkey/background").add()
                 horizontal(SPACER) {

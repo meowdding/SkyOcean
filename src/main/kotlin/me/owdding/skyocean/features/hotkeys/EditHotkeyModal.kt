@@ -81,7 +81,7 @@ class EditHotkeyModal(
 
     private val enabled = ListenableState.of(hotkey?.enabled ?: true)
     private val orderSensitive = ListenableState.of(keybind?.settings?.orderSensitive ?: false)
-    private val allowExtraKeys = ListenableState.of(keybind?.settings?.allowExtraKeys ?: false)
+    private val allowExtraKeys = ListenableState.of(keybind?.settings?.allowExtraKeys ?: true)
 
     private val priority = ListenableState.of(keybind?.settings?.priority ?: 0)
     private val context: ListenableState<ConflictContext> = ListenableState.of(keybind?.settings?.context ?: ConflictContext.IN_GAME)

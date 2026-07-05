@@ -1688,6 +1688,17 @@
           "@value": "Edit hotkeys",
           "desc": "Opens the hotkey edit screen."
         }
+      },
+      "text_replacements": {
+        "@value": "Text Replacements",
+        "enabled": {
+          "@value": "Enabled",
+          "desc": "Global toggle for all text replacements, regardless of their respective toggles."
+        },
+        "outside_skyblock": {
+          "@value": "Outside SkyBlock",
+          "desc": "Allows text replacements to be active outside of skyblock."
+        }
       }
     },
     "garden": {

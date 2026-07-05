@@ -1,5 +1,7 @@
 package me.owdding.skyocean.features.text
 
+import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.config.features.text_replacements.TextReplacementConfig
 import me.owdding.skyocean.features.text.MarkdownChat.toComponent
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
@@ -72,7 +74,7 @@ object TextReplacements {
 
     @JvmStatic
     fun apply(instance: FormattedCharSequence): FormattedCharSequence = runCatching {
-        if (McScreen.self is DisableReplacements) return@runCatching instance
+        if (McScreen.self is DisableReplacements || !TextReplacementConfig.isEnabled()) return@runCatching instance
 
         val builder = StringBuilder()
         instance.accept { _, _, codepoint ->
