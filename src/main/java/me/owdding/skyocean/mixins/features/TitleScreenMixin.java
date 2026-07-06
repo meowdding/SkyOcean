@@ -53,7 +53,8 @@ public abstract class TitleScreenMixin extends Screen {
             multiplayerButton.setWidth(98);
 
             String serverIp = MiscConfig.INSTANCE.getQuickJoinIp();
-            this.skyocean$quickJoinButton = Button.builder(Component.literal("Join " + serverIp), button -> {
+            String text = MiscConfig.INSTANCE.getQuickJoinText().replace("{ip}", serverIp);
+            this.skyocean$quickJoinButton = Button.builder(Component.literal(text), button -> {
                     ServerData serverData = new ServerData("Quick Join", serverIp, ServerData.Type.OTHER);
                     ServerAddress serverAddress = ServerAddress.parseString(serverIp);
                     ConnectScreen.startConnecting(this, this.minecraft, serverAddress, serverData, false, null);

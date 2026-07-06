@@ -47,6 +47,10 @@ object MiscConfig : CategoryKt("misc") {
         searchTerms = listOf("hypixel", "quick", "join", "server")
     }
 
+    var quickJoinText by string("Join {ip}") {
+        translation = "skyocean.config.misc.quickJoinText"
+    }
+
     var quickJoinIp by string("mc.hypixel.net") {
         translation = "skyocean.config.misc.quickJoinIp"
     }

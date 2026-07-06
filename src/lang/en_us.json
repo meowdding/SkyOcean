@@ -492,6 +492,10 @@
           "@value": "Quick Join Button",
           "desc": "Quickly Join a Server with one less button click."
         },
+        "quickJoinText": {
+          "@value": "The Button Text for Quick Join",
+          "desc": "The text shown on the button, use {ip} for the ip."
+        },
         "quickJoinIp": {
           "@value": "The IP for Quick Join",
           "desc": "Customize what Server to quickly join."
