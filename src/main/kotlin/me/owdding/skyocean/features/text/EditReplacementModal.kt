@@ -36,6 +36,7 @@ import me.owdding.skyocean.utils.extensions.middleCenter
 import me.owdding.skyocean.utils.extensions.middleLeft
 import me.owdding.skyocean.utils.extensions.middleRight
 import me.owdding.skyocean.utils.extensions.withPadding
+import me.owdding.skyocean.utils.extensions.withTextFormattingInfo
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -169,64 +170,7 @@ class EditReplacementModal(
             }.add(middleCenter)
             horizontal {
                 createText("Replacement", CatppuccinColors.Mocha.text).withPadding(1).add(middleLeft)
-                Displays.sprite(id("info"), 7, 7).withTooltip {
-                    add("The text field below supports a some formatting tags!")
-                    space()
-                    add("The basic formatting tags include the following")
-                    add {
-                        append(" • ")
-                        append("<bold>") { this.bold = true }
-                        append(", ")
-                        append("<italic>") { this.italic = true }
-                        append(", ")
-                        append("<strikethrough>") { this.strikethrough = true }
-                        append(", ")
-                        append("<underlined>") { this.underlined = true }
-                        append(" and <obfuscated>")
-                    }
-                    ChatFormatting.entries.filter { it <= ChatFormatting.WHITE }.map {
-                        text("<${it.name}>") {
-                            //~ if >= 26.2 'it.color' -> 'McTextColor.fromLegacyFormat(it)?.value'
-                            this.color = McTextColor.fromLegacyFormat(it)?.value!!
-                        }
-                    }.chunked(5).forEach {
-                        add {
-                            append(" • ")
-                            append(Text.join(it, separator = text(", ")))
-                        }
-                    }
-                    add(" • ") {
-                        append("<color #f38ba8>") {
-                            this.color = OceanColors.PINK
-                        }
-                    }
-                    space()
-                    add("The \"complex\" style tags include the following")
-                    OceanGradients.entries.filterNot { it.isDisabled }.map {
-                        text("<${it.name.lowercase()}>") {
-                            this.textShader = it
-                        }
-                    }.chunked(5).forEach {
-                        add {
-                            append(" • ")
-                            append(Text.join(it, separator = text(", ")))
-                        }
-                    }
-                    add {
-                        append(" • ")
-                        append("<gradient ")
-                        append("#color1 ") { this.color = TextColor.BLUE }
-                        append("#color2 ") { this.color = TextColor.GREEN }
-                        append("... ") { this.color = TextColor.GRAY }
-                        append("#colorN ") { this.color = TextColor.MAGENTA }
-                        append("#color1") { this.color = TextColor.BLUE }
-                        append(">")
-                    }
-                    space()
-                    add("Note! To get a gradient that loops perfectly you\n must include the start color at the end again!") {
-                        this.color = TextColor.YELLOW
-                    }
-                }.add()
+                Displays.sprite(id("info"), 7, 7).withTextFormattingInfo().add()
             }
             createTextInput(
                 value,
