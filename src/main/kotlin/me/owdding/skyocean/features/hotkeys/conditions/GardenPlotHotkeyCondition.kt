@@ -53,4 +53,6 @@ data class GardenPlotHotkeyCondition(@Compact val plots: MutableSet<PlotId> = mu
 
         fun isInPlot() = PlotAPI.getCurrentPlot()?.id == ordinal
     }
+
+    override fun duplicate(): HotkeyCondition = copy(plots = plots.toMutableSet())
 }

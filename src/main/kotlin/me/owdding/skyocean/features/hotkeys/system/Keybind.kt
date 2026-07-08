@@ -7,5 +7,10 @@ import me.owdding.ktcodecs.GenerateCodec
 data class Keybind(
     val keys: List<InputConstants.Key>,
     val settings: KeybindSettings,
-)
+) {
+    fun duplicate() = copy(
+        keys = keys.toList(),
+        settings = settings.copy()
+    )
+}
 

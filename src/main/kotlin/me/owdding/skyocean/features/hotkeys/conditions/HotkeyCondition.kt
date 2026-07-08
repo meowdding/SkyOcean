@@ -18,6 +18,8 @@ interface HotkeyCondition {
 
     operator fun invoke() = test()
 
+    fun duplicate(): HotkeyCondition
+
     context(context: WidgetContext)
     fun asLayoutElement(selector: LayoutElement): LayoutElement
 

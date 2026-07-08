@@ -36,9 +36,9 @@ data class Hotkey(
 
     fun duplicate(newName: String = "$name (Copy)"): Hotkey {
         return Hotkey(
-            keybind = keybind,
-            action = action,
-            condition = condition,
+            keybind = keybind.duplicate(),
+            action = action.duplicate(),
+            condition = condition.duplicate(),
             name = newName,
             enabled = false,
             group = group,

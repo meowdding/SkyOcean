@@ -80,4 +80,6 @@ data class CommandHotkeyAction(
             McClient.sendCommand(command)
         }
     }
+
+    override fun duplicate(): HotkeyAction = copy()
 }

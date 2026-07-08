@@ -11,6 +11,8 @@ data object AlwaysHotkeyCondition : HotkeyCondition {
     override val type: HotkeyConditionType = HotkeyConditionType.ALWAYS
 
     override fun test(): Boolean = true
+    override fun duplicate(): HotkeyCondition = this // immutable, so it doesn't matter
+
     context(context: WidgetContext)
     override fun asLayoutElement(selector: LayoutElement): LayoutElement = LayoutFactory.frame(context.width) {
         widget(selector, topLeft)

@@ -114,7 +114,7 @@ object HotkeyManager {
     fun invokeValid() {
         for (keys in getOptions()) {
             val hotkeys = tree.get(keys) ?: continue
-            val hotkey = hotkeys.find { it.isActive() } ?: continue
+            val hotkey = hotkeys.find { it.isActive() && it.keybind.keys.isNotEmpty() } ?: continue
             hotkey.invoke()
             break
         }
@@ -143,6 +143,8 @@ object HotkeyManager {
         pressedKeys.add(key)
 
         val hotkey = this.unorderedKeybinds.find {
+            if (it.keybind.keys.isEmpty()) return@find false
+
             val extraKeys = it.keybind.settings.allowExtraKeys || pressedKeys.all { key ->
                 key in it.keybind.keys
             }
