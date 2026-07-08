@@ -50,7 +50,7 @@ object EquipmentItemContext : OnPlayerItemContext {
         }
     }
 
-    override fun open() = requiresOverworld(true) { McClient.sendCommand("/eq") }
+    override fun open() = requiresOverworld(true) { McClient.sendCommand("/stats") }
 }
 
 object InventoryItemContext : OnPlayerItemContext {
