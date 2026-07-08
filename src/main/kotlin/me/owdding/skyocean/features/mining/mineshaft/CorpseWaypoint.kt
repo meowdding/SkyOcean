@@ -64,10 +64,11 @@ object CorpseWaypoint {
     }
 
     @Subscription
+    @OnlyIn(SkyBlockIsland.MINESHAFT)
     fun onRender(event: RenderTranslucentFeatures) {
         if (!MineshaftConfig.corpseWaypoint) return
-        val mineshaft = mineshaftCorpses?.entries?.find { it.key == MineshaftType.JADE } ?: return
-        val corpses = mineshaft.value.entries.find { it.key == MineshaftVariant.ONE }?.value ?: return
+        val mineshaft = mineshaftCorpses?.entries?.find { it.key == MineshaftAPI.mineshaftType } ?: return
+        val corpses = mineshaft.value.entries.find { it.key == MineshaftAPI.mineshaftVariant }?.value ?: return
 
         corpses.forEach {
             event.event.renderTextInWorld(Vec3(it), ChatUtils.asSkyOceanColor("Corpse"), true)
