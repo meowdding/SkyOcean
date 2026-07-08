@@ -109,7 +109,7 @@ class StyledItemWidget(val stack: ItemStack) : BaseWidget() {
             field
         }
 
-    private val entity = ArmorStand(McClient.self.level!!, 0.0, 0.0, 0.0)
+    private val entity = ArmorStand(McClient.self.level!!, 0.0, 0.0, 0.0).apply { id = -1 }
     private val buttonX get() = this.x + (this.width - BUTTON_SIZE) / 2
     private val buttonY get() = this.y + this.height - BUTTON_SIZE - 2
 
