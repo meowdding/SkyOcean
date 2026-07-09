@@ -5,7 +5,7 @@ minecraft = "26.2"
 sbapi-mc-version = "26.2"
 fabric-api = "0.152.0+26.2"
 
-resourceful-lib = "5.0.0"
+resourceful-lib = "5.0.1"
 resourceful-config = "5.0.0"
 olympus = "1.9.0"
 placeholders = "3.1.0-beta.1+26.2"
