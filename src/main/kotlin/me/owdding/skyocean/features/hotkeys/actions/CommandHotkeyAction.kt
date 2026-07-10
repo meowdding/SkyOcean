@@ -26,7 +26,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 @GenerateCodec
 data class CommandHotkeyAction(
     var command: String,
-    @OptionalBoolean(false) @FieldName("allow_client_commands") var allowClientCommands: Boolean = true,
+    @OptionalBoolean(true) @FieldName("allow_client_commands") var allowClientCommands: Boolean = true,
 ) : HotkeyAction {
     override val codec: MapCodec<CommandHotkeyAction> = SkyOceanCodecs.CommandHotkeyActionCodec
     override val type: HotkeyActionType = HotkeyActionType.COMMAND
