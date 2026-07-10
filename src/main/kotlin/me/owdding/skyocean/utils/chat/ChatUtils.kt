@@ -160,23 +160,25 @@ object OceanColors {
 }
 
 enum class OceanGradients(val colors: List<Int>, private val shader: GradientTextShader = GradientTextShader(colors)) : TextShader by shader, Translatable {
-    DEFAULT(0x87CEEB, 0x7FFFD4, 0x87CEEB),
-    RAINBOW("#FF0000 #FF7F00 #FFFF00 #00FF00 #0000FF #4B0082 #8B00FF"),
-    BISEXUAL("#D60270 #9B4F96 #0038A8"),
-    GAY("#FF0000 #FF9900 #FFFF00 #33CC33 #3399FF #9900CC"),
-    LESBIAN("#D62900 #FF9A56 #FFAC54 #FFFFFF #D362A4 #B9558A #A40061"),
-    PANSEXUAL("#FF1B8D #FFD800 #1BB3FF"),
-    ASEXUAL("#000000 #A4A4A4 #FFFFFF #810081"),
-    NON_BINARY("#FFD800 #FFFFFF #9C59D1 #000000"),
-    TRANS("#55CDFC #F7A8B8 #FFFFFF #F7A8B8 #55CDFC"),
+    DEFAULT(0x87CEEB, 0x7FFFD4),
+    RAINBOW(0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x4B0082, 0x8B00FF),
+    BISEXUAL(0xD60270, 0x9B4F96, 0x0038A8),
+    GAY(0xFF0000, 0xFF9900, 0xFFFF00, 0x33CC33, 0x3399FF, 0x9900CC),
+    LESBIAN(0xD62900, 0xFF9A56, 0xFFAC54, 0xFFFFFF, 0xD362A4, 0xB9558A, 0xA40061),
+    PANSEXUAL(0xFF1B8D, 0xFFD800, 0x1BB3FF),
+    ASEXUAL(0x000000, 0xA4A4A4, 0xFFFFFF, 0x810081),
+    NON_BINARY(0xFFD800, 0xFFFFFF, 0x9C59D1, 0x000000),
+    TRANS(0x55CDFC, 0xF7A8B8, 0xFFFFFF, 0xF7A8B8, 0x55CDFC),
+    GENDERFLUID(0xFF76A4, 0xFFFFFF, 0xC011D7, 0x000000, 0x2F3CBE),
     DISABLED(0),
     ;
 
     override val id: Identifier = id("named_gradient")
     val isDisabled = this.colors.size == 1
 
-    constructor(vararg colors: Int) : this(colors.toList())
-    constructor(colors: String) : this(colors.split(Regex("\\s+")).map { it.removePrefix("#").toInt(16) }.toMutableList().apply { addLast(first()) })
+    constructor(vararg colors: Int) : this(
+        colors.toMutableList().apply { if (size > 1) addLast(first()) }
+    )
 
     override fun getTranslationKey() = "skyocean.gradients.${name.lowercase()}"
 
