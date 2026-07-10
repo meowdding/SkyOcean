@@ -361,6 +361,7 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
         currentCategoryScroll = { 0 }
         currentMainScroll = { 0 }
         currentCategory = HotkeyManager.defaultCategory
+        HotkeyManager.save()
         super.onClose()
     }
 

@@ -146,7 +146,7 @@ object MarkdownChat : MeowddingLogger by SkyOcean.featureLogger() {
         OBFUSCATED(requireDouble('|')),
         STRIKETHROUGH(requireDouble('~')),
         ITALIC({ _, previous ->
-            if (previous == '_' || previous == '*') {
+            if ((previous == '_' && ChatConfig.allowUnderscoreItalic) || previous == '*') {
                 "$previous"
             } else null
         }),

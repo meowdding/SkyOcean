@@ -30,6 +30,10 @@ object ChatConfig : CategoryKt("chat") {
         this.translation = "skyocean.config.chat.reply_boop"
     }
 
+    var hideBlazetekkMessages by boolean(false) {
+        this.translation = "skyocean.config.chat.hide_blazetekk"
+    }
+
     init {
         separator {
             title = "Sack Notification"
@@ -54,5 +58,9 @@ object ChatConfig : CategoryKt("chat") {
     var markdownChat by boolean(false) {
         this.searchTerms += "md"
         this.translation = "skyocean.config.chat.markdown_chat"
+    }
+
+    var allowUnderscoreItalic by boolean(false) {
+        this.translation = "skyocean.config.chat.markdown_chat.underscore_italic"
     }
 }

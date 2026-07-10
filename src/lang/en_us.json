@@ -325,20 +325,34 @@
             "<red>Requires to change servers to take into effect.</red>"
           ]
         },
+        "hide_blazetekk": {
+          "@value": "Hide Blazetekk™ Ham Radio Messages",
+          "desc": "Hides status messages from the Blazetekk™ Ham Radio."
+        },
         "markdown_chat": {
           "@value": "Markdown Chat",
           "desc": [
             "Allows chat to be formatted by basic Markdown formatting.",
             "",
             "This includes:",
-            " - <green>*</green>italic<green>*</green> or <green>_</green>italic<green>_</green> for <pink><italic>italic</italic></pink> text",
+            " - <green>*</green>italic<green>*</green> for <pink><italic>italic</italic></pink> text",
             " - <green>**</green>bold<green>**</green> for <pink><bold>bold</bold></pink> text",
             " - <green>~~</green>strikethrough<green>~~</green> for <pink><strikethrough>strikethrough</strikethrough></pink> text",
             " - <green>__</green>underline<green>__</green> for <pink><underline>underline</underline></pink> text",
             " - <green>||</green>obfuscated<green>||</green> for <pink><obfuscated>obfuscated</obfuscated></pink> text",
             "",
-            "<red><bold>WARNING:</bold> This might cause unwanted effects with some usernames or messages.</red>"
-          ]
+            "<red><bold>WARNING:</bold> This might cause unwanted effects with some messages.</red>"
+          ],
+          "underscore_italic": {
+            "@value": "Allow Underscore italic",
+            "desc": [
+              "Extends the markdown formatting to allow the following.",
+              "",
+              " - <green>_</green>italic<green>_</green> for <pink><italic>italic</italic></pink> text",
+              "",
+              "<red><bold>WARNING:</bold> This might cause unwanted effects with some usernames and/or messages.</red>"
+            ]
+          }
         }
       },
       "garden": {
