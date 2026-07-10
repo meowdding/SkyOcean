@@ -22,6 +22,8 @@ import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.debug.DebugBuilder
+import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
@@ -130,6 +132,21 @@ object CraftHelperManager {
     fun onItemListKeybind(event: ItemListEvent.HoveredItemKeyPress) {
         if (!keybind.key.matches(event.event)) return
         setItem(event.stack)
+    }
+
+    @Subscription
+    @OnlyOnSkyBlock
+    fun onItemListWidget(event: ItemListEvent.RecipeButtonAdd) {
+        event.itemStack.getSkyBlockId() ?: return
+        event.register(
+            Button.builder(Text.of("\uD83E\uDE93")) {
+                // TODO: set actual recipe instead of this
+                setItem(event.itemStack)
+            }.apply {
+                tooltip(Tooltip.create(Text.of("Set as SkyOcean CraftHelper Item")))
+                size(12, 12)
+            }.build(),
+        )
     }
 
     private fun highlight(stack: ItemStack?) {
