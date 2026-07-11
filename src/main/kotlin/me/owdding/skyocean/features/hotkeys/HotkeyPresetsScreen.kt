@@ -158,13 +158,10 @@ class HotkeyPresetsScreen(
 
         FrameLayout.centerInRectangle(this.layout, this.rectangle)
     }
-
-
-    //~ if >= 26.1 'render' -> 'extract' {
+    
     override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick)
         this.extractTransparentBackground(graphics)
-    //~ }
 
         graphics.blitSprite(
             RenderPipelines.GUI_TEXTURED,

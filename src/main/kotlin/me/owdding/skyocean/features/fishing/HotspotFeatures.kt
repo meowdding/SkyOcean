@@ -10,10 +10,12 @@ import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderCircle
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderCylinder
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
 import net.minecraft.util.ARGB
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
@@ -25,10 +27,29 @@ object HotspotFeatures {
 
     private const val MIN_DISTANCE = 40
 
+    init {
+        LevelRenderEvents.COLLECT_SUBMITS.register {
+            if (!LocationAPI.isOnSkyBlock) return@register
+            onRenderWorldEvent(RenderWorldEvent.AfterEntities(
+                it.poseStack(),
+                //? 26.1
+                //it.bufferSource(),
+                it.submitNodeCollector(),
+                //~ if >= 26.2 '.mainCamera.' -> '.mainCamera().' {
+                it.gameRenderer().mainCamera().position(),
+                it.gameRenderer().mainCamera().rotation(),
+                //~}
+                0f,
+            ))
+        }
+    }
+
     fun isEnabled() = HotspotFeaturesConfig.circleOutline || HotspotFeaturesConfig.circleSurface
 
-    @Subscription
-    @OnlyOnSkyBlock
+    fun shouldHideParticles() = isEnabled() && HotspotFeaturesConfig.hideParticles
+
+    //Subscription
+    //OnlyOnSkyBlock
     fun onRenderWorldEvent(event: RenderWorldEvent.AfterEntities) {
         if (!isEnabled()) return
 

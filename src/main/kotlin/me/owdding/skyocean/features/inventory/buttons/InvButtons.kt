@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.inventory.buttons
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.compat.CatharsisSupport
 import me.owdding.skyocean.config.features.inventory.Buttons
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
@@ -64,7 +65,6 @@ object InvButtons {
 
     fun onScreenBackgroundAfter(screen: AbstractContainerScreen<*>, graphics: GuiGraphicsExtractor) {
         if (!shouldShowButtons(screen)) return
-        //~ if >= 26.1 'getButtons' -> 'getWidgets'
         Screens.getWidgets(screen).forEach {
             if (it is InvButton && !it.highlight) {
                 it.renderItem(graphics)
@@ -75,7 +75,6 @@ object InvButtons {
     @Subscription
     fun onScreenBackground(event: RenderScreenBackgroundEvent) {
         if (!shouldShowButtons(event.screen)) return
-        //~ if >= 26.1 'getButtons' -> 'getWidgets'
         Screens.getWidgets(event.screen).forEach {
             if (it is InvButton && !it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
@@ -86,7 +85,6 @@ object InvButtons {
     @Subscription
     fun onScreenForeground(event: RenderScreenForegroundEvent) {
         if (!shouldShowButtons(event.screen)) return
-        //~ if >= 26.1 'getButtons' -> 'getWidgets'
         Screens.getWidgets(event.screen).forEach {
             if (it is InvButton && it.highlight) {
                 it.renderButtons(event.graphics, 0, 0, 0F)
@@ -107,6 +105,8 @@ object InvButtons {
     }
 
     private fun shouldShowButtons(screen: Screen): Boolean {
+        if (CatharsisSupport.isModElementHidden("skyocean:inventory_buttons")) return false
+
         return screen is AbstractContainerScreen<*> && InventoryConfig.inventoryButtons && (LocationAPI.isOnSkyBlock || screen is ButtonConfigScreen)
     }
 

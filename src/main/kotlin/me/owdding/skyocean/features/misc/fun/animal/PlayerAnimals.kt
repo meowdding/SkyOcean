@@ -10,6 +10,7 @@ import me.owdding.skyocean.generated.SkyOceanAnimalModifiers
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.EntityModel
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState
@@ -54,8 +55,11 @@ object PlayerAnimals {
     private fun <State : LivingEntityRenderState> getModifier(entityType: EntityType<*>): AnimalModifier<*, State>? = modifiers[entityType].unsafeCast()
 
     @JvmStatic
-    fun <State : LivingEntityRenderState> apply(entity: LivingEntity, avatarState: AvatarRenderState, state: State, partialTicks: Float) {
+    fun <State : LivingEntityRenderState> apply(resolver: BlockModelResolver, entity: LivingEntity, avatarState: AvatarRenderState, state: State, partialTicks: Float) {
         state.isBaby = PlayerAnimalConfig.isBaby.select(avatarState)
+        state.bodyRot = avatarState.bodyRot
+        state.yRot = avatarState.yRot
+        state.xRot = avatarState.xRot
         if (state is ArmedEntityRenderState) {
             ArmedEntityRenderState.extractArmedEntityRenderState(
                 entity,
@@ -88,7 +92,7 @@ object PlayerAnimals {
         if (state is HoldingEntityRenderState) {
             appendItemLayer(state, avatarState)
         }
-        getModifier<State>(state.entityType)?.apply(avatarState, state, partialTicks)
+        getModifier<State>(state.entityType)?.apply(resolver, avatarState, state, partialTicks)
     }
     @JvmStatic
     fun getEntityType(): EntityType<*> = FunConfig.entityType

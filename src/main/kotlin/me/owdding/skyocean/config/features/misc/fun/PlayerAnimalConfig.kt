@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
 import com.teamresourceful.resourcefulconfigkt.api.RConfigKtEntry
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor
 import me.owdding.skyocean.features.misc.`fun`.animal.CollarColor
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.world.entity.EntityType
 import kotlin.reflect.KProperty
@@ -25,7 +26,7 @@ object PlayerAnimalConfig : ObjectKt() {
     var collarColor = TargetedValue("collar_color") { id, type ->
         enum(id, CollarColor.DEFAULT) {
             this.translation = "skyocean.config.misc.fun.player_animals.config.${type}_collar"
-            condition = isAnySelected(EntityType.CAT, EntityType.WOLF)
+            condition = isAnySelected(EntityTypes.CAT, EntityTypes.WOLF)
         }
     }
 

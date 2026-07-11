@@ -13,7 +13,6 @@ import earth.terrarium.olympus.client.components.renderers.ColorableWidget
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.components.string.TextWidget
 import earth.terrarium.olympus.client.constants.MinecraftColors
-import earth.terrarium.olympus.client.ui.OverlayAlignment
 import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.ui.context.ContextMenu
@@ -38,7 +37,6 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
-//~ if >= 26.1 'com.teamresourceful.resourcefullib.common.utils.TriState' -> 'net.minecraft.util.TriState'
 import net.minecraft.util.TriState
 import org.jetbrains.annotations.Contract
 import org.lwjgl.glfw.GLFW
@@ -89,7 +87,6 @@ fun AbstractWidget.asScrollable(
     alwaysShowScrollBar: Boolean = false,
 ): LayoutWidget<FrameLayout> {
     val scrollable = Widgets.frame { frame ->
-        //~ if >= 26.1 'UNDEFINED' -> 'DEFAULT'
         frame.withScrollableY(alwaysShowScrollBar.takeIf { it }?.let { TriState.TRUE } ?: TriState.DEFAULT)
             .withSize(width, this.height.coerceAtMost(height))
             .withAutoFocus(false)
@@ -409,6 +406,11 @@ fun createButton(
     withTexture(texture)
     withSize(width, height)
 }.apply(builder)
+
+fun createInfo(hover: Component, color: Int): TextWidget = Widgets.text(Text.of("\uD83D\uDEC8", color)).apply {
+    withTooltip(hover)
+    withSize(12)
+}
 
 fun setScreen(provider: () -> Screen?): () -> Unit = { McClient.setScreenAsync(provider) }
 

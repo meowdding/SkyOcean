@@ -36,4 +36,6 @@ data class NotHotkeyCondition(
             }.withPadding(bottom = PADDING).add(bottomCenter)
         }
     }.framed(context.width)
+
+    override fun duplicate(): HotkeyCondition = copy(child = child.duplicate())
 }

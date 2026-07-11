@@ -7,22 +7,22 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 
 enum class MinecraftColor(val dye: DyeColor, val paneItem: Item) : Translatable {
-    WHITE(DyeColor.WHITE, Items.WHITE_STAINED_GLASS_PANE),
-    ORANGE(DyeColor.ORANGE, Items.ORANGE_STAINED_GLASS_PANE),
-    MAGENTA(DyeColor.MAGENTA, Items.MAGENTA_STAINED_GLASS_PANE),
-    LIGHT_BLUE(DyeColor.LIGHT_BLUE, Items.LIGHT_BLUE_STAINED_GLASS_PANE),
-    YELLOW(DyeColor.YELLOW, Items.YELLOW_STAINED_GLASS_PANE),
-    LIME(DyeColor.LIME, Items.LIME_STAINED_GLASS_PANE),
-    PINK(DyeColor.PINK, Items.PINK_STAINED_GLASS_PANE),
-    GRAY(DyeColor.GRAY, Items.GRAY_STAINED_GLASS_PANE),
-    LIGHT_GRAY(DyeColor.LIGHT_GRAY, Items.LIGHT_GRAY_STAINED_GLASS_PANE),
-    CYAN(DyeColor.CYAN, Items.CYAN_STAINED_GLASS_PANE),
-    PURPLE(DyeColor.PURPLE, Items.PURPLE_STAINED_GLASS_PANE),
-    BLUE(DyeColor.BLUE, Items.BLUE_STAINED_GLASS_PANE),
-    BROWN(DyeColor.BROWN, Items.BROWN_STAINED_GLASS_PANE),
-    GREEN(DyeColor.GREEN, Items.GREEN_STAINED_GLASS_PANE),
-    RED(DyeColor.RED, Items.RED_STAINED_GLASS_PANE),
-    BLACK(DyeColor.BLACK, Items.BLACK_STAINED_GLASS_PANE),
+    WHITE(DyeColor.WHITE, Items.STAINED_GLASS_PANE.white()),
+    ORANGE(DyeColor.ORANGE, Items.STAINED_GLASS_PANE.orange()),
+    MAGENTA(DyeColor.MAGENTA, Items.STAINED_GLASS_PANE.magenta()),
+    LIGHT_BLUE(DyeColor.LIGHT_BLUE, Items.STAINED_GLASS_PANE.lightBlue()),
+    YELLOW(DyeColor.YELLOW, Items.STAINED_GLASS_PANE.yellow()),
+    LIME(DyeColor.LIME, Items.STAINED_GLASS_PANE.lime()),
+    PINK(DyeColor.PINK, Items.STAINED_GLASS_PANE.pink()),
+    GRAY(DyeColor.GRAY, Items.STAINED_GLASS_PANE.gray()),
+    LIGHT_GRAY(DyeColor.LIGHT_GRAY, Items.STAINED_GLASS_PANE.lightGray()),
+    CYAN(DyeColor.CYAN, Items.STAINED_GLASS_PANE.cyan()),
+    PURPLE(DyeColor.PURPLE, Items.STAINED_GLASS_PANE.purple()),
+    BLUE(DyeColor.BLUE, Items.STAINED_GLASS_PANE.blue()),
+    BROWN(DyeColor.BROWN, Items.STAINED_GLASS_PANE.brown()),
+    GREEN(DyeColor.GREEN, Items.STAINED_GLASS_PANE.green()),
+    RED(DyeColor.RED, Items.STAINED_GLASS_PANE.red()),
+    BLACK(DyeColor.BLACK, Items.STAINED_GLASS_PANE.black()),
     ;
 
     // ARGB, opaque

@@ -46,7 +46,6 @@ sealed interface ItemStackBlueprint {
         operator fun invoke(item: Item) = of(item)
         operator fun invoke(holder: Holder<Item>, count: Int = 1, patch: DataComponentPatch = DataComponentPatch.EMPTY) = of(holder, count, patch)
 
-        //~ if >= 26.1 'getItemHolder' -> 'typeHolder'
         fun of(item: ItemStack) = of(item.typeHolder(), item.count, item.componentsPatch)
         fun of(item: Item) = of(item.builtInRegistryHolder(), 1, DataComponentPatch.EMPTY)
         fun of(holder: Optional<Holder<Item>>, count: Int = 1, patch: DataComponentPatch = DataComponentPatch.EMPTY): ItemStackBlueprint = of(

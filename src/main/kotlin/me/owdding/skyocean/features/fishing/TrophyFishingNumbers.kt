@@ -22,8 +22,11 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
+// TODO: Probably restructure this to also support trophy frogs as soon as SBAPI has Frog API
 @Module
 object TrophyFishingNumbers {
+
+    val messageRegex = Regex(". TROPHY FISH! You caught .*")
 
     var lastFishCaught: TrophyFishType? = null
     var lastFishTier: TrophyFishTier? = null
@@ -40,12 +43,12 @@ object TrophyFishingNumbers {
     @OnlyIn(SkyBlockIsland.CRIMSON_ISLE)
     fun modifyChatMessage(event: ChatReceivedEvent.Post) {
         if (!FishingConfig.enableTrophyNumbers) return
-        if (!event.text.startsWith("♔ TROPHY FISH! You caught ")) return
+        if (!messageRegex.matches(event.text)) return
         val lastCaught = lastFishCaught ?: return
         val lastTier = lastFishTier ?: return
         event.component = Text.of {
             append(ChatUtils.ICON_SPACE_COMPONENT)
-            append("♔ TROPHY FISH!") {
+            append("\uE02A TROPHY FISH!") {
                 this.bold = true
                 this.color = TextColor.GOLD
             }

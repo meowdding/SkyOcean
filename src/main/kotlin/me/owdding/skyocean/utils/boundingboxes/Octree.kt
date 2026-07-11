@@ -2,42 +2,6 @@ package me.owdding.skyocean.utils.boundingboxes
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.levelgen.structure.BoundingBox
-import kotlin.math.max
-
-class Octree(val boxes: List<BoundingBox>) {
-
-    constructor(vararg boxes: BoundingBox) : this(listOf(*boxes))
-
-    private val root: Branch
-
-    init {
-        val encapsulatingBox = BoundingBox.encapsulatingBoxes(boxes).get()
-        val center = encapsulatingBox.center
-        val span = max(encapsulatingBox.xSpan, encapsulatingBox.zSpan) / 2 + 5
-        root = Branch(BoundingBox(center).inflatedBy(span, span, span), boxes)
-    }
-
-    override fun toString(): String {
-        return root.toString()
-    }
-
-    fun visitNode(visitor: (Node, Int) -> Unit) {
-        root.visit(visitor, 0)
-    }
-
-    fun findLeaf(pos: BlockPos): Leaf? {
-        if (!root.getBox().isInside(pos)) {
-            return null
-        }
-        return root.getNode(pos)
-    }
-
-    fun isInside(pos: BlockPos): Boolean {
-        return findLeaf(pos)?.isInside(pos) == true
-    }
-
-    operator fun contains(pos: BlockPos): Boolean = isInside(pos)
-}
 
 interface Node {
     fun getBox(): BoundingBox

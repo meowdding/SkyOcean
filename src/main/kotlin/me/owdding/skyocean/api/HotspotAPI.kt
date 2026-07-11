@@ -60,7 +60,7 @@ object HotspotAPI {
             val fluid = McLevel[it].fluidState
 
             if (!fluid.isEmpty) {
-                hotspot.pos = Vector3f(pos.x.toFloat(), it.y + fluid.getHeight(McLevel.self, it), pos.z.toFloat())
+                hotspot.pos = Vector3f(pos.x.toFloat(), it.y + fluid.getHeight(McLevel.self, it) + 0.1f, pos.z.toFloat())
                 HotspotEvent.Spawn(hotspot).post(SkyBlockAPI.eventBus)
                 return
             }
@@ -102,12 +102,11 @@ object HotspotAPI {
 
         val maxHotspotSize = when (LocationAPI.island) {
             SkyBlockIsland.CRIMSON_ISLE -> 25.0
-            SkyBlockIsland.JERRYS_WORKSHOP -> 16.0
+            SkyBlockIsland.JERRYS_WORKSHOP, SkyBlockIsland.LOTUS_ATOLL -> 16.0
             else -> 9.0
         }
 
-        val maxDistance = maxHotspotSize + 0.5
-        val maxDistanceSquared = maxDistance.pow(2)
+        val maxDistanceSquared = maxHotspotSize + 0.5
 
         val match = _hotspots.values.asSequence().mapNotNull { entry ->
             val pos = entry.pos ?: return@mapNotNull null
@@ -121,7 +120,7 @@ object HotspotAPI {
         match.first.radius = sqrt(match.second).roundToHalf()
 
         // particles cancelled
-        if (HotspotFeatures.isEnabled()) event.cancel()
+        if (HotspotFeatures.shouldHideParticles()) event.cancel()
     }
 
     private fun ClientboundLevelParticlesPacket.isHotSpotParticle(): Boolean {
@@ -152,11 +151,11 @@ data class HotspotData(
 )
 
 enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
-    SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+α Sea Creature Chance"),
-    FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+☂ Fishing Speed"),
-    DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+⚓ Double Hook Chance"),
-    TREASURE(MinecraftColors.GOLD, "\\+\\d+⛃ Treasure Chance"),
-    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Fish Chance"),
+    SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+. Sea Creature Chance"),
+    FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+. Fishing Speed"),
+    DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+. Double Hook Chance"),
+    TREASURE(MinecraftColors.GOLD, "\\+\\d+. Treasure Chance"),
+    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+. Trophy Chance"),
     UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
     ;
 

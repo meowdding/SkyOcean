@@ -17,7 +17,6 @@ object ComponentAnimatorDebug {
     @Subscription
     fun onRender(event: RenderHudEvent) {
         if (!toggle) return
-        //~ if >= 26.1 'drawString' -> 'text'
         event.graphics.text(
             McFont.self,
             component,

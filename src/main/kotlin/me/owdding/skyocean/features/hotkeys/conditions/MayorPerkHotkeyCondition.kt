@@ -22,4 +22,5 @@ data class MayorPerkHotkeyCondition(
     override fun nameConverter(data: MayorPerk): Component = data.perkName.asComponent()
 
     override fun test(): Boolean = perks.any { it.active }
+    override fun duplicate(): HotkeyCondition = copy(perks = perks.toMutableSet())
 }

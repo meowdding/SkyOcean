@@ -30,7 +30,6 @@ class InventoryTooltipComponent(
     override fun getHeight(font: Font) = height
     override fun getWidth(font: Font) = width
 
-    //~ if >= 26.1 'renderImage' -> 'extractImage'
     override fun extractImage(font: Font, x: Int, y: Int, width: Int, height: Int, guiGraphics: GuiGraphicsExtractor) {
         display.extract(guiGraphics, x + 5, y + 5)
     }

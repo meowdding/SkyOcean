@@ -15,8 +15,10 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.SkyOcean.id
+import me.owdding.skyocean.features.hotkeys.actions.CommandHotkeyAction
 import me.owdding.skyocean.features.hotkeys.actions.HotkeyAction
 import me.owdding.skyocean.features.hotkeys.actions.HotkeyActionType
+import me.owdding.skyocean.features.hotkeys.conditions.AlwaysHotkeyCondition
 import me.owdding.skyocean.features.hotkeys.conditions.HotkeyCondition
 import me.owdding.skyocean.features.hotkeys.system.ConflictContext
 import me.owdding.skyocean.features.hotkeys.system.Hotkey
@@ -27,6 +29,7 @@ import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.extensions.bottomLeft
 import me.owdding.skyocean.utils.extensions.createButton
+import me.owdding.skyocean.utils.extensions.createInfo
 import me.owdding.skyocean.utils.extensions.createIntInput
 import me.owdding.skyocean.utils.extensions.createSprite
 import me.owdding.skyocean.utils.extensions.createText
@@ -71,14 +74,14 @@ class EditHotkeyModal(
 
     private val name = ListenableState.of(hotkey?.name ?: "New Hotkey")
     private val keybind = hotkey?.keybind
-    private var action = hotkey?.action
-    private var condition = hotkey?.condition
+    private var action = hotkey?.action ?: CommandHotkeyAction("")
+    private var condition = hotkey?.condition ?: AlwaysHotkeyCondition
 
     private val keys = keybind?.keys?.toMutableList() ?: mutableListOf()
 
     private val enabled = ListenableState.of(hotkey?.enabled ?: true)
     private val orderSensitive = ListenableState.of(keybind?.settings?.orderSensitive ?: false)
-    private val allowExtraKeys = ListenableState.of(keybind?.settings?.allowExtraKeys ?: false)
+    private val allowExtraKeys = ListenableState.of(keybind?.settings?.allowExtraKeys ?: true)
 
     private val priority = ListenableState.of(keybind?.settings?.priority ?: 0)
     private val context: ListenableState<ConflictContext> = ListenableState.of(keybind?.settings?.context ?: ConflictContext.IN_GAME)
@@ -225,29 +228,38 @@ class EditHotkeyModal(
                     }
                 }.add(middleLeft)
                 LayoutFactory.vertical {
-                    vertical {
+                    horizontal {
                         createText("Allow Extra Keys", CatppuccinColors.Mocha.text).withPadding(1).add(bottomLeft)
-                        createToggleButton(
-                            allowExtraKeys,
-                            trueText = "Yes",
-                            falseText = "No",
-                            width = conditionLayout.width / 3 - PADDING * 3,
-                            onClick = ::rebuildWidgets,
-                        ).add()
+                        createInfo(Text.of {
+                            append("Changes whether any extra keys that are unrelated to this keybind may be pressed.\n")
+                            append("If the keys are set to (a + b) pressing (a + c + b) does nothing if this setting is off.\n")
+                            append("Setting it to on however i till still find the match in (a + [ignored c] + b).")
+                        }, CatppuccinColors.Mocha.text).add()
                     }
+                    createToggleButton(
+                        allowExtraKeys,
+                        trueText = "Yes",
+                        falseText = "No",
+                        width = conditionLayout.width / 3 - PADDING * 3,
+                        onClick = ::rebuildWidgets,
+                    ).add()
                 }.add(middleCenter)
 
                 LayoutFactory.vertical {
-                    vertical {
+                    horizontal {
                         createText("Order Sensitive", CatppuccinColors.Mocha.text).withPadding(1).add(bottomLeft)
-                        createToggleButton(
-                            orderSensitive,
-                            trueText = "Yes",
-                            falseText = "No",
-                            width = conditionLayout.width / 3 - PADDING * 3,
-                            onClick = ::rebuildWidgets,
-                        ).add()
+                        createInfo(Text.of {
+                            append("Changes whether the order keybinds are pressed in is important.\n")
+                            append("If on pressing (a + b) is not the same as pressing (b + a).")
+                        }, CatppuccinColors.Mocha.text).add()
                     }
+                    createToggleButton(
+                        orderSensitive,
+                        trueText = "Yes",
+                        falseText = "No",
+                        width = conditionLayout.width / 3 - PADDING * 3,
+                        onClick = ::rebuildWidgets,
+                    ).add()
                 }.add(middleRight)
             }.add(middleCenter)
 
@@ -342,14 +354,8 @@ class EditHotkeyModal(
                                                 context = context.get(),
                                             ),
                                         ),
-                                        action ?: run {
-                                            require("Action")
-                                            return@createButton
-                                        },
-                                        condition ?: run {
-                                            require("Condition")
-                                            return@createButton
-                                        },
+                                        action,
+                                        condition,
                                         name.get(),
                                         enabled.get(),
                                     )
@@ -398,11 +404,9 @@ class EditHotkeyModal(
         return super.keyPressed(event)
     }
 
-    //~ if >= 26.1 'render' -> 'extract' {
     override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick)
         this.extractTransparentBackground(graphics)
-    //~ }
 
         graphics.blitSprite(
             RenderPipelines.GUI_TEXTURED,

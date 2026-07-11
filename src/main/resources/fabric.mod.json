@@ -18,6 +18,9 @@
     ],
     "catharsis:imc/disabled": [
       "me.owdding.skyocean.compat.CatharsisSupport::disabled"
+    ],
+    "catharsis:imc/hidden_mod_elements": [
+      "me.owdding.skyocean.compat.CatharsisSupport::hiddenModElements"
     ]
   },
   "mixins": [

@@ -3,6 +3,7 @@ accessible method net/minecraft/network/chat/MutableComponent <init> (Lnet/minec
 accessible class net/minecraft/client/gui/layouts/FrameLayout$ChildContainer
 accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher renderers Ljava/util/Map;
 accessible field net/minecraft/client/gui/Gui subtitle Lnet/minecraft/network/chat/Component;
+accessible field net/minecraft/client/gui/Hud subtitle Lnet/minecraft/network/chat/Component;
 accessible field net/minecraft/client/gui/screens/inventory/AbstractContainerScreen imageWidth I
 
 # 1.21.9
@@ -17,3 +18,6 @@ accessible field net/minecraft/client/Minecraft blockModelResolver Lnet/minecraf
 accessible field net/minecraft/client/particle/Particle x D
 accessible field net/minecraft/client/particle/Particle y D
 accessible field net/minecraft/client/particle/Particle z D
+
+# 26.1
+accessible field net/minecraft/client/renderer/block/FluidStateModelSet WATER_MODEL Lnet/minecraft/client/renderer/block/FluidModel$Unbaked;

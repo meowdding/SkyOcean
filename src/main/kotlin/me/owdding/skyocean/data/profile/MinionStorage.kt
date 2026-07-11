@@ -54,7 +54,7 @@ object MinionStorage {
                         dataChanged = true
                     }
                 }
-            } else if (item.`is`(Items.GRAY_DYE)) {
+            } else if (item.`is`(Items.DYE.gray())) {
                 val existing = currentMinions.find { it.partId == partId }
                 if (existing == null) {
                     currentMinions.add(Minion(partId, 0))
