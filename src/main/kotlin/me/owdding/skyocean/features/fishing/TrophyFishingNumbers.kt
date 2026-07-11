@@ -26,7 +26,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 @Module
 object TrophyFishingNumbers {
 
-    val messageRegex = Regex(". TROPHY FISH! You caught")
+    val messageRegex = Regex(". TROPHY FISH! You caught .*")
 
     var lastFishCaught: TrophyFishType? = null
     var lastFishTier: TrophyFishTier? = null
@@ -43,7 +43,7 @@ object TrophyFishingNumbers {
     @OnlyIn(SkyBlockIsland.CRIMSON_ISLE)
     fun modifyChatMessage(event: ChatReceivedEvent.Post) {
         if (!FishingConfig.enableTrophyNumbers) return
-        if (!messageRegex.containsMatchIn(event.text)) return
+        if (!messageRegex.matches(event.text)) return
         val lastCaught = lastFishCaught ?: return
         val lastTier = lastFishTier ?: return
         event.component = Text.of {
