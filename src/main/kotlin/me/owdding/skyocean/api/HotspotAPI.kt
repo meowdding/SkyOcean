@@ -151,11 +151,11 @@ data class HotspotData(
 )
 
 enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
-    SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+α Sea Creature Chance"),
-    FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+☂ Fishing Speed"),
-    DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+⚓ Double Hook Chance"),
-    TREASURE(MinecraftColors.GOLD, "\\+\\d+⛃ Treasure Chance"),
-    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Chance"),
+    SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+. Sea Creature Chance"),
+    FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+. Fishing Speed"),
+    DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+. Double Hook Chance"),
+    TREASURE(MinecraftColors.GOLD, "\\+\\d+. Treasure Chance"),
+    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+. Trophy Chance"),
     UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
     ;
 
