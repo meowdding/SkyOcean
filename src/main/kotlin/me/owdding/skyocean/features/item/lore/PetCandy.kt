@@ -22,7 +22,10 @@ object PetCandy : AbstractItemModifier() {
     override val isEnabled: Boolean get() = MiscConfig.showHiddenPetCandy
 
     override fun appliesTo(itemStack: ItemStack): Boolean {
-        return itemStack.getSkyBlockId() == "PET" && itemStack.getRawLore().contains("MAX LEVEL") && !itemStack.getRawLore().contains(") Pet Candy Used")
+        val lore = itemStack.getRawLore()
+        return itemStack.getSkyBlockId() == "PET" &&
+            lore.contains("MAX LEVEL") &&
+            lore.none { it.endsWith(") Pet Candy Used") }
     }
 
     override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?) = withMerger(list) {
