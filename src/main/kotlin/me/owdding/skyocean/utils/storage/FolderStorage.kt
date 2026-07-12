@@ -4,6 +4,9 @@ import com.mojang.serialization.Codec
 import me.owdding.skyocean.SkyOcean
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.nio.file.Path
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.io.path.*
 
 class FolderStorage<T : Any>(
