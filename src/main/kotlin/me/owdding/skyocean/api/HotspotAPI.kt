@@ -156,6 +156,7 @@ enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
     DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+. Double Hook Chance"),
     TREASURE(MinecraftColors.GOLD, "\\+\\d+. Treasure Chance"),
     TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+. Trophy Chance"),
+    SHARD(MinecraftColors.YELLOW, "Chance of .+ Shard"),
     UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
     ;
 
