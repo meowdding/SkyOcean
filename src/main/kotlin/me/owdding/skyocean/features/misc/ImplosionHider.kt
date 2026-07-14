@@ -22,18 +22,14 @@ object ImplosionHider {
     private val witherBladeIds = setOf("HYPERION", "ASTRAEA", "VALKYRIE", "SCYLLA")
     private val players: MutableSet<Vec3> = ConcurrentHashMap.newKeySet()
 
-    fun Vec3.isInRange(event: ParticleEmitEvent) = this.distanceToSqr(
-        event.particle.x,
-        event.particle.y,
-        event.particle.z
-    ) >= 4.0
+    fun Vec3.isInRange(event: ParticleEmitEvent) = this.distanceToSqr(event.particle.x, event.particle.y, event.particle.z) <= 4.0
 
     @Subscription
+    @OnlyOnSkyBlock
     fun onParticle(event: ParticleEmitEvent) {
         if (!MiscConfig.hideImplosions) return
         val self = McPlayer.self ?: return
-        val particle = event.particle
-        if (particle !is HugeExplosionParticle) return
+        val particle = event.particle as? HugeExplosionParticle ?: return
         if (particle.getQuadSize(1f).absoluteValue <= 25 && (self.position().isInRange(event) || players.any { player -> player.isInRange(event) })) {
             event.cancel()
         }
