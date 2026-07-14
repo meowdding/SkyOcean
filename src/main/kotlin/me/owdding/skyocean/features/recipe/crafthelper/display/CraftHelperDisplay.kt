@@ -11,6 +11,7 @@ import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.compat.CatharsisSupport
 import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.item.sources.ItemSources
@@ -58,6 +59,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
     fun onScreenInit(event: ScreenInitializedEvent) {
         if (!CraftHelperConfig.enabled && !ignoreChecks) return
         if (!LocationAPI.isOnSkyBlock && !ignoreChecks) return
+        if (CatharsisSupport.isModElementHidden("skyocean:crafthelper")) return
 
         val screen = event.screen as? AbstractContainerScreen<*> ?: return
 
