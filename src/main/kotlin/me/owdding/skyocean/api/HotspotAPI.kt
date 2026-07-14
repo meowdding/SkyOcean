@@ -156,7 +156,7 @@ data class HotspotPromptData(
     var announced: Boolean = false,
 )
 
-enum class HotspotType(val color: Color, @Language("regexp") regex: String, val annoucementName: String) {
+enum class HotspotType(val color: Color, @Language("regexp") regex: String, val announcementName: String) {
     SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+. Sea Creature Chance", "Sea Creature Chance"),
     FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+. Fishing Speed", "Fishing Speed"),
     DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+. Double Hook Chance", "Double Hook Chance"),

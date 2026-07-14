@@ -1395,6 +1395,14 @@
           "hide_particles": {
             "@value": "Hide Particles",
             "desc": "Hide hotspot particles (requires Highlight or Outline to be enabled)."
+          },
+          "misc": {
+            "@value": "Miscellaneous",
+            "desc": "Other settings for the hotspot features.",
+            "announce": {
+              "@value": "Announce Hotspot",
+              "desc": "How to Announce Hotspots in chat when you find one."
+            }
           }
         }
       },

@@ -29,7 +29,6 @@ import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
-import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
@@ -145,29 +144,24 @@ object HotspotFeatures {
                     append(Text.of {
                         append("CLICK HERE")
                         color = CatppuccinColors.Frappe.peach
-                        onClick {
-                            closest.prompt.announced = true
-                            McClient.connection?.sendChat(
-                                "${closest.type.annoucementName} Hotspot at " +
-                                    "x: ${chatPos.x}, y: ${chatPos.y}, z: ${chatPos.z} | " +
-                                    ChatUtils.antiSpam()
-                            )
-                        }
                     })
-                    append(CommonText.SPACE)
-                    append("to announce the ${closest.type.annoucementName} Hotspot in chat.")
+                    append(" to announce the ")
+                    append(closest.type.displayComponent)
+                    append(" Hotspot in chat.")
+
                     color = CatppuccinColors.Frappe.text
+
+                    onClick {
+                        closest.prompt.announced = true
+                        McClient.connection?.sendChat(hotspotMessage(closest.type, chatPos))
+                    }
                 }.send()
                 closest.prompt.prompted = true
             }
             HotspotFeaturesConfig.AnnouncementType.AUTOMATIC -> {
                 if (closest.prompt.prompted || closest.prompt.announced) return
 
-                McClient.connection?.sendChat(
-                    "${closest.type.annoucementName} Hotspot at " +
-                        "x: ${chatPos.x}, y: ${chatPos.y}, z: ${chatPos.z} | " +
-                        ChatUtils.antiSpam()
-                )
+                McClient.connection?.sendChat(hotspotMessage(closest.type, chatPos))
                 closest.prompt.announced = true
             }
             else -> return
@@ -180,15 +174,18 @@ object HotspotFeatures {
             callback {
                 HotspotType.entries.random().let { type ->
                     val chatPos = McPlayer.position?.toBlockPos() ?: return@callback
-                    McClient.connection?.sendChat(
-                        "${type.annoucementName} Hotspot at " +
-                            "x: ${chatPos.x}, y: ${chatPos.y}, z: ${chatPos.z} | " +
-                            ChatUtils.antiSpam()
-                    )
+                    McClient.connection?.sendChat(hotspotMessage(type, chatPos))
                 }
                 Text.of(ChatUtils.antiSpam()).send()
             }
         }
+    }
+
+    private fun hotspotMessage(type: HotspotType, pos: BlockPos): String = buildString {
+        append(type.announcementName)
+        append(" | ")
+        append("x: ${pos.x}, y: ${pos.y}, z: ${pos.z} | ")
+        append(ChatUtils.antiSpam())
     }
 
     private fun Vector3f.distance(other: Vec3) = distance(other.x.toFloat(), other.y.toFloat(), other.z.toFloat())
