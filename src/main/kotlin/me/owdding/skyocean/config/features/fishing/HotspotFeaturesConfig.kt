@@ -34,4 +34,21 @@ object HotspotFeaturesConfig : ObjectKt() {
     var outlineTransparency by transparency(100) {
         this.translation = "skyocean.config.fishing.hotspot.outline_transparency"
     }
+
+    init {
+        separator {
+            this.title = "skyocean.config.fishing.hotspot.misc"
+        }
+    }
+
+    var announce by enum(AnnouncementType.OFF) {
+        this.translation = "skyocean.config.fishing.hotspot.misc.announce"
+    }
+
+    enum class AnnouncementType {
+        OFF,
+        MANUAL,
+        AUTOMATIC,
+        ;
+    }
 }
