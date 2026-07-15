@@ -23,10 +23,13 @@ object InventoryItemSource : ItemSource {
 
         if (SkyBlockIsland.THE_RIFT.inIsland()) {
             val overworldData = InventoryStorage.data?.get(InventoryType.NORMAL)
-            overworldData?.inventory?.map { SimpleTrackedItem(it, InventoryItemContext) }?.let { addAll(it) }
+            overworldData?.inventory?.filterIndexed { index, _ -> index != 8 }
+                ?.map { SimpleTrackedItem(it, InventoryItemContext) }?.let { addAll(it) }
             overworldData?.armour?.values?.map { SimpleTrackedItem(it, EquipmentItemContext) }?.let { addAll(it) }
         } else {
-            addAll(McPlayer.inventory.map { SimpleTrackedItem(it, InventoryItemContext) })
+            McPlayer.inventory.filterIndexed { index, _ -> index != 8 }
+                .map { SimpleTrackedItem(it, InventoryItemContext) }
+                .let { addAll(it) }
             McPlayer.self?.getArmor()?.forEach(::addEquipment)
         }
     }
