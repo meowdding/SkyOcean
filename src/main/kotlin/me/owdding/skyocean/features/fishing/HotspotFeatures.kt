@@ -182,9 +182,9 @@ object HotspotFeatures {
     }
 
     private fun hotspotMessage(type: HotspotType, pos: BlockPos): String = buildString {
+        append("x: ${pos.x}, y: ${pos.y}, z: ${pos.z} | ")
         append(type.announcementName)
         append(" | ")
-        append("x: ${pos.x}, y: ${pos.y}, z: ${pos.z} | ")
         append(ChatUtils.antiSpam())
     }
 
