@@ -5,7 +5,7 @@
     "allowTags": true,
     "objectAsKeys": true,
     "@references": {
-      "transparency": "Values range from 0-100%, 100% means it is fully visible."
+      "transparency": "Значение от 0% до 100%, 100% означает полную видимость."
     }
   },
   "key.category.skyocean.main": "SkyOcean",
@@ -14,119 +14,119 @@
     "config": {
       "main": {
         "modifications": {
-          "@value": "Visual Changes",
+          "@value": "Визуальные Изменения",
           "desc": [
-            "The mod may change the appearance of an item (or other visual components), by for example manipulating it's tooltip.",
+            "SkyOcean может изменять внешний вид предметов (или компонентов), например изменяя описание.",
             "",
-            "If such a modification is present there will be a <color #355AA0>\uD83C\uDF0A</color> prefix (or whatever modify indicator is selected), this is done to help identify the origin of any changes and therefore we advise against disabling it."
+            "Если такое изменение присутствует в префиксе будет <color #355AA0>\uD83C\uDF0A</color> (или другой выбранный символ), это сделано для различения причин изменений, поэтому мы рекомендуем не выключать это."
           ]
         },
         "text_shadow": {
-          "@value": "Disable Text Shadow",
-          "desc": "Disables text shadows for all messages sent by SkyOcean."
+          "@value": "Вкл. Тень Текста",
+          "desc": "Переключает тень текста для всех сообщений отправляемых SkyOcean."
         },
         "prefix_gradient": {
-          "@value": "Prefix Gradient",
-          "desc": "Changes the gradient that is used for the prefix."
+          "@value": "Градиент Префикса",
+          "desc": "Изменяет градиент, используемый для префикса."
         },
         "clickable_prefix": {
-          "@value": "Clickable Chat Message Prefix",
-          "desc": "Makes SkyOceans chat message prefix clickable, opening the config screen."
+          "@value": "Нажимаемый Префикс Сообщений",
+          "desc": "Делает префикс сообщений SkyOcean нахимаемый, открывая настройки."
         },
         "modify_indicator": {
-          "@value": "SkyOcean Modify Indicator",
+          "@value": "Индикатор Изменений SkyOcean",
           "desc": [
-            "Items modified or added by SkyOcean will have a small indicator (normally <color #355AA0>\uD83C\uDF0A</color>) in their name.",
-            "This indicator can be customized here."
+            "Предметы измененный или добавленные SkyOcean будут иметь индикатор (по стандарту <color #355AA0>\uD83C\uDF0A</color>) в имене.",
+            "Индикатор может быть изменем здесь."
           ],
-          "prefix": "Prefix in name",
-          "suffix": "Suffix in name",
-          "lore": "First line in lore",
-          "nothing": "No indicator"
+          "prefix": "Префикс в имени",
+          "suffix": "Суффикс в имени",
+          "lore": "Первая строка в описании",
+          "nothing": "Без индикатора"
         },
         "debug": {
-          "@value": "Enable Debug Mode",
+          "@value": "Вкл. Режим Отладки",
           "desc": [
-            "Enables a few different debugs, throughout the mod",
-            "<red>May lead to crashes or unexpected/undefined behaviour"
+            "Включает несколько разных отладок по всему моду",
+            "<red>Может привести к вылетам или непредвиденному поведению"
           ]
         }
       },
       "slayer": {
-        "@value": "Slayer",
+        "@value": "Слеер",
         "highlights": {
           "blaze": {
-            "@value": "Blaze Slayer Highlight",
-            "desc": "Highlights the blaze slayer in the color of the current attunement"
+            "@value": "Подсветка Блейз Слеер",
+            "desc": "Подсвечивает блейз слеера в цвете настройки"
           },
           "own_boss": {
-            "@value": "Highlight own slayer boss",
-            "desc": "Adds glow highlights to your slayer boss"
+            "@value": "Подсветка Собственных Боссов",
+            "desc": "Добавляет подсветку собственным боссам"
           },
           "minis": {
-            "@value": "Highlight minis",
-            "desc": "Highlights all minibosses with a <red>red</red> glow effect.",
+            "@value": "Подсветка Мини-Боссов",
+            "desc": "Подсвечивает всех мини-боссов <red>красным</red> светом.",
             "big_boys": {
-              "@value": "Highlight high tier minis",
-              "desc": "Highlight higher tier mini bosses in <dark_red>dark red</dark_red>."
+              "@value": "Подсветка Мини-Боссов Высокого Уровня",
+              "desc": "Подсвечивает высокоуровневых мини-боссов <dark_red>темно красным</dark_red>."
             }
           }
         }
       },
       "mining": {
-        "@value": "Mining",
+        "@value": "Майнинг",
         "modifyCommissions": {
-          "@value": "Modify Commissions",
-          "desc": "Modifies commission items to be visually different when you started or finished it."
+          "@value": "Изменяет Комиссии",
+          "desc": "Изменяет предмет комиссии в зависимости от завершенности."
         },
         "forge_reminder": {
-          "@value": "Forge Reminder",
-          "desc": "Sends a reminder if you have unclaimed expired forge items"
+          "@value": "Напоминание Форджа",
+          "desc": "Отправляет напоминания, если у вас есть не забранные предметы в фордже."
         },
         "forge_reminder_delay": {
-          "@value": "Forge Reminder Delay",
-          "desc": "The delay between reminders in minutes."
+          "@value": "Задержка Напоминаний Форджа",
+          "desc": "Задержка между напоминаниями в минутах."
         },
         "forge_reminder_action": {
-          "@value": "Forge Reminder Action",
-          "desc": "What clickable action will show when the timer is over.",
-          "warp": "Warp to Forge",
-          "call_fred": "Call Fred",
-          "both": "Both"
+          "@value": "Подсказка Напоминаний Форджа",
+          "desc": "Какая подсказка будет показана когда таймер завершится.",
+          "warp": "Отправить к форджа",
+          "call_fred": "Позвонить Фреду",
+          "both": "Оба"
         },
         "forge_reminder_busy": {
-          "@value": "Don't Forge Remind when busy",
-          "desc": "Busy means if you're inside a Dungeon Run, Kuudra, ..."
+          "@value": "Не Напоминать О Фордже Когда Вы Заняты",
+          "desc": "Заняты означает что вы в забеге данжа, куудре, ..."
         },
         "retexture": {
-          "@value": "Retexture",
+          "@value": "Замена Текстур",
           "carpets": {
-            "@value": "Retexture carpets",
+            "@value": "Замена Текстур Ковров",
             "desc": [
-              "Turns most carpets in the dwarven mines <red>red</red> to make them more visible."
+              "Делает большинство ковров в дворвен шахтах <red>красными</red>, чтобы сделать их более заметными."
             ]
           },
           "glacite": {
-            "@value": "Retexture Glacite Tunnel blocks",
+            "@value": "Замена Текстур Блоков В Глэсайт Тунелях",
             "desc": [
-              "Allows resource packs to change the appearance of tungsten, umber and glacite tunnel blocks."
+              "Позволяет ресурс пакам изменять вид тангстина, амбера и блоков глэсайт тунелей."
             ]
           },
           "mist": {
-            "@value": "Retexture Mist",
+            "@value": "Замена Текстур Миста",
             "desc": [
-              "Allows resource packs to change the appearance of blocks in the mist."
+              "Позволяет ресурс пакам изменять вид блоков миста."
             ]
           },
           "gemstone": {
-            "@value": "Retexture Gemstones",
+            "@value": "Замена Текстур Гемстоунов",
             "desc": [
-              "Allows resource packs to change the appearance of gemstones."
+              "Позволяет ресурс пакам менять вид гемстоунов."
             ]
           },
           "hollows": {
-            "@value": "Retexture Hollows",
-            "desc": "Allows resource packs to change the appearance of most hardstone blocks and ores in the hollows."
+            "@value": "Замена Текстур Холлоус",
+            "desc": "Позволяет ресурс пакам менять вид большинства блоков хардстоуна и руд в кристал холлоус."
           }
         },
         "mineshaft": {
