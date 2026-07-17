@@ -356,31 +356,31 @@
         }
       },
       "garden": {
-        "@value": "Garden",
+        "@value": "Сад",
         "pest_bait_type": {
-          "@value": "Pest Bait Type - Click on the text to get from sack!",
-          "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
+          "@value": "Тип приманки насекомых - нажмите на текст чтобы взять из мешков!",
+          "desc": "Добавляет UI элемент, который показывает какой тип приманки увелчивает шанс заспавнить определенное насекомое."
         },
         "pest_bait_alignment": {
           "@value": "Pest Bait Alignment",
           "desc": "The alignment of the pest bait type element."
         },
         "desk_pest_highlight": {
-          "@value": "Desk Pest Highlight",
-          "desc": "Highlights on what Plot how many pests are on in the 'Configure Plots' menu."
+          "@value": "Подсвечиванте насекомых на доске",
+          "desc": "Подсвечивает участок земли на котором есть насекомые и их количество в меню 'Confugure Plots'."
         },
         "pest_warning": {
-          "@value": "Pest Warning",
-          "desc": "Warns you when you reach the configured amount or more pests while farming."
+          "@value": "Предупреждение о насекомых",
+          "desc": "Предупреждает Вас о достижении настроенного количества насекомых пока Вы фармите."
         },
         "pest_warning_amount": {
-          "@value": "Pest Warning Minimum Amount",
+          "@value": "Минимальное кол-во насекомых для предупреждения",
           "desc": [
-            "The minimum amount of pests to trigger the warning.",
-            "❬Automatic❭ only triggers the warning while you have a <gold>☘</gold> reduction."
+            "Минимальное количество насекомых, нужное для срабатывания предупреждения.",
+            "При выборе (Автоматически), предупреждение срабатывает только при понижении <gold>☘</gold>"
           ],
           "options": {
-            "auto": "Automatic",
+            "auto": "Автоматически",
             "one": "1",
             "two": "2",
             "three": "3",
@@ -392,8 +392,8 @@
           }
         },
         "pest_warning_delay": {
-          "@value": "Pest Warning Delay",
-          "desc": "The delay between reminders in seconds."
+          "@value": "Задержка предупреждения о насекомых.",
+          "desc": "Задержка между напоминаниями в секундах."
         },
         "crop_fever_effect": {
           "@value": "Crop Fever Effects",
