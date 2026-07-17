@@ -130,221 +130,221 @@
           }
         },
         "mineshaft": {
-          "@value": "Mineshaft",
+          "@value": "Шахты",
           "pity_message": {
-            "@value": "Pity Message",
-            "desc": "Sends your current Pity when you find a mineshaft."
+            "@value": "Сообщение Пити",
+            "desc": "Отправляет текущее значение Пити когда вы находите шахту."
           },
           "announce": {
-            "@value": "Announce Mineshaft Enter",
+            "@value": "Обьявлять О Входе В Шахту",
             "desc": [
-              "Send a chat or party message when you enter a Mineshaft.",
-              "Will send in chat if not in a party."
+              "Отправляет сообщение в чат или чат группы при входе в шахту",
+              "Сообщение бут отправлено в чат если вы не в группу."
             ]
           },
           "announce-type": {
-            "@value": "Announcement Type",
-            "desc": "The type of message to send when you enter a Mineshaft."
+            "@value": "Тип Обьявления",
+            "desc": "Тип сообщений отправляемого при входе в шахту."
           },
           "waypoint": {
-            "@value": "Corpse Waypoint",
-            "desc": "Show a waypoint on all possible Corpse Locations in a Mineshaft."
+            "@value": "Места Трупов",
+            "desc": "Показывает точки во всех возможных местах трупов в шахте."
           },
           "show_title": {
-            "@value": "Show Title",
-            "desc": "Shows a title in addition to the announcement message."
+            "@value": "Показывать в Центре Экрана",
+            "desc": "Показывает центре экрана в дополнение к обьявлению."
           },
           "key-announce": {
-            "@value": "Key Announce",
-            "desc": "Send a chat message how many keys of the current mineshaft corpses you have in your sacks."
+            "@value": "Обьявление Ключей",
+            "desc": "Отправляет сообщение о колличестве ключей, нужных в текущей шахте, в мешках."
           }
         },
         "scatha": {
-          "@value": "Scathas",
+          "@value": "Скейсы",
           "wormAnnouncer": {
-            "@value": "Enable Worm Announcer",
-            "desc": "Announce worm type when spawned."
+            "@value": "Вкл. Обьявление Червей",
+            "desc": "Обьевляет тип червя при спавне."
           },
           "wormCooldown": {
-            "@value": "Enable Cooldown Notifier",
-            "desc": "Notifies you when you can spawn another worm."
+            "@value": "Вкл. Уведомления О Кулдоуне",
+            "desc": "Уведомляет когда вы можете заспавнить нового червя."
           },
           "wormPetMessage": {
-            "@value": "Include Rarity in Pet Drop",
-            "desc": "Changes the pet drop message to include the pet rarity."
+            "@value": "Добавить Редкость В Дроп Питомца",
+            "desc": "Добавляет редкость в сообщение о дропе питомца."
           },
           "wormPetTitle": {
-            "@value": "Enable Pet Drop Titles",
-            "desc": "Notifies you via title when you drop a pet."
+            "@value": "Вкл. Отображение Дропа Питомца",
+            "desc": "Сообщает о дропе питомца в центре экрана."
           }
         },
         "hotm": {
-          "@value": "Heart of the Mountain Perk Modifier",
+          "@value": "Изменение Перков Сердца Горы",
           "shiftCost": {
-            "@value": "Show shift click cost",
-            "desc": "Shows the amount of powder that will be consumed on shift click."
+            "@value": "Показывать Стоимость Нажатия С Шифтом",
+            "desc": "Показывает стоимось при прокачке перка с нажатым шифтом."
           },
           "totalProgress": {
-            "@value": "Show total progress",
-            "desc": "Shows your total progress to maxing a perk."
+            "@value": "Показывать Полный Прогресс",
+            "desc": "Показывает прогресс до максимальной прокачки перка."
           },
           "stackSize": {
-            "@value": "Show level as amount",
-            "desc": "Shows the perk level as item stack count."
+            "@value": "Показывать Уровень Как Колличесто ",
+            "desc": "Показывает уровень перка как колличесто предмета."
           },
           "totalLeft": {
-            "@value": "Show total amount left",
-            "desc": "Displays the total amount that is still required to max a perk."
+            "@value": "Показывать Оставшиеся Колличество",
+            "desc": "Показывает оставшиеся колличество нужное для полной прокачки перки."
           },
           "reminder": {
-            "@value": "Reminder",
-            "desc": "Lets you add reminders for when you have enough powder to buy a perk."
+            "@value": "Напоминание",
+            "desc": "Добавляет напоминание когда вам хватает на прокачку перка."
           },
           "reminderTitle": {
-            "@value": "Reminder Title",
-            "desc": "Shows a title when the reminder triggers."
+            "@value": "Показывать В Центре Экрана",
+            "desc": "Показывает напоминание в центре экрана."
           }
         },
         "ch": {
           "area_walls": {
-            "@value": "Area Walls",
-            "desc": "Adds walls between the areas in the crystal hollows."
+            "@value": "Стены Зон",
+            "desc": "Добавляет стены между стенами в кристал холлоус."
           }
         },
         "puzzler": {
-          "@value": "Puzzler Solver",
-          "desc": "Highlights the correct block for the puzzler."
+          "@value": "Рещатель Паззлера",
+          "desc": "Подсвечивает правильный блок для паззлера."
         },
         "metal_detector": {
-          "@value": "Metal Detector Solver",
+          "@value": "Решатель Детектора Металла",
           "metalDetector": {
-            "@value": "Enable Metal Detector Solver",
-            "desc": "Enables the metal detector solver, which helps you find treasures in the Mines of Divan."
+            "@value": "Вкл. Решатель Детектора Металла",
+            "desc": "Решает детектор металла, что помогает вам находить сокровища в шахтах Дивана."
           },
           "playDingOnFind": {
-            "@value": "Play Ding on Find",
-            "desc": "Plays a sound when the metal detector finds a treasure."
+            "@value": "Проигрывать Звук При Находке",
+            "desc": "Проигрывает звук при находке сокровища."
           },
           "showTitleOnFind": {
-            "@value": "Show Title on Find",
-            "desc": "Shows a title when the metal detector finds a treasure."
+            "@value": "Показывать В Центре Экрана",
+            "desc": "Показывает в центре экрана когда вы находите сокровище."
           }
         }
       },
       "inventory": {
-        "@value": "Inventory",
+        "@value": "Инвентарь",
         "sack_value": {
-          "@value": "Sack Value",
-          "desc": "Shows the value of all items in your sacks.",
-          "edit": "Edit Sack Value",
+          "@value": "Стоимтость Мешков",
+          "desc": "Показывает стоимость всех предметов в мещках.",
+          "edit": "Изменение Стоимости Мешков",
           "alignment": {
-            "@value": "Alignment",
-            "desc": "The alignment of the sack value element."
+            "@value": "Выравнивание",
+            "desc": "Выпавнивание элемента стоимости мешков."
           },
           "price_source": {
-            "@value": "Price Source",
-            "desc": "The source to use for the price of items in sacks.",
-            "bazaar": "BZ",
+            "@value": "Источник Цены",
+            "desc": "Источник который используется для цен предметов в мешках.",
+            "bazaar": "Базар",
             "npc": "NPC"
           },
           "show_in_sack_of_sacks": {
-            "@value": "Show in Sack of Sacks",
-            "desc": "Whether to show the total sack value in the sack of sacks."
+            "@value": "Показывать В Мешке Мешков",
+            "desc": "Показывает полную стоимость мешков в мешке мешков."
           },
           "hide_items_with_no_value": {
-            "@value": "Hide items with no value",
-            "desc": "Hides items that have no value from the total sack value."
+            "@value": "Скрывать Предметы Без Цены",
+            "desc": "Скрывает предметы без цены из полной стоимость мешка."
           },
           "show_total_value": {
-            "@value": "Show Total Value",
-            "desc": "Shows the total value of all items in the sack."
+            "@value": "Показывать Полную Цену",
+            "desc": "Показывает полную цену предметов в мешке."
           }
         },
         "minion_helper": {
-          "@value": "Minion Helper",
-          "desc": "Shows the cheapest minion upgrades in the \"Crafted Minions\" inventory."
+          "@value": "Помошник С Миньонами",
+          "desc": "Показывает самые дешевый улучшения в меню \"Crafted Minions\"."
         },
         "inventory_buttons": {
-          "@value": "Inventory Buttons",
-          "desc": "Settings to configure and change inventory buttons.",
+          "@value": "Кнопки Инвенторя",
+          "desc": "Настройки для изменения кнопок инвенторя.",
           "enabled": {
-            "@value": "Inventory Buttons",
-            "desc": "Whether to show the Inventory Buttons."
+            "@value": "Кнопки Инвенторя",
+            "desc": "Показывание кнопок инвенторя."
           },
           "edit": {
-            "@value": "Edit Buttons",
+            "@value": "Изменить Кнопки",
             "desc": [
-              "Configure Buttons in a separate UI.",
-              "<italic>Also accessible through <gray>/skyocean buttons</gray></italic>"
+              "Изменить кнопи в отделлбном меню.",
+              "<italic>Также доступно через <gray>/skyocean buttons</gray></italic>"
             ]
           }
         },
         "salvaging_helper": {
-          "@value": "Salvaging Helper",
+          "@value": "Помощник утилизации",
           "enabled": {
-            "@value": "Enabled",
+            "@value": "Переключатель",
             "desc": ""
           },
           "highlight": {
-            "@value": "Highlight Undonated Museum Items",
-            "desc": "Highlights items that can be donated to the museum and haven't been donated yet when salvaging items."
+            "@value": "Подсвечивать Предметы Не Пожертванные В Музей",
+            "desc": "Подсвечивает предметы которые можно пожертвовать в музей, которые еще не были пожертвованны, при утилизации."
           },
           "block_salvage": {
-            "@value": "Block Salvage of Donatable Items",
-            "desc": "Blocks salvaging items that can be donated to the museum and haven't been donated yet."
+            "@value": "Заблокировать Утилизацию Не Пожертвыванных Предметов",
+            "desc": "Блокирует утилизацию предметов, которые можно пожертвовать, но еще не были пожертвованны."
           }
         }
       },
       "chat": {
-        "@value": "Chat",
+        "@value": "Чат",
         "profile_in_chat": {
-          "@value": "Profile in Chat",
-          "desc": "Show the profile icon in chat messages.",
-          "warning": "<yellow>SkyOcean by default adds the profile emblem into chat messages, if you wish to change this open the config and search for <gold>Profile in Chat</gold>!"
+          "@value": "Профиль В Чате",
+          "desc": "Показывать Значок Профиля.",
+          "warning": "<yellow>SkyOcean по стандарту добавляет значок профиля в сообшения в чате, если вы хотите изменить это откройти настройки и ищите <gold>Профиль В Чате</gold>!"
         },
         "white_non_message": {
-          "@value": "Consistent Player Message Colour",
-          "desc": "Changes the color of messages sent by unranked players from gray to white."
+          "@value": "Единый Цвет Сообщений Игроков",
+          "desc": "Изменяет цвет сообщений отправленных игроками без ранга на белый."
         },
         "piggy_repair_helper": {
-          "@value": "Piggy Repair Helper",
-          "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."
+          "@value": "Помошник Починки Хрюшки",
+          "desc": "Отправляет сообщений для достования 8 зачарованнай свинины из мешков когда хрюшка копилка ломается."
         },
         "sack_notification": {
-          "@value": "Sack Notification",
-          "desc": "Show a notification when you gain specific sack items."
+          "@value": "Уведомление Мешков",
+          "desc": "Показывает уведомление когда вы получаете выбранные предметы."
         },
         "sack_notification_items": {
-          "@value": "Sack Notification Items",
-          "desc": "The items to show notifications for."
+          "@value": "Предметы Для Уведомления Мешков",
+          "desc": "Предметы для которых показываются уведомления."
         },
         "reply_boop": {
-          "@value": "Reply Boop",
+          "@value": "Ответный Boop",
           "desc": [
-            "Adds a <light_purple>/rboop</light_purple> command that runs /boop on the last person that messaged you.",
-            "<red>Requires to change servers to take into effect.</red>"
+            "Добавляет <light_purple>/rboop</light_purple> комманду которая использует /boop на последнем человеке, написавшем вам.",
+            "<red>Требует изменение сервера чтобы вступить в силу.</red>"
           ]
         },
         "hide_blazetekk": {
-          "@value": "Hide Blazetekk™ Ham Radio Messages",
-          "desc": "Hides status messages from the Blazetekk™ Ham Radio."
+          "@value": "Скрыть сообщения Blazetekk™ Ham Radio",
+          "desc": "Прячет сообщения статуса от Blazetekk™ Ham Radio."
         },
         "markdown_chat": {
-          "@value": "Markdown Chat",
+          "@value": "Разметка Чата",
           "desc": [
-            "Allows chat to be formatted by basic Markdown formatting.",
+            "Разрешает форматирования чата простым Markdown.",
             "",
-            "This includes:",
-            " - <green>*</green>italic<green>*</green> for <pink><italic>italic</italic></pink> text",
-            " - <green>**</green>bold<green>**</green> for <pink><bold>bold</bold></pink> text",
-            " - <green>~~</green>strikethrough<green>~~</green> for <pink><strikethrough>strikethrough</strikethrough></pink> text",
-            " - <green>__</green>underline<green>__</green> for <pink><underline>underline</underline></pink> text",
-            " - <green>||</green>obfuscated<green>||</green> for <pink><obfuscated>obfuscated</obfuscated></pink> text",
+            "Это включает в себя:",
+            " - <green>*</green>скошенный<green>*</green> для <pink><italic>скошенного</italic></pink> текста",
+            " - <green>**</green>выделенный<green>**</green> для <pink><bold>выделенного</bold></pink> текста",
+            " - <green>~~</green>вычеркнутый<green>~~</green> для <pink><strikethrough>вычеркнутого</strikethrough></pink> текста",
+            " - <green>__</green>подчеркнутый<green>__</green> для <pink><underline>подчеркнутого</underline></pink> текста",
+            " - <green>||</green>спрятаный<green>||</green> для <pink><obfuscated>спрятанного</obfuscated></pink> текста",
             "",
-            "<red><bold>WARNING:</bold> This might cause unwanted effects with some messages.</red>"
+            "<red><bold>ВНИМАНИЕ:</bold> Может вызавать нежелаемый эффект для некоторых сообщений.</red>"
           ],
           "underscore_italic": {
-            "@value": "Allow Underscore italic",
+            "@value": "Разрешить ",
             "desc": [
               "Extends the markdown formatting to allow the following.",
               "",
