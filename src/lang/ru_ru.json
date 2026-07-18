@@ -480,7 +480,7 @@
           },
           "credits": {
             "@value": "Credits",
-            "desc": "Фоновая музыка взята из <hover 'Нажмите чтобы поситить их сайт'><url 'https://noteblock.world'><color #6294FD>noteblock.world:</color></url></hover> <hover 'Нажмите чтобы поситить сайт песьни'><url 'https://noteblock.world/song/bGGNXKGUKP'><color #4AE84A>Invincibility Theme - Super Mario Bros. by Sandriix701</color></url></hover>"
+            "desc": "Фоновая музыка взята из <hover 'Нажмите чтобы посетить их сайт'><url 'https://noteblock.world'><color #6294FD>noteblock.world:</color></url></hover> <hover 'Нажмите чтобы посетить сайт песни'><url 'https://noteblock.world/song/bGGNXKGUKP'><color #4AE84A>Invincibility Theme - Super Mario Bros. by Sandriix701</color></url></hover>"
           }
         }
       },
@@ -523,32 +523,32 @@
           "desc": "The time a server is cached and shows up as previously joined."
         },
         "hideLightning": {
-          "@value": "Hide Lightning",
-          "desc": "Hides lightning bolts and sky flash effect."
+          "@value": "Спрятать Молнию",
+          "desc": "Скрывает молнию и эффект от неё."
         },
         "fullTextShadow": {
-          "@value": "Full Text Shadow",
+          "@value": "Полная Тень Текста",
           "desc": [
-            "Makes text shadow render as \"full\" all around the glyph.",
+            "Рендерит тень текста как \"полная\" полностью вокруг всего глифа.",
             "",
-            "<red>May Significantly impact performance.</red>"
+            "<red>Может сильно влиять на производительность.</red>"
           ]
         },
         "showHiddenPetCandy": {
-          "@value": "Show Hidden Pet Candy",
-          "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
+          "@value": "Показывать Скрытые Конфеты Питомцев",
+          "desc": "Хайпиксель скрывает конфеты питомцев когда они достигают максимального уровня, эта фича добавляет эту линию обратно."
         },
         "totemAnimation": {
-          "@value": "Totem Animation",
-          "desc": "Plays the Totem of Undying animation when an invulnerability item (like the Bonzo Mask) is used up."
+          "@value": "Анимация Тотема",
+          "desc": "Проигрывает анимацию Тотема Бессмертия когда предмет неуязвимости (например, Маска Бонзо) использован."
         },
         "islandCloudHider": {
-          "@value": "Island Cloud Hider",
+          "@value": "Скрывать Облака На Островах",
           "desc": [
-            "Specify what island shouldn't render Clouds.",
-            "Useful for islands like the Dwarven Mines where clouds can be annoying."
+            "Укажите, на каких островах облака не должны рендериться.",
+            "Полезно в Шахтах Дварфов, где облака могут быть надоедливыми."
           ],
-          "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
+          "warning": "<yellow>SkyOcean скрывает облака на этом острове изначально, если Вы хотите изменить это - откройте найстройки и ищите <gold>Скрывать Облака На Островах</gold>!"
         },
         "netherFogDarkening": {
           "@value": "Nether Fog Darkening",
