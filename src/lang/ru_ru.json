@@ -552,211 +552,211 @@
         },
         "netherFogDarkening": {
           "@value": "Затемнение Тумана Незера",
-          "desc": "Делает небо в Crimson Isle темнее. Работает только с эффектом ночного зрения.",
+          "desc": "Делает небо в Кримзон Айл темнее. Работает только с эффектом ночного зрения.",
           "warning": "<yellow>SkyOcean теперь затемняет небо в Crimson Isle! Вы можете это выключить поискав <gold>Затемнение Тумана Незера</gold>."
         },
         "netherFogScale": {
-          "@value": "Nether Fog Scale",
+          "@value": "Шкала Тумана Незера",
           "desc": [
-            "How bright the Crimson Isle sky should be.",
-            "<yellow>Requires Nether Fog Darkening to be enabled!</yellow>"
+            "Настраивает насолько ярким будет небо Кримзон Айл.",
+            "<yellow>Требует включение Затемнения Тумана Незера!</yellow>"
           ]
         },
         "customization_vanilla_integration": {
-          "@value": "Animate dyes and skins in inventories",
+          "@value": "Анимировать красители и скины в инвентарях",
           "desc": [
-            "Will always animate dyed armors and helmet skins even in inventories or menus.",
+            "Всегда будет анимировать покрашенную броню и скины шлемов в инвентарях и меню.",
             "",
-            "<yellow>(Doesn't currently work with skins that allow variant selection or pets)</yellow>"
+            "<yellow>(На данный момент не работает со скинами, позволяющими выбрать вариант и питомцаи)</yellow>"
           ]
         },
         "queueEstimation": {
-          "@value": "Queue Estimation",
-          "desc": "Estimates your alpha/main server queue time based on the current queue size and average queue speed."
+          "@value": "Прикидка Очереди",
+          "desc": "Приблизительно подсчитывает остаток проведённого Вам времени в очереди в альфа/основной сервер основываясь на размере очередт и средней её скорости."
         },
         "hideEntityFire": {
-          "@value": "Hide entity fire",
-          "desc": "Removes the fire effect from all entities."
+          "@value": "Скрыть Огонь На Существах",
+          "desc": "Убирает эффект огня со всех существ."
         },
         "hideImplosions": {
-          "@value": "Hide Implosion Particles",
-          "desc": "Removes the wither blade implosion particles."
+          "@value": "Скрыть Партиклы Implosion",
+          "desc": "Убирает партиклы взрыва от визер мечей."
         },
         "itemSearch": {
-          "@value": "Item Search",
-          "desc": "Item Search is a feature that allows you to search for items in your inventory, backpacks, storage, sacks, island chests and more.",
+          "@value": "Поиск Предметов",
+          "desc": "Поиск Предметов - фича, позволяющяя Вам искать предметы в Вашем инвентаре, эндер сундуке, рюкзаках, сундуках на острове и т.п.",
           "itemHighlight": {
-            "@value": "Item Highlight",
-            "desc": "Choose what color the searched item will be highlighted with."
+            "@value": "Подсветка Предметов",
+            "desc": "Выберите каким цветом будет подсвечиваться искомый предмет."
           },
           "highlightMode": {
-            "@value": "Highlight Mode",
-            "desc": "Choose how items will be highlighted."
+            "@value": "Режим Подсветки",
+            "desc": "Выберите как предметы будут подсвечиваться."
           },
           "highlightTime": {
-            "@value": "Highlight Time",
-            "desc": "Amount of time that items will be highlighted for, in seconds."
+            "@value": "Время Подсветки",
+            "desc": "Количество времени которое предметы будут подсвечиваться в секундах."
           },
           "useReiSearchBar": {
-            "@value": "Use REI Search Bar",
-            "desc": "Replaces REI's inventory highlighting with SkyOcean's"
+            "@value": "Использовать Строку Поиска REI",
+            "desc": "Заменяет подсветку предметов REI подсветкой от SkyOcean"
           },
           "preserve_search": {
-            "@value": "Preserve Search",
-            "desc": "When reopening the item search, it will keep the previous search input and category instead of clearing them."
+            "@value": "Сохранять Поиск",
+            "desc": "При переоткрывании поиска предметов оставляет предыдущий запрос и категорию вместо очищения их."
           },
           "museumIntegration": {
-            "@value": "Museum integration",
-            "desc": "Changes the museum to highlight items that are found on your profile, furthermore it also tells you which items you can craft and which ones are not craftable at all."
+            "@value": "Интеграция Музея",
+            "desc": "Подсвечивает найденные на Вашем профиле предметы для музея, также показывает предметы, которые Вы можете скоафтить и какие скрафтить вообще невозможно."
           },
           "warp_to_island": {
-            "@value": "Warp to island",
-            "desc": "Automatically warp to island if you click an item that is on it."
+            "@value": "Телепортироваться на остров",
+            "desc": "Автоматически телепортирует на Ваш остров если вы нажмёте на предмет, находящийся на нём."
           }
         },
         "museumArmourPieces": {
-          "@value": "Show museum armour pieces",
-          "desc": "Displays all pieces required to finish an armor set in the tooltip in the museum."
+          "@value": "Показывать части брони для музея",
+          "desc": "Показывает все части, нужные для пожертвования комплекта брони в музей в описании предмета."
         },
         "ratHitbox": {
-          "@value": "Rat hitboxes",
-          "desc": "Renders extra hitboxes for rats in the hub."
+          "@value": "Хитбоксы Крыс",
+          "desc": "Рендерит дополнительные хитбоксы для крым в хабе."
         },
         "stereoPantsMute": {
-          "@value": "Mutes Stereo Pants Music",
-          "desc": "Mutes the sometimes really annoying music that plays from Players wearing Stereo Pants."
+          "@value": "Отключить Музыку Стерео Штанов",
+          "desc": "Выключает иногда надоедливую музыку играющую от игроков носящих Стерео Штаны."
         },
         "crafthelper": {
-          "@value": "Craft Helper",
+          "@value": "Помощник Крафтов",
           "desc": [
-            "Craft helper is a feature that lets you see all the steps in a recipe and how much progress you have made towards completing it.",
+            "Помощник Крафтов - фича, позволяющяя видеть все шаги рецепта и сколько прогресса Вы уже сделали к его крафту.",
             "",
-            "<gray>Pro Tip:</gray> You can also import SkyShard Trees into your CraftHelper by pressing <gray>\"Copy Tree\"</gray>, then <gray>\"SkyOcean Format\"</gray> on the Website and running <gray>/skyocean recipe skyshards</gray> in-game!"
+            "<gray>Подсказка:</gray> Вы также можете импортировать деревья SkyShards в Ваш Помощник Крафтов нажав <gray>\"Copy Tree\"</gray>, then <gray>\"SkyOcean Format\"</gray> на вебсайте и прописав <gray>/skyocean recipe skyshards</gray> в игре!"
           ],
           "enabled": {
-            "@value": "Enable Craft Helper",
-            "desc": "Whether the craft helper is enabled or not, this is the main switch."
+            "@value": "Включить Помощник Крафтов",
+            "desc": "Основной переключатель Помощника Крафтов."
           },
           "quick_set": {
-            "@value": "Quick Set Crafthelper Item",
-            "desc": "Adds a clickable item into multiple different screens like recipe, forge, visitors, ... to quickly add the item into the crafthelper."
+            "@value": "Быстрое Добавление Предмета в Помощник Крафтов",
+            "desc": "Добавляет нажимаемый предмет в несколько разных экранов, например: рецепты, фордж, посетители сада, .... чтобы быстро добавить предмет в помощник крафтов."
           },
           "hideCompleted": {
-            "@value": "Hide completed",
-            "desc": "Whether to hide completed parts of the tree or not."
+            "@value": "Скрыть Выполненные",
+            "desc": "Скрывать ли выполненные части дерева или нет."
           },
           "parentAmount": {
-            "@value": "Add parent amount",
-            "desc": "Includes the amount that is already present through parents."
+            "@value": "Добавлять исходное количество",
+            "desc": "Включает количество уже присутствующих предметов через исходные. (Includes the amount that is already present through parents)"
           },
           "disableRootItems": {
             "@value": "Disable tracking for target",
             "desc": "Prevents the craft helper from showing any progress for the root node, making it simpler for certain items."
           },
           "disallowedItemSources": {
-            "@value": "Disallowed item sources",
-            "desc": "Select sources from which the craft helper will ignore."
+            "@value": "Запрещённые Источники Предметов",
+            "desc": "Выберите источники, которые Помощник Крафтов будет игнорировать."
           },
           "position": {
-            "@value": "Position",
-            "desc": "Craft helper position inside the inventory.",
-            "top_left": "Top Left",
-            "top_right": "Top Right",
-            "bottom_left": "Bottom Left",
-            "bottom_right": "Bottom Right",
-            "left_of_inventory": "Left of Inventory",
-            "right_of_inventory": "Right of Inventory"
+            "@value": "Расположение",
+            "desc": "Расположение Помощника Крафтов в инновационные юинвентаре.",
+            "top_left": "Сверху слева",
+            "top_right": "Сверху справа",
+            "bottom_left": "Снизу слева",
+            "bottom_right": "Снизу справа",
+            "left_of_inventory": "Слева от инвентаря",
+            "right_of_inventory": "Справа от инвентаря"
           },
           "margin": {
-            "@value": "Margin",
-            "desc": "How much space to leave between the inventory/screen edges and the craft helper element."
+            "@value": "Отступ",
+            "desc": "Сколько расстояния оставить между инфентарём/гранями экрана и элементом Помощника Крафтов."
           },
           "done_notifications": {
-            "@value": "Done Notifications",
-            "desc": "Notification types for when your CraftHelper tree is craftable.",
+            "@value": "Уведомление Завершения",
+            "desc": "Тип уведомления, появляющегося когда дерево Помощника Крафтов можно скрафтить.",
             "types": {
-              "@value": "Notification Types",
-              "desc": "The types of notifications you want to receive when your CraftHelper tree is craftable."
+              "@value": "Типы Уведомлений",
+              "desc": "Типы уведомлений, которые Вы хотите получать когда вы можете скрафтить дерево Помощника Крафтов."
             },
             "sound_event": {
-              "@value": "Done Sound",
-              "desc": "The sound you will hear when your Item becomes craftable."
+              "@value": "Звук Завершения",
+              "desc": "TюЗвук, который Вы услышите когда Ваш предмет можно будет скрафтить."
             },
             "notification_type": {
-              "@value": "Notification Type",
-              "done_message": "Done Message",
-              "done_title": "Done Title",
-              "done_sound": "Done Sound"
+              "@value": "Тип Уведомления",
+              "done_message": "Сообщение о завершении",
+              "done_title": "Титул о завершении",
+              "done_sound": "Звук о завершении"
             }
           },
           "tree_formatter": {
-            "@value": "Craft helper formatter",
-            "desc": "Changes the appearance of the craft helper tree.",
-            "raw": "Raw",
-            "tree": "Tree"
+            "@value": "Форматирование Помощника Крафтов",
+            "desc": "Визуально изменяет дерево Помощника Крафтов.",
+            "raw": "Сырье",
+            "tree": "Дерево"
           },
           "raw_formatter_hide_completed": {
-            "@value": "Hide completed elements",
-            "desc": "Hides completed elements from the raw formatter, <yellow>also applies to the hud element!"
+            "@value": "Скрыть выполненные элементы",
+            "desc": "Скрывает выполненные элемента из сырого формата. <yellow>Также применяется к элементу интерфейса!"
           },
           "enable_hud_overlay": {
-            "@value": "Enable HUD overlay",
-            "desc": "Shows the progress to finishing the recipe on screen."
+            "@value": "Включить Элемент Интерфейса",
+            "desc": "Показывает прогресс завершения рецепта на экране."
           },
           "overlay_background": {
-            "@value": "Enable overlay background",
-            "desc": "Adds a background behind the overlay to make it more readable."
+            "@value": "Включить фон оверлея",
+            "desc": "Добавляет фон к овердею для повышения читаемости."
           },
           "transformers": {
-            "@value": "Tree transformers",
-            "desc": "The following settings will alter the recipe tree in different ways, letting you customize the appearance and complexity.",
+            "@value": "Трансформеры дерева",
+            "desc": "Следующие настройки изменят дерево рецептов, позволяя Вам настроить вид и комплексность.",
             "compacted_cutoff_degree": {
               "@value": "Compacted Cutoff Degree",
               "desc": [
-                "Removes raw resources of the Nth degree from the tree",
+                "Убирает сырые ресурсы Нной степени из дерева",
                 "",
-                "For example if it's set to 1, Flawed Ruby will be the final node rather then having Rough as child,",
-                "if set to 2 Fine Ruby would be the final node, and so on..."
+                "Например, если оно стоит на 1, Потрескавшийся Рубин будет последней строкой, не имея Грубого Рубина как компонент,",
+                "если стоит 2, Хороший Рубин будет последней строкой, и т д."
               ]
             }
           }
         },
         "transparentArmor": {
-          "@value": "Transparent Armour",
+          "@value": "Прозрачная Броня",
           "desc": [
-            "Settings to change the appearance of armours on either yourself or others.",
+            "Настройкр для изменения вида брони на Вас или остальных.",
             {
               "@id": "transparency"
             },
-            "<italic>Does not apply to npcs.</italic>"
+            "<italic>Не применяется к НИПаи.</italic>"
           ],
           "self": {
-            "@value": "Self",
-            "desc": "Only applies to your armour."
+            "@value": "На себе",
+            "desc": "Применяется только на Вашу броню."
           },
           "others": {
-            "@value": "Others",
-            "desc": "Only applies to other players."
+            "@value": "На остальных",
+            "desc": "Применяется только к броне других игроков."
           }
         },
         "mob_icons": {
-          "@value": "Mob Icons",
+          "@value": "Иконки Мобов",
           "enabled": {
-            "@value": "Enable Mob Icons",
+            "@value": "Включить Иконки Мобов",
             "desc": [
-              "Replaces the hypixel mob icons with a spelled out version.",
-              "<red>This requires a nametag update, meaning it doesn't refresh instantly!</red>"
+              "Заменяет иконки мобов хайпикселя текстом..",
+              "<red>Требует обновления нэймтагрв, из-за чего изменяется не моментально!</red>"
             ]
           },
           "display_type": {
-            "@value": "Display type",
-            "desc": "Changes the way the mob icons are displayed."
+            "@value": "Тип показа",
+            "desc": "Изменяет как выглядят иконки мобов."
           },
           "colors": {
-            "@value": "Individual colors",
+            "@value": "Индивидуальные цвета",
             "desc": [
-              "Overwrites the colors for the different mob icons.",
-              "The default <white>#FFFFFF</white> means that it doesn't get changed at all."
+              "Замещает цвета для разных иконок мобов.",
+              "По умолчанию <white>#FFFFFF</white> цвет означает, что они вообще не изменяются."
             ]
           }
         },
