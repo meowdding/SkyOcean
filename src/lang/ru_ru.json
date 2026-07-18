@@ -551,9 +551,9 @@
           "warning": "<yellow>SkyOcean скрывает облака на этом острове изначально, если Вы хотите изменить это - откройте найстройки и ищите <gold>Скрывать Облака На Островах</gold>!"
         },
         "netherFogDarkening": {
-          "@value": "Nether Fog Darkening",
-          "desc": "Darkens the Crimson Isle sky. Only has an effect with Night Vision.",
-          "warning": "<yellow>SkyOcean now darkens Crimson Isle's sky! You can disable it in the misc config by searching <gold>Nether Fog Darkening</gold>."
+          "@value": "Затемнение Тумана Незера",
+          "desc": "Делает небо в Crimson Isle темнее. Работает только с эффектом ночного зрения.",
+          "warning": "<yellow>SkyOcean теперь затемняет небо в Crimson Isle! Вы можете это выключить поискав <gold>Затемнение Тумана Незера</gold>."
         },
         "netherFogScale": {
           "@value": "Nether Fog Scale",
