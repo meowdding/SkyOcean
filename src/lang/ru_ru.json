@@ -245,7 +245,7 @@
             "@value": "Источник Цены",
             "desc": "Источник который используется для цен предметов в мешках.",
             "bazaar": "Базар",
-            "npc": "НИП"
+            "npc": "НПС"
           },
           "show_in_sack_of_sacks": {
             "@value": "Показывать В Мешке Мешков",
@@ -332,10 +332,10 @@
         "markdown_chat": {
           "@value": "Разметка Чата",
           "desc": [
-            "Разрешает форматирования чата простым Markdown.",
+            "Разрешает форматирования чата простой Markdown разметкой.",
             "",
             "Это включает в себя:",
-            " - <green>*</green>скошенный<green>*</green> для <pink><italic>скошенного</italic></pink> текста",
+            " - <green>*</green>курсив<green>*</green> для <pink><italic>курсивного</italic></pink> текста",
             " - <green>**</green>выделенный<green>**</green> для <pink><bold>выделенного</bold></pink> текста",
             " - <green>~~</green>вычеркнутый<green>~~</green> для <pink><strikethrough>вычеркнутого</strikethrough></pink> текста",
             " - <green>__</green>подчеркнутый<green>__</green> для <pink><underline>подчеркнутого</underline></pink> текста",
@@ -344,13 +344,13 @@
             "<red><bold>ВНИМАНИЕ:</bold> Может вызавать нежелаемый эффект для некоторых сообщений.</red>"
           ],
           "underscore_italic": {
-            "@value": "Разрешить ",
+            "@value": "Разрешить Подчеркивание Курсива",
             "desc": [
-              "Extends the markdown formatting to allow the following.",
+              "Расширяет markdown разметку до слейдушего.",
               "",
-              " - <green>_</green>italic<green>_</green> for <pink><italic>italic</italic></pink> text",
+              " - <green>_</green>курсив<green>_</green> для <pink><italic>курсивного</italic></pink> текста",
               "",
-              "<red><bold>WARNING:</bold> This might cause unwanted effects with some usernames and/or messages.</red>"
+              "<red><bold>ВНИМАНИЕ:</bold>  Может вызавать нежелаемый эффект с некоторыми именами или сообщениями.</red>"
             ]
           }
         }
@@ -358,23 +358,23 @@
       "garden": {
         "@value": "Сад",
         "pest_bait_type": {
-          "@value": "Тип приманки насекомых - нажмите на текст чтобы взять из мешков!",
-          "desc": "Добавляет UI элемент, который показывает какой тип приманки увелчивает шанс заспавнить определенное насекомое."
+          "@value": "Тип Приманки Насекомых - Нажмите На Текст Чтобы Взять Из Мешков!",
+          "desc": "Добавляет элемент интерфейса, который показывает какой тип приманки увелчивает шанс заспавнить определенное насекомое."
         },
         "pest_bait_alignment": {
-          "@value": "Pest Bait Alignment",
-          "desc": "The alignment of the pest bait type element."
+          "@value": "Выравнивание Приманки Насекомых",
+          "desc": "Выравнивание элемента приманки насекомых."
         },
         "desk_pest_highlight": {
-          "@value": "Подсвечиванте насекомых на доске",
-          "desc": "Подсвечивает участок земли на котором есть насекомые и их количество в меню 'Confugure Plots'."
+          "@value": "Подсвечивание Насекомых Доски",
+          "desc": "Подсвечивает участок на котором есть насекомые и их количество в меню 'Confugure Plots'."
         },
         "pest_warning": {
-          "@value": "Предупреждение о насекомых",
-          "desc": "Предупреждает Вас о достижении настроенного количества насекомых пока Вы фармите."
+          "@value": "Предупреждение О Насекомых",
+          "desc": "Предупреждает о достижении настроенного количества насекомых пока вы фармите."
         },
         "pest_warning_amount": {
-          "@value": "Минимальное кол-во насекомых для предупреждения",
+          "@value": "Минимальное Кол-во Насекомых Для Предупреждения",
           "desc": [
             "Минимальное количество насекомых, нужное для срабатывания предупреждения.",
             "При выборе (Автоматически), предупреждение срабатывает только при понижении <gold>☘</gold>"
@@ -392,29 +392,29 @@
           }
         },
         "pest_warning_delay": {
-          "@value": "Задержка предупреждения о насекомых.",
+          "@value": "Задержка Предупреждения О Насекомых.",
           "desc": "Задержка между напоминаниями в секундах."
         },
         "crop_fever_effect": {
-          "@value": "Crop Fever Effects",
-          "desc": "When you trigger a Crop Fever this adds many visual effects.",
+          "@value": "Эффект Кроп Фивера",
+          "desc": "Добавляет множество визуальных эффектов для Кроп Фивера.",
           "config_title": {
-            "@value": "Crop Fever Config"
+            "@value": "Конфигурация Кроп Фивера"
           },
           "enabled": {
-            "@value": "Enabled",
-            "desc": "Enables the entire feature."
+            "@value": "Переключатель",
+            "desc": "Включает всю функцию."
           },
           "sound_section": {
-            "@value": "Sound Changes",
+            "@value": "Изменение Звуков",
             "desc": "",
             "startingSound": {
-              "@value": "Jackpot Sound",
-              "desc": "Plays a Jackpot sound when starting a Crop Fever."
+              "@value": "Звук Джекпота",
+              "desc": "Проигрывает звук джекпота при начале Кроп Фивера."
             },
             "rngSound": {
-              "@value": "RNG Sound",
-              "desc": "Plays the sound effect from dropping something that is really rare (e.g., Ray of Helios or Strawberry Dye)."
+              "@value": "Звук РНГ",
+              "desc": "Проигрывает звук при дропе редкого предмета (например, Ray of Helios или Strawberry Dye)."
             },
             "backgroundMusic": {
               "@value": "Background Music",
