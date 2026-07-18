@@ -417,55 +417,55 @@
               "desc": "Проигрывает звук при дропе редкого предмета (например, Ray of Helios или Strawberry Dye)."
             },
             "backgroundMusic": {
-              "@value": "Background Music",
+              "@value": "Фоновоя Музыка",
               "desc": [
-                "Plays a looping soundtrack while a Crop Fever is active.",
-                "<red>Disable if you have Hypixel's own music enabled.</red>"
+                "Играет цикличную музыку когда Кроп Фивер активен.",
+                "<red>Отключите если у вас включена музыка Hypixel.</red>"
               ]
             },
             "useRegularSounds": {
-              "@value": "[RP Only] Use .OGG sound files.",
+              "@value": "Использовать .OGG Файлы.",
               "desc": [
-                "Use .ogg sounds instead of .nbs sounds",
-                "To modify them just look for the corresponding files in assets/skyocean/sounds/ogg/garden",
-                "<red>Only enable this if you have a resourcepack that replaces the .ogg sound files, otherwise you will get no sounds</red>"
+                "Использует .ogg файлы вместо .nbs файлов",
+                "Чтобы изменить замените файлы в assets/skyocean/sounds/ogg/garden",
+                "<red>Используйте только если у вас есть ресурс пак заменяющий .ogg файлы, иначе вы не услышите звук</red>"
               ]
             }
           },
           "visual_section": {
-            "@value": "Visual Changes",
+            "@value": "Визуальные Изменения",
             "desc": "",
             "hueShiftingShader": {
-              "@value": "Color Cycling Effect",
-              "desc": "Applies a color cycling post-processing effect to the screen during a Crop Fever.",
+              "@value": "Эффект Переливания Цвета",
+              "desc": "Добавляет эффект переливания цвета на весь экран когда Кроп фивер активен.",
               "shiftingSpeed": {
-                "@value": "Cycling Speed",
+                "@value": "Скорость Переливания",
                 "desc": [
-                  "Controls how fast the colors cylce.",
-                  "<red>If you are sensitive to flashing colors don't go above <color #B22222>❬<color #727378>Normal</color>❭.</red>"
+                  "Изменяет скорость с которой переливаются цвета.",
+                  "<red>Если вы чувствительны к мигающим цветам не используюте значения выше <color #B22222>❬<color #727378>Стандартный</color>❭.</red>"
                 ],
                 "options": {
-                  "slower": "<color #5F9EA0>Slower (0.25x)</color>",
-                  "slow": "<color #708587>Slow (0.5x)</color>",
-                  "normal": "<color #727378>Normal (1.0x)</color>",
-                  "fast": "<color #915454>Fast (1.5x)</color>",
-                  "faster": "<color #A13B3B>Faster (2.5x)</color>",
-                  "insane": "<color #B22222>Insane (10.0x)</color>"
+                  "slower": "<color #5F9EA0>Медленнее (0.25x)</color>",
+                  "slow": "<color #708587>Медленный (0.5x)</color>",
+                  "normal": "<color #727378>Стандартный (1.0x)</color>",
+                  "fast": "<color #915454>Быстрый (1.5x)</color>",
+                  "faster": "<color #A13B3B>Быстрее (2.5x)</color>",
+                  "insane": "<color #B22222>Безумие (10.0x)</color>"
                 }
               }
             },
             "coinRain": {
-              "@value": "Coin Rain",
-              "desc": "Shows an animation of SkyBlock coins raining from the top of the screen when starting a Crop Fever.",
+              "@value": "Денежный Дождь",
+              "desc": "Показывает анимацию денег SkyBlock падающих с верху экрана когда Кроп Фивер активен.",
               "duration": {
-                "@value": "Coin Rain Duration",
-                "desc": "The duration for the coin rain animation."
+                "@value": "Продолжительность Денежного Дождя",
+                "desc": "Продолжительность анимации денежного дождя."
               },
               "spawnMultiplier": {
-                "@value": "Coin Rain Spawn Multiplier",
-                "desc": "Controls how many coins spawn per tick.",
+                "@value": "Мультипликатор Появления Денежного Дождя",
+                "desc": "Изменяет сколько денег появляются за тик.",
                 "options": {
-                  "auto": "Automatic",
+                  "auto": "Автоматически",
                   "one": "1x",
                   "two": "2x",
                   "three": "3x",
@@ -480,46 +480,46 @@
           },
           "credits": {
             "@value": "Credits",
-            "desc": "Background Music is sourced from <hover 'Click to visit their site'><url 'https://noteblock.world'><color #6294FD>noteblock.world:</color></url></hover> <hover 'Click to visit the Page for the Song'><url 'https://noteblock.world/song/bGGNXKGUKP'><color #4AE84A>Invincibility Theme - Super Mario Bros. by Sandriix701</color></url></hover>"
+            "desc": "Фоновая музыка взята из <hover 'Нажмите чтобы поситить их сайт'><url 'https://noteblock.world'><color #6294FD>noteblock.world:</color></url></hover> <hover 'Нажмите чтобы поситить сайт песьни'><url 'https://noteblock.world/song/bGGNXKGUKP'><color #4AE84A>Invincibility Theme - Super Mario Bros. by Sandriix701</color></url></hover>"
           }
         }
       },
       "misc": {
-        "@value": "Miscellaneous",
+        "@value": "Разное",
         "ministerInCalendar": {
-          "@value": "Minister in Calendar",
-          "desc": "Adds a current minister next to the mayor in the calendar."
+          "@value": "Министер В Календаре",
+          "desc": "Добавляет текушего министра рядом с мэром в календаре."
         },
         "anvilHelper": {
-          "@value": "Anvil helper",
-          "desc": "Highlights books that have the same enchantment as the ones in the anvil."
+          "@value": "Помошник Наковальни",
+          "desc": "Подсвечивает книги с тем же зачарованием как та в наковальне."
         },
         "itemStarStacksize": {
-          "@value": "Item Star Stacksize",
-          "desc": "Shows the Item Star amount as the stacksize."
+          "@value": "Колличество Звезд Предмета",
+          "desc": "Показывает звезды предмета как колличество предметов."
         },
         "revertMasterStars": {
-          "@value": "Revert Master Stars",
-          "desc": "Reverts the Master Star back to the stacked colored look."
+          "@value": "Вернуть Мастер Звезды",
+          "desc": "Возвращает Мастер Звезды назад к виду цветных звезд."
         },
         "quickJoinButton": {
-          "@value": "Quick Join Button",
-          "desc": "Quickly Join a Server with one less button click."
+          "@value": "Кнопка Быстрого Присоединения",
+          "desc": "Быстро подключает к серверу, сохраняя одно нажатее."
         },
         "quickJoinText": {
-          "@value": "The Button Text for Quick Join",
-          "desc": "The text shown on the button, use {ip} for the ip."
+          "@value": "Текст Кнопки Быстрого Подключения",
+          "desc": "Текст на кнопке быстрого подключения, используйте {ip} для ip адресса."
         },
         "quickJoinIp": {
-          "@value": "The IP for Quick Join",
-          "desc": "Customize what Server to quickly join."
+          "@value": "IP Адресс Быстрого Подключения",
+          "desc": "Меняет к какому серверу быстро подключаться."
         },
         "previousServer": {
-          "@value": "Previous Server",
-          "desc": "Sends a chat message when you join a server you were previously in."
+          "@value": "Прошлый Сервер",
+          "desc": "Отправляет сообщение в чат когда вы подключаетесь к серверу на котором вы были в прошлом."
         },
         "previousServerTime": {
-          "@value": "Previous Server Time",
+          "@value": "Время Прошлого Сервера",
           "desc": "The time a server is cached and shows up as previously joined."
         },
         "hideLightning": {
