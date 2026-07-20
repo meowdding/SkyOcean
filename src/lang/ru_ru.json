@@ -824,114 +824,114 @@
             },
             "fox": {
               "own_variant": {
-                "@value": "Own Fox Variant",
-                "desc": "Changes the fox variant used for yourself."
+                "@value": "Вид Лисы Для Себя",
+                "desc": "Меняет вид лисы используемый для себя."
               },
               "other_variant": {
-                "@value": "Other Fox Variant",
-                "desc": "Changes the fox variant used for others."
+                "@value": "Вид Лисы Для Других",
+                "desc": "Меняет вид лисы используемый для себя."
               },
               "variant": {
-                "random": "Random",
-                "red": "Red",
-                "snow": "Snow"
+                "random": "Рандом",
+                "red": "Оранжевая",
+                "snow": "Снежная"
               },
               "own_eepy": {
-                "@value": "Own Eepy",
+                "@value": "Я Сонная",
                 "desc": "zzzZZzzZ"
               },
               "other_eepy": {
-                "@value": "Other Eepy",
+                "@value": "Другие Сонные",
                 "desc": "zzzZZzzZ"
               },
               "own_sleep_delay": {
-                "@value": "Own Sleep Delay",
-                "desc": "Delay before eep zzZZz..."
+                "@value": "Задержка Сна Для Себя",
+                "desc": "Задержка перед сном для себя zzZZz..."
               },
               "other_sleep_delay": {
-                "@value": "Other Sleep Delay",
-                "desc": "Delay before eep zzZZz..."
+                "@value": "Задержка Сна Для Других",
+                "desc": "Задержка перед сном для других zzZZz..."
               }
             },
             "wolf": {
               "own_variant": {
-                "@value": "Own Wolf Variant",
-                "desc": "Changes the wolf variant used for yourself."
+                "@value": "Вид Волка Для Себя",
+                "desc": "Меняет вид волка используемый для себя. <strikethrough>Волк не меняются АУФ</strikethrough>"
               },
               "other_variant": {
-                "@value": "Other Wolf Variant",
-                "desc": "Changes the wolf variant used for others."
+                "@value": "Вид Волка Для Других",
+                "desc": "Меняет вид волка используемый для других. <strikethrough>Волк если и меняется то без наслаждения АУФ</strikethrough>"
               },
               "own_state": {
-                "@value": "Own Wolf State",
-                "desc": "Changes the wolf state used for yourself."
+                "@value": "Состояние Волка Для Себя",
+                "desc": "Меняет состояние волка используемый для себя."
               },
               "other_state": {
-                "@value": "Other Wolf State",
-                "desc": "Changes the wolf state used for others."
+                "@value": "Состояние Волка Для Других",
+                "desc": "Меняет состояние волка используемый для других."
               },
               "variant": {
-                "random": "Random",
-                "pale": "Pale",
-                "spotted": "Spotted",
-                "snowy": "Snowy",
-                "black": "Black",
-                "ashen": "Ashen",
-                "rusty": "Rusty",
-                "woods": "Woods",
-                "chestnut": "Chestnut",
-                "striped": "Striped"
+                "random": "Рандом",
+                "pale": "Бледный",
+                "spotted": "Пятнистый",
+                "snowy": "Снежный",
+                "black": "Черный",
+                "ashen": "Пепельный",
+                "rusty": "Рыжий",
+                "woods": "Лесной",
+                "chestnut": "Каштановый",
+                "striped": "Полосатый"
               },
               "state": {
-                "random": "Random",
-                "tame": "Tame",
-                "wild": "Wild",
-                "angry": "Angry"
+                "random": "Рандом",
+                "tame": "Прирученный",
+                "wild": "Дикий",
+                "angry": "Злой"
               }
             },
             "horse": {
               "own_color": {
-                "@value": "Own Horse Color",
-                "desc": "Changes the horse color used for yourself."
+                "@value": "Цвет Лошади Для Себя",
+                "desc": "Меняет цвет лошади используемый для себя."
               },
               "other_color": {
-                "@value": "Other Horse Color",
-                "desc": "Changes the horse color used for others."
+                "@value": "Цвет Лошади Для Других",
+                "desc": "Меняет цвет лошади используемый для других."
               },
               "own_marking": {
-                "@value": "Own Horse Markings",
-                "desc": "Changes the horse markings used for yourself."
+                "@value": "Окрас Лошади Для Себя",
+                "desc": "Меняет окрас лошади используемый для себя."
               },
               "other_marking": {
-                "@value": "Other Horse Markings",
-                "desc": "Changes the horse markings used for others."
+                "@value": "Окрас Лошади Для Других",
+                "desc": "Меняет окрас лошади используемый для других."
               },
               "color": {
-                "random": "Random",
-                "white": "White",
-                "creamy": "Creamy",
-                "chestnut": "Chestnut",
-                "brown": "Brown",
-                "black": "Black",
-                "gray": "Gray",
-                "dark_brown": "Dark Brown"
+                "random": "Рандом",
+                "white": "Белый",
+                "creamy": "Кремовый",
+                "chestnut": "Каштановый",
+                "brown": "Коричнивый",
+                "black": "Черный",
+                "gray": "Серый",
+                "dark_brown": "Темно Коричнивый"
               },
               "marking": {
-                "random": "Random",
-                "none": "None",
-                "white": "White",
-                "white_field": "White Field",
-                "white_dots": "White Dots",
-                "black_dots": "Black Dots"
+                "random": "Рандом",
+                "none": "Нет",
+                "white": "Белый",
+                "white_field": "Белые Области",
+                "white_dots": "Белые Точки",
+                "black_dots": "Черные Точки"
               }
             },
             "axolotl": {
               "own_variant": {
-                "@value": "Own Axolotl Variant",
+                "@value": "Вид Аксолотля Для Себя",
                 "desc": "Changes the axolotl variant that is used for yourself!"
               },
               "other_variant": {
-                "@value": "Other Axolotl Variant",
+                "@value": "Вид Аксолотля Для Других",
                 "desc": "Changes the axolotl variant that is used for others!"
               },
               "variant": {
@@ -945,11 +945,11 @@
             },
             "chicken": {
               "own_variant": {
-                "@value": "Own Chicken Variant",
+                "@value": "Вид Курицы Для Себя",
                 "desc": "Changes the chicken variant that is used for yourself!"
               },
               "other_variant": {
-                "@value": "Other Chicken Variant",
+                "@value": "Вид Курицы Для Других",
                 "desc": "Changes the chicken variant that is used for others!"
               },
               "variant": {
@@ -961,19 +961,19 @@
             },
             "copper_golem": {
               "own_variant": {
-                "@value": "Own Copper Golem Weathering State",
+                "@value": "Степень Окисления Медного Голема Для Себя",
                 "desc": "Changes the copper golem weathering state that is used for yourself!"
               },
               "other_variant": {
-                "@value": "Other Copper Golem Weathering State",
+                "@value": "Степень Окисления Медного Голема Для Других",
                 "desc": "Changes the copper golem weathering state that is used for others!"
               },
               "own_block": {
-                "@value": "Own Copper Golem Antenna Block",
+                "@value": "Блок Антенны Медного Голема Для Себя",
                 "desc": "Changes the copper golem antenna block that is used for yourself!"
               },
               "other_block": {
-                "@value": "Other Copper Golem Antenna Block",
+                "@value": "Блок Антенны Медного Голема Для Других",
                 "desc": "Changes the copper golem antenna block that is used for others!"
               },
               "state": {
@@ -986,11 +986,11 @@
             },
             "cow": {
               "own_variant": {
-                "@value": "Own Cow Variant",
+                "@value": "Вид Коровы Для Себя",
                 "desc": "Changes the cow variant that is used for yourself!"
               },
               "other_variant": {
-                "@value": "Other Cow Variant",
+                "@value": "Вид Коровы Для Других",
                 "desc": "Changes the cow variant that is used for others!"
               },
               "variant": {
@@ -1002,11 +1002,11 @@
             },
             "frog": {
               "own_variant": {
-                "@value": "Own Frog Variant",
+                "@value": "Вид Жабы Для Себя",
                 "desc": "Changes the frog variant used for yourself."
               },
               "other_variant": {
-                "@value": "Other Frog Variant",
+                "@value": "Вид Жабы Для Других",
                 "desc": "Changes the frog variant used for others."
               },
               "variant": {
@@ -1018,11 +1018,11 @@
             },
             "mooshroom": {
               "own_variant": {
-                "@value": "Own Mooshroom Cow Variant",
+                "@value": "Вид Грибной Коровы Для Себя",
                 "desc": "Changes the mooshroom variant used for yourself."
               },
               "other_variant": {
-                "@value": "Other Mooshroom Cow Variant",
+                "@value": "Вид Грибной Коровы Для Других",
                 "desc": "Changes the mooshroom variant used for others."
               },
               "variant": {
@@ -1033,11 +1033,11 @@
             },
             "parrot": {
               "own_variant": {
-                "@value": "Own Parrot Variant",
+                "@value": "Вид Попугая Для Себя",
                 "desc": "Changes the parrot variant that is used for yourself!"
               },
               "other_variant": {
-                "@value": "Other Parrot Variant",
+                "@value": "Вид Попугая Для Других",
                 "desc": "Changes the parrot variant that is used for others!"
               },
               "variant": {
@@ -1051,11 +1051,11 @@
             },
             "pig": {
               "own_variant": {
-                "@value": "Own Pig Variant",
+                "@value": "Вид Свиньи Для Себя",
                 "desc": "Changes the pig variant that is used for yourself!"
               },
               "other_variant": {
-                "@value": "Other Pig Variant",
+                "@value": "Вид Свиньи Для Других",
                 "desc": "Changes the pig variant that is used for others!"
               },
               "variant": {
@@ -1067,11 +1067,11 @@
             },
             "rabbit": {
               "own_variant": {
-                "@value": "Own Rabbit Variant",
+                "@value": "Вид Кролика Для Себя",
                 "desc": "Changes the rabbit variant that is used for yourself!"
               },
               "other_variant": {
-                "@value": "Other Rabbit Variant",
+                "@value": "Вид Кролика Для Других",
                 "desc": "Changes the rabbit variant that is used for others!"
               },
               "variant": {
@@ -1087,11 +1087,11 @@
             },
             "salmon": {
               "own_variant": {
-                "@value": "Own Salmon Variant",
+                "@value": "Вид Лосося Для Себя",
                 "desc": "Changes the salmon variant that is used for yourself!"
               },
               "other_variant": {
-                "@value": "Other Salmon Variant",
+                "@value": "Вид Лосося Для Других",
                 "desc": "Changes the salmon variant that is used for others!"
               },
               "variant": {
@@ -1103,47 +1103,47 @@
             },
             "snow_golem": {
               "own_pumpkin": {
-                "@value": "Own Snow Golem Pumpkin State",
+                "@value": "Состояние Тыквы Снежного Голема Для Себя",
                 "desc": "Changes the snow golem’s pumpkin state for yourself."
               },
               "other_pumpkin": {
-                "@value": "Other Snow Golem Pumpkin State",
+                "@value": "Состояние Тыквы Снежного Голема Для Других",
                 "desc": "Changes the snow golem’s pumpkin state for others."
               }
             },
             "sheep": {
               "own_color": {
-                "@value": "Own Sheep Color",
+                "@value": "Цвет Овцы Для Себя",
                 "desc": "Changes the sheep color used for yourself."
               },
               "other_color": {
-                "@value": "Other Sheep Color",
+                "@value": "Цвет Овцы Для Других",
                 "desc": "Changes the sheep color used for others."
               },
               "own_jeb": {
-                "@value": "Own Jeb",
+                "@value": "Jeb Для Себя",
                 "desc": "Whether you are a jeb_ sheep."
               },
               "other_jeb": {
-                "@value": "Other Jeb",
+                "@value": "Jeb Для Других",
                 "desc": "Whether others are jeb_ sheep."
               },
               "own_sheared": {
-                "@value": "Own Sheared",
+                "@value": "Подстриженность Для Себя",
                 "desc": "Whether you are sheared."
               },
               "other_sheared": {
-                "@value": "Other Sheared",
+                "@value": "Подстриженность Для Других",
                 "desc": "Whether others are sheared."
               }
             },
             "tropical_fish": {
               "own_pattern": {
-                "@value": "Own Tropical Fish Pattern",
+                "@value": "Патерн Тропической Рыбы Для Себя",
                 "desc": "Changes the tropical fish pattern that is used for yourself!"
               },
               "other_pattern": {
-                "@value": "Other Tropical Fish Pattern",
+                "@value": "Патерн Тропической Рыбы Для Других",
                 "desc": "Changes the tropical fish pattern that is used for others!"
               },
               "pattern": {
@@ -1164,19 +1164,19 @@
             },
             "villager": {
               "own_type": {
-                "@value": "Own Villager Type",
+                "@value": "Тип Жителя Для Себя",
                 "desc": "Changes the villager type that is used for yourself!"
               },
               "other_type": {
-                "@value": "Other Villager Type",
+                "@value": "Тип Жителя Для Других",
                 "desc": "Changes the villager type that is used for others!"
               },
               "own_profession": {
-                "@value": "Own Villager Profession",
+                "@value": "Профессия Жителя Для Себя",
                 "desc": "Changes the villager profession that is used for yourself!"
               },
               "other_profession": {
-                "@value": "Other Villager Profession",
+                "@value": "Профессия Жителя Для Других",
                 "desc": "Changes the villager profession that is used for others!"
               },
               "type": {
@@ -1192,11 +1192,11 @@
             },
             "iron_golem": {
               "own_state": {
-                "@value": "Own Iron Golem Crackiness",
+                "@value": "Потресканность Железного Голема Для Себя",
                 "desc": "Changes the iron golem crackiness that is used for yourself!"
               },
               "other_state": {
-                "@value": "Other Iron Golem Crackiness",
+                "@value": "Потресканность Железного Голема Для Других",
                 "desc": "Changes the iron golem crackiness that is used for others!"
               },
               "state": {
@@ -1209,19 +1209,19 @@
             },
             "llama": {
               "own_variant": {
-                "@value": "Own Llama Variant",
+                "@value": "Вид Ламы Для Себя",
                 "desc": "Changes the llama variant that is used for yourself!"
               },
               "other_variant": {
-                "@value": "Other Llama Variant",
+                "@value": "Вид Ламы Для Других",
                 "desc": "Changes the llama variant that is used for others!"
               },
               "own_trader": {
-                "@value": "Is Own Llama Trader",
+                "@value": "Лама Торговца Для Себя",
                 "desc": "Whether the own llama is a trader llama or not!"
               },
               "other_trader": {
-                "@value": "Other Llama Trader",
+                "@value": "Лама Торговца Для Других",
                 "desc": "Whether other llamas are trader llamas or not!"
               },
               "variant": {
@@ -1234,11 +1234,11 @@
             },
             "panda": {
               "own_gene": {
-                "@value": "Own Panda Gene",
+                "@value": "Ген Панды Для Себя",
                 "desc": "Changes the panda gene that is used for yourself!"
               },
               "other_gene": {
-                "@value": "Other Panda Gene",
+                "@value": "Ген Панды Для Других",
                 "desc": "Changes the panda gene that is used for others!"
               },
               "gene": {
@@ -1254,31 +1254,31 @@
             },
             "bogged": {
               "own_sheared": {
-                "@value": "Own Sheared",
+                "@value": "Подстриженность Для Себя",
                 "desc": "Whether you are sheared."
               },
               "other_sheared": {
-                "@value": "Other Sheared",
+                "@value": "Подстриженность Для Других",
                 "desc": "Whether others are sheared."
               }
             },
             "shulker": {
               "own_color": {
-                "@value": "Own Shulker Color",
+                "@value": "Цвет Шалкера Для Себя",
                 "desc": "Changes the shulker color that is used for yourself!"
               },
               "other_color": {
-                "@value": "Other Shulker Color",
+                "@value": "Цвет Шалкера Для Других",
                 "desc": "Changes the shulker color that is used for others!"
               }
             },
             "happy_ghast": {
               "own_harness": {
-                "@value": "Own Harness Color",
+                "@value": "Цвет Упряжки Для Себя",
                 "desc": "Changes the harness color that is used for yourself!"
               },
               "other_harness": {
-                "@value": "Other Harness Color",
+                "@value": "Цвет Упряжки Для Других",
                 "desc": "Changes the harness color that is used for others!"
               }
             },
