@@ -20,6 +20,8 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
@@ -30,8 +32,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.font
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
-import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
-import tech.thatgravyboat.skyblockapi.utils.extentions.since
+import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Instant
 
@@ -144,6 +145,10 @@ internal object ChatUtils {
 
     fun Component.sendWithPrefix() = chat(this)
     fun Component.sendWithPrefix(id: String) = chat(this, id)
+
+    fun antiSpam(len: Int = 8): String = CharArray(len) {
+        Char(0x21 + Random.nextInt(0x7b - 0x21))
+    }.joinToString("")
 }
 
 object OceanColors {
