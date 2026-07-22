@@ -1758,39 +1758,39 @@
       "customize": "Customize Item"
     },
     "gradients": {
-      "default": "Default",
-      "rainbow": "Rainbow",
-      "bisexual": "Bisexual",
-      "gay": "Gay",
-      "lesbian": "Lesbian",
-      "pansexual": "Pansexual",
-      "asexual": "Asexual",
-      "non_binary": "Non Binary",
-      "trans": "Transgender"
+      "default": "Обычный",
+      "rainbow": "Радужный",
+      "bisexual": "Бисексуальный",
+      "gay": "Гейский",
+      "lesbian": "Лесбиянский",
+      "pansexual": "Пансексуальный",
+      "asexual": "Асексуальный",
+      "non_binary": "Не бинарный",
+      "trans": "Трансгендерный"
     },
     "minecraft_colors": {
-      "white": "<color #FFFFFF> White </color>",
-      "orange": "<color #FF681F> Orange </color>",
-      "magenta": "<color #FF00FF> Magenta </color>",
-      "light_blue": "<color #9AC0CD> Light Blue </color>",
-      "yellow": "<color #FFFF00> Yellow </color>",
-      "lime": "<color #BFFF00> Lime </color>",
-      "pink": "<color #FF69B4> Pink </color>",
-      "gray": "<color #808080> Gray </color>",
-      "light_gray": "<color #D3D3D3> Light Gray </color>",
-      "cyan": "<color #00FFFF> Cyan </color>",
-      "purple": "<color #A020F0> Purple </color>",
-      "blue": "<color #0000FF> Blue </color>",
-      "brown": "<color #8B4513> Brown </color>",
-      "green": "<color #00FF00> Green </color>",
-      "red": "<color #FF0000> Red </color>",
-      "black": "<color #000000> Black </color>"
+      "white": "<color #FFFFFF> Белый </color>",
+      "orange": "<color #FF681F> Оранжевый</color>",
+      "magenta": "<color #FF00FF> Маджента </color>",
+      "light_blue": "<color #9AC0CD> Светло-синий </color>",
+      "yellow": "<color #FFFF00> Жёлтый </color>",
+      "lime": "<color #BFFF00> Лаймовый </color>",
+      "pink": "<color #FF69B4> Розовый </color>",
+      "gray": "<color #808080> Серый </color>",
+      "light_gray": "<color #D3D3D3> Светло-серый </color>",
+      "cyan": "<color #00FFFF> Бирюзовый </color>",
+      "purple": "<color #A020F0> Фиолетовый </color>",
+      "blue": "<color #0000FF> Синий </color>",
+      "brown": "<color #8B4513> Коричневый </color>",
+      "green": "<color #00FF00> Зелёный </color>",
+      "red": "<color #FF0000> Красный </color>",
+      "black": "<color #000000> Чёрный </color>"
     },
     "overlays": {
-      "crafthelper": "Crafthelper",
+      "crafthelper": "Помщник крафтов",
       "background": {
-        "disable": "Disable background",
-        "enable": "Enable background"
+        "disable": "Выключить фон",
+        "enable": "Включить фон"
       }
     }
   }
