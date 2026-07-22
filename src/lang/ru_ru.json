@@ -928,392 +928,392 @@
             "axolotl": {
               "own_variant": {
                 "@value": "Вид Аксолотля Для Себя",
-                "desc": "Changes the axolotl variant that is used for yourself!"
+                "desc": "Меняет тип аксолотля, используемый для себя!"
               },
               "other_variant": {
                 "@value": "Вид Аксолотля Для Других",
-                "desc": "Changes the axolotl variant that is used for others!"
+                "desc": "Меняет тип аксолотля, используемый для других!"
               },
               "variant": {
-                "random": "Random",
-                "lucy": "Pink",
-                "wild": "Brown",
-                "gold": "Gold",
-                "cyan": "Cyan",
-                "blue": "Blue"
+                "random": "Случайный",
+                "lucy": "Розовый",
+                "wild": "Коричневый",
+                "gold": "Золотистый",
+                "cyan": "Бирюзовый",
+                "blue": "Синий"
               }
             },
             "chicken": {
               "own_variant": {
                 "@value": "Вид Курицы Для Себя",
-                "desc": "Changes the chicken variant that is used for yourself!"
+                "desc": "Меняет тип курицы, используемый для Вас!"
               },
               "other_variant": {
                 "@value": "Вид Курицы Для Других",
-                "desc": "Changes the chicken variant that is used for others!"
+                "desc": "Меняет тип курицы, использованный для других!"
               },
               "variant": {
-                "random": "Random",
-                "temperate": "Temperate",
-                "warm": "Warm",
-                "cold": "Cold"
+                "random": "Случайная",
+                "temperate": "Умеренная",
+                "warm": "Тёплая",
+                "cold": "Холодная"
               }
             },
             "copper_golem": {
               "own_variant": {
                 "@value": "Степень Окисления Медного Голема Для Себя",
-                "desc": "Changes the copper golem weathering state that is used for yourself!"
+                "desc": "Меняет степень окисления медного голема, используемой для Вас!"
               },
               "other_variant": {
                 "@value": "Степень Окисления Медного Голема Для Других",
-                "desc": "Changes the copper golem weathering state that is used for others!"
+                "desc": "Меняет степень окисления медного голема, используемой для Вас!"
               },
               "own_block": {
                 "@value": "Блок Антенны Медного Голема Для Себя",
-                "desc": "Changes the copper golem antenna block that is used for yourself!"
+                "desc": "Меняет блок антенны медного голема, используемого для Вас!"
               },
               "other_block": {
                 "@value": "Блок Антенны Медного Голема Для Других",
-                "desc": "Changes the copper golem antenna block that is used for others!"
+                "desc": "Меняет блок антенны медного голема, используемого для других!"
               },
               "state": {
-                "random": "Random",
-                "unaffected": "Unaffected",
-                "exposed": "Exposed",
-                "weathered": "Weathered",
-                "oxidized": "Oxidized"
+                "random": "Случайный",
+                "unaffected": "Неокисленный",
+                "exposed": "Потемневший",
+                "weathered": "Состаренный",
+                "oxidized": "Окисленный"
               }
             },
             "cow": {
               "own_variant": {
                 "@value": "Вид Коровы Для Себя",
-                "desc": "Changes the cow variant that is used for yourself!"
+                "desc": "Меняет вид коровы, используемый для Вас!"
               },
               "other_variant": {
                 "@value": "Вид Коровы Для Других",
-                "desc": "Changes the cow variant that is used for others!"
+                "desc": "Меняет вид коровы, используемый для других!"
               },
               "variant": {
-                "random": "Random",
-                "temperate": "Temperate",
-                "warm": "Warm",
-                "cold": "Cold"
+                "random": "Случайный",
+                "temperate": "Умеренный",
+                "warm": "Тёплый",
+                "cold": "Холодный"
               }
             },
             "frog": {
               "own_variant": {
                 "@value": "Вид Жабы Для Себя",
-                "desc": "Changes the frog variant used for yourself."
+                "desc": "Меняет вид жабы, используемый для Вас."
               },
               "other_variant": {
                 "@value": "Вид Жабы Для Других",
-                "desc": "Changes the frog variant used for others."
+                "desc": "Меняет вид жабы, используемый для других."
               },
               "variant": {
-                "random": "Random",
-                "temperate": "Temperate",
-                "warm": "Warm",
-                "cold": "Cold"
+                "random": "Случайный",
+                "temperate": "Умеренный",
+                "warm": "Тёплый",
+                "cold": "Холодный"
               }
             },
             "mooshroom": {
               "own_variant": {
                 "@value": "Вид Грибной Коровы Для Себя",
-                "desc": "Changes the mooshroom variant used for yourself."
+                "desc": "Меняет вид грибной коровы, используемый для Вас."
               },
               "other_variant": {
                 "@value": "Вид Грибной Коровы Для Других",
-                "desc": "Changes the mooshroom variant used for others."
+                "desc": "Меняет вид грибной коровы, используемый для других.."
               },
               "variant": {
-                "random": "Random",
-                "red": "Red",
-                "brown": "Brown"
+                "random": "Случайный",
+                "red": "Красный",
+                "brown": "Коричневый"
               }
             },
             "parrot": {
               "own_variant": {
                 "@value": "Вид Попугая Для Себя",
-                "desc": "Changes the parrot variant that is used for yourself!"
+                "desc": "Меняет вид попугая, используемый для Вас!"
               },
               "other_variant": {
                 "@value": "Вид Попугая Для Других",
-                "desc": "Changes the parrot variant that is used for others!"
+                "desc": "Меняет вид попугая, используемый для других!"
               },
               "variant": {
-                "random": "Random",
-                "red_blue": "Red Blue",
-                "blue": "Blue",
-                "green": "Green",
-                "yellow_blue": "Yellow Blue",
-                "gray": "Gray"
+                "random": "Случайный",
+                "red_blue": "Красно-синий",
+                "blue": "Синий",
+                "green": "Зелёный",
+                "yellow_blue": "Жёлто-синий",
+                "gray": "Серый"
               }
             },
             "pig": {
               "own_variant": {
                 "@value": "Вид Свиньи Для Себя",
-                "desc": "Changes the pig variant that is used for yourself!"
+                "desc": "Меняет вид свиньи, используемый для Вас!"
               },
               "other_variant": {
                 "@value": "Вид Свиньи Для Других",
-                "desc": "Changes the pig variant that is used for others!"
+                "desc": "Меняет вид свиньи, используемый для других!"
               },
               "variant": {
-                "random": "Random",
-                "temperate": "Temperate",
-                "warm": "Warm",
-                "cold": "Cold"
+                "random": "Случаный",
+                "temperate": "Умеренный",
+                "warm": "Тёплый",
+                "cold": "Холодный"
               }
             },
             "rabbit": {
               "own_variant": {
                 "@value": "Вид Кролика Для Себя",
-                "desc": "Changes the rabbit variant that is used for yourself!"
+                "desc": "Меняет вид кролика, используемый для Вас!"
               },
               "other_variant": {
                 "@value": "Вид Кролика Для Других",
-                "desc": "Changes the rabbit variant that is used for others!"
+                "desc": "Меняет вид кролика, используемый для других!"
               },
               "variant": {
-                "random": "Random",
-                "brown": "Brown",
-                "white": "White",
-                "black": "Black",
-                "white_splotched": "White Splotched",
-                "gold": "Gold",
-                "salt": "Salt",
-                "evil": "Evil >:3"
+                "random": "Случайный",
+                "brown": "Коричневый",
+                "white": "Белый",
+                "black": "Чёрный",
+                "white_splotched": "Белый пятнистый",
+                "gold": "Золотистый",
+                "salt": "Бело-коричневый",
+                "evil": "Злой >:3"
               }
             },
             "salmon": {
               "own_variant": {
                 "@value": "Вид Лосося Для Себя",
-                "desc": "Changes the salmon variant that is used for yourself!"
+                "desc": "Меняет вид лосося, используемый для Вас!"
               },
               "other_variant": {
                 "@value": "Вид Лосося Для Других",
-                "desc": "Changes the salmon variant that is used for others!"
+                "desc": "Меняет вид лосося, используемый для других!"
               },
               "variant": {
-                "random": "Random",
-                "small": "Small",
-                "medium": "Medium",
-                "large": "Large"
+                "random": "Случайный",
+                "small": "Малый",
+                "medium": "Средний",
+                "large": "Большой"
               }
             },
             "snow_golem": {
               "own_pumpkin": {
                 "@value": "Состояние Тыквы Снежного Голема Для Себя",
-                "desc": "Changes the snow golem’s pumpkin state for yourself."
+                "desc": "Меняет состояние тыквы снежного големя для Вас."
               },
               "other_pumpkin": {
                 "@value": "Состояние Тыквы Снежного Голема Для Других",
-                "desc": "Changes the snow golem’s pumpkin state for others."
+                "desc": "Меняет состояние тыквы снежного големя для других."
               }
             },
             "sheep": {
               "own_color": {
                 "@value": "Цвет Овцы Для Себя",
-                "desc": "Changes the sheep color used for yourself."
+                "desc": "Меняет цвет овцы, используемый для Вас."
               },
               "other_color": {
                 "@value": "Цвет Овцы Для Других",
-                "desc": "Changes the sheep color used for others."
+                "desc": "Меняет цвет овцы, используемый для Вас."
               },
               "own_jeb": {
                 "@value": "Jeb Для Себя",
-                "desc": "Whether you are a jeb_ sheep."
+                "desc": "Являетесь Вы jeb_ овцой."
               },
               "other_jeb": {
                 "@value": "Jeb Для Других",
-                "desc": "Whether others are jeb_ sheep."
+                "desc": "Являются другие овцами jeb_."
               },
               "own_sheared": {
                 "@value": "Подстриженность Для Себя",
-                "desc": "Whether you are sheared."
+                "desc": "Подстрижены Вы или нет."
               },
               "other_sheared": {
                 "@value": "Подстриженность Для Других",
-                "desc": "Whether others are sheared."
+                "desc": "Подстрижены другие."
               }
             },
             "tropical_fish": {
               "own_pattern": {
-                "@value": "Патерн Тропической Рыбы Для Себя",
+                "@value": "Паттерн Тропической Рыбы Для Себя",
                 "desc": "Changes the tropical fish pattern that is used for yourself!"
               },
               "other_pattern": {
-                "@value": "Патерн Тропической Рыбы Для Других",
-                "desc": "Changes the tropical fish pattern that is used for others!"
+                "@value": "Паттерн Тропической Рыбы Для Других",
+                "desc": "Меняет паттерн тропической рыбы, используемого для других!"
               },
               "pattern": {
-                "random": "Random",
-                "kob": "Kob",
-                "sunstreak": "Sunstreak",
-                "snooper": "Snooper",
-                "dasher": "Dasher",
-                "brinely": "Brinely",
-                "spotty": "Spotty",
-                "flopper": "Flopper",
-                "stripey": "Stripey",
-                "glitter": "Glitter",
-                "blockfish": "Blockfish",
-                "betty": "Betty",
-                "clayfish": "Clayfish"
+                "random": "Случайный",
+                "kob": "Остров",
+                "sunstreak": "Санстрейк",
+                "snooper": "Снупер",
+                "dasher": "Дэшер",
+                "brinely": "Солёный",
+                "spotty": "Пятнистый",
+                "flopper": "Флоппер",
+                "stripey": "Полосатый",
+                "glitter": "Блестящий",
+                "blockfish": "Блокфиш",
+                "betty": "Бэтти",
+                "clayfish": "Клэйфиш"
               }
             },
             "villager": {
               "own_type": {
                 "@value": "Тип Жителя Для Себя",
-                "desc": "Changes the villager type that is used for yourself!"
+                "desc": "Меняет тип жителя, используемый для Вас!"
               },
               "other_type": {
                 "@value": "Тип Жителя Для Других",
-                "desc": "Changes the villager type that is used for others!"
+                "desc": "Меняет тип жителя, используемый для других!"
               },
               "own_profession": {
                 "@value": "Профессия Жителя Для Себя",
-                "desc": "Changes the villager profession that is used for yourself!"
+                "desc": "Меняет профессию жителя, используемый для Вас!!"
               },
               "other_profession": {
                 "@value": "Профессия Жителя Для Других",
-                "desc": "Changes the villager profession that is used for others!"
+                "desc": "Меняет профессию жителя, используемый для других!"
               },
               "type": {
-                "random": "Random",
-                "desert": "Desert",
-                "jungle": "Jungle",
-                "plains": "Plains",
-                "savanna": "Savanna",
-                "snow": "Snow",
-                "swamp": "Swamp",
-                "taiga": "Taiga"
+                "random": "Случайный",
+                "desert": "Пустынный",
+                "jungle": "Джунгли",
+                "plains": "Равнинный",
+                "savanna": "Саванна",
+                "snow": "Снежный",
+                "swamp": "Болотный",
+                "taiga": "Тайга"
               }
             },
             "iron_golem": {
               "own_state": {
                 "@value": "Потресканность Железного Голема Для Себя",
-                "desc": "Changes the iron golem crackiness that is used for yourself!"
+                "desc": "Меняет потресканнось железного голема, используемой для Вас!"
               },
               "other_state": {
                 "@value": "Потресканность Железного Голема Для Других",
-                "desc": "Changes the iron golem crackiness that is used for others!"
+                "desc": "Меняет потресканность железного голеиа, используемой для других!"
               },
               "state": {
-                "random": "Random",
-                "none": "None",
-                "low": "Low",
-                "medium": "Medium",
-                "high": "High"
+                "random": "Случайная",
+                "none": "Никакая",
+                "low": "Низкая",
+                "medium": "Средняя",
+                "high": "Высокая"
               }
             },
             "llama": {
               "own_variant": {
                 "@value": "Вид Ламы Для Себя",
-                "desc": "Changes the llama variant that is used for yourself!"
+                "desc": "Меняет тип ламы, используемый для Вас!"
               },
               "other_variant": {
                 "@value": "Вид Ламы Для Других",
-                "desc": "Changes the llama variant that is used for others!"
+                "desc": "Меняет тип ламы, используемый для других!"
               },
               "own_trader": {
                 "@value": "Лама Торговца Для Себя",
-                "desc": "Whether the own llama is a trader llama or not!"
+                "desc": "Будет ли собственная лама ламой странствующего торговца!"
               },
               "other_trader": {
                 "@value": "Лама Торговца Для Других",
-                "desc": "Whether other llamas are trader llamas or not!"
+                "desc": "Будут ли ламы других ламами странствующего торговца!"
               },
               "variant": {
-                "random": "Random",
-                "creamy": "Creamy",
-                "white": "White",
-                "brown": "Brown",
-                "gray": "Gray"
+                "random": "Случайная",
+                "creamy": "Кремовая",
+                "white": "Белая",
+                "brown": "Коричневая",
+                "gray": "Серая"
               }
             },
             "panda": {
               "own_gene": {
                 "@value": "Ген Панды Для Себя",
-                "desc": "Changes the panda gene that is used for yourself!"
+                "desc": "Меняет ген панды, используемый для Вас!"
               },
               "other_gene": {
                 "@value": "Ген Панды Для Других",
-                "desc": "Changes the panda gene that is used for others!"
+                "desc": "Меняет ген панды, используемый для других!"
               },
               "gene": {
-                "random": "Random",
-                "normal": "Normal",
-                "lazy": "Lazy",
-                "worried": "Worried",
-                "playful": "Playful",
-                "brown": "Brown",
-                "weak": "Weak",
-                "aggressive": "Aggressive"
+                "random": "Случайный",
+                "normal": "Обычный",
+                "lazy": "Ленивый",
+                "worried": "Беспокойный",
+                "playful": "Игривый",
+                "brown": "Коричневаюый",
+                "weak": "Слабый",
+                "aggressive": "Агрессивный"
               }
             },
             "bogged": {
               "own_sheared": {
                 "@value": "Подстриженность Для Себя",
-                "desc": "Whether you are sheared."
+                "desc": "Подстрижены ли Вы."
               },
               "other_sheared": {
                 "@value": "Подстриженность Для Других",
-                "desc": "Whether others are sheared."
+                "desc": "Подстрижены ли другие."
               }
             },
             "shulker": {
               "own_color": {
                 "@value": "Цвет Шалкера Для Себя",
-                "desc": "Changes the shulker color that is used for yourself!"
+                "desc": "Меняет цвет шалкера для Вас!"
               },
               "other_color": {
                 "@value": "Цвет Шалкера Для Других",
-                "desc": "Changes the shulker color that is used for others!"
+                "desc": "Меняет цвет шалкера для других!"
               }
             },
             "happy_ghast": {
               "own_harness": {
                 "@value": "Цвет Упряжки Для Себя",
-                "desc": "Changes the harness color that is used for yourself!"
+                "desc": "Меняет цвет упряжки, используемый для Вас!"
               },
               "other_harness": {
                 "@value": "Цвет Упряжки Для Других",
-                "desc": "Changes the harness color that is used for others!"
+                "desc": "Меняет цвет упряжки, используемый для других!"
               }
             },
-            "random": "Random",
+            "random": "Случайно",
             "boolean_state": {
-              "random": "Random",
-              "always": "Always",
-              "never": "Never"
+              "random": "Случайно",
+              "always": "Всегда",
+              "never": "Никогда"
             },
             "state": {
-              "none": "Nobody",
-              "self": "Self",
-              "players": "Players",
-              "everyone": "Everyone"
+              "none": "Никто",
+              "self": "Вы",
+              "players": "Игроки",
+              "everyone": "Все"
             },
             "color": {
-              "default": "Random",
-              "random": "Random",
-              "none": "None",
-              "white": "<white>White",
-              "orange": "<#f5a97f>Orange",
-              "magenta": "<#ff00ff>Magenta",
-              "light_blue": "<#90d5ff>Light Blue",
-              "yellow": "<yellow>Yellow",
-              "lime": "<green>Lime",
-              "pink": "<pink>Pink",
-              "gray": "<dark_gray>Gray",
-              "light_gray": "<light_gray>Light Gray",
-              "cyan": "<#00ffff>Cyan",
-              "purple": "<purple>Purple",
-              "blue": "<blue>Blue",
-              "brown": "<#964B00>Brown",
-              "green": "<green>Green",
-              "red": "<red>Red",
-              "black": "<black>Black"
+              "default": "Случайный",
+              "random": "Случайный",
+              "none": "Никакой",
+              "white": "<white>Белый",
+              "orange": "<#f5a97f>Оранжевый",
+              "magenta": "<#ff00ff>Маджента",
+              "light_blue": "<#90d5ff>Светло-синий",
+              "yellow": "<yellow>Жёлтый",
+              "lime": "<green>Лаймовый",
+              "pink": "<pink>Розовый",
+              "gray": "<dark_gray>Серый",
+              "light_gray": "<light_gray>Светло-серый",
+              "cyan": "<#00ffff>Бирюзовый",
+              "purple": "<purple>Фиолетовый",
+              "blue": "<blue>Синий",
+              "brown": "<#964B00>Коричневый",
+              "green": "<green>Зеленый",
+              "red": "<red>Красный",
+              "black": "<black>Чёрный"
             },
             "entity_overwrite": {
               "desc": [
