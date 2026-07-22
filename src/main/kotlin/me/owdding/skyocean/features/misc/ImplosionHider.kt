@@ -22,7 +22,7 @@ object ImplosionHider {
     private val witherBladeIds = setOf("HYPERION", "ASTRAEA", "VALKYRIE", "SCYLLA")
     private val players: MutableSet<Vec3> = ConcurrentHashMap.newKeySet()
 
-    fun Vec3.isInRange(event: ParticleEmitEvent) = this.distanceToSqr(event.particle.x, event.particle.y, event.particle.z) <= 4.0
+    fun Vec3.isInRange(event: ParticleEmitEvent) = this.distanceToSqr(event.particle.x, event.particle.y, event.particle.z) <= 12.0
 
     @Subscription
     @OnlyOnSkyBlock
