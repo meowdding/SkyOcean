@@ -26,6 +26,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.api.profile.party.PartyAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
@@ -153,7 +154,7 @@ object HotspotFeatures {
 
                     onClick {
                         closest.prompt.announced = true
-                        McClient.connection?.sendChat(hotspotMessage(closest.type, chatPos))
+                        HotspotFeaturesConfig.chatType.announce(hotspotMessage(closest.type, chatPos))
                     }
                 }.send()
                 closest.prompt.prompted = true
@@ -161,8 +162,8 @@ object HotspotFeatures {
             HotspotFeaturesConfig.AnnouncementType.AUTOMATIC -> {
                 if (closest.prompt.prompted || closest.prompt.announced) return
 
-                McClient.connection?.sendChat(hotspotMessage(closest.type, chatPos))
                 closest.prompt.announced = true
+                HotspotFeaturesConfig.chatType.announce(hotspotMessage(closest.type, chatPos))
             }
             else -> return
         }

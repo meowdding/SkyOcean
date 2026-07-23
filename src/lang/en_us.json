@@ -1402,6 +1402,10 @@
             "announce": {
               "@value": "Announce Hotspot",
               "desc": "How to Announce Hotspots in chat when you find one."
+            },
+            "chat_type": {
+              "@value": "Chat Type",
+              "desc": "The type of chat to announce hotspots in when automatically sharing them."
             }
           }
         }

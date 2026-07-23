@@ -60,7 +60,7 @@ object ComponentIcons {
     val HOLLOW_FLAG = text(Icons.HOLLOW_FLAG)
     val FILLED_FLAG = text(Icons.FILLED_FLAG)
 
-    val ID = SkyOcean.id("font_icons")
+    val ID = id("font_icons")
 
     val WARDROBE = ComponentIcon.WARDROBE.text
     val ACCESSORIES = ComponentIcon.ACCESSORIES.text
@@ -147,7 +147,7 @@ internal object ChatUtils {
     fun Component.sendWithPrefix(id: String) = chat(this, id)
 
     fun antiSpam(len: Int = 8): String = CharArray(len) {
-        Char(0x21 + Random.nextInt(0x7b - 0x21))
+        Char(0x21 + Random.nextInt(0x40 - 0x21))
     }.joinToString("")
 }
 
