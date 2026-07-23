@@ -1329,92 +1329,92 @@
         }
       },
       "fishing": {
-        "@value": "Fishing",
+        "@value": "Рыбалка",
         "trophy_numbers": {
-          "@value": "Trophy Numbers",
-          "desc": "Displays the amount of trophy fishes you caught upon catching one."
+          "@value": "Колличесто Трофеев",
+          "desc": "Показывает коллтичество рыб трофеев вы поймали при вылове одной."
         },
         "hook_text_scale_toggle": {
-          "@value": "Toggle Hook Text Scale",
-          "desc": "Whether to enable the hook text scaling or not."
+          "@value": "Вкл. Масштабирование Текста Пополавока",
+          "desc": "Переключатель масштабирования текста пополавока."
         },
         "hook_text_scale": {
-          "@value": "Hook Text Scale",
-          "desc": "Changes the scale of the text above your fishing hook/bobber."
+          "@value": "Масштаб Текста Поплавка",
+          "desc": "Изменяет масштаб текста над поплавком."
         },
         "lava_replacement": {
-          "@value": "Lava Replacement",
-          "desc": "Replaces the lava texture with the water texture while in the Crimson Isle."
+          "@value": "Замена Лавы",
+          "desc": "Заменяет текстуру лавы на воду в кримсон айл."
         },
         "bobber_fix": {
-          "@value": "Bobber Fix",
-          "desc": "Fixes bobbers rubberbanding when fishing."
+          "@value": "Исправление Поплавка",
+          "desc": "Исправляет лаг поплавка при рыбалке."
         },
         "bobber_time": {
-          "@value": "Bobber Time",
-          "desc": "Shows the time your bobber has existed."
+          "@value": "Время Поплавка",
+          "desc": "Показывает время которое попловок существует."
         },
         "hide_other_bobbers": {
-          "@value": "Hide Other Bobbers",
-          "desc": "Hides other players' bobbers, making it easier to see your own."
+          "@value": "Скрывать Другие Поплавки",
+          "desc": "Скрывает поплавки других игроков, позволяя видеть свой попловок легче."
         },
         "hotspot": {
-          "@value": "Hotspot Features",
-          "desc": "All settings for the hotspot Features.",
+          "@value": "Функции Хотспот",
+          "desc": "Все настройки функций хотспота.",
           "warning": {
-            "@value": "Warning",
-            "desc": "Sends a chat warning when a hotspot you recently fished at disappears."
+            "@value": "Предупреждение",
+            "desc": "Отправляет предупреждение в чате когда хотспот в котором вы рыбачите пропадает."
           },
-          "highlight": "Highlight",
+          "highlight": "Подсветка",
           "circle_surface": {
-            "@value": "Surface",
-            "desc": "Render a \"solid\" circle for hotspots."
+            "@value": "Поверхность",
+            "desc": "Показывает \"полный\" круг для хотспотов."
           },
           "surface_transparency": {
-            "@value": "Surface Transparency",
+            "@value": "Прозрачность поверхности",
             "desc": [
-              "Changes the transparency of the surface.",
+              "Изменяет прозрачность поверхности.",
               {
                 "@id": "transparency"
               }
             ]
           },
           "circle_outline": {
-            "@value": "Outline",
-            "desc": "Render a \"solid\" outline for hotspots."
+            "@value": "Обводка",
+            "desc": "Показывает \"полную\" обводку для хотспота."
           },
           "outline_transparency": {
-            "@value": "Outline Transparency",
+            "@value": "Прозрачность обводки",
             "desc": [
-              "Changes the transparency of the outline.",
+              "Изменяет прозрачность обводки.",
               {
                 "@id": "transparency"
               }
             ]
           },
           "hide_particles": {
-            "@value": "Hide Particles",
-            "desc": "Hide hotspot particles (requires Highlight or Outline to be enabled)."
+            "@value": "Скрывать частицы",
+            "desc": "Скрывает частицы хотспота (требует Подсветку или Обводку для включения)."
           }
         }
       },
       "lore_modifiers": {
-        "@value": "Lore Modifiers",
+        "@value": "Изменение Описания",
         "modifications": {
-          "@value": "Lore Modifications",
+          "@value": "Изменение Описания",
           "desc": [
-            "All items that have any modification present in the lore are indicated with the selected modify indicator.",
-            "To list all modifications that are present press <gray>shift</gray>.",
+            "Все измененные предметы будут иметь выбранный индикатор в описании.",
+            "Чтобы отобразить все используемые изменения нажмите <gray>шифт</gray>.",
             "",
-            "Some of the settings may include examples, <italic><gray>hover</gray></italic> them to see them."
+            "Некоторые настройки могут исеть примеры, <italic><gray>наведитесь</gray></italic> на них чтобы увидеть их."
           ]
         },
         "drill_modifications": {
-          "@value": "Compact drill modifications",
+          "@value": "Сжатые Детали Дрели",
           "desc": [
-            "Compacts the installed upgrade parts into one line each.",
+            "Сжимает установленные детали дрели в одну строка.",
             "",
-            "Example: <green><hover show_text '<color #355AA0>\uD83C\uDF0A</color><aqua> Heated Divans Drill</aqua>",
+            "Пример: <green><hover show_text '<color #355AA0>\uD83C\uDF0A</color><aqua> Heated Divans Drill</aqua>",
             "<dark_gray>Breaking Power 10</dark_gray>",
             "",
             "<gray>Damage: <red>+75</red></gray>",
@@ -1488,11 +1488,11 @@
           ]
         },
         "dungeon_quality": {
-          "@value": "Dungeon Quality",
+          "@value": "Качество Данжа",
           "desc": [
-            "Adds the dungeon quality to the lore.",
+            "Добавляет качесто данжа в описании.",
             "",
-            "Example: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <gold>Smart Skeleton Master Leggings</gold>",
+            "Пример: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <gold>Smart Skeleton Master Leggings</gold>",
             "<gray>Item Quality: <red>50<gray>/</gray>50</red></gray>",
             "<gray>Tier: <light_purple>8<gray>/</gray>10</light_purple></gray>",
             "<gray>Gear Score: <light_purple>555</light_purple> <dark_gray>(2543)</dark_gray></gray>",
@@ -1534,11 +1534,11 @@
           ]
         },
         "compact_level_bars": {
-          "@value": "Compact Level Bars",
+          "@value": "Сжимает Шкалу Уровня",
           "desc": [
-            "Compacts the bars in the SkyBlock levels menu into one line, making them fit on smaller screens.",
+            "Сжимает шкалу меню SkyBlock уровня в одну строку, позволяя им вмещаться на маленький экран.",
             "",
-            "Example: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <dark_aqua>Dungeon Tasks</dark_aqua>",
+            "Пример: <green><hover '<color #355AA0>\uD83C\uDF0A</color> <dark_aqua>Dungeon Tasks</dark_aqua>",
             "<dark_gray>3 Tasks</dark_gray>",
             "",
             "<gray>All Dungeon related XP Tasks</gray>",
@@ -1571,191 +1571,191 @@
           ]
         },
         "armadillo_blocks_walked": {
-          "@value": "Prehistoric egg blocks walked",
-          "desc": "Shows how many blocks you have walked so far on a prehistory egg."
+          "@value": "Блоки пройденные с доисторическим яйцом",
+          "desc": "Показывает сколько блоков вы прошли на доисторическим яйце."
         },
         "storage_preview": {
-          "@value": "Storage Preview",
-          "desc": "Previews the contents of your backpacks and ender chest in the tooltip."
+          "@value": "Превью Хранилища",
+          "desc": "Показывает превью содержания ваших рюкзаков и эндер-сундука в описании."
         },
         "museum_donation": {
-          "@value": "Museum Donation",
-          "desc": "Shows what items haven't been donated to museum in the tooltip."
+          "@value": "Пожертвование Музея",
+          "desc": "Показывает какие предметы не были пожертвованны в музей."
         },
         "dye_hex": {
-          "@value": "Dye Hex Color",
-          "desc": "Shows the hex code of the dye on armors."
+          "@value": "Hex Цвет Красителя",
+          "desc": "Показывает hex код красителя брони."
         },
         "dye_pos": {
-          "@value": "Dye Hex Color square position",
-          "desc": "Select where the color display square is positioned.",
-          "left": "Left",
-          "middle": "Middle",
-          "right": "Right"
+          "@value": "Расположение Квадрата Hex Цвета Красителя",
+          "desc": "Выберите где квадрата цвета расположен.",
+          "left": "Слево",
+          "middle": "В Центре",
+          "right": "Справо"
         },
         "midas_bid_breakdown": {
-          "@value": "Midas Bid Breakdown",
-          "desc": "Shows the original bid and added coins on Midas Weapons."
+          "@value": "Анализ Ставки Мидаса",
+          "desc": "Показывает оригинальную ставку и добавленные деньги на Мидас Оружиях."
         }
       },
       "foraging": {
-        "@value": "Foraging",
+        "@value": "Форагинг",
         "hotf": {
           "shiftCost": {
-            "@value": "Show shift click cost",
-            "desc": "Shows the amount of powder that will be consumed on shift click."
+            "@value": "Показывать Стоимость Нажатия С Шифтом",
+            "desc": "Показывает стоимось при прокачке перка с нажатым шифтом."
           },
           "totalProgress": {
-            "@value": "Show total progress",
-            "desc": "Shows your total progress to maxing a perk."
+            "@value": "Показывать Полный Прогресс",
+            "desc": "Показывает прогресс до максимальной прокачки перка."
           },
           "stackSize": {
-            "@value": "Show level as amount",
-            "desc": "Shows the perk level as item stack count."
+            "@value": "Показывать Уровень Как Количество",
+            "desc": "Показывает уровень перка как количество предмета."
           },
           "totalLeft": {
-            "@value": "Show total amount left",
-            "desc": "Displays the total amount that is still required to max a perk."
+            "@value": "Показывать Оставшемся Количестве",
+            "desc": "Показывает оставшееся количество, нужное для полной прокачки перка."
           },
           "reminder": {
-            "@value": "Reminder",
-            "desc": "Lets you add reminders for when you have enough whispers to buy a perk."
+            "@value": "Напоминание",
+            "desc": "Добавляет напоминание когда вам хватает на прокачку перка."
           },
           "reminderTitle": {
-            "@value": "Reminder Title",
-            "desc": "Shows a title when the reminder triggers."
+            "@value": "Показывать В Центре Экрана",
+            "desc": "Показывает напоминание в центре экрана."
           }
         },
         "galatea": {
-          "@value": "Galatea",
+          "@value": "Галатеа",
           "muteThePhantoms": {
-            "@value": "Mute the Phantoms",
-            "desc": "Mutes all phantoms making them not induce ear pain.",
-            "warning": "<yellow>SkyOcean mutes the phantom sounds by default, if you wish to change this open the config and search for <gold>Mute the Phantoms</gold>!"
+            "@value": "Заглушение Фантомов",
+            "desc": "Заглушает всех фантомов, не позволяя им вызывать ушную боль.",
+            "warning": "<yellow>SkyOcean заглушает фантомов по стандарту, если вы хотите поменять это откройте настройки и найдите <gold>Заглушение Фантомов</gold>!"
           },
           "moongladeBeaconColor": {
-            "@value": "Moonglade Beacon Color",
-            "desc": "Changes the Moonglade Beacon beam color in Galatea to <red>Red</red> if it's inactive, and <green>green</green> if its active."
+            "@value": "Цвет Мунглейд Маяка",
+            "desc": "Изменяет цвет Мунглейд маяка в Галатеи на <red>Красный</red> если он не активен, и на <green>зеленый</green> если он активен."
           },
           "shulkerOverwrite": {
-            "@value": "Retexture shulker",
-            "desc": "Recolors the shulkers to make them more visible."
+            "@value": "Замена Текстур Шалкера",
+            "desc": "Изменяет цвет шалкеров на более заметный."
           }
         }
       },
       "gambling": {
-        "@value": "Gambling",
+        "@value": "Гэмблинг",
         "dungeons": {
           "separator": {
-            "@value": "Dungeon Chest Gambling",
+            "@value": "Гэмблинг Данжеон Сундуков",
             "desc": ""
           },
-          "@value": "Dungeon Chest CSGO Case Opening",
-          "desc": "Shows a CSGO case opening animation when opening a dungeon chest.",
+          "@value": "Открытие Кейсов CSGO Данжеон Сундуков",
+          "desc": "Показывает анимацию открытия кейса CSGO при открытии данжеон сундука.",
           "croesus": {
-            "@value": "Also Show Case Opening in Croesus",
-            "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
+            "@value": "Также Показывать В Меню Кроесуса",
+            "desc": "Скроет содержимое кроесуса перед открытием, чтобы не испортить сюрприз."
           },
           "time": {
-            "@value": "Animation Time",
-            "desc": "Changes the time the animation takes. (in seconds)"
+            "@value": "Время Анимации",
+            "desc": "Изменяет время которое занимает анимации. (в секундах)"
           }
         },
         "vanguard": {
           "separator": {
-            "@value": "Vanguard Gambling",
+            "@value": "Гэмблинг Вангардов",
             "desc": ""
           },
-          "@value": "Vanguard Slot Machine",
-          "desc": "Shows a slot machine animation when looting a Vanguard.",
+          "@value": "Вангард Слот Машина",
+          "desc": "Показывает анимацию слот машины при открытии Вангарда.",
           "hide_chat": {
-            "@value": "Hide Chat While Gambling",
-            "desc": "Hides the chat messages while the gambling animation is playing so you don't get spoiled."
+            "@value": "Скрывать Чат При Прокрутке",
+            "desc": "Скрывает сообщения чата при показе анимации чтобы не испортить сюрприз."
           },
           "mode": {
-            "@value": "Mode",
-            "desc": "Changes the mode of the slot machine between most expensive item or a predefined set of rare items (Weight <= 10).",
-            "predefined": "Predefined",
-            "most_expensive": "Most expensive"
+            "@value": "Режим",
+            "desc": "Иэменяет режим слот машины между самым дорогим предметом и заданным списком редких предметов (Вес <= 10).",
+            "predefined": "Заданный",
+            "most_expensive": "Самый Дорогой"
           },
           "time": {
-            "@value": "Animation Time",
-            "desc": "Changes the time the animation takes. (in seconds)"
+            "@value": "Время Анимации",
+            "desc": "Изменяет время которое занимает анимации. (в секундах)"
           }
         },
         "credits": {
-          "@value": "Credits",
+          "@value": "Авторы",
           "desc": [
-            "Dungeon Chest Gambling is recreation from the 1.8 mod <hover 'Click to visit their GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>.",
+            "Гэмблинг Данжеон Сундуков воссоздан из 1.8 мода <hover 'Нажмите чтобы поситить их GitHub'><url 'https://github.com/Ev-Hoang/Bedrock-Chest-Case-Opening'><blue>Bedrock Chest Case Opening</blue></url></hover>.",
             "",
-            "Slot Machine textures are created by <hover 'Click to visit her BlueSky'><url 'https://bsky.app/profile/vrachel.bsky.social'><color:#4FB1FF>rachel</color></url></hover>."
+            "Текстуры слот машины созданы <hover 'Нажмите чтобы посетить ее BlueSky'><url 'https://bsky.app/profile/vrachel.bsky.social'><color:#4FB1FF>rachel</color></url></hover>."
           ]
         }
       },
       "hotkeys": {
-        "@value": "Custom Hotkeys",
+        "@value": "Пользовательские Горячие Клавиши",
         "enabled": {
-          "@value": "Enabled",
-          "desc": "Whether the custom hotkeys are enabled or not."
+          "@value": "Переключатель",
+          "desc": "Переключатель пользовательских горячих клавиш."
         },
         "sequence_input_delay": {
-          "@value": "Sequence input delay",
-          "desc": "The max delay between two keypresses in a sequence. (in ms)"
+          "@value": "Задержка Ввода Последовательности",
+          "desc": "Максимальная задержка между двумя нажатиями кнопкок в последовательности. (в мс)"
         },
         "edit": {
-          "@value": "Edit hotkeys",
-          "desc": "Opens the hotkey edit screen."
+          "@value": "Изменить Горячии Клавиши",
+          "desc": "Открывает меню изменения горячих клавиш."
         }
       },
       "text_replacements": {
-        "@value": "Text Replacements",
+        "@value": "Замена текста",
         "enabled": {
-          "@value": "Enabled",
-          "desc": "Global toggle for all text replacements, regardless of their respective toggles."
+          "@value": "Переключатель",
+          "desc": "Переключатель для всех замен текста, вне зависимости от их переключателя."
         },
         "outside_skyblock": {
-          "@value": "Outside SkyBlock",
-          "desc": "Allows text replacements to be active outside of skyblock."
+          "@value": "Вне SkyBlock",
+          "desc": "Разрешает замену текста вне skyblock."
         }
       }
     },
     "garden": {
-      "pest_bait_type": "<dark_gray>Pest Bait Type</dark_gray>",
-      "open_sack": "<dark_gray>Open Sack</dark_gray>"
+      "pest_bait_type": "<dark_gray>Тип Приманки Насекомых</dark_gray>",
+      "open_sack": "<dark_gray>Открыть Мешок</dark_gray>"
     },
     "inventory": {
       "sack_value": {
-        "@value": "<dark_gray>Sack Value</dark_gray>",
-        "total_value": "Total: "
+        "@value": "<dark_gray>Стоимость Мешка</dark_gray>",
+        "total_value": "Сумма: "
       },
       "buttons": {
-        "configuration": "<white>Button Configuration",
-        "item": "Item ID / Skyblock ID",
-        "command": "Command",
-        "screen_title": "Screen Title",
-        "tooltip": "Button Tooltip",
-        "select_button": "<color #cff8ff>Select Button to Edit",
-        "enable_first": "Enable inventory buttons in the Config first!",
-        "disable": "Disable",
-        "enable": "Enable",
-        "reset": "Reset"
+        "configuration": "<white>Настройка Кнопки",
+        "item": "ID предмета / Skyblock ID",
+        "command": "Комманда",
+        "screen_title": "Титул В Центре Экрана",
+        "tooltip": "Описание Кнопки",
+        "select_button": "<color #cff8ff>Выберите Кнопку Для Изменения",
+        "enable_first": "Сначала включите кнопки инвенторя в настройка!",
+        "disable": "Выкл.",
+        "enable": "Вкл.",
+        "reset": "Сброс"
       }
     },
     "screens": {
       "item_search": {
         "sort": {
-          "amount": "Amount",
-          "price": "Price",
-          "rarity": "Rarity"
+          "amount": "Колличество",
+          "price": "Цено",
+          "rarity": "Редкость"
         }
       }
     },
     "keybind": {
-      "item_search": "Open Item Search",
-      "item_value": "Open Item Value",
-      "crafthelper": "Set as active Craft Helper Item",
-      "item_highlight": "Highlight matching Items",
-      "customize": "Customize Item"
+      "item_search": "Открыть Поиск Предметов",
+      "item_value": "Открыть Стоимость Предмета",
+      "crafthelper": "Задать как текущий предмет Помошника Крафтов",
+      "item_highlight": "Подсветить подходящие предметы",
+      "customize": "Изменить Предмет"
     },
     "gradients": {
       "default": "Обычный",
@@ -1771,7 +1771,7 @@
     "minecraft_colors": {
       "white": "<color #FFFFFF> Белый </color>",
       "orange": "<color #FF681F> Оранжевый</color>",
-      "magenta": "<color #FF00FF> Маджента </color>",
+      "magenta": "<color #FF00FF> Сереневый </color>",
       "light_blue": "<color #9AC0CD> Светло-синий </color>",
       "yellow": "<color #FFFF00> Жёлтый </color>",
       "lime": "<color #BFFF00> Лаймовый </color>",
