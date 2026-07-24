@@ -1730,7 +1730,7 @@
       },
       "buttons": {
         "configuration": "<white>Button Configuration",
-        "item": "Item ID / Skyblock ID",
+        "item": "Item ID / SkyBlock ID",
         "command": "Command",
         "screen_title": "Screen Title",
         "tooltip": "Button Tooltip",
