@@ -1730,7 +1730,7 @@
       },
       "buttons": {
         "configuration": "<white>Настройка Кнопки",
-        "item": "ID предмета / Skyblock ID",
+        "item": "ID предмета / SkyBlock ID",
         "command": "Команда",
         "screen_title": "Титул В Центре Экрана",
         "tooltip": "Описание Кнопки",
