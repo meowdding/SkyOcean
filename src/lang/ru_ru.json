@@ -1715,7 +1715,7 @@
         },
         "outside_skyblock": {
           "@value": "Вне SkyBlock",
-          "desc": "Разрешает замену текста вне skyblock."
+          "desc": "Разрешает замену текста вне SkyBlock."
         }
       }
     },
