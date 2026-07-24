@@ -30,7 +30,7 @@ object MinionStorage {
     fun getMinionTier(id: String) = unlockedMinions.find { it.partId == id }?.maxUnlock
 
     @Subscription(priority = Subscription.HIGHEST)
-    @InventoryTitle("Crafted Minions")
+    @InventoryTitle("\\(\\d+/\\d+\\) Crafted Minions")
     fun onOpen(event: ContainerInitializedEvent) {
         val currentMinions = storage.get() ?: CopyOnWriteArrayList()
         var dataChanged = false
