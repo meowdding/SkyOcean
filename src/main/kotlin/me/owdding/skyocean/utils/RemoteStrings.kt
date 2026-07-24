@@ -6,7 +6,10 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.events.StartRepoLoadingEvent
 import me.owdding.lib.utils.FeatureName
+import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.repo.RemoteRepo
+import me.owdding.skyocean.SkyOcean
 import org.intellij.lang.annotations.Language
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.utils.regex.component.ComponentRegex
@@ -78,7 +81,7 @@ data class StringGroupImpl(val prefix: String, val parent: StringGroup) : String
 }
 
 @Module
-object RemoteStrings : StringGroup {
+object RemoteStrings : StringGroup, MeowddingLogger by SkyOcean.featureLogger() {
     private val list: MutableList<CompletedElementDelegate<*>> = mutableListOf()
     val stringOverwrites: MutableMap<String, String> = mutableMapOf()
 
@@ -123,6 +126,7 @@ object RemoteStrings : StringGroup {
     override fun resolve(path: String): StringGroup = StringGroupImpl(path, this)
 
     fun register(delegate: CompletedElementDelegate<*>) {
+        debug("Registering ${delegate.key}")
         list.add(delegate)
     }
 }

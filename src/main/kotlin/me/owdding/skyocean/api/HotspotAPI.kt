@@ -6,6 +6,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.events.fishing.FishCatchEvent
 import me.owdding.skyocean.events.fishing.HotspotEvent
 import me.owdding.skyocean.features.fishing.HotspotFeatures
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup
 import me.owdding.skyocean.utils.Utils.roundToHalf
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.DustParticleOptions
@@ -150,6 +152,8 @@ data class HotspotData(
     var fishedIn: Boolean = false,
 )
 
+private val hotspotGroup = RemoteStrings.resolve("HotspotType")
+
 enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
     SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+. Sea Creature Chance"),
     FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+. Fishing Speed"),
@@ -164,7 +168,7 @@ enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
     val displayComponent: Component = displayName.asComponent { this.color = this@HotspotType.color.value }
     override fun toString(): String = displayName
 
-    val regex: Regex = Regex(regex)
+    val regex: Regex by hotspotGroup.regex(regex, name.lowercase() + "_regex")
 
     companion object {
 
