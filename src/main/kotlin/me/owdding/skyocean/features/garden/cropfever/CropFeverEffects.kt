@@ -84,9 +84,7 @@ object CropFeverEffects {
         val buffer = (pass as PostPassAccessor).`skyocean$getCustomUniforms`()[UNIFORM_ID] ?: return
 
         MemoryStack.stackPush().use { stack ->
-            val buf = Std140Builder.onStack(stack, UBO_SIZE)
-                .putFloat(CropFeverEffectsConfig.shiftingShaderSpeed.speed)
-                .get()
+            val buf = Std140Builder.onStack(stack, UBO_SIZE).putFloat(CropFeverEffectsConfig.shiftingShaderSpeed.speed).get()
             RenderSystem.getDevice().createCommandEncoder().writeToBuffer(buffer.slice(), buf)
         }
     }
@@ -99,16 +97,18 @@ object CropFeverEffects {
         }
     }
 
-    private fun turnOff() {
+    fun turnOff() {
         if (!isFeverActive) return
         isFeverActive = false
 
         startTime = Instant.DISTANT_PAST
         if (fallingCoinsList.isNotEmpty()) fallingCoinsList.clear()
 
-        McClient.self.soundManager.stop(SkyOcean.id(RNG_SOUND_ID), SoundSource.PLAYERS)
-        McClient.self.soundManager.stop(SkyOcean.id(BG_MUSIC_SOUND_ID), SoundSource.PLAYERS)
-        McClient.self.soundManager.stop(SkyOcean.id(START_SOUND_ID), SoundSource.PLAYERS)
+        val soundManager = McClient.self.soundManager
+
+        soundManager.stop(SkyOcean.id(RNG_SOUND_ID), SoundSource.PLAYERS)
+        soundManager.stop(SkyOcean.id(BG_MUSIC_SOUND_ID), SoundSource.PLAYERS)
+        soundManager.stop(SkyOcean.id(START_SOUND_ID), SoundSource.PLAYERS)
 
         NBSMusicManager.stop(RNG_SOUND_ID)
         NBSMusicManager.stop(BG_MUSIC_SOUND_ID)
