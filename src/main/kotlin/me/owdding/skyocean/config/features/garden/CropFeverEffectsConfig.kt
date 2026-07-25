@@ -1,8 +1,8 @@
 package me.owdding.skyocean.config.features.garden
 
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
 import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
-import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.duration
 import me.owdding.skyocean.config.translation
 import me.owdding.skyocean.features.garden.cropfever.CropFeverEffects
@@ -15,8 +15,12 @@ object CropFeverEffectsConfig : ObjectKt(), Translatable {
     const val VISUAL_PATH = "$ROOT_PATH.visual_section"
     override fun getTranslationKey(): String = "$ROOT_PATH.config_title"
 
-    var enabled by boolean(false) {
-        this.translation = "$ROOT_PATH.enabled"
+    var enabled by observable(
+        boolean(false) {
+            translation = "$ROOT_PATH.enabled"
+        },
+    ) { _, new ->
+        if (!new && CropFeverEffects.isFeverActive) CropFeverEffects.turnOff()
     }
 
     init {
