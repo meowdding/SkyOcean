@@ -24,6 +24,10 @@ object InventoryConfig : CategoryKt("inventory") {
         translation = "skyocean.config.inventory.inventory_buttons.enabled"
     }
 
+    var renderBehindBackgroundIfInactive by boolean(true) {
+        translation = "skyocean.config.inventory.inventory_buttons.render_behind_background"
+    }
+
     init {
         button {
             title = "skyocean.config.inventory.inventory_buttons.edit"

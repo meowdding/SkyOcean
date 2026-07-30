@@ -271,6 +271,10 @@
             "@value": "Inventory Buttons",
             "desc": "Whether to show the Inventory Buttons."
           },
+          "render_behind_background": {
+            "@value": "Render Behind Background when not Hovered",
+            "desc": "Renders the button texture behind the Container Background if its not hovered."
+          },
           "edit": {
             "@value": "Edit Buttons",
             "desc": [
