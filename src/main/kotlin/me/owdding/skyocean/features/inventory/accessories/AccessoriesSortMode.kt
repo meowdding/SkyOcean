@@ -6,10 +6,10 @@ import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 
 enum class AccessoriesSortMode(vararg sortModes: Comparator<TrackedAccessory>, displayName: String? = null) : Comparator<TrackedAccessory> {
-    MP(Mode.MP, Mode.PRICE, Mode.RARITY, displayName = "MP"),
-    PRICE(Mode.PRICE, Mode.MP, Mode.RARITY),
-    RARITY(Mode.RARITY, Mode.PRICE, Mode.MP),
-    PRICE_PER_MP(Mode.PRICE_PER_MP, Mode.RARITY, displayName = "Price per MP"),
+    AP(Mode.AP, Mode.PRICE, Mode.RARITY, displayName = "AP"),
+    PRICE(Mode.PRICE, Mode.AP, Mode.RARITY),
+    RARITY(Mode.RARITY, Mode.PRICE, Mode.AP),
+    PRICE_PER_AP(Mode.PRICE_PER_AP, Mode.RARITY, displayName = "Price per AP"),
     ;
 
     val displayName: String = displayName ?: toFormattedName()
@@ -27,17 +27,17 @@ private typealias Mode = AdditionalSortMode
 private enum class AdditionalSortMode(comparator: Comparator<TrackedAccessory>) : Comparator<TrackedAccessory> by comparator {
     MARKED(reversed(Comparator.comparing { it.marked })),
     HAS_PRICE(reversed(Comparator.comparing { getPrice(it) != Long.MAX_VALUE })),
-    MP(reversed(Comparator.comparing { AccessoriesAPI.getMp(it.items.first()) })),
+    AP(reversed(Comparator.comparing(::getAp))),
     PRICE(Comparator.comparing { getPrice(it) }),
     RARITY(reversed(Comparator.comparing { getRarity(it) })),
-    PRICE_PER_MP(Comparator.comparing { getPrice(it) / getMp(it) }),
+    PRICE_PER_AP(Comparator.comparing { getPrice(it) / getAp(it) }),
     ;
 
     companion object {
         fun getPrice(accessory: TrackedAccessory): Long = accessory.items.minOf { item -> item.getItemValue().rawPrice.takeIf { it > 0 } ?: Long.MAX_VALUE }
         // TODO: handle accessory upgrades of recombed accessories
-        private fun getMp(accessory: TrackedAccessory): Int {
-            return AccessoriesAPI.getMp(accessory.items.first())
+        private fun getAp(accessory: TrackedAccessory): Int {
+            return AccessoriesAPI.getAp(accessory.items.first())
         }
         // TODO: handle accessory upgrades of recombed accessories?
         private fun getRarity(accessory: TrackedAccessory): SkyBlockRarity {

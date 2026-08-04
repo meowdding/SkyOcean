@@ -30,7 +30,6 @@ import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
@@ -45,14 +44,14 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
  *  - Highlight accessories you have materials for
  *  - Recombs
  *  - Handle accessories like campfire badge having to be upgraded multiple times to upgrade rarity
- *  - Add price and price/mp data to tooltip
+ *  - Add price and price/ap data to tooltip
  *  - Take into account requirements (hotm level, slayer level, etc)
  */
 
 object AccessoriesHelperScreen : SkyOceanScreen() {
 
     val state: ListenableState<String> = ListenableState.of("")
-    val dropdownSort: DropdownState<AccessoriesSortMode> = DropdownState.of(PRICE_PER_MP)
+    val dropdownSort: DropdownState<AccessoriesSortMode> = DropdownState.of(PRICE_PER_AP)
 
     val widgetWidth get() = (width / 3).coerceAtLeast(100) + 50
     val widgetHeight get() = (height / 3).coerceAtLeast(100) + 50
@@ -330,7 +329,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
         addItems()
     }
 
-    fun refreshSort(mode: AccessoriesSortMode = dropdownSort.get() ?: PRICE_PER_MP) {
+    fun refreshSort(mode: AccessoriesSortMode = dropdownSort.get() ?: PRICE_PER_AP) {
         val comparator = AccessoriesSortMode.BASE
             .thenComparing(mode)
         this.trackedAccessories.sortWith(comparator)

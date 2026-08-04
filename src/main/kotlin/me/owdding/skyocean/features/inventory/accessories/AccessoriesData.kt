@@ -52,7 +52,7 @@ object AccessoriesAPI {
     internal var unobtainable: Set<SkyBlockId> = emptySet()
     internal var rarityUpgraded: Map<SkyBlockId, AccessoryRarityUpgraded> = emptyMap()
     internal var disallowedOriginFamilies: Set<String> = emptySet()
-    internal var magicalPower: MagicalPowerRepoData? = null
+    internal var accessoryPower: AccessoryPowerRepoData? = null
 
     fun getFamily(id: SkyBlockId): AccessoryFamily? {
         return families.values.find { it.contains(id) }
@@ -60,7 +60,7 @@ object AccessoriesAPI {
 
     fun AccessoryFamily.isDisallowed(): Boolean = isDisallowedOriginFamily(family)
 
-    fun getMp(item: ItemStack): Int = magicalPower?.getMagicalPower(item) ?: 1
+    fun getAp(item: ItemStack): Int = accessoryPower?.getAccessoryPower(item) ?: 1
 
     private fun calculateIsDisallowedOrigin(family: AccessoryFamily): Boolean {
         return family.flatMapItems().any { id ->
@@ -84,7 +84,7 @@ object AccessoriesAPI {
         families = emptyMap()
         unobtainable = emptySet()
         rarityUpgraded = emptyMap()
-        magicalPower = null
+        accessoryPower = null
 
 
         families = Utils.loadRemoteRepoData<AccessoryFamily, List<AccessoryFamily>>("accessories/families", CodecUtils::list)
@@ -105,7 +105,7 @@ object AccessoriesAPI {
         unobtainable = Utils.loadRemoteRepoData<SkyBlockId, Set<SkyBlockId>>("accessories/unobtainable_accessories", CodecUtils::set).orEmpty()
         rarityUpgraded = Utils.loadRemoteRepoData<AccessoryRarityUpgraded, List<AccessoryRarityUpgraded>>("accessories/rarity_upgraded", CodecUtils::list)
             ?.associateBy { it.item }.orEmpty()
-        magicalPower = Utils.loadRemoteRepoData<MagicalPowerRepoData>("accessories/magical_power")
+        accessoryPower = Utils.loadRemoteRepoData<AccessoryPowerRepoData>("accessories/magical_power")
 
         disallowedOriginFamilies = families.filterValues(::calculateIsDisallowedOrigin).keys
     }
@@ -248,15 +248,15 @@ data class AccessoryRarityUpgraded(
 }
 
 @GenerateCodec
-data class MagicalPowerRepoData(
+data class AccessoryPowerRepoData(
     val rarity: Map<SkyBlockRarity, Int>,
     val overrides: Map<SkyBlockId, Override>,
 ) {
-    fun getMagicalPower(item: ItemStack): Int {
+    fun getAccessoryPower(item: ItemStack): Int {
         val override = overrides[item.getSkyBlockId()]
-        val mp = rarity[item.getData(DataTypes.RARITY)] ?: 0
+        val ap = rarity[item.getData(DataTypes.RARITY)] ?: 0
 
-        return override?.apply(mp) ?: mp
+        return override?.apply(ap) ?: ap
     }
 }
 
