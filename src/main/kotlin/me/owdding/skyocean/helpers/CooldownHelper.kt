@@ -57,6 +57,7 @@ class CooldownHelper(
             SkyBlockIsland.KUUDRA.inIsland() -> true
             SkyBlockIsland.DARK_AUCTION.inIsland() -> true
             SkyBlockIsland.THE_RIFT.inIsland() -> true
+            SkyBlockIsland.SAFARI.inIsland() -> true
             else -> false
         }
     }
