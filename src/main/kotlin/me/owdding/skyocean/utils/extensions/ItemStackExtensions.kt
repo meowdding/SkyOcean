@@ -1,7 +1,9 @@
 package me.owdding.skyocean.utils.extensions
 
+import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import me.owdding.skyocean.utils.Utils.previous
 import net.minecraft.core.component.DataComponents
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
@@ -9,6 +11,12 @@ import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
 
 fun ItemLike.getEquipmentSlot() = asItem().components().get(DataComponents.EQUIPPABLE)?.slot()
+
+@Suppress("DEPRECATION")
+operator fun Item.contains(item: ItemStackBlueprint) = this.builtInRegistryHolder().`is`(item.item)
+
+fun Item.asBlueprint() = ItemStackBlueprint(this)
+fun ItemStack.asBlueprint() = ItemStackBlueprint(this.typeHolder(), this.count, this.componentsPatch)
 
 fun ItemStack.getRealRarity(): SkyBlockRarity? {
     var rarity = this[DataTypes.RARITY] ?: return null

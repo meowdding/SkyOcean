@@ -4,9 +4,11 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.CatRenderState
 import net.minecraft.core.registries.Registries
@@ -19,28 +21,27 @@ import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier
 object CatModifier : AnimalModifier<Cat, CatRenderState> {
-    override val type: EntityType<Cat> = EntityType.CAT
+    override val type: EntityType<Cat> = EntityTypes.CAT
 
     private val catVariants: List<CatVariant> = Registries.CAT_VARIANT.list().sortedBy {
-        //~ if >= 26.1 'assetInfo' -> 'babyAssetInfo()'
         it.babyAssetInfo().id.toString()
     }
 
     var catVariant = PlayerAnimalConfig.createEntry("cat_variant") { id, type ->
         enum(id, Variant.DEFAULT) {
             this.translation = createTranslationKey("cat", "${type}_variant")
-            condition = isSelected(EntityType.CAT)
+            condition = isSelected(EntityTypes.CAT)
         }
     }
 
     fun getCatVariant(state: AvatarRenderState): CatVariant = catVariant.select(state).catVariant ?: getRandom(state, catVariants)
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: CatRenderState,
         partialTicks: Float,
     ) {
-        //~ if >= 26.1 'assetInfo()' -> 'assetInfo(state.isBaby)'
         state.texture = getCatVariant(avatarState).assetInfo(state.isBaby).texturePath()
         state.collarColor = getCollarColor(avatarState)
         state.isSitting = state.isCrouching

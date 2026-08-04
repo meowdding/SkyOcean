@@ -5,7 +5,7 @@ import me.owdding.skyocean.utils.PreInitModule
 import me.owdding.skyocean.utils.RemoteRepoDelegate
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import net.minecraft.world.item.ItemStack
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 
 @PreInitModule
@@ -24,8 +24,8 @@ object SackData {
         val items: List<String>,
     ) {
         val normalizedId by lazy { normalizedSackId(sack) }
-        val item by RepoItemsAPI.getItemLazy(sack)
-        val containingItems by lazy { items.map { RepoItemsAPI.getItem(it) } }
+        val item = SkyBlockItemsRepo.getLazyItemStack(sack)
+        val containingItems = items.mapNotNull { SkyBlockItemsRepo.getLazyItemStack(it) }
 
         operator fun contains(stack: ItemStack) = stack.getSkyBlockId() in items
 

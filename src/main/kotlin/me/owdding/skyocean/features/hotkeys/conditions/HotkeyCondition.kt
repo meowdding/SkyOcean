@@ -18,6 +18,8 @@ interface HotkeyCondition {
 
     operator fun invoke() = test()
 
+    fun duplicate(): HotkeyCondition
+
     context(context: WidgetContext)
     fun asLayoutElement(selector: LayoutElement): LayoutElement
 
@@ -52,6 +54,8 @@ data object HotkeyConditions {
         idMapper.put("or", SkyOceanCodecs.OrHotkeyConditionCodec)
         idMapper.put("dungeon_floor", SkyOceanCodecs.DungeonFloorHotkeyConditionCodec)
         idMapper.put("dungeon_class", SkyOceanCodecs.DungeonClassHotkeyConditionCodec)
+        idMapper.put("mayor_perk", SkyOceanCodecs.MayorPerkHotkeyConditionCodec)
+        idMapper.put("garden_plot", SkyOceanCodecs.GardenPlotHotkeyConditionCodec)
     }
 }
 
@@ -64,4 +68,6 @@ enum class HotkeyConditionType(val builder: (() -> HotkeyCondition)? = null, val
     OR(builder = ::OrHotkeyCondition, nested = true),
     DUNGEON_FLOOR(builder = ::DungeonFloorHotkeyCondition),
     DUNGEON_CLASS(builder = ::DungeonClassHotkeyCondition),
+    MAYOR_PERK(builder = ::MayorPerkHotkeyCondition),
+    GARDEN_PLOT(builder = ::GardenPlotHotkeyCondition),
 }

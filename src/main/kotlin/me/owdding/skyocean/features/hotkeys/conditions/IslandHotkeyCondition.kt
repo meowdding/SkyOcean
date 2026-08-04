@@ -22,4 +22,5 @@ data class IslandHotkeyCondition(
     override fun nameConverter(data: SkyBlockIsland): Component = data.name.toTitleCase().asComponent()
 
     override fun test(): Boolean = SkyBlockIsland.inAnyIsland(islands)
+    override fun duplicate(): HotkeyCondition = copy(islands = islands.toMutableSet())
 }

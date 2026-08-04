@@ -8,6 +8,7 @@ import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
 import kotlin.reflect.KProperty
@@ -20,7 +21,10 @@ import kotlin.time.toTimeUnit
 fun <T> CategoryBuilder.observable(entry: ConfigDelegateProvider<RConfigKtEntry<T>>, onChange: () -> Unit) = this.observable(entry) { _, _ -> onChange() }
 
 fun CategoryBuilder.requiresChunkRebuild(entry: ConfigDelegateProvider<RConfigKtEntry<Boolean>>) = observable(entry) {
-    runCatching { McClient.self.levelRenderer.allChanged() }
+    runCatching {
+        //~ if >= 26.2 'levelRenderer' -> 'levelExtractor'
+        McClient.self.levelExtractor.allChanged()
+    }
 }
 
 var SeparatorBuilder.translation: String

@@ -4,7 +4,9 @@ import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalColor
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.ShulkerRenderState
 import net.minecraft.world.entity.EntityType
@@ -13,17 +15,18 @@ import net.minecraft.world.item.DyeColor
 
 @RegisterAnimalModifier
 object ShulkerModifier : AnimalModifier<Shulker, ShulkerRenderState> {
-    override val type: EntityType<Shulker> = EntityType.SHULKER
+    override val type: EntityType<Shulker> = EntityTypes.SHULKER
     val colors = DyeColor.entries
 
     var shulkerColor = PlayerAnimalConfig.createEntry("shulker_color") { id, type ->
         enum(id, AnimalColor.RANDOM) {
             this.translation = createTranslationKey("shulker", "${type}_color")
-            condition = isSelected(EntityType.SHULKER)
+            condition = isSelected(EntityTypes.SHULKER)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: ShulkerRenderState,
         partialTicks: Float,

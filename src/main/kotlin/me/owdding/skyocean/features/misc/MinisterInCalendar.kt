@@ -11,6 +11,7 @@ import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.area.hub.ElectionAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoMobsAPI
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 import tech.thatgravyboat.skyblockapi.platform.ResolvableProfile
@@ -25,7 +26,7 @@ object MinisterInCalendar {
 
     @Subscription
     fun onInventoryChange(event: InventoryChangeEvent) {
-        if (!MiscConfig.ministerInCalendar) return
+        if (!enabled()) return
         if (event.slot.index != 38) return
         if (event.title != "Calendar and Events") return
         if (event.item !in ItemTag.GLASS_PANES) {
@@ -81,5 +82,7 @@ object MinisterInCalendar {
             }
         }
     }
+
+    private fun enabled() = MiscConfig.ministerInCalendar && LocationAPI.isOnSkyBlock && !LocationAPI.onAlpha
 
 }

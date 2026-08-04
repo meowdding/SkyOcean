@@ -4,7 +4,9 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.SalmonRenderState
 import net.minecraft.world.entity.EntityType
@@ -12,17 +14,18 @@ import net.minecraft.world.entity.animal.fish.Salmon
 
 @RegisterAnimalModifier
 object SalmonModifier : AnimalModifier<Salmon, SalmonRenderState> {
-    override val type: EntityType<Salmon> = EntityType.SALMON
+    override val type: EntityType<Salmon> = EntityTypes.SALMON
     private val salmonVariants = Salmon.Variant.entries
 
     var salmonVariant = PlayerAnimalConfig.createEntry("salmon_variant") { id, type ->
         enum(id, Variant.RANDOM) {
             this.translation = createTranslationKey("salmon", "${type}_variant")
-            condition = isSelected(EntityType.SALMON)
+            condition = isSelected(EntityTypes.SALMON)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: SalmonRenderState,
         partialTicks: Float,

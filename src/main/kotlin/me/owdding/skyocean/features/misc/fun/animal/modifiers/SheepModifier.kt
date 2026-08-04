@@ -4,7 +4,9 @@ import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalColor
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.SheepRenderState
 import net.minecraft.world.entity.EntityType
@@ -13,31 +15,32 @@ import net.minecraft.world.item.DyeColor
 
 @RegisterAnimalModifier
 object SheepModifier : AnimalModifier<Sheep, SheepRenderState> {
-    override val type: EntityType<Sheep> = EntityType.SHEEP
+    override val type: EntityType<Sheep> = EntityTypes.SHEEP
     val colors = DyeColor.entries
 
     var sheepColor = PlayerAnimalConfig.createEntry("sheep_color") { id, type ->
         enum(id, AnimalColor.RANDOM) {
             this.translation = createTranslationKey("sheep", "${type}_color")
-            condition = isSelected(EntityType.SHEEP)
+            condition = isSelected(EntityTypes.SHEEP)
         }
     }
 
     var isJebSheep = PlayerAnimalConfig.createEntry("sheep_jeb") { id, type ->
         enum(id, AnimalModifier.BooleanState.RANDOM) {
             this.translation = createTranslationKey("sheep", "${type}_jeb")
-            condition = isSelected(EntityType.SHEEP)
+            condition = isSelected(EntityTypes.SHEEP)
         }
     }
 
     var isSheared = PlayerAnimalConfig.createEntry("sheep_sheared") { id, type ->
         enum(id, AnimalModifier.BooleanState.RANDOM) {
             this.translation = createTranslationKey("sheep", "${type}_sheared")
-            condition = isSelected(EntityType.SHEEP)
+            condition = isSelected(EntityTypes.SHEEP)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: SheepRenderState,
         partialTicks: Float,

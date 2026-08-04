@@ -5,9 +5,7 @@ import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.plus
-//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
-import net.minecraft.util.LightCoordsUtil as LightTexture
-//~ if >= 26.1 'ModelBlockRenderer' -> 'dispatch.BlockStateModelPart'
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart
 import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -66,31 +64,17 @@ object PuzzlerSolver {
             }
 
 
-            //? if >= 26.1 {
             val list = mutableListOf<BlockStateModelPart>()
             McClient.self.modelManager.blockStateModelSet.get(state).collectParts(RandomSource.create(-1), list)
-            McClient.self.gameRenderer.submitNodeStorage.submitBlockModel(
+            event.submitNodeCollector.submitBlockModel(
                 event.poseStack,
                 RenderTypes.entityCutoutZOffset(TextureAtlas.LOCATION_BLOCKS),
                 list,
                 IntArray(0),
-                LightTexture.FULL_BRIGHT,
+                LightCoordsUtil.FULL_BRIGHT,
                 OverlayTexture.NO_OVERLAY,
                 1
             )
-            //? } else {
-            /*ModelBlockRenderer.renderModel(
-                event.poseStack.last(),
-                // RenderTypes instead of RenderType but how
-                event.buffer.getBuffer(RenderTypes.entityCutoutNoCullZOffset(TextureAtlas.LOCATION_BLOCKS)),
-                McClient.self.blockRenderer.getBlockModel(state),
-                1f,
-                1f,
-                1f,
-                LightTexture.FULL_BRIGHT,
-                OverlayTexture.NO_OVERLAY,
-            )
-            *///? }
         }
     }
 

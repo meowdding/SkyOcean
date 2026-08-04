@@ -3,34 +3,46 @@ package me.owdding.skyocean.features.recipe.crafthelper
 import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.REIRuntimeCompatability
+import me.owdding.lib.events.ItemListEvent
 import me.owdding.skyocean.ApiDebug
 import me.owdding.skyocean.config.SkyOceanKeybind
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperNotificationType
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
+import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
+import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
 import me.owdding.skyocean.features.recipe.crafthelper.views.SimpleRecipeView
+import me.owdding.skyocean.features.recipe.crafthelper.visitors.CompactedResourceCutoffTreeTransformer
 import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.debug.DebugBuilder
+import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.components.Tooltip
+import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenKeyReleasedEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
-import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.concurrent.atomic.AtomicReference
+import java.util.function.UnaryOperator
 
 @Module
 object CraftHelperManager {
@@ -45,6 +57,19 @@ object CraftHelperManager {
         CraftHelperStorage.save()
     }
 
+    fun resolve(resetLayout: () -> Unit, clear: () -> Unit): CraftHelperTree? {
+        val tree = CraftHelperStorage.data?.resolve(resetLayout, clear) ?: return null
+        return getTransformers().fold(tree) { tree, op -> op.apply(tree) }
+    }
+
+    fun getTransformers(): List<UnaryOperator<CraftHelperTree>> = buildList {
+
+        CraftHelperConfig.compactedCutoffDegree.takeIf { it > 0 }?.let {
+            add { tree -> CompactedResourceCutoffTreeTransformer.apply(it, tree) }
+        }
+
+    }
+
     @Subscription(TickEvent::class)
     @TimePassed("5t")
     fun onTick() {
@@ -53,32 +78,83 @@ object CraftHelperManager {
             hasBeenNotified = false
             lastEvaluatedRoot.set(null)
         }
-        val (tree) = CraftHelperStorage.data?.resolve({}, ::clear) ?: return
+        val tree = resolve({}, ::clear) ?: return
         SimpleRecipeView {
             if (it.path != "root") return@SimpleRecipeView
             lastEvaluatedRoot.set(it)
-            if (!CraftHelperConfig.doneMessage) return@SimpleRecipeView
             if (!it.childrenDone) return@SimpleRecipeView
             if (hasBeenNotified) return@SimpleRecipeView
             hasBeenNotified = true
-            text("You have all materials to craft ") {
-                CraftHelperStorage.selectedItem?.toItem()?.hoverName?.let { item ->
-                    append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }
-                    append(item)
-                } ?: append("your selected craft helper tree")
-                append("!")
-            }.sendWithPrefix()
+            CraftHelperConfig.doneNotificationConfig.doneTypes.forEach(::doneNotification)
         }.visit(tree, ItemTracker(ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()))
+    }
+
+    fun doneNotification(type: CraftHelperNotificationType) {
+        when (type) {
+            CraftHelperNotificationType.DONE_MESSAGE -> {
+                text("You have all materials to craft ") {
+                    CraftHelperStorage.selectedItem?.toItem()?.hoverName?.let { item ->
+                        append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }
+                        append(item)
+                    } ?: append("your selected craft helper tree")
+                    append("!")
+                }.sendWithPrefix()
+            }
+            CraftHelperNotificationType.DONE_TITLE -> {
+                val title = CraftHelperStorage.selectedItem?.let {
+                    Text.of {
+                        append(ChatUtils.ICON_WITH_SPACE)
+                        append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }
+                        append(it.toItem().hoverName)
+                        append(" Craftable!") { color = TextColor.GREEN }
+                    }
+                } ?: Text.of {
+                    append("CraftHelper Item Craftable!") { this.color = TextColor.GREEN }
+                }
+                McClient.setTitle(title, null, 0f, 3f, 0.5f)
+            }
+            CraftHelperNotificationType.DONE_SOUND -> {
+                McClient.playSound(CraftHelperConfig.doneNotificationConfig.soundEvent)
+            }
+        }
     }
 
 
     @Subscription
-    fun onKeybind(event: ScreenKeyReleasedEvent.Pre) {
+    @OnlyOnSkyBlock
+    fun onItemListKeybind(event: ScreenKeyReleasedEvent.Pre) {
         if (!keybind.matches(event)) return
+        highlight(McScreen.asMenu?.getHoveredSlot()?.item)
+    }
 
-        val reiHovered = REIRuntimeCompatability.getReiHoveredItemStack()
-        val mcScreenHovered = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty }
-        val item = mcScreenHovered ?: reiHovered ?: return
+    @Subscription
+    @OnlyOnSkyBlock
+    fun onItemListKeybind(event: ItemListEvent.HoveredItemKeyPress) {
+        if (!keybind.key.matches(event.event)) return
+        setItem(event.stack)
+    }
+
+    @Subscription
+    @OnlyOnSkyBlock
+    fun onItemListWidget(event: ItemListEvent.RecipeButtonAdd) {
+        event.itemStack.getSkyBlockId() ?: return
+        event.register(
+            Button.builder(Text.of("\uD83E\uDE93")) {
+                // TODO: set actual recipe instead of this
+                setItem(event.itemStack)
+            }.apply {
+                tooltip(Tooltip.create(Text.of("Set as SkyOcean CraftHelper Item")))
+                size(12, 12)
+            }.build(),
+        )
+    }
+
+    private fun highlight(stack: ItemStack?) {
+        setItem(stack?.takeUnless { it.isEmpty })
+    }
+
+    fun setItem(item: ItemStack?) {
+        val item = item?.takeUnless { it.isEmpty } ?: return
 
         if (item.getSkyBlockId() == null) {
             Text.of("Item ") {
@@ -107,6 +183,25 @@ object CraftHelperManager {
             literal(it.name)
         }
         val itemTracker = ItemTracker(ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet())
-        field("Total Items Tracked", itemTracker.items.values.flatten().sumOf { it.amount })
+        field("Total Items Tracked", itemTracker.items.values.flatten().sumOf { it.amount }, copyValue = buildString {
+            appendLine("Currencies")
+            appendLine()
+            itemTracker.currencies.entries.sortedByDescending { (_, amount) -> amount }.forEach { (type, amount) ->
+                appendLine("- $type: ${amount.toFormattedString()}")
+            }
+            appendLine()
+            appendLine("Items")
+            itemTracker.items.entries.sortedByDescending { (_, value) -> value.sumOf { it.amount } }.forEach { (id, sources) ->
+                append("- ")
+                append(id)
+                append(": ")
+                append(sources.sumOf { it.amount }.toFormattedString())
+                append(" (")
+                append(sources.map { 1 shl it.source.ordinal }.reduce(Int::or).toString(32))
+                append(")")
+                appendLine()
+            }
+
+        })
     }
 }

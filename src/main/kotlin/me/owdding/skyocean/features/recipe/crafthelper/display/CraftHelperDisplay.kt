@@ -1,23 +1,22 @@
 package me.owdding.skyocean.features.recipe.crafthelper.display
 
-import earth.terrarium.olympus.client.components.Widgets
-import earth.terrarium.olympus.client.constants.MinecraftColors
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
-import me.owdding.lib.compat.REIRenderOverlayEvent
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.withPadding
+import me.owdding.lib.events.ItemListEvent
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.compat.CatharsisSupport
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
-import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
@@ -60,6 +59,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
     fun onScreenInit(event: ScreenInitializedEvent) {
         if (!CraftHelperConfig.enabled && !ignoreChecks) return
         if (!LocationAPI.isOnSkyBlock && !ignoreChecks) return
+        if (CatharsisSupport.isModElementHidden("skyocean:crafthelper")) return
 
         val screen = event.screen as? AbstractContainerScreen<*> ?: return
 
@@ -74,7 +74,8 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             layout.visitWidgets { event.widgets.remove(it) }
         }
         callback = callback@{ save ->
-            val (tree, output) = CraftHelperStorage.data?.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
+            val tree = CraftHelperManager.resolve(::resetLayout, CraftHelperManager::clear) ?: return@callback
+            val output = tree.output
             resetLayout()
             layout.tryClear()
                 layout.addChild(visualize(tree, output, maxAvailableWidth) { callback })
@@ -88,7 +89,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
     }
 
     @Subscription
-    fun onREI(event: REIRenderOverlayEvent) {
+    fun onItemListRender(event: ItemListEvent.RegisterExclusionZones) {
         craftHelperLayout?.let {
             event.register(it.x, it.y, it.width, it.height)
         }
@@ -100,7 +101,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
     }
 
     @Suppress("LongMethod")
-    private fun visualize(tree: ContextAwareRecipeTree, output: ItemLikeIngredient, maxWidth: Int, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
+    private fun visualize(tree: CraftHelperTree, output: ItemLikeIngredient, maxWidth: Int, callback: () -> ((save: Boolean) -> Unit)): AbstractWidget {
         val sources = ItemSources.craftHelperSources - CraftHelperConfig.disallowedSources.toSet()
         val tracker = ItemTracker(sources)
         val callback = callback()
@@ -139,10 +140,11 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
 
             horizontal(5, MIDDLE) {
                 val item = ExtraDisplays.inventoryBackground(1, 1, Displays.item(output.item, showTooltip = true).withPadding(2))
+                val titleWidth = max(0, contentWidth - item.getWidth() - 10)
                 display(item)
                 vertical(alignment = MIDDLE) {
-                    spacer(max(0, contentWidth - item.getWidth() - 10))
-                    display(Displays.component(output.itemName))
+                    spacer(titleWidth)
+                    display(Displays.fixed(titleWidth, McFont.height, Displays.component(output.itemName)))
                     horizontal {
                         widget(
                             Displays.component(
@@ -154,10 +156,10 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
 
                                 val value = CraftHelperStorage.selectedAmount / (tree.amountPerCraft)
-                                val newValue = if (McScreen.isShiftDown) {
-                                    value - 10
-                                } else {
-                                    value - 1
+                                val newValue = when {
+                                    McScreen.isControlDown -> value - 64
+                                    McScreen.isShiftDown -> value - 10
+                                    else -> value - 1
                                 }
                                 CraftHelperStorage.setAmount(max(1, newValue) * tree.amountPerCraft)
                                 callback(true)
@@ -165,6 +167,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                                 Text.multiline(
                                     "§eClick§r to decrease by §c1",
                                     "§eShift + Click§r to decrease by §c10",
+                                    "§eCtrl + Click§r to decrease by §c64",
                                 ).apply { this.color = TextColor.GRAY },
                             ).withoutTooltipDelay(),
                         )
@@ -180,10 +183,10 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                             ).asButtonLeft {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
                                 val value = CraftHelperStorage.selectedAmount / tree.amountPerCraft
-                                val newValue = if (McScreen.isShiftDown) {
-                                    value + 10
-                                } else {
-                                    value + 1
+                                val newValue = when {
+                                    McScreen.isControlDown -> value + 64
+                                    McScreen.isShiftDown -> value + 10
+                                    else -> value + 1
                                 }
                                 CraftHelperStorage.setAmount(newValue * tree.amountPerCraft)
                                 callback(true)
@@ -191,6 +194,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                                 Text.multiline(
                                     "§eClick§r to increase by §a1",
                                     "§eShift + Click§r to increase by §a10",
+                                    "§eCtrl + Click§r to increase by §a64",
                                 ).apply { this.color = TextColor.GRAY },
                             ).withoutTooltipDelay(),
                         )

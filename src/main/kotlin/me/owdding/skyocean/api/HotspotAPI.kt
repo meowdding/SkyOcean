@@ -6,6 +6,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.events.fishing.FishCatchEvent
 import me.owdding.skyocean.events.fishing.HotspotEvent
 import me.owdding.skyocean.features.fishing.HotspotFeatures
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup
 import me.owdding.skyocean.utils.Utils.roundToHalf
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.DustParticleOptions
@@ -60,7 +62,7 @@ object HotspotAPI {
             val fluid = McLevel[it].fluidState
 
             if (!fluid.isEmpty) {
-                hotspot.pos = Vector3f(pos.x.toFloat(), it.y + fluid.getHeight(McLevel.self, it), pos.z.toFloat())
+                hotspot.pos = Vector3f(pos.x.toFloat(), it.y + fluid.getHeight(McLevel.self, it) + 0.1f, pos.z.toFloat())
                 HotspotEvent.Spawn(hotspot).post(SkyBlockAPI.eventBus)
                 return
             }
@@ -94,7 +96,6 @@ object HotspotAPI {
         }
     }
 
-
     @Subscription
     @OnlyOnSkyBlock
     fun onParticle(event: PacketReceivedEvent) {
@@ -103,28 +104,41 @@ object HotspotAPI {
 
         val maxHotspotSize = when (LocationAPI.island) {
             SkyBlockIsland.CRIMSON_ISLE -> 25.0
+            SkyBlockIsland.JERRYS_WORKSHOP, SkyBlockIsland.LOTUS_ATOLL -> 16.0
             else -> 9.0
         }
 
-        for (entry in _hotspots.values) {
-            if (entry.pos == null) continue
+        val maxDistanceSquared = maxHotspotSize + 0.5
 
-            val distance = ((packet.x - entry.pos!!.x).pow(2) + (packet.z - entry.pos!!.z).pow(2))
-            if (distance <= maxHotspotSize + 0.5) {
-                entry.radius = sqrt(distance).roundToHalf()
-                // Hotspot particles are cancelled here to avoid having to check them again inside the HotspotFeatures object.
-                if (HotspotFeatures.isEnabled()) event.cancel()
-                return
-            }
-        }
+        val match = _hotspots.values.asSequence().mapNotNull { entry ->
+            val pos = entry.pos ?: return@mapNotNull null
+
+            val distanceSquared = (packet.x - pos.x).pow(2) + (packet.z - pos.z).pow(2)
+            if (distanceSquared > maxDistanceSquared) return@mapNotNull null
+
+            entry to distanceSquared
+        }.minByOrNull { it.second } ?: return
+
+        match.first.radius = sqrt(match.second).roundToHalf()
+
+        // particles cancelled
+        if (HotspotFeatures.shouldHideParticles()) event.cancel()
     }
 
     private fun ClientboundLevelParticlesPacket.isHotSpotParticle(): Boolean {
         if (LocationAPI.island == SkyBlockIsland.CRIMSON_ISLE) {
             return this.particle.type == ParticleTypes.SMOKE && (this.count == 5 || this.count == 2)
         }
+
         val options = this.particle as? DustParticleOptions ?: return false
-        return options.color == PARTICLE_COLOR
+        if (options.color != PARTICLE_COLOR) return false
+
+        // (a bit less) strict bs :-D
+        if (this.count != 0) return false
+        if (this.xDist != 1f) return false
+        if (this.maxSpeed != 1f)  return false
+
+        return true
     }
 
     private fun Vec3.toVec2d(): Vector2d = Vector2d(this.x, this.z)
@@ -138,12 +152,15 @@ data class HotspotData(
     var fishedIn: Boolean = false,
 )
 
+private val hotspotGroup = RemoteStrings.resolve("HotspotType")
+
 enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
-    SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+α Sea Creature Chance"),
-    FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+☂ Fishing Speed"),
-    DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+⚓ Double Hook Chance"),
-    TREASURE(MinecraftColors.GOLD, "\\+\\d+⛃ Treasure Chance"),
-    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Fish Chance"),
+    SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+. Sea Creature Chance"),
+    FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+. Fishing Speed"),
+    DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+. Double Hook Chance"),
+    TREASURE(MinecraftColors.GOLD, "\\+\\d+. Treasure Chance"),
+    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+. Trophy Chance"),
+    SHARD(MinecraftColors.YELLOW, "Chance of .+ Shard"),
     UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
     ;
 
@@ -151,7 +168,7 @@ enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
     val displayComponent: Component = displayName.asComponent { this.color = this@HotspotType.color.value }
     override fun toString(): String = displayName
 
-    val regex: Regex = Regex(regex)
+    val regex: Regex by hotspotGroup.regex(regex, name.lowercase() + "_regex")
 
     companion object {
 

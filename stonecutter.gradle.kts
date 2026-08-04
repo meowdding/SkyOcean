@@ -4,54 +4,12 @@ plugins {
     id("net.fabricmc.fabric-loom") apply false
 }
 
-stonecutter active "26.1"
-
-//region 1.21.11 animal package changes
-private val animalReplacementPrefix = "import net.minecraft.world.entity."
-private val animalsReplacements = mapOf(
-    "monster.skeleton.Bogged" to "monster.Bogged",
-    "monster.zombie.Zombie" to "monster.Zombie",
-    "animal.feline.Cat" to "animal.Cat",
-    "animal.chicken.Chicken" to "animal.Chicken",
-    "animal.cow.Cow" to "animal.Cow",
-    "animal.fox.Fox" to "animal.Fox",
-    "animal.happyghast.HappyGhast" to "animal.HappyGhast",
-    "animal.golem.IronGolem" to "animal.IronGolem",
-    "animal.equine." to "animal.horse.",
-    "animal.cow.MushroomCow" to "animal.MushroomCow",
-    "animal.panda.Panda" to "animal.Panda",
-    "animal.parrot.Parrot" to "animal.Parrot",
-    "animal.pig.Pig" to "animal.Pig",
-    "animal.rabbit.Rabbit" to "animal.Rabbit",
-    "animal.fish.Salmon" to "animal.Salmon",
-    "animal.golem.SnowGolem" to "animal.SnowGolem",
-    "animal.fish.TropicalFish" to "animal.TropicalFish",
-    "npc.villager.Villager" to "npc.Villager",
-    "monster.zombie.ZombieVillager" to "monster.ZombieVillager",
-    "animal.golem.CopperGolem" to "animal.coppergolem.CopperGolem",
-)
-//endregion
-
+stonecutter active "26.2"
 
 stonecutter parameters {
-    // Used for temporarily removing classes from the latest version.
-    constants["TODO"] = current.version != "1.21.11"
 
     swaps["mod_version"] = "\"" + property("version") + "\";"
     swaps["minecraft"] = "\"" + node.metadata.version + "\";"
-    replacements.string {
-        direction = eval(current.version, "> 1.21.5")
-        replace("// moj_import <", "//!moj_import <")
-    }
-    replacements.regex {
-        direction = eval(current.version, "< 1.21.9")
-        replace(
-            "import net.minecraft.client.renderer.entity.state.AvatarRenderState(?!;)",
-            "import net.minecraft.client.renderer.entity.state.PlayerRenderState as AvatarRenderState",
-            "import net.minecraft.client.renderer.entity.state.PlayerRenderState as AvatarRenderState",
-            "import net.minecraft.client.renderer.entity.state.AvatarRenderState"
-        )
-    }
 
     filters.include("**/*.fsh", "**/*.vsh")
 
@@ -78,11 +36,37 @@ stonecutter parameters {
         }
     }
 
-    animalsReplacements.forEach { (new, old) ->
-        replacements.string {
-            direction = eval(current.version, "< 1.21.11")
-            replace(animalReplacementPrefix + new, animalReplacementPrefix + old)
+
+    // Taken from Luna :3
+    replacements.string {
+        direction = eval(current.version, "<= 26.1")
+
+        val dyeColors = mapOf(
+            "black" to "BLACK",
+            "blue" to "BLUE",
+            "brown" to "BROWN",
+            "cyan" to "CYAN",
+            "gray" to "GRAY",
+            "green" to "GREEN",
+            "lightBlue" to "LIGHT_BLUE",
+            "lightGray" to "LIGHT_GRAY",
+            "lime" to "LIME",
+            "magenta" to "MAGENTA",
+            "orange" to "ORANGE",
+            "pink" to "PINK",
+            "purple" to "PURPLE",
+            "red" to "RED",
+            "white" to "WHITE",
+            "yellow" to "YELLOW",
+        )
+        dyeColors.forEach { (lower, upper) ->
+            replace("DYE.$lower()", "${upper}_DYE")
+            replace("WOOL.$lower()", "${upper}_WOOL")
+            replace("CARPET.$lower()", "${upper}_CARPET")
+            replace("STAINED_GLASS.$lower()", "${upper}_STAINED_GLASS")
+            replace("STAINED_GLASS_PANE.$lower()", "${upper}_STAINED_GLASS_PANE")
+            replace("DYED_TERRACOTTA.$lower()", "${upper}_TERRACOTTA")
+            replace("HARNESS.$lower()", "${upper}_HARNESS")
         }
     }
-
 }

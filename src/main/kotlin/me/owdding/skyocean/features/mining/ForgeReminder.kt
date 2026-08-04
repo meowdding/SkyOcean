@@ -80,6 +80,7 @@ object ForgeReminder {
                 color = OceanColors.BASE_TEXT
             }.sendWithPrefix("SKYOCEAN_FORGE_REMINDER")
         },
+        busyOption = MiningConfig::forgeReminderBusy,
     )
 
     @Subscription(ProfileChangeEvent::class)

@@ -28,12 +28,12 @@ import tech.thatgravyboat.skyblockapi.api.item.calculator.ItemValueSource.ITEM_S
 import tech.thatgravyboat.skyblockapi.api.item.calculator.ItemValueSource.NECRON_SCROLLS
 import tech.thatgravyboat.skyblockapi.api.item.calculator.ItemWithLimitEntry
 import tech.thatgravyboat.skyblockapi.api.item.calculator.ReforgeEntry
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.CoinCost
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.EssenceCost
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemCost
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.BazaarAPI
+import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -90,7 +90,7 @@ object SourceToWidget {
                 LayoutFactory.vertical {
                     text {
                         color = TextColor.DARK_GRAY
-                        append(RepoItemsAPI.getItemName(this@asWidget.reforge))
+                        append(SkyBlockItemsRepo.getItemStackOrDefault(this@asWidget.reforge).hoverName)
                         append(": ")
                         append(this@asWidget.price.toFormattedString()) {
                             this.color = BETTER_GOLD
@@ -123,7 +123,7 @@ object SourceToWidget {
                         is EssenceCost -> text {
                             this.color = TextColor.DARK_GRAY
                             append("${cost.amount.toFormattedString()}x ")
-                            append(RepoItemsAPI.getItem(cost.essenceType.bazaarId ?: "").hoverName)
+                            append(SkyBlockItemsRepo.getItemStackOrDefault(cost.essenceType.bazaarId ?: "").hoverName)
                             append(": ")
                             append(BazaarAPI.getProduct(cost.essenceType.bazaarId)?.sellPrice?.times(cost.amount)?.shorten() ?: "0") {
                                 this.color = BETTER_GOLD
@@ -132,7 +132,7 @@ object SourceToWidget {
 
                         is ItemCost -> text {
                             color = TextColor.DARK_GRAY
-                            append(RepoItemsAPI.getItem(cost.itemId).hoverName)
+                            append(SkyBlockItemsRepo.getItemStackOrDefault(cost.itemId).hoverName)
                             append(": ")
                             append(price.shorten()) {
                                 this.color = BETTER_GOLD

@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.item.search.screen
 
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.features.item.sources.system.TrackedItem
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
@@ -7,7 +8,7 @@ import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.item.calculator.getItemValue
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 
-enum class SortModes(vararg additionalSortModes: AdditionalSortModes) : Comparator<TrackedItem> {
+enum class SortModes(vararg additionalSortModes: AdditionalSortModes) : Comparator<TrackedItem>, Translatable {
     AMOUNT(AdditionalSortModes.AMOUNT, AdditionalSortModes.NAME, AdditionalSortModes.RARITY),
     PRICE(AdditionalSortModes.PRICE, AdditionalSortModes.NAME),
     RARITY(AdditionalSortModes.RARITY, AdditionalSortModes.AMOUNT, AdditionalSortModes.NAME),
@@ -15,6 +16,7 @@ enum class SortModes(vararg additionalSortModes: AdditionalSortModes) : Comparat
 
     val comparator = additionalSortModes.map { it.comparator }.reduce { c1, c2 -> c1.thenComparing(c2) }
     override fun compare(o1: TrackedItem?, o2: TrackedItem?) = comparator.compare(o1?.itemStack, o2?.itemStack)
+    override fun getTranslationKey(): String = "skyocean.screens.item_search.sort.${name.lowercase()}"
 }
 
 private enum class AdditionalSortModes(val comparator: Comparator<ItemStack>) {

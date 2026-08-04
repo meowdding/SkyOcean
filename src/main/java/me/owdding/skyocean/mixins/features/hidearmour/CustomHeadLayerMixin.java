@@ -7,13 +7,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import me.owdding.skyocean.helpers.HeadLayerAlphaHolder;
-//? > 1.21.10 {
 import net.minecraft.client.model.object.skull.SkullModelBase;
 import net.minecraft.client.renderer.rendertype.RenderType;
-//? } else {
-/*import net.minecraft.client.model.SkullModelBase;
-import net.minecraft.client.renderer.rendertype.RenderType;
-*///? }
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -30,18 +25,11 @@ public class CustomHeadLayerMixin {
         method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;FF)V",
         at = @At(
             value = "INVOKE",
-            //? >= 26.1 {
             target = "Lnet/minecraft/client/renderer/blockentity/SkullBlockRenderer;submitSkull(FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/model/object/skull/SkullModelBase;Lnet/minecraft/client/renderer/rendertype/RenderType;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"
-            //? } else
-            //target = "Lnet/minecraft/client/renderer/blockentity/SkullBlockRenderer;submitSkull(Lnet/minecraft/core/Direction;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/model/object/skull/SkullModelBase;Lnet/minecraft/client/renderer/rendertype/RenderType;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"
             )
     )
     public <S extends LivingEntityRenderState> void render(
-        //? < 26.1
-        //Direction direction,
         float v,
-        //? < 26.1
-        //float v2,
         PoseStack poseStack,
         SubmitNodeCollector submitNodeCollector,
         int i,
@@ -59,13 +47,7 @@ public class CustomHeadLayerMixin {
                 HeadLayerAlphaHolder.alpha = MiscConfig.INSTANCE.getTransparentArmorOthers();
             }
         }
-        original.call(
-            //? < 26.1
-            //direction,
-            v,
-            //? < 26.1
-            //v2,
-            poseStack, submitNodeCollector, i, skullModelBase, renderType, i2, crumblingOverlay);
+        original.call(v, poseStack, submitNodeCollector, i, skullModelBase, renderType, i2, crumblingOverlay);
         HeadLayerAlphaHolder.alpha = null;
     }
 

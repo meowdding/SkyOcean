@@ -63,8 +63,8 @@ open class DebugBuilder : ApiDebugBuilder(CommonComponents.EMPTY, CommonComponen
     }
 
     @Suppress("NOTHING_TO_INLINE")
-    inline fun <Type> field(property: KProperty0<Type>, description: Component? = null, copyValue: String? = null) {
-        field(property.name, property.get(), description, copyValue)
+    override fun <Type> field(field: KProperty0<Type>, description: Component?, copyValue: String?) {
+        field(field.name, field.get(), description, copyValue)
     }
 
     @Suppress("NOTHING_TO_INLINE")

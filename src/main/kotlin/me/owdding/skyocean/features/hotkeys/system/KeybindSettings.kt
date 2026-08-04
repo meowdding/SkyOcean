@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.hotkeys.system
 import me.owdding.ktcodecs.FieldNames
 import me.owdding.ktcodecs.GenerateCodec
 import net.minecraft.client.Minecraft
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
 @GenerateCodec
 data class KeybindSettings(
@@ -18,11 +19,11 @@ enum class ConflictContext {
         override fun conflictsWith(other: ConflictContext) = true
     },
     GUI {
-        override val isActive: Boolean get() = Minecraft.getInstance().screen != null
+        override val isActive: Boolean get() = McScreen.self != null
         override fun conflictsWith(other: ConflictContext): Boolean = other == GUI
     },
     IN_GAME {
-        override val isActive: Boolean get() = Minecraft.getInstance().screen == null
+        override val isActive: Boolean get() = McScreen.self == null
         override fun conflictsWith(other: ConflictContext): Boolean = other == IN_GAME
     },
     ;

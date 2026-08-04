@@ -17,7 +17,6 @@ import java.util.UUID
  *
  * Hotkey    Any one action that can be bound to keys
  * Keybind   The key combination that invokes a hotkey
- *
  */
 @GenerateCodec
 data class Hotkey(
@@ -33,6 +32,18 @@ data class Hotkey(
 
     fun invoke() {
         action()
+    }
+
+    fun duplicate(newName: String = "$name (Copy)"): Hotkey {
+        return Hotkey(
+            keybind = keybind.duplicate(),
+            action = action.duplicate(),
+            condition = condition.duplicate(),
+            name = newName,
+            enabled = false,
+            group = group,
+            timeCreated = System.currentTimeMillis(),
+        )
     }
 
     fun formatKeys(override: Boolean? = null) = formatKeys(keybind.keys, override ?: keybind.settings.orderSensitive)
