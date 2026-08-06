@@ -26,6 +26,7 @@ object Timber {
             TimberSoundOption.TIMBER -> SkyOcean.id("timber.timber_sound")
             TimberSoundOption.SUGARCOAT -> SkyOcean.id("timber.sugarcoat_sound")
             TimberSoundOption.FLASHBANG -> SkyOcean.id("timber.flashbang_sound")
+            TimberSoundOption.NONE -> null
         }
 
     private val triggers = listOf(
@@ -44,8 +45,10 @@ object Timber {
         if (triggers.none { text.contains(it) }) return
 
         timestamp = System.currentTimeMillis()
+
+        val soundId = sound ?: return
         val instance = SimpleSoundInstance.forUI(
-            SoundEvent.createVariableRangeEvent(sound),
+            SoundEvent.createVariableRangeEvent(soundId),
             1f,
             1f,
         )
@@ -81,5 +84,5 @@ enum class TimberSoundOption {
     TIMBER,
     SUGARCOAT,
     FLASHBANG,
+    NONE,
 }
-

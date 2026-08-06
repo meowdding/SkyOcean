@@ -1332,7 +1332,10 @@
           },
           "timberSilly": {
             "@value": "Timber",
-            "desc": "Plays a sound and shows an image when a perk fells a tree."
+            "desc": [
+              "Plays a sound and shows an image when a perk fells a tree.",
+              "<red>Trigger Warning: Flashbang and Loud Noises!</red>"
+            ]
           },
           "timber_texture": {
             "@value": "Timber Texture",
@@ -1350,7 +1353,8 @@
               "",
               "<white>Timber</white>: Timber voiceline from a certain mobile game.",
               "<white>Sugarcoat</white>: I'm Not Gonna Sugarcoat It.",
-              "<white>Flashbang</white>: as it says. Don't use it in the dark!"
+              "<white>Flashbang</white>: as it says. Don't use it in the dark!",
+              "<white>None</white>: Plays no sound."
             ]
           }
         }
