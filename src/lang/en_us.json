@@ -1329,6 +1329,29 @@
               "@value": "Outside SkyBlock",
               "desc": "Whether player animals should also be visible outside of SkyBlock."
             }
+          },
+          "timberSilly": {
+            "@value": "Timber",
+            "desc": "Plays a sound and shows an image when a perk fells a tree."
+          },
+          "timber_texture": {
+            "@value": "Timber Texture",
+            "desc": [
+              "Which image to show when someone fells an entire tree.",
+              "",
+              "<white>Sugarcoat</white>: I'm Not Gonna Sugarcoat It",
+              "<white>Flashbang</white>: as it says,,"
+            ]
+          },
+          "timber_sound": {
+            "@value": "Timber Sound",
+            "desc": [
+              "Which sound to play when someone fells an entire tree.",
+              "",
+              "<white>Timber</white>: Timber voiceline from a certain mobile game.",
+              "<white>Sugarcoat</white>: I'm Not Gonna Sugarcoat It.",
+              "<white>Flashbang</white>: as it says. Don't use it in the dark!"
+            ]
           }
         }
       },
