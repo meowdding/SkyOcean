@@ -14,6 +14,8 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderHudEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.since
 
 @Module
 object Timber {
@@ -26,7 +28,7 @@ object Timber {
     private val group = RemoteStrings.resolve()
     private val treeFellRegex by group.regex("(?:TIMBER|PETALFALL|WOODPECKER)! You felled the entire Tree!")
 
-    private var currentInstant = 0L
+    private var timestamp = currentInstant()
 
     @Subscription
     fun onMessage(event: ChatReceivedEvent.Pre) {
@@ -35,7 +37,7 @@ object Timber {
         val text = event.text
         if (!treeFellRegex.matches(text)) return
 
-        currentInstant = System.currentTimeMillis()
+        timestamp = currentInstant()
 
         val soundId = sound ?: return
         val instance = SimpleSoundInstance.forUI(
@@ -54,7 +56,7 @@ object Timber {
     fun render(event: RenderHudEvent) {
         if (!FunConfig.timberSilly) return
         val graphics = event.graphics
-        val time = (System.currentTimeMillis() - currentInstant)
+        val time = timestamp.since().inWholeMilliseconds
         val opacity = when {
             time > 700 -> return
             else -> 1.0f - (time - 400).coerceAtLeast(0) / 300f
