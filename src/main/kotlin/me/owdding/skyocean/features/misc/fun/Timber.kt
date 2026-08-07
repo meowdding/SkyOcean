@@ -28,7 +28,7 @@ object Timber {
     private val group = RemoteStrings.resolve()
     private val treeFellRegex by group.regex("(?:TIMBER|PETALFALL|WOODPECKER)! You felled the entire Tree!")
 
-    private var timestamp = currentInstant()
+    private var timestamp = Instant.DISTANT_PAST
 
     @Subscription
     fun onMessage(event: ChatReceivedEvent.Pre) {
