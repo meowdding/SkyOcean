@@ -129,6 +129,10 @@ object MiscConfig : CategoryKt("misc") {
         separator("skyocean.config.misc.itemSearch")
     }
 
+    var itemSearchKeybindOnHover by boolean(false) {
+        translation = "skyocean.config.misc.itemSearch.keybindOnHover"
+    }
+
     var itemSearchItemHighlight by enum(MinecraftColor.RED) {
         translation = "skyocean.config.misc.itemSearch.itemHighlight"
     }

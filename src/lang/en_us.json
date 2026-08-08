@@ -589,6 +589,10 @@
         "itemSearch": {
           "@value": "Item Search",
           "desc": "Item Search is a feature that allows you to search for items in your inventory, backpacks, storage, sacks, island chests and more.",
+          "keybindOnHover": {
+            "@value": "Press Keybind on Hover to Search",
+            "desc": "While hovering over an Item inside a Container, if the ItemSearch keybinds gets pressed it will search for that item."
+          },
           "itemHighlight": {
             "@value": "Item Highlight",
             "desc": "Choose what color the searched item will be highlighted with."

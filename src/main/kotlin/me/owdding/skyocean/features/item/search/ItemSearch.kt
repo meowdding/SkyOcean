@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.SkyOceanKeybind
+import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.item.search.screen.ItemSearchScreen
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
@@ -28,7 +29,7 @@ object ItemSearch {
 
     @Subscription
     fun onKey(event: ScreenKeyReleasedEvent) {
-        if (!key.matches(event)) return
+        if (!key.matches(event) || !MiscConfig.itemSearchKeybindOnHover) return
         val screen = event.screen as? AbstractContainerScreen<*> ?: return
         val item = screen.getHoveredSlot()?.item ?: return
 
