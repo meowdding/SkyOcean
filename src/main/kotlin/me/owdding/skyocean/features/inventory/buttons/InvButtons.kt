@@ -66,8 +66,10 @@ object InvButtons {
     fun onScreenBackgroundAfter(screen: AbstractContainerScreen<*>, graphics: GuiGraphicsExtractor) {
         if (!shouldShowButtons(screen)) return
         Screens.getWidgets(screen).forEach {
-            if (it is InvButton && !it.highlight) {
-                it.renderItem(graphics)
+            if (it is InvButton) {
+                if (!it.highlight && InventoryConfig.renderBehindBackgroundIfInactive) {
+                    it.renderItem(graphics)
+                }
             }
         }
     }
@@ -76,8 +78,10 @@ object InvButtons {
     fun onScreenBackground(event: RenderScreenBackgroundEvent) {
         if (!shouldShowButtons(event.screen)) return
         Screens.getWidgets(event.screen).forEach {
-            if (it is InvButton && !it.highlight) {
-                it.renderButtons(event.graphics, 0, 0, 0F)
+            if (it is InvButton) {
+                if (!it.highlight && InventoryConfig.renderBehindBackgroundIfInactive) {
+                    it.renderButtons(event.graphics, 0, 0, 0F)
+                }
             }
         }
     }
@@ -86,9 +90,11 @@ object InvButtons {
     fun onScreenForeground(event: RenderScreenForegroundEvent) {
         if (!shouldShowButtons(event.screen)) return
         Screens.getWidgets(event.screen).forEach {
-            if (it is InvButton && it.highlight) {
-                it.renderButtons(event.graphics, 0, 0, 0F)
-                it.renderItem(event.graphics)
+            if (it is InvButton) {
+                if (it.highlight || !InventoryConfig.renderBehindBackgroundIfInactive) {
+                    it.renderButtons(event.graphics, 0, 0, 0F)
+                    it.renderItem(event.graphics)
+                }
             }
         }
     }
