@@ -7,7 +7,6 @@ import me.owdding.skyocean.events.fishing.FishCatchEvent
 import me.owdding.skyocean.events.fishing.HotspotEvent
 import me.owdding.skyocean.features.fishing.HotspotFeatures
 import me.owdding.skyocean.utils.RemoteStrings
-import me.owdding.skyocean.utils.StringGroup
 import me.owdding.skyocean.utils.Utils.roundToHalf
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.DustParticleOptions
@@ -119,7 +118,13 @@ object HotspotAPI {
             entry to distanceSquared
         }.minByOrNull { it.second } ?: return
 
-        match.first.radius = sqrt(match.second).roundToHalf()
+        val radius = sqrt(match.second).roundToHalf()
+
+        // Count how often a specific radious was calculated and use the most common one
+        // Should fix stuff like Crab Pets making it flicker
+        val counts = match.first.radiusCounts
+        counts[radius] = (counts[radius] ?: 0) + 1
+        match.first.radius = counts.maxByOrNull { it.value }?.key
 
         // particles cancelled
         if (HotspotFeatures.shouldHideParticles()) event.cancel()
@@ -150,7 +155,9 @@ data class HotspotData(
     var pos: Vector3f? = null,
     var radius: Double? = null,
     var fishedIn: Boolean = false,
-)
+) {
+    val radiusCounts = mutableMapOf<Double, Int>()
+}
 
 private val hotspotGroup = RemoteStrings.resolve("HotspotType")
 
