@@ -52,7 +52,6 @@ data class GalateaItems(
     @FieldName("huntaxeItem") var huntaxeItemTemplate: ItemStackBlueprint?,
     @FieldName("toolkitItems") var toolkitItemsTemplate: List<ItemStackBlueprint>,
 ) {
-    //? >= 26.1
     constructor(huntaxeItem: ItemStack, toolkitItems: List<ItemStack>) : this(huntaxeItem.asBlueprint(), toolkitItems.map { it.asBlueprint() })
 
     var huntaxeItem by levelBound { huntaxeItemTemplate?.create() }.withSetter {

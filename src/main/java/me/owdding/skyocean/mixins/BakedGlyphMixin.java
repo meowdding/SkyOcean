@@ -6,7 +6,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.gui.font.glyphs.BakedSheetGlyph;
-//~ if >= 26.1 'Matrix4f' -> 'Matrix4fc'
 import org.joml.Matrix4fc;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class BakedGlyphMixin {
     @WrapOperation(
         method = "renderChar",
-        //~ if >= 26.1 'Matrix4f' -> 'Matrix4fc'
         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedSheetGlyph;render(ZFFFLorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", ordinal = 0)
     )
     public void onRenderShadow(
@@ -24,7 +22,6 @@ public abstract class BakedGlyphMixin {
         float x,
         float y,
         float z,
-        //~ if >= 26.1 'Matrix4f' -> 'Matrix4fc'
         Matrix4fc pose,
         VertexConsumer builder,
         int color,
@@ -50,7 +47,6 @@ public abstract class BakedGlyphMixin {
 
     @WrapOperation(
         method = "renderChar",
-        //~ if >= 26.1 'Matrix4f' -> 'Matrix4fc'
         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/font/glyphs/BakedSheetGlyph;render(ZFFFLorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZI)V", ordinal = 1)
     )
     public void onRenderShadowBold(
@@ -59,7 +55,6 @@ public abstract class BakedGlyphMixin {
         float x,
         float y,
         float z,
-        //~ if >= 26.1 'Matrix4f' -> 'Matrix4fc'
         Matrix4fc pose,
         VertexConsumer buffer,
         int color,

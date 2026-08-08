@@ -19,7 +19,7 @@ enum class ItemSources(val itemSource: ItemSource?, vararg val disabledIn: ItemS
     BUNDLE(null),
     CHEST(ChestItemSource),
     STORAGE(StorageItemSource),
-    WARDROBE(WardrobeItemSource),
+    WARDROBE(ArmorWardrobeItemSource),
     SACKS(SacksItemSource),
     ACCESSORY_BAG(AccessoryBagItemSource),
     FORGE(ForgeItemSource),
@@ -34,6 +34,7 @@ enum class ItemSources(val itemSource: ItemSource?, vararg val disabledIn: ItemS
     SACK_OF_SACKS(SackOfSacksItemSource),
     HUNTING_BOX(HuntingBoxItemSource, ItemSourceTag.ITEM_SEARCH),
     FARMING_TOOLKIT(FarmingToolkitSource),
+    EQUIPMENT_WARDROBE(EquipmentWardrobeItemSource),
     ;
     // todo POTION_BAG(TODO()),
 

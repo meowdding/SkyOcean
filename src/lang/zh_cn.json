@@ -1,14 +1,15 @@
 {
-    "@meowdding:metadata": {
-      "allowMultiline": true,
-      "allowReferences": true,
-      "allowTags": true,
-      "objectAsKeys": true,
-      "prefix": "skyocean",
-      "@references": {
-        "transparency": "取值范围为0-100%，100%表示完全可见。"
-      }
-    },
+  "@meowdding:metadata": {
+    "allowMultiline": true,
+    "allowReferences": true,
+    "allowTags": true,
+    "objectAsKeys": true,
+    "@references": {
+      "transparency": "取值范围为0-100%，100%表示完全可见。"
+    }
+  },
+  "key.category.skyocean.main": "SkyOcean",
+  "skyocean": {
     "@value": "SkyOcean",
     "config": {
       "main": {
@@ -404,8 +405,8 @@
             "",
             "<dark_gray><bold>*</bold> Co-op Soulbound <bold>*</bold></dark_gray>",
             "<aqua><bold><obfuscated>a</obfuscated> DIVINE DRILL <obfuscated>a</obfuscated></bold></aqua>'><red>Off</red></hover>"
-            ]
-          },
+          ]
+        },
         "dungeon_quality": {
           "@value": "地牢品质",
           "desc": [
@@ -450,7 +451,7 @@
             "<green>This item is Undead ༕!<green>",
             "",
             "<gold><bold>LEGENDARY DUNGEON LEGGINGS</bold></gold>'>Off</red>"
-            ]
+          ]
         },
         "compact_level_bars": {
           "@value": "简化等级条",
@@ -487,7 +488,7 @@
             "<gold><strikethrough>                     <white>    </white></strikethrough> <yellow>2,288</yellow>/<yellow>2,760 XP</yellow></gold>",
             "",
             "<yellow>Click to view tasks!</yellow>'>Off</hover></red>"
-            ]
+          ]
         },
         "storage_preview": {
           "@value": "存储预览",
@@ -552,3 +553,4 @@
       "item_value": "物品价值"
     }
   }
+}

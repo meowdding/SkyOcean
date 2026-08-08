@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.owdding.skyocean.utils.rendering.PostEffectApplicator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.GuiRenderer;
-//~ if >= 26.1 'gui.render.state' -> 'renderer.state.gui'
 import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelTargetBundle;
@@ -39,7 +38,8 @@ public class GuiRendererMixin {
             var mc = Minecraft.getInstance();
             var chain = mc.getShaderManager().getPostChain(this.skyocean$currentEffect, LevelTargetBundle.MAIN_TARGETS);
             if (chain != null) {
-                chain.process(mc.getMainRenderTarget(), accessor.getResourcePool());
+                //~ if >= 26.2 'getMainRenderTarget()' -> 'gameRenderer.mainRenderTarget()'
+                chain.process(mc.gameRenderer.mainRenderTarget(), accessor.getResourcePool());
                 return;
             }
         }

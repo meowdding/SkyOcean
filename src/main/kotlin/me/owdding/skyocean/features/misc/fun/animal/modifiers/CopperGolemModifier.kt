@@ -4,9 +4,10 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.config.utils.GenericDropdown.Companion.blockDropdown
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
-//? >= 26.1
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.block.model.BlockDisplayContext
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.CopperGolemRenderState
@@ -15,18 +16,16 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.animal.golem.CopperGolem
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.WeatheringCopper
-import tech.thatgravyboat.skyblockapi.helpers.McClient
-import java.util.*
 
 @RegisterAnimalModifier
 object CopperGolemModifier : AnimalModifier<CopperGolem, CopperGolemRenderState> {
-    override val type: EntityType<CopperGolem> = EntityType.COPPER_GOLEM
+    override val type: EntityType<CopperGolem> = EntityTypes.COPPER_GOLEM
     val states = WeatheringCopper.WeatherState.entries
 
     var copperState = PlayerAnimalConfig.createEntry("copper_state") { id, type ->
         enum(id, WeatherState.RANDOM) {
             this.translation = "skyocean.config.misc.fun.player_animals.copper_golem.${type}_variant"
-            condition = isSelected(EntityType.COPPER_GOLEM)
+            condition = isSelected(EntityTypes.COPPER_GOLEM)
         }
     }
 
@@ -37,23 +36,21 @@ object CopperGolemModifier : AnimalModifier<CopperGolem, CopperGolemRenderState>
             options = Registries.BLOCK.list(),
         ) {
             this.translation = "skyocean.config.misc.fun.player_animals.copper_golem.${type}_block"
-            condition = isSelected(EntityType.COPPER_GOLEM)
+            condition = isSelected(EntityTypes.COPPER_GOLEM)
         }
     }
 
     fun getWeatherState(state: AvatarRenderState): WeatheringCopper.WeatherState = copperState.select(state).state ?: getRandom(state, states)
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: CopperGolemRenderState,
         partialTicks: Float,
     ) {
         state.weathering = getWeatherState(avatarState)
         val block = blockSelector.select(avatarState).takeUnless { it == Blocks.AIR }
-        //? >= 26.1 {
-        McClient.self.blockModelResolver.update(state.blockOnAntenna, block?.defaultBlockState() ?: return, BlockDisplayContext.create())
-        //? } else
-        //state.blockOnAntenna = Optional.ofNullable(block?.defaultBlockState())
+        resolver.update(state.blockOnAntenna, block?.defaultBlockState() ?: return, BlockDisplayContext.create())
     }
 
     enum class WeatherState(val state: WeatheringCopper.WeatherState?) : Translatable {

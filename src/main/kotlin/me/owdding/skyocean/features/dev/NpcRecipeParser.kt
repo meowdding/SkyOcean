@@ -69,7 +69,7 @@ object NpcRecipeParser {
         lastInv[slot.index] = !CustomRecipe(SkyOceanItemIngredient(id, output), costs.toMutableList())
         slot.item.replaceVisually {
             copyFrom(slot.item)
-            backgroundItem = Items.RED_STAINED_GLASS_PANE.defaultInstance
+            backgroundItem = Items.STAINED_GLASS_PANE.red().defaultInstance
         }
     }
 
@@ -110,7 +110,7 @@ object NpcRecipeParser {
         data.save = !data.save
         clickedSlot.item.replaceVisually {
             copyFrom(clickedSlot.item)
-            backgroundItem = if (data.save) Items.LIME_STAINED_GLASS_PANE.defaultInstance else Items.RED_STAINED_GLASS_PANE.defaultInstance
+            backgroundItem = if (data.save) Items.STAINED_GLASS_PANE.lime().defaultInstance else Items.STAINED_GLASS_PANE.red().defaultInstance
         }
         this.cancel()
     }

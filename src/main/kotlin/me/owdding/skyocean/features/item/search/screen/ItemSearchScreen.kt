@@ -41,6 +41,7 @@ import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.utils.extentions.*
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -234,9 +235,8 @@ object ItemSearchScreen : SkyOceanScreen() {
         focused = widget
     }
 
-    //~ if >= 26.1 'render(' -> 'extractRenderState(' {
     override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, f: Float) {
-        if (McClient.self.screen !is ItemSearchScreen) {
+        if (McScreen.self !is ItemSearchScreen) {
             Displays.disableTooltips {
                 super.extractRenderState(graphics, mouseX, mouseY, f)
             }
@@ -244,7 +244,6 @@ object ItemSearchScreen : SkyOceanScreen() {
             super.extractRenderState(graphics, mouseX, mouseY, f)
         }
     }
-    //~ }
 
     fun addItems() {
         val width = widgetWidth

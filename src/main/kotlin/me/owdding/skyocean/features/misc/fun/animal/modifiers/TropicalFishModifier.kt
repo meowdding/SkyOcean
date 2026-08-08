@@ -5,7 +5,9 @@ import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.hash
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.TropicalFishRenderState
 import net.minecraft.util.RandomSource
@@ -14,17 +16,18 @@ import net.minecraft.world.entity.animal.fish.TropicalFish
 
 @RegisterAnimalModifier
 object TropicalFishModifier : AnimalModifier<TropicalFish, TropicalFishRenderState> {
-    override val type: EntityType<TropicalFish> = EntityType.TROPICAL_FISH
+    override val type: EntityType<TropicalFish> = EntityTypes.TROPICAL_FISH
     val patterns = TropicalFish.Pattern.entries
 
     var tropicalPattern = PlayerAnimalConfig.createEntry("tropical_pattern") { id, type ->
         enum(id, Pattern.RANDOM) {
             this.translation = createTranslationKey("tropical_fish", "${type}_pattern")
-            condition = isSelected(EntityType.TROPICAL_FISH)
+            condition = isSelected(EntityTypes.TROPICAL_FISH)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: TropicalFishRenderState,
         partialTicks: Float,

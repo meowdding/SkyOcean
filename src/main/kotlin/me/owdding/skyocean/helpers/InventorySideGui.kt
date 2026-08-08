@@ -1,11 +1,11 @@
 package me.owdding.skyocean.helpers
 
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
-import me.owdding.lib.compat.REIRenderOverlayEvent
+import me.owdding.lib.events.ItemListEvent
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.helpers.InventorySideGui.Alignment
 import me.owdding.skyocean.mixins.ScreenAccessor
+import me.owdding.skyocean.utils.RemoteStrings
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.screens.Screen
@@ -13,7 +13,6 @@ import org.intellij.lang.annotations.Language
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
-import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenMouseClickEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
 import tech.thatgravyboat.skyblockapi.utils.extentions.left
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
@@ -21,9 +20,13 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
-abstract class InventorySideGui(@Language("RegExp") titleRegex: String, val alignment: () -> Alignment = { Alignment.RIGHT_OF_INVENTORY }) {
+abstract class InventorySideGui(
+    remoteKey: String,
+    @Language("RegExp") titleRegex: String,
+    val alignment: () -> Alignment = { Alignment.RIGHT_OF_INVENTORY },
+) {
 
-    private val regex = titleRegex.toRegex()
+    private val regex by RemoteStrings.regex(titleRegex, path = remoteKey)
     var oldList: LayoutWidget<*>? = null
     var oldWidget: AbstractWidget? = null
 
@@ -80,7 +83,7 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String, val alig
     }
 
     @Subscription(inherited = true)
-    fun onReiRender(event: REIRenderOverlayEvent) {
+    fun onItemListRender(event: ItemListEvent.RegisterExclusionZones) {
         if (!isBeingShown) return
 
         oldWidget?.let {

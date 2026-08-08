@@ -1,8 +1,5 @@
 package me.owdding.skyocean
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.FieldNamingStrategy
-import com.google.gson.GsonBuilder
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import me.owdding.ktmodules.AutoCollect
@@ -14,6 +11,7 @@ import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.repo.RemoteRepo
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanApiDebug
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
@@ -67,7 +65,7 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
 
     override fun onInitializeClient() {
         MixinHelper.isStarted = true
-        RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
+        if (!McClient.isDev) RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
         SkyOceanModules.init {
             SkyBlockAPI.eventBus.register(it)
@@ -122,26 +120,24 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     }
 
     @Subscription
-    fun onCommand(event: RegisterCommandsEvent) {
-        event.register("skyocean") {
-            thenCallback("version") {
-                Text.of("Version: $VERSION").withColor(TextColor.GRAY).sendWithPrefix()
-            }
+    fun onSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
+        event.registerWithCallback("version") {
+            Text.of("Version: $VERSION").withColor(TextColor.GRAY).sendWithPrefix()
+        }
 
-            thenCallback("discord") {
-                Text.of("Join the Meowdding Discord!").apply {
-                    this.url = DISCORD
-                    this.hover = Text.of(DISCORD).withColor(TextColor.GRAY)
-                }.sendWithPrefix()
-            }
+        event.registerWithCallback("discord") {
+            Text.of("Join the Meowdding Discord!").apply {
+                this.url = DISCORD
+                this.hover = Text.of(DISCORD).withColor(TextColor.GRAY)
+            }.sendWithPrefix()
+        }
 
-            thenCallback("overlays") {
-                McClient.setScreenAsync { EditOverlaysScreen(MOD_ID) }
-            }
+        event.registerWithCallback("overlays") {
+            McClient.setScreenAsync { EditOverlaysScreen(MOD_ID) }
+        }
 
-            callback {
-                McClient.setScreenAsync { ResourcefulConfigScreen.getFactory("skyocean").apply(null) }
-            }
+        event.registerBaseCallback {
+            McClient.setScreenAsync { ResourcefulConfigScreen.getFactory("skyocean").apply(null) }
         }
     }
 
@@ -177,5 +173,5 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
 @Target(AnnotationTarget.FUNCTION)
 internal annotation class ApiDebug(
     val name: String,
-    val commandName: String = ""
+    val commandName: String = "",
 )

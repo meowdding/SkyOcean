@@ -17,12 +17,9 @@ import me.owdding.lib.platform.screens.Overlay
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
-//? < 26.1
-//import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
-//~ if >= 26.1 'com.teamresourceful.resourcefullib.common.utils.TriState' -> 'net.minecraft.util.TriState'
 import net.minecraft.util.TriState
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -39,7 +36,6 @@ class ItemSelectorOverlay(
         LayoutWidget(ClearableGridLayout()).apply {
             withPosition(bounds.x, bounds.y + bounds.height)
             withContentMargin(1)
-            //~ if >= 26.1 'UNDEFINED' -> 'DEFAULT'
             withScrollableY(TriState.DEFAULT)
             withTexture(UIConstants.LIST_BG)
             withScrollbarBackground(UIConstants.MODAL_INSET)
@@ -101,7 +97,8 @@ class ItemSelectorOverlay(
             .toArray { arrayOfNulls<Button>(it) }
 
         this.entries.withContents { layout ->
-            layout.clear()
+            //~ if >= 26.2 'clear' -> 'removeChildren'
+            layout.removeChildren()
             for ((index, value) in entries.withIndex()) {
                 layout.addChild(value, index, 0)
             }

@@ -7,6 +7,7 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.skyocean.features.hotkeys.WidgetContext
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.Utils.mapToMutableList
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.extensions.bottomCenter
 import me.owdding.skyocean.utils.extensions.createButton
@@ -78,4 +79,6 @@ data class AndHotkeyCondition(
             },
         ).withPadding(PADDING, top = 0).add(bottomCenter)
     }.framed(context.width)
+
+    override fun duplicate(): HotkeyCondition = copy(conditions = conditions.mapToMutableList(HotkeyCondition::duplicate))
 }

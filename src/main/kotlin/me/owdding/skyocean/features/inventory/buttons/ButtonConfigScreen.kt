@@ -20,7 +20,6 @@ import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.navigation.ScreenPosition
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
-//~ if >= 26.1 'ClickType' -> 'ContainerInput'
 import net.minecraft.world.inventory.ContainerInput
 import net.minecraft.world.inventory.Slot
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -48,17 +47,10 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
     val resetButton: Button = Widgets.button().withRenderer(WidgetRenderers.text(+"skyocean.inventory.buttons.reset"))
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean = false
-    //? < 26.1 {
-    /*@Suppress("WRONG_NULLABILITY_FOR_JAVA_OVERRIDE")
-    override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, type: ClickType) {
-    }
-    *///? } else {
     override fun slotClicked(slot: Slot, slotId: Int, buttonNum: Int, containerInput: ContainerInput) {
         super.slotClicked(slot, slotId, buttonNum, containerInput)
     }
-    //? }
 
-    //~ if >= 26.1 'renderSlots' -> 'extractSlots'
     override fun extractSlots(guiGraphics: GuiGraphicsExtractor, i: Int, j: Int) {}
     override fun onRecipeBookButtonClick() {}
 
@@ -66,7 +58,6 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
     override fun getRecipeBookButtonPosition(): ScreenPosition = ScreenPosition(1000, 1000)
     override fun showsActiveEffects(): Boolean = false
 
-    //~ if >= 26.1 'renderTooltip' -> 'extractTooltip'
     override fun extractTooltip(guiGraphics: GuiGraphicsExtractor, x: Int, y: Int) {}
 
     fun refresh(selectedButtonIndex: Int) {

@@ -95,7 +95,6 @@ class SlotMachineSpinner(
         }
     }
 
-    //~ if >= 26.1 'render' -> 'extractRenderState'
     override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, f: Float) {
         val elapsedTime = startTime.since()
         val scale = 1.5
@@ -146,7 +145,6 @@ class SlotMachineSpinner(
             scaledHeight, // height
         )
 
-        //~ if >= 26.1 'render' -> 'extractRenderState'
         super.extractRenderState(graphics, mouseX, mouseY, f)
     }
 
@@ -197,7 +195,6 @@ class SlotMachineSpinner(
                 val targetIndex = (currentBaseIndex + offset).coerceIn(0, slot.size - 1)
                 val item = slot[targetIndex]
                 val itemY = yPos + pixelOffset - (offset * slotHeight * scale).toInt()
-                //~ if >= 26.1 'renderItem(' -> 'item('
                 item(item.toItem(), xPos - 8, itemY - 8)
             }
         }

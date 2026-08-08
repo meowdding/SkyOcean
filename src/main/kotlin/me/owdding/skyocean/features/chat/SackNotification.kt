@@ -7,7 +7,7 @@ import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.SacksChangeEvent
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -20,7 +20,7 @@ object SackNotification {
         if (!ChatConfig.enableSackNotification) return
 
         val amount = event.changedItems.filter { it.diff > 0 }.map {
-            RepoItemsAPI.getItemName(it.item).stripped to it.diff
+            SkyBlockItemsRepo.getItemStackOrDefault(it.item).hoverName.stripped to it.diff
         }.filter { it.first in ChatConfig.sackNotificationItems }
         if (amount.isEmpty()) return
 

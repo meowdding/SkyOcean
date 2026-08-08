@@ -94,6 +94,10 @@
           "call_fred": "Call Fred",
           "both": "Both"
         },
+        "forge_reminder_busy": {
+          "@value": "Don't Forge Remind when busy",
+          "desc": "Busy means if you're inside a Dungeon Run, Kuudra, ..."
+        },
         "retexture": {
           "@value": "Retexture",
           "carpets": {
@@ -267,6 +271,10 @@
             "@value": "Inventory Buttons",
             "desc": "Whether to show the Inventory Buttons."
           },
+          "render_behind_background": {
+            "@value": "Render Behind Background when not Hovered",
+            "desc": "Renders the button texture behind the Container Background if its not hovered."
+          },
           "edit": {
             "@value": "Edit Buttons",
             "desc": [
@@ -320,6 +328,35 @@
             "Adds a <light_purple>/rboop</light_purple> command that runs /boop on the last person that messaged you.",
             "<red>Requires to change servers to take into effect.</red>"
           ]
+        },
+        "hide_blazetekk": {
+          "@value": "Hide Blazetekk™ Ham Radio Messages",
+          "desc": "Hides status messages from the Blazetekk™ Ham Radio."
+        },
+        "markdown_chat": {
+          "@value": "Markdown Chat",
+          "desc": [
+            "Allows chat to be formatted by basic Markdown formatting.",
+            "",
+            "This includes:",
+            " - <green>*</green>italic<green>*</green> for <pink><italic>italic</italic></pink> text",
+            " - <green>**</green>bold<green>**</green> for <pink><bold>bold</bold></pink> text",
+            " - <green>~~</green>strikethrough<green>~~</green> for <pink><strikethrough>strikethrough</strikethrough></pink> text",
+            " - <green>__</green>underline<green>__</green> for <pink><underline>underline</underline></pink> text",
+            " - <green>||</green>obfuscated<green>||</green> for <pink><obfuscated>obfuscated</obfuscated></pink> text",
+            "",
+            "<red><bold>WARNING:</bold> This might cause unwanted effects with some messages.</red>"
+          ],
+          "underscore_italic": {
+            "@value": "Allow Underscore italic",
+            "desc": [
+              "Extends the markdown formatting to allow the following.",
+              "",
+              " - <green>_</green>italic<green>_</green> for <pink><italic>italic</italic></pink> text",
+              "",
+              "<red><bold>WARNING:</bold> This might cause unwanted effects with some usernames and/or messages.</red>"
+            ]
+          }
         }
       },
       "garden": {
@@ -388,6 +425,14 @@
               "desc": [
                 "Plays a looping soundtrack while a Crop Fever is active.",
                 "<red>Disable if you have Hypixel's own music enabled.</red>"
+              ]
+            },
+            "useRegularSounds": {
+              "@value": "[RP Only] Use .OGG sound files.",
+              "desc": [
+                "Use .ogg sounds instead of .nbs sounds",
+                "To modify them just look for the corresponding files in assets/skyocean/sounds/ogg/garden",
+                "<red>Only enable this if you have a resourcepack that replaces the .ogg sound files, otherwise you will get no sounds</red>"
               ]
             }
           },
@@ -460,6 +505,18 @@
         "revertMasterStars": {
           "@value": "Revert Master Stars",
           "desc": "Reverts the Master Star back to the stacked colored look."
+        },
+        "quickJoinButton": {
+          "@value": "Quick Join Button",
+          "desc": "Quickly Join a Server with one less button click."
+        },
+        "quickJoinText": {
+          "@value": "The Button Text for Quick Join",
+          "desc": "The text shown on the button, use {ip} for the ip."
+        },
+        "quickJoinIp": {
+          "@value": "The IP for Quick Join",
+          "desc": "Customize what Server to quickly join."
         },
         "previousServer": {
           "@value": "Previous Server",
@@ -568,6 +625,10 @@
         "ratHitbox": {
           "@value": "Rat hitboxes",
           "desc": "Renders extra hitboxes for rats in the hub."
+        },
+        "stereoPantsMute": {
+          "@value": "Mutes Stereo Pants Music",
+          "desc": "Mutes the sometimes really annoying music that plays from Players wearing Stereo Pants."
         },
         "crafthelper": {
           "@value": "Craft Helper",
@@ -1649,6 +1710,17 @@
           "@value": "Edit hotkeys",
           "desc": "Opens the hotkey edit screen."
         }
+      },
+      "text_replacements": {
+        "@value": "Text Replacements",
+        "enabled": {
+          "@value": "Enabled",
+          "desc": "Global toggle for all text replacements, regardless of their respective toggles."
+        },
+        "outside_skyblock": {
+          "@value": "Outside SkyBlock",
+          "desc": "Allows text replacements to be active outside of skyblock."
+        }
       }
     },
     "garden": {
@@ -1662,7 +1734,7 @@
       },
       "buttons": {
         "configuration": "<white>Button Configuration",
-        "item": "Item ID / Skyblock ID",
+        "item": "Item ID / SkyBlock ID",
         "command": "Command",
         "screen_title": "Screen Title",
         "tooltip": "Button Tooltip",

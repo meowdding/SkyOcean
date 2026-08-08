@@ -30,7 +30,7 @@ object DeskPestHighlight {
             val amount = amount.toIntValue().takeUnless { it == 0 } ?: return@anyMatch
             event.item.disableCatharsisModifications()
             event.item.skyoceanReplace {
-                backgroundItem = Items.RED_STAINED_GLASS_PANE.defaultInstance
+                backgroundItem = Items.STAINED_GLASS_PANE.red().defaultInstance
                 customSlotText = "§6$amount"
             }
         }

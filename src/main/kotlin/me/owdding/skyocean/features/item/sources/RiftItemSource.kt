@@ -82,7 +82,7 @@ object RiftEquipment : RiftItemContext {
         requiresOverworld { add("Equipped in rift!") { color = TextColor.GRAY } }
     }
 
-    override fun open() = requiresRift(true) { McClient.sendCommand("/eq") }
+    override fun open() = requiresRift(true) { McClient.sendCommand("/stats") }
 }
 
 data class RiftEnderchestPageContext(

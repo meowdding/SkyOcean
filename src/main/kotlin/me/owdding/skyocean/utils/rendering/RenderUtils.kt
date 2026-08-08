@@ -1,11 +1,13 @@
 package me.owdding.skyocean.utils.rendering
 
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphicsExtractor
-import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.ShapeRenderer
+//? 26.1 {
+/*import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.ShapeRenderer*///?}
+import net.minecraft.client.renderer.SubmitNodeCollector
+import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
@@ -25,8 +27,8 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 import me.owdding.lib.rendering.world.RenderTypes as MLibRenderTypes
-//~ if >= 26.1 'client.renderer.LightTexture' -> 'util.LightCoordsUtil as LightTexture'
-import net.minecraft.util.LightCoordsUtil as LightTexture
+import net.minecraft.util.LightCoordsUtil
+import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 
 
 interface PostEffectApplicator {
@@ -41,79 +43,33 @@ fun GuiGraphicsExtractor.applyPostEffect(id: Identifier) {
     this.fill(0, 0, this.guiWidth(), this.guiHeight(), 0)
 }
 
-internal fun renderFace(
-    poseStack: PoseStack,
-    buffer: MultiBufferSource,
-    direction: Direction,
-    vec6: RenderUtils.Vec6f,
-    color: Int,
-) {
-    val matrix = poseStack.last().pose()
-    val vertexconsumer = buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_QUAD)
-
-    val (a, b, c, d, e, f) = vec6
-
-    when (direction) {
-        Direction.DOWN -> {
-            vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
-            vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
-            vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
-            vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
-        }
-
-        Direction.UP -> {
-            vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
-            vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
-            vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
-            vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
-        }
-
-        Direction.NORTH -> {
-            vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
-            vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
-            vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
-            vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
-        }
-
-        Direction.SOUTH -> {
-            vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
-            vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
-            vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
-            vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
-        }
-
-        Direction.WEST -> {
-            vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
-            vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
-            vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
-            vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
-        }
-
-        Direction.EAST -> {
-            vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
-            vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
-            vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
-            vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
-        }
-    }
-}
-
 internal fun renderShape(
     poseStack: PoseStack,
-    vertexConsumer: VertexConsumer,
+    vertexConsumer: RenderType,
     shape: VoxelShape,
     offsetX: Double,
     offsetY: Double,
     offsetZ: Double,
     color: Int,
     lineWidth: Float = 1f,
+    throughWalls: Boolean = false,
+    collector: SubmitNodeCollector,
+    //? 26.1
+    //buffer: MultiBufferSource,
 ) {
-    ShapeRenderer.renderShape(
+
+    //? 26.1 {
+    /*ShapeRenderer.renderShape(
         poseStack,
-        vertexConsumer,
+        buffer.getBuffer(vertexConsumer),
         shape,
         offsetX, offsetY, offsetZ, color, lineWidth,
     )
+    *///? } else {
+    poseStack.translated(offsetX, offsetY, offsetZ) {
+        collector.submitShapeOutline(poseStack, shape, vertexConsumer, color, 1f, throughWalls)
+    }
+    //? }
 }
 
 
@@ -121,13 +77,17 @@ object RenderUtils {
 
     val blockAABB = Shapes.create(AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0))
 
-    fun RenderWorldEvent.renderBox(pos: BlockPos, color: UInt = 0xFFFFFFFFu) {
+    fun RenderWorldEvent.renderBox(pos: BlockPos, color: UInt = 0xFFFFFFFFu, throughWalls: Boolean = true) {
         val color = color.toInt()
         renderShape(
             poseStack,
-            buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS),
+            MLibRenderTypes.BLOCK_FILL_TRIANGLE_THROUGH_WALLS,
             blockAABB,
             pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), color,
+            throughWalls = throughWalls,
+            collector = submitNodeCollector,
+            //? 26.1
+            //buffer = buffer
         )
     }
 
@@ -164,7 +124,7 @@ object RenderUtils {
                 dropShadow = false,
                 displayMode = Font.DisplayMode.SEE_THROUGH,
                 backgroundColor = 0u,
-                light = LightTexture.FULL_BRIGHT,
+                light = LightCoordsUtil.FULL_BRIGHT,
             )
         }
     }
@@ -201,56 +161,55 @@ object RenderUtils {
         z: Float,
         color: Int,
     ) {
-        val (a, b, c, d, e, f) = when (direction) {
-            Direction.UP, Direction.DOWN -> Vec6f(startX, z, startY, endX, z, endY)
-            Direction.NORTH, Direction.SOUTH -> Vec6f(startX, startY, z, endX, endY, z)
-            Direction.EAST, Direction.WEST -> Vec6f(z, startX, startY, z, endX, endY)
-        }
-
-        val matrix = poseStack.last().pose()
-        val vertexconsumer = buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_QUAD)
-
-        when (direction) {
-            Direction.DOWN -> {
-                vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
-                vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
-                vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
-                vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
+        submitNodeCollector.submitCustomGeometry(poseStack, MLibRenderTypes.BLOCK_FILL_QUAD) { pose, consumer ->
+            val (a, b, c, d, e, f) = when (direction) {
+                Direction.UP, Direction.DOWN -> Vec6f(startX, z, startY, endX, z, endY)
+                Direction.NORTH, Direction.SOUTH -> Vec6f(startX, startY, z, endX, endY, z)
+                Direction.EAST, Direction.WEST -> Vec6f(z, startX, startY, z, endX, endY)
             }
 
-            Direction.UP -> {
-                vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
-                vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
-                vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
-                vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
-            }
+            when (direction) {
+                Direction.DOWN -> {
+                    consumer.addVertex(pose, a, b, c).setColor(color)
+                    consumer.addVertex(pose, d, b, c).setColor(color)
+                    consumer.addVertex(pose, d, b, f).setColor(color)
+                    consumer.addVertex(pose, a, b, f).setColor(color)
+                }
 
-            Direction.NORTH -> {
-                vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
-                vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
-                vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
-                vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
-            }
+                Direction.UP -> {
+                    consumer.addVertex(pose, a, e, c).setColor(color)
+                    consumer.addVertex(pose, a, e, f).setColor(color)
+                    consumer.addVertex(pose, d, e, f).setColor(color)
+                    consumer.addVertex(pose, d, e, c).setColor(color)
+                }
 
-            Direction.SOUTH -> {
-                vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
-                vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
-                vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
-                vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
-            }
+                Direction.NORTH -> {
+                    consumer.addVertex(pose, a, b, c).setColor(color)
+                    consumer.addVertex(pose, a, e, c).setColor(color)
+                    consumer.addVertex(pose, d, e, c).setColor(color)
+                    consumer.addVertex(pose, d, b, c).setColor(color)
+                }
 
-            Direction.WEST -> {
-                vertexconsumer.addVertex(matrix, a, b, c).setColor(color)
-                vertexconsumer.addVertex(matrix, a, b, f).setColor(color)
-                vertexconsumer.addVertex(matrix, a, e, f).setColor(color)
-                vertexconsumer.addVertex(matrix, a, e, c).setColor(color)
-            }
+                Direction.SOUTH -> {
+                    consumer.addVertex(pose, a, b, f).setColor(color)
+                    consumer.addVertex(pose, d, b, f).setColor(color)
+                    consumer.addVertex(pose, d, e, f).setColor(color)
+                    consumer.addVertex(pose, a, e, f).setColor(color)
+                }
 
-            Direction.EAST -> {
-                vertexconsumer.addVertex(matrix, d, b, c).setColor(color)
-                vertexconsumer.addVertex(matrix, d, e, c).setColor(color)
-                vertexconsumer.addVertex(matrix, d, e, f).setColor(color)
-                vertexconsumer.addVertex(matrix, d, b, f).setColor(color)
+                Direction.WEST -> {
+                    consumer.addVertex(pose, a, b, c).setColor(color)
+                    consumer.addVertex(pose, a, b, f).setColor(color)
+                    consumer.addVertex(pose, a, e, f).setColor(color)
+                    consumer.addVertex(pose, a, e, c).setColor(color)
+                }
+
+                Direction.EAST -> {
+                    consumer.addVertex(pose, d, b, c).setColor(color)
+                    consumer.addVertex(pose, d, e, c).setColor(color)
+                    consumer.addVertex(pose, d, e, f).setColor(color)
+                    consumer.addVertex(pose, d, b, f).setColor(color)
+                }
             }
         }
     }
@@ -265,29 +224,28 @@ object RenderUtils {
     ) {
         atCamera {
             translate(x, y + 0.01f, z)
-            val vc = buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_QUAD)
-            val pose = poseStack.last().pose()
+            submitNodeCollector.submitCustomGeometry(poseStack, MLibRenderTypes.BLOCK_FILL_QUAD) { pose, consumer ->
+                for (i in 0 until 360) {
+                    val rad = Math.toRadians(i.toDouble())
+                    val nextRad = Math.toRadians(i + 1.toDouble())
 
-            for (i in 0 until 360) {
-                val rad = Math.toRadians(i.toDouble())
-                val nextRad = Math.toRadians(i + 1.toDouble())
+                    val x1 = (radius * cos(rad)).toFloat()
+                    val z1 = (radius * sin(rad)).toFloat()
 
-                val x1 = (radius * cos(rad)).toFloat()
-                val z1 = (radius * sin(rad)).toFloat()
-                val x2 = (radius * cos(nextRad)).toFloat()
-                val z2 = (radius * sin(nextRad)).toFloat()
+                    val x2 = (radius * cos(nextRad)).toFloat()
+                    val z2 = (radius * sin(nextRad)).toFloat()
 
-                // Inside
-                vc.addVertex(pose, x1, 0f, z1).setColor(color)
-                vc.addVertex(pose, x2, 0f, z2).setColor(color)
-                vc.addVertex(pose, x2, height, z2).setColor(color)
-                vc.addVertex(pose, x1, height, z1).setColor(color)
-
-                // Outside
-                vc.addVertex(pose, x2, 0f, z2).setColor(color)
-                vc.addVertex(pose, x1, 0f, z1).setColor(color)
-                vc.addVertex(pose, x1, height, z1).setColor(color)
-                vc.addVertex(pose, x2, height, z2).setColor(color)
+                    // Inside
+                    consumer.addVertex(pose, x1, 0f, z1).setColor(color)
+                    consumer.addVertex(pose, x2, 0f, z2).setColor(color)
+                    consumer.addVertex(pose, x2, height, z2).setColor(color)
+                    consumer.addVertex(pose, x1, height, z1).setColor(color)
+                    // Outside
+                    consumer.addVertex(pose, x2, 0f, z2).setColor(color)
+                    consumer.addVertex(pose, x1, 0f, z1).setColor(color)
+                    consumer.addVertex(pose, x1, height, z1).setColor(color)
+                    consumer.addVertex(pose, x2, height, z2).setColor(color)
+                }
             }
         }
     }
@@ -299,25 +257,26 @@ object RenderUtils {
         radius: Float,
         color: Int,
     ) {
-        atCamera {
-            translate(x, y + 0.01f, z)
-            val vc = buffer.getBuffer(MLibRenderTypes.BLOCK_FILL_QUAD)
-            val pose = poseStack.last().pose()
+       atCamera {
+           translate(x, y + 0.01f, z)
+           submitNodeCollector.submitCustomGeometry(poseStack, MLibRenderTypes.BLOCK_FILL_QUAD) { pose, consumer ->
+               for (i in 0 until 360) {
+                   val rad = Math.toRadians(i.toDouble())
+                   val nextRad = Math.toRadians((i + 1).toDouble())
 
-            for (i in 0 until 360) {
-                val rad = Math.toRadians(i.toDouble())
-                val nextRad = Math.toRadians((i + 1).toDouble())
+                   val x1 = (radius * cos(rad)).toFloat()
+                   val z1 = (radius * sin(rad)).toFloat()
 
-                val x1 = (radius * cos(rad)).toFloat()
-                val z1 = (radius * sin(rad)).toFloat()
-                val x2 = (radius * cos(nextRad)).toFloat()
-                val z2 = (radius * sin(nextRad)).toFloat()
+                   val x2 = (radius * cos(nextRad)).toFloat()
+                   val z2 = (radius * sin(nextRad)).toFloat()
 
-                vc.addVertex(pose, 0f, 0f, 0f).setColor(color)
-                vc.addVertex(pose, x2, 0f, z2).setColor(color)
-                vc.addVertex(pose, x1, 0f, z1).setColor(color)
-                vc.addVertex(pose, 0f, 0f, 0f).setColor(color)
-            }
-        }
+                   consumer.addVertex(pose, 0f, 0f, 0f).setColor(color)
+                   consumer.addVertex(pose, x2, 0f, z2).setColor(color)
+                   consumer.addVertex(pose, x1, 0f, z1).setColor(color)
+                   consumer.addVertex(pose, 0f, 0f, 0f).setColor(color)
+               }
+           }
+
+       }
     }
 }

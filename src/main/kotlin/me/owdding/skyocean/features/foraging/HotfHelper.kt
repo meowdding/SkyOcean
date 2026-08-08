@@ -216,7 +216,7 @@ object HotfHelper {
                             append("Click to remove reminder!", OceanColors.SKYOCEAN_BLUE)
                         }.let(listMerger::add)
 
-                        backgroundItem = Items.BLUE_STAINED_GLASS_PANE.defaultInstance
+                        backgroundItem = Items.STAINED_GLASS_PANE.blue().defaultInstance
 
                         this@skyoceanReplace.onClick { button ->
                             if (button != InputConstants.MOUSE_BUTTON_LEFT) return@onClick null

@@ -13,8 +13,11 @@ import earth.terrarium.olympus.client.ui.modals.Modals
 import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.Orientation
 import earth.terrarium.olympus.client.utils.State
-import me.owdding.lib.displays.*
-import me.owdding.lib.rendering.text.textShader
+import me.owdding.lib.displays.Display
+import me.owdding.lib.displays.DisplayWidget
+import me.owdding.lib.displays.Displays
+import me.owdding.lib.displays.asWidget
+import me.owdding.lib.displays.withPadding
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.data.RecentColorStorage
 import me.owdding.skyocean.features.item.custom.CustomItems
@@ -22,7 +25,12 @@ import me.owdding.skyocean.features.item.custom.CustomItems.getKey
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrCreateStaticData
 import me.owdding.skyocean.features.item.custom.CustomItems.getOrTryCreateCustomData
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper
-import me.owdding.skyocean.features.item.custom.data.*
+import me.owdding.skyocean.features.item.custom.data.AnimatedSkyBlockDye
+import me.owdding.skyocean.features.item.custom.data.ArmorTrim
+import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.ItemColor
+import me.owdding.skyocean.features.item.custom.data.SkyBlockDye
+import me.owdding.skyocean.features.item.custom.data.StaticItemColor
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.anyUpdated
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttonClick
 import me.owdding.skyocean.features.item.custom.ui.standard.StandardCustomizationUi.buttons
@@ -46,21 +54,17 @@ import me.owdding.skyocean.utils.asColumn
 import me.owdding.skyocean.utils.asLayoutWidget
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.chat.ChatUtils.withoutShadow
-import me.owdding.skyocean.utils.chat.OceanColors
-import me.owdding.skyocean.utils.chat.OceanGradients
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.asScrollableWidget
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
 import me.owdding.skyocean.utils.extensions.setFrameContent
 import me.owdding.skyocean.utils.extensions.withPadding
+import me.owdding.skyocean.utils.extensions.withTextFormattingInfo
 import me.owdding.skyocean.utils.items.ItemCache
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import me.owdding.skyocean.utils.rendering.ExtraUiConstants
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
 import me.owdding.skyocean.utils.rendering.StyledItemWidget
-import net.minecraft.ChatFormatting
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
@@ -82,15 +86,8 @@ import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
-import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
-import kotlin.jvm.optionals.getOrNull
 import kotlin.math.max
 import kotlin.time.Duration.Companion.seconds
 
@@ -168,63 +165,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 DisplayWidget(
                     Displays.row(
                         Displays.text((!"Name ").withoutShadow()),
-                        Displays.sprite(SkyOcean.id("info"), 7, 7).withTooltip {
-                            add("The text field below supports a some formatting tags!")
-                            space()
-                            add("The basic formatting tags include the following")
-                            add {
-                                append(" • ")
-                                append("<bold>") { this.bold = true }
-                                append(", ")
-                                append("<italic>") { this.italic = true }
-                                append(", ")
-                                append("<strikethrough>") { this.strikethrough = true }
-                                append(", ")
-                                append("<underlined>") { this.underlined = true }
-                                append(" and <obfuscated>")
-                            }
-                            ChatFormatting.entries.filter { it.isColor }.map {
-                                text("<${it.serializedName}>") {
-                                    this.color = it.color!!
-                                }
-                            }.chunked(5).forEach {
-                                add {
-                                    append(" • ")
-                                    append(Text.join(it, separator = text(", ")))
-                                }
-                            }
-                            add(" • ") {
-                                append("<color #f38ba8>") {
-                                    this.color = OceanColors.PINK
-                                }
-                            }
-                            space()
-                            add("The \"complex\" style tags include the following")
-                            OceanGradients.entries.filterNot { it.isDisabled }.map {
-                                text("<${it.name.lowercase()}>") {
-                                    this.textShader = it
-                                }
-                            }.chunked(5).forEach {
-                                add {
-                                    append(" • ")
-                                    append(Text.join(it, separator = text(", ")))
-                                }
-                            }
-                            add {
-                                append(" • ")
-                                append("<gradient ")
-                                append("#color1 ") { this.color = TextColor.BLUE }
-                                append("#color2 ") { this.color = TextColor.GREEN }
-                                append("... ") { this.color = TextColor.GRAY }
-                                append("#colorN ") { this.color = TextColor.MAGENTA }
-                                append("#color1") { this.color = TextColor.BLUE }
-                                append(">")
-                            }
-                            space()
-                            add("Note! To get a gradient that loops perfectly you\n must include the start color at the end again!") {
-                                this.color = TextColor.YELLOW
-                            }
-                        },
+                        Displays.sprite(SkyOcean.id("info"), 7, 7).withTextFormattingInfo(),
                     ),
                 ),
             )
@@ -312,14 +253,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         val recentDyeWidget = getRecentDyes()
 
         val trimMaterialWidget = ItemCache.trimMaterials.associateWithNotNull {
-            it.components()
-                .get(DataComponents.PROVIDES_TRIM_MATERIAL)
-                //? < 26.1 {
-                /* ?.material()
-                ?.unwrap(SkyOcean.registryLookup)
-                ?.getOrNull()
-                *///? }
-                ?.value()
+            it.components().get(DataComponents.PROVIDES_TRIM_MATERIAL)?.value()
         }.trimButton(trimMaterial)
             .chunked(4)
             .asWidgetTable()
@@ -563,19 +497,15 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
         FrameLayout.centerInRectangle(this.layout!!, this.rectangle)
     }
 
-    //~ if >= 26.1 'render' -> 'extractRenderState'
     override fun extractRenderState(p0: GuiGraphicsExtractor, p1: Int, p2: Int, p3: Float) {
         animationManager?.update()
-        //~ if >= 26.1 'render' -> 'extractRenderState'
         super.extractRenderState(p0, p1, p2, p3)
     }
 
-    //~ if >= 26.1 'render' -> 'extract' {
     override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         val layout = layout ?: return
         super.extractBackground(graphics, mouseX, mouseY, partialTick)
         this.extractTransparentBackground(graphics)
-    //~ }
 
         graphics.drawSprite(
             UIConstants.MODAL,

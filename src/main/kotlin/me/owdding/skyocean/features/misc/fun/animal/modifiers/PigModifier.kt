@@ -4,9 +4,11 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.PigRenderState
 import net.minecraft.core.registries.Registries
@@ -19,20 +21,21 @@ import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier
 object PigModifier : AnimalModifier<Pig, PigRenderState> {
-    override val type: EntityType<Pig> = EntityType.PIG
+    override val type: EntityType<Pig> = EntityTypes.PIG
 
     val variants = Registries.PIG_VARIANT.list()
 
     var pigVariant = PlayerAnimalConfig.createEntry("pig_variant") { id, type ->
         enum(id, Variant.RANDOM) {
             this.translation = createTranslationKey("pig", "${type}_variant")
-            condition = isSelected(EntityType.PIG)
+            condition = isSelected(EntityTypes.PIG)
         }
     }
 
     fun getPigVariant(state: AvatarRenderState): PigVariant = pigVariant.select(state).pigVariant ?: getRandom(state, variants)
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: PigRenderState,
         partialTicks: Float,

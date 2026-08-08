@@ -6,6 +6,8 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.events.fishing.FishCatchEvent
 import me.owdding.skyocean.events.fishing.HotspotEvent
 import me.owdding.skyocean.features.fishing.HotspotFeatures
+import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.StringGroup
 import me.owdding.skyocean.utils.Utils.roundToHalf
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.DustParticleOptions
@@ -60,7 +62,7 @@ object HotspotAPI {
             val fluid = McLevel[it].fluidState
 
             if (!fluid.isEmpty) {
-                hotspot.pos = Vector3f(pos.x.toFloat(), it.y + fluid.getHeight(McLevel.self, it), pos.z.toFloat())
+                hotspot.pos = Vector3f(pos.x.toFloat(), it.y + fluid.getHeight(McLevel.self, it) + 0.1f, pos.z.toFloat())
                 HotspotEvent.Spawn(hotspot).post(SkyBlockAPI.eventBus)
                 return
             }
@@ -150,12 +152,15 @@ data class HotspotData(
     var fishedIn: Boolean = false,
 )
 
+private val hotspotGroup = RemoteStrings.resolve("HotspotType")
+
 enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
-    SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+α Sea Creature Chance"),
-    FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+☂ Fishing Speed"),
-    DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+⚓ Double Hook Chance"),
-    TREASURE(MinecraftColors.GOLD, "\\+\\d+⛃ Treasure Chance"),
-    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+♔ Trophy Chance"),
+    SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+. Sea Creature Chance"),
+    FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+. Fishing Speed"),
+    DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+. Double Hook Chance"),
+    TREASURE(MinecraftColors.GOLD, "\\+\\d+. Treasure Chance"),
+    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+. Trophy Chance"),
+    SHARD(MinecraftColors.YELLOW, "Chance of .+ Shard"),
     UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
     ;
 
@@ -163,7 +168,7 @@ enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
     val displayComponent: Component = displayName.asComponent { this.color = this@HotspotType.color.value }
     override fun toString(): String = displayName
 
-    val regex: Regex = Regex(regex)
+    val regex: Regex by hotspotGroup.regex(regex, name.lowercase() + "_regex")
 
     companion object {
 

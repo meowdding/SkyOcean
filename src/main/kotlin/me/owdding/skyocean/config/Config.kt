@@ -24,6 +24,7 @@ import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.misc.MobIconsConfig
 import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
+import me.owdding.skyocean.config.features.text_replacements.TextReplacementConfig
 import me.owdding.skyocean.config.hidden.OverlayPositions
 import me.owdding.skyocean.config.patcher.ConfigPatches
 import me.owdding.skyocean.utils.SkyOceanModifyIndicator
@@ -46,7 +47,7 @@ object Config : ConfigKt("skyocean/config") {
         category(MiningConfig) {
             categories(MiningRetexture, ScathaConfig, MineshaftConfig)
         }
-        category(HotkeyConfig)
+        categories(HotkeyConfig, TextReplacementConfig)
         category(GamblingConfig)
         category(MiscConfig) {
             categories(MobIconsConfig, CraftHelperConfig, FunConfig)

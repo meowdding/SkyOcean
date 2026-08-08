@@ -4,9 +4,11 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.CowRenderState
 import net.minecraft.core.registries.Registries
@@ -19,20 +21,21 @@ import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier
 object CowModifier : AnimalModifier<Cow, CowRenderState> {
-    override val type: EntityType<Cow> = EntityType.COW
+    override val type: EntityType<Cow> = EntityTypes.COW
 
     val variants = Registries.COW_VARIANT.list()
 
     var cowVariant = PlayerAnimalConfig.createEntry("cow_variant") { id, type ->
         enum(id, Variant.RANDOM) {
             this.translation = createTranslationKey("cow", "${type}_variant")
-            condition = isSelected(EntityType.COW)
+            condition = isSelected(EntityTypes.COW)
         }
     }
 
     fun getCowVariant(state: AvatarRenderState): CowVariant = cowVariant.select(state).cowVariant ?: getRandom(state, variants)
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: CowRenderState,
         partialTicks: Float,

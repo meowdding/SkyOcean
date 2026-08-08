@@ -42,6 +42,19 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.revertMasterStars"
     }
 
+    var quickJoinButton by boolean(false) {
+        translation = "skyocean.config.misc.quickJoinButton"
+        searchTerms = listOf("hypixel", "quick", "join", "server")
+    }
+
+    var quickJoinText by string("Join {ip}") {
+        translation = "skyocean.config.misc.quickJoinText"
+    }
+
+    var quickJoinIp by string("mc.hypixel.net") {
+        translation = "skyocean.config.misc.quickJoinIp"
+    }
+
     var hideLightning by boolean(false) {
         translation = "skyocean.config.misc.hideLightning"
     }
@@ -104,6 +117,14 @@ object MiscConfig : CategoryKt("misc") {
         range = 0f..1f
     }
 
+    var ratHitbox by boolean(false) {
+        translation = "skyocean.config.misc.ratHitbox"
+    }
+
+    var stereoPantsMute by boolean(false) {
+        translation = "skyocean.config.misc.stereoPantsMute"
+    }
+
     init {
         separator("skyocean.config.misc.itemSearch")
     }
@@ -149,10 +170,6 @@ object MiscConfig : CategoryKt("misc") {
 
     var transparentArmorOthers by transparency(100) {
         translation = "skyocean.config.misc.transparentArmor.others"
-    }
-
-    var ratHitbox by boolean(false) {
-        translation = "skyocean.config.misc.ratHitbox"
     }
 }
 

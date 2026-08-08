@@ -20,7 +20,6 @@ class DungeonGamblingFakeScreen(
         DungeonGamblingRenderer.init(floor, chest)
     }
 
-    //~ if >= 26.1 'render' -> 'extractRenderState'
     override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         DungeonGamblingRenderer.extract(graphics)
     }

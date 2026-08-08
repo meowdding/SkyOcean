@@ -76,7 +76,7 @@ class NBSPlayer(private val song: NoteBlockSong) {
             if (instrumentId !in soundLookup.indices) continue
 
             val soundEvent = soundLookup[instrumentId]
-            val volume = (instrument.layer.volume * instrument.noteBlockVelocity) / 100f
+            val volume = (instrument.layer.volume * instrument.noteBlockVelocity) / 10000f
             val pitch = getPitch(instrument)
 
             McClient.runNextTick {

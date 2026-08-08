@@ -4,7 +4,9 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.PandaRenderState
 import net.minecraft.world.entity.EntityType
@@ -12,17 +14,18 @@ import net.minecraft.world.entity.animal.panda.Panda
 
 @RegisterAnimalModifier
 object PandaModifier : AnimalModifier<Panda, PandaRenderState> {
-    override val type: EntityType<Panda> = EntityType.PANDA
+    override val type: EntityType<Panda> = EntityTypes.PANDA
     val pandaGenes = Panda.Gene.entries
 
     var pandaGene = PlayerAnimalConfig.createEntry("panda_gene") { id, type ->
         enum(id, Gene.RANDOM) {
             this.translation = createTranslationKey("panda", "${type}_gene")
-            condition = isSelected(EntityType.PANDA)
+            condition = isSelected(EntityTypes.PANDA)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: PandaRenderState,
         partialTicks: Float,

@@ -6,6 +6,7 @@ import eu.pb4.placeholders.api.parsers.tag.TagRegistry
 import eu.pb4.placeholders.api.parsers.tag.TextTag
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
+import me.owdding.skyocean.generated.EnumCodec
 import me.owdding.skyocean.utils.chat.OceanGradients
 import me.owdding.skyocean.utils.components.tags.GradientNode
 import me.owdding.skyocean.utils.components.tags.OceanGradientNode
@@ -30,14 +31,23 @@ object TagComponentSerialization {
                 "strikethrough",
                 "color",
             ),
-            ChatFormatting.entries.filter { it.isColor }.map { it.serializedName },
+
+            ChatFormatting.entries.filter { it <= ChatFormatting.WHITE }.map {
+                //~ if >= 26.2 'serializedName' -> 'name'
+                it.name
+            },
         ).flatten()
         val tagRegistry = TagRegistry.builder().apply {
             copies.forEach { default.getTag(it)?.let { tag -> this.add(tag) } }
             add(
                 TextTag.enclosing("gradient", "gradient") { node, data, _ ->
-
                     val colors = mutableListOf<TextColor>()
+                    val direction = data.get(
+                        "dir",
+                        EnumCodec.forKCodec(GradientTextShader.Direction.entries.toTypedArray()),
+                    ).resultOrPartial().getOrNull() ?: GradientTextShader.Direction.RIGHT
+                    val speed = data.get("speed", "0").toFloatOrNull() ?: 1f
+
                     while (true) {
                         val current = data.getNext("0") ?: break
                         val color = TextColor.parseColor(current).result().getOrNull() ?: continue
@@ -45,14 +55,19 @@ object TagComponentSerialization {
                     }
 
                     val colorList = colors.map { it.value }.toList()
-                    GradientNode(node) { colorList }
+                    GradientNode(node, direction, speed) { colorList }
                 },
             )
 
             OceanGradients.entries.filterNot { it.isDisabled }.forEach {
                 add(
-                    TextTag.enclosing(it.name.lowercase(), "gradient") { node, _, _ ->
-                        OceanGradientNode(node, it)
+                    TextTag.enclosing(it.name.lowercase(), "gradient") { node, data, _ ->
+                        val direction = data.get(
+                            "dir",
+                            EnumCodec.forKCodec(GradientTextShader.Direction.entries.toTypedArray()),
+                        ).resultOrPartial().getOrNull() ?: GradientTextShader.Direction.RIGHT
+                        val speed = data.get("speed", "0").toFloatOrNull() ?: 1f
+                        OceanGradientNode(node, it, direction, speed)
                     },
                 )
             }
@@ -117,11 +132,28 @@ object TagComponentSerialization {
         }
         if (this.textShader() != null) {
             when (val shader = this.textShader()) {
+                is GradientTextShader if OceanGradients.entries.any {
+                    it.colors.toIntArray().contentEquals(shader.gradientProvider.getColors().toIntArray())
+                } -> {
+                    val gradient = OceanGradients.entries.first { it.colors.toIntArray().contentEquals(shader.gradientProvider.getColors().toIntArray()) }
+                    list.add(
+                        buildString {
+                            append(gradient.name.lowercase())
+                            shader.serializeProperties().takeUnless { it.isEmpty() }?.let(::append)
+                        },
+                    )
+                }
+
                 is GradientTextShader -> list.add(
-                    "gradient ${
-                        shader.gradientProvider.getColors()
-                            .joinToString(" ") { "#" + (it.toHexString().dropWhile { char -> char == '0' }.takeUnless { it.isEmpty() } ?: "0") }
-                    }",
+                    buildString {
+                        append("gradient")
+
+                        shader.serializeProperties().takeUnless { it.isEmpty() }?.let(::append)
+
+                        for (i in shader.gradientProvider.getColors()) {
+                            append(" #").append(i.toHexString().dropWhile { char -> char == '0' }.takeUnless { it.isEmpty() } ?: "0")
+                        }
+                    },
                 )
 
                 is OceanGradients -> list.add(shader.name.lowercase())
@@ -137,7 +169,15 @@ object TagComponentSerialization {
         return list
     }
 
-    //~ if >= 26.1 'parseText' -> 'parseComponent'
+    fun GradientTextShader.serializeProperties() = buildString {
+        if (direction != GradientTextShader.Direction.RIGHT) {
+            append(" dir:").append(direction.name.lowercase())
+        }
+        if (speed != 1f) {
+            append(" speed:").append(speed.toString().removeSuffix(".0"))
+        }
+    }
+
     fun deserialize(text: String): Component = tagParser.parseComponent(text, context)
 
 }

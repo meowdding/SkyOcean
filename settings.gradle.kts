@@ -11,15 +11,15 @@ pluginManagement {
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
-    id("dev.kikugie.stonecutter") version "0.9"
+    id("dev.kikugie.stonecutter") version "0.10-alpha.2"
 }
 
-val versions = listOf("26.1", "1.21.11")
+val versions = listOf("26.2", "26.1")
 
 stonecutter {
     create(rootProject) {
         versions.forEach {
-            version(it).buildscript = if (stonecutter.eval(it, "<=1.21.11")) "build.obf.gradle.kts" else "build.gradle.kts"
+            version(it)
         }
         vcsVersion = versions.first()
     }

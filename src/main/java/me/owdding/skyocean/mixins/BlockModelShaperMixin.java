@@ -3,7 +3,6 @@ package me.owdding.skyocean.mixins;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import me.owdding.skyocean.events.BlockModelEvent;
-//~ if >= 26.1 'BlockModelShaper' -> 'BlockStateModelSet' {
 import net.minecraft.client.renderer.block.BlockStateModelSet;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,10 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI;
 
 @Mixin(BlockStateModelSet.class)
-//~ }
 public class BlockModelShaperMixin {
 
-    //~ if >= 26.1 'getBlockModel' -> 'get'
     @Inject(method = "get", at = @At("HEAD"))
     private void getBlockModel(CallbackInfoReturnable<BlockModel> cir, @Local(argsOnly = true) LocalRef<BlockState> blockState) {
         final BlockModelEvent blockModelEvent = new BlockModelEvent(blockState.get());
