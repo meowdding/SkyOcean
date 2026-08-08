@@ -39,16 +39,16 @@ object HotspotFeaturesConfig : ObjectKt() {
 
     init {
         separator {
-            this.title = "skyocean.config.fishing.hotspot.misc"
+            this.title = "skyocean.config.fishing.hotspot.announcements"
         }
     }
 
     var announce by enum(AnnouncementType.OFF) {
-        this.translation = "skyocean.config.fishing.hotspot.misc.announce"
+        this.translation = "skyocean.config.fishing.hotspot.announcements.announce"
     }
 
     var chatType by enum(ChatType.PARTY_ONLY) {
-        this.translation = "skyocean.config.fishing.hotspot.misc.chat_type"
+        this.translation = "skyocean.config.fishing.hotspot.announcements.chat_type"
     }
 
     enum class AnnouncementType {

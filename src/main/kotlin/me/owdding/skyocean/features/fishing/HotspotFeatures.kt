@@ -12,7 +12,10 @@ import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
+import me.owdding.skyocean.utils.extensions.distance
+import me.owdding.skyocean.utils.extensions.horizontalDistance
 import me.owdding.skyocean.utils.extensions.toBlockPos
+import me.owdding.skyocean.utils.extensions.verticalDistance
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderCircle
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderCylinder
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
@@ -188,16 +191,4 @@ object HotspotFeatures {
         append(" | ")
         append(ChatUtils.antiSpam())
     }
-
-    private fun Vector3f.distance(other: Vec3) = distance(other.x.toFloat(), other.y.toFloat(), other.z.toFloat())
-
-    private fun Vector3f.horizontalDistance(other: Vec3): Float {
-        val dx = this.x - other.x.toFloat()
-        val dz = this.z - other.z.toFloat()
-        return sqrt(dx * dx + dz * dz)
-    }
-
-    private fun Vector3f.verticalDistance(other: Vec3): Float = abs(this.y - other.y.toFloat())
-
-    private fun Vector3f.toBlockPos() = BlockPos(x.floor(), y.floor(), z.floor())
 }
