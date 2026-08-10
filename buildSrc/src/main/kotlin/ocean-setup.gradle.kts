@@ -70,6 +70,7 @@ tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.optIn.add("kotlin.time.ExperimentalTime")
     compilerOptions.freeCompilerArgs.addAll(
         "-Xcontext-parameters",
+        "-Xexplicit-backing-fields",
         "-Xcontext-sensitive-resolution",
         "-Xnullability-annotations=@org.jspecify.annotations:warn"
     )
