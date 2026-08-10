@@ -16,8 +16,8 @@ import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.item.sources.ItemSources
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
@@ -78,7 +78,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             val output = tree.output
             resetLayout()
             layout.tryClear()
-                layout.addChild(visualize(tree, output, maxAvailableWidth) { callback })
+            layout.addChild(visualize(tree, output, maxAvailableWidth) { callback })
             layout.arrangeElements()
             layout.setPosition(CraftHelperConfig.position.position(layout.width, layout.height))
             layout.visitWidgets { event.widgets.add(it) }
@@ -144,14 +144,15 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                 display(item)
                 vertical(alignment = MIDDLE) {
                     spacer(titleWidth)
-                    display(Displays.fixed(titleWidth, McFont.height, Displays.component(output.itemName)))
+                    val nameComponent = Displays.component(output.itemName)
+                    display(
+                        if (nameComponent.getWidth() > titleWidth) Displays.fixedWidth(nameComponent, titleWidth)
+                        else nameComponent,
+                    )
                     horizontal {
                         widget(
                             Displays.component(
-                                Text.of {
-                                    append("-")
-                                    this.color = if (CraftHelperStorage.canModifyCount) TextColor.RED else TextColor.GRAY
-                                },
+                                Text.of("-", if (CraftHelperStorage.canModifyCount) TextColor.RED else TextColor.GRAY),
                             ).asButtonLeft {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
 
@@ -176,10 +177,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
                         }
                         widget(
                             Displays.component(
-                                Text.of {
-                                    append("+")
-                                    this.color = if (CraftHelperStorage.canModifyCount) TextColor.GREEN else TextColor.GRAY
-                                },
+                                Text.of("+", if (CraftHelperStorage.canModifyCount) TextColor.GREEN else TextColor.GRAY),
                             ).asButtonLeft {
                                 if (!CraftHelperStorage.canModifyCount) return@asButtonLeft
                                 val value = CraftHelperStorage.selectedAmount / tree.amountPerCraft
