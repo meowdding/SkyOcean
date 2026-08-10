@@ -62,9 +62,12 @@ open class DebugBuilder : ApiDebugBuilder(CommonComponents.EMPTY, CommonComponen
         )
     }
 
-    @Suppress("NOTHING_TO_INLINE")
     override fun <Type> field(field: KProperty0<Type>, description: Component?, copyValue: String?) {
         field(field.name, field.get(), description, copyValue)
+    }
+
+    fun <FieldType, MappedType> field(field: KProperty0<FieldType>, modifier: (FieldType) -> MappedType, description: Component?, copyValue: String?) {
+        field(field.name, modifier(field.get()), description, copyValue)
     }
 
     @Suppress("NOTHING_TO_INLINE")
@@ -93,6 +96,11 @@ open class DebugBuilder : ApiDebugBuilder(CommonComponents.EMPTY, CommonComponen
     }
 
     override fun <T> field(field: String, value: T?, description: Component?, copyValue: String?) {
+        if (value is DebugRepresentable<*>) {
+            field(field, value.render(), description, copyValue)
+            return
+        }
+
         val copyValue = copyValue ?: value.toString()
         entries.add(
             FieldEntry(
