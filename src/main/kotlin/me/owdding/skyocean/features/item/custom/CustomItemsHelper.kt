@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack
 object CustomItemsHelper {
 
     @JvmStatic
-    fun <T : Any> getData(instance: ItemStack, type: DataComponentType<T>): T? = context(instance) { getCustomData(instance)?.getData(type) }
+    fun <T> getData(instance: ItemStack, type: DataComponentType<T>): T? = context(instance) { getCustomData(instance)?.getData(type) }
 
     @JvmStatic
     fun <T : Any> getCustomData(instance: ItemStack, type: CustomItemComponent<T>): T? = context(instance) { getCustomData(instance)?.get(type) }
@@ -35,7 +35,8 @@ object CustomItemsHelper {
         return EquippableModelState(TriState.TRUE, modelEquippable)
     }
 
-    context(item: ItemStack) fun <T : Any> CustomItemData.getData(type: DataComponentType<T>): T? = when (type) {
+    context(item: ItemStack)
+    fun <T> CustomItemData.getData(type: DataComponentType<T>): T? = when (type) {
         DataComponents.ITEM_MODEL -> this[CustomItemDataComponents.MODEL]?.getModel()
         DataComponents.CUSTOM_NAME -> this[CustomItemDataComponents.NAME]
         DataComponents.ENCHANTMENT_GLINT_OVERRIDE -> this[CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE]
@@ -47,7 +48,7 @@ object CustomItemsHelper {
     }.unsafeCast()
 
     @JvmStatic
-    fun <T : Any> replace(itemStack: ItemStack, type: DataComponentType<T>, original: Operation<T>): T {
+    fun <T> replace(itemStack: ItemStack, type: DataComponentType<T>, original: Operation<T>): T {
         return getData(itemStack, type) ?: original.call(itemStack, type)
     }
 
