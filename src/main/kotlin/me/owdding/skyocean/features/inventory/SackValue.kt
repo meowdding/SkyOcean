@@ -52,13 +52,14 @@ object SackValue : InventorySideGui("inventorySideGui.sackValue.title",".* Sack|
             else -> idsInInventory
         }.ifEmpty { return null }
 
+        val sackEntries = SacksAPI.sackItems.filter { it.key in ids }.map {
+            SackEntry(it.key, it.value)
+        }.let { entries ->
+            if (SackValueConfig.hideItemsWithNoValue) entries.filterNot { it.price == 0L }
+            else entries
+        }.sortedByDescending { it.price }.ifEmpty { return null }
+
         return LayoutFactory.vertical {
-            val sackEntries = SacksAPI.sackItems.filter { it.key in ids }.map {
-                SackEntry(it.key, it.value)
-            }.let { entries ->
-                if (SackValueConfig.hideItemsWithNoValue) entries.filterNot { it.price == 0L }
-                else entries
-            }.sortedByDescending { it.price }
 
             val title = LayoutFactory.vertical {
                 horizontal {
