@@ -19,11 +19,6 @@ import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.extensions.withPadding
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
-//? if <26.1 {
-/*
-import net.minecraft.client.gui.GuiGraphics
-*/
-//?}
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.util.ARGB
@@ -39,13 +34,14 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 /*
- * TODO for the future:
+ * TODO for the future (possibly):
  *  - Take into account price of previous tier when calculating price for sorting
- *  - Highlight accessories you have materials for
- *  - Recombs
+ *  - Highlight accessories you have materials for (?)
+ *    - This would basically require Crafthelper to evaluate every single accessory
  *  - Handle accessories like campfire badge having to be upgraded multiple times to upgrade rarity
  *  - Add price and price/ap data to tooltip
  *  - Take into account requirements (hotm level, slayer level, etc)
+ *    - This would require all of these requirements to get added to sbapi
  */
 
 object AccessoriesHelperScreen : SkyOceanScreen() {
@@ -148,19 +144,6 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
 
         addItems()
     }
-    //? if <26.1 {
-    /*
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
-        if (!McScreen.isOf<AccessoriesHelperScreen>()) {
-            Displays.disableTooltips {
-                super.render(graphics, mouseX, mouseY, f)
-            }
-        } else {
-            super.render(graphics, mouseX, mouseY, f)
-        }
-    }
-     */
-    //?}
 
     fun addItems() {
         val width = widgetWidth
