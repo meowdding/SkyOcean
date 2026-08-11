@@ -3,16 +3,16 @@ package me.owdding.skyocean.utils.rendering
 //? >= 26.2
 import com.mojang.blaze3d.pipeline.BindGroupLayout
 //? 26.1 {
-//import com.mojang.blaze3d.pipeline.BlendFunction
-//import com.mojang.blaze3d.pipeline.ColorTargetState
-//import com.mojang.blaze3d.pipeline.DepthStencilState
-//? }
+/*import com.mojang.blaze3d.pipeline.BlendFunction
+import com.mojang.blaze3d.pipeline.ColorTargetState
+import com.mojang.blaze3d.pipeline.DepthStencilState
+*///? }
 import com.mojang.blaze3d.pipeline.RenderPipeline
 import com.mojang.blaze3d.shaders.UniformType
 //? 26.1 {
-//import com.mojang.blaze3d.vertex.DefaultVertexFormat
-//import com.mojang.blaze3d.vertex.VertexFormat
-//? }
+/*import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.blaze3d.vertex.VertexFormat
+*///? }
 import earth.terrarium.olympus.client.utils.Orientation
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -28,8 +28,8 @@ object InventoryRenderer {
         RenderPipeline.builder(/*? >= 26.2 >> ')'*/RenderPipelines.GUI_TEXTURED_SNIPPET)
             .withLocation(SkyOcean.id("inventory"))
             //? 26.1 {
-            //.withVertexShader(SkyOcean.id("core/inventory"))
-            //? }
+            /*.withVertexShader(SkyOcean.id("core/inventory"))
+            *///? }
             .withFragmentShader(SkyOcean.id("core/inventory"))
             .withCull(false)
             //? >= 26.2 {
@@ -52,8 +52,8 @@ object InventoryRenderer {
         RenderPipeline.builder(/*? >= 26.2 >> ')'*/RenderPipelines.GUI_TEXTURED_SNIPPET)
             .withLocation(SkyOcean.id("mono_inventory"))
             //? 26.1 {
-            //.withVertexShader(SkyOcean.id("core/inventory"))
-            //? }
+            /*.withVertexShader(SkyOcean.id("core/inventory"))
+            *///? }
             .withFragmentShader(SkyOcean.id("core/mono_inventory"))
             .withCull(false)
             //? >= 26.2 {
