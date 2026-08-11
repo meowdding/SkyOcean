@@ -4,6 +4,7 @@ import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
+import me.owdding.lib.utils.mod.data.MeowddingStorageData
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.customize.ItemStackAccessor
 import me.owdding.skyocean.config.features.misc.MiscConfig
@@ -19,7 +20,6 @@ import me.owdding.skyocean.features.item.custom.data.UuidKey
 import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.codecs.CodecHelpers
-import me.owdding.skyocean.utils.storage.DataStorage
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
@@ -46,10 +46,10 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger(), LateInitLoader
         .weakKeys()
         .build()
 
-    private val storage: DataStorage<MutableList<CustomItemData>> by lazy {
-        DataStorage(
-            { mutableListOf() },
+    private val storage: MeowddingStorageData<MutableList<CustomItemData>> by lazy {
+        SkyOcean.storage(
             "custom_items",
+            { mutableListOf() },
             CodecHelpers.mutableList(),
         )
     }

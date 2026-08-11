@@ -6,11 +6,13 @@ import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktcodecs.OptionalBoolean
 import me.owdding.ktmodules.Module
+import me.owdding.lib.utils.mod.data.MeowddingStorageData
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.Utils.edit
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.extensions.indexOfOrNull
-import me.owdding.skyocean.utils.storage.DataStorage
 import net.minecraft.util.Util
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -39,9 +41,9 @@ object TextReplacementManager {
         @NamedCodec("text_replacement_set") val replacements: HashSet<TextReplacement>,
     )
 
-    private val storage: DataStorage<StoredData> = DataStorage(
-        { StoredData(mutableSetOf(), HashSet()) },
+    private val storage: MeowddingStorageData<StoredData> = SkyOcean.storage(
         "text_replacements",
+        { StoredData(mutableSetOf(), HashSet()) },
         Codec.withAlternative(
             SkyOceanCodecs.TextReplacementDataCodec.codec(),
             textReplacementSet.xmap({ StoredData(mutableSetOf(), it) }, { it.replacements }),

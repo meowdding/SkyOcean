@@ -1,20 +1,16 @@
 package me.owdding.skyocean.config
 
-import com.mojang.serialization.Codec
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.generated.CodecUtils
-import me.owdding.skyocean.utils.storage.DataStorage
+import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.utils.codecs.CodecHelpers
 
 @Module
 object DefaultEnabledMessageHelper {
 
-    private val storage = DataStorage(
-        0,
-        { mutableListOf() },
+    private val storage = SkyOcean.storage(
         "default_enabled_messages",
-        {
-            CodecUtils.mutableList(Codec.STRING)
-        },
+        { mutableListOf() },
+        CodecHelpers.mutableList<String>()
     )
 
     fun needsSend(id: String): Boolean = !storage.get().contains(id)

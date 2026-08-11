@@ -3,12 +3,11 @@ package me.owdding.skyocean.data.profile
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.Utils.containerItems
 import me.owdding.skyocean.utils.extensions.asBlueprint
 import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import me.owdding.skyocean.utils.levelBound
-import me.owdding.skyocean.utils.storage.ProfileStorage
 import me.owdding.skyocean.utils.withSetter
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
@@ -17,10 +16,9 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 
 @Module
 object FarmingItemStorage {
-    private val storage: ProfileStorage<FarmingItems> = ProfileStorage(
-        defaultData = { FarmingItems.DEFAULT },
+    private val storage = SkyOcean.profileStorage(
         fileName = "farming_items",
-        codec = { SkyOceanCodecs.FarmingItemsCodec.codec() },
+        defaultData = { FarmingItems.DEFAULT },
     )
 
     val data get() = storage.get()

@@ -18,6 +18,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.repo.LevelableTreeNode
 import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.mod.data.MeowddingStorageData
 import me.owdding.repo.RemoteRepo
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
@@ -407,6 +408,11 @@ object Utils {
     }
 
     fun componentList(init: TooltipBuilder.() -> Unit) = TooltipBuilder().apply(init).lines()
+
+    inline fun <T : Any> MeowddingStorageData<T>.edit(block: T.() -> Unit) {
+        get().block()
+        save()
+    }
 }
 
 enum class SkyOceanModifyIndicator : Translatable {
