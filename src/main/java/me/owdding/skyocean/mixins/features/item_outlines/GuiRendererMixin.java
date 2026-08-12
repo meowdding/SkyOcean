@@ -50,9 +50,7 @@ public class GuiRendererMixin {
         @Local(argsOnly = true)
         GuiItemRenderState itemState
     ) {
-        var rarity = itemState.itemStackRenderState().getData(RarityOutlines.RARITY);
-        //if (!MiscConfig.getRarityOutlines()) rarity = null;
-        return original.call(rarity != null ? RarityOutlines.GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED.apply(rarity.getColor()) : pipeline, textureSetup, pose, x0, y0, x1, y1, u0, u1, v0, v1, color, scissorArea, bounds);
+        return original.call(RarityOutlines.createPipeline(itemState, pipeline), textureSetup, pose, x0, y0, x1, y1, u0, u1, v0, v1, color, scissorArea, bounds);
     }
 
     @Inject(

@@ -21,6 +21,6 @@ public class ItemModelResolverMixin {
         at = @At("HEAD")
     )
     private void attachExtra(ItemStackRenderState output, ItemStack item, ItemDisplayContext displayContext, Level level, ItemOwner owner, int seed, CallbackInfo ci) {
-        output.setData(RarityOutlines.RARITY, DataTypeItemStackKt.getData(item, DataTypes.INSTANCE.getRARITY()));
+        RarityOutlines.attachData(output, item, displayContext, level);
     }
 }

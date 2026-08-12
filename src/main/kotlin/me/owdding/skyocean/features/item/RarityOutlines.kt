@@ -15,20 +15,34 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import me.owdding.ktmodules.Module
 import me.owdding.lib.accessor.RenderPipelineBuilderAccessor
 import me.owdding.skyocean.SkyOcean.id
+import me.owdding.skyocean.config.features.inventory.RarityOutlinesConfig
+import me.owdding.skyocean.utils.extensions.getRealRarity
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey
 import net.minecraft.client.renderer.BindGroupLayouts
 import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.client.renderer.item.ItemStackRenderState
+import net.minecraft.client.renderer.state.gui.GuiItemRenderState
 import net.minecraft.util.ARGB
 import net.minecraft.util.Util
+import net.minecraft.world.item.ItemDisplayContext
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
 import org.lwjgl.system.MemoryStack
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
-import java.util.function.Function
+import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
+import tech.thatgravyboat.skyblockapi.api.datatype.getData
+import java.util.*
+import java.util.function.BiFunction
 
 /*
-New/Old colors
-Outline Thickness
-Sample Size
-Outline alpha override
+   | New/Old colors
+ x | Outline Thickness
+ x | Sample Size
+ x | Outline alpha override
+ x | Alpha cutoff
+ x | And I want to addd a thing for recomb
+   | Rounded corners
+   | Leather color as outline color
 
  */
 @Module
@@ -37,6 +51,22 @@ object RarityOutlines {
         val accessor = this as RenderPipelineBuilderAccessor
         accessor.`meowddinglib$define`(name, "vec4(${ARGB.redFloat(color)}, ${ARGB.greenFloat(color)}, ${ARGB.blueFloat(color)}, ${ARGB.alphaFloat(color)})")
         return this
+    }
+
+    @JvmStatic
+    fun createPipeline(item: GuiItemRenderState, base: RenderPipeline): RenderPipeline {
+        val rarity = item.itemStackRenderState().getData(RARITY) ?: return base
+        val baseRarity = item.itemStackRenderState().getData(BASE_RARITY).asOptionalInt()
+
+        return GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED.apply(rarity, baseRarity)
+    }
+
+    fun Int?.asOptionalInt(): OptionalInt = OptionalInt.of(this ?: return OptionalInt.empty())
+
+    @JvmStatic
+    fun attachData(output: ItemStackRenderState, item: ItemStack, displayContext: ItemDisplayContext, level: Level) {
+        RarityOutlinesConfig.color(item.getData(DataTypes.RARITY))?.let { output.setData(RARITY, it) }
+        RarityOutlinesConfig.color(item.getRealRarity())?.let { output.setData(BASE_RARITY, it) }
     }
 
 
@@ -48,33 +78,43 @@ object RarityOutlines {
         .build()
 
     @JvmField
-    val GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED: Function<Int, RenderPipeline> = Util.memoize { color ->
+    val GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED: BiFunction<Int, OptionalInt, RenderPipeline> = Util.memoize { color, baseRarity ->
         RenderPipelines.register(
             RenderPipeline.builder()
                 .withLocation(id("rarity_outlines/$color"))
                 .withVertexShader(id("core/rarity_outlines"))
                 .withFragmentShader(id("core/rarity_outlines"))
                 .withShaderDefineColor("RARITY_COLOR", color)
+                .apply {
+                    if (baseRarity.isPresent) {
+                        withShaderDefine("IS_RARITY_UPGRADE").withShaderDefineColor("BASE_RARITY_COLOR", baseRarity.asInt)
+                    }
+                }
                 .withBindGroupLayout(BindGroupLayouts.GLOBALS)
                 .withBindGroupLayout(RARITY_BIND_GROUP)
                 .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
                 .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
                 .withPrimitiveTopology(PrimitiveTopology.QUADS)
                 .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT))
-                .build()
+                .build(),
         )
     }
 
     //? } else {
     /*
     @JvmField
-    val GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED: BiFunction<Int, Vector4f, RenderPipeline> = Util.memoize { color, uvs ->
+    val GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED: BiFunction<Int, OptionalInt, RenderPipeline> = Util.memoize { color, baseRarity ->
         RenderPipelines.register(
             RenderPipeline.builder()
                 .withLocation(id("rarity_outlines/$color"))
                 .withVertexShader(id("core/rarity_outlines"))
                 .withFragmentShader(id("core/rarity_outlines"))
                 .withShaderDefineColor("RARITY_COLOR", color)
+                .apply {
+                    if (baseRarity.isPresent) {
+                        withShaderDefine("IS_RARITY_UPGRADE").withShaderDefineColor("BASE_RARITY_COLOR", baseRarity.asInt)
+                    }
+                }
                 .withShaderDefine("MIN_UV", Vector2f(uvs.x, uvs.y))
                 .withShaderDefine("MAX_UV", Vector2f(uvs.z, uvs.w))
                 .withSampler("Sampler0")
@@ -89,13 +129,33 @@ object RarityOutlines {
 
 
     @JvmField
-    val RARITY: RenderStateDataKey<SkyBlockRarity> = RenderStateDataKey.create { id("rarity").toString() }
+    val RARITY: RenderStateDataKey<Int> = RenderStateDataKey.create { id("rarity").toString() }
+
+    @JvmField
+    val BASE_RARITY: RenderStateDataKey<Int> = RenderStateDataKey.create { id("base_rarity").toString() }
 
     object Buffer {
+        /*
+
+        float AtlasDimensions;
+        float SlotSize;
+        float SampleAmount;
+        float SampleDistance;
+        float AlphaCutoff;
+        int GuiScale;
+
+         */
         const val NAME = "SkyoceanRarityUniform"
 
         @JvmStatic
-        private val UBO_SIZE = Std140SizeCalculator().putFloat().putFloat().putInt().get()
+        private val UBO_SIZE = Std140SizeCalculator()
+            .putFloat()
+            .putFloat()
+            .putFloat()
+            .putFloat()
+            .putFloat()
+            .putFloat()
+            .get()
 
         private var buffer: GpuBuffer? = null
 
@@ -106,7 +166,14 @@ object RarityOutlines {
                 UBO_SIZE.toLong(),
             )
             MemoryStack.stackPush().use {
-                val data = Std140Builder.onStack(it, UBO_SIZE).putFloat(width.toFloat()).putFloat(slotSize.toFloat()).putInt(guiScale).get()
+                val data = Std140Builder.onStack(it, UBO_SIZE)
+                    .putFloat(width.toFloat())
+                    .putFloat(slotSize.toFloat())
+                    .putFloat(RarityOutlinesConfig.sampleAmount)
+                    .putFloat(RarityOutlinesConfig.sampleDistance)
+                    .putFloat(RarityOutlinesConfig.alphaCutoff)
+                    .putFloat(RarityOutlinesConfig.outlineAlpha)
+                    .get()
                 RenderSystem.getDevice().createCommandEncoder().writeToBuffer(this.buffer!!.slice(), data)
             }
         }
