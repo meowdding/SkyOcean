@@ -297,6 +297,92 @@
             "@value": "Block Salvage of Donatable Items",
             "desc": "Blocks salvaging items that can be donated to the museum and haven't been donated yet."
           }
+        },
+        "rarity_outlines": {
+          "@value": "Rarity Outlines",
+          "desc": "",
+          "enabled": {
+            "@value": "Enable rarity outlines",
+            "desc": "Main toggle for the rarity outlines."
+          },
+          "sample_amount": {
+            "@value": "Sample Amount",
+            "desc": "The amount of samples to take to define the outline, changes outline thickness. <red>High numbers <bold>WILL</bold> decrease frames! <gray><italic>Complexity: O(n^2)"
+          },
+          "sample_distance": {
+            "@value": "Distance between samples",
+            "desc": "Modifies the distance between the samples, changes outline thickness."
+          },
+          "alpha_cutoff": {
+            "@value": "Alpha cutoff",
+            "desc": "The minimum alpha required to be considered a full pixel by the outline."
+          },
+          "outline_alpha": {
+            "@value": "Outline Alpha",
+            "desc": "The alpha used for outlines."
+          },
+          "base_rarity_glint": {
+            "@value": "Base rarity glint",
+            "desc": "Adds a glint animation in the base rarity of the item."
+          },
+          "kernel_type": {
+            "@value": "Kernel type",
+            "desc": "The kernel to use for calculating the outline, use circle for rounded corners."
+          },
+          "common": {
+            "@value": "Common Color",
+            "desc": "Color used for Common rarity"
+          },
+          "uncommon": {
+            "@value": "Uncommon Color",
+            "desc": "Color used for Uncommon rarity"
+          },
+          "rare": {
+            "@value": "Rare Color",
+            "desc": "Color used for Rare rarity"
+          },
+          "epic": {
+            "@value": "Epic Color",
+            "desc": "Color used for Epic rarity"
+          },
+          "legendary": {
+            "@value": "Legendary Color",
+            "desc": "Color used for Legendary rarity"
+          },
+          "mythic": {
+            "@value": "Mythic Color",
+            "desc": "Color used for Mythic rarity"
+          },
+          "divine": {
+            "@value": "Divine Color",
+            "desc": "Color used for Divine rarity"
+          },
+          "ultimate": {
+            "@value": "Ultimate Color",
+            "desc": "Color used for Ultimate rarity"
+          },
+          "special": {
+            "@value": "Special Color",
+            "desc": "Color used for Special rarity"
+          },
+          "very_special": {
+            "@value": "Very Special Color",
+            "desc": "Color used for Very Special rarity"
+          },
+          "admin": {
+            "@value": "Admin Color",
+            "desc": "Color used for Admin rarity"
+          },
+          "skyblock_colors": {
+            "@value": "Load skyblock colors",
+            "desc": "Sets all rarity values to their respective skyblock rarity color.",
+            "text": "Click to load!"
+          },
+          "legacy_colors": {
+            "@value": "Load skyblock LEGACY colors",
+            "desc": "Sets all rarity values to their respective old (pre resourcepack) skyblock rarity color.",
+            "text": "Click to load!"
+          }
         }
       },
       "chat": {
