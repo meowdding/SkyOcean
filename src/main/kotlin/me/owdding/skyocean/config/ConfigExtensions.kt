@@ -18,8 +18,10 @@ import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
+import tech.thatgravyboat.skyblockapi.utils.extentions.capitalize
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
+import tech.thatgravyboat.skyblockapi.utils.extentions.toSnakeCase
 import kotlin.reflect.KProperty
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -136,9 +138,16 @@ fun <T> CategoryBuilder.invalidProperty(
 }
 
 abstract class DelegatingConfig(val entryBuilder: EntriesBuilder) {
-    abstract val translationBase: String
+    @Suppress("EnumEntryName")
+    enum class StringStyle(val modify: (String) -> String) {
+        CamelCase({ it.split("_").joinToString { it.capitalize() } }),
+        snake_case({ it.toSnakeCase() }),
+    }
 
-    fun makeTranslation(id: String) = listOf(translationBase, id).filter { it.isNotEmpty() }.joinToString(".").replace("-", ".")
+    abstract val translationBase: String
+    open val stringStyle: StringStyle = StringStyle.snake_case
+
+    fun makeTranslation(id: String) = listOf(translationBase, stringStyle.modify(id)).filter { it.isNotEmpty() }.joinToString(".").replace("-", ".")
 
     fun TypeBuilder.makeTranslations() {
         this.translation = makeTranslation(id)
@@ -262,4 +271,5 @@ abstract class DelegatingConfig(val entryBuilder: EntriesBuilder) {
     fun <T, R> cachedTransform(entry: Entry<T, *>, from: (R) -> T, to: (T) -> R) = CachedTransformedEntry(entry, from, to)
     fun <T, R> cachedTransform(entry: ConfigDelegateProvider<RConfigKtEntry<T>>, from: (R) -> T, to: (T) -> R) = CachedTransformedEntry(entry, from, to)
 
+    fun separator(id: String) = entryBuilder.separator { this.translation = makeTranslation(id) }
 }

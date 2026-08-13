@@ -11,7 +11,11 @@ import kotlin.reflect.KMutableProperty
 @PreInitModule
 object RarityOutlinesConfig : DelegatingConfig(InventoryConfig) {
 
-    override val translationBase: String = "skyocean.config.items.rarity_outlines"
+    override val translationBase: String = "skyocean.config.inventory.rarity_outlines"
+
+    init {
+        separator("")
+    }
 
     val enabled by boolean(false)
     val sampleAmount by cachedTransform(

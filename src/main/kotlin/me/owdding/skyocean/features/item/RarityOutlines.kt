@@ -1,11 +1,15 @@
 package me.owdding.skyocean.features.item
 
-
+//? >= 26.2 {
 import com.mojang.blaze3d.PrimitiveTopology
+import com.mojang.blaze3d.pipeline.BindGroupLayout
+import net.minecraft.client.renderer.BindGroupLayouts
+//? } else 26.1 {
+//import com.mojang.blaze3d.vertex.VertexFormat
+//? }
 import com.mojang.blaze3d.buffers.GpuBuffer
 import com.mojang.blaze3d.buffers.Std140Builder
 import com.mojang.blaze3d.buffers.Std140SizeCalculator
-import com.mojang.blaze3d.pipeline.BindGroupLayout
 import com.mojang.blaze3d.pipeline.BlendFunction
 import com.mojang.blaze3d.pipeline.ColorTargetState
 import com.mojang.blaze3d.pipeline.RenderPipeline
@@ -18,7 +22,6 @@ import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.config.features.inventory.RarityOutlinesConfig
 import me.owdding.skyocean.utils.extensions.getRealRarity
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey
-import net.minecraft.client.renderer.BindGroupLayouts
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.item.ItemStackRenderState
 import net.minecraft.client.renderer.state.gui.GuiItemRenderState
@@ -28,10 +31,8 @@ import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import org.lwjgl.system.MemoryStack
-import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.util.*
 import java.util.function.BiFunction
 
@@ -56,6 +57,7 @@ object RarityOutlines {
 
     @JvmStatic
     fun createPipeline(item: GuiItemRenderState, base: RenderPipeline): RenderPipeline {
+        if (!RarityOutlinesConfig.enabled) return base
         val rarity = item.itemStackRenderState().getData(RARITY) ?: return base
         val baseRarity = item.itemStackRenderState().getData(BASE_RARITY).asOptionalInt()
 
@@ -66,9 +68,12 @@ object RarityOutlines {
 
     @JvmStatic
     fun attachData(output: ItemStackRenderState, item: ItemStack, displayContext: ItemDisplayContext, level: Level) {
-        RarityOutlinesConfig.color(item.getData(DataTypes.RARITY))?.let { output.setData(RARITY, it) }
-        if (RarityOutlinesConfig.baseRarityGlint) {
-            RarityOutlinesConfig.color(item.getRealRarity())?.let { output.setData(BASE_RARITY, it) }
+        val modifiedRarity = RarityOutlinesConfig.color(item.getData(DataTypes.RARITY))
+        val baseRarity = RarityOutlinesConfig.color(item.getRealRarity())
+        modifiedRarity?.let { output.setData(RARITY, it) }
+
+        if (RarityOutlinesConfig.baseRarityGlint && baseRarity != modifiedRarity) {
+            modifiedRarity?.let { output.setData(BASE_RARITY, it) }
         }
     }
 
@@ -118,8 +123,6 @@ object RarityOutlines {
                         withShaderDefine("IS_RARITY_UPGRADE").withShaderDefineColor("BASE_RARITY_COLOR", baseRarity.asInt)
                     }
                 }
-                .withShaderDefine("MIN_UV", Vector2f(uvs.x, uvs.y))
-                .withShaderDefine("MAX_UV", Vector2f(uvs.z, uvs.w))
                 .withSampler("Sampler0")
                 .withUniform(Buffer.NAME, UniformType.UNIFORM_BUFFER)
                 .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
