@@ -13,9 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class RenderSystemMixin {
     @Inject(
         method = "bindDefaultUniforms",
-        at = @At(
-            value = "TAIL"
-        )
+        at = @At("TAIL")
     )
     private static void onBindDefault(RenderPass renderPass, CallbackInfo ci) {
         GpuBuffer buffer = RarityOutlines.Buffer.getGpuBuffer();
