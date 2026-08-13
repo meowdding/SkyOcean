@@ -37,13 +37,13 @@ import java.util.*
 import java.util.function.BiFunction
 
 /*
-   | New/Old colors
+ x | New/Old colors
  x | Outline Thickness
  x | Sample Size
  x | Outline alpha override
  x | Alpha cutoff
  x | And I want to addd a thing for recomb
-   | Rounded corners
+ x | Rounded corners
    | Leather color as outline color
 
  */
