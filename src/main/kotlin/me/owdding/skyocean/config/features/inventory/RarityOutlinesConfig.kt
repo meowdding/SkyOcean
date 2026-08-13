@@ -2,12 +2,13 @@ package me.owdding.skyocean.config.features.inventory
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.DelegatingConfig
+import me.owdding.skyocean.utils.PreInitModule
 import me.owdding.skyocean.utils.extensions.createButton
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import javax.xml.crypto.dsig.keyinfo.KeyName
 import kotlin.reflect.KMutableProperty
 
-@Module
+@PreInitModule
 object RarityOutlinesConfig : DelegatingConfig(InventoryConfig) {
 
     override val translationBase: String = "skyocean.config.items.rarity_outlines"
