@@ -5,8 +5,8 @@ import com.mojang.blaze3d.PrimitiveTopology
 import com.mojang.blaze3d.pipeline.BindGroupLayout
 import net.minecraft.client.renderer.BindGroupLayouts
 //? } else 26.1 {
-//import com.mojang.blaze3d.vertex.VertexFormat
-//? }
+/*import com.mojang.blaze3d.vertex.VertexFormat
+*///? }
 import com.mojang.blaze3d.buffers.GpuBuffer
 import com.mojang.blaze3d.buffers.Std140Builder
 import com.mojang.blaze3d.buffers.Std140SizeCalculator
@@ -109,11 +109,11 @@ object RarityOutlines {
     }
 
     //? } else {
-    /*
-    @JvmField
+    
+    /*@JvmField
     val GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED: BiFunction<Int, OptionalInt, RenderPipeline> = Util.memoize { color, baseRarity ->
         RenderPipelines.register(
-            RenderPipeline.builder()
+            RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
                 .withLocation(id("rarity_outlines/$color"))
                 .withVertexShader(id("core/rarity_outlines"))
                 .withFragmentShader(id("core/rarity_outlines"))
