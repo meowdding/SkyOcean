@@ -20,12 +20,13 @@ layout(std140) uniform Globals {
 };
 
 layout(std140) uniform SkyoceanRarityUniform {
-    float AtlasDimensions;  // width.toFloat())
-    float SlotSize;  // slotSize.toFloat())
-    float SampleAmount;  // RarityOutlinesConfig.sampleAmount)
-    float SampleDistance;  // RarityOutlinesConfig.sampleDistance)
-    float AlphaCutoff;  // RarityOutlinesConfig.alphaCutoff)
-    float OutlineAlpha;  // RarityOutlinesConfig.outlineAlpha)
+    float AtlasDimensions;                    // width.toFloat())
+    float SlotSize;                           // slotSize.toFloat())
+    float SampleAmount;                       // RarityOutlinesConfig.sampleAmount)
+    float SampleDistance;                     // RarityOutlinesConfig.sampleDistance)
+    float AlphaCutoff;                        // RarityOutlinesConfig.alphaCutoff)
+    float OutlineAlpha;                       // RarityOutlinesConfig.outlineAlpha)
+    int KernelType;                           // 0 = Square, 1 = Circle
 };
 
 const vec4 rarityColor = RARITY_COLOR;

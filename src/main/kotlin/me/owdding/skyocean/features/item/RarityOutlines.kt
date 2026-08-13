@@ -31,6 +31,7 @@ import org.lwjgl.system.MemoryStack
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.util.*
 import java.util.function.BiFunction
 
@@ -66,7 +67,9 @@ object RarityOutlines {
     @JvmStatic
     fun attachData(output: ItemStackRenderState, item: ItemStack, displayContext: ItemDisplayContext, level: Level) {
         RarityOutlinesConfig.color(item.getData(DataTypes.RARITY))?.let { output.setData(RARITY, it) }
-        RarityOutlinesConfig.color(item.getRealRarity())?.let { output.setData(BASE_RARITY, it) }
+        if (RarityOutlinesConfig.baseRarityGlint) {
+            RarityOutlinesConfig.color(item.getRealRarity())?.let { output.setData(BASE_RARITY, it) }
+        }
     }
 
 
@@ -155,6 +158,8 @@ object RarityOutlines {
             .putFloat()
             .putFloat()
             .putFloat()
+            .putInt()
+            .putInt()
             .get()
 
         private var buffer: GpuBuffer? = null
@@ -173,6 +178,8 @@ object RarityOutlines {
                     .putFloat(RarityOutlinesConfig.sampleDistance)
                     .putFloat(RarityOutlinesConfig.alphaCutoff)
                     .putFloat(RarityOutlinesConfig.outlineAlpha)
+                    .putInt(RarityOutlinesConfig.kernelType)
+                    .putInt(guiScale)
                     .get()
                 RenderSystem.getDevice().createCommandEncoder().writeToBuffer(this.buffer!!.slice(), data)
             }

@@ -4,6 +4,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.DelegatingConfig
 import me.owdding.skyocean.utils.extensions.createButton
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
+import javax.xml.crypto.dsig.keyinfo.KeyName
 import kotlin.reflect.KMutableProperty
 
 @Module
@@ -12,10 +13,14 @@ object RarityOutlinesConfig : DelegatingConfig(InventoryConfig) {
     override val translationBase: String = "skyocean.config.items.rarity_outlines"
 
     val enabled by boolean(false)
-    val sampleAmount by cachedTransform(int(8) {
-        this.range = 1..16
-        this.slider = true
-    }, { it.toInt() }, { it.toFloat() }).wrap()
+    val sampleAmount by cachedTransform(
+        int(8) {
+            this.range = 1..16
+            this.slider = true
+        },
+        Float::toInt, Int::toFloat,
+    ).wrap()
+
     val sampleDistance by float(1f) {
         this.range = 0f..2f
         this.slider = true
@@ -29,6 +34,10 @@ object RarityOutlinesConfig : DelegatingConfig(InventoryConfig) {
         this.slider = true
     }
     val baseRarityGlint by boolean(false)
+    val kernelType by cachedTransform(
+        enum(KernelType.SQUARE),
+        KernelType.entries::get, KernelType::ordinal,
+    ).wrap()
 
     var common by color(SkyBlockRarity.COMMON.skyBlockColor)
     var uncommon by color(SkyBlockRarity.UNCOMMON.skyBlockColor)
@@ -86,5 +95,11 @@ object RarityOutlinesConfig : DelegatingConfig(InventoryConfig) {
         SkyBlockRarity.VERY_SPECIAL -> verySpecial
         SkyBlockRarity.ADMIN -> admin
         else -> null
+    }
+
+    enum class KernelType {
+        SQUARE,
+        CIRCLE,
+        ;
     }
 }
