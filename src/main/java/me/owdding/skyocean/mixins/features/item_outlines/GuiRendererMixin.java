@@ -65,9 +65,7 @@ public class GuiRendererMixin {
 
     @Inject(
         method = "close",
-        at = @At(
-            value = "TAIL"
-        )
+        at = @At("TAIL")
     )
     private void onClose(CallbackInfo ci) {
         var buffer = RarityOutlines.Buffer.getGpuBuffer();
