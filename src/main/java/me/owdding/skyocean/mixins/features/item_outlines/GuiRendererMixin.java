@@ -55,9 +55,7 @@ public class GuiRendererMixin {
 
     @Inject(
         method = "prepareItemAtlas",
-        at = @At(
-            value = "RETURN"
-        )
+        at = @At("RETURN")
     )
     private void onPrepareAtlas(Set<Object> itemsInFrame, int slotTextureSize, CallbackInfoReturnable<GuiItemAtlas> cir) {
         RarityOutlines.Buffer.INSTANCE.update(cir.getReturnValue().textureSize(), slotTextureSize, McClient.INSTANCE.getOptions().guiScale().get());
