@@ -59,7 +59,7 @@ object HotkeyManager {
         ),
     )
 
-    private val options = McClient.options
+    private val options by lazy { McClient.options }
 
     private val tree = HotkeyTree()
 
