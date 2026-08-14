@@ -3,7 +3,6 @@ package me.owdding.skyocean.features.hotkeys.system
 import com.google.common.collect.EvictingQueue
 import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.serialization.Codec
-import earth.terrarium.olympus.client.ui.modals.Modals.action
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.NamedCodec
@@ -17,7 +16,6 @@ import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.debugToggle
 import me.owdding.skyocean.utils.storage.DataStorage
 import net.minecraft.client.input.KeyEvent
-import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.util.Util
 import org.lwjgl.glfw.GLFW
@@ -60,6 +58,9 @@ object HotkeyManager {
             hotkeySet.xmap({ StoredData(mutableSetOf(), it) }, { it.hotkeys }),
         ),
     )
+
+    private val options = McClient.options
+
 
     private val tree = HotkeyTree()
 
@@ -166,7 +167,8 @@ object HotkeyManager {
 
     @JvmStatic
     fun handle(event: KeyEvent, action: Int): Boolean {
-        return handleKey(lazy { InputConstants.getKey(event) }, action)
+        if (!options.keyDebugModifier.isDown) return handleKey(lazy { InputConstants.getKey(event) }, action)
+        return false
     }
 
     fun clearBuffers() {
