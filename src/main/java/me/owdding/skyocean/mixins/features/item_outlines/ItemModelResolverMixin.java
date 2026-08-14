@@ -11,9 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tech.thatgravyboat.skyblockapi.api.datatype.DataTypeItemStackKt;
-import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes;
-
 @Mixin(ItemModelResolver.class)
 public class ItemModelResolverMixin {
     @Inject(
@@ -21,6 +18,6 @@ public class ItemModelResolverMixin {
         at = @At("HEAD")
     )
     private void attachExtra(ItemStackRenderState output, ItemStack item, ItemDisplayContext displayContext, Level level, ItemOwner owner, int seed, CallbackInfo ci) {
-        RarityOutlines.attachData(output, item, displayContext, level);
+        RarityOutlines.attachData(output, item);
     }
 }

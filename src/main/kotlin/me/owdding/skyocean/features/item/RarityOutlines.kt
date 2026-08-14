@@ -59,7 +59,7 @@ object RarityOutlines {
     fun Int?.asOptionalInt(): OptionalInt = OptionalInt.of(this ?: return OptionalInt.empty())
 
     @JvmStatic
-    fun attachData(output: ItemStackRenderState, item: ItemStack, displayContext: ItemDisplayContext, level: Level) {
+    fun attachData(output: ItemStackRenderState, item: ItemStack) {
         val modifiedRarity = RarityOutlinesConfig.color(item.getData(DataTypes.RARITY))
         val baseRarity = RarityOutlinesConfig.color(item.getRealRarity())
         modifiedRarity?.let { output.setData(RARITY, it) }
