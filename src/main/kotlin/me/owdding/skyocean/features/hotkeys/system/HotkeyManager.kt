@@ -61,7 +61,6 @@ object HotkeyManager {
 
     private val options = McClient.options
 
-
     private val tree = HotkeyTree()
 
     inline val MAX_INPUT_DELAY get() = HotkeyConfig.sequenceInputDelay
