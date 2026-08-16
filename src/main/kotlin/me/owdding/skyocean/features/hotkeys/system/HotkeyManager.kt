@@ -59,8 +59,6 @@ object HotkeyManager {
         ),
     )
 
-    private val options by lazy { McClient.options }
-
     private val tree = HotkeyTree()
 
     inline val MAX_INPUT_DELAY get() = HotkeyConfig.sequenceInputDelay
@@ -166,7 +164,7 @@ object HotkeyManager {
 
     @JvmStatic
     fun handle(event: KeyEvent, action: Int): Boolean {
-        if (!options.keyDebugModifier.isDown) return handleKey(lazy { InputConstants.getKey(event) }, action)
+        if (!McClient.options.keyDebugModifier.isDown) return handleKey(lazy { InputConstants.getKey(event) }, action)
         return false
     }
 
