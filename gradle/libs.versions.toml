@@ -1,7 +1,7 @@
 [versions]
 
 fabric-loader = "0.18.3"
-fabric-language-kotlin = "1.13.10+kotlin.2.3.20"
+fabric-language-kotlin = "1.13.12+kotlin.2.4.0"
 
 kotlin = "2.3.0"
 kotlin-gradle-plugin = "2.3.0"

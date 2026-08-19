@@ -1517,6 +1517,49 @@
             "@value": "Hide Particles",
             "desc": "Hide hotspot particles (requires Highlight or Outline to be enabled)."
           }
+        },
+        "wormhole": {
+          "@value": "Wormhole Features",
+          "desc": "All settings for the wormhole Features.",
+          "warning": {
+            "@value": "Warning",
+            "desc": "Sends a chat warning when a wormhole you recently fished at disappears."
+          },
+          "highlight": "Highlight",
+          "circle_surface": {
+            "@value": "Surface",
+            "desc": "Render a \"solid\" circle for wormholes."
+          },
+          "surface_transparency": {
+            "@value": "Surface Transparency",
+            "desc": [
+              "Changes the transparency of the surface.",
+              {
+                "@id": "transparency"
+              }
+            ]
+          },
+          "circle_outline": {
+            "@value": "Outline",
+            "desc": "Render a \"solid\" outline for wormholes."
+          },
+          "outline_transparency": {
+            "@value": "Outline Transparency",
+            "desc": [
+              "Changes the transparency of the outline.",
+              {
+                "@id": "transparency"
+              }
+            ]
+          },
+          "hide_particles": {
+            "@value": "Hide Particles",
+            "desc": "Hide wormhole particles (requires Highlight or Outline to be enabled)."
+          },
+          "color": {
+            "@value": "Highlight Color",
+            "desc": "The color the wormhole should be highlighted with."
+          }
         }
       },
       "lore_modifiers": {
