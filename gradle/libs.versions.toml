@@ -21,7 +21,7 @@ meowdding-lib = "4.2.21"
 meowdding-ktmodules = "1.0.6"
 meowdding-ktcodecs = "1.1.9"
 meowdding-resources = "1.0.21"
-meowdding-auto-mixins = "1.0.10"
+meowdding-auto-mixins = "1.0.11"
 
 moulberry-mixinconstraints = "1.0.8"
 
