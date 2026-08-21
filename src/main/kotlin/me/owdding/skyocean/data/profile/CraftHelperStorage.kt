@@ -12,6 +12,7 @@ import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import kotlin.math.ceil
 
 @LateInitModule
 object CraftHelperStorage {
@@ -38,22 +39,12 @@ object CraftHelperStorage {
         }
     }
 
-    val canModifyCount: Boolean get() = storage.get()?.canModifyCount == true
+    val canModifyCount: Boolean get() = storage.get() is CraftHelperRecipe.MutableCount
     val recipeType get() = storage.get()?.type
 
     val data get() = storage.get()
-    val selectedItem
-        get() = when (val data = data) {
-            is NormalCraftHelperRecipe -> data.item
-            is SkyShardsRecipe -> data.tree.shard
-            else -> null
-        }
-    val selectedAmount
-        get() = when (val data = data) {
-            is NormalCraftHelperRecipe -> data.amount
-            is SkyShardsRecipe -> data.tree.quantity
-            else -> 1
-        }
+    val selectedItem get() = data?.selectedItem
+    val selectedAmount get() = data?.amount ?: 1
 
     fun setSelected(item: SkyBlockId?) {
         storage.set(NormalCraftHelperRecipe(item))
@@ -61,12 +52,14 @@ object CraftHelperStorage {
     }
 
     fun setAmount(amount: Int) {
-        val amount = amount.coerceAtLeast(1)
-        when (val data = data) {
-            is NormalCraftHelperRecipe -> storage.set(data.copy(amount = amount))
-            else -> return
+        var amount = amount.coerceAtLeast(1)
+        val data = data as? CraftHelperRecipe.MutableCount ?: return
+
+        if (data is CraftHelperRecipe.MultiplesOf) {
+            amount = ceil(amount.toFloat() / data.multiples).toInt()
         }
 
+        storage.set(data.withAmount(amount))
         save()
     }
 
@@ -76,7 +69,7 @@ object CraftHelperStorage {
     }
 
     fun setRepoLibRecipe(recipe: RepoApiRecipe) {
-        storage.set(RepoLibRecipeTree(recipe))
+        storage.set(RepoLibRecipeTree(recipe, 1))
         save()
     }
 

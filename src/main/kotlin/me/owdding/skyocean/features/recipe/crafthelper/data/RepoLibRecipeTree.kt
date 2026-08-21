@@ -5,12 +5,19 @@ import me.owdding.skyocean.features.recipe.RepoApiRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.RepoLibTreeResolver
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
 @GenerateCodec
 data class RepoLibRecipeTree(
     var recipe: RepoApiRecipe,
-) : CraftHelperRecipe(CraftHelperRecipeType.REPO_LIB_RECIPE, true) {
+    override var amount: Int,
+) : CraftHelperRecipe(CraftHelperRecipeType.REPO_LIB_RECIPE) , CraftHelperRecipe.MutableCount, CraftHelperRecipe.MultiplesOf {
+    override val selectedItem: SkyBlockId? get() = recipe.output?.id
+
     override fun resolve(resetLayout: () -> Unit, clear: () -> Unit): CraftHelperTree? {
         return RepoLibTreeResolver.resolve(this, resetLayout, clear)
     }
+
+    override fun withAmount(amount: Int): RepoLibRecipeTree = copy(amount = amount)
+    override val multiples: Int get() = recipe.output?.amount ?: 1
 }
