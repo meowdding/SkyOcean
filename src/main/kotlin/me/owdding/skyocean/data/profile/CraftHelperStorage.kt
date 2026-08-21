@@ -69,7 +69,7 @@ object CraftHelperStorage {
     }
 
     fun setRepoLibRecipe(recipe: RepoApiRecipe) {
-        storage.set(RepoLibRecipeTree(recipe, 1))
+        storage.set(RepoLibRecipeTree(recipe, recipe.output?.amount ?: 1))
         save()
     }
 
