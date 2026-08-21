@@ -1,7 +1,9 @@
 package me.owdding.skyocean.data.profile
 
+import me.owdding.skyocean.features.recipe.Recipe
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.data.RepoLibRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsRecipe
 import me.owdding.skyocean.generated.SkyOceanCodecs
@@ -69,6 +71,11 @@ object CraftHelperStorage {
 
     fun setSkyShards(recipe: SkyShardsMethod) {
         storage.set(SkyShardsRecipe(recipe))
+        save()
+    }
+
+    fun setRepoLibRecipe(recipe: Recipe) {
+        storage.set(RepoLibRecipeTree(recipe))
         save()
     }
 
