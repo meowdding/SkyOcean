@@ -56,7 +56,7 @@ object CraftHelperStorage {
         val data = data as? CraftHelperRecipe.MutableCount ?: return
 
         if (data is CraftHelperRecipe.MultiplesOf) {
-            amount = ceil(amount.toFloat() / data.multiples).toInt()
+            amount = ceil(amount.toFloat() / data.multiples).toInt() * data.multiples
         }
 
         storage.set(data.withAmount(amount))
