@@ -1,9 +1,9 @@
 package me.owdding.skyocean.data.profile
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.Utils.containerItems
 import me.owdding.skyocean.utils.codecs.CodecHelpers
-import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
@@ -14,13 +14,13 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSky
 @Module
 object SackOfSacksItemStorage {
 
-    private val storage: ProfileStorage<MutableList<ItemStack>> = ProfileStorage(
-        defaultData = { mutableListOf() },
+    private val storage = SkyOcean.profileStorage(
         fileName = "sack_of_sacks",
-        codec = { CodecHelpers.mutableList() },
+        defaultData = { mutableListOf() },
+        CodecHelpers.mutableList<ItemStack>(),
     )
 
-    val items: List<ItemStack> get() = storage.get() ?: emptyList()
+    val items: List<ItemStack> get() = storage.get().orEmpty()
 
     @Subscription
     @OnlyOnSkyBlock
