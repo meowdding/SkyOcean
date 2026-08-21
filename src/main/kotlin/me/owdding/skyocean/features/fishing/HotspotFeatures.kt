@@ -1,25 +1,45 @@
 package me.owdding.skyocean.features.fishing
 
 import me.owdding.ktmodules.Module
+import me.owdding.lib.extensions.floor
 import me.owdding.skyocean.api.HotspotAPI
+import me.owdding.skyocean.api.HotspotType
 import me.owdding.skyocean.config.features.fishing.HotspotFeaturesConfig
+import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.events.fishing.HotspotEvent
 import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
+import me.owdding.skyocean.utils.extensions.distance
+import me.owdding.skyocean.utils.extensions.horizontalDistance
+import me.owdding.skyocean.utils.extensions.toBlockPos
+import me.owdding.skyocean.utils.extensions.verticalDistance
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderCircle
 import me.owdding.skyocean.utils.rendering.RenderUtils.renderCylinder
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
+import net.minecraft.core.BlockPos
 import net.minecraft.util.ARGB
+import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
+import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
+import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.api.profile.party.PartyAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
+import kotlin.math.abs
+import kotlin.math.sqrt
 import kotlin.time.Duration.Companion.seconds
 
 @Module
@@ -98,4 +118,77 @@ object HotspotFeatures {
         )
     }
 
+    @Subscription(TickEvent::class)
+    @TimePassed("10t")
+    @OnlyOnSkyBlock
+    fun onTick() {
+        if (HotspotFeaturesConfig.announce == HotspotFeaturesConfig.AnnouncementType.OFF) return
+
+        val availableHotspots = HotspotAPI.hotspots
+            .filter { !it.prompt.announced }
+            .filter { it.pos != null && it.radius != null && it.type != HotspotType.UNKNOWN }
+        if (availableHotspots.isEmpty()) return
+
+        val playerPos = McPlayer.position ?: return
+        val closest = availableHotspots.minByOrNull { it.pos?.distance(playerPos) ?: Float.MAX_VALUE } ?: return
+
+        val hotspotPos = closest.pos ?: return
+        val hotspotRadius = closest.radius ?: return
+
+        if (hotspotPos.horizontalDistance(playerPos) > hotspotRadius) return
+        if (hotspotPos.verticalDistance(playerPos) > 4.0) return
+
+        val chatPos = hotspotPos.toBlockPos()
+        when (HotspotFeaturesConfig.announce) {
+            HotspotFeaturesConfig.AnnouncementType.MANUAL -> {
+                if (closest.prompt.prompted || closest.prompt.announced) return
+
+                Text.of {
+                    append(ChatUtils.ICON_SPACE_COMPONENT)
+                    append(Text.of {
+                        append("CLICK HERE")
+                        color = CatppuccinColors.Frappe.peach
+                    })
+                    append(" to announce the ")
+                    append(closest.type.displayComponent)
+                    append(" Hotspot in chat.")
+
+                    color = CatppuccinColors.Frappe.text
+
+                    onClick {
+                        closest.prompt.announced = true
+                        HotspotFeaturesConfig.chatType.announce(hotspotMessage(closest.type, chatPos))
+                    }
+                }.send()
+                closest.prompt.prompted = true
+            }
+            HotspotFeaturesConfig.AnnouncementType.AUTOMATIC -> {
+                if (closest.prompt.prompted || closest.prompt.announced) return
+
+                closest.prompt.announced = true
+                HotspotFeaturesConfig.chatType.announce(hotspotMessage(closest.type, chatPos))
+            }
+            else -> return
+        }
+    }
+
+    @Subscription
+    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+        event.register("testHotspot") {
+            callback {
+                HotspotType.entries.random().let { type ->
+                    val chatPos = McPlayer.position?.toBlockPos() ?: return@callback
+                    McClient.connection?.sendChat(hotspotMessage(type, chatPos))
+                }
+                Text.of(ChatUtils.antiSpam()).send()
+            }
+        }
+    }
+
+    private fun hotspotMessage(type: HotspotType, pos: BlockPos): String = buildString {
+        append("x: ${pos.x}, y: ${pos.y}, z: ${pos.z} | ")
+        append(type.announcementName)
+        append(" | ")
+        append(ChatUtils.antiSpam())
+    }
 }
