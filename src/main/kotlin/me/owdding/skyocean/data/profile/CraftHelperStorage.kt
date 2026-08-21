@@ -1,7 +1,10 @@
 package me.owdding.skyocean.data.profile
 
+import me.owdding.skyocean.features.recipe.Recipe
+import me.owdding.skyocean.features.recipe.RepoApiRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.data.RepoLibRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsRecipe
 import me.owdding.skyocean.generated.SkyOceanCodecs
@@ -9,6 +12,7 @@ import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import kotlin.math.ceil
 
 @LateInitModule
 object CraftHelperStorage {
@@ -35,22 +39,12 @@ object CraftHelperStorage {
         }
     }
 
-    val canModifyCount: Boolean get() = storage.get()?.canModifyCount == true
+    val canModifyCount: Boolean get() = storage.get() is CraftHelperRecipe.MutableCount
     val recipeType get() = storage.get()?.type
 
     val data get() = storage.get()
-    val selectedItem
-        get() = when (val data = data) {
-            is NormalCraftHelperRecipe -> data.item
-            is SkyShardsRecipe -> data.tree.shard
-            else -> null
-        }
-    val selectedAmount
-        get() = when (val data = data) {
-            is NormalCraftHelperRecipe -> data.amount
-            is SkyShardsRecipe -> data.tree.quantity
-            else -> 1
-        }
+    val selectedItem get() = data?.selectedItem
+    val selectedAmount get() = data?.amount ?: 1
 
     fun setSelected(item: SkyBlockId?) {
         storage.set(NormalCraftHelperRecipe(item))
@@ -58,17 +52,24 @@ object CraftHelperStorage {
     }
 
     fun setAmount(amount: Int) {
-        val amount = amount.coerceAtLeast(1)
-        when (val data = data) {
-            is NormalCraftHelperRecipe -> storage.set(data.copy(amount = amount))
-            else -> return
+        var amount = amount.coerceAtLeast(1)
+        val data = data as? CraftHelperRecipe.MutableCount ?: return
+
+        if (data is CraftHelperRecipe.MultiplesOf) {
+            amount = ceil(amount.toFloat() / data.multiples).toInt() * data.multiples
         }
 
+        storage.set(data.withAmount(amount))
         save()
     }
 
     fun setSkyShards(recipe: SkyShardsMethod) {
         storage.set(SkyShardsRecipe(recipe))
+        save()
+    }
+
+    fun setRepoLibRecipe(recipe: RepoApiRecipe) {
+        storage.set(RepoLibRecipeTree(recipe, recipe.output?.amount ?: 1))
         save()
     }
 
