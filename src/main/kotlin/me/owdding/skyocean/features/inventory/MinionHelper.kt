@@ -74,6 +74,8 @@ object MinionHelper : InventorySideGui("inventorySideGui.minionHelper.title", "\
                             price += ingredient.amount
                         }
                     }
+
+                    else -> {}
                 }
             }
 

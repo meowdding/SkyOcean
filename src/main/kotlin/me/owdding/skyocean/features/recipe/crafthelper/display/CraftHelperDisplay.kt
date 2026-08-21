@@ -141,7 +141,9 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             horizontal(5, MIDDLE) {
                 val item = ExtraDisplays.inventoryBackground(1, 1, Displays.item(output.item, showTooltip = true).withPadding(2))
                 val titleWidth = max(0, contentWidth - item.getWidth() - 10)
-                display(item)
+                if (!output.item.isEmpty) {
+                    display(item)
+                }
                 vertical(alignment = MIDDLE) {
                     spacer(titleWidth)
                     val nameComponent = Displays.component(output.itemName)
