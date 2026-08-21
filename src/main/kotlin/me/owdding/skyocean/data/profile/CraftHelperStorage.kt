@@ -1,14 +1,24 @@
 package me.owdding.skyocean.data.profile
 
+import me.owdding.skyocean.features.recipe.SimpleRecipeApi
+import me.owdding.skyocean.features.recipe.SimpleRecipeApi.getBestRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsRecipe
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
+import me.owdding.skyocean.utils.Utils
+import me.owdding.skyocean.utils.Utils.not
+import me.owdding.skyocean.utils.Utils.text
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.ProfileStorage
+import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @LateInitModule
 object CraftHelperStorage {
@@ -51,6 +61,18 @@ object CraftHelperStorage {
             is SkyShardsRecipe -> data.tree.quantity
             else -> 1
         }
+
+    fun setSelectedWithNextUpAmount(item: SkyBlockId?, amount: Int) {
+        setSelected(item)
+        val craftAmount = item?.let(SimpleRecipeApi::getBestRecipe)?.output?.amount ?: 1
+        setAmount(Utils.nextUp(amount, craftAmount))
+        save()
+        text("Set current recipe to ") {
+            append("${selectedAmount}x ") { color = TextColor.GREEN }
+            append(selectedItem?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
+            append("!")
+        }.sendWithPrefix()
+    }
 
     fun setSelected(item: SkyBlockId?) {
         storage.set(NormalCraftHelperRecipe(item))

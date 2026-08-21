@@ -109,15 +109,7 @@ object CraftHelperCommand {
                         amount = input.substringAfterLast(" ").toIntOrNull() ?: 1
                         SkyBlockId.fromName(splitName) ?: SkyBlockId.unknownType(splitName)
                     }
-                    CraftHelperStorage.setSelected(item)
-                    val craftAmount = item?.let(SimpleRecipeApi::getBestRecipe)?.output?.amount ?: 1
-                    CraftHelperStorage.setAmount(Utils.nextUp(amount, craftAmount))
-                    CraftHelperStorage.save()
-                    text("Set current recipe to ") {
-                        append("${CraftHelperStorage.selectedAmount}x ") { color = TextColor.GREEN }
-                        append(CraftHelperStorage.selectedItem?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
-                        append("!")
-                    }.sendWithPrefix()
+                    CraftHelperStorage.setSelectedWithNextUpAmount(item, amount)
                 }
             }
         }
