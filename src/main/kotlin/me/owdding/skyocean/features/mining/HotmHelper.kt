@@ -53,6 +53,7 @@ object HotmHelper {
 
     private val reminders get() = PerkUpgradeStorage.hotm
     private val cachedPerkCost = enumMapOf<PowderType, Int>()
+    private val lastReminderTime = mutableMapOf<PowderType, Instant>()
     private var lastClick: Instant = Instant.DISTANT_PAST
 
     private fun getNextLevelCost(perkName: String): Int? {
@@ -84,11 +85,31 @@ object HotmHelper {
         if (powders.isEmpty()) return
         if (lastClick.since() < 5.seconds) return
         val perks = reminders.filterKeys { it in powders }
+
+        val toRemove = mutableListOf<PowderType>()
+        val toRemind = mutableMapOf<PowderType, String>()
+
+        powders.forEach { powder ->
+            if (MiningConfig.hotmRepeatReminder) {
+                val lastShown = lastReminderTime[powder] ?: Instant.DISTANT_PAST
+                if (lastShown.since() >= MiningConfig.hotmReminderInterval) {
+                    toRemind[powder] = perks[powder]!!
+                    lastReminderTime[powder] = currentInstant()
+                }
+            } else {
+                toRemind[powder] = perks[powder]!!
+                toRemove.add(powder)
+            }
+        }
+
         // We remove the perks even if you have the feature disabled
-        powders.forEach {
+        toRemove.forEach {
             PerkUpgradeStorage.remove(it)
             cachedPerkCost.remove(it)
+            lastReminderTime.remove(it)
         }
+
+        if (toRemind.isEmpty()) return
         if (!MiningConfig.hotmReminder) return
         perks.forEach { (type, perk) ->
             Text.of {
@@ -101,7 +122,7 @@ object HotmHelper {
                 onClick {
                     McClient.sendCommand("hotm")
                 }
-            }.sendWithPrefix()
+            }.sendWithPrefix("skyocean-hotm-perk-upgrade")
         }
         if (!MiningConfig.reminderTitle) return
         val title = Text.of {

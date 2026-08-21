@@ -203,6 +203,14 @@
           "reminderTitle": {
             "@value": "Reminder Title",
             "desc": "Shows a title when the reminder triggers."
+          },
+          "repeatReminder": {
+            "@value": "Repeat Reminder",
+            "desc": "Repeats the reminder after a set time."
+          },
+          "reminderInterval": {
+            "@value": "Repeating Reminder Interval",
+            "desc": "The interval between the reminders if repeating reminder is enabled, in seconds."
           }
         },
         "ch": {
@@ -1788,6 +1796,14 @@
           "reminderTitle": {
             "@value": "Reminder Title",
             "desc": "Shows a title when the reminder triggers."
+          },
+          "repeatReminder": {
+            "@value": "Repeat Reminder",
+            "desc": "Repeats the reminder after a set time."
+          },
+          "reminderInterval": {
+            "@value": "Repeating Reminder Interval",
+            "desc": "The interval between the reminders if repeating reminder is enabled, in seconds."
           }
         },
         "galatea": {

@@ -1,7 +1,8 @@
 package me.owdding.skyocean.config.features.foraging
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
-
+import me.owdding.skyocean.config.duration
+import kotlin.time.DurationUnit
 
 object ForagingConfig : CategoryKt("foraging") {
 
@@ -30,5 +31,14 @@ object ForagingConfig : CategoryKt("foraging") {
     var reminderTitle by boolean(true) {
         translation = "skyocean.config.foraging.hotf.reminderTitle"
     }
+
+    var hotfRepeatReminder by boolean(false) {
+        translation = "skyocean.config.foraging.hotf.repeatReminder"
+    }
+    var hotfReminderInterval by long(30) {
+        translation = "skyocean.config.foraging.hotf.reminderInterval"
+        slider = true
+        range = 5L..180L
+    }.duration(DurationUnit.SECONDS)
 
 }

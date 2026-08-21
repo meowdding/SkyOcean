@@ -1,8 +1,10 @@
 package me.owdding.skyocean.config.features.mining
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.skyocean.config.duration
 import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.features.mining.ForgeReminder
+import kotlin.time.DurationUnit
 
 object MiningConfig : CategoryKt("mining") {
 
@@ -66,6 +68,15 @@ object MiningConfig : CategoryKt("mining") {
     var reminderTitle by boolean(true) {
         translation = "skyocean.config.mining.hotm.reminderTitle"
     }
+
+    var hotmRepeatReminder by boolean(false) {
+        translation = "skyocean.config.mining.hotm.repeatReminder"
+    }
+    var hotmReminderInterval by long(30) {
+        translation = "skyocean.config.mining.hotm.reminderInterval"
+        slider = true
+        range = 5L..180L
+    }.duration(DurationUnit.SECONDS)
 
     init {
         separator("skyocean.config.mining.metal_detector")
