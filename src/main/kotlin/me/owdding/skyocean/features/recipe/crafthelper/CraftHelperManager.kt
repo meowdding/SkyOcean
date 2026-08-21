@@ -147,7 +147,6 @@ object CraftHelperManager {
                     return@builder
                 }
                 CraftHelperStorage.setRepoLibRecipe(RepoApiRecipe(event.recipe, type))
-                McScreen.refreshScreen()
             }.apply {
                 tooltip(Tooltip.create(Text.of("Set as SkyOcean CraftHelper Item")))
                 size(12, 12)
