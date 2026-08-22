@@ -7,7 +7,6 @@ import me.owdding.skyocean.features.recipe.CurrencyType
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.serialize
 import me.owdding.skyocean.utils.Utils.mapToMutableList
-import me.owdding.skyocean.utils.extensions.sanitizeNeu
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.area.farming.TrapperAPI
 import tech.thatgravyboat.skyblockapi.api.area.hub.FarmhouseAPI

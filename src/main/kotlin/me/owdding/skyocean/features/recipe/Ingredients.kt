@@ -6,7 +6,6 @@ import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.extensions.sanitizeNeu
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.repolib.api.recipes.ingredient.CraftingIngredient
