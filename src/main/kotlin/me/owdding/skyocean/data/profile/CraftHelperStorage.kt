@@ -46,6 +46,11 @@ object CraftHelperStorage {
     val selectedItem get() = data?.selectedItem
     val selectedAmount get() = data?.amount ?: 1
 
+    fun set(recipe: CraftHelperRecipe) {
+        storage.set(recipe)
+        save()
+    }
+
     fun setSelected(item: SkyBlockId?) {
         storage.set(NormalCraftHelperRecipe(item))
         save()

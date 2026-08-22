@@ -16,4 +16,4 @@ fun SkyBlockId.sanitizeNeu(): SkyBlockId {
 
 fun SkyBlockId.toIngredient(amount: Int = 1) = SkyOceanItemIngredient(this, amount)
 
-fun String.sanitizeNeu() = this.replace(reverseNeuStuff, "$1:$2")
+fun String.sanitizeNeu() = this

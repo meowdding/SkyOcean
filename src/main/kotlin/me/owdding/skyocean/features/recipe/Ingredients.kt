@@ -113,3 +113,13 @@ fun CraftingIngredient.toSkyOceanIngredient(): Ingredient? {
         else -> null
     }
 }
+
+fun Ingredient.toCraftingIngredient(): CraftingIngredient? {
+    return when (this) {
+        is SkyOceanItemIngredient if this.id.isItem -> RepoItemIngredient(this.id.skyblockId, this.amount)
+        is SkyOceanItemIngredient if this.id.isPet -> RepoPetIngredient(this.id.skyblockId, this.id.cleanId.substringAfter(':'), this.amount)
+        is SkyOceanItemIngredient if this.id.isEnchantment -> RepoEnchantmentIngredient(this.id.skyblockId, this.id.cleanId.substringAfter(':').toInt(), this.amount)
+        is SkyOceanItemIngredient if this.id.isAttribute -> RepoAttributeIngredient(this.id.skyblockId, this.amount)
+        else -> null
+    }
+}
