@@ -42,7 +42,7 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
             }
         }.mapNotNull { item ->
             item.itemStack.getSkyBlockId()?.asDerived(false)?.let {
-                TrackedItem(it.id.sanitizeNeu(), item.itemStack, item.itemStack.count, item.context, item.context.source)
+                TrackedItem(it.id, item.itemStack, item.itemStack.count, item.context, item.context.source)
             }
         }
         .groupBy { it.id }

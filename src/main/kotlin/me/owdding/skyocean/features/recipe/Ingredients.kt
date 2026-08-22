@@ -103,7 +103,7 @@ fun Iterable<Ingredient>.mergeSameTypes(): Iterable<Ingredient> = this.groupBy {
 
 
 fun CraftingIngredient.toSkyOceanIngredient(): Ingredient? {
-    val id = this.id()?.sanitizeNeu() ?: return null
+    val id = this.id() ?: return null
 
     return when (this) {
         is RepoItemIngredient -> SkyOceanItemIngredient(SkyBlockId.item(id), this.count())
