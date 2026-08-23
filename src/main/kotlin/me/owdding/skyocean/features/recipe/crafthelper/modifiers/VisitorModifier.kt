@@ -2,7 +2,14 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.IngredientParser
+import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
+import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
+import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
+import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
+import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.contains
 import me.owdding.skyocean.utils.extensions.indexOfOrNull
 import net.minecraft.world.item.Items
@@ -17,7 +24,7 @@ object VisitorModifier : AbstractCraftHelperModifier() {
     // TODO
     //  "Shift to add to list" so we can have multiple recipes on one list (for multiple visitors)
 
-    override fun applies(event: InventoryChangeEvent): SkyOceanItemIngredient? {
+    override fun applies(event: InventoryChangeEvent): CraftHelperRecipe? {
         if (!SkyBlockIsland.GARDEN.inIsland()) return null
         if (event.slot.index != 22) return null
 
@@ -36,6 +43,9 @@ object VisitorModifier : AbstractCraftHelperModifier() {
 
         if (items.size != 1) return null // Only support single item requests for now
 
-        return IngredientParser.parse(items[0].trim()) as? SkyOceanItemIngredient
+        val ingredient = IngredientParser.parse(items[0].trim()) as? SkyOceanItemIngredient ?: return null
+
+        val amount = SimpleRecipeApi.getBestRecipe(ingredient.id)?.output?.amount ?: 1
+        return NormalCraftHelperRecipe(ingredient.id, Utils.nextUp(ingredient.amount, amount))
     }
 }

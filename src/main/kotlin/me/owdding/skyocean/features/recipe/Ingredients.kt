@@ -6,7 +6,6 @@ import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.extensions.sanitizeNeu
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.repolib.api.recipes.ingredient.CraftingIngredient
@@ -103,13 +102,23 @@ fun Iterable<Ingredient>.mergeSameTypes(): Iterable<Ingredient> = this.groupBy {
 
 
 fun CraftingIngredient.toSkyOceanIngredient(): Ingredient? {
-    val id = this.id()?.sanitizeNeu() ?: return null
+    val id = this.id() ?: return null
 
     return when (this) {
         is RepoItemIngredient -> SkyOceanItemIngredient(SkyBlockId.item(id), this.count())
         is RepoPetIngredient -> SkyOceanItemIngredient(SkyBlockId.pet(id, this.tier()), this.count())
         is RepoEnchantmentIngredient -> SkyOceanItemIngredient(SkyBlockId.enchantment(id, this.level()), this.count())
         is RepoAttributeIngredient -> SkyOceanItemIngredient(SkyBlockId.attribute(id), this.count())
+        else -> null
+    }
+}
+
+fun Ingredient.toCraftingIngredient(): CraftingIngredient? {
+    return when (this) {
+        is SkyOceanItemIngredient if this.id.isItem -> RepoItemIngredient(this.id.skyblockId, this.amount)
+        is SkyOceanItemIngredient if this.id.isPet -> RepoPetIngredient(this.id.skyblockId, this.id.cleanId.substringAfter(':'), this.amount)
+        is SkyOceanItemIngredient if this.id.isEnchantment -> RepoEnchantmentIngredient(this.id.skyblockId, this.id.cleanId.substringAfter(':').toInt(), this.amount)
+        is SkyOceanItemIngredient if this.id.isAttribute -> RepoAttributeIngredient(this.id.skyblockId, this.amount)
         else -> null
     }
 }
