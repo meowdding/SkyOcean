@@ -131,6 +131,8 @@ enum class KnownMobIcon(val icon: String, short: String? = null) {
     AIRBORNE('\uE070', "AIR"),
     GLACIAL('\uE07A', "GLAC"),
     WOODLAND('\uE086', "WOOD"),
+    CRITTER('\ue087', "CRIT"),
+    TIMID('\ue088', "TIM"),
     ;
 
     var color: Int? = null
