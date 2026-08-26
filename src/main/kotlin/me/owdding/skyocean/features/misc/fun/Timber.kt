@@ -27,7 +27,7 @@ object Timber {
     private val sound get() = FunConfig.timberSound.soundId
 
     private val group = RemoteStrings.resolve()
-    private val treeFellRegex by group.regex("(?:TIMBER|PETALFALL|WOODPECKER)! You felled the entire Tree!")
+    private val treeFellRegex by group.regex("TIMBER! You felled the entire \\w+ Tree!")
 
     private var timestamp = Instant.DISTANT_PAST
 
