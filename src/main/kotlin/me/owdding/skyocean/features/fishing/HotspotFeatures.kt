@@ -47,30 +47,13 @@ object HotspotFeatures {
 
     private const val MIN_DISTANCE = 40
 
-    init {
-        LevelRenderEvents.COLLECT_SUBMITS.register {
-            if (!LocationAPI.isOnSkyBlock) return@register
-            onRenderWorldEvent(RenderWorldEvent.AfterEntities(
-                it.poseStack(),
-                //? 26.1
-                //it.bufferSource(),
-                it.submitNodeCollector(),
-                //~ if >= 26.2 '.mainCamera.' -> '.mainCamera().' {
-                it.gameRenderer().mainCamera().position(),
-                it.gameRenderer().mainCamera().rotation(),
-                //~}
-                0f,
-            ))
-        }
-    }
-
     fun isEnabled() = HotspotFeaturesConfig.circleOutline || HotspotFeaturesConfig.circleSurface
 
     fun shouldHideParticles() = isEnabled() && HotspotFeaturesConfig.hideParticles
 
-    //Subscription
-    //OnlyOnSkyBlock
-    fun onRenderWorldEvent(event: RenderWorldEvent.AfterEntities) {
+    @Subscription
+    @OnlyOnSkyBlock
+    fun onRenderWorldEvent(event: RenderWorldEvent.CollectSubmits) {
         if (!isEnabled()) return
 
         HotspotAPI.hotspots.forEach { (_, type, pos, radius) ->
