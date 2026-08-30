@@ -15,6 +15,7 @@ import me.owdding.skyocean.compat.CatharsisSupport
 import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.item.sources.ItemSources
+import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
@@ -139,6 +140,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
             val contentWidth = minOf(maxLine, maxWidth)
 
             horizontal(5, MIDDLE) {
+
                 val item = ExtraDisplays.inventoryBackground(1, 1, Displays.item(output.item, showTooltip = true).withPadding(2))
                 val titleWidth = max(0, contentWidth - item.getWidth() - 10)
                 display(item)

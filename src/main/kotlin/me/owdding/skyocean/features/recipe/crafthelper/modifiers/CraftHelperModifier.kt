@@ -5,15 +5,10 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
 import me.owdding.skyocean.compat.CatharsisSupport.withCatharsisId
 import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
-import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
-import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
+import me.owdding.skyocean.data.profile.CraftHelperStorage.addToIngredientRecipe
 import me.owdding.skyocean.data.profile.CraftHelperStorage.set
-import me.owdding.skyocean.features.recipe.SimpleRecipeApi
-import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.generated.SkyOceanCraftHelperModifiers
-import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import net.minecraft.core.component.DataComponents
@@ -47,10 +42,17 @@ abstract class AbstractCraftHelperModifier {
                 add("Set as selected craft helper item!") {
                     this.color = TextColor.GRAY
                 }
+                add("Hold Shift to add it to your current recipe!") {
+                    this.color = TextColor.GRAY
+                }
             }
 
             onClick {
-                set(ingredient)
+                if (McScreen.isShiftDown && ingredient is CraftHelperRecipe.Ingredients) {
+                    addToIngredientRecipe(ingredient)
+                } else {
+                    set(ingredient)
+                }
                 McScreen.refreshScreen()
             }
         }

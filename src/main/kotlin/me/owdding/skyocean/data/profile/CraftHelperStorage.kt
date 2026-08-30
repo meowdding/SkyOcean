@@ -3,6 +3,7 @@ package me.owdding.skyocean.data.profile
 import me.owdding.skyocean.features.recipe.Recipe
 import me.owdding.skyocean.features.recipe.RepoApiRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.data.IngredientCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.RepoLibRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
@@ -47,13 +48,11 @@ object CraftHelperStorage {
     val selectedAmount get() = data?.amount ?: 1
 
     fun set(recipe: CraftHelperRecipe) {
-        storage.set(recipe)
-        save()
+        storage.update(recipe)
     }
 
     fun setSelected(item: SkyBlockId?) {
-        storage.set(NormalCraftHelperRecipe(item))
-        save()
+        storage.update(NormalCraftHelperRecipe(item))
     }
 
     fun setAmount(amount: Int) {
@@ -64,26 +63,39 @@ object CraftHelperStorage {
             amount = ceil(amount.toFloat() / data.multiples).toInt() * data.multiples
         }
 
-        storage.set(data.withAmount(amount))
-        save()
+        storage.update(data.withAmount(amount))
     }
 
     fun setSkyShards(recipe: SkyShardsMethod) {
-        storage.set(SkyShardsRecipe(recipe))
-        save()
+        storage.update(SkyShardsRecipe(recipe))
     }
 
     fun setRepoLibRecipe(recipe: RepoApiRecipe) {
-        storage.set(RepoLibRecipeTree(recipe, recipe.output?.amount ?: 1))
-        save()
+        storage.update(RepoLibRecipeTree(recipe, recipe.output?.amount ?: 1))
     }
 
     fun clear() {
-        storage.set(NormalCraftHelperRecipe(null))
-        save()
+        storage.update(NormalCraftHelperRecipe(null))
     }
 
     fun save() {
         storage.save()
     }
+
+    fun <T> addToIngredientRecipe(recipe: T) where T : CraftHelperRecipe, T : CraftHelperRecipe.Ingredients {
+        getOrCreateIngredientRecipe().add(recipe.entriesForAddition.map { it.withAmount(it.amount * recipe.amount) })
+    }
+
+    fun getOrCreateIngredientRecipe(): IngredientCraftHelperRecipe {
+        val data = data
+        if (data is IngredientCraftHelperRecipe) {
+            return data
+        }
+
+        return storage.update(IngredientCraftHelperRecipe()).apply {
+            val inputs = (data as? CraftHelperRecipe.Ingredients)?.entriesForAddition ?: return@apply
+            add(inputs.map { it.withAmount(it.amount * data.amount) })
+        }
+    }
+
 }

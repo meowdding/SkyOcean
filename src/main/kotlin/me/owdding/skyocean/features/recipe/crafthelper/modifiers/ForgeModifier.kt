@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 @CraftHelperModifier
 object ForgeModifier : AbstractCraftHelperModifier() {
 
-    override fun applies(event: InventoryChangeEvent): CraftHelperRecipe? {
+    override fun applies(event: InventoryChangeEvent): NormalCraftHelperRecipe? {
         if (event.title != "Confirm Process") return null
         if (event.slot.index != 22 && event.slot.index != 23) return null
 

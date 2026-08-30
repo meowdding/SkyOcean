@@ -28,7 +28,7 @@ object RecipeModifier : AbstractCraftHelperModifier() {
 
     private val region = ContainerRegion(1..3, 1..3)
 
-    override fun applies(event: InventoryChangeEvent): CraftHelperRecipe? {
+    override fun applies(event: InventoryChangeEvent): RepoLibRecipeTree? {
         if (event.slot.index != 14) return null
         if (event.inventory.size < 23 || event.inventory[23].item !in Items.CRAFTING_TABLE) return null
         if (event.inventory.size < 32 || event.inventory[32].item.cleanName != "Supercraft") return null
@@ -49,7 +49,6 @@ object RecipeModifier : AbstractCraftHelperModifier() {
         return RepoLibRecipeTree(
             RepoApiRecipe(
                 CraftingRecipe(inputIds.mapNotNull { it.toCraftingIngredient() }, output.toCraftingIngredient() ?: return null),
-                RecipeType.CRAFTING,
             ),
             output.amount,
         )

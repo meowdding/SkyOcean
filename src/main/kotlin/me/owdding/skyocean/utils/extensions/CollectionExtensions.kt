@@ -26,3 +26,8 @@ fun <T> Iterable<T>.indexOfOrNull(predicate: T) = indexOf(predicate).takeUnless 
 fun <Type> MutableCollection<Type>.addAll(other: Collection<Type>?) = other?.let { this.addAll(it) }
 
 fun <Key, Value> MutableMap<Key, Value>.putAll(other: Map<Key, Value>?) = other?.let { this.putAll(it) }
+
+fun <Type> MutableList<Type>.replaceValues(newValues: Iterable<Type>) {
+    this.clear()
+    this.addAll(newValues)
+}
