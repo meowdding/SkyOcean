@@ -295,6 +295,9 @@ class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallb
             ItemSources.HUNTING_BOX,
             join(ComponentIcons.BOX, " Hunting Box"),
         )
+        addSimple(
+            ItemSources.CRYSTAL, !"Heart of the Mountain Crystal",
+        )
 
         if (sources.containsKey(ItemSources.FORGE)) {
             addUsedSources()
