@@ -53,7 +53,6 @@ object CraftHelperManager {
     var lastEvaluatedRoot: AtomicReference<CraftHelperState?> = AtomicReference()
     private val keybind = SkyOceanKeybind("crafthelper", InputConstants.KEY_V)
 
-
     fun clear() {
         CraftHelperStorage.clear()
         CraftHelperStorage.save()
@@ -65,11 +64,9 @@ object CraftHelperManager {
     }
 
     fun getTransformers(): List<UnaryOperator<CraftHelperTree>> = buildList {
-
         CraftHelperConfig.compactedCutoffDegree.takeIf { it > 0 }?.let {
             add { tree -> CompactedResourceCutoffTreeTransformer.apply(it, tree) }
         }
-
     }
 
     @Subscription(TickEvent::class)
@@ -121,7 +118,6 @@ object CraftHelperManager {
         }
     }
 
-
     @Subscription
     @OnlyOnSkyBlock
     fun onItemListKeybind(event: ScreenKeyReleasedEvent.Pre) {
@@ -142,11 +138,7 @@ object CraftHelperManager {
         event.itemStack.getSkyBlockId() ?: return
         event.register(
             Button.builder(Text.of("\uD83E\uDE93")) {
-                val type = RecipeType.fromRepoLibType(event.recipe.type()) ?: run {
-                    Text.of("Failed to set ItemList Recipe because type ${event.recipe.type()} is unknown.")
-                    return@builder
-                }
-                CraftHelperStorage.setRepoLibRecipe(RepoApiRecipe(event.recipe, type))
+                CraftHelperStorage.setRepoLibRecipe(RepoApiRecipe(event.recipe))
             }.apply {
                 tooltip(Tooltip.create(Text.of("Set as SkyOcean CraftHelper Item")))
                 size(12, 12)

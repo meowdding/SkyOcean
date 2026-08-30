@@ -11,6 +11,7 @@ enum class CraftHelperRecipeType(override val type: KClass<out CraftHelperRecipe
     NORMAL(NormalCraftHelperRecipe::class),
     SKY_SHARDS(SkyShardsRecipe::class),
     REPO_LIB_RECIPE(RepoLibRecipeTree::class),
+    INGREDIENT_RECIPE(IngredientCraftHelperRecipe::class),
     ;
 
     companion object {

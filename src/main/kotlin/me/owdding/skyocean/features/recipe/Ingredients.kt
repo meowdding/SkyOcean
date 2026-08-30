@@ -1,19 +1,34 @@
 package me.owdding.skyocean.features.recipe
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.ktcodecs.IncludedCodec
+import me.owdding.skyocean.features.item.custom.CustomItems
+import me.owdding.skyocean.features.item.custom.data.AnimatedSkyblockSkin
+import me.owdding.skyocean.features.item.custom.data.CustomItemData
+import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
+import me.owdding.skyocean.features.item.custom.data.ItemKey
+import me.owdding.skyocean.features.item.custom.data.RotatingModel
+import me.owdding.skyocean.features.item.custom.data.UuidKey
+import me.owdding.skyocean.features.recipe.crafthelper.data.IngredientCraftHelperRecipe
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.component.CustomData
 import tech.thatgravyboat.repolib.api.recipes.ingredient.CraftingIngredient
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.id
+import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
+import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import java.util.UUID
 import kotlin.reflect.KClass
 import tech.thatgravyboat.repolib.api.recipes.ingredient.AttributeIngredient as RepoAttributeIngredient
 import tech.thatgravyboat.repolib.api.recipes.ingredient.EnchantmentIngredient as RepoEnchantmentIngredient
@@ -23,7 +38,7 @@ import tech.thatgravyboat.repolib.api.recipes.ingredient.PetIngredient as RepoPe
 @GenerateDispatchCodec(Ingredient::class)
 enum class IngredientType(override val type: KClass<out Ingredient>) : DispatchHelper<Ingredient> {
     ITEM(SkyOceanItemIngredient::class),
-    CURRENCY(CurrencyIngredient::class),
+    CURRENCY(CurrencyIngredient::class)
     ;
 
     companion object {
@@ -51,6 +66,36 @@ interface ItemLikeIngredient : Ingredient {
     val itemName: Component
 
     fun getRecipe() = SimpleRecipeApi.getBestRecipe(id)
+}
+
+data class CustomRecipeIngredient(val parent: IngredientCraftHelperRecipe) : ItemLikeIngredient {
+    override val amount: Int = 1
+    override val type: IngredientType = IngredientType.ITEM
+
+    private val uuid = UuidKey(UUID.randomUUID())
+    override fun withAmount(amount: Int): Ingredient = this
+    override val skyblockId: String = "bedrock"
+    override val id: SkyBlockId = SkyBlockId.item("bedrock")
+    override val item: ItemStack
+        get() = ItemBuilder(Items.PAPER) {
+            set(
+                DataComponents.CUSTOM_DATA,
+                CustomData.of(
+                    compoundTag {
+                        putString("skyocean:static_item", uuid.uuid.toString())
+                    },
+                ),
+            )
+            CustomItems.staticMap[uuid] = CustomItemData(uuid, mutableMapOf()).apply {
+                this[CustomItemDataComponents.MODEL] = RotatingModel(
+                    parent.inputs.filterIsInstance<ItemLikeIngredient>().takeUnless { it.isEmpty() } ?: listOf(
+                        SkyOceanItemIngredient(SkyBlockId.item("crafting_table")),
+                    ),
+                )
+            }
+            name(Text.of("Custom Recipe"))
+        }
+    override val itemName: Component get() = item.hoverName
 }
 
 @GenerateCodec
@@ -117,7 +162,12 @@ fun Ingredient.toCraftingIngredient(): CraftingIngredient? {
     return when (this) {
         is SkyOceanItemIngredient if this.id.isItem -> RepoItemIngredient(this.id.skyblockId, this.amount)
         is SkyOceanItemIngredient if this.id.isPet -> RepoPetIngredient(this.id.skyblockId, this.id.cleanId.substringAfter(':'), this.amount)
-        is SkyOceanItemIngredient if this.id.isEnchantment -> RepoEnchantmentIngredient(this.id.skyblockId, this.id.cleanId.substringAfter(':').toInt(), this.amount)
+        is SkyOceanItemIngredient if this.id.isEnchantment -> RepoEnchantmentIngredient(
+            this.id.skyblockId,
+            this.id.cleanId.substringAfter(':').toInt(),
+            this.amount,
+        )
+
         is SkyOceanItemIngredient if this.id.isAttribute -> RepoAttributeIngredient(this.id.skyblockId, this.amount)
         else -> null
     }

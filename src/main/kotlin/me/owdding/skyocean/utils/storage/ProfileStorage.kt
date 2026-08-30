@@ -18,6 +18,9 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import tech.thatgravyboat.skyblockapi.utils.json.JsonObject
 import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.relativeTo
@@ -60,6 +63,22 @@ internal class ProfileStorage<T : Any>(
     private lateinit var data: T
     private lateinit var lastPath: Path
     private var lastProfile: String? = null
+
+    @OptIn(ExperimentalContracts::class)
+    inline fun <Result> edit(block: T?.() -> Result): Result {
+        contract {
+            callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+        }
+        val result = block(get())
+        save()
+        return result
+    }
+
+    fun <Input : T> update(newData: Input): Input {
+        set(newData)
+        save()
+        return newData
+    }
 
     fun get(): T? {
         if (isCurrentlyActive()) {

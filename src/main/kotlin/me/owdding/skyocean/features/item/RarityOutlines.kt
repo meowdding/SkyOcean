@@ -160,7 +160,8 @@ object RarityOutlines {
         private var buffer: GpuBuffer? = null
 
         fun update(width: Int, slotSize: Int, guiScale: Int) {
-            if (buffer == null) buffer = RenderSystem.getDevice().createBuffer(
+            val currentBuffer = buffer
+            if (currentBuffer == null || currentBuffer.isClosed) buffer = RenderSystem.getDevice().createBuffer(
                 { "SkyOcean Rarity UBO" },
                 GpuBuffer.USAGE_UNIFORM or GpuBuffer.USAGE_COPY_DST,
                 UBO_SIZE.toLong(),
