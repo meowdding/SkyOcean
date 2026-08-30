@@ -6,10 +6,16 @@ import me.owdding.skyocean.features.item.custom.ui.standard.search.ItemModelSear
 import me.owdding.skyocean.features.item.custom.ui.standard.search.ModelSearchEntry
 import me.owdding.skyocean.features.item.custom.ui.standard.search.SkyBlockModelEntry
 import me.owdding.skyocean.generated.DispatchHelper
+import me.owdding.skyocean.utils.extensions.model
+import me.owdding.skyocean.utils.extensions.withModel
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
+import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
 import kotlin.reflect.KClass
 
 
@@ -32,7 +38,9 @@ data class StaticModel(
     override fun toModelSearchEntry() = ItemModelSearchEntry(location)
 
     override fun getModel() = location
-    override fun resolveToItem(): Item? = BuiltInRegistries.ITEM.getOptional(location).orElse(null)
+    override fun resolveToItem(): ItemStack = BuiltInRegistries.ITEM.getOptional(location).map { it.defaultInstance }.orElseGet {
+        Items.PAPER.withModel(location)
+    }
 }
 
 @GenerateCodec
@@ -42,8 +50,8 @@ data class SkyblockModel(
     override val type: ItemModelType = ItemModelType.SKYBLOCK_MODEL
     override fun toModelSearchEntry() = SkyBlockModelEntry(location)
 
-    override fun getModel() = BuiltInRegistries.ITEM.getKey(location.toItem().item)
-    override fun resolveToItem(): Item? = location.toItem().item
+    override fun getModel() = location.toItem().model()
+    override fun resolveToItem(): ItemStack = location.toItem()
 }
 
 interface ItemModel {
@@ -51,5 +59,5 @@ interface ItemModel {
 
     fun toModelSearchEntry(): ModelSearchEntry
     fun getModel(): Identifier
-    fun resolveToItem(): Item?
+    fun resolveToItem(): ItemStack?
 }
