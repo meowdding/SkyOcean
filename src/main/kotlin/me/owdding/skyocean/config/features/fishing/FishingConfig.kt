@@ -42,6 +42,9 @@ object FishingConfig : CategoryKt("fishing") {
         obj("hotspot", HotspotFeaturesConfig) {
             this.translation = "skyocean.config.fishing.hotspot"
         }
+        obj("wormhole", WormholeFeaturesConfig) {
+            this.translation = "skyocean.config.fishing.wormhole"
+        }
     }
 
 }

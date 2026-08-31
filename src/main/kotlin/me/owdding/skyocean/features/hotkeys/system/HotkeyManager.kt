@@ -165,7 +165,8 @@ object HotkeyManager {
 
     @JvmStatic
     fun handle(event: KeyEvent, action: Int): Boolean {
-        return handleKey(lazy { InputConstants.getKey(event) }, action)
+        if (!McClient.options.keyDebugModifier.isDown) return handleKey(lazy { InputConstants.getKey(event) }, action)
+        return false
     }
 
     fun clearBuffers() {

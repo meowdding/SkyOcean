@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.recipe
 
+import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.features.recipe.visitors.RecipeVisitor
 import tech.thatgravyboat.repolib.api.recipes.Recipe as RepoRecipe
 
@@ -13,6 +14,7 @@ interface ParentRecipe : Recipe {
     fun getRecipe(ingredient: Ingredient): Recipe?
 }
 
+@GenerateCodec
 data class RepoApiRecipe(val recipe: RepoRecipe<*>, override val recipeType: RecipeType) : Recipe {
     override val inputs: List<Ingredient> by lazy { RecipeVisitor.getInputs(recipe) }
     override val output: ItemLikeIngredient? by lazy { RecipeVisitor.getOutput(recipe) }

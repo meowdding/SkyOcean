@@ -102,7 +102,7 @@ object HotspotAPI {
         if (!packet.isHotSpotParticle()) return
 
         val maxHotspotSize = when (LocationAPI.island) {
-            SkyBlockIsland.CRIMSON_ISLE -> 25.0
+            SkyBlockIsland.CRIMSON_ISLE, SkyBlockIsland.TORRHUS_CANYON -> 25.0
             SkyBlockIsland.JERRYS_WORKSHOP, SkyBlockIsland.LOTUS_ATOLL -> 16.0
             else -> 9.0
         }
@@ -155,20 +155,26 @@ data class HotspotData(
     var pos: Vector3f? = null,
     var radius: Double? = null,
     var fishedIn: Boolean = false,
+    val prompt: HotspotPromptData = HotspotPromptData(),
 ) {
     val radiusCounts = mutableMapOf<Double, Int>()
 }
 
+data class HotspotPromptData(
+    var prompted: Boolean = false,
+    var announced: Boolean = false,
+)
+
 private val hotspotGroup = RemoteStrings.resolve("HotspotType")
 
-enum class HotspotType(val color: Color, @Language("regexp") regex: String) {
-    SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+. Sea Creature Chance"),
-    FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+. Fishing Speed"),
-    DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+. Double Hook Chance"),
-    TREASURE(MinecraftColors.GOLD, "\\+\\d+. Treasure Chance"),
-    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+. Trophy Chance"),
-    SHARD(MinecraftColors.YELLOW, "Chance of .+ Shard"),
-    UNKNOWN(MinecraftColors.LIGHT_PURPLE, ""),
+enum class HotspotType(val color: Color, @Language("regexp") regex: String, val announcementName: String) {
+    SEA_CREATURE(MinecraftColors.DARK_AQUA, "\\+\\d+. Sea Creature Chance", "Sea Creature Chance"),
+    FISHING_SPEED(MinecraftColors.AQUA, "\\+\\d+. Fishing Speed", "Fishing Speed"),
+    DOUBLE_HOOK(MinecraftColors.BLUE, "\\+\\d+. Double Hook Chance", "Double Hook Chance"),
+    TREASURE(MinecraftColors.GOLD, "\\+\\d+. Treasure Chance", "Treasure Chance"),
+    TROPHY_FISH(MinecraftColors.GOLD, "\\+\\d+. Trophy Chance", "Trophy Chance"),
+    SHARD(MinecraftColors.YELLOW, "Chance of .+ Shard", "Shard Chance"),
+    UNKNOWN(MinecraftColors.LIGHT_PURPLE, "", ""),
     ;
 
     private val displayName = toFormattedName()

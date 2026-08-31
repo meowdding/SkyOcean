@@ -35,6 +35,7 @@ enum class ItemSources(val itemSource: ItemSource?, vararg val disabledIn: ItemS
     HUNTING_BOX(HuntingBoxItemSource, ItemSourceTag.ITEM_SEARCH),
     FARMING_TOOLKIT(FarmingToolkitSource),
     EQUIPMENT_WARDROBE(EquipmentWardrobeItemSource),
+    CRYSTAL(CrystalItemSource, ItemSourceTag.ITEM_SEARCH),
     ;
     // todo POTION_BAG(TODO()),
 

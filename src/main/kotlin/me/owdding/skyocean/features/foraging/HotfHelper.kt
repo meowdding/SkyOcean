@@ -54,6 +54,7 @@ object HotfHelper {
 
     private val reminders get() = PerkUpgradeStorage.hotf
     private val cachedPerkCost = enumMapOf<WhisperType, Int>()
+    private val lastReminderTime = mutableMapOf<WhisperType, Instant>()
     private var lastClick: Instant = Instant.DISTANT_PAST
 
     private val config get() = ForagingConfig
@@ -88,13 +89,33 @@ object HotfHelper {
         if (whispers.isEmpty()) return
         if (lastClick.since() < 5.seconds) return
         val perks = reminders.filterKeys { it in whispers }
+
+        val toRemove = mutableListOf<WhisperType>()
+        val toRemind = mutableMapOf<WhisperType, String>()
+
+        whispers.forEach { whisper ->
+            if (config.hotfRepeatReminder) {
+                val lastShown = lastReminderTime[whisper] ?: Instant.DISTANT_PAST
+                if (lastShown.since() >= config.hotfReminderInterval) {
+                    toRemind[whisper] = perks[whisper]!!
+                    lastReminderTime[whisper] = currentInstant()
+                }
+            } else {
+                toRemind[whisper] = perks[whisper]!!
+                toRemove.add(whisper)
+            }
+        }
+
         // We remove the perks even if you have the feature disabled
-        whispers.forEach {
+        toRemove.forEach {
             PerkUpgradeStorage.remove(it)
             cachedPerkCost.remove(it)
+            lastReminderTime.remove(it)
         }
+
+        if (toRemind.isEmpty()) return
         if (!config.hotfReminder) return
-        perks.forEach { (type, perk) ->
+        toRemind.forEach { (type, perk) ->
             Text.of {
                 append("You have enough ")
                 append(type.displayName)
@@ -104,7 +125,7 @@ object HotfHelper {
                 onClick {
                     McClient.sendCommand("hotf")
                 }
-            }.sendWithPrefix()
+            }.sendWithPrefix("skyocean-hotf-perk-upgrade")
         }
         if (!config.reminderTitle) return
         val title = Text.of {

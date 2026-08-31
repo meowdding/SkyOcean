@@ -2,6 +2,8 @@ package me.owdding.skyocean.config.features.fishing
 
 import com.teamresourceful.resourcefulconfigkt.api.ObjectKt
 import me.owdding.skyocean.utils.transparency
+import tech.thatgravyboat.skyblockapi.api.profile.party.PartyAPI
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 object HotspotFeaturesConfig : ObjectKt() {
 
@@ -33,5 +35,36 @@ object HotspotFeaturesConfig : ObjectKt() {
 
     var outlineTransparency by transparency(100) {
         this.translation = "skyocean.config.fishing.hotspot.outline_transparency"
+    }
+
+    init {
+        separator {
+            this.title = "skyocean.config.fishing.hotspot.announcements"
+        }
+    }
+
+    var announce by enum(AnnouncementType.OFF) {
+        this.translation = "skyocean.config.fishing.hotspot.announcements.announce"
+    }
+
+    var chatType by enum(ChatType.PARTY_ONLY) {
+        this.translation = "skyocean.config.fishing.hotspot.announcements.chat_type"
+    }
+
+    enum class AnnouncementType {
+        OFF,
+        MANUAL,
+        AUTOMATIC,
+        ;
+    }
+
+    enum class ChatType(val announce: (String) -> Unit) {
+        PARTY_ONLY({ chat ->
+            if (PartyAPI.inParty) {
+                McClient.sendCommand("pc $chat")
+            }
+        }),
+        CURRENT({ McClient.connection?.sendChat(it) }),
+        ;
     }
 }
