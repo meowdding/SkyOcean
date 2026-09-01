@@ -249,7 +249,7 @@ seamless way.
     - Configurable display types and individual custom colors for every mob icon.
 - Fun: Player Animals
     - Render players in the world as animals (Cats, Foxes, Wolves, Axolotls, Pandas, and many more).
-    - Configure who is affected (Nobody, Self, Players, Everyone).
+    - Configure who is affected (Nobody, Self, Players, Others, Everyone).
     - Customize individual appearance traits (variants, collars, baby status, sheared states).
 - Item Search
     - Customize highlight colors, highlight modes, and highlight durations.
