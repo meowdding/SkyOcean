@@ -868,7 +868,7 @@
             "@value": "Player Animals",
             "desc": [
               "Changes players in the world to be rendered as the selected animal!",
-              "You can choose between <white>Nobody</white>, <white>Self</white>, <white>Players (non NPCs)</white> and <white>Everyone</white>."
+              "You can choose between <white>Nobody</white>, <white>Self</white>, <white>Players (non NPCs)</white>, <white>Others (non NPCs)</white>, and <white>Everyone</white>."
             ],
             "type": {
               "@value": "Animal Type",
@@ -1394,6 +1394,7 @@
               "none": "Nobody",
               "self": "Self",
               "players": "Players",
+              "others": "Others",
               "everyone": "Everyone"
             },
             "color": {
