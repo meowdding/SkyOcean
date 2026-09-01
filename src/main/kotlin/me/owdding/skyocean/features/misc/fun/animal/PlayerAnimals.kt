@@ -44,6 +44,7 @@ object PlayerAnimals {
             PlayerAnimalState.NONE -> false
             PlayerAnimalState.EVERYONE -> true
             PlayerAnimalState.SELF -> accessor.`skyocean$isSelf`()
+            PlayerAnimalState.OTHERS -> !accessor.`skyocean$isSelf`() && !accessor.`skyocean$isNpc`()
             PlayerAnimalState.PLAYERS -> !accessor.`skyocean$isNpc`()
         }
     }
@@ -120,7 +121,7 @@ object PlayerAnimals {
         NONE,
         SELF,
         PLAYERS,
-
+        OTHERS,
         EVERYONE,
         ;
 

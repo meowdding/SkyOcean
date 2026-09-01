@@ -1394,6 +1394,7 @@
               "none": "Nobody",
               "self": "Self",
               "players": "Players",
+              "others": "Others",
               "everyone": "Everyone"
             },
             "color": {
