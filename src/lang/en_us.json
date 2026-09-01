@@ -539,7 +539,7 @@
               "shiftingSpeed": {
                 "@value": "Cycling Speed",
                 "desc": [
-                  "Controls how fast the colors cylce.",
+                  "Controls how fast the colors cycle.",
                   "<red>If you are sensitive to flashing colors don't go above <color #B22222>❬<color #727378>Normal</color>❭.</red>"
                 ],
                 "options": {
@@ -1521,9 +1521,29 @@
               }
             ]
           },
+          "circle_column": {
+            "@value": "Column",
+            "desc": "Render a \"solid\" column for hotspots."
+          },
+          "column_transparency": {
+            "@value": "Column Transparency",
+            "desc": [
+              "Changes the transparency of the column.",
+              {
+                "@id": "transparency"
+              }
+            ]
+          },
+          "circle_matches_player_y": {
+            "@value": "Circle & Outline Matches Player Y Coordinate",
+            "desc": [
+              "moves the top of the circle and its outline to your Y coordinate.",
+              "<yellow>⚠ Only works while underwater!</yellow>"
+            ]
+          },
           "hide_particles": {
             "@value": "Hide Particles",
-            "desc": "Hide hotspot particles (requires Highlight or Outline to be enabled)."
+            "desc": "Hide hotspot particles (requires Highlight, Outline or Column to be enabled)."
           },
           "announcements": {
             "@value": "Announcements",
@@ -1572,9 +1592,29 @@
               }
             ]
           },
+          "circle_column": {
+            "@value": "Column",
+            "desc": "Render a \"solid\" column for wormholes."
+          },
+          "column_transparency": {
+            "@value": "Column Transparency",
+            "desc": [
+              "Changes the transparency of the column.",
+              {
+                "@id": "transparency"
+              }
+            ]
+          },
+          "circle_matches_player_y": {
+            "@value": "Circle & Outline Matches Player Y Coordinate",
+            "desc": [
+              "moves the top of the circle and its outline to your Y coordinate.",
+              "<yellow>⚠ Only works while underwater!</yellow>"
+            ]
+          },
           "hide_particles": {
             "@value": "Hide Particles",
-            "desc": "Hide wormhole particles (requires Highlight or Outline to be enabled)."
+            "desc": "Hide wormhole particles (requires Highlight, Outline or Column to be enabled)."
           },
           "color": {
             "@value": "Highlight Color",
