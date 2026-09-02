@@ -3,15 +3,15 @@ package me.owdding.skyocean.data.profile
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.lib.repo.PowderType
 import me.owdding.lib.repo.WhisperType
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.storage.ProfileStorage
 
 object PerkUpgradeStorage {
 
-    private val STORAGE = ProfileStorage(
-        defaultData = ::StoredPerkData,
+    private val STORAGE = SkyOcean.storage(
         fileName = "perk_upgrade",
-        codec = { SkyOceanCodecs.getCodec<StoredPerkData>() },
+        defaultData = ::StoredPerkData,
+        codec = SkyOceanCodecs.getCodec<StoredPerkData>(),
     )
 
     private inline val data get() = STORAGE.get()

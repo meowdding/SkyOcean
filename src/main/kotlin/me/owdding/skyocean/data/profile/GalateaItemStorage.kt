@@ -3,12 +3,11 @@ package me.owdding.skyocean.data.profile
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.Utils.containerItems
 import me.owdding.skyocean.utils.extensions.asBlueprint
 import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import me.owdding.skyocean.utils.levelBound
-import me.owdding.skyocean.utils.storage.ProfileStorage
 import me.owdding.skyocean.utils.withSetter
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -18,10 +17,9 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 
 @Module
 object GalateaItemStorage {
-    private val storage: ProfileStorage<GalateaItems> = ProfileStorage(
-        defaultData = { GalateaItems.DEFAULT },
+    private val storage = SkyOcean.profileStorage(
         fileName = "galatea_items",
-        codec = { SkyOceanCodecs.GalateaItemsCodec.codec() },
+        defaultData = { GalateaItems.DEFAULT },
     )
 
     val data get() = storage.get()
