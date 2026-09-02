@@ -1537,7 +1537,7 @@
           "circle_matches_player_y": {
             "@value": "Circle & Outline Matches Player Y Coordinate",
             "desc": [
-              "moves the top of the circle and its outline to your Y coordinate.",
+              "Moves the top of the circle and its outline to your Y coordinate.",
               "<yellow>⚠ Only works while underwater!</yellow>"
             ]
           },
