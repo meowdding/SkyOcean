@@ -7,48 +7,62 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 object HotspotFeaturesConfig : ObjectKt() {
 
+    override val baseTranslation: String = "skyocean.config.fishing.hotspot"
+
     var warning by boolean(false) {
-        this.translation = "skyocean.config.fishing.hotspot.warning"
+        this.translation = "warning"
     }
 
     init {
         separator {
-            this.title = "skyocean.config.fishing.hotspot.highlight"
+            this.title = "highlight"
         }
     }
 
     var circleSurface by boolean(true) {
-        this.translation = "skyocean.config.fishing.hotspot.circle_surface"
+        this.translation = "circle_surface"
     }
 
     var circleOutline by boolean(true) {
-        this.translation = "skyocean.config.fishing.hotspot.circle_outline"
+        this.translation = "circle_outline"
+    }
+
+    var circleColumn by boolean(false) {
+        this.translation = "circle_column"
+    }
+
+    var circleMatchesPlayerY by boolean(false) {
+        this.translation = "circle_matches_player_y"
     }
 
     var hideParticles by boolean(true) {
-        this.translation = "skyocean.config.fishing.hotspot.hide_particles"
+        this.translation = "hide_particles"
     }
 
     var surfaceTransparency by transparency(50) {
-        this.translation = "skyocean.config.fishing.hotspot.surface_transparency"
+        this.translation = "surface_transparency"
     }
 
     var outlineTransparency by transparency(100) {
-        this.translation = "skyocean.config.fishing.hotspot.outline_transparency"
+        this.translation = "outline_transparency"
+    }
+
+    var columnTransparency by transparency(25) {
+        this.translation = "column_transparency"
     }
 
     init {
         separator {
-            this.title = "skyocean.config.fishing.hotspot.announcements"
+            this.title = "announcements"
         }
     }
 
     var announce by enum(AnnouncementType.OFF) {
-        this.translation = "skyocean.config.fishing.hotspot.announcements.announce"
+        this.translation = "announcements.announce"
     }
 
     var chatType by enum(ChatType.PARTY_ONLY) {
-        this.translation = "skyocean.config.fishing.hotspot.announcements.chat_type"
+        this.translation = "announcements.chat_type"
     }
 
     enum class AnnouncementType {
@@ -59,11 +73,13 @@ object HotspotFeaturesConfig : ObjectKt() {
     }
 
     enum class ChatType(val announce: (String) -> Unit) {
-        PARTY_ONLY({ chat ->
-            if (PartyAPI.inParty) {
-                McClient.sendCommand("pc $chat")
-            }
-        }),
+        PARTY_ONLY(
+            { chat ->
+                if (PartyAPI.inParty) {
+                    McClient.sendCommand("pc $chat")
+                }
+            },
+        ),
         CURRENT({ McClient.connection?.sendChat(it) }),
         ;
     }
