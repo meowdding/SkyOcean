@@ -1,6 +1,7 @@
 package me.owdding.skyocean.features.item.search.screen
 
 import earth.terrarium.olympus.client.components.Widgets
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
@@ -21,6 +22,7 @@ import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.features.inventory.SackValue
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.matcher.ItemMatcher
 import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
@@ -317,21 +319,7 @@ object ItemSearchScreen : SkyOceanScreen() {
 
             if (context is SackItemContext || (context is BundledItemContext && context.map.containsKey(ItemSources.SACKS))) {
                 item.asButton(leftAction) {
-                    ContextMenu.open { menu ->
-                        menu.withAutoCloseOff()
-                        val title = "Get From Sacks"
-                        menu.add { Widgets.text(title).withPadding(3) }
-                        menu.add {
-                            val state = ListenableState.of("")
-                            Widgets.textInput(state) {
-                                it.withSize(McFont.width(title), 20)
-                                it.withEnterCallback {
-                                    McClient.sendCommand("/gfs ${itemStack.getSkyBlockId()} ${state.get().parseFormattedLong()}")
-                                    menu.onClose()
-                                }
-                            }.withPadding(3)
-                        }
-                    }
+                    SackValue.openGfsContextMenu(itemStack.getSkyBlockId() ?: return@asButton)
                 }
             } else {
                 item.asButtonLeft(leftAction)

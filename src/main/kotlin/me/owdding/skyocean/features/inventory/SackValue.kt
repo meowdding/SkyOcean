@@ -110,21 +110,7 @@ object SackValue : InventorySideGui("inventorySideGui.sackValue.title",".* Sack|
                             }
                         }
                     }.asButtonRight {
-                        ContextMenu.open { menu ->
-                            menu.withAutoCloseOff()
-                            val title = "Get From Sacks"
-                            menu.add { Widgets.text(title).withPadding(3) }
-                            menu.add {
-                                val state = ListenableState.of("")
-                                Widgets.textInput(state) {
-                                    it.withSize(McFont.width(title), 20)
-                                    it.withEnterCallback {
-                                        McClient.sendCommand("/gfs $item ${state.get().parseFormattedLong()}")
-                                        menu.onClose()
-                                    }
-                                }.withPadding(3)
-                            }
-                        }
+                        openGfsContextMenu(item)
                     }.apply {
                         withTooltip(Text.of("Right-Click to input how many items to get."))
                         widget(this)
@@ -151,5 +137,34 @@ object SackValue : InventorySideGui("inventorySideGui.sackValue.title",".* Sack|
         }.times(amount.toDouble()).toLong()
 
         operator fun component3() = price
+    }
+
+    fun openGfsContextMenu(id: String) {
+        ContextMenu.open { menu ->
+            menu.withAutoCloseOff()
+            val title = "Get From Sacks"
+            menu.add { Widgets.text(title).withPadding(3) }
+            listOf(1, 16, 64, 160).forEach { amount ->
+                menu.add {
+                    Widgets.button {
+                        it.withRenderer(WidgetRenderers.text(Text.of("Get $amount")))
+                        it.withSize(McFont.width(title), 20)
+                        it.withCallback {
+                            McClient.sendCommand("/gfs $id $amount")
+                        }
+                    }
+                }
+            }
+            menu.add {
+                val state = ListenableState.of("")
+                Widgets.textInput(state) {
+                    it.withSize(McFont.width(title), 20)
+                    it.withEnterCallback {
+                        McClient.sendCommand("/gfs $id ${state.get().parseFormattedLong()}")
+                        menu.onClose()
+                    }
+                }.withPadding(3)
+            }
+        }
     }
 }
