@@ -28,6 +28,7 @@ import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.GARDEN
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -116,9 +117,12 @@ object CropFeverEffects {
 
         val gameRenderer = McClient.self.gameRenderer
         if (gameRenderer != null) {
-            if (gameRenderer.currentPostEffect() == SkyOcean.id(SHADER_ID)) {
+            //? < 26.3 {
+            /*if (gameRenderer.currentPostEffect() == SkyOcean.id(SHADER_ID)) {
                 gameRenderer.clearPostEffect()
             }
+            *///? } else
+            McClient.self.player?.activePostEffects?.remove(SkyOcean.id(SHADER_ID))
         }
     }
 
@@ -149,12 +153,16 @@ object CropFeverEffects {
                 startTime = currentInstant()
             }
             if (CropFeverEffectsConfig.hueShiftingShader) {
-                val gameRenderer = McClient.self.gameRenderer ?: return
+                //? >= 26.3 {
+                McClient.self.player?.activePostEffects?.add(SkyOcean.id(SHADER_ID))
+                //? } else {
+                /*val gameRenderer = McClient.self.gameRenderer ?: return
                 val accessor = gameRenderer as GameRendererAccessor
                 if (gameRenderer.currentPostEffect() != SkyOcean.id(SHADER_ID)) {
                     updateShaderBuffer()
                     accessor.invokeSetPostEffect(SkyOcean.id(SHADER_ID))
                 }
+                *///? }
             }
         }
         if (endRegex.matches(event.text)) {

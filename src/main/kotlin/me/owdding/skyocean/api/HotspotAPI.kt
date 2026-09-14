@@ -141,7 +141,11 @@ object HotspotAPI {
         // (a bit less) strict bs :-D
         if (this.count != 0) return false
         if (this.xDist != 1f) return false
-        if (this.maxSpeed != 1f)  return false
+        //? < 26.3
+        //if (this.maxSpeed != 1f)  return false
+        // todo needs testing on hypixel
+        //? >= 26.3
+        if (this.zMaxSpeed != 1f && this.yMaxSpeed != 1f && this.xMaxSpeed != 1f)  return false
 
         return true
     }

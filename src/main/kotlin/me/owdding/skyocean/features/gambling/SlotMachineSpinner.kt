@@ -1,12 +1,13 @@
 package me.owdding.skyocean.features.gambling
 
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection
-import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.TickTracker
+import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.animation.EasingFunctions
 import me.owdding.skyocean.utils.chat.ComponentAnimator
 import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
@@ -38,7 +39,7 @@ class SlotMachineSpinner(
     val hideChat: Boolean,
     val titleAnimator: ComponentAnimator,
     val baseDuration: Duration,
-) : MeowddingScreen("Slot Machine Spinner") {
+) : Screen(!"Slot Machine Spinner") {
     private val armTexture = SkyOcean.id("gambling/arm")
     private val weightedCollection = WeightedCollection.of(spinPool.entries) { it.value.toDouble() }
 

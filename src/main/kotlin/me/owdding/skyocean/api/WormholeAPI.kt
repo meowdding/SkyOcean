@@ -94,8 +94,8 @@ object WormholeAPI {
 
     private fun ClientboundLevelParticlesPacket.isHotSpotParticle(): Boolean {
         return when (this.particle.type) {
-            ParticleTypes.ENCHANT -> this.count == 4 && this.maxSpeed == -1.2f
-            ParticleTypes.PORTAL -> this.count == 5 && this.maxSpeed == 0.25f
+            ParticleTypes.ENCHANT -> this.count == 4 && this.xMaxSpeed == -1.2f
+            ParticleTypes.PORTAL -> this.count == 5 && this.xMaxSpeed == 0.25f
             else -> false
         }
     }

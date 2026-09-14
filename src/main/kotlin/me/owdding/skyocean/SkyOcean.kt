@@ -30,8 +30,7 @@ import net.minecraft.resources.Identifier
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
-import tech.thatgravyboat.skyblockapi.api.events.misc.RepoStatusEvent
+import tech.thatgravyboat.skyblockapi.api.events.repo.RepoEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -46,7 +45,8 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     private var meowddingRepo: Boolean = false
     private var apiRepo: Boolean = false
 
-    val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createLookup() }
+    //~ if >= 26.3 'createLookup' -> 'createWorldLookup'
+    val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createWorldLookup() }
     val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
     val DATAGEN_SELF by lazy { FabricLoader.getInstance().getModContainer("skyocean-datagen").getOrNull() }
     val SBAPI by lazy { FabricLoader.getInstance().getModContainer(SkyBlockAPI.MOD_ID).get() }
@@ -78,13 +78,15 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     }
 
     @Subscription
-    private fun RepoStatusEvent.repoReady() {
+    context(_: RepoEvent.Status)
+    private fun repoReady() {
         apiRepo = true
         onRepoReady()
     }
 
     @Subscription
-    private fun FinishRepoLoadingEvent.repoReady() {
+    context(_: FinishRepoLoadingEvent)
+    private fun repoReady() {
         meowddingRepo = true
         onRepoReady()
     }

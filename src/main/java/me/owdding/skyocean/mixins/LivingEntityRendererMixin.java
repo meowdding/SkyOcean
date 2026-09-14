@@ -8,6 +8,7 @@ import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import me.owdding.skyocean.accessors.WalkAnimationStateAccessor;
 import me.owdding.skyocean.features.misc.fun.animal.PlayerAnimals;
 import me.owdding.skyocean.utils.PlayerUtils;
+import net.fabricmc.fabric.api.client.rendering.v1.SubmitRenderPhases;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.player.AbstractClientPlayer;

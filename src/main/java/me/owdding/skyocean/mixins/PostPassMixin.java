@@ -16,7 +16,7 @@ public class PostPassMixin {
         method = "<init>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/blaze3d/systems/GpuDevice;createBuffer(Ljava/util/function/Supplier;ILjava/nio/ByteBuffer;)Lcom/mojang/blaze3d/buffers/GpuBuffer;")
+            target = "Lcom/mojang/renderpearl/api/device/GpuDevice;createBuffer(Ljava/util/function/Supplier;ILjava/nio/ByteBuffer;)Lcom/mojang/renderpearl/api/buffers/GpuBuffer;")
     )
     private void skyocean$enableCopyDst(Args args){
         Supplier<String> nameSupplier = args.get(0);

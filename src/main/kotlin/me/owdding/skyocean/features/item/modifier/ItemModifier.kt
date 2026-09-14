@@ -229,16 +229,15 @@ object ItemModifiers {
         val usedModifiers = mutableListOf<AbstractItemModifier>()
         context(map, itemStack) {
             for (modifier in modifiers) {
-                val state = State.of(false)
+                val state: State<Boolean> = State.of(false)
                 context(state) {
                     modifier.extract(DataMarker.ITEM, AbstractItemModifier::itemOverride)
                     modifier.extract(DataMarker.BACKGROUND_ITEM, AbstractItemModifier::backgroundItem)
                     modifier.extract(DataMarker.BACKGROUND_COLOR, AbstractItemModifier::backgroundColor)
                     modifier.extract(DataMarker.CLICK_ACTION, AbstractItemModifier::clickAction)
                     modifier.extract(DataMarker.ITEM_COUNT, AbstractItemModifier::itemCountOverride)
-                    modifier.getExtraComponents(itemStack)?.entrySet()?.forEach { (key, value) ->
-                        if (value.isEmpty) return@forEach
-                        set(DataMarker.ComponentDataMarker(key), value.get())
+                    modifier.getExtraComponents(itemStack)?.split()?.added?.forEach {
+                        set(DataMarker.ComponentDataMarker(it.type), it.value)
                     }
                 }
                 if (state.get()) {

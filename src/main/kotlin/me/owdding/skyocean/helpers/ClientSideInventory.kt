@@ -1,12 +1,11 @@
 package me.owdding.skyocean.helpers
 
-import me.owdding.lib.platform.screens.KeyEvent
-import me.owdding.lib.platform.screens.MouseButtonEvent
-import me.owdding.lib.utils.matches
 import me.owdding.skyocean.helpers.ClientSideInventory.Slot.Companion.asSlots
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.rendering.RenderUtils
 import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
@@ -115,7 +114,8 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
     }
 
     override fun mouseClicked(mouseEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean {
-        val (mouseX, mouseY) = mouseEvent
+        val mouseX = mouseEvent.x
+        val mouseY = mouseEvent.y
         val offsetX = this.x + 8
         val offsetY = this.y + 18
         val localX = mouseX - offsetX

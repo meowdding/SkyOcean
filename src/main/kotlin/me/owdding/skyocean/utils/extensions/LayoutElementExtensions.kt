@@ -39,7 +39,6 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.util.TriState
 import org.jetbrains.annotations.Contract
-import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -383,8 +382,8 @@ fun createButton(
     builder: Button.() -> Unit = {},
 ): Button = Widgets.button().apply {
     click?.let { withCallback(click) }
-    rightClick?.let { withCallback(GLFW.GLFW_MOUSE_BUTTON_RIGHT, rightClick) }
-    leftClick?.let { withCallback(GLFW.GLFW_MOUSE_BUTTON_LEFT, leftClick) }
+    rightClick?.let { withCallback(1, rightClick) }
+    leftClick?.let { withCallback(0, leftClick) }
     if (icon != null || text != null) {
         withRenderer(
             WidgetRenderers.layered(

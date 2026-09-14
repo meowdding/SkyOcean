@@ -1,7 +1,7 @@
 package me.owdding.skyocean.utils.rendering
 
 //? >= 26.2 {
-import com.mojang.blaze3d.PrimitiveTopology
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
 import com.mojang.blaze3d.vertex.BufferBuilder
 import com.mojang.blaze3d.vertex.ByteBufferBuilder
 //? }
@@ -9,9 +9,10 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 //? 26.1 {
 /*import com.mojang.blaze3d.vertex.Tesselator
-import com.mojang.blaze3d.vertex.VertexFormat
+import com.mojang.renderpearl.api.vertex.VertexFormat
 *///? }
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer
+import earth.terrarium.olympus.client.pipelines.renderer.PipelineTarget
 import me.owdding.lib.rendering.MeowddingPipState
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.navigation.ScreenRectangle
@@ -99,7 +100,7 @@ class MonoInventoryPipRenderer() : PictureInPictureRenderer<MonoInventoryPipStat
                 .uniform(MonoInventoryUniform.STORAGE, MonoInventoryUniform(state.size, if (state.vertical) 1 else 0))
                 .textures(TextureSetup.singleTexture(texture.textureView, texture.sampler))
                 .color(state.color)
-                .draw()
+                .draw(PipelineTarget(this))
 
             this.lastState = state
             //? >= 26.2
@@ -141,7 +142,7 @@ class PolyInventoryPipRenderer() : PictureInPictureRenderer<PolyInventoryPipStat
                 .uniform(PolyInventoryUniform.STORAGE, PolyInventoryUniform(state.size))
                 .textures(TextureSetup.singleTexture(texture.textureView, texture.sampler))
                 .color(state.color)
-                .draw()
+                .draw(PipelineTarget(this))
 
             this.lastState = state
         //? >= 26.2

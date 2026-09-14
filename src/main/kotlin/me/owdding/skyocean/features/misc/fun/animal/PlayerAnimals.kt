@@ -70,11 +70,13 @@ object PlayerAnimals {
         }
         if (state is HumanoidRenderState) {
             state.swimAmount = avatarState.swimAmount
-            state.attackTime = avatarState.attackTime
+            //? < 26.3
+            //state.attackTime = avatarState.attackTime
             state.speedValue = avatarState.speedValue
             state.maxCrossbowChargeDuration = avatarState.maxCrossbowChargeDuration
             state.ticksUsingItem = avatarState.ticksUsingItem
-            state.attackArm = avatarState.attackArm
+            //? < 26.3
+            //state.attackArm = avatarState.attackArm
             state.useItemHand = avatarState.useItemHand
             state.isCrouching = avatarState.isCrouching
             state.isFallFlying = avatarState.isFallFlying
@@ -99,7 +101,7 @@ object PlayerAnimals {
 
     fun createRenderer(context: EntityRendererProvider.Context) {
         this.context = context
-        renderer = object : LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>(context, null, 20f) {
+        renderer = object : LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>(context, object : EntityModel<LivingEntityRenderState>(null) {}, 20f) {
             override fun getTextureLocation(renderState: LivingEntityRenderState): Identifier = SkyOcean.id("none")
             override fun createRenderState(): LivingEntityRenderState? = null
         }

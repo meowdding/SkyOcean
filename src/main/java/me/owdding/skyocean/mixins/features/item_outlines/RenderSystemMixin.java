@@ -1,7 +1,7 @@
 package me.owdding.skyocean.mixins.features.item_outlines;
 
-import com.mojang.blaze3d.buffers.GpuBuffer;
-import com.mojang.blaze3d.systems.RenderPass;
+import com.mojang.renderpearl.api.buffers.GpuBuffer;
+import com.mojang.renderpearl.api.commands.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.owdding.skyocean.features.item.RarityOutlines;
 import org.spongepowered.asm.mixin.Mixin;
