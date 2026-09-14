@@ -1,6 +1,5 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
-import me.owdding.lib.extensions.ceil
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.ParentRecipe
@@ -27,12 +26,12 @@ sealed interface CraftHelperParentNode : CraftHelperEntry{
             val recipe = (recipe as? ParentRecipe)?.getRecipe(it) ?: SimpleRecipeApi.getBestRecipe(it)
             if (visitedRecipes.contains(recipe)) return@forEach
             val recipeOutput = recipe?.output?.amount ?: 1
-            val totalRequired = it.amount * amount
+            val totalRequired = Math.multiplyExact(it.amount, amount)
             val carriedOver = context[it].coerceAtMost(totalRequired)
             val requiredAmount = totalRequired - carriedOver
             val carriedOverOver = context[it] - carriedOver
-            val craftsRequired = (requiredAmount / recipeOutput.toFloat()).ceil()
-            val remainder = (craftsRequired * recipeOutput - requiredAmount).coerceAtLeast(0)
+            val craftsRequired = Math.ceilDiv(requiredAmount, recipeOutput)
+            val remainder = (craftsRequired.toLong() * recipeOutput - requiredAmount).toInt()
             context[it] = remainder + carriedOverOver
 
             if (recipe != null) {
