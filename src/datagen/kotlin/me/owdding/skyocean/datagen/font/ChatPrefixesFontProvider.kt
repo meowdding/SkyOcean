@@ -33,7 +33,7 @@ class ChatPrefixesFontProvider(output: FabricPackOutput) : SkyOceanFontProvider(
         val blank = ImageIO.read(Utils.loadFromResourcesAsStream("data/skyocean/textures/chat_prefixes_blank.png"))
         val left = blank.getSubimage(0, 0, 2, backgroundHeight)
         val middle = blank.getSubimage(2, 0, 6, backgroundHeight)
-        val right = blank.getSubimage(8, 0, 5, backgroundHeight)
+        val right = blank.getSubimage(8, 0, 3, backgroundHeight)
 
         val font = ImageIO.read(Utils.loadFromResourcesAsStream("data/skyocean/textures/small.png"))
         val fontMap: Map<Char, BufferedImage> = (('A'..'Z') + '-').mapIndexed { index, character ->
@@ -43,8 +43,8 @@ class ChatPrefixesFontProvider(output: FabricPackOutput) : SkyOceanFontProvider(
         KnownChatPrefix.entries.forEach {
             val name = it.displayName
             val spacedWidth = fontWidth + 1
-            // 2 blank before text, 4 blank after text, 2 spaces after
-            val totalWidth = 2 + (name.length * spacedWidth) + 4 + 2 - 1
+            // 2 blank before text, 4 blank after text
+            val totalWidth = 2 + (name.length * spacedWidth) + 4 - 1
             val image = BufferedImage(totalWidth, backgroundHeight, BufferedImage.TYPE_INT_ARGB)
 
             val graphics = image.createGraphics()

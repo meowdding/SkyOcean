@@ -26,8 +26,8 @@ object ChatTypePrefixes {
     val CHAT_PREFIXES = SkyOcean.id("chat_prefixes")
     val EMPTY_FONT = SkyOcean.id("empty_font")
 
-    private val normalChatPrefixRegex = "^(?<type>[\\w-]+) > ".toRegex()
-    private val npcRegex = "^\\[NPC] ".toRegex()
+    private val normalChatPrefixRegex = "^(?<type>[\\w-]+) >".toRegex()
+    private val npcRegex = "^\\[NPC]".toRegex()
 
     @Subscription(priority = Subscription.LOW)
     fun onChat(event: ChatReceivedEvent.Post) {
