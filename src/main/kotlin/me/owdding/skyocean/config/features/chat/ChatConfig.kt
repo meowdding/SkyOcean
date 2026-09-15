@@ -2,6 +2,7 @@ package me.owdding.skyocean.config.features.chat
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.defaultEnabledMessage
+import me.owdding.skyocean.features.chat.ConfigChatPrefix
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 
@@ -20,6 +21,16 @@ object ChatConfig : CategoryKt("chat") {
     var whiteNonMessage by boolean(false) {
         this.searchTerms += "non"
         this.translation = "skyocean.config.chat.white_non_message"
+    }
+
+    var chatPrefixesIcons by boolean(false) {
+        this.searchTerms += ConfigChatPrefix.searchTerms
+        this.translation = "skyocean.config.chat.chat_prefixes_icons"
+    }
+
+    var allowedChatPrefixesIcons by select(*ConfigChatPrefix.default.toTypedArray()) {
+        this.searchTerms += ConfigChatPrefix.searchTerms
+        this.translation = "skyocean.config.chat.allowed_chat_prefixes_icons"
     }
 
     var piggyRepairHelper by boolean(true) {

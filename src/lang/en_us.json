@@ -404,6 +404,14 @@
           "@value": "Consistent Player Message Colour",
           "desc": "Changes the color of messages sent by unranked players from gray to white."
         },
+        "chat_prefixes_icons": {
+          "@value": "Chat Prefixes Icons",
+          "desc": "Replaces vanilla chat prefixes, such as \"<dark_green>Guild \\></dark_green>\", for more stylized ones."
+        },
+        "allowed_chat_prefixes_icons": {
+          "@value": "Allowed Chat Prefixes Icons",
+          "desc": "What prefixes will be replaced with the more stylized ones when using Chat Prefixes Icons"
+        },
         "piggy_repair_helper": {
           "@value": "Piggy Repair Helper",
           "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."

@@ -39,8 +39,8 @@ class MobTypesFontProvider(output: FabricPackOutput, val converter: (KnownMobIco
         val right = blank.getSubimage(9, 0, 2, backgroundHeight)
 
         val font = ImageIO.read(Utils.loadFromResourcesAsStream("data/skyocean/textures/small.png"))
-        val fontMap: Map<Char, BufferedImage> = ('a'..'z').mapIndexed { index, character ->
-            character.uppercaseChar() to font.getSubimage(index * fontWidth, 0, fontWidth, fontHeight)
+        val fontMap: Map<Char, BufferedImage> = (('A'..'Z') + '-').mapIndexed { index, character ->
+            character to font.getSubimage(index * fontWidth, 0, fontWidth, fontHeight)
         }.toMap()
 
         KnownMobIcon.entries.forEach {
