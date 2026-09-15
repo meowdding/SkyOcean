@@ -2,7 +2,7 @@ package me.owdding.skyocean.datagen
 
 import me.owdding.skyocean.datagen.dispatcher.SkyOceanDataGenerator
 import me.owdding.skyocean.datagen.dispatcher.SkyOceanDataGeneratorEntrypoint
-import me.owdding.skyocean.datagen.font.ChatPrefixesFontProvider
+import me.owdding.skyocean.datagen.font.StylizedChatPrefixesFontProvider
 import me.owdding.skyocean.datagen.font.EmptyFontProvider
 import me.owdding.skyocean.datagen.font.FontIconsProvider
 import me.owdding.skyocean.datagen.font.MobTypesFontProvider
@@ -16,7 +16,7 @@ object SkyOceanDatagen : SkyOceanDataGeneratorEntrypoint() {
         val createPack = output.createPack()
         createPack.register { MobTypesFontProvider(it, KnownMobIcon::name, MobIcons.MOB_ICONS) }
         createPack.register { MobTypesFontProvider(it, KnownMobIcon::short, MobIcons.MOB_ICONS_SHORT) }
-        createPack.register { ChatPrefixesFontProvider(it) }
+        createPack.register { StylizedChatPrefixesFontProvider(it) }
         createPack.register { FontIconsProvider(it) }
         createPack.register { EmptyFontProvider(it) }
         createPack.addProvider(::EntityTagProvider)

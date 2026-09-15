@@ -23,16 +23,6 @@ object ChatConfig : CategoryKt("chat") {
         this.translation = "skyocean.config.chat.white_non_message"
     }
 
-    var chatPrefixesIcons by boolean(false) {
-        this.searchTerms += ConfigChatPrefix.searchTerms
-        this.translation = "skyocean.config.chat.chat_prefixes_icons"
-    }
-
-    var allowedChatPrefixesIcons by select(*ConfigChatPrefix.default.toTypedArray()) {
-        this.searchTerms += ConfigChatPrefix.searchTerms
-        this.translation = "skyocean.config.chat.allowed_chat_prefixes_icons"
-    }
-
     var piggyRepairHelper by boolean(true) {
         this.translation = "skyocean.config.chat.piggy_repair_helper"
     }
@@ -43,6 +33,40 @@ object ChatConfig : CategoryKt("chat") {
 
     var hideBlazetekkMessages by boolean(false) {
         this.translation = "skyocean.config.chat.hide_blazetekk"
+    }
+
+    init {
+        separator {
+            title = "Stylized Chat Prefixes"
+        }
+    }
+
+    var enableStylizedChatPrefixes by boolean(false) {
+        this.searchTerms += ConfigChatPrefix.searchTerms
+        this.translation = "skyocean.config.chat.stylized_chat_prefixes"
+    }
+
+    var allowedStylizedChatPrefixes by select(*ConfigChatPrefix.default.toTypedArray()) {
+        this.searchTerms += ConfigChatPrefix.searchTerms
+        this.translation = "skyocean.config.chat.allowed_stylized_chat_prefixes"
+    }
+
+    init {
+        separator {
+            title = "Bridge Formatter"
+        }
+    }
+
+    var enableBridgeFormatter by boolean(false) {
+        this.translation = "skyocean.config.chat.bridge_formatter"
+    }
+
+    var bridgeFormatterIgn by string("") {
+        this.translation = "skyocean.config.chat.bridge_formatter_ign"
+    }
+
+    var bridgeFormatterStylizedChatPrefix by boolean(false) {
+        this.translation = "skyocean.config.chat.bridge_formatter_stylized_chat_prefix"
     }
 
     init {

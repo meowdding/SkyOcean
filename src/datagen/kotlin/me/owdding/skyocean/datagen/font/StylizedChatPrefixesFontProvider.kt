@@ -5,7 +5,7 @@ import com.google.common.hash.HashingOutputStream
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.datagen.providers.PngHolder
 import me.owdding.skyocean.datagen.providers.SkyOceanFontProvider
-import me.owdding.skyocean.features.chat.ChatTypePrefixes
+import me.owdding.skyocean.features.chat.StylizedChatPrefixes
 import me.owdding.skyocean.features.chat.KnownChatPrefix
 import me.owdding.skyocean.utils.Utils
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput
@@ -23,7 +23,7 @@ private const val fontWidth = 5
 private const val fontHeight = 5
 private const val backgroundHeight = 7
 
-class ChatPrefixesFontProvider(output: FabricPackOutput) : SkyOceanFontProvider(output, ChatTypePrefixes.CHAT_PREFIXES) {
+class StylizedChatPrefixesFontProvider(output: FabricPackOutput) : SkyOceanFontProvider(output, StylizedChatPrefixes.STYLIZED_CHAT_PREFIXES) {
     private val chatPrefixesTexturePath: String = id.path
 
     private val chatPrefixesProvider: PackOutput.PathProvider = output.createPathProvider(RESOURCE_PACK, "textures/$chatPrefixesTexturePath")
@@ -101,5 +101,5 @@ class ChatPrefixesFontProvider(output: FabricPackOutput) : SkyOceanFontProvider(
         return CompletableFuture.allOf(pngHolder.save(output))
     }
 
-    override fun getName() = "Chat Prefixes Font Generator"
+    override fun getName() = "Stylized Chat Prefixes Font Generator"
 }
