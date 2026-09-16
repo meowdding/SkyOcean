@@ -13,14 +13,10 @@ import net.minecraft.data.CachedOutput
 import net.minecraft.data.PackOutput
 import org.apache.commons.io.output.ByteArrayOutputStream
 import java.awt.Color
-import java.awt.Graphics2D
 import java.awt.image.BufferedImage
-import java.awt.image.RescaleOp
 import java.util.concurrent.CompletableFuture
 import javax.imageio.ImageIO
 
-private const val fontWidth = 5
-private const val fontHeight = 5
 private const val backgroundHeight = 7
 
 class StylizedChatPrefixesFontProvider(output: FabricPackOutput) : SkyOceanFontProvider(output, StylizedChatPrefixes.STYLIZED_CHAT_PREFIXES) {
@@ -35,14 +31,11 @@ class StylizedChatPrefixesFontProvider(output: FabricPackOutput) : SkyOceanFontP
         val middle = blank.getSubimage(2, 0, 6, backgroundHeight)
         val right = blank.getSubimage(8, 0, 3, backgroundHeight)
 
-        val font = ImageIO.read(Utils.loadFromResourcesAsStream("data/skyocean/textures/small.png"))
-        val fontMap: Map<Char, BufferedImage> = (('A'..'Z') + '-').mapIndexed { index, character ->
-            character to font.getSubimage(index * fontWidth, 0, fontWidth, fontHeight)
-        }.toMap()
+        val fontMap = getSmallFont()
 
         KnownChatPrefix.entries.forEach {
             val name = it.displayName
-            val spacedWidth = fontWidth + 1
+            val spacedWidth = smallFontWidth + 1
             // 2 blank before text, 4 blank after text
             val totalWidth = 2 + (name.length * spacedWidth) + 4 - 1
             val image = BufferedImage(totalWidth, backgroundHeight, BufferedImage.TYPE_INT_ARGB)
@@ -80,20 +73,6 @@ class StylizedChatPrefixesFontProvider(output: FabricPackOutput) : SkyOceanFontP
                 row(it.icon)
             }
         }
-    }
-
-    private fun Graphics2D.drawImageTinted(
-        image: BufferedImage,
-        x: Int,
-        y: Int,
-        tint: Color,
-    ) {
-        val tintedImage = RescaleOp(
-            tint.getRGBComponents(null),
-            FloatArray(4) { 0f },
-            null,
-        ).filter(image, null)
-        drawImage(tintedImage, x, y, null)
     }
 
     override fun run(output: CachedOutput): CompletableFuture<*> {
