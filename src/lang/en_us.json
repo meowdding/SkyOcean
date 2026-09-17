@@ -180,6 +180,7 @@
         },
         "hotm": {
           "@value": "Heart of the Mountain Perk Modifier",
+          "desc": "",
           "shiftCost": {
             "@value": "Show shift click cost",
             "desc": "Shows the amount of powder that will be consumed on shift click."
@@ -225,6 +226,7 @@
         },
         "metal_detector": {
           "@value": "Metal Detector Solver",
+          "desc": "",
           "metalDetector": {
             "@value": "Enable Metal Detector Solver",
             "desc": "Enables the metal detector solver, which helps you find treasures in the Mines of Divan."
