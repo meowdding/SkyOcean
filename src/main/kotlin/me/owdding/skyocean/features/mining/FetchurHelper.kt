@@ -34,9 +34,6 @@ object FetchurHelper {
     private val fetchurItems = Utils.loadRepoData("mining/fetchur", CodecHelpers.list<FetchurItem>())
     private var fetchurItem: FetchurItem? = null
 
-    // tbh this doenst really work as i expected,
-    // since you obvisouly cant craft mithril
-    // so idk if we should even do this
     private val craftHelperButton by lazy {
         text {
             append(" [", TextColor.YELLOW)
@@ -70,7 +67,6 @@ object FetchurHelper {
                 append(item.itemName, OceanColors.HIGHLIGHT)
                 append(craftHelperButton)
             }.sendWithPrefix()
-            // TODO: do item tracker stuff
         }
     }
 

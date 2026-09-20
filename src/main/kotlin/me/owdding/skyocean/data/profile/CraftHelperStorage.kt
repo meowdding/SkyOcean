@@ -1,7 +1,7 @@
 package me.owdding.skyocean.data.profile
 
-import me.owdding.skyocean.features.recipe.Recipe
 import me.owdding.skyocean.features.recipe.RepoApiRecipe
+import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.RepoLibRecipeTree
@@ -17,6 +17,9 @@ import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.math.ceil
 
 @LateInitModule
@@ -62,7 +65,7 @@ object CraftHelperStorage {
         setAmount(Utils.nextUp(amount, craftAmount))
         save()
         text("Set current recipe to ") {
-            append("${selectedAmount}x ") { color = TextColor.GREEN }
+            append("${selectedAmount}x ", TextColor.GREEN)
             append(selectedItem?.toItem()?.let(ItemStack::getHoverName) ?: !"unknown")
             append("!")
         }.sendWithPrefix()
