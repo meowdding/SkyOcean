@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.mining.MineshaftConfig
+import me.owdding.skyocean.events.RenderTranslucentFeatures
 import me.owdding.skyocean.utils.RemoteRepoDelegate
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils
@@ -13,6 +14,7 @@ import me.owdding.skyocean.utils.rendering.RenderUtils.renderTextInWorld
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.phys.Vec3
+import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.MineshaftAPI
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.MineshaftType
 import tech.thatgravyboat.skyblockapi.api.area.mining.mineshaft.MineshaftVariant
@@ -55,15 +57,21 @@ object CorpseWaypoint {
         CODEC,
     )
 
+    //? >= 26.2
+    @Subscription
+    fun onRender(event: RenderWorldEvent.AfterTranslucent) {
+        RenderTranslucentFeatures(event).post(SkyBlockAPI.eventBus)
+    }
+
     @Subscription
     @OnlyIn(SkyBlockIsland.MINESHAFT)
-    fun onRender(event: RenderWorldEvent.AfterTranslucent) {
+    fun onRender(event: RenderTranslucentFeatures) {
         if (!MineshaftConfig.corpseWaypoint) return
         val mineshaft = mineshaftCorpses?.entries?.find { it.key == MineshaftAPI.mineshaftType } ?: return
         val corpses = mineshaft.value.entries.find { it.key == MineshaftAPI.mineshaftVariant }?.value ?: return
 
         corpses.forEach {
-            event.renderTextInWorld(Vec3(it), ChatUtils.asSkyOceanColor("Corpse"), true)
+            event.event.renderTextInWorld(Vec3(it), ChatUtils.asSkyOceanColor("Corpse"), true)
         }
     }
 

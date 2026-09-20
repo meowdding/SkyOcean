@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.lib.utils.KnownMods
 import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.config.duration
+import me.owdding.skyocean.config.features.inventory.SackValueConfig
 import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlightMode
 import me.owdding.skyocean.utils.MinecraftColor
@@ -42,6 +43,19 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.revertMasterStars"
     }
 
+    var quickJoinButton by boolean(false) {
+        translation = "skyocean.config.misc.quickJoinButton"
+        searchTerms = listOf("hypixel", "quick", "join", "server")
+    }
+
+    var quickJoinText by string("Join {ip}") {
+        translation = "skyocean.config.misc.quickJoinText"
+    }
+
+    var quickJoinIp by string("mc.hypixel.net") {
+        translation = "skyocean.config.misc.quickJoinIp"
+    }
+
     var hideLightning by boolean(false) {
         translation = "skyocean.config.misc.hideLightning"
     }
@@ -56,6 +70,10 @@ object MiscConfig : CategoryKt("misc") {
 
     var hideEntityFire by boolean(false) {
         translation = "skyocean.config.misc.hideEntityFire"
+    }
+
+    var hideImplosions by boolean(false) {
+        translation = "skyocean.config.misc.hideImplosions"
     }
 
     var islandCloudHider by defaultEnabledMessage(
@@ -77,12 +95,43 @@ object MiscConfig : CategoryKt("misc") {
         this.translation = "skyocean.config.misc.customization_vanilla_integration"
     }
 
+    var totemAnimation by boolean(false) {
+        translation = "skyocean.config.misc.totemAnimation"
+        searchTerms = listOf("bonzo", "spirit", "mask", "phoenix", "pet", "remnant", "eye")
+    }
+
     var queueEstimation by boolean(true) {
         translation = "skyocean.config.misc.queueEstimation"
     }
 
+    var netherFogDarkening by defaultEnabledMessage(
+        boolean(true) {
+            translation = "skyocean.config.misc.netherFogDarkening"
+        },
+        { +"skyocean.config.misc.netherFogDarkening.warning" }, "netherFogDarkening",
+        predicate = { SkyBlockIsland.CRIMSON_ISLE.inIsland() },
+    )
+
+    var netherFogScale by float(0.25f) {
+        translation = "skyocean.config.misc.netherFogScale"
+        slider = true
+        range = 0f..1f
+    }
+
+    var ratHitbox by boolean(false) {
+        translation = "skyocean.config.misc.ratHitbox"
+    }
+
+    var stereoPantsMute by boolean(false) {
+        translation = "skyocean.config.misc.stereoPantsMute"
+    }
+
     init {
         separator("skyocean.config.misc.itemSearch")
+    }
+
+    var itemSearchKeybindOnHover by boolean(false) {
+        translation = "skyocean.config.misc.itemSearch.keybindOnHover"
     }
 
     var itemSearchItemHighlight by enum(MinecraftColor.RED) {
@@ -99,7 +148,15 @@ object MiscConfig : CategoryKt("misc") {
         range = 10L..60L
     }.duration(SECONDS)
 
-    var useReiSearchBar by boolean(true) {
+    var priceSource by enum(SackValueConfig.PriceSource.BAZAAR) {
+        translation = "skyocean.config.misc.itemSearch.priceSource"
+    }
+
+    var showTotalValue by boolean(true) {
+        translation = "skyocean.config.misc.itemSearch.showTotalValue"
+    }
+
+    var useReiSearchBar by boolean(false) {
         translation = "skyocean.config.misc.itemSearch.useReiSearchBar"
         condition = KnownMods.REI::installed
     }
@@ -126,10 +183,6 @@ object MiscConfig : CategoryKt("misc") {
 
     var transparentArmorOthers by transparency(100) {
         translation = "skyocean.config.misc.transparentArmor.others"
-    }
-
-    var ratHitbox by boolean(false) {
-        translation = "skyocean.config.misc.ratHitbox"
     }
 }
 

@@ -4,6 +4,9 @@ import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.codecs.CodecHelpers
+import me.owdding.skyocean.utils.extensions.asBlueprint
+import me.owdding.skyocean.utils.items.ItemStackBlueprint
+import me.owdding.skyocean.utils.levelBound
 import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.ItemStack
@@ -50,10 +53,16 @@ object IslandChestStorage {
 
 @GenerateCodec
 data class ChestItem(
-    @FieldName("item_stack") val itemStack: ItemStack,
+    @FieldName("item_stack") val itemStackBlueprint: ItemStackBlueprint,
     val slot: Int = 0,
     val pos: BlockPos,
     val pos2: BlockPos?,
 ) {
+    constructor(template: ItemStack, slot: Int = 0, pos: BlockPos, pos2: BlockPos?) : this(template.asBlueprint(), slot, pos, pos2)
+
+    operator fun component5() = itemStack
+
+    val itemStack: ItemStack by levelBound { itemStackBlueprint.create() }
     val posList: List<BlockPos> get() = listOfNotNull(pos, pos2)
 }
+

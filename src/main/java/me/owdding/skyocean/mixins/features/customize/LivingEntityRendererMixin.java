@@ -40,11 +40,7 @@ public abstract class LivingEntityRendererMixin<T extends Mob, S extends Humanoi
         method = "extractHumanoidRenderState",
         at = @At(
             value = "INVOKE",
-            //? > 1.21.10 {
             target = "Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;extractArmedEntityRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;Lnet/minecraft/client/renderer/item/ItemModelResolver;F)V",
-            //?} else {
-            /*target = "Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;extractArmedEntityRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/ArmedEntityRenderState;Lnet/minecraft/client/renderer/item/ItemModelResolver;)V",
-            *///?}
             shift = At.Shift.AFTER
         )
     )
@@ -54,18 +50,17 @@ public abstract class LivingEntityRendererMixin<T extends Mob, S extends Humanoi
         var model = CustomItemsHelper.getCustomData(item, CustomItemDataComponents.model());
 
         if (profile == null && model == null) return;
-        var itemModel = model == null ? item.getItem() : Objects.requireNonNullElse(model.resolveToItem(), item.getItem());
+        var itemModel = model == null ? item : Objects.requireNonNullElse(model.resolveToItem(), item);
 
         state.wornHeadProfile = profile;
-        if (itemModel instanceof BlockItem blockItem && blockItem.getBlock() instanceof AbstractSkullBlock abstractSkullBlock) {
+        if (itemModel.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof AbstractSkullBlock abstractSkullBlock) {
             state.wornHeadType = abstractSkullBlock.getType();
             state.headItem.clear();
             state.headEquipment = ItemStack.EMPTY;
         } else {
             state.headEquipment = item;
-            var defaultInstance = itemModel.getDefaultInstance();
-            if (!HumanoidArmorLayer.shouldRender(defaultInstance, EquipmentSlot.HEAD)) {
-                itemModelResolver.updateForLiving(state.headItem, defaultInstance, ItemDisplayContext.HEAD, entity);
+            if (!HumanoidArmorLayer.shouldRender(itemModel, EquipmentSlot.HEAD)) {
+                itemModelResolver.updateForLiving(state.headItem, itemModel, ItemDisplayContext.HEAD, entity);
             } else {
                 state.headItem.clear();
             }

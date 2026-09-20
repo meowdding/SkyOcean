@@ -7,20 +7,26 @@ import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.components.textbox.TextBox
 import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.ui.UIIcons
-import earth.terrarium.olympus.client.ui.context.ContextMenu
 import earth.terrarium.olympus.client.utils.ListenableState
 import earth.terrarium.olympus.client.utils.StateUtils
 import me.owdding.lib.builder.LEFT
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.builder.RIGHT
-import me.owdding.lib.displays.*
+import me.owdding.lib.displays.DisplayWidget
+import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
+import me.owdding.lib.displays.asButton
+import me.owdding.lib.displays.asButtonLeft
+import me.owdding.lib.displays.asWidget
+import me.owdding.lib.displays.centerIn
+import me.owdding.lib.displays.withPadding
+import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.extensions.rightPad
 import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.ScalableWidget
-import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.config.features.misc.MiscConfig
+import me.owdding.skyocean.features.inventory.SackValue
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
 import me.owdding.skyocean.features.item.search.matcher.ItemMatcher
 import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
@@ -30,19 +36,26 @@ import me.owdding.skyocean.features.item.sources.system.BundledItemContext
 import me.owdding.skyocean.features.item.sources.system.TrackedItem
 import me.owdding.skyocean.features.item.sources.system.TrackedItemBundle
 import me.owdding.skyocean.utils.SkyOceanScreen
+import me.owdding.skyocean.utils.Utils.next
+import me.owdding.skyocean.utils.Utils.nextCycling
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
-import tech.thatgravyboat.skyblockapi.utils.extentions.*
+import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
+import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
+import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -120,6 +133,38 @@ object ItemSearchScreen : SkyOceanScreen() {
                         spacer(width)
                         LayoutFactory.horizontal {
                             spacer(height = 24)
+
+                            if (MiscConfig.showTotalValue) {
+                                val total = items.filter { (itemStack) -> matches(itemStack) }.sumOf { (_, _, price) -> price }
+
+                                Button().apply {
+                                    setSize(20, 20)
+                                    withTexture(null)
+                                    withTooltip(
+                                        Text.multiline(
+                                            Text.of("Total Value: (${MiscConfig.priceSource.name})", TextColor.GRAY),
+                                            Text.of(total.toFormattedString(), TextColor.GOLD),
+                                            Text.of(""),
+                                            Text.of("Click to cycle the price source.", TextColor.GRAY)
+                                        )
+                                    )
+                                    val display = WidgetRenderers.text<Button>(Text.of("$", TextColor.GREEN)).apply { withShadow() }
+                                    val buttonTexture = WidgetRenderers.sprite<Button>(UIConstants.GOLD_BUTTON)
+                                    withRenderer(
+                                        WidgetRenderers.layered(
+                                            { graphics, widget, ticks -> buttonTexture.render(graphics, widget, ticks) },
+                                            { graphics, widget, ticks -> display.render(graphics, widget, ticks) },
+                                        )
+                                    )
+                                    withCallback {
+                                        MiscConfig.priceSource = MiscConfig.priceSource.nextCycling()
+                                        rebuildItems()
+                                        rebuildWidgets()
+                                    }
+                                }.add { alignVerticallyMiddle() }
+                                spacer(width = 4)
+                            }
+
                             textBox = Widgets.textInput(state) { box ->
                                 box.withChangeCallback(::refreshSearch)
                                 box.withPlaceholder("Search...")
@@ -138,9 +183,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                             Widgets.dropdown(
                                 dropdownState,
                                 SortModes.entries,
-                                { modes ->
-                                    Text.of(modes.name.toTitleCase())
-                                },
+                                { modes -> Text.translatable(modes.translationKey) },
                                 { button -> button.withSize(80, 20) },
                             ) { builder ->
                                 builder.withCallback(::refreshSort)
@@ -157,7 +200,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                                         factory.isFocused = false
                                     }
                                 }
-                                factory.withRenderer { graphics, widget, partialTick ->
+                                factory.withRenderer { graphics, widget, _ ->
                                     val texture = if (ascending.get()) {
                                         UIIcons.CHEVRON_UP
                                     } else {
@@ -236,13 +279,13 @@ object ItemSearchScreen : SkyOceanScreen() {
         focused = widget
     }
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
-        if (McClient.self.screen !is ItemSearchScreen) {
+    override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, f: Float) {
+        if (McScreen.self !is ItemSearchScreen) {
             Displays.disableTooltips {
-                super.render(graphics, mouseX, mouseY, f)
+                super.extractRenderState(graphics, mouseX, mouseY, f)
             }
         } else {
-            super.render(graphics, mouseX, mouseY, f)
+            super.extractRenderState(graphics, mouseX, mouseY, f)
         }
     }
 
@@ -318,21 +361,7 @@ object ItemSearchScreen : SkyOceanScreen() {
 
             if (context is SackItemContext || (context is BundledItemContext && context.map.containsKey(ItemSources.SACKS))) {
                 item.asButton(leftAction) {
-                    ContextMenu.open { menu ->
-                        menu.withAutoCloseOff()
-                        val title = "Get From Sacks"
-                        menu.add { Widgets.text(title).withPadding(3) }
-                        menu.add {
-                            val state = ListenableState.of("")
-                            Widgets.textInput(state) {
-                                it.withSize(McFont.width(title), 20)
-                                it.withEnterCallback {
-                                    McClient.sendCommand("/gfs ${itemStack.getSkyBlockId()} ${state.get().parseFormattedLong()}")
-                                    menu.onClose()
-                                }
-                            }.withPadding(3)
-                        }
-                    }
+                    SackValue.openGfsContextMenu(itemStack.getSkyBlockId() ?: return@asButton)
                 }
             } else {
                 item.asButtonLeft(leftAction)

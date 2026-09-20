@@ -1,7 +1,7 @@
 package me.owdding.skyocean.features.recipe.crafthelper.display
 
 import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 enum class CraftHelperLocation(val position: (Int, Int) -> Pair<Int, Int>) : Translatable {

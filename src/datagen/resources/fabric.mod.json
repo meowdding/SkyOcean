@@ -11,8 +11,5 @@
         "adapter": "kotlin"
       }
     ]
-  },
-  "mixins": [
-    "skyocean.datagen.mixins.json"
-  ]
+  }
 }

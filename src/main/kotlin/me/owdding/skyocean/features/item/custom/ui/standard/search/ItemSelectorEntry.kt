@@ -7,6 +7,7 @@ import me.owdding.skyocean.mixins.ModelManagerAccessor
 import me.owdding.skyocean.utils.Utils.applyCatching
 import me.owdding.skyocean.utils.Utils.itemBuilder
 import me.owdding.skyocean.utils.Utils.set
+import me.owdding.skyocean.utils.extensions.model
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
@@ -85,7 +86,7 @@ data class SkyBlockModelEntry(
 
     override fun resolve(parent: ItemStack): ItemStack = itemBuilder(parent) {
         val item = model.toItem()
-        set(DataComponents.ITEM_MODEL, BuiltInRegistries.ITEM.getKey(item.getItemModel()))
+        set(DataComponents.ITEM_MODEL, item.model())
         set(
             DataComponents.CUSTOM_DATA,
             CustomData.of(

@@ -37,7 +37,11 @@ object QueueEstimate {
     @Subscription
     fun onTick(event: TickEvent) {
         if (!MiscConfig.queueEstimation) return
-        val title = McClient.self.gui.subtitle?.stripped ?: run {
+        //? >= 26.2 {
+        val title = McClient.self.gui.hud.subtitle?.stripped
+        //?} else
+        //val title = McClient.self.gui.subtitle?.stripped
+        if (title == null) {
             lastTitle = null
             history.clear()
             estimate = null
@@ -93,7 +97,7 @@ object QueueEstimate {
             }
         }
 
-        display.centerIn(McClient.window.guiScaledWidth, McClient.window.guiScaledHeight / 3).render(event.graphics)
+        display.centerIn(McClient.window.guiScaledWidth, McClient.window.guiScaledHeight / 3).extract(event.graphics)
     }
 
     private fun predict(): Instant? {

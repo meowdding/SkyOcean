@@ -20,6 +20,8 @@ interface HotkeyAction {
 
     operator fun invoke() = perform()
 
+    fun duplicate(): HotkeyAction
+
     context(context: WidgetContext)
     fun asLayoutElement(selector: LayoutElement): LayoutElement
 

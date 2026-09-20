@@ -12,7 +12,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object ChestItemSource : ItemSource {
-    override fun getAll() = IslandChestStorage.getItems().map { (itemStack, _, pos, secondPos) ->
+    override fun getAll() = IslandChestStorage.getItems().map { (_, _, pos, secondPos, itemStack) ->
         SimpleTrackedItem(itemStack, ChestItemContext(pos, secondPos))
     }
 

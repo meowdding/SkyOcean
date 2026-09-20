@@ -1,7 +1,6 @@
 package me.owdding.skyocean.utils.extensions
 
 import com.teamresourceful.resourcefullib.common.color.Color
-import com.teamresourceful.resourcefullib.common.utils.TriState
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
 import earth.terrarium.olympus.client.components.buttons.Button
@@ -14,7 +13,6 @@ import earth.terrarium.olympus.client.components.renderers.ColorableWidget
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.components.string.TextWidget
 import earth.terrarium.olympus.client.constants.MinecraftColors
-import earth.terrarium.olympus.client.ui.OverlayAlignment
 import earth.terrarium.olympus.client.ui.UIConstants
 import earth.terrarium.olympus.client.ui.UIIcons
 import earth.terrarium.olympus.client.ui.context.ContextMenu
@@ -39,6 +37,7 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
+import net.minecraft.util.TriState
 import org.jetbrains.annotations.Contract
 import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -88,7 +87,7 @@ fun AbstractWidget.asScrollable(
     alwaysShowScrollBar: Boolean = false,
 ): LayoutWidget<FrameLayout> {
     val scrollable = Widgets.frame { frame ->
-        frame.withScrollableY(TriState.of(alwaysShowScrollBar.takeIf { it }))
+        frame.withScrollableY(alwaysShowScrollBar.takeIf { it }?.let { TriState.TRUE } ?: TriState.DEFAULT)
             .withSize(width, this.height.coerceAtMost(height))
             .withAutoFocus(false)
             .withContents { contents ->
@@ -408,6 +407,11 @@ fun createButton(
     withSize(width, height)
 }.apply(builder)
 
+fun createInfo(hover: Component, color: Int): TextWidget = Widgets.text(Text.of("\uD83D\uDEC8", color)).apply {
+    withTooltip(hover)
+    withSize(12)
+}
+
 fun setScreen(provider: () -> Screen?): () -> Unit = { McClient.setScreenAsync(provider) }
 
 fun <T> createMultiselectDropdown(
@@ -439,7 +443,7 @@ fun <T> createMultiselectDropdown(
         ContextMenu.open {
             it.withAutoCloseOff()
             it.withBounds(entryWidth, 150)
-            it.withAlignment(OverlayAlignment.BOTTOM_LEFT, state)
+            it.withAlignment(null, state)
             it.withCloseCallback { state.isOpened = false }
             backgroundTexture?.let(it::withTexture)
 

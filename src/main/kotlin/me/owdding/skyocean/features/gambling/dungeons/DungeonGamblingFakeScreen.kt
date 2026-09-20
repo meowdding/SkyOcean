@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants
 import me.owdding.lib.platform.screens.KeyEvent
 import me.owdding.skyocean.features.gambling.dungeons.chest.DungeonChestType
 import me.owdding.skyocean.utils.SkyOceanScreen
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import tech.thatgravyboat.skyblockapi.api.area.dungeon.DungeonFloor
 
 class DungeonGamblingFakeScreen(
@@ -20,8 +20,8 @@ class DungeonGamblingFakeScreen(
         DungeonGamblingRenderer.init(floor, chest)
     }
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        DungeonGamblingRenderer.render(graphics)
+    override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        DungeonGamblingRenderer.extract(graphics)
     }
 
     override fun keyPressed(keyEvent: KeyEvent): Boolean {

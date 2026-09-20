@@ -6,7 +6,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.overlays.Position
 import me.owdding.skyocean.config.CachedValue
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.config.hidden.OverlayPositions
 import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.features.recipe.crafthelper.views.raw.RawFormatter
@@ -15,7 +15,7 @@ import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.rendering.OceanTextures
 import me.owdding.skyocean.utils.rendering.Overlay
 import me.owdding.skyocean.utils.rendering.SkyOceanOverlay
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
@@ -61,13 +61,13 @@ object CraftHelperOverlay : SkyOceanOverlay() {
 
     override val enabled: Boolean get() = CraftHelperConfig.enableOverlay && state != null && LocationAPI.isOnSkyBlock
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extract(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         if (padding != 0) {
             graphics.drawSprite(OceanTextures.overlayBackground, 0, 0, bounds.first, bounds.second)
         }
 
         graphics.translated(padding, padding) {
-            layout?.visitWidgets { it.render(graphics, -1, -1, partialTicks) }
+            layout?.visitWidgets { it.extractRenderState(graphics, -1, -1, partialTicks) }
         }
     }
 

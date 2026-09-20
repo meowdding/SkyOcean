@@ -8,8 +8,8 @@ import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.withTextShader
 import net.minecraft.network.chat.Style
 
-class GradientNode(nodes: Array<TextNode>, val provider: GradientProvider) : ParentNode(*nodes) {
+class GradientNode(nodes: Array<TextNode>, val direction: GradientTextShader.Direction, val speed: Float, val provider: GradientProvider) : ParentNode(*nodes) {
     override fun applyFormatting(style: Style, context: ParserContext): Style {
-        return style.withTextShader(GradientTextShader(provider))
+        return style.withTextShader(GradientTextShader(provider, direction, speed))
     }
 }

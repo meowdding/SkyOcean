@@ -23,7 +23,7 @@ import me.owdding.skyocean.utils.extensions.middleLeft
 import me.owdding.skyocean.utils.extensions.middleRight
 import me.owdding.skyocean.utils.extensions.setScreen
 import me.owdding.skyocean.utils.extensions.withPadding
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.Layout
@@ -158,11 +158,10 @@ class HotkeyPresetsScreen(
 
         FrameLayout.centerInRectangle(this.layout, this.rectangle)
     }
-
-
-    override fun renderBackground(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        super.renderBackground(graphics, mouseX, mouseY, partialTick)
-        this.renderTransparentBackground(graphics)
+    
+    override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick)
+        this.extractTransparentBackground(graphics)
 
         graphics.blitSprite(
             RenderPipelines.GUI_TEXTURED,

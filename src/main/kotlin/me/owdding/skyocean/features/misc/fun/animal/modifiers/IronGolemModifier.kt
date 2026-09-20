@@ -4,7 +4,9 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.IronGolemRenderState
 import net.minecraft.world.entity.Crackiness
@@ -13,17 +15,18 @@ import net.minecraft.world.entity.animal.golem.IronGolem
 
 @RegisterAnimalModifier
 object IronGolemModifier : AnimalModifier<IronGolem, IronGolemRenderState> {
-    override val type: EntityType<IronGolem> = EntityType.IRON_GOLEM
+    override val type: EntityType<IronGolem> = EntityTypes.IRON_GOLEM
     val states = Crackiness.Level.entries
 
     var ironGolemState = PlayerAnimalConfig.createEntry("iron_golem_state") { id, type ->
         enum(id, State.RANDOM) {
             this.translation = createTranslationKey("iron_golem", "${type}_variant")
-            condition = isSelected(EntityType.IRON_GOLEM)
+            condition = isSelected(EntityTypes.IRON_GOLEM)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: IronGolemRenderState,
         partialTicks: Float,

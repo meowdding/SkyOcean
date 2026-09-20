@@ -7,12 +7,11 @@ import me.owdding.skyocean.features.recipe.CurrencyType
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.serialize
 import me.owdding.skyocean.utils.Utils.mapToMutableList
-import me.owdding.skyocean.utils.extensions.sanitizeNeu
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.area.farming.TrapperAPI
 import tech.thatgravyboat.skyblockapi.api.area.hub.FarmhouseAPI
 import tech.thatgravyboat.skyblockapi.api.area.rift.RiftAPI
-import tech.thatgravyboat.skyblockapi.api.profile.CurrencyAPI
+import tech.thatgravyboat.skyblockapi.api.profile.currency.CurrencyAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import kotlin.math.min
@@ -41,8 +40,8 @@ data class ItemTracker(val sources: Iterable<ItemSources> = ItemSources.entries)
                 addAll(sources.mapNotNull { it.itemSource?.postProcess(items) }.flatten())
             }
         }.mapNotNull { item ->
-            item.itemStack.getSkyBlockId()?.let {
-                TrackedItem(it.id.sanitizeNeu(), item.itemStack, item.itemStack.count, item.context, item.context.source)
+            item.itemStack.getSkyBlockId()?.asDerived(false)?.let {
+                TrackedItem(it.id, item.itemStack, item.itemStack.count, item.context, item.context.source)
             }
         }
         .groupBy { it.id }

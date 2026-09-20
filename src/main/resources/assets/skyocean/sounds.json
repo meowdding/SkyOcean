@@ -1,0 +1,26 @@
+{
+  "garden.crop_fever.music": {
+    "sounds": [
+      "skyocean:ogg/garden/crop_fever_music"
+    ]
+  },
+  "garden.crop_fever.rng": {
+    "sounds": [
+      "skyocean:ogg/garden/crop_fever_rng"
+    ]
+  },
+  "garden.crop_fever.start": {
+    "sounds": [
+      "skyocean:ogg/garden/crop_fever_start"
+    ]
+  },
+  "timber.timber_sound": {
+    "sounds": ["skyocean:fun/timber/timber"]
+  },
+  "timber.sugarcoat_sound": {
+    "sounds": ["skyocean:fun/timber/im-not-gonna-sugarcoat-it"]
+  },
+  "timber.flashbang_sound": {
+    "sounds": ["skyocean:fun/timber/flashbang"]
+  }
+}

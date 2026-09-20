@@ -5,8 +5,10 @@ import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.hash
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import me.owdding.skyocean.utils.Utils.lookup
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.VillagerRenderState
 import net.minecraft.core.registries.Registries
@@ -21,25 +23,26 @@ import kotlin.jvm.optionals.getOrNull
 
 @RegisterAnimalModifier
 object VillagerModifier : AnimalModifier<Villager, VillagerRenderState> {
-    override val type: EntityType<Villager> = EntityType.VILLAGER
+    override val type: EntityType<Villager> = EntityTypes.VILLAGER
     val types = Registries.VILLAGER_TYPE.lookup().listElements().toList()
     val professions = Registries.VILLAGER_PROFESSION.lookup().listElements().toList()
 
     var villagerType = PlayerAnimalConfig.createEntry("villager_type") { id, type ->
         enum(id, Type.RANDOM) {
             this.translation = createTranslationKey("villager", "${type}_type")
-            condition = isAnySelected(EntityType.VILLAGER, EntityType.ZOMBIE_VILLAGER)
+            condition = isAnySelected(EntityTypes.VILLAGER, EntityTypes.ZOMBIE_VILLAGER)
         }
     }
 
     var villagerProfession = PlayerAnimalConfig.createEntry("villager_profession") { id, type ->
         enum(id, Profession.RANDOM) {
             this.translation = createTranslationKey("villager", "${type}_profession")
-            condition = isAnySelected(EntityType.VILLAGER, EntityType.ZOMBIE_VILLAGER)
+            condition = isAnySelected(EntityTypes.VILLAGER, EntityTypes.ZOMBIE_VILLAGER)
         }
     }
 
     override fun apply(
+        resolver: BlockModelResolver,
         avatarState: AvatarRenderState,
         state: VillagerRenderState,
         partialTicks: Float,

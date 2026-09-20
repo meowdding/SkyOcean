@@ -7,4 +7,5 @@ object OverlayPositions : CategoryKt("overlays") {
     override val hidden: Boolean = true
 
     val craftHelper by obj(ConfigPosition(5, 200))
+    val cropFeverCoinRain by obj(ConfigPosition(0, 0))
 }

@@ -16,6 +16,7 @@ import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.debugToggle
 import me.owdding.skyocean.utils.storage.DataStorage
 import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.util.Util
 import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -111,7 +112,7 @@ object HotkeyManager {
     fun invokeValid() {
         for (keys in getOptions()) {
             val hotkeys = tree.get(keys) ?: continue
-            val hotkey = hotkeys.find { it.isActive() } ?: continue
+            val hotkey = hotkeys.find { it.isActive() && it.keybind.keys.isNotEmpty() } ?: continue
             hotkey.invoke()
             break
         }
@@ -126,11 +127,11 @@ object HotkeyManager {
         }
     }
 
-    @JvmStatic
-    fun handle(action: Int, event: KeyEvent): Boolean {
+
+    fun handleKey(key: Lazy<InputConstants.Key>, action: Int): Boolean {
         if (HotkeyConfig.disabled) return false
         if (McScreen.self is IgnoreHotkeyInputs) return false
-        val key by lazy { InputConstants.getKey(event) }
+        val key by key
         if (action == GLFW.GLFW_RELEASE) {
             this.pressedKeys.remove(key)
         }
@@ -140,6 +141,8 @@ object HotkeyManager {
         pressedKeys.add(key)
 
         val hotkey = this.unorderedKeybinds.find {
+            if (it.keybind.keys.isEmpty()) return@find false
+
             val extraKeys = it.keybind.settings.allowExtraKeys || pressedKeys.all { key ->
                 key in it.keybind.keys
             }
@@ -154,6 +157,17 @@ object HotkeyManager {
         return true
     }
 
+    @JvmStatic
+    fun handle(event: MouseButtonInfo, action: Int): Boolean {
+        return handleKey(lazy { InputConstants.Type.MOUSE.getOrCreate(event.button()) }, action)
+    }
+
+    @JvmStatic
+    fun handle(event: KeyEvent, action: Int): Boolean {
+        if (!McClient.options.keyDebugModifier.isDown) return handleKey(lazy { InputConstants.getKey(event) }, action)
+        return false
+    }
+
     fun clearBuffers() {
         this.buffer.clear()
         this.pressedKeys.clear()
@@ -165,6 +179,9 @@ object HotkeyManager {
     @Subscription
     fun registerCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("keybinds") {
+            McClient.setScreenAsync { ConditionalHotkeyScreen }
+        }
+        event.registerWithCallback("hotkeys") {
             McClient.setScreenAsync { ConditionalHotkeyScreen }
         }
     }

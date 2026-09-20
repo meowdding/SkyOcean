@@ -33,6 +33,7 @@ data class ForwardingVersionCatalog(
         val lookup: VersionCatalog.(String) -> Optional<T>,
     ) {
         operator fun get(name: String): T = parent.first(name, lookup)
+        fun has(name: String): Boolean = runCatching { get(name) }.map { true }.getOrDefault(false)
         fun getOrFallback(
             name: String,
             fallbackName: String,

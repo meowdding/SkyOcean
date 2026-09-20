@@ -7,7 +7,7 @@ import me.owdding.skyocean.datagen.providers.PngHolder
 import me.owdding.skyocean.datagen.providers.SkyOceanFontProvider
 import me.owdding.skyocean.features.textures.KnownMobIcon
 import me.owdding.skyocean.utils.Utils
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput
 import net.minecraft.data.CachedOutput
 import net.minecraft.data.PackOutput
 import net.minecraft.resources.Identifier
@@ -20,7 +20,7 @@ private const val fontWidth = 5
 private const val fontHeight = 5
 private const val backgroundHeight = 7
 
-class MobTypesFontProvider(output: FabricDataOutput, val converter: (KnownMobIcon) -> String, val fontType: Identifier) :
+class MobTypesFontProvider(output: FabricPackOutput, val converter: (KnownMobIcon) -> String, val fontType: Identifier) :
     SkyOceanFontProvider(output, fontType) {
     val mobTypesTexturePath: String = fontType.path
 

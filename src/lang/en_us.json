@@ -94,6 +94,10 @@
           "call_fred": "Call Fred",
           "both": "Both"
         },
+        "forge_reminder_busy": {
+          "@value": "Don't Forge Remind when busy",
+          "desc": "Busy means if you're inside a Dungeon Run, Kuudra, ..."
+        },
         "retexture": {
           "@value": "Retexture",
           "carpets": {
@@ -176,6 +180,7 @@
         },
         "hotm": {
           "@value": "Heart of the Mountain Perk Modifier",
+          "desc": "",
           "shiftCost": {
             "@value": "Show shift click cost",
             "desc": "Shows the amount of powder that will be consumed on shift click."
@@ -199,6 +204,14 @@
           "reminderTitle": {
             "@value": "Reminder Title",
             "desc": "Shows a title when the reminder triggers."
+          },
+          "repeatReminder": {
+            "@value": "Repeat Reminder",
+            "desc": "Repeats the reminder after a set time."
+          },
+          "reminderInterval": {
+            "@value": "Repeating Reminder Interval",
+            "desc": "The interval between the reminders if repeating reminder is enabled, in seconds."
           }
         },
         "ch": {
@@ -217,6 +230,7 @@
         },
         "metal_detector": {
           "@value": "Metal Detector Solver",
+          "desc": "",
           "metalDetector": {
             "@value": "Enable Metal Detector Solver",
             "desc": "Enables the metal detector solver, which helps you find treasures in the Mines of Divan."
@@ -237,6 +251,10 @@
           "@value": "Sack Value",
           "desc": "Shows the value of all items in your sacks.",
           "edit": "Edit Sack Value",
+          "alignment": {
+            "@value": "Alignment",
+            "desc": "The alignment of the sack value element."
+          },
           "price_source": {
             "@value": "Price Source",
             "desc": "The source to use for the price of items in sacks.",
@@ -256,6 +274,10 @@
             "desc": "Shows the total value of all items in the sack."
           }
         },
+        "minion_helper": {
+          "@value": "Minion Helper",
+          "desc": "Shows the cheapest minion upgrades in the \"Crafted Minions\" inventory."
+        },
         "inventory_buttons": {
           "@value": "Inventory Buttons",
           "desc": "Settings to configure and change inventory buttons.",
@@ -263,12 +285,117 @@
             "@value": "Inventory Buttons",
             "desc": "Whether to show the Inventory Buttons."
           },
+          "render_behind_background": {
+            "@value": "Render Behind Background when not Hovered",
+            "desc": "Renders the button texture behind the Container Background if its not hovered."
+          },
           "edit": {
             "@value": "Edit Buttons",
             "desc": [
               "Configure Buttons in a separate UI.",
               "<italic>Also accessible through <gray>/skyocean buttons</gray></italic>"
             ]
+          }
+        },
+        "salvaging_helper": {
+          "@value": "Salvaging Helper",
+          "enabled": {
+            "@value": "Enabled",
+            "desc": ""
+          },
+          "highlight": {
+            "@value": "Highlight Undonated Museum Items",
+            "desc": "Highlights items that can be donated to the museum and haven't been donated yet when salvaging items."
+          },
+          "block_salvage": {
+            "@value": "Block Salvage of Donatable Items",
+            "desc": "Blocks salvaging items that can be donated to the museum and haven't been donated yet."
+          }
+        },
+        "rarity_outlines": {
+          "@value": "Rarity Outlines",
+          "desc": "",
+          "enabled": {
+            "@value": "Enable rarity outlines",
+            "desc": "Main toggle for the rarity outlines."
+          },
+          "sample_amount": {
+            "@value": "Sample Amount",
+            "desc": "The amount of samples to take to define the outline, changes outline thickness. <red>High numbers <bold>WILL</bold> decrease frames! <gray><italic>Complexity: O(n^2)"
+          },
+          "sample_distance": {
+            "@value": "Distance between samples",
+            "desc": "Modifies the distance between the samples, changes outline thickness."
+          },
+          "alpha_cutoff": {
+            "@value": "Alpha cutoff",
+            "desc": "The minimum alpha required to be considered a full pixel by the outline."
+          },
+          "outline_alpha": {
+            "@value": "Outline Alpha",
+            "desc": "The alpha used for outlines."
+          },
+          "base_rarity_glint": {
+            "@value": "Base rarity glint",
+            "desc": "Adds a glint animation in the base rarity of the item."
+          },
+          "kernel_type": {
+            "@value": "Kernel type",
+            "desc": "The kernel to use for calculating the outline, use circle for rounded corners."
+          },
+          "common": {
+            "@value": "Common Color",
+            "desc": "Color used for Common rarity"
+          },
+          "uncommon": {
+            "@value": "Uncommon Color",
+            "desc": "Color used for Uncommon rarity"
+          },
+          "rare": {
+            "@value": "Rare Color",
+            "desc": "Color used for Rare rarity"
+          },
+          "epic": {
+            "@value": "Epic Color",
+            "desc": "Color used for Epic rarity"
+          },
+          "legendary": {
+            "@value": "Legendary Color",
+            "desc": "Color used for Legendary rarity"
+          },
+          "mythic": {
+            "@value": "Mythic Color",
+            "desc": "Color used for Mythic rarity"
+          },
+          "divine": {
+            "@value": "Divine Color",
+            "desc": "Color used for Divine rarity"
+          },
+          "ultimate": {
+            "@value": "Ultimate Color",
+            "desc": "Color used for Ultimate rarity"
+          },
+          "special": {
+            "@value": "Special Color",
+            "desc": "Color used for Special rarity"
+          },
+          "very_special": {
+            "@value": "Very Special Color",
+            "desc": "Color used for Very Special rarity"
+          },
+          "admin": {
+            "@value": "Admin Color",
+            "desc": "Color used for Admin rarity"
+          },
+          "skyblock_colors": {
+            "@value": "Load skyblock colors",
+            "desc": "Sets all rarity values to their respective skyblock rarity color.",
+            "text": "Click to load!"
+          },
+          "legacy_colors": {
+            "@value": "Load skyblock LEGACY colors",
+            "desc": "Sets all rarity values to their respective old (pre resourcepack) skyblock rarity color.",
+            "text": "Click to load!"
           }
         }
       },
@@ -301,13 +428,46 @@
             "Adds a <light_purple>/rboop</light_purple> command that runs /boop on the last person that messaged you.",
             "<red>Requires to change servers to take into effect.</red>"
           ]
+        },
+        "hide_blazetekk": {
+          "@value": "Hide Blazetekk™ Ham Radio Messages",
+          "desc": "Hides status messages from the Blazetekk™ Ham Radio."
+        },
+        "markdown_chat": {
+          "@value": "Markdown Chat",
+          "desc": [
+            "Allows chat to be formatted by basic Markdown formatting.",
+            "",
+            "This includes:",
+            " - <green>*</green>italic<green>*</green> for <pink><italic>italic</italic></pink> text",
+            " - <green>**</green>bold<green>**</green> for <pink><bold>bold</bold></pink> text",
+            " - <green>~~</green>strikethrough<green>~~</green> for <pink><strikethrough>strikethrough</strikethrough></pink> text",
+            " - <green>__</green>underline<green>__</green> for <pink><underline>underline</underline></pink> text",
+            " - <green>||</green>obfuscated<green>||</green> for <pink><obfuscated>obfuscated</obfuscated></pink> text",
+            "",
+            "<red><bold>WARNING:</bold> This might cause unwanted effects with some messages.</red>"
+          ],
+          "underscore_italic": {
+            "@value": "Allow Underscore italic",
+            "desc": [
+              "Extends the markdown formatting to allow the following.",
+              "",
+              " - <green>_</green>italic<green>_</green> for <pink><italic>italic</italic></pink> text",
+              "",
+              "<red><bold>WARNING:</bold> This might cause unwanted effects with some usernames and/or messages.</red>"
+            ]
+          }
         }
       },
       "garden": {
         "@value": "Garden",
         "pest_bait_type": {
-          "@value": "Pest Bait Type",
+          "@value": "Pest Bait Type - Click on the text to get from sack!",
           "desc": "Adds a UI element that shows which pest bait increases the chance of spawning a specific pest."
+        },
+        "pest_bait_alignment": {
+          "@value": "Pest Bait Alignment",
+          "desc": "The alignment of the pest bait type element."
         },
         "desk_pest_highlight": {
           "@value": "Desk Pest Highlight",
@@ -315,11 +475,117 @@
         },
         "pest_warning": {
           "@value": "Pest Warning",
-          "desc": "Warns you when you reach 4 or more pests while farming."
+          "desc": "Warns you when you reach the configured amount or more pests while farming."
+        },
+        "pest_warning_amount": {
+          "@value": "Pest Warning Minimum Amount",
+          "desc": [
+            "The minimum amount of pests to trigger the warning.",
+            "❬Automatic❭ only triggers the warning while you have a <gold>☘</gold> reduction."
+          ],
+          "options": {
+            "auto": "Automatic",
+            "one": "1",
+            "two": "2",
+            "three": "3",
+            "four": "4",
+            "five": "5",
+            "six": "6",
+            "seven": "7",
+            "eight": "8"
+          }
         },
         "pest_warning_delay": {
           "@value": "Pest Warning Delay",
           "desc": "The delay between reminders in seconds."
+        },
+        "crop_fever_effect": {
+          "@value": "Crop Fever Effects",
+          "desc": "When you trigger a Crop Fever this adds many visual effects.",
+          "config_title": {
+            "@value": "Crop Fever Config"
+          },
+          "enabled": {
+            "@value": "Enabled",
+            "desc": "Enables the entire feature."
+          },
+          "sound_section": {
+            "@value": "Sound Changes",
+            "desc": "",
+            "startingSound": {
+              "@value": "Jackpot Sound",
+              "desc": "Plays a Jackpot sound when starting a Crop Fever."
+            },
+            "rngSound": {
+              "@value": "RNG Sound",
+              "desc": "Plays the sound effect from dropping something that is really rare (e.g., Ray of Helios or Strawberry Dye)."
+            },
+            "backgroundMusic": {
+              "@value": "Background Music",
+              "desc": [
+                "Plays a looping soundtrack while a Crop Fever is active.",
+                "<red>Disable if you have Hypixel's own music enabled.</red>"
+              ]
+            },
+            "useRegularSounds": {
+              "@value": "[RP Only] Use .OGG sound files.",
+              "desc": [
+                "Use .ogg sounds instead of .nbs sounds",
+                "To modify them just look for the corresponding files in assets/skyocean/sounds/ogg/garden",
+                "<red>Only enable this if you have a resourcepack that replaces the .ogg sound files, otherwise you will get no sounds</red>"
+              ]
+            }
+          },
+          "visual_section": {
+            "@value": "Visual Changes",
+            "desc": "",
+            "hueShiftingShader": {
+              "@value": "Color Cycling Effect",
+              "desc": "Applies a color cycling post-processing effect to the screen during a Crop Fever.",
+              "shiftingSpeed": {
+                "@value": "Cycling Speed",
+                "desc": [
+                  "Controls how fast the colors cylce.",
+                  "<red>If you are sensitive to flashing colors don't go above <color #B22222>❬<color #727378>Normal</color>❭.</red>"
+                ],
+                "options": {
+                  "slower": "<color #5F9EA0>Slower (0.25x)</color>",
+                  "slow": "<color #708587>Slow (0.5x)</color>",
+                  "normal": "<color #727378>Normal (1.0x)</color>",
+                  "fast": "<color #915454>Fast (1.5x)</color>",
+                  "faster": "<color #A13B3B>Faster (2.5x)</color>",
+                  "insane": "<color #B22222>Insane (10.0x)</color>"
+                }
+              }
+            },
+            "coinRain": {
+              "@value": "Coin Rain",
+              "desc": "Shows an animation of SkyBlock coins raining from the top of the screen when starting a Crop Fever.",
+              "duration": {
+                "@value": "Coin Rain Duration",
+                "desc": "The duration for the coin rain animation."
+              },
+              "spawnMultiplier": {
+                "@value": "Coin Rain Spawn Multiplier",
+                "desc": "Controls how many coins spawn per tick.",
+                "options": {
+                  "auto": "Automatic",
+                  "one": "1x",
+                  "two": "2x",
+                  "three": "3x",
+                  "four": "4x",
+                  "five": "5x",
+                  "ten": "10x",
+                  "fifteen": "15x",
+                  "twenty": "20x"
+                }
+              }
+            }
+          },
+          "credits": {
+            "@value": "Credits",
+            "desc": "Background Music is sourced from <hover 'Click to visit their site'><url 'https://noteblock.world'><color #6294FD>noteblock.world:</color></url></hover> <hover 'Click to visit the Page for the Song'><url 'https://noteblock.world/song/bGGNXKGUKP'><color #4AE84A>Invincibility Theme - Super Mario Bros. by Sandriix701</color></url></hover>"
+          }
         }
       },
       "misc": {
@@ -339,6 +605,18 @@
         "revertMasterStars": {
           "@value": "Revert Master Stars",
           "desc": "Reverts the Master Star back to the stacked colored look."
+        },
+        "quickJoinButton": {
+          "@value": "Quick Join Button",
+          "desc": "Quickly Join a Server with one less button click."
+        },
+        "quickJoinText": {
+          "@value": "The Button Text for Quick Join",
+          "desc": "The text shown on the button, use {ip} for the ip."
+        },
+        "quickJoinIp": {
+          "@value": "The IP for Quick Join",
+          "desc": "Customize what Server to quickly join."
         },
         "previousServer": {
           "@value": "Previous Server",
@@ -364,6 +642,10 @@
           "@value": "Show Hidden Pet Candy",
           "desc": "Hypixel hides the pet candy line once its max level, this feature re-adds the line."
         },
+        "totemAnimation": {
+          "@value": "Totem Animation",
+          "desc": "Plays the Totem of Undying animation when an invulnerability item (like the Bonzo Mask) is used up."
+        },
         "islandCloudHider": {
           "@value": "Island Cloud Hider",
           "desc": [
@@ -371,6 +653,18 @@
             "Useful for islands like the Dwarven Mines where clouds can be annoying."
           ],
           "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
+        },
+        "netherFogDarkening": {
+          "@value": "Nether Fog Darkening",
+          "desc": "Darkens the Crimson Isle sky. Only has an effect with Night Vision.",
+          "warning": "<yellow>SkyOcean now darkens Crimson Isle's sky! You can disable it in the misc config by searching <gold>Nether Fog Darkening</gold>."
+        },
+        "netherFogScale": {
+          "@value": "Nether Fog Scale",
+          "desc": [
+            "How bright the Crimson Isle sky should be.",
+            "<yellow>Requires Nether Fog Darkening to be enabled!</yellow>"
+          ]
         },
         "customization_vanilla_integration": {
           "@value": "Animate dyes and skins in inventories",
@@ -388,9 +682,17 @@
           "@value": "Hide entity fire",
           "desc": "Removes the fire effect from all entities."
         },
+        "hideImplosions": {
+          "@value": "Hide Implosion Particles",
+          "desc": "Removes the wither blade implosion particles."
+        },
         "itemSearch": {
           "@value": "Item Search",
           "desc": "Item Search is a feature that allows you to search for items in your inventory, backpacks, storage, sacks, island chests and more.",
+          "keybindOnHover": {
+            "@value": "Press Keybind on Hover to Search",
+            "desc": "While hovering over an Item inside a Container, if the ItemSearch keybinds gets pressed it will search for that item."
+          },
           "itemHighlight": {
             "@value": "Item Highlight",
             "desc": "Choose what color the searched item will be highlighted with."
@@ -402,6 +704,21 @@
           "highlightTime": {
             "@value": "Highlight Time",
             "desc": "Amount of time that items will be highlighted for, in seconds."
+          },
+          "priceSource": {
+            "@value": "ItemSearch Price Source",
+            "desc": [
+              "What source to use for Pricing.",
+              "Bazaar means Auction House & Bazaar with Item Evaluation.",
+              "NPC means NPC sell price."
+            ]
+          },
+          "showTotalValue": {
+            "@value": "Show Total Value",
+            "desc": [
+              "Displays the combined coin value of all items currently found in your item search.",
+              "<red>Might cause performance issues when opening the screen.</red>"
+            ]
           },
           "useReiSearchBar": {
             "@value": "Use REI Search Bar",
@@ -427,6 +744,10 @@
         "ratHitbox": {
           "@value": "Rat hitboxes",
           "desc": "Renders extra hitboxes for rats in the hub."
+        },
+        "stereoPantsMute": {
+          "@value": "Mutes Stereo Pants Music",
+          "desc": "Mutes the sometimes really annoying music that plays from Players wearing Stereo Pants."
         },
         "crafthelper": {
           "@value": "Craft Helper",
@@ -473,9 +794,23 @@
             "@value": "Margin",
             "desc": "How much space to leave between the inventory/screen edges and the craft helper element."
           },
-          "done_message": {
-            "@value": "Send a message when your recipe is complete",
-            "desc": "Sends a chat message whenever the mod detects your recipe tree as completed."
+          "done_notifications": {
+            "@value": "Done Notifications",
+            "desc": "Notification types for when your CraftHelper tree is craftable.",
+            "types": {
+              "@value": "Notification Types",
+              "desc": "The types of notifications you want to receive when your CraftHelper tree is craftable."
+            },
+            "sound_event": {
+              "@value": "Done Sound",
+              "desc": "The sound you will hear when your Item becomes craftable."
+            },
+            "notification_type": {
+              "@value": "Notification Type",
+              "done_message": "Done Message",
+              "done_title": "Done Title",
+              "done_sound": "Done Sound"
+            }
           },
           "tree_formatter": {
             "@value": "Craft helper formatter",
@@ -494,6 +829,19 @@
           "overlay_background": {
             "@value": "Enable overlay background",
             "desc": "Adds a background behind the overlay to make it more readable."
+          },
+          "transformers": {
+            "@value": "Tree transformers",
+            "desc": "The following settings will alter the recipe tree in different ways, letting you customize the appearance and complexity.",
+            "compacted_cutoff_degree": {
+              "@value": "Compacted Cutoff Degree",
+              "desc": [
+                "Removes raw resources of the Nth degree from the tree",
+                "",
+                "For example if it's set to 1, Flawed Ruby will be the final node rather then having Rough as child,",
+                "if set to 2 Fine Ruby would be the final node, and so on..."
+              ]
+            }
           }
         },
         "transparentArmor": {
@@ -541,7 +889,7 @@
             "@value": "Player Animals",
             "desc": [
               "Changes players in the world to be rendered as the selected animal!",
-              "You can choose between <white>Nobody</white>, <white>Self</white>, <white>Players (non NPCs)</white> and <white>Everyone</white>."
+              "You can choose between <white>Nobody</white>, <white>Self</white>, <white>Players (non NPCs)</white>, <white>Others (non NPCs)</white>, and <white>Everyone</white>."
             ],
             "type": {
               "@value": "Animal Type",
@@ -662,6 +1010,42 @@
                 "tame": "Tame",
                 "wild": "Wild",
                 "angry": "Angry"
+              }
+            },
+            "horse": {
+              "own_color": {
+                "@value": "Own Horse Color",
+                "desc": "Changes the horse color used for yourself."
+              },
+              "other_color": {
+                "@value": "Other Horse Color",
+                "desc": "Changes the horse color used for others."
+              },
+              "own_marking": {
+                "@value": "Own Horse Markings",
+                "desc": "Changes the horse markings used for yourself."
+              },
+              "other_marking": {
+                "@value": "Other Horse Markings",
+                "desc": "Changes the horse markings used for others."
+              },
+              "color": {
+                "random": "Random",
+                "white": "White",
+                "creamy": "Creamy",
+                "chestnut": "Chestnut",
+                "brown": "Brown",
+                "black": "Black",
+                "gray": "Gray",
+                "dark_brown": "Dark Brown"
+              },
+              "marking": {
+                "random": "Random",
+                "none": "None",
+                "white": "White",
+                "white_field": "White Field",
+                "white_dots": "White Dots",
+                "black_dots": "Black Dots"
               }
             },
             "axolotl": {
@@ -1031,6 +1415,7 @@
               "none": "Nobody",
               "self": "Self",
               "players": "Players",
+              "others": "Others",
               "everyone": "Everyone"
             },
             "color": {
@@ -1064,6 +1449,33 @@
               "@value": "Outside SkyBlock",
               "desc": "Whether player animals should also be visible outside of SkyBlock."
             }
+          },
+          "timberSilly": {
+            "@value": "Timber",
+            "desc": [
+              "Plays a sound and shows an image when a perk fells a tree.",
+              "<red>Trigger Warning: Flashbang and Loud Noises!</red>"
+            ]
+          },
+          "timber_texture": {
+            "@value": "Timber Texture",
+            "desc": [
+              "Which image to show when someone fells an entire tree.",
+              "",
+              "<white>Sugarcoat</white>: I'm Not Gonna Sugarcoat It",
+              "<white>Flashbang</white>: as it says,,"
+            ]
+          },
+          "timber_sound": {
+            "@value": "Timber Sound",
+            "desc": [
+              "Which sound to play when someone fells an entire tree.",
+              "",
+              "<white>Timber</white>: Timber voiceline from a certain mobile game.",
+              "<white>Sugarcoat</white>: I'm Not Gonna Sugarcoat It.",
+              "<white>Flashbang</white>: as it says. Don't use it in the dark!",
+              "<white>None</white>: Plays no sound."
+            ]
           }
         }
       },
@@ -1072,6 +1484,10 @@
         "trophy_numbers": {
           "@value": "Trophy Numbers",
           "desc": "Displays the amount of trophy fishes you caught upon catching one."
+        },
+        "hook_text_scale_toggle": {
+          "@value": "Toggle Hook Text Scale",
+          "desc": "Whether to enable the hook text scaling or not."
         },
         "hook_text_scale": {
           "@value": "Hook Text Scale",
@@ -1103,7 +1519,7 @@
           "highlight": "Highlight",
           "circle_surface": {
             "@value": "Surface",
-            "desc": "Render a \"solid\" circle instead of the particle outline."
+            "desc": "Render a \"solid\" circle for hotspots."
           },
           "surface_transparency": {
             "@value": "Surface Transparency",
@@ -1116,16 +1532,75 @@
           },
           "circle_outline": {
             "@value": "Outline",
-            "desc": "Render a \"solid\" outline instead of the particle outline."
+            "desc": "Render a \"solid\" outline for hotspots."
           },
           "outline_transparency": {
-            "@value": "Surface Transparency",
+            "@value": "Outline Transparency",
             "desc": [
               "Changes the transparency of the outline.",
               {
                 "@id": "transparency"
               }
             ]
+          },
+          "hide_particles": {
+            "@value": "Hide Particles",
+            "desc": "Hide hotspot particles (requires Highlight or Outline to be enabled)."
+          },
+          "announcements": {
+            "@value": "Announcements",
+            "desc": "Settings for announcing hotspots in chat.",
+            "announce": {
+              "@value": "Announce Hotspot",
+              "desc": "How to Announce Hotspots in chat when you find one."
+            },
+            "chat_type": {
+              "@value": "Chat Type",
+              "desc": "The type of chat to announce hotspots in when automatically sharing them."
+            }
+          }
+        },
+        "wormhole": {
+          "@value": "Wormhole Features",
+          "desc": "All settings for the wormhole Features.",
+          "warning": {
+            "@value": "Warning",
+            "desc": "Sends a chat warning when a wormhole you recently fished at disappears."
+          },
+          "highlight": "Highlight",
+          "circle_surface": {
+            "@value": "Surface",
+            "desc": "Render a \"solid\" circle for wormholes."
+          },
+          "surface_transparency": {
+            "@value": "Surface Transparency",
+            "desc": [
+              "Changes the transparency of the surface.",
+              {
+                "@id": "transparency"
+              }
+            ]
+          },
+          "circle_outline": {
+            "@value": "Outline",
+            "desc": "Render a \"solid\" outline for wormholes."
+          },
+          "outline_transparency": {
+            "@value": "Outline Transparency",
+            "desc": [
+              "Changes the transparency of the outline.",
+              {
+                "@id": "transparency"
+              }
+            ]
+          },
+          "hide_particles": {
+            "@value": "Hide Particles",
+            "desc": "Hide wormhole particles (requires Highlight or Outline to be enabled)."
+          },
+          "color": {
+            "@value": "Highlight Color",
+            "desc": "The color the wormhole should be highlighted with."
           }
         }
       },
@@ -1355,6 +1830,14 @@
           "reminderTitle": {
             "@value": "Reminder Title",
             "desc": "Shows a title when the reminder triggers."
+          },
+          "repeatReminder": {
+            "@value": "Repeat Reminder",
+            "desc": "Repeats the reminder after a set time."
+          },
+          "reminderInterval": {
+            "@value": "Repeating Reminder Interval",
+            "desc": "The interval between the reminders if repeating reminder is enabled, in seconds."
           }
         },
         "galatea": {
@@ -1386,6 +1869,10 @@
           "croesus": {
             "@value": "Also Show Case Opening in Croesus",
             "desc": "Will hide croesus summary before opening the chest, to not spoil the surprise."
+          },
+          "time": {
+            "@value": "Animation Time",
+            "desc": "Changes the time the animation takes. (in seconds)"
           }
         },
         "vanguard": {
@@ -1404,6 +1891,10 @@
             "desc": "Changes the mode of the slot machine between most expensive item or a predefined set of rare items (Weight <= 10).",
             "predefined": "Predefined",
             "most_expensive": "Most expensive"
+          },
+          "time": {
+            "@value": "Animation Time",
+            "desc": "Changes the time the animation takes. (in seconds)"
           }
         },
         "credits": {
@@ -1429,6 +1920,17 @@
           "@value": "Edit hotkeys",
           "desc": "Opens the hotkey edit screen."
         }
+      },
+      "text_replacements": {
+        "@value": "Text Replacements",
+        "enabled": {
+          "@value": "Enabled",
+          "desc": "Global toggle for all text replacements, regardless of their respective toggles."
+        },
+        "outside_skyblock": {
+          "@value": "Outside SkyBlock",
+          "desc": "Allows text replacements to be active outside of skyblock."
+        }
       }
     },
     "garden": {
@@ -1442,7 +1944,7 @@
       },
       "buttons": {
         "configuration": "<white>Button Configuration",
-        "item": "Item ID / Skyblock ID",
+        "item": "Item ID / SkyBlock ID",
         "command": "Command",
         "screen_title": "Screen Title",
         "tooltip": "Button Tooltip",
@@ -1453,11 +1955,21 @@
         "reset": "Reset"
       }
     },
+    "screens": {
+      "item_search": {
+        "sort": {
+          "amount": "Amount",
+          "price": "Price",
+          "rarity": "Rarity"
+        }
+      }
+    },
     "keybind": {
       "item_search": "Open Item Search",
       "item_value": "Open Item Value",
       "crafthelper": "Set as active Craft Helper Item",
-      "item_highlight": "Highlight matching Items"
+      "item_highlight": "Highlight matching Items",
+      "customize": "Customize Item"
     },
     "gradients": {
       "default": "Default",

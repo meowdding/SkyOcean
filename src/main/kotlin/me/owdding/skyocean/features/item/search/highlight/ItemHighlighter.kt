@@ -187,7 +187,7 @@ object ItemHighlighter {
         val id = event.item.getSkyBlockId()?.replace(sackRegex, "") ?: return
         val sack = SackData.getByNormalizedId(id) ?: return
 
-        if (sack.containingItems.any { filter.test(it) }) {
+        if (sack.containingItems.any { filter.test(it.create()) }) {
             event.item.highlight()
         }
     }

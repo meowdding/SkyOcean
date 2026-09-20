@@ -7,6 +7,7 @@ import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.utils.Utils.add
 import me.owdding.skyocean.utils.Utils.skipRemaining
+import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
@@ -62,7 +63,7 @@ object CroesusImpl : AbstractItemModifier() {
         add {
             color = TextColor.GRAY
             append("\"")
-            append(Text.translatable("skyocean.config.dungeons.gambling.enabled"))
+            append(+"config.gambling.dungeons.separator")
             append("\" feature.")
         }
 

@@ -8,7 +8,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.InventoryBuilder
 import me.owdding.lib.extensions.toReadableTime
 import me.owdding.lib.extensions.withTooltip
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.features.recipe.ForgeRecipeScreenHandler.forgeRecipes
 import me.owdding.skyocean.helpers.ClientSideInventory
@@ -23,9 +23,9 @@ import tech.thatgravyboat.repolib.api.recipes.ingredient.ItemIngredient
 import tech.thatgravyboat.repolib.api.recipes.ingredient.PetIngredient
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
 import tech.thatgravyboat.skyblockapi.api.remote.RepoRecipeAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -62,7 +62,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
             val inputs = recipe?.inputs()?.filterIsInstance<ItemIngredient>() ?: emptyList()
             val slots = sizes[inputs.size] ?: emptyList()
             val inputItemStacks = inputs.map { input ->
-                (RepoItemsAPI.getItemOrNull(input.id()) ?: Items.BARRIER.defaultInstance).apply {
+                SkyBlockItemsRepo.getItemStackOrDefault(input.id()).apply {
                     this.count = input.count()
                 }
             }
@@ -114,7 +114,7 @@ class ForgeRecipeScreen(input: String) : ClientSideInventory("Forge", 6) {
                 }
             }
 
-            fill(Items.BLACK_STAINED_GLASS_PANE.defaultInstance.withTooltip())
+            fill(Items.STAINED_GLASS_PANE.black().defaultInstance.withTooltip())
         }.build()
 
         addItems(items)
@@ -153,14 +153,14 @@ object ForgeSuggestionProvider : SkyOceanSuggestionProvider {
                 is ItemIngredient -> {
                     (recipe.result() as ItemIngredient).let {
                         suggest(builder, it.id())
-                        suggest(builder, RepoItemsAPI.getItemName(it.id()).stripped)
+                        suggest(builder, SkyBlockItemsRepo.getItemStackOrDefault(it.id()).hoverName.stripped)
                     }
                 }
 
                 is PetIngredient -> {
                     (recipe.result() as PetIngredient).let {
                         suggest(builder, it.id())
-                        suggest(builder, RepoItemsAPI.getItemName(it.id()).stripped)
+                        suggest(builder, SkyBlockItemsRepo.getItemStackOrDefault(it.id()).hoverName.stripped)
                     }
                 }
 

@@ -6,10 +6,11 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.TickTracker
 import me.owdding.skyocean.utils.animation.EasingFunctions
 import me.owdding.skyocean.utils.chat.ComponentAnimator
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
+import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.render.HudElement
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderHudElementEvent
@@ -36,6 +37,7 @@ class SlotMachineSpinner(
     val slotTexture: Identifier,
     val hideChat: Boolean,
     val titleAnimator: ComponentAnimator,
+    val baseDuration: Duration,
 ) : MeowddingScreen("Slot Machine Spinner") {
     private val armTexture = SkyOcean.id("gambling/arm")
     private val weightedCollection = WeightedCollection.of(spinPool.entries) { it.value.toDouble() }
@@ -47,7 +49,6 @@ class SlotMachineSpinner(
     private val lastScrollIndex = IntArray(3) { -1 }
 
     private var startTime = currentInstant() + 0.2.seconds
-    private val baseDuration = 3.seconds
     private val waitDelay = 1.seconds
     private val slotHeight = 18
 
@@ -55,6 +56,11 @@ class SlotMachineSpinner(
     override fun init() {
         super.init()
         createSlots()
+    }
+
+    override fun removed() {
+        super.removed()
+        SkyBlockAPI.eventBus.unregister(this)
     }
 
     @Subscription(inherited = true)
@@ -89,7 +95,7 @@ class SlotMachineSpinner(
         }
     }
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, f: Float) {
+    override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, f: Float) {
         val elapsedTime = startTime.since()
         val scale = 1.5
 
@@ -139,10 +145,10 @@ class SlotMachineSpinner(
             scaledHeight, // height
         )
 
-        super.render(graphics, mouseX, mouseY, f)
+        super.extractRenderState(graphics, mouseX, mouseY, f)
     }
 
-    private fun GuiGraphics.renderSlot(index: Int, scale: Double, elapsedTime: Duration) {
+    private fun GuiGraphicsExtractor.renderSlot(index: Int, scale: Double, elapsedTime: Duration) {
         val spinDuration = baseDuration + (index * waitDelay)
 
         val rawProgress = (elapsedTime.inWholeMilliseconds / spinDuration.inWholeMilliseconds.toFloat()).coerceIn(0f, 1f)
@@ -189,7 +195,7 @@ class SlotMachineSpinner(
                 val targetIndex = (currentBaseIndex + offset).coerceIn(0, slot.size - 1)
                 val item = slot[targetIndex]
                 val itemY = yPos + pixelOffset - (offset * slotHeight * scale).toInt()
-                renderItem(item.toItem(), xPos - 8, itemY - 8)
+                item(item.toItem(), xPos - 8, itemY - 8)
             }
         }
     }

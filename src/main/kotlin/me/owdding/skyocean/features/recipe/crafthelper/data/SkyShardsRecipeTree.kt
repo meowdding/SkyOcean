@@ -5,7 +5,7 @@ import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.skyocean.features.recipe.*
-import me.owdding.skyocean.features.recipe.crafthelper.ContextAwareRecipeTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.resolver.SkyShardsTreeResolver
 import me.owdding.skyocean.generated.DispatchHelper
@@ -16,11 +16,14 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 @GenerateCodec
 data class SkyShardsRecipe(
     var tree: SkyShardsMethod,
-) : CraftHelperRecipe(CraftHelperRecipeType.SKY_SHARDS, false) {
+) : CraftHelperRecipe(CraftHelperRecipeType.SKY_SHARDS) {
+    override val amount: Int get() = tree.quantity
+    override val selectedItem: SkyBlockId get() = tree.shard
+
     override fun resolve(
         resetLayout: () -> Unit,
         clear: () -> Unit,
-    ): Pair<ContextAwareRecipeTree, ItemLikeIngredient> {
+    ): CraftHelperTree {
         return SkyShardsTreeResolver.resolve(this, resetLayout, clear)
     }
 }

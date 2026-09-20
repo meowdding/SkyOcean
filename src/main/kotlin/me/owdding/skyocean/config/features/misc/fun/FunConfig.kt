@@ -2,7 +2,10 @@ package me.owdding.skyocean.config.features.misc.`fun`
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.utils.GenericDropdown.Companion.entityTypeDropdown
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.PlayerAnimals
+import me.owdding.skyocean.features.misc.`fun`.TimberSoundOption
+import me.owdding.skyocean.features.misc.`fun`.TimberTextureOption
 import me.owdding.skyocean.utils.tags.EntityTagKey
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.EntityType
@@ -15,7 +18,7 @@ object FunConfig : CategoryKt("fun") {
     }
 
     val entityType: EntityType<*> by entityTypeDropdown(
-        EntityType.CAT,
+        EntityTypes.CAT,
         BuiltInRegistries.ENTITY_TYPE.toList().filter { it in EntityTagKey.LIVING_ENTITIES },
     ) {
         this.translation = "skyocean.config.misc.fun.player_animals.type"
@@ -32,4 +35,15 @@ object FunConfig : CategoryKt("fun") {
         PlayerAnimals.registerModifiers()
     }
 
+    var timberSilly by boolean(false) {
+        this.translation = "skyocean.config.misc.fun.timberSilly"
+    }
+
+    var timberTexture by enum(TimberTextureOption.SUGARCOAT) {
+        this.translation = "skyocean.config.misc.fun.timber_texture"
+    }
+
+    var timberSound by enum(TimberSoundOption.TIMBER) {
+        this.translation = "skyocean.config.misc.fun.timber_sound"
+    }
 }

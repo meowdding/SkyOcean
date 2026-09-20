@@ -17,7 +17,7 @@ object ComponentAnimatorDebug {
     @Subscription
     fun onRender(event: RenderHudEvent) {
         if (!toggle) return
-        event.graphics.drawString(
+        event.graphics.text(
             McFont.self,
             component,
             10,

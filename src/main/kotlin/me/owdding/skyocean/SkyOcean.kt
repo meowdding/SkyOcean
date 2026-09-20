@@ -2,6 +2,7 @@ package me.owdding.skyocean
 
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
+import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.RemoteConfig
 import me.owdding.lib.events.FinishRepoLoadingEvent
@@ -10,12 +11,16 @@ import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.repo.RemoteRepo
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
+import me.owdding.skyocean.generated.SkyOceanApiDebug
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
 import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
+import me.owdding.skyocean.utils.debug.DebugBuilder
+import me.owdding.skyocean.utils.debug.RegisterSkyOceanDebugEvent
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.HolderLookup
@@ -60,7 +65,7 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
 
     override fun onInitializeClient() {
         MixinHelper.isStarted = true
-        RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
+        if (!McClient.isDev) RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
         SkyOceanModules.init {
             SkyBlockAPI.eventBus.register(it)
@@ -115,25 +120,37 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     }
 
     @Subscription
-    fun onCommand(event: RegisterCommandsEvent) {
-        event.register("skyocean") {
-            thenCallback("version") {
-                Text.of("Version: $VERSION").withColor(TextColor.GRAY).sendWithPrefix()
-            }
+    fun onSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
+        event.registerWithCallback("version") {
+            Text.of("Version: $VERSION").withColor(TextColor.GRAY).sendWithPrefix()
+        }
 
-            thenCallback("discord") {
-                Text.of("Join the Meowdding Discord!").apply {
-                    this.url = DISCORD
-                    this.hover = Text.of(DISCORD).withColor(TextColor.GRAY)
-                }.sendWithPrefix()
-            }
+        event.registerWithCallback("discord") {
+            Text.of("Join the Meowdding Discord!").apply {
+                this.url = DISCORD
+                this.hover = Text.of(DISCORD).withColor(TextColor.GRAY)
+            }.sendWithPrefix()
+        }
 
-            thenCallback("overlays") {
-                McClient.setScreenAsync { EditOverlaysScreen(MOD_ID) }
-            }
+        event.registerWithCallback("overlays") {
+            McClient.setScreenAsync { EditOverlaysScreen(MOD_ID) }
+        }
 
-            callback {
-                McClient.setScreenAsync { ResourcefulConfigScreen.getFactory("skyocean").apply(null) }
+        event.registerBaseCallback {
+            McClient.setScreenAsync { ResourcefulConfigScreen.getFactory("skyocean").apply(null) }
+        }
+    }
+
+
+    @Subscription
+    private fun registerDebugs(event: RegisterSkyOceanDebugEvent) {
+        SkyOceanApiDebug.collected.forEach {
+            val debug = it.annotations.filterIsInstance<ApiDebug>().first()
+            val name = debug.name
+            val commandName = debug.commandName.takeUnless(String::isEmpty) ?: name.lowercase().replace(" ", "_")
+
+            event.oceanRegister(name, commandName) {
+                it.invoke(this)
             }
         }
     }
@@ -141,4 +158,20 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
     fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(MOD_ID, path)
     fun minecraft(path: String): Identifier = Identifier.withDefaultNamespace(path)
     fun olympus(path: String): Identifier = Identifier.fromNamespaceAndPath("olympus", path)
+
+    @ApiDebug("General Info", commandName = "general")
+    internal fun debug(builder: DebugBuilder) = with(builder) {
+        field("Version", VERSION)
+        field("Modules Loaded", SkyOceanModules.collected.size)
+        field("Meowdding Repo", meowddingRepo)
+        field("Api Repo", apiRepo)
+    }
 }
+
+@AutoCollect
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION)
+internal annotation class ApiDebug(
+    val name: String,
+    val commandName: String = "",
+)

@@ -3,11 +3,15 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
-import me.owdding.skyocean.config.features.misc.CraftHelperConfig
+import me.owdding.skyocean.compat.CatharsisSupport.withCatharsisId
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
+import me.owdding.skyocean.data.profile.CraftHelperStorage.set
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.generated.SkyOceanCraftHelperModifiers
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.refreshScreen
@@ -23,14 +27,14 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 abstract class AbstractCraftHelperModifier {
-    abstract fun applies(event: InventoryChangeEvent): SkyOceanItemIngredient?
+    abstract fun applies(event: InventoryChangeEvent): CraftHelperRecipe?
 
     fun tryModify(event: InventoryChangeEvent) {
         applies(event)?.let { modify(event, it) }
     }
 
-    private fun modify(event: InventoryChangeEvent, ingredient: SkyOceanItemIngredient) {
-        event.item.disableCatharsisModifications()
+    private fun modify(event: InventoryChangeEvent, ingredient: CraftHelperRecipe) {
+        event.item.disableCatharsisModifications().withCatharsisId("crafthelper")
         event.item.skyoceanReplace {
             this.item = Items.DIAMOND_PICKAXE
             set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT.withHidden(DataComponents.ATTRIBUTE_MODIFIERS, true))
@@ -46,9 +50,7 @@ abstract class AbstractCraftHelperModifier {
             }
 
             onClick {
-                setSelected(ingredient.id)
-                val amount = SimpleRecipeApi.getBestRecipe(ingredient.id)?.output?.amount ?: 1
-                setAmount(Utils.nextUp(ingredient.amount, amount))
+                set(ingredient)
                 McScreen.refreshScreen()
             }
         }

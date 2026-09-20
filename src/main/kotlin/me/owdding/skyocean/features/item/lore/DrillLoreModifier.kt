@@ -10,7 +10,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
-import tech.thatgravyboat.skyblockapi.api.remote.RepoItemsAPI
+import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -30,7 +30,7 @@ object DrillLoreModifier : AbstractItemModifier() {
 
         fun MutableComponent.addOrNotInstalled(id: String?) {
             if (id != null) {
-                append(RepoItemsAPI.getItemName(id))
+                append(SkyBlockItemsRepo.getItemStackOrDefault(id).hoverName)
             } else {
                 append("Not Installed") { this.color = TextColor.RED }
             }

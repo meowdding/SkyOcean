@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(Options.class)
 public class OptionsMixin {
 
-    @WrapMethod(method = "getCloudsType")
+    @WrapMethod(method = "getCloudStatus")
     private CloudStatus modifyCloudsType(Operation<CloudStatus> original) {
         if (MiscConfig.INSTANCE.getShouldHideClouds()) {
             return CloudStatus.OFF;

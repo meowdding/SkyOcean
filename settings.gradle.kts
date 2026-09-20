@@ -3,7 +3,7 @@ rootProject.name = "SkyOcean"
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
+        maven("https://maven.teamresourceful.com/repository/maven-public/")
         maven("https://maven.kikugie.dev/snapshots")
         maven("https://maven.fabricmc.net/")
     }
@@ -11,14 +11,16 @@ pluginManagement {
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
-    id("dev.kikugie.stonecutter") version "0.7.10"
+    id("dev.kikugie.stonecutter") version "0.10-alpha.2"
 }
 
-val versions = listOf("1.21.11", "1.21.10")
+val versions = listOf("26.2", "26.1")
 
 stonecutter {
     create(rootProject) {
-        versions(versions)
+        versions.forEach {
+            version(it)
+        }
         vcsVersion = versions.first()
     }
 }

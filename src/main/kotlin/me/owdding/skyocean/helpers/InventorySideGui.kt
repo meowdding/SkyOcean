@@ -1,10 +1,11 @@
 package me.owdding.skyocean.helpers
 
 import earth.terrarium.olympus.client.components.compound.LayoutWidget
-import me.owdding.lib.compat.REIRenderOverlayEvent
+import me.owdding.lib.events.ItemListEvent
 import me.owdding.lib.layouts.BackgroundWidget
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.mixins.ScreenAccessor
+import me.owdding.skyocean.utils.RemoteStrings
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.screens.Screen
@@ -13,17 +14,24 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.ScreenInitializedEvent
+import tech.thatgravyboat.skyblockapi.utils.extentions.left
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
-abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
+abstract class InventorySideGui(
+    remoteKey: String,
+    @Language("RegExp") titleRegex: String,
+    val alignment: () -> Alignment = { Alignment.RIGHT_OF_INVENTORY },
+) {
 
-    private val regex = titleRegex.toRegex()
+    private val regex by RemoteStrings.regex(titleRegex, path = remoteKey)
     var oldList: LayoutWidget<*>? = null
     var oldWidget: AbstractWidget? = null
 
     private var lastEvent: ContainerInitializedEvent? = null
+    private var isBeingShown: Boolean = false
 
     abstract val enabled: Boolean
 
@@ -33,12 +41,17 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
         val event = lastEvent ?: return
         val screen = event.screen
 
-        if (!enabled || !regex.matches(screen.title.stripped)) return
+        isBeingShown = enabled && regex.matches(screen.title.stripped)
+        if (!isBeingShown) return
 
         val layout = event.getLayout() ?: return
 
         val widget = BackgroundWidget(SkyOcean.id("blank"), layout, 5).apply {
-            this.setPosition(screen.right + 5, screen.top)
+            val x = when (alignment()) {
+                Alignment.LEFT_OF_INVENTORY -> screen.left - 5 - this.width
+                Alignment.RIGHT_OF_INVENTORY -> screen.right + 5
+            }
+            this.setPosition(x, screen.top)
         }
         screen.addWidget(widget)
     }
@@ -54,7 +67,9 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
 
     @Subscription(inherited = true)
     fun onScreenInit(event: ScreenInitializedEvent) {
-        if (!enabled || !regex.matches(event.screen.title.stripped)) return
+        isBeingShown = enabled && regex.matches(event.screen.title.stripped)
+        if (!isBeingShown) return
+
         val widget = this.oldWidget ?: return
 
         event.screen.addWidget(widget)
@@ -68,7 +83,9 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
     }
 
     @Subscription(inherited = true)
-    fun onReiRender(event: REIRenderOverlayEvent) {
+    fun onItemListRender(event: ItemListEvent.RegisterExclusionZones) {
+        if (!isBeingShown) return
+
         oldWidget?.let {
             event.register(it.x, it.y, it.width, it.height)
         }
@@ -76,8 +93,17 @@ abstract class InventorySideGui(@Language("RegExp") titleRegex: String) {
 
     @Subscription(ContainerCloseEvent::class, inherited = true)
     fun onContainerClose() {
+        isBeingShown = false
         oldList = null
         lastEvent = null
+    }
+
+    enum class Alignment {
+        LEFT_OF_INVENTORY,
+        RIGHT_OF_INVENTORY;
+
+        private val formattedName = toFormattedName()
+        override fun toString() = formattedName
     }
 
 }

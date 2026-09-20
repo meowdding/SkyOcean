@@ -23,6 +23,7 @@ data class DungeonFloorHotkeyCondition(
     override fun nameConverter(data: DungeonFloor): Component = data.longName.replace("The Catacombs ", "").asComponent()
 
     override fun test(): Boolean = DungeonAPI.dungeonFloor in floors
+    override fun duplicate(): HotkeyCondition = copy(floors = floors.toMutableSet())
 }
 
 @GenerateCodec
@@ -38,4 +39,6 @@ data class DungeonClassHotkeyCondition(
     override fun nameConverter(data: DungeonClass): Component = data.displayName.asComponent()
 
     override fun test(): Boolean = DungeonAPI.dungeonClass in classes
+
+    override fun duplicate(): HotkeyCondition = copy(classes = classes.toMutableSet())
 }

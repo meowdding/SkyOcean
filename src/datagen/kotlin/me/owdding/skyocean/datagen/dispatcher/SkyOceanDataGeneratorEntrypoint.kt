@@ -4,7 +4,7 @@ import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput
 import net.minecraft.data.DataProvider
 
 abstract class SkyOceanDataGeneratorEntrypoint(val target: DatagenTarget) : DataGeneratorEntrypoint, MeowddingLogger by SkyOcean.featureLogger("datagen") {
@@ -22,7 +22,7 @@ abstract class SkyOceanDataGeneratorEntrypoint(val target: DatagenTarget) : Data
 
     abstract fun run(output: SkyOceanDataGenerator)
 
-    fun FabricDataGenerator.Pack.register(provider: (FabricDataOutput) -> DataProvider) {
-        this.addProvider { provider(it as FabricDataOutput) }
+    fun FabricDataGenerator.Pack.register(provider: (FabricPackOutput) -> DataProvider) {
+        this.addProvider { provider(it as FabricPackOutput) }
     }
 }

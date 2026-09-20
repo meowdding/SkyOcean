@@ -4,9 +4,12 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
+import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.world.entity.EntityType
+//? >= 26.2
+import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
 import tech.thatgravyboat.skyblockapi.platform.texture
@@ -18,10 +21,13 @@ annotation class RegisterAnimalModifier
 
 private val dyeColors = DyeColor.entries
 
+//~ if >= 26.2 '= EntityType<*>' -> '= EntityTypes'
+typealias EntityTypes = EntityTypes
+
 interface AnimalModifier<Type : LivingEntity, State : LivingEntityRenderState> {
     val type: EntityType<Type>
     fun <T> getRandom(state: AvatarRenderState, list: List<T>) = list[Math.floorMod(state.hash, list.size)]
-    fun apply(avatarState: AvatarRenderState, state: State, partialTicks: Float)
+    fun apply(resolver: BlockModelResolver, avatarState: AvatarRenderState, state: State, partialTicks: Float)
 
     fun getCollarColor(state: AvatarRenderState): DyeColor? {
         val collarColor = PlayerAnimalConfig.collarColor.select(state)

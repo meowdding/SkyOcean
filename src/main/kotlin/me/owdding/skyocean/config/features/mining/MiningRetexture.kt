@@ -12,28 +12,4 @@ object MiningRetexture : CategoryKt("retexture") {
             translation = "skyocean.config.mining.retexture.carpets"
         },
     )
-
-    var customGlaciteTextures by requiresChunkRebuild(
-        boolean(false) {
-            translation = "skyocean.config.mining.retexture.glacite"
-        },
-    )
-
-    var customMist by requiresChunkRebuild(
-        boolean(false) {
-            translation = "skyocean.config.mining.retexture.mist"
-        },
-    )
-
-    var customGemstoneTextures by requiresChunkRebuild(
-        boolean(false) {
-            translation = "skyocean.config.mining.retexture.gemstone"
-        },
-    )
-
-    var customHollowTextures by requiresChunkRebuild(
-        boolean(false) {
-            translation = "skyocean.config.mining.retexture.hollows"
-        },
-    )
 }
