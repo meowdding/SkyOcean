@@ -61,9 +61,9 @@ object HotspotFeatures {
         else -> 4f // most islands have a depth of 2, 3 or 4 blocks and don't seem to clip through the ceiling in my brief checks
     }
 
-    fun yMatcher(y: Float): Float {
+    fun yMatcher(y: Float, partial: Float): Float {
         if (!HotspotFeaturesConfig.circleMatchesPlayerY) return y
-        val playerPos: Vec3 = McPlayer.position ?: return y
+        val playerPos: Vec3 = McPlayer.self?.getPosition(partial) ?: return y
         val fluidAtPlayer = McLevel[playerPos.toBlockPos()].fluidState.type
         return if (playerPos.y <= y && (playerPos.y - y) >= maxHotspotHeight(y).unaryMinus() && validLiquids.contains(fluidAtPlayer)) playerPos.y.toFloat() + 0.01f
         else y
@@ -80,7 +80,7 @@ object HotspotFeatures {
 
             if (HotspotFeaturesConfig.circleOutline) {
                 event.renderCylinder(
-                    pos.x, yMatcher(pos.y), pos.z,
+                    pos.x, yMatcher(pos.y, event.partialTicks), pos.z,
                     radius,
                     0.1f,
                     ARGB.color(HotspotFeaturesConfig.outlineTransparency, type.color.value),
@@ -89,7 +89,7 @@ object HotspotFeatures {
 
             if (HotspotFeaturesConfig.circleSurface) {
                 event.renderCircle(
-                    pos.x, yMatcher(pos.y), pos.z,
+                    pos.x, yMatcher(pos.y, event.partialTicks), pos.z,
                     radius,
                     ARGB.color(HotspotFeaturesConfig.surfaceTransparency, type.color.value),
                 )

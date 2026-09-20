@@ -45,9 +45,9 @@ object WormholeFeatures {
         else -> 4f
     }
 
-    fun yMatcher(y: Float): Float {
+    fun yMatcher(y: Float, ticks: Float): Float {
         if (!WormholeFeaturesConfig.circleMatchesPlayerY) return y
-        val playerPos: Vec3 = McPlayer.position ?: return y
+        val playerPos: Vec3 = McPlayer.self?.getPosition(ticks) ?: return y
         val fluidAtPlayer = McLevel[playerPos.toBlockPos()].fluidState.type
         return if (playerPos.y <= y && (playerPos.y - y) >= maxWormholeHeight(y).unaryMinus() && validLiquids.contains(fluidAtPlayer)) playerPos.y.toFloat() + 0.01f
         else y
@@ -64,7 +64,7 @@ object WormholeFeatures {
 
             if (WormholeFeaturesConfig.circleOutline) {
                 event.renderCylinder(
-                    pos.x, yMatcher(pos.y), pos.z,
+                    pos.x, yMatcher(pos.y, event.partialTicks), pos.z,
                     radius,
                     0.1f,
                     ARGB.color(WormholeFeaturesConfig.outlineTransparency, WormholeFeaturesConfig.color),
@@ -73,7 +73,7 @@ object WormholeFeatures {
 
             if (WormholeFeaturesConfig.circleSurface) {
                 event.renderCircle(
-                    pos.x, yMatcher(pos.y), pos.z,
+                    pos.x, yMatcher(pos.y, event.partialTicks), pos.z,
                     radius,
                     ARGB.color(WormholeFeaturesConfig.surfaceTransparency, WormholeFeaturesConfig.color),
                 )
