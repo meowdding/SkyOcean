@@ -159,23 +159,23 @@ object ItemModifiers {
 
     val McPlayer.equipment get() = listOf(helmet, chestplate, leggings, boots)
 
-    @Subscription
+    @Subscription(priority = Subscription.LOW)
     @MustBeContainer
     private fun InventoryChangeEvent.onContainerChange() {
         tryModify(item, AbstractItemModifier.ModifierSource.INVENTORY)
     }
 
-    @Subscription
+    @Subscription(priority = Subscription.LOW)
     private fun PlayerInventoryChangeEvent.onInventoryChange() {
         tryModify(item, slotIndex.toSource(36))
     }
 
-    @Subscription
+    @Subscription(priority = Subscription.LOW)
     private fun PlayerHotbarChangeEvent.onHotbarChange() {
         tryModify(item, AbstractItemModifier.ModifierSource.HOTBAR)
     }
 
-    @Subscription
+    @Subscription(priority = Subscription.LOW)
     private fun PlayerEquipmentChangeEvent.onHotbarChange() {
         tryModify(item, AbstractItemModifier.ModifierSource.EQUIPMENT)
     }
@@ -188,7 +188,7 @@ object ItemModifiers {
         AbstractItemModifier.ModifierSource.PLAYER_INVENTORY
     }
 
-    @Subscription
+    @Subscription(priority = Subscription.LOW)
     private fun ScreenInitializedEvent.event() {
         if (this.screen.isInventory()) {
             McPlayer.equipment.forEach { stack ->
@@ -263,8 +263,8 @@ object ItemModifiers {
         modifiedItems[itemStack.getVisualItem() ?: itemStack] = usedModifiers
     }
 
-    private context(map: MutableMap<DataMarker<*>, Any>, state: State<Boolean>, itemStack: ItemStack)
-    fun <T : Any> AbstractItemModifier.extract(
+    context(map: MutableMap<DataMarker<*>, Any>, state: State<Boolean>, itemStack: ItemStack)
+    private fun <T : Any> AbstractItemModifier.extract(
         dataMarker: DataMarker<T>,
         mapper: AbstractItemModifier.(ItemStack) -> T?,
     ) {
@@ -294,7 +294,7 @@ object ItemModifiers {
         data class ComponentDataMarker<T : Any>(val component: DataComponentType<T>) : DataMarker<T>
     }
 
-    @Subscription
+    @Subscription(priority = Subscription.LOW)
     private fun ItemTooltipEvent.onLore() = tooltip.takeUnless { it.isEmpty() }?.let {
         val loreModifiers = modifiers.filter {
             it.isEnabled && it.appliesTo(item) && McScreen.self?.let { screen -> it.appliesToScreen(screen) } == true

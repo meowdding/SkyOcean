@@ -3,16 +3,15 @@
 package me.owdding.skyocean.features.inventory.accessories
 
 import com.mojang.serialization.Codec
-import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.*
+import me.owdding.ktmodules.Module
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.Utils.unsafeCast
@@ -20,19 +19,18 @@ import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockCategory
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.remote.api.SimpleItemAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.BINGO
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.RIFT
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.Scheduling
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
@@ -42,10 +40,11 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import kotlin.math.roundToInt
 import kotlin.reflect.KClass
 
-@LateInitModule
+@Module
 object AccessoriesAPI {
 
     internal var families: Map<String, AccessoryFamily> = emptyMap()
@@ -128,21 +127,25 @@ object AccessoriesAPI {
             }
 
             then("check") {
-                thenCallback("missing") { Scheduling.async(::checkMissing) }
-                thenCallback("unknown") { Scheduling.async(::checkUnknown) }
+                thenCallback("missing") {
+                    CompletableFuture.runAsync {
+                        checkMissingAccessories()
+                    }
+                }
+                thenCallback("unknown") {
+
+                    CompletableFuture.runAsync(::checkUnknown)
+                }
             }
         }
     }
 
     // Creates every single item in skyblock and gets the accessories that don't have a family or are ignored
-    private fun checkMissing() {
-        val allAccessories = RepoAPI.items().items().map { json ->
-            ItemStack.CODEC.parse(JsonOps.INSTANCE, json.value).orThrow
-        }.filterTo(mutableSetOf()) {
-            val category = it.getData(DataTypes.CATEGORY) ?: return@filterTo false
+    private fun checkMissingAccessories() {
+        val allAccessories = SimpleItemAPI.getAllIds().filterTo(mutableSetOf()) {
+            val category = it.toItem().getData(DataTypes.CATEGORY) ?: return@filterTo false
             category.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY, ignoreDungeon = true)
-        }.mapNotNullTo(mutableSetOf()) { it.getSkyBlockId() }
-
+        }
         val storedAccessories: Set<SkyBlockId> = buildSet {
             families.values.forEach { family ->
                 family.tiers.forEach(::addAll)
@@ -151,6 +154,9 @@ object AccessoriesAPI {
         }
 
         allAccessories.removeAll(storedAccessories)
+
+        text("stored accessories size: ${storedAccessories.size}").sendWithPrefix()
+        text("filtered accessories size: ${allAccessories.size}").sendWithPrefix()
 
         if (allAccessories.isEmpty()) {
             text("All accessories have families!").sendWithPrefix()

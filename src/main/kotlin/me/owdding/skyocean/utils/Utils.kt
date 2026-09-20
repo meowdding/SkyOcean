@@ -354,12 +354,12 @@ object Utils {
         return value ?: default()
     }
 
-    fun <T> TagKey<T>.listEntries() = ClientTags.getOrCreateLocalTag(this).map { this.registry().get(it) }.unwrap()
-    fun <T> ResourceKey<out Registry<T>>.list(): List<T> = this.lookup().listElements().map { it.value() }.toList()
-    fun <T> ResourceKey<T>.get(): Holder<T>? = SkyOcean.registryLookup.get(this).getOrNull()
-    fun <T> ResourceKey<out Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
-    fun <T> ResourceKey<out Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
-    fun <T> ResourceKey<out Registry<T>>.get(value: Identifier): Holder<T> = runCatching {
+    fun <T : Any> TagKey<T>.listEntries() = ClientTags.getOrCreateLocalTag(this).map { this.registry().get(it) }.unwrap()
+    fun <T : Any> ResourceKey<out Registry<T>>.list(): List<T> = this.lookup().listElements().map { it.value() }.toList()
+    fun <T : Any> ResourceKey<T>.get(): Holder<T>? = SkyOcean.registryLookup.get(this).getOrNull()
+    fun <T : Any> ResourceKey<out Registry<T>>.lookup(): HolderLookup.RegistryLookup<T> = SkyOcean.registryLookup.lookupOrThrow(this)
+    fun <T : Any> ResourceKey<out Registry<T>>.get(value: T): Holder<T> = this.lookup().filterElements { it == value }.listElements().findFirst().orElseThrow()
+    fun <T : Any> ResourceKey<out Registry<T>>.get(value: Identifier): Holder<T> = runCatching {
         this.lookup().listElements().filter {
             it.unwrapKey().get().identifier == value
         }.findFirst().orElseThrow()
@@ -388,7 +388,7 @@ object Utils {
 
     fun Component.asDisplay(): Display = Displays.text(this)
     fun Iterable<Item>.filterNotAir() = this.filterNot { item -> item == Items.AIR }
-    fun <T> Iterable<Holder<T>>.unwrap() = this.map { it.value() }
+    fun <T : Any> Iterable<Holder<T>>.unwrap() = this.map { it.value() }
 
     fun LevelableTreeNode.totalPowder() = powderForInterval(1 exclusiveInclusive maxLevel)
     fun LevelableTreeNode.powderForInterval(intRange: IntRange) = intRange.sumOf { costForLevel(it).second }

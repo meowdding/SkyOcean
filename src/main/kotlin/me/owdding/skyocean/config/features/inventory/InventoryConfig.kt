@@ -16,6 +16,10 @@ object InventoryConfig : CategoryKt("inventory") {
         translation = "skyocean.config.inventory.minion_helper"
     }
 
+    var accessoriesHelper by boolean(true) {
+        translation = "skyocean.config.inventory.accessories_helper"
+    }
+
     init {
         separator { title = "skyocean.config.inventory.inventory_buttons" }
     }

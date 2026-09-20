@@ -2,6 +2,7 @@ package me.owdding.skyocean.features.inventory.accessories
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.CachedValue
+import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesAPI.isDisallowed
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.*
@@ -160,14 +161,14 @@ object AccessoriesHelper : AbstractItemModifier() {
     @Subscription
     fun onRegisterSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("accessories") {
-            thenCallback("screen") {
+            callback {
                 if (!LocationAPI.isOnSkyBlock) {
                     Text.of("You must be on SkyBlock!") { this.color = TextColor.RED }.sendWithPrefix()
-                    return@thenCallback
+                    return@callback
                 }
                 if (SkyBlockIsland.THE_RIFT.inIsland()) {
                     Text.of("You can't use Accessories Helper in the Rift!", TextColor.RED).sendWithPrefix()
-                    return@thenCallback
+                    return@callback
                 }
                 McClient.setScreen(AccessoriesHelperScreen)
             }
@@ -177,7 +178,7 @@ object AccessoriesHelper : AbstractItemModifier() {
     override val displayName: Component
         get() = Text.of("Accessories Helper")
     override val isEnabled: Boolean
-        get() = true
+        get() = InventoryConfig.accessoriesHelper
 
     override fun appliesTo(itemStack: ItemStack): Boolean {
         if (itemStack.isEmpty) return false
