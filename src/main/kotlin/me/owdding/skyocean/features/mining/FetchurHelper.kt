@@ -44,7 +44,7 @@ object FetchurHelper {
                 val item = fetchurItem ?: return@onClick
                 // TODO: what the fuck do we do with the items that have multiple answers
                 //  maybe marie's pr?? #186
-                CraftHelperStorage.setSelectedWithNextUpAmount(item.items.firstOrNull(), item.amount)
+                //  use that pr, custom title "Fetchur - <name>" with "(any)" suffix is multiple
             }
         }
     }
