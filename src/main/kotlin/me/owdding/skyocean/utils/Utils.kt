@@ -18,6 +18,7 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.repo.LevelableTreeNode
 import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.lib.utils.mod.data.MeowddingStorageData
 import me.owdding.repo.RemoteRepo
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.accessors.SafeMutableComponentAccessor
@@ -401,11 +402,16 @@ object Utils {
 
     fun nextUp(amount: Int, divider: Int) = if (amount % divider == 0) amount else amount - (amount % divider) + divider
 
-    inline fun <reified E : Enum<E>> E.nextCycling(offset: Int = 1): E = enumValues<E>().let { it[ordinal + offset % it.size] }
+    inline fun <reified E : Enum<E>> E.nextCycling(offset: Int = 1): E = enumValues<E>().let { it[(ordinal + offset) % it.size] }
     inline fun <reified E : Enum<E>> E.next(offset: Int = 1): E? = enumValues<E>().getOrNull(ordinal + offset)
     inline fun <reified E : Enum<E>> E.previous(offset: Int = 1): E? = enumValues<E>().getOrNull(ordinal - offset)
 
     fun componentList(init: TooltipBuilder.() -> Unit) = TooltipBuilder().apply(init).lines()
+
+    inline fun <T : Any> MeowddingStorageData<T>.edit(block: T.() -> Unit) {
+        get().block()
+        save()
+    }
 }
 
 enum class SkyOceanModifyIndicator : Translatable {

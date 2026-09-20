@@ -19,9 +19,11 @@ import me.owdding.skyocean.utils.Utils.unaryMinus
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.OceanColors.BETTER_GOLD
 import me.owdding.skyocean.utils.extensions.asScrollable
+import me.owdding.skyocean.utils.rendering.widgets.SelectAmountWidget
 import net.minecraft.client.gui.layouts.Layout
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.Pricing
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
@@ -110,21 +112,7 @@ object SackValue : InventorySideGui("inventorySideGui.sackValue.title",".* Sack|
                             }
                         }
                     }.asButtonRight {
-                        ContextMenu.open { menu ->
-                            menu.withAutoCloseOff()
-                            val title = "Get From Sacks"
-                            menu.add { Widgets.text(title).withPadding(3) }
-                            menu.add {
-                                val state = ListenableState.of("")
-                                Widgets.textInput(state) {
-                                    it.withSize(McFont.width(title), 20)
-                                    it.withEnterCallback {
-                                        McClient.sendCommand("/gfs $item ${state.get().parseFormattedLong()}")
-                                        menu.onClose()
-                                    }
-                                }.withPadding(3)
-                            }
-                        }
+                        openGfsContextMenu(SkyBlockId.item(item))
                     }.apply {
                         withTooltip(Text.of("Right-Click to input how many items to get."))
                         widget(this)
@@ -151,5 +139,20 @@ object SackValue : InventorySideGui("inventorySideGui.sackValue.title",".* Sack|
         }.times(amount.toDouble()).toLong()
 
         operator fun component3() = price
+    }
+
+    fun openGfsContextMenu(id: SkyBlockId) {
+        ContextMenu.open { menu ->
+            menu.withAutoCloseOff()
+            val title = "Select Amount"
+            menu.add { Widgets.text(title).withPadding(3) }
+
+            menu.add {
+                SelectAmountWidget(id) { amount ->
+                    McClient.sendCommand("/gfs ${id.skyblockId} $amount")
+                    menu.onClose()
+                }.withPadding(3)
+            }
+        }
     }
 }

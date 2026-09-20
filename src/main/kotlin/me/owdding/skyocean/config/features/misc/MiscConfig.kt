@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.lib.utils.KnownMods
 import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.config.duration
+import me.owdding.skyocean.config.features.inventory.SackValueConfig
 import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlightMode
 import me.owdding.skyocean.utils.MinecraftColor
@@ -146,6 +147,14 @@ object MiscConfig : CategoryKt("misc") {
         slider = true
         range = 10L..60L
     }.duration(SECONDS)
+
+    var priceSource by enum(SackValueConfig.PriceSource.BAZAAR) {
+        translation = "skyocean.config.misc.itemSearch.priceSource"
+    }
+
+    var showTotalValue by boolean(true) {
+        translation = "skyocean.config.misc.itemSearch.showTotalValue"
+    }
 
     var useReiSearchBar by boolean(false) {
         translation = "skyocean.config.misc.itemSearch.useReiSearchBar"

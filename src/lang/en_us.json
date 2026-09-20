@@ -180,6 +180,7 @@
         },
         "hotm": {
           "@value": "Heart of the Mountain Perk Modifier",
+          "desc": "",
           "shiftCost": {
             "@value": "Show shift click cost",
             "desc": "Shows the amount of powder that will be consumed on shift click."
@@ -225,6 +226,7 @@
         },
         "metal_detector": {
           "@value": "Metal Detector Solver",
+          "desc": "",
           "metalDetector": {
             "@value": "Enable Metal Detector Solver",
             "desc": "Enables the metal detector solver, which helps you find treasures in the Mines of Divan."
@@ -407,6 +409,29 @@
         "piggy_repair_helper": {
           "@value": "Piggy Repair Helper",
           "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."
+        },
+        "stylized_chat_prefixes": {
+          "@value": "Enable Stylized Chat Prefixes",
+          "desc": "Replaces vanilla chat prefixes, such as \"<dark_green>Guild \\></dark_green>\", for more stylized ones, like \"<white><font 'skyocean:stylized_chat_prefixes'>G</font></white>\"."
+        },
+        "allowed_stylized_chat_prefixes": {
+          "@value": "Allowed Stylized Chat Prefixes",
+          "desc": "What prefixes will be replaced with the more stylized ones when using Chat Prefixes Icons"
+        },
+        "bridge_formatter": {
+          "@value": "Enable Bridge Formatter",
+          "desc": [
+            "Enables a bridge formatter, replacing all guild messages sent by a certain player as if it was a discord chat.",
+            "Example: \"<color #5865f2>Discord \\> </color><white>Empa: hi!</white>\""
+          ]
+        },
+        "bridge_formatter_ign": {
+          "@value": "Bridge Formatter Ign",
+          "desc": "Specifies what Ign the bridge bot has."
+        },
+        "bridge_formatter_stylized_chat_prefix": {
+          "@value": "Stylized Bridge Formatter",
+          "desc": "Whether to use a more stylized prefix for the bridge formatter (<white><font 'skyocean:stylized_chat_prefixes'>D</font></white>)"
         },
         "sack_notification": {
           "@value": "Sack Notification",
@@ -699,6 +724,21 @@
             "@value": "Highlight Time",
             "desc": "Amount of time that items will be highlighted for, in seconds."
           },
+          "priceSource": {
+            "@value": "ItemSearch Price Source",
+            "desc": [
+              "What source to use for Pricing.",
+              "Bazaar means Auction House & Bazaar with Item Evaluation.",
+              "NPC means NPC sell price."
+            ]
+          },
+          "showTotalValue": {
+            "@value": "Show Total Value",
+            "desc": [
+              "Displays the combined coin value of all items currently found in your item search.",
+              "<red>Might cause performance issues when opening the screen.</red>"
+            ]
+          },
           "useReiSearchBar": {
             "@value": "Use REI Search Bar",
             "desc": "Replaces REI's inventory highlighting with SkyOcean's"
@@ -868,7 +908,7 @@
             "@value": "Player Animals",
             "desc": [
               "Changes players in the world to be rendered as the selected animal!",
-              "You can choose between <white>Nobody</white>, <white>Self</white>, <white>Players (non NPCs)</white> and <white>Everyone</white>."
+              "You can choose between <white>Nobody</white>, <white>Self</white>, <white>Players (non NPCs)</white>, <white>Others (non NPCs)</white>, and <white>Everyone</white>."
             ],
             "type": {
               "@value": "Animal Type",
@@ -1394,6 +1434,7 @@
               "none": "Nobody",
               "self": "Self",
               "players": "Players",
+              "others": "Others",
               "everyone": "Everyone"
             },
             "color": {
