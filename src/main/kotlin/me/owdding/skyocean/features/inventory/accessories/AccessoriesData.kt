@@ -31,6 +31,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.BINGO
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.RIFT
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.Scheduling
 import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
@@ -127,15 +128,8 @@ object AccessoriesAPI {
             }
 
             then("check") {
-                thenCallback("missing") {
-                    CompletableFuture.runAsync {
-                        checkMissingAccessories()
-                    }
-                }
-                thenCallback("unknown") {
-
-                    CompletableFuture.runAsync(::checkUnknown)
-                }
+                thenCallback("missing") { Scheduling.async(::checkMissingAccessories) }
+                thenCallback("unknown") { Scheduling.async(::checkUnknown) }
             }
         }
     }
@@ -154,9 +148,6 @@ object AccessoriesAPI {
         }
 
         allAccessories.removeAll(storedAccessories)
-
-        text("stored accessories size: ${storedAccessories.size}").sendWithPrefix()
-        text("filtered accessories size: ${allAccessories.size}").sendWithPrefix()
 
         if (allAccessories.isEmpty()) {
             text("All accessories have families!").sendWithPrefix()
