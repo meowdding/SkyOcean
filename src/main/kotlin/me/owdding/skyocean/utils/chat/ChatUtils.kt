@@ -7,7 +7,6 @@ import me.owdding.lib.events.RegisterTextShaderEvent
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
-import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.Config
@@ -116,6 +115,11 @@ internal object ChatUtils {
         }.withPotentialShadow()
     }
     val prefix: Component by prefixDelegate
+
+    val ADDED_BY_SKYOCEAN = Text.join(
+        ICON_SPACE_COMPONENT,
+        Text.of("Added by SkyOcean!", OceanColors.BASE_TEXT),
+    )
 
     fun MutableComponent.withPotentialShadow(): MutableComponent {
         return if (Config.disableMessageTextShadow) {

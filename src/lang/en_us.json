@@ -410,6 +410,29 @@
           "@value": "Piggy Repair Helper",
           "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."
         },
+        "stylized_chat_prefixes": {
+          "@value": "Enable Stylized Chat Prefixes",
+          "desc": "Replaces vanilla chat prefixes, such as \"<dark_green>Guild \\></dark_green>\", for more stylized ones, like \"<white><font 'skyocean:stylized_chat_prefixes'>G</font></white>\"."
+        },
+        "allowed_stylized_chat_prefixes": {
+          "@value": "Allowed Stylized Chat Prefixes",
+          "desc": "What prefixes will be replaced with the more stylized ones when using Chat Prefixes Icons"
+        },
+        "bridge_formatter": {
+          "@value": "Enable Bridge Formatter",
+          "desc": [
+            "Enables a bridge formatter, replacing all guild messages sent by a certain player as if it was a discord chat.",
+            "Example: \"<color #5865f2>Discord \\> </color><white>Empa: hi!</white>\""
+          ]
+        },
+        "bridge_formatter_ign": {
+          "@value": "Bridge Formatter Ign",
+          "desc": "Specifies what Ign the bridge bot has."
+        },
+        "bridge_formatter_stylized_chat_prefix": {
+          "@value": "Stylized Bridge Formatter",
+          "desc": "Whether to use a more stylized prefix for the bridge formatter (<white><font 'skyocean:stylized_chat_prefixes'>D</font></white>)"
+        },
         "sack_notification": {
           "@value": "Sack Notification",
           "desc": "Show a notification when you gain specific sack items."
