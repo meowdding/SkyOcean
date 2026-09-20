@@ -19,6 +19,7 @@ import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asButton
 import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.asWidget
+import me.owdding.lib.displays.centerIn
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.extensions.rightPad
@@ -35,6 +36,8 @@ import me.owdding.skyocean.features.item.sources.system.BundledItemContext
 import me.owdding.skyocean.features.item.sources.system.TrackedItem
 import me.owdding.skyocean.features.item.sources.system.TrackedItemBundle
 import me.owdding.skyocean.utils.SkyOceanScreen
+import me.owdding.skyocean.utils.Utils.next
+import me.owdding.skyocean.utils.Utils.nextCycling
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.extensions.asScrollable
 import me.owdding.skyocean.utils.rendering.ExtraDisplays
@@ -130,6 +133,38 @@ object ItemSearchScreen : SkyOceanScreen() {
                         spacer(width)
                         LayoutFactory.horizontal {
                             spacer(height = 24)
+
+                            if (MiscConfig.showTotalValue) {
+                                val total = items.filter { (itemStack) -> matches(itemStack) }.sumOf { (_, _, price) -> price }
+
+                                Button().apply {
+                                    setSize(20, 20)
+                                    withTexture(null)
+                                    withTooltip(
+                                        Text.multiline(
+                                            Text.of("Total Value: (${MiscConfig.priceSource.name})", TextColor.GRAY),
+                                            Text.of(total.toFormattedString(), TextColor.GOLD),
+                                            Text.of(""),
+                                            Text.of("Click to cycle the price source.", TextColor.GRAY)
+                                        )
+                                    )
+                                    val display = WidgetRenderers.text<Button>(Text.of("$", TextColor.GREEN)).apply { withShadow() }
+                                    val buttonTexture = WidgetRenderers.sprite<Button>(UIConstants.GOLD_BUTTON)
+                                    withRenderer(
+                                        WidgetRenderers.layered(
+                                            { graphics, widget, ticks -> buttonTexture.render(graphics, widget, ticks) },
+                                            { graphics, widget, ticks -> display.render(graphics, widget, ticks) },
+                                        )
+                                    )
+                                    withCallback {
+                                        MiscConfig.priceSource = MiscConfig.priceSource.nextCycling()
+                                        rebuildItems()
+                                        rebuildWidgets()
+                                    }
+                                }.add { alignVerticallyMiddle() }
+                                spacer(width = 4)
+                            }
+
                             textBox = Widgets.textInput(state) { box ->
                                 box.withChangeCallback(::refreshSearch)
                                 box.withPlaceholder("Search...")

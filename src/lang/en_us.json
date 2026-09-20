@@ -701,6 +701,21 @@
             "@value": "Highlight Time",
             "desc": "Amount of time that items will be highlighted for, in seconds."
           },
+          "priceSource": {
+            "@value": "ItemSearch Price Source",
+            "desc": [
+              "What source to use for Pricing.",
+              "Bazaar means Auction House & Bazaar with Item Evaluation.",
+              "NPC means NPC sell price."
+            ]
+          },
+          "showTotalValue": {
+            "@value": "Show Total Value",
+            "desc": [
+              "Displays the combined coin value of all items currently found in your item search.",
+              "<red>Might cause performance issues when opening the screen.</red>"
+            ]
+          },
           "useReiSearchBar": {
             "@value": "Use REI Search Bar",
             "desc": "Replaces REI's inventory highlighting with SkyOcean's"
