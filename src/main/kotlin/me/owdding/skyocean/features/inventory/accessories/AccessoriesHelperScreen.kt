@@ -12,6 +12,7 @@ import me.owdding.lib.builder.RIGHT
 import me.owdding.lib.displays.*
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.extensions.rightPad
+import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.asWidgetTable
@@ -108,7 +109,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                                 },
                                 { button ->
                                     val width = AccessoriesSortMode.entries.maxOf { McFont.width(it.displayName) }
-                                    button.withSize(width, 20)
+                                    button.withSize(width + 30, 20)
                                 },
                             ) { builder ->
                                 builder.withCallback(::refreshSort)
@@ -177,8 +178,8 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
             fun createItemDisplay(item: ItemStack): Display {
                 return Displays.item(
                     item,
-                    customStackText = if (accessory.type == MISSING) AccessoriesHelper.AccessoryResult.MISSING.component!!
-                    else AccessoriesHelper.AccessoryResult.UPGRADE.component!!
+                    customStackText = (if (accessory.type == MISSING) AccessoriesHelper.AccessoryResult.MISSING
+                    else AccessoriesHelper.AccessoryResult.UPGRADE).takeUnless { it in InventoryConfig.disabledAccessoryIcons }?.component
                 ).withTooltip {
                     add(item.hoverName)
                     item.getLore().forEach(::add)

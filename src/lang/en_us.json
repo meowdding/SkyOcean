@@ -274,6 +274,47 @@
           "@value": "Minion Helper",
           "desc": "Shows the cheapest minion upgrades in the \"Crafted Minions\" inventory."
         },
+        "accessories_helper": {
+          "@value": "Accessories Helper",
+          "desc": "Enables showing an icon as a stack size that represents the status of you owning that accessory or if it can been upgraded.",
+
+          "disabled_icons": {
+            "@value": "Disabled Accessories Icons",
+            "desc": "Choose what icons will not be shown."
+          },
+          "icons": {
+            "maxed": "<green>✔ MAXED</green>",
+            "upgrade": "<blue>✦ UPGRADE</blue>",
+            "upgradeable": "<yellow>▲ UPGRADEABLE</yellow>",
+            "missing": "<red>❌ MISSING</red>",
+            "duplicate": "<dark_purple>☰ DUPLICATE</dark_purple>",
+            "downgrade": "<gray>▼ DOWNGRADE</gray>"
+          },
+          "info": {
+            "@value": "Accessories Helper",
+            "desc": [
+              "Accessories Helper helps you find what accessories you need to get and which to upgrade, and keep track of them.",
+              "Enabling \"Accessories Helper\" will make icons be shown as a stack size for accessories, those icons meaning: ",
+              "",
+              "- <green>✔ <bold>MAXED</bold></green> (You own that accessory and its the max tier)",
+              "- <blue>✦ <bold>UPGRADE</bold></blue> (You own a lower tier of this accessory and can upgrade it to this one)",
+              "- <yellow>▲ <bold>UPGRADEABLE</bold></yellow> (You own this accessory, and it has a next tier it can be upgraded to)",
+              "- <red>❌ <bold>MISSING</bold></red> (You don't own any accessories of this accessory family or group)",
+              "- <dark_purple>☰ <bold>DUPLICATE</bold></dark_purple> (You own multiple accessories like this one)",
+              "- <gray>▼ <bold>DOWNGRADE</bold></gray> (You already own an upgraded version of this accessory)"
+              ]
+          },
+          "open_screen": {
+            "@value": "Open Accessories Helper Screen",
+            "desc": [
+              "Click to open the Accessories Helper Screen, where you can see all the missing accessories/the upgrades you can get.",
+              "<italic>You can also open this with <gray>/skyocean accessories</gray></italic>"
+            ],
+            "text": "Open"
+          }
+
+
+        },
         "inventory_buttons": {
           "@value": "Inventory Buttons",
           "desc": "Settings to configure and change inventory buttons.",

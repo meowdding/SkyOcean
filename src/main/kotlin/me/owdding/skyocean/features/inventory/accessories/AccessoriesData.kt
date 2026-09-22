@@ -3,7 +3,6 @@
 package me.owdding.skyocean.features.inventory.accessories
 
 import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.*
 import me.owdding.ktmodules.Module
 import me.owdding.lib.events.FinishRepoLoadingEvent
@@ -24,6 +23,7 @@ import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.profile.profile.ProfileAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SimpleItemAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
@@ -32,18 +32,20 @@ import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.BIN
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemOrigin.RIFT
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.Scheduling
-import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
+import tech.thatgravyboat.skyblockapi.utils.extentions.capitalize
+import tech.thatgravyboat.skyblockapi.utils.extentions.toSnakeCase
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJson
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
+import tech.thatgravyboat.skyblockapi.utils.json.JsonArray
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 import java.util.*
-import java.util.concurrent.CompletableFuture
 import kotlin.math.roundToInt
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty0
 
 @Module
 object AccessoriesAPI {
@@ -114,17 +116,48 @@ object AccessoriesAPI {
     fun onRegisterSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerDev("accessories") {
             then("copy") {
-                fun <T : Any> copy(name: String, data: () -> T, codec: Codec<T>) {
-                    thenCallback(name) {
-                        McClient.clipboard = data().toJson(codec).toPrettyString()
-                        Text.of("Copied accessories ${name.toTitleCase()} data to clipboard!").sendWithPrefix()
+                fun <T : Any> copy(prop: KProperty0<T>, codec: Codec<T>, name: String = prop.name) {
+                    val snakeCase = name.toSnakeCase()
+                    thenCallback(snakeCase) {
+                        McClient.clipboard = prop.get().toJson(codec).toPrettyString()
+                        val outputName = snakeCase.split("_").joinToString(separator = " ") { it.capitalize() }
+                        Text.of("Copied accessories $outputName data to clipboard!").sendWithPrefix()
                     }
                 }
+                copy(::families, CodecUtils.map(Codec.STRING, AccessoryFamily.CODEC).unsafeCast())
+                copy(::unobtainable, CodecUtils.set(SkyBlockId.CODEC), name = "ignored")
+                copy(::rarityUpgraded, CodecUtils.map(SkyBlockId.CODEC, AccessoryRarityUpgraded.CODEC).unsafeCast())
+                copy(::disallowedOriginFamilies, CodecUtils.set(Codec.STRING))
+            }
 
-                copy("families", ::families, CodecUtils.map(Codec.STRING, AccessoryFamily.CODEC).unsafeCast())
-                copy("ignored", ::unobtainable, CodecUtils.set(SkyBlockId.CODEC))
-                copy("rarity_upgraded", ::rarityUpgraded, CodecUtils.map(SkyBlockId.CODEC, AccessoryRarityUpgraded.CODEC).unsafeCast())
-                copy("disallowed_origin_families", ::disallowedOriginFamilies, CodecUtils.set(Codec.STRING))
+            then("profile copy") {
+                thenCallback("missing") {
+                    val data = AccessoriesHelper.getMissingAccessories().map { it.family }
+                    McClient.clipboard = data.toJson(CodecUtils.list(Codec.STRING)).toPrettyString()
+                    text("Copied missing accessories in profile ${ProfileAPI.profileName} to clipboard!").sendWithPrefix()
+                }
+                thenCallback("upgradeable") {
+                    McClient.clipboard = JsonArray {
+                        AccessoriesHelper.getUpgradeableAccessories().forEach {
+                            obj { obj ->
+                                obj["family"] = it.family.family
+                                obj["next_tier"] = it.nextTierInt
+                            }
+                        }
+                    }.toPrettyString()
+                    text("Copied upgradeable accessories in profile ${ProfileAPI.profileName} to clipboard!").sendWithPrefix()
+                }
+                thenCallback("upgradeable_rarity") {
+                    McClient.clipboard = JsonArray {
+                        AccessoriesHelper.getUpgradeableRarityAccessories().forEach {
+                            obj { obj ->
+                                obj["family"] = it.family.family
+                                obj["next_rarity"] = it.nextRarity.name
+                            }
+                        }
+                    }.toPrettyString()
+                    text("Copied upgradeable rarity accessories in profile ${ProfileAPI.profileName} to clipboard!").sendWithPrefix()
+                }
             }
 
             then("check") {
@@ -235,12 +268,7 @@ data class AccessoryRarityUpgraded(
     fun isMax(rarity: SkyBlockRarity) = rarities.maxOrNull() == rarity
     fun nextAfter(rarity: SkyBlockRarity): SkyBlockRarity? = firstOrNull { it > rarity }
     companion object {
-        val CODEC: Codec<AccessoryRarityUpgraded> = RecordCodecBuilder.create {
-            it.group(
-                SkyOceanCodecs.getCodec<SkyBlockId>().fieldOf("item").forGetter(AccessoryRarityUpgraded::item),
-                CodecUtils.enumSet(SkyOceanCodecs.getCodec<SkyBlockRarity>()).fieldOf("rarities").forGetter(AccessoryRarityUpgraded::rarities),
-            ).apply(it, ::AccessoryRarityUpgraded)
-        }
+        val CODEC: Codec<AccessoryRarityUpgraded> = SkyOceanCodecs.getCodec()
     }
 }
 
