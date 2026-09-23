@@ -5,37 +5,52 @@ import me.owdding.skyocean.utils.transparency
 
 object WormholeFeaturesConfig : ObjectKt() {
 
+    override val baseTranslation: String = "skyocean.config.fishing.wormhole"
+
     var warning by boolean(false) {
-        this.translation = "skyocean.config.fishing.wormhole.warning"
+        this.translation = "warning"
     }
 
     init {
         separator {
-            this.title = "skyocean.config.fishing.wormhole.highlight"
+            this.title = "highlight"
         }
     }
 
     var circleSurface by boolean(true) {
-        this.translation = "skyocean.config.fishing.wormhole.circle_surface"
+        this.translation = "circle_surface"
     }
 
     var circleOutline by boolean(true) {
-        this.translation = "skyocean.config.fishing.wormhole.circle_outline"
+        this.translation = "circle_outline"
     }
 
+    var circleColumn by boolean(false) {
+        this.translation = "circle_column"
+    }
+
+    var circleMatchesPlayerY by boolean(false) {
+        this.translation = "circle_matches_player_y"
+    }
+
+
     var hideParticles by boolean(true) {
-        this.translation = "skyocean.config.fishing.wormhole.hide_particles"
+        this.translation = "hide_particles"
     }
 
     var color by color(0xAA00AA) {
-        this.translation = "skyocean.config.fishing.wormhole.color"
+        this.translation = "color"
     }
 
     var surfaceTransparency by transparency(50) {
-        this.translation = "skyocean.config.fishing.wormhole.surface_transparency"
+        this.translation = "surface_transparency"
     }
 
     var outlineTransparency by transparency(100) {
-        this.translation = "skyocean.config.fishing.wormhole.outline_transparency"
+        this.translation = "outline_transparency"
+    }
+
+    var columnTransparency by transparency(25) {
+        this.translation = "column_transparency"
     }
 }

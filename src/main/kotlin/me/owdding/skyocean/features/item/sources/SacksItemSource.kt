@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.item.sources
 
+import me.owdding.lib.utils.MemoizeUtil
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
@@ -13,9 +14,10 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object SacksItemSource : ItemSource, MeowddingLogger by SkyOcean.featureLogger() {
+    private val cache = MemoizeUtil.memoize { id: String -> SkyBlockId.unknownType(id)  }
     override fun getAll() = SacksAPI.sackItems.mapNotNull(
         { (_) -> },
-        { (id, amount) -> createFromIdAndAmount(SkyBlockId.unknownType(id), amount) },
+        { (id, amount) -> createFromIdAndAmount(cache(id), amount) },
     ).map { SimpleTrackedItem(it, SackItemContext) }
 
     override val type = ItemSources.SACKS

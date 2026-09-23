@@ -1,5 +1,6 @@
 package me.owdding.skyocean
 
+import com.mojang.serialization.Codec
 import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import me.owdding.ktmodules.AutoCollect
@@ -7,12 +8,14 @@ import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.RemoteConfig
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.overlays.EditOverlaysScreen
-import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingUpdateChecker
+import me.owdding.lib.utils.mod.MeowddingMod
+import me.owdding.lib.utils.unsafeCast
 import me.owdding.repo.RemoteRepo
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanApiDebug
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.generated.SkyOceanDevModules
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
@@ -23,7 +26,6 @@ import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.debug.DebugBuilder
 import me.owdding.skyocean.utils.debug.RegisterSkyOceanDebugEvent
-import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.registries.VanillaRegistries
@@ -33,6 +35,7 @@ import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.repo.RepoEvent
+import tech.thatgravyboat.skyblockapi.api.events.misc.RepoStatusEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -42,18 +45,15 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.url
 import kotlin.jvm.optionals.getOrNull
 
 @Module
-object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
+object SkyOcean : MeowddingMod("skyocean") {
 
     private var meowddingRepo: Boolean = false
     private var apiRepo: Boolean = false
 
     //~ if >= 26.3 'createLookup' -> 'createWorldLookup'
     val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createWorldLookup() }
-    val SELF = FabricLoader.getInstance().getModContainer("skyocean").get()
     val DATAGEN_SELF by lazy { FabricLoader.getInstance().getModContainer("skyocean-datagen").getOrNull() }
     val SBAPI by lazy { FabricLoader.getInstance().getModContainer(SkyBlockAPI.MOD_ID).get() }
-    val MOD_ID: String = SELF.metadata.id
-    val VERSION: String = SELF.metadata.version.friendlyString
     const val DISCORD = "https://meowdd.ing/discord"
 
     init {
@@ -165,7 +165,8 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         }
     }
 
-    fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(MOD_ID, path)
+    override fun <T : Any> getCodec(clazz: Class<T>): Codec<T> = SkyOceanCodecs.getCodec(clazz).unsafeCast()
+
     fun minecraft(path: String): Identifier = Identifier.withDefaultNamespace(path)
     fun olympus(path: String): Identifier = Identifier.fromNamespaceAndPath("olympus", path)
 

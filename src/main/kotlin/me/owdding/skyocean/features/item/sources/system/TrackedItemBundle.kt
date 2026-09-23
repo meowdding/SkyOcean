@@ -31,39 +31,33 @@ class TrackedItemBundle(trackedItem: TrackedItem) : TrackedItem {
     private fun updateContext(newItem: TrackedItem) {
         val context = context
         val other = (newItem.context as? ParentItemContext)?.parent ?: newItem.context
-        when {
-            context is BundledItemContext -> context.add(newItem)
-
-            context is EnderChestStorageItemContext && other is EnderChestStorageItemContext -> {
+        when (context) {
+            is BundledItemContext -> context.add(newItem)
+            is EnderChestStorageItemContext if other is EnderChestStorageItemContext -> {
                 if (context.index == other.index) return
                 this.context = StorageItemContext
             }
 
-            context is BackpackStorageItemContext && other is BackpackStorageItemContext -> {
+            is BackpackStorageItemContext if other is BackpackStorageItemContext -> {
                 if (context.index == other.index) return
                 this.context = StorageItemContext
             }
 
-            context is AbstractStorageItemContext && other is AbstractStorageItemContext -> {
+            is AbstractStorageItemContext if other is AbstractStorageItemContext -> {
                 this.context = StorageItemContext
             }
 
-            context is RiftInventoryContext && other is RiftInventoryContext -> {}
-
-            context is RiftEnderchestPageContext && other is RiftEnderchestPageContext -> {
+            is RiftInventoryContext if other is RiftInventoryContext -> {}
+            is RiftEnderchestPageContext if other is RiftEnderchestPageContext -> {
                 if (context.index == other.index) return
                 this.context = RiftStorageContext
             }
 
-            context is AbstractRiftStorageContext && other is AbstractRiftStorageContext -> {}
-
-            context is RiftItemContext && other is RiftItemContext -> {}
-
-            context is InventoryItemContext && other is InventoryItemContext -> {}
-
-            context is EquipmentItemContext && other is EquipmentItemContext -> {}
-
-            context !is BundledItemContext -> {
+            is AbstractRiftStorageContext if other is AbstractRiftStorageContext -> {}
+            is RiftItemContext if other is RiftItemContext -> {}
+            is InventoryItemContext if other is InventoryItemContext -> {}
+            is EquipmentItemContext if other is EquipmentItemContext -> {}
+            !is BundledItemContext -> {
                 this.context = BundledItemContext().apply {
                     this@TrackedItemBundle.items.forEach(::add)
                 }
@@ -106,16 +100,12 @@ data class BundledItemContext(val map: MutableMap<ItemSources, Int> = mutableMap
             this.item = newItem.itemStack
         }
         map.merge(newItem.context.source, newItem.itemStack.count, Int::plus)
-        val newContext = newItem.context
-        when {
-            newContext is ChestItemContext -> chests.add(newContext.chestPos)
-
-            newContext is EquipmentItemContext && !any<EquipmentItemContext>() -> contexts.add(EquipmentItemContext)
-            newContext is InventoryItemContext && !any<InventoryItemContext>() -> contexts.add(InventoryItemContext)
-
-            newContext is AbstractStorageItemContext && any<StorageItemContext>() -> {} // skip
-
-            newContext is AbstractStorageItemContext -> {
+        when (val newContext = newItem.context) {
+            is ChestItemContext -> chests.add(newContext.chestPos)
+            is EquipmentItemContext if !any<EquipmentItemContext>() -> contexts.add(EquipmentItemContext)
+            is InventoryItemContext if !any<InventoryItemContext>() -> contexts.add(InventoryItemContext)
+            is AbstractStorageItemContext if any<StorageItemContext>() -> {} // skip
+            is AbstractStorageItemContext -> {
                 val other = contexts.filterIsInstance<AbstractStorageItemContext>().firstOrNull() // there should only ever be one entry per type
                 val mergedContext: ItemContext = when {
                     other == null -> newContext

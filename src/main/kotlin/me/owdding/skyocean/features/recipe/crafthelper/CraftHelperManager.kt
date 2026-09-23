@@ -60,7 +60,16 @@ object CraftHelperManager {
     }
 
     fun resolve(resetLayout: () -> Unit, clear: () -> Unit): CraftHelperTree? {
-        val tree = CraftHelperStorage.data?.resolve(resetLayout, clear) ?: return null
+        val tree = try {
+            CraftHelperStorage.data?.resolve(resetLayout, clear)
+        } catch (_: ArithmeticException) {
+            text("Craft Helper amount is too large. Please choose a smaller amount.")
+                .withColor(TextColor.RED).sendWithPrefix()
+            clear()
+            resetLayout()
+            lastEvaluatedRoot.set(null)
+            null
+        } ?: return null
         return getTransformers().fold(tree) { tree, op -> op.apply(tree) }
     }
 

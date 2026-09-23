@@ -16,8 +16,6 @@ import java.awt.image.BufferedImage
 import java.util.concurrent.CompletableFuture
 import javax.imageio.ImageIO
 
-private const val fontWidth = 5
-private const val fontHeight = 5
 private const val backgroundHeight = 7
 
 class MobTypesFontProvider(output: FabricPackOutput, val converter: (KnownMobIcon) -> String, val fontType: Identifier) :
@@ -38,14 +36,11 @@ class MobTypesFontProvider(output: FabricPackOutput, val converter: (KnownMobIco
         val middle = blank.getSubimage(2, 0, 6, backgroundHeight)
         val right = blank.getSubimage(9, 0, 2, backgroundHeight)
 
-        val font = ImageIO.read(Utils.loadFromResourcesAsStream("data/skyocean/textures/small.png"))
-        val fontMap: Map<Char, BufferedImage> = ('a'..'z').mapIndexed { index, character ->
-            character.uppercaseChar() to font.getSubimage(index * fontWidth, 0, fontWidth, fontHeight)
-        }.toMap()
+        val fontMap = getSmallFont()
 
         KnownMobIcon.entries.forEach {
             val name = converter(it)
-            val spacedWidth = fontWidth + 1
+            val spacedWidth = smallFontWidth + 1
             val totalWidth = 4 + name.length * spacedWidth - 1
             val image = BufferedImage(totalWidth, backgroundHeight, BufferedImage.TYPE_INT_ARGB)
             val graphics = image.createGraphics()

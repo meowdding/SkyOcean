@@ -1,7 +1,9 @@
 package me.owdding.skyocean.features.inventory.accessories
 
+import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.CachedValue
+import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesAPI.isDisallowed
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.*
@@ -22,6 +24,7 @@ import tech.thatgravyboat.skyblockapi.api.profile.items.accessory.AccessoryBagAP
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.extentions.addOrPut
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -32,7 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 @ItemModifier
 object AccessoriesHelper : AbstractItemModifier() {
 
-    fun getCurrentAccessories(): MutableList<SkyBlockId> = AccessoryBagAPI.getItems().mapNotNullTo(mutableListOf()) { it.item.getSkyBlockId() }
+    private fun getCurrentAccessories(): List<SkyBlockId> = AccessoryBagAPI.getItems().mapNotNullTo(mutableListOf()) { it.item.getSkyBlockId() }
 
     fun getFamilyAndTier(id: SkyBlockId): Pair<AccessoryFamily, AccessoryTier>? {
         val family = AccessoriesAPI.getFamily(id) ?: return null
@@ -47,17 +50,21 @@ object AccessoriesHelper : AbstractItemModifier() {
         return family.lastOrNull { it.any(current::contains) }
     }
 
+    /** Returns true if you have any other accessory of the same family and tier */
     fun hasDuplicate(id: SkyBlockId): Boolean {
-        val current = getCurrentAccessories()
         val (_, tier) = getFamilyAndTier(id) ?: return false
-        current.remove(id)
-        return tier.any(current::contains)
+        return tier.any { tierId ->
+            val count = currentIdsByCount[tierId] ?: 0
+            // if the id is the same one we are checking duplicates for, it already has to have 1 accessory
+            if (tierId == id) count > 1
+            else count > 0
+        }
     }
 
     fun ignoreDuplicate(id: SkyBlockId): Boolean = getFamilyAndTier(id)?.first?.ignoreDuplicates ?: false
 
-    fun getResult(id: SkyBlockId): AccessoryResult {
-        val (family, tier) = getFamilyAndTier(id) ?: return NONE
+    fun getResult(id: SkyBlockId): AccessoryResult? {
+        val (family, tier) = getFamilyAndTier(id) ?: return null
         val hasId = id in currentIds
         // If you have another accessory of the same line, in the same tier
         if (hasId && hasDuplicate(id) && !ignoreDuplicate(id)) return DUPLICATE
@@ -75,10 +82,10 @@ object AccessoriesHelper : AbstractItemModifier() {
         // If own this accessory and it can be upgraded
         if (hasId) return UPGRADEABLE
 
-        return NONE // I don't think this should be reachable?
+        return null // I don't think this should be reachable?
     }
 
-    enum class AccessoryResult(val component: Component?, val color: Int = 0) {
+    enum class AccessoryResult(val component: Component, val color: Int = 0) : Translatable {
         // You own that accessory and it's the max tier
         MAXED(Icons.CHECKMARK, TextColor.GREEN),
 
@@ -96,14 +103,19 @@ object AccessoriesHelper : AbstractItemModifier() {
 
         // You own a higher tier of this accessory
         DOWNGRADE("▼", TextColor.GRAY),
-
-        NONE(null),
         ;
 
         constructor(icon: String, color: Int) : this(Text.of(icon, color), color)
+
+        override fun getTranslationKey(): String = "skyocean.config.inventory.accessories_helper.icons.${name.lowercase()}"
     }
 
     val currentIds: Set<SkyBlockId> by CachedValue(1.seconds) { getCurrentAccessories().toSet() }
+    val currentIdsByCount: Map<SkyBlockId, Int> by CachedValue(1.seconds) {
+        buildMap {
+            getCurrentAccessories().forEach { addOrPut(it, 1) }
+        }
+    }
 
     fun getMissingAccessories(): Set<AccessoryFamily> {
         val ids = currentIds
@@ -160,14 +172,14 @@ object AccessoriesHelper : AbstractItemModifier() {
     @Subscription
     fun onRegisterSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("accessories") {
-            thenCallback("screen") {
+            callback {
                 if (!LocationAPI.isOnSkyBlock) {
                     Text.of("You must be on SkyBlock!") { this.color = TextColor.RED }.sendWithPrefix()
-                    return@thenCallback
+                    return@callback
                 }
                 if (SkyBlockIsland.THE_RIFT.inIsland()) {
                     Text.of("You can't use Accessories Helper in the Rift!", TextColor.RED).sendWithPrefix()
-                    return@thenCallback
+                    return@callback
                 }
                 McClient.setScreen(AccessoriesHelperScreen)
             }
@@ -177,26 +189,27 @@ object AccessoriesHelper : AbstractItemModifier() {
     override val displayName: Component
         get() = Text.of("Accessories Helper")
     override val isEnabled: Boolean
-        get() = true
+        get() = InventoryConfig.accessoriesHelper
 
     override fun appliesTo(itemStack: ItemStack): Boolean {
         if (itemStack.isEmpty) return false
         val category = itemStack[DataTypes.CATEGORY] ?: return false
         if (!category.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY)) return false
         val id = itemStack.getSkyBlockId() ?: return false
-        return getResult(id) != NONE
+        return getResult(id) != null
     }
 
     override fun itemCountOverride(itemStack: ItemStack): Component? {
         val id = itemStack.getSkyBlockId() ?: return null
-        return getResult(id).component
+        val result = getResult(id) ?: return null
+        return if (result in InventoryConfig.disabledAccessoryIcons) null
+        else result.component
     }
 
     override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?): Result = withMerger(list) {
         val result = item.getSkyBlockId()?.let(::getResult) ?: return@withMerger null
-        if (result.component == null) return@withMerger null
         copy()
-        
+
         add(
             Text.join(
                 result.component,

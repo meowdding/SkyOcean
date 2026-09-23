@@ -1,14 +1,12 @@
 package me.owdding.skyocean.data.profile
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.inventory.DimensionInventory
-import me.owdding.skyocean.features.inventory.InventoryData
 import me.owdding.skyocean.features.inventory.InventoryType
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.items.ItemStackBlueprint
-import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -19,9 +17,9 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 
 @Module
 object InventoryStorage {
-    private val storage: ProfileStorage<InventoryData> = ProfileStorage(
-        defaultData = { mutableMapOf() },
+    private val storage = SkyOcean.profileStorage(
         fileName = "inventory",
+        defaultData = { mutableMapOf() },
         version = 1,
         codec = {
             when (it) {
