@@ -19,6 +19,7 @@ public class SkullBlockRendererMixin {
         method = "submitSkull",
         at = @At(
             value = "INVOKE",
+            //~ if >= 26.3 'IIILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)' -> 'III)'
             target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;III)V"
         )
     )
