@@ -13,10 +13,12 @@ import me.owdding.repo.RemoteRepo
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanApiDebug
+import me.owdding.skyocean.generated.SkyOceanDevModules
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
+import me.owdding.skyocean.utils.DevUtils
 import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.debug.DebugBuilder
@@ -69,6 +71,12 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
         SkyOceanModules.init {
             SkyBlockAPI.eventBus.register(it)
+        }
+
+        if (DevUtils.isOn(id("dev_modules")) || FabricLoader.getInstance().isDevelopmentEnvironment) {
+            SkyOceanDevModules.init {
+                SkyBlockAPI.eventBus.register(it)
+            }
         }
 
         apiRepo = RepoAPI.isInitialized()
@@ -177,3 +185,7 @@ internal annotation class ApiDebug(
     val name: String,
     val commandName: String = "",
 )
+@AutoCollect("DevModules")
+@Retention(AnnotationRetention.SOURCE)
+@Target(AnnotationTarget.CLASS)
+internal annotation class DevModule

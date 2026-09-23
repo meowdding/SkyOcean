@@ -21,12 +21,13 @@ public class FishingHookRendererMixin {
     }
 
     @Inject(
-        method = "shouldRender(Lnet/minecraft/world/entity/projectile/FishingHook;Lnet/minecraft/client/renderer/culling/Frustum;DDD)Z",
+        //~ if >= 26.3 'DDD' -> 'DDDF'
+        method = "shouldRender(Lnet/minecraft/world/entity/projectile/FishingHook;Lnet/minecraft/client/renderer/culling/Frustum;DDDF)Z",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void skyocean$hideOtherBobbers(CallbackInfoReturnable<Boolean> cir, @Local(argsOnly = true) FishingHook fishingHook) {
-        if (isEnabled() && !(fishingHook.getPlayerOwner() instanceof LocalPlayer)) {
+    private void skyocean$hideOtherBobbers(CallbackInfoReturnable<Boolean> cir, @Local(argsOnly = true) FishingHook entity) {
+        if (isEnabled() && !(entity.getPlayerOwner() instanceof LocalPlayer)) {
             cir.setReturnValue(false);
         }
     }

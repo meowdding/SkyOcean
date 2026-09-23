@@ -15,20 +15,17 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.UvMapping;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(EquipmentLayerRenderer.class)
 public class EquipmentLayerRendererMixin {
-
-    @Unique
-    private static final RenderType TRANSPARENT_TRIMS_TYPE = RenderTypes.armorTranslucent(Sheets.ARMOR_TRIMS_SHEET);
-
-
 
     @WrapOperation(
         method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/resources/Identifier;II)V",
@@ -43,7 +40,7 @@ public class EquipmentLayerRendererMixin {
         @Share(value = "translucent", namespace = "skyocean") LocalRef<Boolean> renderTranslucent
     ) {
         if (renderTranslucent.get() != null && renderTranslucent.get()) {
-            return RenderTypes.armorTranslucent(location);
+            return RenderTypes.entityTranslucent(location);
         }
         return original.call(location);
     }
@@ -52,18 +49,19 @@ public class EquipmentLayerRendererMixin {
         method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/resources/Identifier;II)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/Sheets;armorTrimsSheet(Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"
+            target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;armorTrim(Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"
         )
     )
     public RenderType modifyTrimsRenderType(
+        Identifier identifier,
         boolean decal,
         Operation<RenderType> original,
         @Share(value = "translucent", namespace = "skyocean") LocalRef<Boolean> renderTranslucent
     ) {
         if (renderTranslucent.get() != null && renderTranslucent.get()) {
-            return TRANSPARENT_TRIMS_TYPE;
+            return RenderTypes.entityTranslucent(identifier);
         }
-        return original.call(decal);
+        return original.call(identifier, decal);
     }
 
     @WrapOperation(
@@ -94,30 +92,28 @@ public class EquipmentLayerRendererMixin {
         method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/resources/Identifier;II)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/OrderedSubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/TextureAtlasSprite;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V",
-            ordinal = 2
+            target = "Lnet/minecraft/client/renderer/OrderedSubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/UvMapping;I)V",
+            ordinal = 1
         )
     )
     public <S> void renderTrimToBuffer(
         OrderedSubmitNodeCollector instance,
         Model<? super S> model,
-        S s,
-        PoseStack poseStack,
+        S state, PoseStack poseStack,
         RenderType renderType,
-        int i,
-        int i2,
-        int i3,
-        TextureAtlasSprite textureAtlasSprite,
-        int i4,
-        ModelFeatureRenderer.CrumblingOverlay crumblingOverlay,
+        int lightCoords,
+        int overlayCoords,
+        int tintedColor,
+        @Nullable UvMapping uvMapping,
+        int outlineColor,
         Operation<Void> original,
         @Local(argsOnly = true) ItemStack stack
     ) {
         var alpha = ItemStackAccessor.getAlpha(stack);
         if (alpha != null) {
-            original.call(instance, model, s, poseStack, renderType, i, i2, (alpha << 24) | i3, textureAtlasSprite, i4, crumblingOverlay);
+            original.call(instance, model, state, poseStack, renderType, lightCoords, overlayCoords, (alpha << 24) | (tintedColor  & 0xFFFFFF),  uvMapping, outlineColor);
         } else {
-            original.call(instance, model, s, poseStack, renderType, i, i2, i3, textureAtlasSprite, i4, crumblingOverlay);
+            original.call(instance, model, state, poseStack, renderType, lightCoords, overlayCoords, tintedColor, uvMapping, outlineColor);
         }
     }
 }

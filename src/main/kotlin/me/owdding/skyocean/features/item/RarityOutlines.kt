@@ -31,6 +31,10 @@ import java.util.function.BiFunction
 import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout
 import net.minecraft.client.renderer.BindGroupLayouts
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.McVersion
+import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
+
 //? } else 26.1 {
 //import com.mojang.renderpearl.api.vertex.VertexFormat
 //? }
@@ -72,15 +76,13 @@ object RarityOutlines {
     //? if >= 26.2 {
 
     private val RARITY_BIND_GROUP: BindGroupLayout = BindGroupLayout.builder()
-        //~ if >= 26.3 'Sampler("Sampler0")' -> 'Uniform("Sampler0", COMBINED_IMAGE_SAMPLER)'
-        .withUniform("Sampler0", COMBINED_IMAGE_SAMPLER)
         .withUniform(Buffer.NAME, UniformType.UNIFORM_BUFFER)
         .build()
 
     @JvmField
     val GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED: BiFunction<Int, OptionalInt, RenderPipeline> = Util.memoize { color, baseRarity ->
         RenderPipelines.register(
-            RenderPipeline.builder()
+            RenderPipeline.builder(RenderPipelines.GUI_TEXTURED_SNIPPET)
                 .withLocation(id("rarity_outlines/$color"))
                 .withVertexShader(id("core/rarity_outlines"))
                 .withFragmentShader(id("core/rarity_outlines"))
@@ -89,16 +91,12 @@ object RarityOutlines {
                     if (baseRarity.isPresent) {
                         withShaderDefine("IS_RARITY_UPGRADE").withShaderDefineColor("BASE_RARITY_COLOR", baseRarity.asInt)
                     }
+
+                    //? < 26.3
+                    //withShaderDefine("NO_LAYOUT")
                 }
-                .withBindGroupLayout(BindGroupLayouts.GLOBALS)
                 .withBindGroupLayout(RARITY_BIND_GROUP)
-                //? if >= 26.3
-                .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
-                //~ if >= 26.3 'MATRICES_PROJECTION' -> 'PROJECTION'
-                .withBindGroupLayout(BindGroupLayouts.PROJECTION)
-                .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
-                .withPrimitiveTopology(PrimitiveTopology.QUADS)
-                .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT))
+                .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT_PREMULTIPLIED_ALPHA))
                 .build(),
         )
     }

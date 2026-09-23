@@ -13,6 +13,8 @@ public interface GameRendererAccessor {
     @Accessor("resourcePool")
     CrossFrameResourcePool getResourcePool();
 
-    @Invoker("setPostEffect")
-    void invokeSetPostEffect(Identifier identifier);
+    //? <= 26.2 {
+    //@Invoker("setPostEffect")
+    //void invokeSetPostEffect(Identifier identifier);
+    //? }
 }

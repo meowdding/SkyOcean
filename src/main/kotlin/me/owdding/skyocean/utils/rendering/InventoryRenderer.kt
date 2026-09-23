@@ -32,6 +32,8 @@ object InventoryRenderer {
             //? }
             .withFragmentShader(SkyOcean.id("core/inventory"))
             .withCull(false)
+            //? < 26.3
+            //.withShaderDefine("NO_LAYOUT")
             //? >= 26.2 {
             .withBindGroupLayout(BindGroupLayout.builder()
                 .withUniform(POLY_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
@@ -56,6 +58,8 @@ object InventoryRenderer {
             //? }
             .withFragmentShader(SkyOcean.id("core/mono_inventory"))
             .withCull(false)
+            //? < 26.3
+            //.withShaderDefine("NO_LAYOUT")
             //? >= 26.2 {
             .withBindGroupLayout(BindGroupLayout.builder()
                 .withUniform(MONO_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)

@@ -81,7 +81,7 @@ object CropFeverEffects {
     val UBO_SIZE = Std140SizeCalculator().putFloat().get()
     private fun updateShaderBuffer() {
         val postChain = McClient.self.shaderManager.getPostChain(SkyOcean.id(SHADER_ID), LevelTargetBundle.MAIN_TARGETS)
-        val pass = (postChain as PostChainAccessor).`skyocean$getPasses`().firstOrNull() ?: return
+        val pass = (postChain as PostChainAccessor).`skyocean$getPasses`().find { false } ?: return
         val buffer = (pass as PostPassAccessor).`skyocean$getCustomUniforms`()[UNIFORM_ID] ?: return
 
         MemoryStack.stackPush().use { stack ->
@@ -154,7 +154,11 @@ object CropFeverEffects {
             }
             if (CropFeverEffectsConfig.hueShiftingShader) {
                 //? >= 26.3 {
-                McClient.self.player?.activePostEffects?.add(SkyOcean.id(SHADER_ID))
+                McClient.self.player?.activePostEffects = buildList {
+                    addAll(McClient.self.player?.activePostEffects ?: emptyList())
+                    add(SkyOcean.id(SHADER_ID))
+                }
+                updateShaderBuffer()
                 //? } else {
                 /*val gameRenderer = McClient.self.gameRenderer ?: return
                 val accessor = gameRenderer as GameRendererAccessor

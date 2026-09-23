@@ -152,6 +152,8 @@ stonecutter parameters {
                     "shaders.UniformType" to "pipeline.UniformType",
                 )
             }
+
+            rename("PipelineRenderer", "PipelineSubmit", "earth.terrarium.olympus.client.pipelines.renderer")
         }
     }
 }

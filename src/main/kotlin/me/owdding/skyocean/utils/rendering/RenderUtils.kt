@@ -260,7 +260,6 @@ object RenderUtils {
     ) {
        atCamera {
            translate(x, y + 0.01f, z)
-           submitNodeCollector.submitText()
            submitNodeCollector.submitCustomGeometry(poseStack, MLibRenderTypes.BLOCK_FILL_QUAD) { pose, consumer ->
                for (i in 0 until 360) {
                    val rad = Math.toRadians(i.toDouble())
