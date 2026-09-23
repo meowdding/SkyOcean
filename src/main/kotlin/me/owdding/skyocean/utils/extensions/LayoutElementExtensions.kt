@@ -1,5 +1,6 @@
 package me.owdding.skyocean.utils.extensions
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.teamresourceful.resourcefullib.common.color.Color
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer
@@ -382,8 +383,8 @@ fun createButton(
     builder: Button.() -> Unit = {},
 ): Button = Widgets.button().apply {
     click?.let { withCallback(click) }
-    rightClick?.let { withCallback(1, rightClick) }
-    leftClick?.let { withCallback(0, leftClick) }
+    rightClick?.let { withCallback(InputConstants.MOUSE_BUTTON_RIGHT, rightClick) }
+    leftClick?.let { withCallback(InputConstants.MOUSE_BUTTON_LEFT, leftClick) }
     if (icon != null || text != null) {
         withRenderer(
             WidgetRenderers.layered(
