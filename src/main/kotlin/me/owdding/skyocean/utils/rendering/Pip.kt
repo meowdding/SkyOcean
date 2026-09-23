@@ -112,10 +112,10 @@ private fun <Uniform : RenderPipelineUniforms> submit(
             //? 26.3
         }
         //? < 26.3
-        //PipelineSubmit.builder(TexturedCirclePipeline.PIPELINE, bufferBuilder.buildOrThrow())
+        //PipelineSubmit.builder(pipeline, bufferBuilder.buildOrThrow())
         .uniform(uniformStorage, uniform)
         .textures(TextureSetup.singleTexture(texture.textureView, texture.sampler)).color(color)
-        //~ if >= 26.3 'draw(' -> 'submit(this'
+        //~ if >= 26.3 'draw(' -> 'submit(submitNodeCollector'
         .submit(submitNodeCollector)
 
     //? = 26.2

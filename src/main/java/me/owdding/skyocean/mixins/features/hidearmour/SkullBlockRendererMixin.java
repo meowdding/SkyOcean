@@ -31,6 +31,8 @@ public class SkullBlockRendererMixin {
         final int lightCoords,
         final int overlayCoords,
         final int outlineColor,
+        //? < 26.3
+        //ModelFeatureRenderer.CrumblingOverlay crumblingOverlay,
         Operation<Void> original
     ) {
         if (HeadLayerAlphaHolder.alpha != null) {
@@ -44,6 +46,8 @@ public class SkullBlockRendererMixin {
                 (HeadLayerAlphaHolder.alpha << 24) | 0xFFFFFF,
                 null,
                 outlineColor
+                //? < 26.3
+                //,crumblingOverlay
             );
             return;
         }
