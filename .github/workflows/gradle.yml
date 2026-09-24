@@ -8,12 +8,16 @@ on:
 
 permissions:
     contents: read
+
 jobs:
     build:
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                version: [ '26.1', '26.2', '26.3' ]
         steps:
             -   uses: actions/checkout@v5
-            -   name: Setup JDK 21
+            -   name: Setup JDK 25
                 uses: actions/setup-java@v5
                 with:
                     distribution: temurin
@@ -23,12 +27,8 @@ jobs:
             -   run: chmod +x gradlew
             -   name: Build
                 run: ./gradlew build -PskipDetekt -Pdatagen
-            -   name: Upload Artifact
+            -   name: Upload Artifact ${{ matrix.version }}
                 uses: actions/upload-artifact@v7.0.0
                 with:
                     archive: false
-                    path: build/libs/*-26.1.jar
-            -   uses: actions/upload-artifact@v7.0.0
-                with:
-                    archive: false
-                    path: build/libs/*-26.2.jar
+                    path: build/libs/*-${{ matrix.version }}.jar
