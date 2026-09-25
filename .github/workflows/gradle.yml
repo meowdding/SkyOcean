@@ -26,7 +26,7 @@ jobs:
                 uses: gradle/actions/setup-gradle@v5
             -   run: chmod +x gradlew
             -   name: Build
-                run: ./gradlew build -PskipDetekt -Pdatagen
+                run: ./gradlew :${{ matrix.version }}:build -PskipDetekt -Pdatagen
             -   name: Upload Artifact ${{ matrix.version }}
                 uses: actions/upload-artifact@v7.0.0
                 with:
