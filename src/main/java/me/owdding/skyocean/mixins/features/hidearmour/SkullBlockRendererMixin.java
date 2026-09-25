@@ -53,7 +53,7 @@ public class SkullBlockRendererMixin {
             return;
         }
 
-        original.call(instance, model, state, poseStack, renderType, lightCoords, overlayCoords, outlineColor);
+        original.call(instance, model, state, poseStack, renderType, lightCoords, overlayCoords, outlineColor/*? < 26.3 >> ')'*//*, crumblingOverlay*/);
     }
 
 }

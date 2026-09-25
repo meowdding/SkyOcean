@@ -25,9 +25,9 @@ import net.minecraft.client.renderer.state.gui.GuiRenderState
 import kotlin.math.roundToInt
 
 //? 26.2 {
-//import com.mojang.blaze3d.vertex.BufferBuilder
-//import com.mojang.blaze3d.vertex.ByteBufferBuilder
-//? }
+/*import com.mojang.blaze3d.vertex.BufferBuilder
+import com.mojang.blaze3d.vertex.ByteBufferBuilder
+*///? }
 //? 26.1 {
 /*import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.renderpearl.api.vertex.VertexFormat
@@ -88,14 +88,14 @@ private fun <Uniform : RenderPipelineUniforms> submit(
     submitNodeCollector: SubmitNodeCollector,
 ) {
     //? if 26.1 {
+/*
+    val bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
 
-    //val bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
-
-    //? else 26.2 {
-
-    //ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_TEX_COLOR.vertexSize * 4).use {
-    //    val bufferBuilder = BufferBuilder(it, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
-    //? }
+    *///? else 26.2 {
+/*
+    ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_TEX_COLOR.vertexSize * 4).use {
+        val bufferBuilder = BufferBuilder(it, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
+    *///? }
 
     //? if >= 26.3 {
 
