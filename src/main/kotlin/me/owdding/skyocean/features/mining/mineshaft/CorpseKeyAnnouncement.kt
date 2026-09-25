@@ -44,7 +44,7 @@ object CorpseKeyAnnouncement {
 
         return Text.join(
             "Corpse Keys",
-            ChatUtils.SEPERATOR_COMPONENT,
+            ChatUtils.SEPARATOR_COMPONENT,
             keys.map { (type, pair) ->
                 val (count, keys) = pair
                 Text.join(

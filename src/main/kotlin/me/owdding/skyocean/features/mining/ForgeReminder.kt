@@ -73,7 +73,7 @@ object ForgeReminder {
 
             Text.join(
                 Text.translatable("skyocean.config.mining.forge_reminder"),
-                ChatUtils.SEPERATOR_COMPONENT,
+                ChatUtils.SEPARATOR_COMPONENT,
                 items,
                 action,
             ) {

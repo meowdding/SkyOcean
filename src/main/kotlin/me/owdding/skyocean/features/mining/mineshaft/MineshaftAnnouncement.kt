@@ -88,11 +88,11 @@ object MineshaftAnnouncement {
 
         val text = Text.join(
             "Mineshaft Entered",
-            ChatUtils.SEPERATOR_COMPONENT,
+            ChatUtils.SEPARATOR_COMPONENT,
             Text.of(MineshaftAPI.mineshaftType?.toFormattedName() ?: "Unknown Type", MineshaftAPI.mineshaftType.color()),
             " ",
             MineshaftAPI.mineshaftVariant?.toFormattedName() ?: "Unknown Variant",
-            ChatUtils.SEPERATOR_COMPONENT,
+            ChatUtils.SEPARATOR_COMPONENT,
             MineshaftAPI.corpses.groupBy { it.type }.toSortedMap(CorpseType::compareTo).map { (type, corpses) ->
                 Text.join(
                     Text.of(corpses.size.toString()),

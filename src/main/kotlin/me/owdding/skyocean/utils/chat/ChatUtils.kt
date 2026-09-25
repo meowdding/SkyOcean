@@ -98,7 +98,7 @@ internal object ChatUtils {
     val ICON_COMPONENT: Component = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
     val ICON_SPACE_COMPONENT: Component = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
     val SPACE_ICON_COMPONENT: Component = Text.of(SPACE_WITH_ICON) { this.color = DARK_OCEAN_BLUE }
-    val SEPERATOR_COMPONENT = Text.of(" | ", OceanColors.SEPARATOR)
+    val SEPARATOR_COMPONENT = Text.of(" | ", OceanColors.SEPARATOR)
 
     val prefixDelegate = CachedValue<Component> {
         Text.of {

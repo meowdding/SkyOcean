@@ -44,7 +44,7 @@ object PityMessage {
         McClient.runNextTick {
             Text.join(
                 "Mineshaft Pity",
-                ChatUtils.SEPERATOR_COMPONENT,
+                ChatUtils.SEPARATOR_COMPONENT,
                 "You found a mineshaft after ",
                 Text.of(lastPity.toString(), OceanColors.HIGHLIGHT),
                 Text.of("/", OceanColors.SEPARATOR),
