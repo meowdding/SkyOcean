@@ -19,37 +19,41 @@ public class SkullBlockRendererMixin {
         method = "submitSkull",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"
+            //~ if >= 26.3 'IIILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)' -> 'III)'
+            target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;III)V"
         )
     )
     private static <S> void renderSkull(
         SubmitNodeCollector instance,
-        Model<S> model,
-        S o,
-        PoseStack poseStack,
-        RenderType renderType,
-        int packedLight,
-        int packedOverlay,
-        int outlineColor,
-        ModelFeatureRenderer.CrumblingOverlay crumblingOverlay,
+        final Model<? super S> model,
+        final S state,
+        final PoseStack poseStack,
+        final RenderType renderType,
+        final int lightCoords,
+        final int overlayCoords,
+        final int outlineColor,
+        //? < 26.3
+        //ModelFeatureRenderer.CrumblingOverlay crumblingOverlay,
         Operation<Void> original
     ) {
         if (HeadLayerAlphaHolder.alpha != null) {
             instance.submitModel(
                 model,
-                o,
+                state,
                 poseStack,
                 renderType,
-                packedLight,
-                packedOverlay,
+                lightCoords,
+                overlayCoords,
                 (HeadLayerAlphaHolder.alpha << 24) | 0xFFFFFF,
                 null,
-                outlineColor,
-                crumblingOverlay);
+                outlineColor
+                //? < 26.3
+                //,crumblingOverlay
+            );
             return;
         }
 
-        original.call(instance, model, o, poseStack, renderType, packedLight, packedOverlay, outlineColor, crumblingOverlay);
+        original.call(instance, model, state, poseStack, renderType, lightCoords, overlayCoords, outlineColor);
     }
 
 }

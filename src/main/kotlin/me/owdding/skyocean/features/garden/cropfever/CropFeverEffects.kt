@@ -28,6 +28,7 @@ import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.GARDEN
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -80,7 +81,7 @@ object CropFeverEffects {
     val UBO_SIZE = Std140SizeCalculator().putFloat().get()
     private fun updateShaderBuffer() {
         val postChain = McClient.self.shaderManager.getPostChain(SkyOcean.id(SHADER_ID), LevelTargetBundle.MAIN_TARGETS)
-        val pass = (postChain as PostChainAccessor).`skyocean$getPasses`().firstOrNull() ?: return
+        val pass = (postChain as PostChainAccessor).`skyocean$getPasses`().find { false } ?: return
         val buffer = (pass as PostPassAccessor).`skyocean$getCustomUniforms`()[UNIFORM_ID] ?: return
 
         MemoryStack.stackPush().use { stack ->
@@ -116,9 +117,12 @@ object CropFeverEffects {
 
         val gameRenderer = McClient.self.gameRenderer
         if (gameRenderer != null) {
-            if (gameRenderer.currentPostEffect() == SkyOcean.id(SHADER_ID)) {
+            //? < 26.3 {
+            /*if (gameRenderer.currentPostEffect() == SkyOcean.id(SHADER_ID)) {
                 gameRenderer.clearPostEffect()
             }
+            *///? } else
+            McClient.self.player?.activePostEffects?.remove(SkyOcean.id(SHADER_ID))
         }
     }
 
@@ -149,12 +153,20 @@ object CropFeverEffects {
                 startTime = currentInstant()
             }
             if (CropFeverEffectsConfig.hueShiftingShader) {
-                val gameRenderer = McClient.self.gameRenderer ?: return
+                //? >= 26.3 {
+                McClient.self.player?.activePostEffects = buildList {
+                    addAll(McClient.self.player?.activePostEffects ?: emptyList())
+                    add(SkyOcean.id(SHADER_ID))
+                }
+                updateShaderBuffer()
+                //? } else {
+                /*val gameRenderer = McClient.self.gameRenderer ?: return
                 val accessor = gameRenderer as GameRendererAccessor
                 if (gameRenderer.currentPostEffect() != SkyOcean.id(SHADER_ID)) {
                     updateShaderBuffer()
                     accessor.invokeSetPostEffect(SkyOcean.id(SHADER_ID))
                 }
+                *///? }
             }
         }
         if (endRegex.matches(event.text)) {

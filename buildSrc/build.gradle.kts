@@ -27,5 +27,5 @@ dependencies {
     implementation(plugin(libs.plugins.meowdding.auto.mixins))
     implementation(plugin(libs.plugins.fabric.loom.asProvider()))
     implementation(plugin(libs.plugins.fabric.loom.remap))
-    implementation("dev.kikugie.stonecutter:dev.kikugie.stonecutter.gradle.plugin:0.10-alpha.2")
+    implementation("dev.kikugie.stonecutter:dev.kikugie.stonecutter.gradle.plugin:0.10-alpha.8")
 }

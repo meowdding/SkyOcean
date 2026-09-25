@@ -16,10 +16,12 @@ import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanApiDebug
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.generated.SkyOceanDevModules
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
+import me.owdding.skyocean.utils.DevUtils
 import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.debug.DebugBuilder
@@ -32,7 +34,7 @@ import net.minecraft.resources.Identifier
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
-import tech.thatgravyboat.skyblockapi.api.events.misc.RepoStatusEvent
+import tech.thatgravyboat.skyblockapi.api.events.repo.RepoEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -47,7 +49,8 @@ object SkyOcean : MeowddingMod("skyocean") {
     private var meowddingRepo: Boolean = false
     private var apiRepo: Boolean = false
 
-    val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createLookup() }
+    //~ if >= 26.3 'createLookup' -> 'createWorldLookup'
+    val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createWorldLookup() }
     val DATAGEN_SELF by lazy { FabricLoader.getInstance().getModContainer("skyocean-datagen").getOrNull() }
     val SBAPI by lazy { FabricLoader.getInstance().getModContainer(SkyBlockAPI.MOD_ID).get() }
     const val DISCORD = "https://meowdd.ing/discord"
@@ -69,6 +72,12 @@ object SkyOcean : MeowddingMod("skyocean") {
             SkyBlockAPI.eventBus.register(it)
         }
 
+        if (DevUtils.isOn(id("dev_modules")) || FabricLoader.getInstance().isDevelopmentEnvironment) {
+            SkyOceanDevModules.init {
+                SkyBlockAPI.eventBus.register(it)
+            }
+        }
+
         apiRepo = RepoAPI.isInitialized()
         meowddingRepo = RemoteRepo.isInitialized()
 
@@ -76,13 +85,15 @@ object SkyOcean : MeowddingMod("skyocean") {
     }
 
     @Subscription
-    private fun RepoStatusEvent.repoReady() {
+    context(_: RepoEvent.Status)
+    private fun repoReady() {
         apiRepo = true
         onRepoReady()
     }
 
     @Subscription
-    private fun FinishRepoLoadingEvent.repoReady() {
+    context(_: FinishRepoLoadingEvent)
+    private fun repoReady() {
         meowddingRepo = true
         onRepoReady()
     }
@@ -174,3 +185,7 @@ internal annotation class ApiDebug(
     val name: String,
     val commandName: String = "",
 )
+@AutoCollect("DevModules")
+@Retention(AnnotationRetention.SOURCE)
+@Target(AnnotationTarget.CLASS)
+internal annotation class DevModule

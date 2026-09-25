@@ -1,17 +1,16 @@
 package me.owdding.skyocean.utils
 
-import me.owdding.lib.platform.screens.MeowddingScreen
 import me.owdding.skyocean.SkyOcean
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LayoutElement
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-
-abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : MeowddingScreen(title) {
+abstract class SkyOceanScreen(title: Component = CommonComponents.EMPTY) : Screen(title) {
     constructor(title: String) : this(Text.of(title))
 
     fun olympus(path: String) = SkyOcean.olympus(path)

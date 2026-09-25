@@ -112,7 +112,8 @@ object RenderUtils {
 
         poseStack.pushPop {
             poseStack.translate(position.x - x + 0.5, position.y - y + 1.07f, position.z - z + 0.5)
-            poseStack.mulPose(cameraRotation)
+            //~ if >= 26.3 'mulPose' -> 'rotate'
+            poseStack.rotate(cameraRotation)
             poseStack.scale(scale, -scale, scale)
             val xOffset = if (center) -McFont.width(text) / 2.0f else 0.0f
 

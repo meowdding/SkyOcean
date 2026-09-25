@@ -4,7 +4,7 @@ import com.mojang.blaze3d.buffers.Std140Builder
 import com.mojang.blaze3d.buffers.Std140SizeCalculator
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniforms
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniformsStorage
-import net.minecraft.client.renderer.DynamicUniformStorage
+import net.minecraft.client.renderer.DynamicGpuDataStorage
 import org.joml.Vector2i
 import java.nio.ByteBuffer
 import java.util.function.Supplier
@@ -25,7 +25,7 @@ data class MonoInventoryUniform(
     }
 
     companion object {
-        val STORAGE: Supplier<DynamicUniformStorage<MonoInventoryUniform>> =
+        val STORAGE: Supplier<DynamicGpuDataStorage<MonoInventoryUniform>> =
             RenderPipelineUniformsStorage.register<MonoInventoryUniform>("SkyOcean Mono Inventory UBO", 5, Std140SizeCalculator().putInt().putInt())
     }
 }
@@ -44,7 +44,7 @@ data class PolyInventoryUniform(
     }
 
     companion object {
-        val STORAGE: Supplier<DynamicUniformStorage<PolyInventoryUniform>> =
+        val STORAGE: Supplier<DynamicGpuDataStorage<PolyInventoryUniform>> =
             RenderPipelineUniformsStorage.register<PolyInventoryUniform>("SkyOcean Poly Inventory UBO", 5, Std140SizeCalculator().putIVec2())
     }
 }

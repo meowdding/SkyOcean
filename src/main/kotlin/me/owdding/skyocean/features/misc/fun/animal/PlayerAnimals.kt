@@ -10,6 +10,8 @@ import me.owdding.skyocean.generated.SkyOceanAnimalModifiers
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.EntityModel
+import net.minecraft.client.model.geom.ModelLayers
+import net.minecraft.client.model.player.PlayerModel
 import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
@@ -71,11 +73,13 @@ object PlayerAnimals {
         }
         if (state is HumanoidRenderState) {
             state.swimAmount = avatarState.swimAmount
-            state.attackTime = avatarState.attackTime
+            //? < 26.3
+            //state.attackTime = avatarState.attackTime
             state.speedValue = avatarState.speedValue
             state.maxCrossbowChargeDuration = avatarState.maxCrossbowChargeDuration
             state.ticksUsingItem = avatarState.ticksUsingItem
-            state.attackArm = avatarState.attackArm
+            //? < 26.3
+            //state.attackArm = avatarState.attackArm
             state.useItemHand = avatarState.useItemHand
             state.isCrouching = avatarState.isCrouching
             state.isFallFlying = avatarState.isFallFlying
@@ -100,7 +104,8 @@ object PlayerAnimals {
 
     fun createRenderer(context: EntityRendererProvider.Context) {
         this.context = context
-        renderer = object : LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>(context, null, 20f) {
+        renderer = object : LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>(context, object : EntityModel<LivingEntityRenderState>(
+            context.bakeLayer(ModelLayers.PIG)) {}, 20f) {
             override fun getTextureLocation(renderState: LivingEntityRenderState): Identifier = SkyOcean.id("none")
             override fun createRenderState(): LivingEntityRenderState? = null
         }

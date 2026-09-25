@@ -72,8 +72,10 @@ class ItemWidgetRenderer() : PictureInPictureRenderer<ItemWidgetItemState>() {
         stack.pushPose()
         stack.translate(0f, bounds.height() / -2f - 5f, 0f)
         stack.scale(40f, 40f, 40f)
-        stack.mulPose(Axis.ZN.rotationDegrees(180f))
-        stack.mulPose(Axis.YN.rotationDegrees(state.rotation))
+        //~ if >= 26.3 'mulPose' -> 'rotate'
+        stack.rotate(Axis.ZN.rotationDegrees(180f))
+        //~ if >= 26.3 'mulPose' -> 'rotate'
+        stack.rotate(Axis.YN.rotationDegrees(state.rotation))
 
         //~ if >= 26.2 '.lighting' -> '.lighting()'
         McClient.self.gameRenderer.lighting().setupFor(if (state.item.usesBlockLight()) Lighting.Entry.ITEMS_3D else Lighting.Entry.ITEMS_FLAT)

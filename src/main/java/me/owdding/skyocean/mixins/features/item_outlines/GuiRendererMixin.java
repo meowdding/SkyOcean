@@ -4,7 +4,7 @@ package me.owdding.skyocean.mixins.features.item_outlines;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import java.util.Set;
 import me.owdding.skyocean.features.item.RarityOutlines;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
