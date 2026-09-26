@@ -38,6 +38,7 @@ import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
@@ -426,6 +427,13 @@ object Utils {
     inline fun <T : Any> MeowddingStorageData<T>.edit(block: T.() -> Unit) {
         get().block()
         save()
+    }
+
+    fun ClientboundLevelParticlesPacket.hasMaxSpeed(speed: Float): Boolean {
+        //? if >= 26.3
+        return this.xMaxSpeed == speed && this.yMaxSpeed == speed && this.zMaxSpeed == speed
+        //? else
+        // return this.maxSpeed == speed
     }
 }
 

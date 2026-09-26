@@ -4,6 +4,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.events.fishing.FishCatchEvent
 import me.owdding.skyocean.events.fishing.WormholeEvent
 import me.owdding.skyocean.features.fishing.WormholeFeatures
+import me.owdding.skyocean.utils.Utils.hasMaxSpeed
 import me.owdding.skyocean.utils.Utils.roundToHalf
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket
@@ -93,11 +94,9 @@ object WormholeAPI {
 
     private fun ClientboundLevelParticlesPacket.isHotSpotParticle(): Boolean {
         return when (this.particle.type) {
-            //~ if >= 26.3 'maxSpeed' -> 'xMaxSpeed' {
-            ParticleTypes.ENCHANT -> this.count == 4 && this.xMaxSpeed == -1.2f
-            ParticleTypes.PORTAL -> this.count == 5 && this.xMaxSpeed == 0.25f
+            ParticleTypes.ENCHANT -> this.count == 4 && this.hasMaxSpeed(-1.2f)
+            ParticleTypes.PORTAL -> this.count == 5 && this.hasMaxSpeed(0.25f)
             else -> false
-            //~ }
         }
     }
 

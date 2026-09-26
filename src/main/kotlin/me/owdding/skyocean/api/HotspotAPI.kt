@@ -7,6 +7,7 @@ import me.owdding.skyocean.events.fishing.FishCatchEvent
 import me.owdding.skyocean.events.fishing.HotspotEvent
 import me.owdding.skyocean.features.fishing.HotspotFeatures
 import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.Utils.hasMaxSpeed
 import me.owdding.skyocean.utils.Utils.roundToHalf
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.DustParticleOptions
@@ -141,10 +142,7 @@ object HotspotAPI {
         // (a bit less) strict bs :-D
         if (this.count != 0) return false
         if (this.xDist != 1f) return false
-        //? < 26.3
-        //if (this.maxSpeed != 1f) return false
-        //? >= 26.3
-        if (this.zMaxSpeed != 1f && this.yMaxSpeed != 1f && this.xMaxSpeed != 1f) return false
+        if (!this.hasMaxSpeed(1f)) return false
 
         return true
     }
