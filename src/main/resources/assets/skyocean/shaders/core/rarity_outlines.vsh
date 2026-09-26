@@ -1,13 +1,10 @@
 #version 330
 
-#if defined(NO_LAYOUT)
-//!moj_import <minecraft:dynamictransforms.glsl>
-//!moj_import <minecraft:projection.glsl>
-#else
+#ifndef NO_LAYOUT
 #extension GL_ARB_separate_shader_objects : require
+#endif
 #include <minecraft:dynamictransforms.glsl>
 #include <minecraft:projection.glsl>
-#endif
 
 #if defined(NO_LAYOUT)
 in vec3 Position;
