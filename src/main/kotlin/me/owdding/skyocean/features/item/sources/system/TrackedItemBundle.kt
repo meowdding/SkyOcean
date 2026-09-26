@@ -1,7 +1,20 @@
 package me.owdding.skyocean.features.item.sources.system
 
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlighter
-import me.owdding.skyocean.features.item.sources.*
+import me.owdding.skyocean.features.item.sources.AbstractRiftStorageContext
+import me.owdding.skyocean.features.item.sources.AbstractStorageItemContext
+import me.owdding.skyocean.features.item.sources.BackpackStorageItemContext
+import me.owdding.skyocean.features.item.sources.ChestItemContext
+import me.owdding.skyocean.features.item.sources.EnderChestStorageItemContext
+import me.owdding.skyocean.features.item.sources.EquipmentItemContext
+import me.owdding.skyocean.features.item.sources.InventoryItemContext
+import me.owdding.skyocean.features.item.sources.ItemSources
+import me.owdding.skyocean.features.item.sources.OnPlayerItemContext
+import me.owdding.skyocean.features.item.sources.RiftEnderchestPageContext
+import me.owdding.skyocean.features.item.sources.RiftInventoryContext
+import me.owdding.skyocean.features.item.sources.RiftItemContext
+import me.owdding.skyocean.features.item.sources.RiftStorageContext
+import me.owdding.skyocean.features.item.sources.StorageItemContext
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.item.ItemStack

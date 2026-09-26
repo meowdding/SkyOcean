@@ -13,7 +13,6 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
-import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
@@ -108,7 +107,7 @@ object WormholeAPI {
 data class WormholeData(
     var pos: Vector3f? = null,
     var radius: Double? = null,
-    var fishedIn: Boolean = false
+    var fishedIn: Boolean = false,
 ) {
     var lastParticleTime: Instant = currentInstant()
 

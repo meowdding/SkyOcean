@@ -14,7 +14,6 @@ import com.teamresourceful.resourcefulconfigkt.api.builders.EntriesBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.StringBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.TypeBuilder
 import me.owdding.skyocean.utils.Utils.id
-import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
@@ -24,7 +23,6 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Block
 import java.util.*
-import kotlin.jvm.optionals.getOrNull
 
 class GenericDropdown<T>(
     val element: ResourcefulConfigElement,
@@ -53,6 +51,7 @@ class GenericDropdown<T>(
                 fun <Type : EntityType<out E>, E : Entity> entityWrapper(type: Type) = TranslatableWrapper(type) {
                     EntityType.getKey(it).toLanguageKey("entity")
                 }
+
                 fun blockWrapper(block: Block) = TranslatableWrapper(block) { it.descriptionId }
                 fun soundEventWrapper(soundEvent: SoundEvent) = TranslatableWrapper(soundEvent) { it.location.toShortLanguageKey() }
             }

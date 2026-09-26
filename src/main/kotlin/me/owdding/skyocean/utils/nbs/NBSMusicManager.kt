@@ -2,15 +2,15 @@ package me.owdding.skyocean.utils.nbs
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.SkyOcean
 import me.owdding.lib.utils.MeowddingLogger
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.misc.RegisterCommandsEvent.Companion.argument
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 @Module
-object NBSMusicManager: MeowddingLogger by SkyOcean.featureLogger("NBS Music Manager") {
+object NBSMusicManager : MeowddingLogger by SkyOcean.featureLogger("NBS Music Manager") {
     private val activePlayers = HashMap<String, NBSPlayer>()
 
     @Subscription

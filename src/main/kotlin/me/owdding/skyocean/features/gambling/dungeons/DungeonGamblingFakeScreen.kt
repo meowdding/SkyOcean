@@ -30,6 +30,7 @@ class DungeonGamblingFakeScreen(
                 setup()
                 true
             }
+
             else -> super.keyPressed(keyEvent)
         }
     }

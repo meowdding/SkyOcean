@@ -158,7 +158,7 @@ class HotkeyPresetsScreen(
 
         FrameLayout.centerInRectangle(this.layout, this.rectangle)
     }
-    
+
     override fun extractBackground(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick)
         this.extractTransparentBackground(graphics)

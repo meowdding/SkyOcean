@@ -19,10 +19,12 @@ object CatharsisSupport {
 
     @JvmStatic
     fun id(consumer: BiConsumer<ItemStack, Identifier>) = this.idConsumer.setValue(consumer)
+
     @JvmStatic
     fun disabled(consumer: BiConsumer<ItemStack, Boolean>) = this.disabledConsumer.setValue(consumer)
+
     @JvmStatic
-    fun hiddenModElements(provider: Predicate<String>)  = this.hiddenModElementsProvider.setValue(provider)
+    fun hiddenModElements(provider: Predicate<String>) = this.hiddenModElementsProvider.setValue(provider)
 
     fun ItemStack.disableCatharsisModifications() = apply {
         disabledConsumer().accept(this, true)

@@ -2,6 +2,7 @@ package me.owdding.skyocean.utils.rendering
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineSubmit
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniforms
 import me.owdding.lib.rendering.MeowddingPipState
@@ -19,11 +20,6 @@ import java.util.function.Supplier
 
 //? >= 26.2
 import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
-import com.mojang.renderpearl.api.pipeline.RenderPipeline
-import me.owdding.lib.extensions.round
-import net.minecraft.client.renderer.state.gui.GuiRenderState
-import kotlin.math.roundToInt
-
 //? 26.2 {
 /*import com.mojang.blaze3d.vertex.BufferBuilder
 import com.mojang.blaze3d.vertex.ByteBufferBuilder
@@ -88,14 +84,14 @@ private fun <Uniform : RenderPipelineUniforms> submit(
     submitNodeCollector: SubmitNodeCollector,
 ) {
     //? if 26.1 {
-/*
-    val bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
+    /*
+        val bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
 
-    *///? else 26.2 {
-/*
-    ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_TEX_COLOR.vertexSize * 4).use {
-        val bufferBuilder = BufferBuilder(it, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
-    *///? }
+        *///? else 26.2 {
+    /*
+        ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_TEX_COLOR.vertexSize * 4).use {
+            val bufferBuilder = BufferBuilder(it, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
+        *///? }
 
     //? if >= 26.3 {
 

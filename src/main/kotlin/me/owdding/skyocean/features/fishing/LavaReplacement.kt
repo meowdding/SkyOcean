@@ -3,6 +3,8 @@ package me.owdding.skyocean.features.fishing
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.fishing.FishingConfig
+import net.minecraft.client.renderer.block.FluidModel
+import net.minecraft.client.renderer.block.FluidStateModelSet
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.block.state.StateDefinition
@@ -10,8 +12,6 @@ import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.WaterFluid
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
-import net.minecraft.client.renderer.block.FluidModel
-import net.minecraft.client.renderer.block.FluidStateModelSet
 
 abstract class OpaqueWaterFluid : WaterFluid() {
     object Flowing : OpaqueWaterFluid() {
@@ -42,14 +42,14 @@ object LavaReplacement {
     val OPAQUE_WATER: Fluid = Registry.register(
         BuiltInRegistries.FLUID,
         SkyOcean.id("opaque_water"),
-        OpaqueWaterFluid.Source
+        OpaqueWaterFluid.Source,
     )
 
     @JvmField
     val OPAQUE_FLOWING_WATER: Fluid = Registry.register(
         BuiltInRegistries.FLUID,
         SkyOcean.id("opaque_flowing_water"),
-        OpaqueWaterFluid.Flowing
+        OpaqueWaterFluid.Flowing,
     )
 
     @JvmField
@@ -57,7 +57,7 @@ object LavaReplacement {
         FluidStateModelSet.WATER_MODEL.stillMaterial(),
         FluidStateModelSet.WATER_MODEL.flowingMaterial(),
         FluidStateModelSet.WATER_MODEL.overlayMaterial(),
-        FluidStateModelSet.WATER_MODEL.tintSource()
+        FluidStateModelSet.WATER_MODEL.tintSource(),
     )
 
     fun isActive(): Boolean = SkyBlockIsland.CRIMSON_ISLE.inIsland() && FishingConfig.lavaReplacement

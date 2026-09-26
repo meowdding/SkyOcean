@@ -2,7 +2,6 @@ package me.owdding.skyocean.config.features.gambling
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.duration
-import me.owdding.skyocean.config.observable
 import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.features.gambling.vanguard.VanguardGambling
 import kotlin.time.DurationUnit

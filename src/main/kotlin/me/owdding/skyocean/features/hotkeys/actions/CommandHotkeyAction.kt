@@ -38,9 +38,12 @@ data class CommandHotkeyAction(
             LayoutFactory.vertical {
                 horizontal {
                     createText("Allow Client Commands", CatppuccinColors.Mocha.surface0).withPadding(left = PADDING).add(middleLeft)
-                    createInfo(Text.of {
-                        append("Allows running commands that are provided by mods.")
-                    }, CatppuccinColors.Mocha.surface0).add()
+                    createInfo(
+                        Text.of {
+                            append("Allows running commands that are provided by mods.")
+                        },
+                        CatppuccinColors.Mocha.surface0,
+                    ).add()
                 }
                 val state = ListenableState.of(allowClientCommands)
                 state.registerListener {

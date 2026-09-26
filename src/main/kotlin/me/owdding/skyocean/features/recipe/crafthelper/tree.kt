@@ -8,7 +8,7 @@ import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.mergeSameTypes
 import me.owdding.skyocean.features.recipe.serialize
 
-sealed interface CraftHelperParentNode : CraftHelperEntry{
+sealed interface CraftHelperParentNode : CraftHelperEntry {
     val nodes: MutableList<CraftHelperNode>
     override val recipe: Recipe?
 
@@ -59,7 +59,7 @@ sealed interface CraftHelperEntry {
         get() = 0
 }
 
-sealed interface CraftHelperNode: CraftHelperEntry
+sealed interface CraftHelperNode : CraftHelperEntry
 
 data class CraftHelperLeafNode(override val output: Ingredient) : CraftHelperNode {
     override val outputWithAmount: Ingredient get() = output

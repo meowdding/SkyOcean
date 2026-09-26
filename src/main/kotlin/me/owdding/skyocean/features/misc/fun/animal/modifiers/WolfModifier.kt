@@ -70,7 +70,6 @@ object WolfModifier : AnimalModifier<Wolf, WolfRenderState> {
         ;
 
 
-
         fun select(state: AvatarRenderState, wolfVariant: WolfVariant, wolfState: WolfRenderState) = if (this == RANDOM) {
             getRandom(state, states)
         } else {

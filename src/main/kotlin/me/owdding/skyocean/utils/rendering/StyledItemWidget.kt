@@ -14,13 +14,11 @@ import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.renderer.SubmitNodeCollector
-import net.minecraft.util.LightCoordsUtil
-//? 26.1
-//import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.component.DataComponents
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.decoration.ArmorStand
@@ -35,10 +33,12 @@ import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.platform.showTooltip
 import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-//? 26.1
-//import java.util.function.Function
 import java.util.function.Supplier
 
+//? 26.1
+//import net.minecraft.client.renderer.MultiBufferSource
+//? 26.1
+//import java.util.function.Function
 
 private const val BUTTON_SIZE = 5
 
@@ -61,12 +61,12 @@ data class ItemWidgetItemState(
 }
 
 //~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> '() : ', '(buffer)' -> '()'
-class ItemWidgetRenderer() : PictureInPictureRenderer<ItemWidgetItemState>() {
+class ItemWidgetRenderer : PictureInPictureRenderer<ItemWidgetItemState>() {
 
     override fun getRenderStateClass(): Class<ItemWidgetItemState> = ItemWidgetItemState::class.java
     override fun getTextureLabel(): String = "skyocean_item_widget"
 
-    override fun renderToTexture(state: ItemWidgetItemState, stack: PoseStack/*? >= 26.2 >> ')'*/, submitNodeCollector: SubmitNodeCollector ) {
+    override fun renderToTexture(state: ItemWidgetItemState, stack: PoseStack/*? >= 26.2 >> ')'*/, submitNodeCollector: SubmitNodeCollector) {
         val bounds = state.bounds ?: return
 
         stack.pushPose()

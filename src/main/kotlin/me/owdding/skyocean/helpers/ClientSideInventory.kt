@@ -35,7 +35,7 @@ abstract class ClientSideInventory(val titleComponent: String?, val rows: Int) :
         slots = items.asSlots().toMutableList()
     }
 
-        override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         if (titleComponent != null) {
             guiGraphics.drawString(Text.of(titleComponent) { color = TextColor.DARK_GRAY }, this.x + 8, this.y + 6, -1, false)

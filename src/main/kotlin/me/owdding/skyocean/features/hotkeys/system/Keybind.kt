@@ -10,7 +10,7 @@ data class Keybind(
 ) {
     fun duplicate() = copy(
         keys = keys.toList(),
-        settings = settings.copy()
+        settings = settings.copy(),
     )
 }
 

@@ -6,7 +6,6 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.RIGHT
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
-import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.hotkeys.system.Hotkey
 import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
@@ -438,7 +437,7 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
                     height = 15,
                     click = withRebuild {
                         HotkeyManager.register(hotkey.duplicate())
-                    }
+                    },
                 ).add()
 
                 val instantDelete = tryDeleting === hotkey

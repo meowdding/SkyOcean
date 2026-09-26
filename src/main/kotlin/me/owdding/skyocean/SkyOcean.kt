@@ -185,6 +185,7 @@ internal annotation class ApiDebug(
     val name: String,
     val commandName: String = "",
 )
+
 @AutoCollect("DevModules")
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.CLASS)

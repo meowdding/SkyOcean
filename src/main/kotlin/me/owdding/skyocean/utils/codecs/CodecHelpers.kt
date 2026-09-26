@@ -11,8 +11,6 @@ import me.owdding.lib.rendering.text.TextShaders
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.PackMetadata
-import me.owdding.skyocean.utils.extensions.contains
-import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import net.minecraft.core.BlockPos
 import net.minecraft.core.ClientAsset
 import net.minecraft.network.chat.Component
@@ -30,11 +28,9 @@ import net.minecraft.network.chat.contents.TranslatableContents
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Function
 import kotlin.jvm.optionals.getOrNull

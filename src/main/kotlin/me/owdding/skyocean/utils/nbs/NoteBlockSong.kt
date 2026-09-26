@@ -1,7 +1,5 @@
 package me.owdding.skyocean.utils.nbs
 
-import org.jetbrains.annotations.Nullable
-
 data class NoteBlockSong(
     val vanillaInstrumentCount: Int,
     val songLengthTicks: Short,
@@ -25,7 +23,7 @@ data class NoteBlockSong(
     val loopStartTick: Short,
     val ticks: List<Tick>,
     val layers: List<Layer>,
-    val customInstruments: List<CustomInstrument>
+    val customInstruments: List<CustomInstrument>,
 ) {
 
     data class Instrument(
@@ -34,12 +32,12 @@ data class NoteBlockSong(
         val noteBlockKey: Byte,
         val noteBlockVelocity: Byte, // volume from 0-100 in percent
         val noteBlockPanning: Short,
-        val noteBlockPitch: Short
+        val noteBlockPitch: Short,
     )
 
     data class Tick(
         val tickTime: Int, // The index this tick is at
-        val instruments: List<Instrument>
+        val instruments: List<Instrument>,
     ) : Iterable<Instrument> {
         override fun iterator(): Iterator<Instrument> = instruments.iterator()
     }
@@ -49,14 +47,14 @@ data class NoteBlockSong(
         val name: String?,
         val locked: Boolean,
         val volume: Byte, // Percentage 0-100
-        val stereo: Short // 0-200 (200 = two blocks left, 100 = center, 0 = two blocks right)
+        val stereo: Short, // 0-200 (200 = two blocks left, 100 = center, 0 = two blocks right)
     )
 
     data class CustomInstrument(
         val name: String?,
         val soundFile: String?,
         val soundKey: Byte,
-        val pressPianoKey: Boolean
+        val pressPianoKey: Boolean,
     )
 
 
@@ -69,6 +67,6 @@ data class NoteBlockSong(
         val originalAuthor: String?,
         val description: String?,
         val link: String?,
-        val data: Map<String, String>
+        val data: Map<String, String>,
     )
 }

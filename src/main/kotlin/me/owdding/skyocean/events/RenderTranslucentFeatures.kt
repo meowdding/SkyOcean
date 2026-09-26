@@ -7,5 +7,5 @@ import tech.thatgravyboat.skyblockapi.api.events.render.RenderWorldEvent
 //import net.minecraft.client.renderer.MultiBufferSource
 
 data class RenderTranslucentFeatures(
-    val event: RenderWorldEvent.AfterTranslucent
+    val event: RenderWorldEvent.AfterTranslucent,
 ) : SkyBlockEvent()

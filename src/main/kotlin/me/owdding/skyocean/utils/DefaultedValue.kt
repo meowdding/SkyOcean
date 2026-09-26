@@ -10,11 +10,13 @@ data class DefaultedValue<Type, Value>(var value: Value) : ReadWriteProperty<Typ
 
     override fun getValue(thisRef: Type, property: KProperty<*>): Value = value
     override fun setValue(thisRef: Type, property: KProperty<*>, value: Value) = setValue(value)
+
     @JvmName("_set_value_")
     fun setValue(value: Value) {
         this.value = value
         isModified = true
     }
+
     operator fun invoke() = value
 
     override fun render(): Boolean = isModified

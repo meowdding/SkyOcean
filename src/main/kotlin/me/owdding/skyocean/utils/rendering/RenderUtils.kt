@@ -3,15 +3,13 @@ package me.owdding.skyocean.utils.rendering
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphicsExtractor
-//? 26.1 {
-/*import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.ShapeRenderer*///?}
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
@@ -21,15 +19,17 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.platform.drawString
 import tech.thatgravyboat.skyblockapi.utils.extentions.pushPop
+import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.awt.Color
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 import me.owdding.lib.rendering.world.RenderTypes as MLibRenderTypes
-import net.minecraft.util.LightCoordsUtil
-import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 
+//? 26.1 {
+/*import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.ShapeRenderer*///?}
 
 interface PostEffectApplicator {
     fun `skyocean$applyPostEffect`(id: Identifier)
@@ -258,26 +258,26 @@ object RenderUtils {
         radius: Float,
         color: Int,
     ) {
-       atCamera {
-           translate(x, y + 0.01f, z)
-           submitNodeCollector.submitCustomGeometry(poseStack, MLibRenderTypes.BLOCK_FILL_QUAD) { pose, consumer ->
-               for (i in 0 until 360) {
-                   val rad = Math.toRadians(i.toDouble())
-                   val nextRad = Math.toRadians((i + 1).toDouble())
+        atCamera {
+            translate(x, y + 0.01f, z)
+            submitNodeCollector.submitCustomGeometry(poseStack, MLibRenderTypes.BLOCK_FILL_QUAD) { pose, consumer ->
+                for (i in 0 until 360) {
+                    val rad = Math.toRadians(i.toDouble())
+                    val nextRad = Math.toRadians((i + 1).toDouble())
 
-                   val x1 = (radius * cos(rad)).toFloat()
-                   val z1 = (radius * sin(rad)).toFloat()
+                    val x1 = (radius * cos(rad)).toFloat()
+                    val z1 = (radius * sin(rad)).toFloat()
 
-                   val x2 = (radius * cos(nextRad)).toFloat()
-                   val z2 = (radius * sin(nextRad)).toFloat()
+                    val x2 = (radius * cos(nextRad)).toFloat()
+                    val z2 = (radius * sin(nextRad)).toFloat()
 
-                   consumer.addVertex(pose, 0f, 0f, 0f).setColor(color)
-                   consumer.addVertex(pose, x2, 0f, z2).setColor(color)
-                   consumer.addVertex(pose, x1, 0f, z1).setColor(color)
-                   consumer.addVertex(pose, 0f, 0f, 0f).setColor(color)
-               }
-           }
+                    consumer.addVertex(pose, 0f, 0f, 0f).setColor(color)
+                    consumer.addVertex(pose, x2, 0f, z2).setColor(color)
+                    consumer.addVertex(pose, x1, 0f, z1).setColor(color)
+                    consumer.addVertex(pose, 0f, 0f, 0f).setColor(color)
+                }
+            }
 
-       }
+        }
     }
 }

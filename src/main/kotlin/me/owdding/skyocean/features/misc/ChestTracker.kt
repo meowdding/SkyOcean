@@ -112,7 +112,11 @@ object ChestTracker {
             } else if (second != null) {
                 IslandChestStorage.addItem(slot.item, slot.savableIndex, second, first)
             } else {
-                SkyOcean.warn("Failed to save item ${slot.item.item.components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY).stripped} at position ($first, $second)")
+                SkyOcean.warn(
+                    "Failed to save item ${
+                        slot.item.item.components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY).stripped
+                    } at position ($first, $second)",
+                )
             }
         }
         IslandChestStorage.save()

@@ -27,11 +27,11 @@ import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.forEachBelow
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -144,7 +144,7 @@ object HotspotAPI {
         //? < 26.3
         //if (this.maxSpeed != 1f) return false
         //? >= 26.3
-        if (this.zMaxSpeed != 1f && this.yMaxSpeed != 1f && this.xMaxSpeed != 1f)  return false
+        if (this.zMaxSpeed != 1f && this.yMaxSpeed != 1f && this.xMaxSpeed != 1f) return false
 
         return true
     }

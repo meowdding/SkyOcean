@@ -7,8 +7,6 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.utils.json.getPath
-import kotlin.text.substringAfterLast
-import kotlin.text.substringBeforeLast
 
 @GenerateCodec
 data class RemovePatch(val path: String) : Patch {

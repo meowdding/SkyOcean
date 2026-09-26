@@ -1,20 +1,16 @@
 package me.owdding.skyocean.features.foraging.galatea
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.config.features.foraging.GalateaConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import net.minecraft.client.player.AbstractClientPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.player.Player
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
-import tech.thatgravyboat.skyblockapi.api.events.entity.EntityAttributesUpdateEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityEquipmentUpdateEvent
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityRemovedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.minecraft.sounds.SoundPlayedEvent
-import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLeggings
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import java.util.*

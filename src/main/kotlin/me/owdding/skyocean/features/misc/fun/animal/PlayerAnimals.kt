@@ -11,7 +11,6 @@ import me.owdding.skyocean.utils.Utils.unsafeCast
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.geom.ModelLayers
-import net.minecraft.client.model.player.PlayerModel
 import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
@@ -58,7 +57,13 @@ object PlayerAnimals {
     private fun <State : LivingEntityRenderState> getModifier(entityType: EntityType<*>): AnimalModifier<*, State>? = modifiers[entityType].unsafeCast()
 
     @JvmStatic
-    fun <State : LivingEntityRenderState> apply(resolver: BlockModelResolver, entity: LivingEntity, avatarState: AvatarRenderState, state: State, partialTicks: Float) {
+    fun <State : LivingEntityRenderState> apply(
+        resolver: BlockModelResolver,
+        entity: LivingEntity,
+        avatarState: AvatarRenderState,
+        state: State,
+        partialTicks: Float,
+    ) {
         state.isBaby = PlayerAnimalConfig.isBaby.select(avatarState)
         state.bodyRot = avatarState.bodyRot
         state.yRot = avatarState.yRot
@@ -99,13 +104,19 @@ object PlayerAnimals {
         }
         getModifier<State>(state.entityType)?.apply(resolver, avatarState, state, partialTicks)
     }
+
     @JvmStatic
     fun getEntityType(): EntityType<*> = FunConfig.entityType
 
     fun createRenderer(context: EntityRendererProvider.Context) {
         this.context = context
-        renderer = object : LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>(context, object : EntityModel<LivingEntityRenderState>(
-            context.bakeLayer(ModelLayers.PIG)) {}, 20f) {
+        renderer = object : LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>>(
+            context,
+            object : EntityModel<LivingEntityRenderState>(
+                context.bakeLayer(ModelLayers.PIG),
+            ) {},
+            20f,
+        ) {
             override fun getTextureLocation(renderState: LivingEntityRenderState): Identifier = SkyOcean.id("none")
             override fun createRenderState(): LivingEntityRenderState? = null
         }

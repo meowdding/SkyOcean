@@ -185,9 +185,7 @@ enum class OceanGradients(val colors: List<Int>, private val shader: GradientTex
     override val id: Identifier = id("named_gradient")
     val isDisabled = this.colors.size == 1
 
-    constructor(vararg colors: Int) : this(
-        colors.toMutableList().apply { if (size > 1) addLast(first()) }
-    )
+    constructor(vararg colors: Int) : this(colors.toMutableList().apply { if (size > 1) addLast(first()) })
 
     override fun getTranslationKey() = "skyocean.gradients.${name.lowercase()}"
 

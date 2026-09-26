@@ -6,9 +6,9 @@ import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 

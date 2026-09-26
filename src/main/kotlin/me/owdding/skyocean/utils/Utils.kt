@@ -254,7 +254,8 @@ object Utils {
     fun TooltipBuilder.copyFrom(itemStack: ItemStack) = lines().addAll(itemStack.getLore())
     fun MutableComponent.wrap(wrap: String) = this.wrap(wrap, wrap)
 
-    context(_: ItemStack) fun ItemBuilder.skyOceanIndicator() = when (Config.modifyIndicator) {
+    context(_: ItemStack)
+    fun ItemBuilder.skyOceanIndicator() = when (Config.modifyIndicator) {
         SkyOceanModifyIndicator.PREFIX -> this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
         SkyOceanModifyIndicator.SUFFIX -> this.nameSuffix(ChatUtils.SPACE_ICON_COMPONENT)
         SkyOceanModifyIndicator.LORE -> this.alterTooltip {
@@ -276,7 +277,8 @@ object Utils {
         }
     }
 
-    context(_: ItemStack) inline fun ItemBuilder.alterTooltip(crossinline init: TooltipBuilder.() -> Unit) {
+    context(_: ItemStack)
+    inline fun ItemBuilder.alterTooltip(crossinline init: TooltipBuilder.() -> Unit) {
         this.tooltip {
             lines().addAll(this@alterTooltip.build().getLore())
             init()
@@ -310,22 +312,35 @@ object Utils {
     fun jsonObject(init: context(JsonObject) () -> Unit) = JsonObject().apply(init)
     fun jsonArray(init: context(JsonArray) () -> Unit) = JsonArray().apply(init)
 
-    context(parent: JsonObject) fun putString(property: String, value: String) = parent.addProperty(property, value)
-    context(parent: JsonObject) fun putNumber(property: String, value: Number) = parent.addProperty(property, value)
-    context(parent: JsonObject) fun putBoolean(property: String, value: Boolean) = parent.addProperty(property, value)
-    context(parent: JsonObject) fun putChar(property: String, value: Char) = parent.addProperty(property, value)
-    context(parent: JsonObject) fun putElement(property: String, value: JsonElement) = parent.add(property, value)
+    context(parent: JsonObject)
+    fun putString(property: String, value: String) = parent.addProperty(property, value)
+    context(parent: JsonObject)
+    fun putNumber(property: String, value: Number) = parent.addProperty(property, value)
+    context(parent: JsonObject)
+    fun putBoolean(property: String, value: Boolean) = parent.addProperty(property, value)
+    context(parent: JsonObject)
+    fun putChar(property: String, value: Char) = parent.addProperty(property, value)
+    context(parent: JsonObject)
+    fun putElement(property: String, value: JsonElement) = parent.add(property, value)
 
-    context(parent: JsonArray) fun putString(value: String) = parent.add(value)
-    context(parent: JsonArray) fun putNumber(value: Number) = parent.add(value)
-    context(parent: JsonArray) fun putBoolean(value: Boolean) = parent.add(value)
-    context(parent: JsonArray) fun putChar(value: Char) = parent.add(value)
+    context(parent: JsonArray)
+    fun putString(value: String) = parent.add(value)
+    context(parent: JsonArray)
+    fun putNumber(value: Number) = parent.add(value)
+    context(parent: JsonArray)
+    fun putBoolean(value: Boolean) = parent.add(value)
+    context(parent: JsonArray)
+    fun putChar(value: Char) = parent.add(value)
 
-    context(parent: JsonArray) fun putArray(init: context(JsonArray) () -> Unit) = parent.add(JsonArray().apply(init))
-    context(parent: JsonObject) fun putArray(property: String, init: context(JsonArray) () -> Unit) = parent.add(property, JsonArray().apply(init))
+    context(parent: JsonArray)
+    fun putArray(init: context(JsonArray) () -> Unit) = parent.add(JsonArray().apply(init))
+    context(parent: JsonObject)
+    fun putArray(property: String, init: context(JsonArray) () -> Unit) = parent.add(property, JsonArray().apply(init))
 
-    context(parent: JsonArray) fun putObject(init: context(JsonObject) () -> Unit) = parent.add(JsonObject().apply(init))
-    context(parent: JsonObject) fun putObject(property: String, init: context(JsonObject) () -> Unit) = parent.add(property, JsonObject().apply(init))
+    context(parent: JsonArray)
+    fun putObject(init: context(JsonObject) () -> Unit) = parent.add(JsonObject().apply(init))
+    context(parent: JsonObject)
+    fun putObject(property: String, init: context(JsonObject) () -> Unit) = parent.add(property, JsonObject().apply(init))
 
     fun List<Slot>.container() = this.filterNot { it.container is Inventory }
     fun List<Slot>.containerItems() = this.filterNot { it.container is Inventory }.map { it.item }

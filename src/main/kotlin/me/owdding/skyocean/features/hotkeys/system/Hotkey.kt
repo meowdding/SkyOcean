@@ -47,6 +47,7 @@ data class Hotkey(
     }
 
     fun formatKeys(override: Boolean? = null) = formatKeys(keybind.keys, override ?: keybind.settings.orderSensitive)
+
     companion object {
         fun formatKeys(keys: List<InputConstants.Key>, orderSensitive: Boolean) = Text.join(
             keys.map {

@@ -8,11 +8,12 @@ import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.world.entity.EntityType
-//? >= 26.2
-import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
 import tech.thatgravyboat.skyblockapi.platform.texture
+
+//? >= 26.2
+import net.minecraft.world.entity.EntityTypes
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)

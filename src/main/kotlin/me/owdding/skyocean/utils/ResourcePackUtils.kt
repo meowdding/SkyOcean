@@ -1,11 +1,11 @@
 package me.owdding.skyocean.utils
 
 import com.google.gson.JsonElement
-import kotlin.math.max
-import kotlin.math.min
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.Inline
+import kotlin.math.max
+import kotlin.math.min
 
 @GenerateCodec
 data class PackMetadata(

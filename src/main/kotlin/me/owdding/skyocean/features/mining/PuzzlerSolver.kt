@@ -5,12 +5,12 @@ import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.plus
-import net.minecraft.util.LightCoordsUtil
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart
 import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.core.BlockPos
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.StairBlock
@@ -73,7 +73,7 @@ object PuzzlerSolver {
                 IntArray(0),
                 LightCoordsUtil.FULL_BRIGHT,
                 OverlayTexture.NO_OVERLAY,
-                1
+                1,
             )
         }
     }

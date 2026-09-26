@@ -2,7 +2,6 @@ package me.owdding.skyocean.features.hotkeys.system
 
 import me.owdding.ktcodecs.FieldNames
 import me.owdding.ktcodecs.GenerateCodec
-import net.minecraft.client.Minecraft
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
 @GenerateCodec

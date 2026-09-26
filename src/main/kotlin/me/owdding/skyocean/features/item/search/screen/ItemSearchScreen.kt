@@ -19,7 +19,6 @@ import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asButton
 import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.asWidget
-import me.owdding.lib.displays.centerIn
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.extensions.rightPad
@@ -36,7 +35,6 @@ import me.owdding.skyocean.features.item.sources.system.BundledItemContext
 import me.owdding.skyocean.features.item.sources.system.TrackedItem
 import me.owdding.skyocean.features.item.sources.system.TrackedItemBundle
 import me.owdding.skyocean.utils.SkyOceanScreen
-import me.owdding.skyocean.utils.Utils.next
 import me.owdding.skyocean.utils.Utils.nextCycling
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.extensions.asScrollable
@@ -145,8 +143,8 @@ object ItemSearchScreen : SkyOceanScreen() {
                                             Text.of("Total Value: (${MiscConfig.priceSource.name})", TextColor.GRAY),
                                             Text.of(total.toFormattedString(), TextColor.GOLD),
                                             Text.of(""),
-                                            Text.of("Click to cycle the price source.", TextColor.GRAY)
-                                        )
+                                            Text.of("Click to cycle the price source.", TextColor.GRAY),
+                                        ),
                                     )
                                     val display = WidgetRenderers.text<Button>(Text.of("$", TextColor.GREEN)).apply { withShadow() }
                                     val buttonTexture = WidgetRenderers.sprite<Button>(UIConstants.GOLD_BUTTON)
@@ -154,7 +152,7 @@ object ItemSearchScreen : SkyOceanScreen() {
                                         WidgetRenderers.layered(
                                             { graphics, widget, ticks -> buttonTexture.render(graphics, widget, ticks) },
                                             { graphics, widget, ticks -> display.render(graphics, widget, ticks) },
-                                        )
+                                        ),
                                     )
                                     withCallback {
                                         MiscConfig.priceSource = MiscConfig.priceSource.nextCycling()

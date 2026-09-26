@@ -1,7 +1,7 @@
 package me.owdding.skyocean.utils.extensions
 
-import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import me.owdding.skyocean.utils.Utils.previous
+import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier

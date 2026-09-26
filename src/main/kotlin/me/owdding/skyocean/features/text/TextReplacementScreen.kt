@@ -5,15 +5,27 @@ import earth.terrarium.olympus.client.ui.UIIcons
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.RIGHT
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
-import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.text_replacements.TextReplacementConfig
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.features.hotkeys.ShowMessageModal
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils
-import me.owdding.skyocean.utils.extensions.*
+import me.owdding.skyocean.utils.extensions.asScrollableWidget
+import me.owdding.skyocean.utils.extensions.asWidget
+import me.owdding.skyocean.utils.extensions.bottomCenter
+import me.owdding.skyocean.utils.extensions.createButton
+import me.owdding.skyocean.utils.extensions.createSeparator
+import me.owdding.skyocean.utils.extensions.createText
+import me.owdding.skyocean.utils.extensions.framed
+import me.owdding.skyocean.utils.extensions.middleCenter
+import me.owdding.skyocean.utils.extensions.middleLeft
+import me.owdding.skyocean.utils.extensions.middleRight
+import me.owdding.skyocean.utils.extensions.setScreen
+import me.owdding.skyocean.utils.extensions.string
+import me.owdding.skyocean.utils.extensions.topCenter
+import me.owdding.skyocean.utils.extensions.withPadding
+import me.owdding.skyocean.utils.extensions.withTexturedBackground
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.network.chat.CommonComponents
@@ -22,12 +34,11 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
-import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import kotlin.math.max
 
-object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), IgnoreHotkeyInputs, DisableReplacements  {
+object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), IgnoreHotkeyInputs, DisableReplacements {
 
     private var tryDeleting: TextReplacement? = null
 
@@ -362,13 +373,15 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                 createText(
                     Text.of(textReplacement.priority.toString()) {
                         color = CatppuccinColors.Mocha.subtext0
-                    }
+                    },
                 ).withPadding(SPACER).add(middleLeft)
                 vertical {
-                    createText(Text.join(
-                        textReplacement.key.chars().mapToObj { Char(it) }.toList(),
-                        separator = Text.of("\u200c")
-                    )) {
+                    createText(
+                        Text.join(
+                            textReplacement.key.chars().mapToObj { Char(it) }.toList(),
+                            separator = Text.of("\u200c"),
+                        ),
+                    ) {
                         color = CatppuccinColors.Mocha.text
                     }.withPadding(bottom = 2).add()
                     createText(textReplacement.value).withPadding(4).withTexturedBackground("text_replacements/header").add()
@@ -396,7 +409,7 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                     click = setScreen {
                         EditReplacementModal(
                             this@TextReplacementScreen,
-                            textReplacement
+                            textReplacement,
                         ) { key, value, priority, wholeWord, ignoreCase, enabled ->
                             textReplacement.key = key
                             textReplacement.value = value

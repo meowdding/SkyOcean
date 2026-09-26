@@ -156,7 +156,7 @@ fun LayoutElement.withTexturedBackground(location: Identifier, width: Int = this
 
 
 fun LayoutElement.withTexturedBackground(location: String, width: Int = this.width, height: Int = this.height): LayoutElement = withTexturedBackground(
-    SkyOcean.id(location), width, height,
+    id(location), width, height,
 )
 
 fun Layout.asLayoutWidget(init: LayoutWidget<Layout>.() -> Unit = {}) = LayoutWidget(this).apply {

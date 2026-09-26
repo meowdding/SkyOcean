@@ -1,9 +1,9 @@
 package me.owdding.skyocean.features.misc.`fun`
 
-import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import net.minecraft.client.renderer.RenderPipelines

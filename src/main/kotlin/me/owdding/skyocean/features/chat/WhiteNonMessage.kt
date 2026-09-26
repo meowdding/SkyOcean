@@ -14,6 +14,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 object WhiteNonMessage {
 
     private val group = RemoteStrings.resolve()
+
     //                                                SBLVL            Emblem          Not Ranks
     private val regex by group.componentRegex("(?<prefix>(?:\\[\\d+]\\s)?(?:[^\\w\\s]\\s*)?)(?!\\[[^]]+]\\s)(?<username>\\w{3,16})(?<text>: .+)")
 

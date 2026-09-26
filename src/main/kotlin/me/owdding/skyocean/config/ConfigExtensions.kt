@@ -1,6 +1,12 @@
 package me.owdding.skyocean.config
 
-import com.teamresourceful.resourcefulconfigkt.api.*
+import com.teamresourceful.resourcefulconfigkt.api.CachedTransformedEntry
+import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import com.teamresourceful.resourcefulconfigkt.api.ConfigDelegateProvider
+import com.teamresourceful.resourcefulconfigkt.api.Entry
+import com.teamresourceful.resourcefulconfigkt.api.ObservableEntry
+import com.teamresourceful.resourcefulconfigkt.api.RConfigKtEntry
+import com.teamresourceful.resourcefulconfigkt.api.TransformedEntry
 import com.teamresourceful.resourcefulconfigkt.api.builders.ButtonBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.CategoryBuilder
 import com.teamresourceful.resourcefulconfigkt.api.builders.ColorBuilder
@@ -15,9 +21,7 @@ import com.teamresourceful.resourcefulconfigkt.api.builders.TypeBuilder
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.network.chat.Component
-import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.utils.extentions.capitalize
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
@@ -158,12 +162,12 @@ abstract class DelegatingConfig(val entryBuilder: EntriesBuilder) {
         builder(it)
     }
 
-    inner class DelegateWrap<Type>(val entry:  ConfigDelegateProvider<RConfigKtEntry<Type>>) : ConfigDelegateProvider<RConfigKtEntry<Type>> {
+    inner class DelegateWrap<Type>(val entry: ConfigDelegateProvider<RConfigKtEntry<Type>>) : ConfigDelegateProvider<RConfigKtEntry<Type>> {
         operator fun <Any> provideDelegate(owner: Any, property: KProperty<*>) = entry.provideDelegate(entryBuilder, property)
         override fun provideDelegate(entries: EntriesBuilder, prop: KProperty<*>): RConfigKtEntry<Type> = entry.provideDelegate(entries, prop)
     }
 
-    open fun <Type>  ConfigDelegateProvider<RConfigKtEntry<Type>>.wrap() = DelegateWrap(this)
+    open fun <Type> ConfigDelegateProvider<RConfigKtEntry<Type>>.wrap() = DelegateWrap(this)
 
     fun byte(value: Byte, builder: NumberBuilder<Byte>.() -> Unit = {}) = entryBuilder.byte(value, wrap(builder)).wrap()
     fun byte(id: String, value: Byte, builder: NumberBuilder<Byte>.() -> Unit = {}) = entryBuilder.byte(id, value, wrap(builder)).wrap()
