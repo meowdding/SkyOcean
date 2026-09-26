@@ -61,7 +61,7 @@ data class ItemWidgetItemState(
 }
 
 //~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> '() : ', '(buffer)' -> '()'
-class ItemWidgetRenderer : PictureInPictureRenderer<ItemWidgetItemState>() {
+class ItemWidgetRenderer() : PictureInPictureRenderer<ItemWidgetItemState>() {
 
     override fun getRenderStateClass(): Class<ItemWidgetItemState> = ItemWidgetItemState::class.java
     override fun getTextureLabel(): String = "skyocean_item_widget"
