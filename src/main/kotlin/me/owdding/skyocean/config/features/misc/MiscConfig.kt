@@ -56,6 +56,7 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.quickJoinIp"
     }
 
+    // TODO: move into environmental config
     var hideLightning by boolean(false) {
         translation = "skyocean.config.misc.hideLightning"
     }
@@ -76,6 +77,7 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.hideImplosions"
     }
 
+    // TODO: move into environmental config
     var islandCloudHider by defaultEnabledMessage(
         select(*defaultCloudIslands.toTypedArray()) {
             translation = "skyocean.config.misc.islandCloudHider"
@@ -104,6 +106,7 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.queueEstimation"
     }
 
+    // TODO: move into environmental config
     var netherFogDarkening by defaultEnabledMessage(
         boolean(true) {
             translation = "skyocean.config.misc.netherFogDarkening"
@@ -112,6 +115,7 @@ object MiscConfig : CategoryKt("misc") {
         predicate = { SkyBlockIsland.CRIMSON_ISLE.inIsland() },
     )
 
+    // TODO: move into environmental config
     var netherFogScale by float(0.25f) {
         translation = "skyocean.config.misc.netherFogScale"
         slider = true
