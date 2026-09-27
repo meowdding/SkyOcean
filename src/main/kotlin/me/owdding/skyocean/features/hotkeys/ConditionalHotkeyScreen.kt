@@ -36,6 +36,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.font
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import kotlin.math.max
 
@@ -47,6 +48,10 @@ import kotlin.math.max
  *  - Held item condition (probably with extra item conditions??)
  */
 object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), IgnoreHotkeyInputs {
+
+    val FONT = SkyOcean.id("hotkey_screen")
+    val chevronUp = Text.of("^") { this.font = FONT }
+    val chevronDown = Text.of("v") { this.font = FONT }
 
     private var tryDeleting: Hotkey? = null
 
@@ -266,13 +271,16 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
 
     fun createRightPanel(sliceWidth: Int, height: Int): LayoutElement {
         val panelWidth = sliceWidth * 2 + SPACER
-        val entry = getHotkeysInCategory().sortedBy { it.timeCreated }
+        val entry = getHotkeysInCategory().sortedBy { it.ordering }
+        entry.forEachIndexed { index, hotkey ->
+            hotkey.ordering = index.toLong()
+        }
         val header = createHeader(sliceWidth, panelWidth, entry)
 
         val mainSectionHeight = height - header.height - SPACER
         val mainSection = LayoutFactory.vertical {
             entry.forEach { hotkey ->
-                createEntry(hotkey, panelWidth, SPACER * 7).add()
+                createEntry(entry, hotkey, panelWidth, SPACER * 7).add()
                 createSeparator(panelWidth - SPACER * 2).add {
                     alignHorizontallyCenter()
                 }
@@ -389,13 +397,39 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
         rebuildWidgets()
     }
 
-    private fun createEntry(hotkey: Hotkey, width: Int, height: Int): LayoutElement = LayoutFactory.frame(width, height) {
+    private fun createEntry(hotkeys: List<Hotkey>, hotkey: Hotkey, width: Int, height: Int): LayoutElement = LayoutFactory.frame(width, height) {
         val keyComponent = hotkey.formatKeys()
-        LayoutFactory.vertical {
-            createText(hotkey.name) {
-                color = CatppuccinColors.Mocha.text
-            }.withPadding(bottom = 2).add()
-            createText(keyComponent).withPadding(4).withTexturedBackground("hotkey/header").add()
+        LayoutFactory.horizontal {
+            LayoutFactory.frame(SPACER * 4, height) {
+                createButton(
+                    texture = null,
+                    text = chevronUp,
+                    width = McFont.width(chevronUp) + SPACER * 2,
+                    color = if (hotkey.ordering == 0L) unhovered else hovered,
+                    height = 15,
+                    click = withRebuild {
+                        hotkeys.find { it.ordering == (hotkey.ordering - 1) }?.ordering += 1
+                        hotkey.ordering -= 1
+                    },
+                ).add(topCenter)
+                createButton(
+                    texture = null,
+                    text = chevronDown,
+                    width = McFont.width(chevronDown) + SPACER * 2,
+                    color = if (hotkey.ordering == hotkeys.lastIndex.toLong()) unhovered else hovered,
+                    height = 15,
+                    click = withRebuild {
+                        hotkeys.find { it.ordering == (hotkey.ordering + 1) }?.ordering -= 1
+                        hotkey.ordering += 1
+                    },
+                ).add(bottomCenter)
+            }.add()
+            vertical {
+                createText(hotkey.name) {
+                    color = CatppuccinColors.Mocha.text
+                }.withPadding(bottom = 2).add()
+                createText(keyComponent).withPadding(4).withTexturedBackground("hotkey/header").add()
+            }
         }.withPadding(left = SPACER).add(middleLeft)
         LayoutFactory.vertical(alignment = RIGHT, spacing = 1) {
             val secondRow = LayoutFactory.horizontal(1) {

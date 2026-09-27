@@ -36,7 +36,7 @@ abstract class SkyOceanFontProvider(val output: PackOutput, val id: Identifier) 
         }
 
         fun bitmap(file: Identifier, height: Int, ascent: Int = 7, init: BitMapProviderDefinitionBuilder.() -> Unit) {
-            glyphProvider.add(BitMapProviderDefinitionBuilder(file, height, ascent).apply(init).build())
+            glyphProvider.add(BitMapProviderDefinitionBuilder(file.withPath { "${it.removeSuffix(".png")}.png" }, height, ascent).apply(init).build())
         }
     }
 
