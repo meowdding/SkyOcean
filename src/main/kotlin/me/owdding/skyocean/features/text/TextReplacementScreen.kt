@@ -11,21 +11,7 @@ import me.owdding.skyocean.features.hotkeys.ShowMessageModal
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils
-import me.owdding.skyocean.utils.extensions.asScrollableWidget
-import me.owdding.skyocean.utils.extensions.asWidget
-import me.owdding.skyocean.utils.extensions.bottomCenter
-import me.owdding.skyocean.utils.extensions.createButton
-import me.owdding.skyocean.utils.extensions.createSeparator
-import me.owdding.skyocean.utils.extensions.createText
-import me.owdding.skyocean.utils.extensions.framed
-import me.owdding.skyocean.utils.extensions.middleCenter
-import me.owdding.skyocean.utils.extensions.middleLeft
-import me.owdding.skyocean.utils.extensions.middleRight
-import me.owdding.skyocean.utils.extensions.setScreen
-import me.owdding.skyocean.utils.extensions.string
-import me.owdding.skyocean.utils.extensions.topCenter
-import me.owdding.skyocean.utils.extensions.withPadding
-import me.owdding.skyocean.utils.extensions.withTexturedBackground
+import me.owdding.skyocean.utils.extensions.*
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.network.chat.CommonComponents
@@ -34,6 +20,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.width
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import kotlin.math.max
@@ -56,6 +43,7 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
     )
     var toggleWidth = 0
 
+    val move = Text.of("Move")
     var currentCategoryScroll = { 0 }
     var currentMainScroll = { 0 }
     const val SPACER = 5
@@ -389,16 +377,7 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
             }
         }.withPadding(left = SPACER).add(middleLeft)
         LayoutFactory.vertical(alignment = RIGHT, spacing = 1) {
-            createButton(
-                texture = headerSprite,
-                text = if (textReplacement.enabled) enabled else disabled,
-                width = toggleWidth + SPACER * 2,
-                height = 15,
-                click = withRebuild {
-                    textReplacement.enabled = !textReplacement.enabled
-                },
-            ).add()
-            horizontal(1) {
+            val secondRow = LayoutFactory.horizontal(1) {
                 val edit = Text.of("Edit")
                 createButton(
                     texture = headerSprite,
@@ -444,6 +423,32 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                     },
                 ).add()
             }
+            horizontal {
+                createButton(
+                    texture = headerSprite,
+                    text = move,
+                    width = secondRow.width - move.width - 1,
+                    height = 15,
+                    color = if (TextReplacementManager.categories.isEmpty()) CatppuccinColors.Mocha.surface2Color else unhovered,
+                    click = setScreen {
+                        MoveTextReplacementModal(TextReplacementScreen, textReplacement)
+                    },
+                ).apply {
+                    if (TextReplacementManager.categories.isEmpty()) {
+                        this.asDisabled()
+                    }
+                }.add()
+                createButton(
+                    texture = headerSprite,
+                    text = if (textReplacement.enabled) enabled else disabled,
+                    width = toggleWidth + SPACER * 2,
+                    height = 15,
+                    click = withRebuild {
+                        textReplacement.enabled = !textReplacement.enabled
+                    },
+                ).add()
+            }
+            secondRow.add()
         }.withPadding(right = SPACER * 2).add(middleRight)
 
     }
