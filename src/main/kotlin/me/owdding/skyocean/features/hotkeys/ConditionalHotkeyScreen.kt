@@ -400,7 +400,7 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
     private fun createEntry(hotkeys: List<Hotkey>, hotkey: Hotkey, width: Int, height: Int): LayoutElement = LayoutFactory.frame(width, height) {
         val keyComponent = hotkey.formatKeys()
         LayoutFactory.horizontal {
-            LayoutFactory.frame(SPACER * 4, height) {
+            LayoutFactory.frame(SPACER * 4, 30) {
                 createButton(
                     texture = null,
                     text = chevronUp,
@@ -423,7 +423,7 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
                         hotkey.ordering += 1
                     },
                 ).add(bottomCenter)
-            }.add()
+            }.add(middleLeft)
             vertical {
                 createText(hotkey.name) {
                     color = CatppuccinColors.Mocha.text
