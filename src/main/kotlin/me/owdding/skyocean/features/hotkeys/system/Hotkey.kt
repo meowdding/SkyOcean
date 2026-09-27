@@ -25,7 +25,7 @@ data class Hotkey(
     var condition: HotkeyCondition,
     var name: String,
     @OptionalBoolean(true) var enabled: Boolean = true,
-    val group: UUID?,
+    var group: UUID?,
     @FieldName("created_at") val timeCreated: Long = System.currentTimeMillis(),
 ) {
     fun isActive() = enabled && condition.test() && keybind.settings.context.isActive
