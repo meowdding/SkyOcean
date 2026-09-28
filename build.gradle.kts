@@ -1,7 +1,5 @@
 import com.google.devtools.ksp.gradle.KspAATask
 import com.google.devtools.ksp.gradle.KspExtension
-import dev.detekt.gradle.Detekt
-import dev.detekt.gradle.DetektCreateBaselineTask
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 import net.fabricmc.loom.api.fabricapi.FabricApiExtension
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
@@ -20,7 +18,6 @@ plugins {
     id("me.owdding.auto-mixins")
     id("me.owdding.resources")
     id("idea")
-    id("dev.detekt")
     id("versioned-catalogues")
     id("museum-data")
 }
@@ -220,13 +217,6 @@ tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
-detekt {
-    source.setFrom(project.sourceSets.map { it.allSource })
-    config.from(files("$rootDir/detekt/detekt.yml"))
-    baseline = file("$rootDir/detekt/${project.name}-baseline.xml")
-    parallel = true
-}
-
 tasks.named { it == "jar" || it == "sourcesJar" }.configureEach {
     if (this !is Jar) return@configureEach
     if (rootProject.hasProperty("datagen")) {
@@ -235,22 +225,6 @@ tasks.named { it == "jar" || it == "sourcesJar" }.configureEach {
             from(datagenOutput).exclude(".cache/**")
         })
     }
-}
-
-tasks.withType<Detekt>().configureEach {
-    onlyIf {
-        !rootProject.hasProperty("skipDetekt")
-    }
-    exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.get().asFile.toPath()) }
-    reports {
-        html.required.set(true)
-        sarif.required.set(true)
-    }
-}
-
-tasks.withType<DetektCreateBaselineTask>().configureEach {
-    exclude { it.file.toPath().toAbsolutePath().startsWith(project.layout.buildDirectory.get().asFile.toPath()) }
-    outputs.upToDateWhen { false }
 }
 
 dependencies {
@@ -293,6 +267,4 @@ dependencies {
 
     ksp(versionedCatalog["meowdding.ktmodules"])
     ksp(versionedCatalog["meowdding.ktcodecs"])
-
-    detektPlugins(versionedCatalog["detekt.ktlintWrapper"])
 }
