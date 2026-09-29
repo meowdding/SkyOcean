@@ -113,7 +113,7 @@ object Utils {
     operator fun BlockPos.plus(vec: BlockPos): BlockPos = this.offset(vec.x, vec.y, vec.z)
 
     fun Path.readAsJson(): JsonElement = JsonParser.parseString(this.readText())
-    fun <T : JsonElement> Path.readJson(): T = this.readAsJson() as T
+    fun <T : JsonElement> Path.readJson(): T = this.readAsJson().unsafeCast()
     fun Path.writeJson(
         element: JsonElement,
         charset: Charset = Charsets.UTF_8,
@@ -230,11 +230,11 @@ object Utils {
         }
     }
 
-    operator fun <Key : Any, Value : Any> Cache<Key, Value>.get(key: Key) = this.getIfPresent(key)
+    operator fun <Key : Any, Value : Any> Cache<Key, Value>.get(key: Key): Value? = this.getIfPresent(key)
     operator fun <Key : Any, Value : Any> Cache<Key, Value>.set(key: Key, value: Value) = this.put(key, value)
 
-    fun MutableComponent.appendSafe(other: Component): MutableComponent? = (this as? SafeMutableComponentAccessor)?.`skyocean$appendSafe`(other)
-    fun MutableComponent.mutableSiblings(): MutableList<Component>? = (this as? SafeMutableComponentAccessor)?.`skyocean$mutableSiblings`()
+    fun MutableComponent.appendSafe(other: Component): MutableComponent? = this.`skyocean$appendSafe`(other)
+    fun MutableComponent.mutableSiblings(): MutableList<Component>? = this.`skyocean$mutableSiblings`()
     var MutableComponent.textContents: ComponentContents
         get() = this.contents
         set(value) {

@@ -175,7 +175,7 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
         column.arrangeElements()
         column.visitWidgets(::addRenderableWidget)
 
-        val recipebook = (this as AbstractRecipeBookScreenAccessor).`skyocean$getRecipeBookComponent`()
+        val recipebook = this.`skyocean$getRecipeBookComponent`()
         if (recipebook.isVisible) recipebook.toggleVisibility()
     }
 

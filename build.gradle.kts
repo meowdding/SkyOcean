@@ -60,9 +60,9 @@ java {
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.jvmTarget.set(JvmTarget.JVM_25)
     compilerOptions.optIn.add("kotlin.time.ExperimentalTime")
+    compilerOptions.progressiveMode = true
+    compilerOptions.allWarningsAsErrors = true
     compilerOptions.freeCompilerArgs.addAll(
-        "-Xcontext-parameters",
-        "-Xexplicit-backing-fields",
         "-Xcontext-sensitive-resolution",
         "-Xnullability-annotations=@org.jspecify.annotations:warn"
     )

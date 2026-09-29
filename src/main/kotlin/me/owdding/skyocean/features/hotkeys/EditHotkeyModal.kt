@@ -118,18 +118,8 @@ class EditHotkeyModal(
             this@EditHotkeyModal.action = it
             rebuildWidgets()
         }
-        if (action == null) {
-            state.registerListener {
-                callback(it.builder!!.invoke())
-            }
-            val dropdown = dropdown
-            LayoutFactory.frame(widgetContext.width) {
-                dropdown.add(middleLeft)
-            }.withTexturedBackground(widgetContext.background).add()
-        } else {
-            context(widgetContext) {
-                action.toWidget(callback).withTexturedBackground(widgetContext.background).add()
-            }
+        context(widgetContext) {
+            action.toWidget(callback).withTexturedBackground(widgetContext.background).add()
         }
         widgetContext.advance()
     }

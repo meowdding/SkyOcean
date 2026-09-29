@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.lib.helper.TextShaderHolder
 import me.owdding.lib.rendering.text.TextShaders
+import me.owdding.lib.rendering.text.serialization.TextCodecs
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.PackMetadata
@@ -84,56 +85,10 @@ object CodecHelpers {
         { "${it.x},${it.y},${it.z}" },
     )
 
-    val STYLE_WITH_SHADER_CODEC: MapCodec<Style> = RecordCodecBuilder.mapCodec {
-        it.group(
-            Style.Serializer.MAP_CODEC.forGetter(Function.identity()),
-            TextShaders.CODEC.optionalFieldOf("text_shader").forNullGetter { style -> (style as? TextShaderHolder)?.`meowddinglib$getTextShader`() },
-        ).apply(it) { style, shader ->
-            (style as? TextShaderHolder)?.`meowddinglib$withTextShader`(shader.getOrNull())
-        }
-    }
+    val STYLE_WITH_SHADER_CODEC: MapCodec<Style> = TextCodecs.STYLE_WITH_SHADER_CODEC
 
     @IncludedCodec(named = "customComponentCodec")
-    val CUSTOM_COMPONENT_CODEC: Codec<Component> = Codec.recursive("SkyOceanComponentCodec") { self ->
-        val componentMatcher = createContentCodec()
-
-        val codec: Codec<Component> = RecordCodecBuilder.create {
-            it.group(
-                componentMatcher.forGetter { it.contents },
-                ExtraCodecs.nonEmptyList(self.listOf()).optionalFieldOf("extra", mutableListOf<Component>()).forGetter { it.siblings },
-                STYLE_WITH_SHADER_CODEC.forGetter { it.style },
-            ).apply(
-                it,
-            ) { contents: ComponentContents, siblings: List<Component>, style: Style ->
-                MutableComponent(
-                    contents,
-                    siblings,
-                    style,
-                )
-            }
-        }
-
-        return@recursive Codec.either(
-            Codec.either(
-                Codec.STRING,
-                ExtraCodecs.nonEmptyList(self.listOf()),
-            ),
-            codec,
-        ).xmap(
-            {
-                it.map(
-                    { either ->
-                        either.map(Component::literal, Text::join)
-                    },
-                    Function.identity(),
-                )
-            },
-            {
-                val collapsed = it.tryCollapseToString()
-                if (collapsed != null) Either.left(Either.left(collapsed)) else Either.right(it)
-            },
-        )
-    }
+    val CUSTOM_COMPONENT_CODEC: Codec<Component> = TextCodecs.CUSTOM_COMPONENT_CODEC
 
     fun <T, B> pair(t: Codec<T>, b: Codec<B>): Codec<Pair<T, B>> = RecordCodecBuilder.create {
         it.group(

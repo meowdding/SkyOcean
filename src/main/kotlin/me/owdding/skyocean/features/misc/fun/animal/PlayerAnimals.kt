@@ -118,6 +118,7 @@ object PlayerAnimals {
             20f,
         ) {
             override fun getTextureLocation(renderState: LivingEntityRenderState): Identifier = SkyOcean.id("none")
+            @Suppress("WRONG_TYPE_FOR_JAVA_OVERRIDE") // this function should never be called, the implementation is only a dummy
             override fun createRenderState(): LivingEntityRenderState? = null
         }
     }

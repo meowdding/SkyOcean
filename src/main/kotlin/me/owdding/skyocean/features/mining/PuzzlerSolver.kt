@@ -66,6 +66,7 @@ object PuzzlerSolver {
 
             val list = mutableListOf<BlockStateModelPart>()
             McClient.self.modelManager.blockStateModelSet.get(state).collectParts(RandomSource.create(-1), list)
+            @Suppress("DEPRECATION") // There's currently no replacement for TextureAtlas.LOCATION_BLOCKS
             event.submitNodeCollector.submitBlockModel(
                 event.poseStack,
                 RenderTypes.entityCutoutZOffset(TextureAtlas.LOCATION_BLOCKS),

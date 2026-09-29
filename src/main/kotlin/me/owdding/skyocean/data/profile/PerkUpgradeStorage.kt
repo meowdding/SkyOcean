@@ -17,31 +17,31 @@ object PerkUpgradeStorage {
     private inline val data get() = STORAGE.get()
 
     val hotm: Map<PowderType, String>
-        get() = data?.hotm.orEmpty()
+        get() = data.hotm.orEmpty()
 
     val hotf: Map<WhisperType, String>
-        get() = data?.hotf.orEmpty()
+        get() = data.hotf.orEmpty()
 
     operator fun set(type: PowderType, perk: String) {
-        val data = data ?: return
+        val data = data
         if (data.hotm[type] == perk) return
         data.hotm[type] = perk
         save()
     }
 
     fun remove(type: PowderType) {
-        val data = data ?: return
+        val data = data
         if (data.hotm.remove(type) != null) save()
     }
 
     operator fun set(type: WhisperType, perk: String) {
-        val data = data ?: return
+        val data = data
         if (data.hotf[type] == perk) return
         data.hotf[type] = perk
     }
 
     fun remove(type: WhisperType) {
-        val data = data ?: return
+        val data = data
         if (data.hotf.remove(type) != null) save()
     }
 

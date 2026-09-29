@@ -30,7 +30,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.font
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Instant
@@ -136,11 +135,6 @@ internal object ChatUtils {
 
     fun asSkyOceanColorAnimated(text: String, useSelected: Boolean = false) = Text.of(text) {
         this.textShader = if (useSelected) Config.prefixGradient else OceanGradients.DEFAULT
-    }
-
-    fun MutableComponent.withoutShadow(): MutableComponent = this.apply {
-        this.shadowColor = null
-        this.siblings.filterIsInstance<MutableComponent>().forEach { it.withoutShadow() }
     }
 
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))

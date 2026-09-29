@@ -78,6 +78,7 @@ object CalcCommand {
                         }
                         ChatUtils.chat("$expression = $value")
                     } catch (e: KevalException) {
+                        @Suppress("REDUNDANT_ELSE_IN_WHEN") // in case another mod ships a newer keval version
                         val message = when (e) {
                             is KevalInvalidArgumentException -> "Invalid argument: ${e.message}"
                             is KevalZeroDivisionException -> "Division by zero :("

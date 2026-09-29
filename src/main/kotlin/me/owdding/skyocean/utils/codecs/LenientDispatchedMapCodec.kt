@@ -13,7 +13,7 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import java.util.function.Function
 
-class LenientDispatchedMapCodec<K, V>(
+class LenientDispatchedMapCodec<K : Any, V : Any>(
     val keyCodec: Codec<K>,
     val valueCodecFunction: (K) -> Codec<out V>,
 ) : Codec<Map<K, V>> {
