@@ -74,7 +74,6 @@ val accessWidenerFile = rootProject.file("src/skyocean.accesswidener")
 loom {
     runConfigs["client"].apply {
         generateRunConfig = true
-        preferGradleTask = true
         runDirectory = project.file("../../run")
         jvmArguments.addAll("-Dfabric.modsFolder=${mcVersion}Mods", "-XX:StackShadowPages=32")
     }
