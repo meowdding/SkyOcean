@@ -28,8 +28,8 @@ object SlayerConfig : CategoryKt("slayer") {
 
     private fun TypeBuilder.applyRenderChestCondition() {
         //? if renderchest {
-        /*this.condition = { true }
-        *///?} else {
+        //this.condition = { true }
+        //?} else {
         this.condition = { false }
         //?}
     }
