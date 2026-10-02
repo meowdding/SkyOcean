@@ -1,5 +1,6 @@
 package me.owdding.skyocean.helpers
 
+import com.mojang.blaze3d.systems.RenderSystem
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap
 import me.owdding.ktmodules.Module
 import net.minecraft.util.ARGB
@@ -81,6 +82,7 @@ object EntityHelper {
     }
 
     fun <T : Entity> getEntityColor(entity: T): Int? {
+        RenderSystem.assertOnRenderThread()
         val rgb = entityGlowMap.getOrDefault(entity.id, 0)
         return if (rgb == 0) null else rgb
     }
