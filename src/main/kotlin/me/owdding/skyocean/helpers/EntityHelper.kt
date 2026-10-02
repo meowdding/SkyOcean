@@ -1,7 +1,19 @@
 package me.owdding.skyocean.helpers
 
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap
+import me.owdding.ktmodules.Module
+import net.minecraft.util.ARGB
 import net.minecraft.world.entity.Entity
-import kotlin.time.Duration
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.api.events.entity.EntityRemovedEvent
+import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+
+// TODO: Add 26.3 when released
+//? if = 26.2 {
+/*import net.azureaaron.renderchest.api.CustomGlowCallback
+import net.azureaaron.renderchest.api.GlowConstants
+*///?}
 
 internal interface EntityRenderStateAccessor {
     fun `ocean$getNameTagScale`(): Float
@@ -9,32 +21,20 @@ internal interface EntityRenderStateAccessor {
 }
 
 internal interface EntityAccessor {
-    fun `ocean$setGlowing`(glowing: Boolean)
-    fun `ocean$setGlowingColor`(color: Int)
-    fun `ocean$glowTime`(time: Long)
-
     fun `ocean$getNameTagScale`(): Float
     fun `ocean$setNameTagScale`(scale: Float)
 }
 
 private fun Entity.asAccessor(): EntityAccessor = (this as EntityAccessor)
 
-var Entity.isGlowing: Boolean
-    get() = this.isCurrentlyGlowing
+var Entity.glowingColor: Int?
+    get() = EntityHelper.getEntityColor(this)
     set(value) {
-        this.asAccessor().`ocean$setGlowing`(value)
-    }
-
-var Entity.glowTime: Duration
-    get() = Duration.INFINITE
-    set(value) {
-        this.asAccessor().`ocean$glowTime`(value.inWholeMilliseconds)
-    }
-
-var Entity.glowingColor: Int
-    get() = this.teamColor
-    set(value) {
-        this.asAccessor().`ocean$setGlowingColor`(value)
+        if (value == null) {
+            EntityHelper.removeEntityColor(this)
+        } else {
+            EntityHelper.setEntityColor(this, value)
+        }
     }
 
 var Entity.nameTagScale: Float
@@ -42,3 +42,46 @@ var Entity.nameTagScale: Float
     set(value) {
         this.asAccessor().`ocean$setNameTagScale`(value)
     }
+
+@Module
+object EntityHelper {
+    private val entityGlowMap = Int2IntOpenHashMap()
+
+//? if = 26.2 {
+/*    init {
+        CustomGlowCallback.EVENT.register { entity, _ ->
+            entityGlowMap.getOrDefault(entity.id, GlowConstants.NO_GLOW)
+        }
+    }
+*///?}
+
+    @Subscription(ServerChangeEvent::class)
+    private fun onWorldChange() {
+        entityGlowMap.clear()
+    }
+
+    @Subscription
+    private fun onEntityLeaveWorld(event: EntityRemovedEvent) {
+        entityGlowMap.remove(event.entity.id)
+    }
+
+    fun <T : Entity> removeEntityColor(entity: T) {
+        val entityId = entity.id
+        McClient.runOrNextTick {
+            entityGlowMap.remove(entityId)
+        }
+    }
+
+    fun <T : Entity> setEntityColor(entity: T, rgb: Int) {
+        val rgb = ARGB.opaque(rgb.takeUnless { it == 0 } ?: return)
+        val entityId = entity.id
+        McClient.runOrNextTick {
+            entityGlowMap[entityId] = (rgb)
+        }
+    }
+
+    fun <T : Entity> getEntityColor(entity: T): Int? {
+        val rgb = entityGlowMap.getOrDefault(entity.id, 0)
+        return if (rgb == 0) null else rgb
+    }
+}

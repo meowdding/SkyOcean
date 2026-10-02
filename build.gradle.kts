@@ -38,6 +38,7 @@ repositories {
         "com.terraformersmc"
     )
     scopedMaven("https://maven.nucleoid.xyz/", "eu.pb4")
+    scopedMaven("https://maven.azureaaron.net/releases", "net.azureaaron")
     mavenCentral()
     mavenLocal()
 }
@@ -79,9 +80,9 @@ val accessWidenerFile = rootProject.file("src/skyocean.accesswidener")
 
 loom {
     runConfigs["client"].apply {
-        ideConfigGenerated(true)
-        runDir = "../../run"
-        vmArgs("-Dfabric.modsFolder=${mcVersion}Mods", "-XX:StackShadowPages=32")
+        generateRunConfig.set(true)
+        runDirectory.set(project.file("../../run"))
+        jvmArguments.addAll("-Dfabric.modsFolder=${mcVersion}Mods", "-XX:StackShadowPages=32")
     }
 
     if (accessWidenerFile.exists()) {
@@ -113,7 +114,7 @@ afterEvaluate {
         log4jConfigs.from(rootProject.layout.projectDirectory.file("gradle/log4j.config.xml"))
 
         runs.named("datagen") {
-            this.vmArgs.add("-Dskyocean.extraPaths=\"\"")
+            this.jvmArguments.add("-Dskyocean.extraPaths=\"\"")
         }
     }
 
@@ -249,6 +250,9 @@ dependencies {
     includeImplementation(versionedCatalog["placeholders"])
     includeImplementation(versionedCatalog["resourceful.config.kotlin"])
     includeImplementation(versionedCatalog["olympus"])
+    if (versionedCatalog.libraries.has("renderchest")) {
+        includeImplementation(versionedCatalog["renderchest"])
+    }
 
     implementation(versionedCatalog["moulberry.mixinconstraints"]) // Already included in mlib
 
