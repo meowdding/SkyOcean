@@ -56,13 +56,12 @@ var Entity.nameTagScale: Float
 object EntityHelper {
     private val entityGlowMap = Int2IntOpenHashMap()
 
-//? renderchest {
-/*    init {
+    //? renderchest {
+    /*init {
         CustomGlowCallback.EVENT.register { entity, _ ->
             entityGlowMap.getOrDefault(entity.id, GlowConstants.NO_GLOW)
         }
-    }
-*///?}
+   }*///?}
 
     @Subscription(ServerChangeEvent::class)
     private fun onWorldChange() {
