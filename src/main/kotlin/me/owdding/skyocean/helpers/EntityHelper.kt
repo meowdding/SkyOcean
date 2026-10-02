@@ -10,8 +10,7 @@ import tech.thatgravyboat.skyblockapi.api.events.entity.EntityRemovedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
-// TODO: Add 26.3 when released
-//? if = 26.2 {
+//? renderchest {
 /*import net.azureaaron.renderchest.api.CustomGlowCallback
 import net.azureaaron.renderchest.api.GlowConstants
 *///?}
@@ -48,7 +47,7 @@ var Entity.nameTagScale: Float
 object EntityHelper {
     private val entityGlowMap = Int2IntOpenHashMap()
 
-//? if = 26.2 {
+//? renderchest {
 /*    init {
         CustomGlowCallback.EVENT.register { entity, _ ->
             entityGlowMap.getOrDefault(entity.id, GlowConstants.NO_GLOW)
