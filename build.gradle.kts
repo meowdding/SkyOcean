@@ -1,14 +1,7 @@
 import com.google.devtools.ksp.gradle.KspAATask
-import com.google.devtools.ksp.gradle.KspExtension
-import net.fabricmc.loom.api.LoomGradleExtensionAPI
-import net.fabricmc.loom.api.fabricapi.FabricApiExtension
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
-import org.gradle.kotlin.dsl.getByName
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import kotlin.apply
 import kotlin.io.path.createDirectories
 
 plugins {
@@ -79,9 +72,10 @@ val accessWidenerFile = rootProject.file("src/skyocean.accesswidener")
 
 loom {
     runConfigs["client"].apply {
-        ideConfigGenerated(true)
-        runDir = "../../run"
-        vmArgs("-Dfabric.modsFolder=${mcVersion}Mods", "-XX:StackShadowPages=32")
+        generateRunConfig = true
+        preferGradleTask = true
+        runDirectory = project.file("../../run")
+        jvmArguments.addAll("-Dfabric.modsFolder=${mcVersion}Mods", "-XX:StackShadowPages=32")
     }
 
     if (accessWidenerFile.exists()) {
@@ -113,7 +107,7 @@ afterEvaluate {
         log4jConfigs.from(rootProject.layout.projectDirectory.file("gradle/log4j.config.xml"))
 
         runs.named("datagen") {
-            this.vmArgs.add("-Dskyocean.extraPaths=\"\"")
+            this.jvmArguments.add("-Dskyocean.extraPaths=\"\"")
         }
     }
 
