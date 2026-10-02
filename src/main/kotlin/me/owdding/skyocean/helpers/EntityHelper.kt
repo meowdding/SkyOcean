@@ -89,7 +89,7 @@ object EntityHelper {
         }
     }
 
-    fun  getEntityColor(entity: Entity): Int? {
+    fun getEntityColor(entity: Entity): Int? {
         RenderSystem.assertOnRenderThread()
         val rgb = entityGlowMap.getOrDefault(entity.id, 0)
         return if (rgb == 0) null else rgb
