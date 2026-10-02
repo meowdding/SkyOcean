@@ -21,6 +21,7 @@ import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
+import me.owdding.skyocean.repo.customization.DyeData
 import me.owdding.skyocean.utils.DevUtils
 import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
@@ -48,6 +49,7 @@ object SkyOcean : MeowddingMod("skyocean") {
 
     private var meowddingRepo: Boolean = false
     private var apiRepo: Boolean = false
+    private var lateModulesInitialized: Boolean = false
 
     //~ if >= 26.3 'createLookup' -> 'createWorldLookup'
     val registryLookup: HolderLookup.Provider by lazy { VanillaRegistries.createWorldLookup() }
@@ -98,14 +100,19 @@ object SkyOcean : MeowddingMod("skyocean") {
         onRepoReady()
     }
 
+    @Synchronized
     fun onRepoReady() {
-        if (!apiRepo || !meowddingRepo) return
+        if (!apiRepo || !meowddingRepo || lateModulesInitialized) return
+        // Custom item/history codecs validate IDs against these maps. Load them
+        // after the remote repository is ready and before any storage decodes.
+        if (!DyeData.load()) return
         SkyOceanLateInitModules.collected.forEach {
             SkyBlockAPI.eventBus.register(it)
             if (it is LateInitLoader) {
                 it.load()
             }
         }
+        lateModulesInitialized = true
     }
 
     fun sendUpdateMessage(link: String, current: String, new: String) {

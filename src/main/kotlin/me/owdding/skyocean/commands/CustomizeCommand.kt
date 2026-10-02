@@ -244,7 +244,9 @@ object CustomizeCommand {
                         unableToCustomize()
                     }
                 }
-                thenCallback("static_color", SkyBlockIdArgument(DyeData.staticDyes.keys.map { SkyBlockId.item(it.lowercase()) })) {
+                thenCallback("static_color", SkyBlockIdArgument(Iterable {
+                    DyeData.staticDyes.keys.map { SkyBlockId.item(it.lowercase()) }.iterator()
+                })) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
                     val color = getArgument<SkyBlockId>("static_color")!!
 
@@ -260,7 +262,9 @@ object CustomizeCommand {
                         unableToCustomize()
                     }
                 }
-                thenCallback("animated_color", SkyBlockIdArgument(DyeData.animatedDyes.keys.map { SkyBlockId.item(it.lowercase()) })) {
+                thenCallback("animated_color", SkyBlockIdArgument(Iterable {
+                    DyeData.animatedDyes.keys.map { SkyBlockId.item(it.lowercase()) }.iterator()
+                })) {
                     val item = mainHandItemOrNull() ?: return@thenCallback
                     val color = getArgument<SkyBlockId>("animated_color")!!
 
