@@ -29,7 +29,7 @@ private fun Entity.asAccessor(): EntityAccessor = (this as EntityAccessor)
 
 /**
  * Applies a non-Xray glowing outline to the entity using the specified RGB color.
- * Set the color to null or 0 to remove the custom outline.
+ * Set the color to null to remove the custom outline.
  * The alpha channel of the color is ignored and the outline is always fully opaque.
  *
  * If the entity already has the vanilla glowing effect,
@@ -39,7 +39,7 @@ private fun Entity.asAccessor(): EntityAccessor = (this as EntityAccessor)
 var Entity.glowingColor: Int?
     get() = EntityHelper.getEntityColor(this)
     set(value) {
-        if (value == null || value == 0) {
+        if (value == null) {
             EntityHelper.removeEntityColor(this)
         } else {
             EntityHelper.setEntityColor(this, value)
