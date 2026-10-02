@@ -30,6 +30,7 @@ private fun Entity.asAccessor(): EntityAccessor = (this as EntityAccessor)
 /**
  * Applies a non-Xray glowing outline to the entity using the specified RGB color.
  * Set the color to null to remove the custom outline.
+ * The alpha channel of the color is ignored and the outline is always fully opaque.
  *
  * If the entity already has the vanilla glowing effect,
  * its outline remains visible through walls and its color is overridden.
