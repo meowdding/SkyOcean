@@ -76,7 +76,7 @@ object EntityHelper {
         val rgb = ARGB.opaque(rgb.takeUnless { it == 0 } ?: return)
         val entityId = entity.id
         McClient.runOrNextTick {
-            entityGlowMap[entityId] = (rgb)
+            entityGlowMap[entityId] = rgb
         }
     }
 
