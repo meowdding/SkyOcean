@@ -23,7 +23,7 @@ meowdding-auto-mixins = "1.0.11"
 
 moulberry-mixinconstraints = "1.0.8"
 
-fabric-loom = "1.15-SNAPSHOT"
+fabric-loom = "1.18-SNAPSHOT"
 
 [libraries]
 

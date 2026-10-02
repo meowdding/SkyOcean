@@ -1,14 +1,7 @@
 import com.google.devtools.ksp.gradle.KspAATask
-import com.google.devtools.ksp.gradle.KspExtension
-import net.fabricmc.loom.api.LoomGradleExtensionAPI
-import net.fabricmc.loom.api.fabricapi.FabricApiExtension
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
-import org.gradle.kotlin.dsl.getByName
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import kotlin.apply
 import kotlin.io.path.createDirectories
 
 plugins {
@@ -79,9 +72,9 @@ val accessWidenerFile = rootProject.file("src/skyocean.accesswidener")
 
 loom {
     runConfigs["client"].apply {
-        ideConfigGenerated(true)
-        runDir = "../../run"
-        vmArgs("-Dfabric.modsFolder=${mcVersion}Mods", "-XX:StackShadowPages=32")
+        generateRunConfig = true
+        runDirectory = project.file("../../run")
+        jvmArguments.addAll("-Dfabric.modsFolder=${mcVersion}Mods", "-XX:StackShadowPages=32")
     }
 
     if (accessWidenerFile.exists()) {
@@ -113,7 +106,7 @@ afterEvaluate {
         log4jConfigs.from(rootProject.layout.projectDirectory.file("gradle/log4j.config.xml"))
 
         runs.named("datagen") {
-            this.vmArgs.add("-Dskyocean.extraPaths=\"\"")
+            this.jvmArguments.add("-Dskyocean.extraPaths=\"\"")
         }
     }
 
@@ -191,7 +184,7 @@ tasks.withType<ProcessResources>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
         // `#` is used for all versions, `!` is used for multiversioned imports
-        filter { if (it.startsWith("#include") && stonecutter.eval(stonecutter.current.version, "<26.3")) "#moj_import ${it.substringAfter(' ')}" else it }
+        filter { if (it.startsWith("#include") && stonecutter.current.parsed("<26.3")) "#moj_import ${it.substringAfter(' ')}" else it }
     }
     with(copySpec {
         from(rootProject.file("src/lang")).include("*.json").into("assets/skyocean/lang")
