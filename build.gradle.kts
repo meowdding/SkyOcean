@@ -185,7 +185,7 @@ tasks.withType<ProcessResources>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     filesMatching(listOf("**/*.fsh", "**/*.vsh")) {
         // `#` is used for all versions, `!` is used for multiversioned imports
-        filter { if (it.startsWith("#include") && stonecutter.eval(stonecutter.current.version, "<26.3")) "#moj_import ${it.substringAfter(' ')}" else it }
+        filter { if (it.startsWith("#include") && stonecutter.current.parsed("<26.3")) "#moj_import ${it.substringAfter(' ')}" else it }
     }
     with(copySpec {
         from(rootProject.file("src/lang")).include("*.json").into("assets/skyocean/lang")
