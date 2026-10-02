@@ -74,14 +74,14 @@ object EntityHelper {
         entityGlowMap.remove(event.entity.id)
     }
 
-    fun <T : Entity> removeEntityColor(entity: T) {
+    fun removeEntityColor(entity: Entity) {
         val entityId = entity.id
         McClient.runOrNextTick {
             entityGlowMap.remove(entityId)
         }
     }
 
-    fun <T : Entity> setEntityColor(entity: T, argb: Int) {
+    fun setEntityColor(entity: Entity, argb: Int) {
         val rgb = ARGB.opaque(argb)
         val entityId = entity.id
         McClient.runOrNextTick {
@@ -89,7 +89,7 @@ object EntityHelper {
         }
     }
 
-    fun <T : Entity> getEntityColor(entity: T): Int? {
+    fun  getEntityColor(entity: Entity): Int? {
         RenderSystem.assertOnRenderThread()
         val rgb = entityGlowMap.getOrDefault(entity.id, 0)
         return if (rgb == 0) null else rgb
