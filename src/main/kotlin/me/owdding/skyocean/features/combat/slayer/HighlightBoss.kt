@@ -3,7 +3,6 @@ package me.owdding.skyocean.features.combat.slayer
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.combat.SlayerConfig
 import me.owdding.skyocean.helpers.glowingColor
-import me.owdding.skyocean.helpers.isGlowing
 import tech.thatgravyboat.skyblockapi.api.area.slayer.SlayerType
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlySlayerBosses
@@ -29,11 +28,10 @@ object HighlightBoss {
         }
 
         if (!SlayerConfig.highlightOwnBoss) {
-            event.slayerInfo.entity.isGlowing = false
+            event.slayerInfo.entity.glowingColor = null
             return
         }
 
-        event.slayerInfo.entity.isGlowing = true
         event.slayerInfo.entity.glowingColor = colors[event.slayerInfo.type] ?: TextColor.GRAY
     }
 
