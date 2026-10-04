@@ -8,18 +8,14 @@ import me.owdding.skyocean.features.item.custom.ui.standard.search.SkyBlockModel
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.generated.DispatchHelper
 import net.minecraft.core.component.DataComponents
-import me.owdding.skyocean.utils.extensions.model
 import me.owdding.skyocean.utils.extensions.withModel
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.Item
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
-import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
-import kotlin.collections.get
 import kotlin.reflect.KClass
 
 
@@ -56,7 +52,7 @@ data class SkyblockModel(
     override fun toModelSearchEntry() = SkyBlockModelEntry(location)
 
     override fun getModel(): Identifier = location.toItem().get(DataComponents.ITEM_MODEL) ?: BuiltInRegistries.ITEM.getKey(location.toItem().item)
-    override fun resolveToItem(): Item = location.toItem().getItemModel()
+    override fun resolveToItem(): ItemStack = location.toItem()
 }
 
 data class RotatingModel(
@@ -70,7 +66,7 @@ data class RotatingModel(
         it.id.toItem().get(DataComponents.ITEM_MODEL) ?: BuiltInRegistries.ITEM.getKey(it.id.toItem().item)
     }
 
-    override fun resolveToItem(): Item = items[(TickEvent.ticks / 20) % items.size].id.toItem().getItemModel()
+    override fun resolveToItem(): ItemStack = items[(TickEvent.ticks / 20) % items.size].id.toItem()
 }
 
 interface ItemModel {

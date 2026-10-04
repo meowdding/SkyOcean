@@ -47,11 +47,13 @@ object CraftHelperStorage {
     val selectedAmount get() = data?.amount ?: 1
 
     fun set(recipe: CraftHelperRecipe) {
-        storage.update(recipe)
+        storage.set(recipe)
+        storage.save()
     }
 
     fun setSelected(item: SkyBlockId?) {
-        storage.update(NormalCraftHelperRecipe(item))
+        storage.set(NormalCraftHelperRecipe(item))
+        storage.save()
     }
 
     fun setAmount(amount: Int) {
@@ -62,19 +64,23 @@ object CraftHelperStorage {
             amount = ceil(amount.toFloat() / data.multiples).toInt() * data.multiples
         }
 
-        storage.update(data.withAmount(amount))
+        storage.set(data.withAmount(amount))
+        storage.save()
     }
 
     fun setSkyShards(recipe: SkyShardsMethod) {
-        storage.update(SkyShardsRecipe(recipe))
+        storage.set(SkyShardsRecipe(recipe))
+        storage.save()
     }
 
     fun setRepoLibRecipe(recipe: RepoApiRecipe) {
-        storage.update(RepoLibRecipeTree(recipe, recipe.output?.amount ?: 1))
+        storage.set(RepoLibRecipeTree(recipe, recipe.output?.amount ?: 1))
+        storage.save()
     }
 
     fun clear() {
-        storage.update(NormalCraftHelperRecipe(null))
+        storage.set(NormalCraftHelperRecipe(null))
+        storage.save()
     }
 
     fun save() {
@@ -91,10 +97,13 @@ object CraftHelperStorage {
             return data
         }
 
-        return storage.update(IngredientCraftHelperRecipe()).apply {
+        val newRecipe = IngredientCraftHelperRecipe().apply {
             val inputs = (data as? CraftHelperRecipe.Ingredients)?.entriesForAddition ?: return@apply
             add(inputs.map { it.withAmount(it.amount * data.amount) })
         }
+        storage.set(newRecipe)
+        storage.save()
+        return newRecipe
     }
 
 }
