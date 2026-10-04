@@ -2,14 +2,18 @@ package me.owdding.skyocean.utils.codecs
 
 import com.google.common.collect.ImmutableMap
 import com.mojang.datafixers.util.Pair
-import com.mojang.serialization.*
+import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
+import com.mojang.serialization.DynamicOps
+import com.mojang.serialization.MapLike
+import com.mojang.serialization.RecordBuilder
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import java.util.function.Function
 
-class LenientDispatchedMapCodec<K, V>(
+class LenientDispatchedMapCodec<K : Any, V : Any>(
     val keyCodec: Codec<K>,
     val valueCodecFunction: (K) -> Codec<out V>,
 ) : Codec<Map<K, V>> {

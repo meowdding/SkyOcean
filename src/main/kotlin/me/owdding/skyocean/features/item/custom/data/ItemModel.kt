@@ -8,8 +8,12 @@ import me.owdding.skyocean.features.item.custom.ui.standard.search.SkyBlockModel
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.generated.DispatchHelper
 import net.minecraft.core.component.DataComponents
+import me.owdding.skyocean.utils.extensions.model
+import me.owdding.skyocean.utils.extensions.withModel
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.Item
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
@@ -39,7 +43,9 @@ data class StaticModel(
     override fun toModelSearchEntry() = ItemModelSearchEntry(location)
 
     override fun getModel() = location
-    override fun resolveToItem(): Item? = BuiltInRegistries.ITEM.getOptional(location).orElse(null)
+    override fun resolveToItem(): ItemStack = BuiltInRegistries.ITEM.getOptional(location).map { it.defaultInstance }.orElseGet {
+        Items.PAPER.withModel(location)
+    }
 }
 
 @GenerateCodec
@@ -72,5 +78,5 @@ interface ItemModel {
 
     fun toModelSearchEntry(): ModelSearchEntry?
     fun getModel(): Identifier
-    fun resolveToItem(): Item?
+    fun resolveToItem(): ItemStack?
 }

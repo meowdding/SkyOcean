@@ -2,10 +2,10 @@ package me.owdding.skyocean.config.features.misc.`fun`
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.config.utils.GenericDropdown.Companion.entityTypeDropdown
-import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
-import me.owdding.skyocean.features.misc.`fun`.animal.PlayerAnimals
 import me.owdding.skyocean.features.misc.`fun`.TimberSoundOption
 import me.owdding.skyocean.features.misc.`fun`.TimberTextureOption
+import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
+import me.owdding.skyocean.features.misc.`fun`.animal.PlayerAnimals
 import me.owdding.skyocean.utils.tags.EntityTagKey
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.EntityType

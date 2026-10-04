@@ -18,7 +18,7 @@
           {
             "name": "speedMultiplier",
             "type": "float",
-            "value": 0.0
+            "value": 1.0
           }
         ]
       }

@@ -1,9 +1,9 @@
 package me.owdding.skyocean.features.misc.`fun`
 
-import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 import me.owdding.ktmodules.Module
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import net.minecraft.client.renderer.RenderPipelines
@@ -27,7 +27,7 @@ object Timber {
     private val sound get() = FunConfig.timberSound.soundId
 
     private val group = RemoteStrings.resolve()
-    private val treeFellRegex by group.regex("(?:TIMBER|PETALFALL|WOODPECKER)! You felled the entire Tree!")
+    private val treeFellRegex by group.regex("TIMBER! You felled the entire \\w+ Tree!")
 
     private var timestamp = Instant.DISTANT_PAST
 

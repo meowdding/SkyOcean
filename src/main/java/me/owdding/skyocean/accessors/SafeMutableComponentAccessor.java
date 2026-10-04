@@ -5,13 +5,24 @@ import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
 
 import java.util.List;
+import org.apache.commons.lang3.NotImplementedException;
+import org.slf4j.helpers.CheckReturnValue;
 
 public interface SafeMutableComponentAccessor {
 
-    MutableComponent skyocean$appendSafe(Component component);
+    @CheckReturnValue
+    default MutableComponent skyocean$appendSafe(Component component) {
+        throw new NotImplementedException("Implemented in mixins!");
+    }
 
-    List<Component> skyocean$mutableSiblings();
+    @CheckReturnValue
+    default List<Component> skyocean$mutableSiblings() {
+        throw new NotImplementedException("Implemented in mixins!");
+    }
 
-    void skyocean$setContents(ComponentContents contents);
+    default void skyocean$setContents(ComponentContents contents){
+        throw new NotImplementedException("Implemented in mixins!");
+    }
+
 
 }

@@ -14,7 +14,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 data class RepoLibRecipeTree(
     @Inline var recipe: RepoApiRecipe,
     override var amount: Int,
-) : CraftHelperRecipe(CraftHelperRecipeType.REPO_LIB_RECIPE) , CraftHelperRecipe.MutableCount, CraftHelperRecipe.MultiplesOf, CraftHelperRecipe.Ingredients {
+) : CraftHelperRecipe(CraftHelperRecipeType.REPO_LIB_RECIPE), CraftHelperRecipe.MutableCount, CraftHelperRecipe.MultiplesOf, CraftHelperRecipe.Ingredients {
     override val selectedItem: SkyBlockId? get() = recipe.output?.id
 
     override fun resolve(resetLayout: () -> Unit, clear: () -> Unit): CraftHelperTree? {

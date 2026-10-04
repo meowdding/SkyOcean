@@ -180,6 +180,7 @@
         },
         "hotm": {
           "@value": "Heart of the Mountain Perk Modifier",
+          "desc": "",
           "shiftCost": {
             "@value": "Show shift click cost",
             "desc": "Shows the amount of powder that will be consumed on shift click."
@@ -225,6 +226,7 @@
         },
         "metal_detector": {
           "@value": "Metal Detector Solver",
+          "desc": "",
           "metalDetector": {
             "@value": "Enable Metal Detector Solver",
             "desc": "Enables the metal detector solver, which helps you find treasures in the Mines of Divan."
@@ -271,6 +273,47 @@
         "minion_helper": {
           "@value": "Minion Helper",
           "desc": "Shows the cheapest minion upgrades in the \"Crafted Minions\" inventory."
+        },
+        "accessories_helper": {
+          "@value": "Accessories Helper",
+          "desc": "Enables showing an icon as a stack size that represents the status of you owning that accessory or if it can been upgraded.",
+
+          "disabled_icons": {
+            "@value": "Disabled Accessories Icons",
+            "desc": "Choose what icons will not be shown."
+          },
+          "icons": {
+            "maxed": "<green>✔ MAXED</green>",
+            "upgrade": "<blue>✦ UPGRADE</blue>",
+            "upgradeable": "<yellow>▲ UPGRADEABLE</yellow>",
+            "missing": "<red>❌ MISSING</red>",
+            "duplicate": "<dark_purple>☰ DUPLICATE</dark_purple>",
+            "downgrade": "<gray>▼ DOWNGRADE</gray>"
+          },
+          "info": {
+            "@value": "Accessories Helper",
+            "desc": [
+              "Accessories Helper helps you find what accessories you need to get and which to upgrade, and keep track of them.",
+              "Enabling \"Accessories Helper\" will make icons be shown as a stack size for accessories, those icons meaning: ",
+              "",
+              "- <green>✔ <bold>MAXED</bold></green> (You own that accessory and its the max tier)",
+              "- <blue>✦ <bold>UPGRADE</bold></blue> (You own a lower tier of this accessory and can upgrade it to this one)",
+              "- <yellow>▲ <bold>UPGRADEABLE</bold></yellow> (You own this accessory, and it has a next tier it can be upgraded to)",
+              "- <red>❌ <bold>MISSING</bold></red> (You don't own any accessories of this accessory family or group)",
+              "- <dark_purple>☰ <bold>DUPLICATE</bold></dark_purple> (You own multiple accessories like this one)",
+              "- <gray>▼ <bold>DOWNGRADE</bold></gray> (You already own an upgraded version of this accessory)"
+              ]
+          },
+          "open_screen": {
+            "@value": "Open Accessories Helper Screen",
+            "desc": [
+              "Click to open the Accessories Helper Screen, where you can see all the missing accessories/the upgrades you can get.",
+              "<italic>You can also open this with <gray>/skyocean accessories</gray></italic>"
+            ],
+            "text": "Open"
+          }
+
+
         },
         "inventory_buttons": {
           "@value": "Inventory Buttons",
@@ -408,6 +451,29 @@
           "@value": "Piggy Repair Helper",
           "desc": "Sends a chat message to get 8 Enchanted Pork from sacks when the piggy bank breaks."
         },
+        "stylized_chat_prefixes": {
+          "@value": "Enable Stylized Chat Prefixes",
+          "desc": "Replaces vanilla chat prefixes, such as \"<dark_green>Guild \\></dark_green>\", for more stylized ones, like \"<white><font 'skyocean:stylized_chat_prefixes'>G</font></white>\"."
+        },
+        "allowed_stylized_chat_prefixes": {
+          "@value": "Allowed Stylized Chat Prefixes",
+          "desc": "What prefixes will be replaced with the more stylized ones when using Chat Prefixes Icons"
+        },
+        "bridge_formatter": {
+          "@value": "Enable Bridge Formatter",
+          "desc": [
+            "Enables a bridge formatter, replacing all guild messages sent by a certain player as if it was a discord chat.",
+            "Example: \"<color #5865f2>Discord \\> </color><white>Empa: hi!</white>\""
+          ]
+        },
+        "bridge_formatter_ign": {
+          "@value": "Bridge Formatter Ign",
+          "desc": "Specifies what Ign the bridge bot has."
+        },
+        "bridge_formatter_stylized_chat_prefix": {
+          "@value": "Stylized Bridge Formatter",
+          "desc": "Whether to use a more stylized prefix for the bridge formatter (<white><font 'skyocean:stylized_chat_prefixes'>D</font></white>)"
+        },
         "sack_notification": {
           "@value": "Sack Notification",
           "desc": "Show a notification when you gain specific sack items."
@@ -539,7 +605,7 @@
               "shiftingSpeed": {
                 "@value": "Cycling Speed",
                 "desc": [
-                  "Controls how fast the colors cylce.",
+                  "Controls how fast the colors cycle.",
                   "<red>If you are sensitive to flashing colors don't go above <color #B22222>❬<color #727378>Normal</color>❭.</red>"
                 ],
                 "options": {
@@ -698,6 +764,21 @@
           "highlightTime": {
             "@value": "Highlight Time",
             "desc": "Amount of time that items will be highlighted for, in seconds."
+          },
+          "priceSource": {
+            "@value": "ItemSearch Price Source",
+            "desc": [
+              "What source to use for Pricing.",
+              "Bazaar means Auction House & Bazaar with Item Evaluation.",
+              "NPC means NPC sell price."
+            ]
+          },
+          "showTotalValue": {
+            "@value": "Show Total Value",
+            "desc": [
+              "Displays the combined coin value of all items currently found in your item search.",
+              "<red>Might cause performance issues when opening the screen.</red>"
+            ]
           },
           "useReiSearchBar": {
             "@value": "Use REI Search Bar",
@@ -868,7 +949,7 @@
             "@value": "Player Animals",
             "desc": [
               "Changes players in the world to be rendered as the selected animal!",
-              "You can choose between <white>Nobody</white>, <white>Self</white>, <white>Players (non NPCs)</white> and <white>Everyone</white>."
+              "You can choose between <white>Nobody</white>, <white>Self</white>, <white>Players (non NPCs)</white>, <white>Others (non NPCs)</white>, and <white>Everyone</white>."
             ],
             "type": {
               "@value": "Animal Type",
@@ -1394,6 +1475,7 @@
               "none": "Nobody",
               "self": "Self",
               "players": "Players",
+              "others": "Others",
               "everyone": "Everyone"
             },
             "color": {
@@ -1521,9 +1603,29 @@
               }
             ]
           },
+          "circle_column": {
+            "@value": "Column",
+            "desc": "Render a \"solid\" column for hotspots."
+          },
+          "column_transparency": {
+            "@value": "Column Transparency",
+            "desc": [
+              "Changes the transparency of the column.",
+              {
+                "@id": "transparency"
+              }
+            ]
+          },
+          "circle_matches_player_y": {
+            "@value": "Circle & Outline Matches Player Y Coordinate",
+            "desc": [
+              "Moves the top of the circle and its outline to your Y coordinate.",
+              "<yellow>⚠ Only works while underwater!</yellow>"
+            ]
+          },
           "hide_particles": {
             "@value": "Hide Particles",
-            "desc": "Hide hotspot particles (requires Highlight or Outline to be enabled)."
+            "desc": "Hide hotspot particles (requires Highlight, Outline or Column to be enabled)."
           },
           "announcements": {
             "@value": "Announcements",
@@ -1572,9 +1674,29 @@
               }
             ]
           },
+          "circle_column": {
+            "@value": "Column",
+            "desc": "Render a \"solid\" column for wormholes."
+          },
+          "column_transparency": {
+            "@value": "Column Transparency",
+            "desc": [
+              "Changes the transparency of the column.",
+              {
+                "@id": "transparency"
+              }
+            ]
+          },
+          "circle_matches_player_y": {
+            "@value": "Circle & Outline Matches Player Y Coordinate",
+            "desc": [
+              "Moves the top of the circle and its outline to your Y coordinate.",
+              "<yellow>⚠ Only works while underwater!</yellow>"
+            ]
+          },
           "hide_particles": {
             "@value": "Hide Particles",
-            "desc": "Hide wormhole particles (requires Highlight or Outline to be enabled)."
+            "desc": "Hide wormhole particles (requires Highlight, Outline or Column to be enabled)."
           },
           "color": {
             "@value": "Highlight Color",

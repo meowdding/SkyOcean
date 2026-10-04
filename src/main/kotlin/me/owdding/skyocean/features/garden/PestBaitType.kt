@@ -1,6 +1,5 @@
 package me.owdding.skyocean.features.garden
 
-import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LayoutFactory

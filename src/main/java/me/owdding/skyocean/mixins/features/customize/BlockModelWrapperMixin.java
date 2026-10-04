@@ -35,7 +35,7 @@ public class BlockModelWrapperMixin {
         var model = CustomItemsHelper.getCustomData(itemStack, CustomItemDataComponents.model());
         if (model != null) {
             var resolved = model.resolveToItem();
-            if (resolved != null) itemStackRef.set(resolved.getDefaultInstance());
+            if (resolved != null) itemStackRef.set(resolved);
         }
 
         if (instance instanceof Constant || customColor == null || foundFirst.get()) {

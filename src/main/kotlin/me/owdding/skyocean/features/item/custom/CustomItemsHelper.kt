@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack
 object CustomItemsHelper {
 
     @JvmStatic
-    fun <T> getData(instance: ItemStack, type: DataComponentType<T>): T? = context(instance) { getCustomData(instance)?.getData(type) }
+    fun <T : Any> getData(instance: ItemStack, type: DataComponentType<T>): T? = context(instance) { getCustomData(instance)?.getData(type) }
 
     @JvmStatic
     fun <T : Any> getCustomData(instance: ItemStack, type: CustomItemComponent<T>): T? = context(instance) { getCustomData(instance)?.get(type) }
@@ -31,24 +31,24 @@ object CustomItemsHelper {
     @JvmStatic
     fun getEquippableState(instance: ItemStack): EquippableModelState {
         val model = getCustomData(instance)?.get(CustomItemDataComponents.MODEL) ?: return EquippableModelState.VANILLA
-        val modelEquippable = model.resolveToItem()?.components()[DataComponents.EQUIPPABLE] ?: return EquippableModelState.NON_EQUIPPABLE
+        val modelEquippable = model.resolveToItem()?.get(DataComponents.EQUIPPABLE) ?: return EquippableModelState.NON_EQUIPPABLE
         return EquippableModelState(TriState.TRUE, modelEquippable)
     }
 
     context(item: ItemStack)
-    fun <T> CustomItemData.getData(type: DataComponentType<T>): T? = when (type) {
+    fun <T : Any> CustomItemData.getData(type: DataComponentType<T>): T? = when (type) {
         DataComponents.ITEM_MODEL -> this[CustomItemDataComponents.MODEL]?.getModel()
         DataComponents.CUSTOM_NAME -> this[CustomItemDataComponents.NAME]
         DataComponents.ENCHANTMENT_GLINT_OVERRIDE -> this[CustomItemDataComponents.ENCHANTMENT_GLINT_OVERRIDE]
         DataComponents.TRIM -> this[CustomItemDataComponents.ARMOR_TRIM]?.trim
         DataComponents.PROFILE -> this[CustomItemDataComponents.SKIN]?.getResolvableProfile()
         DataComponents.DYED_COLOR -> this[CustomItemDataComponents.COLOR]?.getDyeColor(item)
-        DataComponents.EQUIPPABLE -> this[CustomItemDataComponents.MODEL]?.resolveToItem()?.components()[DataComponents.EQUIPPABLE]
+        DataComponents.EQUIPPABLE -> this[CustomItemDataComponents.MODEL]?.resolveToItem()?.get(DataComponents.EQUIPPABLE)
         else -> null
     }.unsafeCast()
 
     @JvmStatic
-    fun <T> replace(itemStack: ItemStack, type: DataComponentType<T>, original: Operation<T>): T {
+    fun <T : Any> replace(itemStack: ItemStack, type: DataComponentType<T>, original: Operation<T>): T? {
         return getData(itemStack, type) ?: original.call(itemStack, type)
     }
 

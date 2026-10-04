@@ -7,7 +7,6 @@ import me.owdding.lib.events.RegisterTextShaderEvent
 import me.owdding.lib.rendering.text.TextShader
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
-import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.Config
@@ -31,7 +30,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.font
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Instant
@@ -99,7 +97,7 @@ internal object ChatUtils {
     val ICON_COMPONENT: Component = Text.of(ICON) { this.color = DARK_OCEAN_BLUE }
     val ICON_SPACE_COMPONENT: Component = Text.of(ICON_WITH_SPACE) { this.color = DARK_OCEAN_BLUE }
     val SPACE_ICON_COMPONENT: Component = Text.of(SPACE_WITH_ICON) { this.color = DARK_OCEAN_BLUE }
-    val SEPERATOR_COMPONENT = Text.of(" | ", OceanColors.SEPARATOR)
+    val SEPARATOR_COMPONENT = Text.of(" | ", OceanColors.SEPARATOR)
 
     val prefixDelegate = CachedValue<Component> {
         Text.of {
@@ -117,6 +115,11 @@ internal object ChatUtils {
     }
     val prefix: Component by prefixDelegate
 
+    val ADDED_BY_SKYOCEAN = Text.join(
+        ICON_SPACE_COMPONENT,
+        Text.of("Added by SkyOcean!", OceanColors.BASE_TEXT),
+    )
+
     fun MutableComponent.withPotentialShadow(): MutableComponent {
         return if (Config.disableMessageTextShadow) {
             this.withoutShadow()
@@ -132,11 +135,6 @@ internal object ChatUtils {
 
     fun asSkyOceanColorAnimated(text: String, useSelected: Boolean = false) = Text.of(text) {
         this.textShader = if (useSelected) Config.prefixGradient else OceanGradients.DEFAULT
-    }
-
-    fun MutableComponent.withoutShadow(): MutableComponent = this.apply {
-        this.shadowColor = null
-        this.siblings.filterIsInstance<MutableComponent>().forEach { it.withoutShadow() }
     }
 
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))
@@ -181,9 +179,7 @@ enum class OceanGradients(val colors: List<Int>, private val shader: GradientTex
     override val id: Identifier = id("named_gradient")
     val isDisabled = this.colors.size == 1
 
-    constructor(vararg colors: Int) : this(
-        colors.toMutableList().apply { if (size > 1) addLast(first()) }
-    )
+    constructor(vararg colors: Int) : this(colors.toMutableList().apply { if (size > 1) addLast(first()) })
 
     override fun getTranslationKey() = "skyocean.gradients.${name.lowercase()}"
 

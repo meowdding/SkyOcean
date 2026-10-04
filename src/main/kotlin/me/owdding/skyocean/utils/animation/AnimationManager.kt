@@ -71,15 +71,18 @@ data class AnimationManager(val screen: Screen, val time: Duration, var current:
     private var onPercentage: MutableMap<Double, MutableList<() -> Unit>> = mutableMapOf()
 
     companion object {
-        context(manager: AnimationManager) fun <T : AbstractWidget> T.addImmediately() {
+        context(manager: AnimationManager)
+        fun <T : AbstractWidget> T.addImmediately() {
             manager.applyImmediately.add(this)
         }
 
-        context(manager: AnimationManager) fun <T : AbstractWidget> T.onFinish(runnable: T.() -> Unit) {
+        context(manager: AnimationManager)
+        fun <T : AbstractWidget> T.onFinish(runnable: T.() -> Unit) {
             manager.onFinish.add { this.runnable() }
         }
 
-        context(manager: AnimationManager) fun <T : AbstractWidget> T.onPercentage(percentage: Double, runnable: T.() -> Unit) {
+        context(manager: AnimationManager)
+        fun <T : AbstractWidget> T.onPercentage(percentage: Double, runnable: T.() -> Unit) {
             manager.onPercentage.getOrPut(percentage) { mutableListOf() }.add { runnable() }
         }
     }

@@ -3,7 +3,6 @@ package me.owdding.skyocean.features.inventory
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.ui.context.ContextMenu
-import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LayoutFactory
@@ -13,15 +12,16 @@ import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.config.features.inventory.SackValueConfig
 import me.owdding.skyocean.helpers.InventorySideGui
-import me.owdding.skyocean.utils.Utils.next
 import me.owdding.skyocean.utils.Utils.nextCycling
 import me.owdding.skyocean.utils.Utils.unaryMinus
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.chat.OceanColors.BETTER_GOLD
 import me.owdding.skyocean.utils.extensions.asScrollable
+import me.owdding.skyocean.utils.rendering.widgets.SelectAmountWidget
 import net.minecraft.client.gui.layouts.Layout
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerInitializedEvent
 import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.Pricing
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
@@ -29,14 +29,13 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.extentions.containerHeight
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
-import tech.thatgravyboat.skyblockapi.utils.extentions.parseFormattedLong
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
-object SackValue : InventorySideGui("inventorySideGui.sackValue.title",".* Sack|Sack of Sacks", { SackValueConfig.alignment }) {
+object SackValue : InventorySideGui("inventorySideGui.sackValue.title", ".* Sack|Sack of Sacks", { SackValueConfig.alignment }) {
 
     private const val SCROLLBAR_WIDTH = 10
     private val gemstoneLevel = listOf("ROUGH", "FLAWED", "FINE")
@@ -110,21 +109,7 @@ object SackValue : InventorySideGui("inventorySideGui.sackValue.title",".* Sack|
                             }
                         }
                     }.asButtonRight {
-                        ContextMenu.open { menu ->
-                            menu.withAutoCloseOff()
-                            val title = "Get From Sacks"
-                            menu.add { Widgets.text(title).withPadding(3) }
-                            menu.add {
-                                val state = ListenableState.of("")
-                                Widgets.textInput(state) {
-                                    it.withSize(McFont.width(title), 20)
-                                    it.withEnterCallback {
-                                        McClient.sendCommand("/gfs $item ${state.get().parseFormattedLong()}")
-                                        menu.onClose()
-                                    }
-                                }.withPadding(3)
-                            }
-                        }
+                        openGfsContextMenu(SkyBlockId.item(item))
                     }.apply {
                         withTooltip(Text.of("Right-Click to input how many items to get."))
                         widget(this)
@@ -151,5 +136,20 @@ object SackValue : InventorySideGui("inventorySideGui.sackValue.title",".* Sack|
         }.times(amount.toDouble()).toLong()
 
         operator fun component3() = price
+    }
+
+    fun openGfsContextMenu(id: SkyBlockId) {
+        ContextMenu.open { menu ->
+            menu.withAutoCloseOff()
+            val title = "Select Amount"
+            menu.add { Widgets.text(title).withPadding(3) }
+
+            menu.add {
+                SelectAmountWidget(id) { amount ->
+                    McClient.sendCommand("/gfs ${id.skyblockId} $amount")
+                    menu.onClose()
+                }.withPadding(3)
+            }
+        }
     }
 }

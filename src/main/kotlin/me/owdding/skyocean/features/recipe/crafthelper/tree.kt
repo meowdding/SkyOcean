@@ -1,6 +1,5 @@
 package me.owdding.skyocean.features.recipe.crafthelper
 
-import me.owdding.lib.extensions.ceil
 import me.owdding.skyocean.features.recipe.Ingredient
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.ParentRecipe
@@ -9,7 +8,7 @@ import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.mergeSameTypes
 import me.owdding.skyocean.features.recipe.serialize
 
-sealed interface CraftHelperParentNode : CraftHelperEntry{
+sealed interface CraftHelperParentNode : CraftHelperEntry {
     val nodes: MutableList<CraftHelperNode>
     override val recipe: Recipe?
 
@@ -27,12 +26,12 @@ sealed interface CraftHelperParentNode : CraftHelperEntry{
             val recipe = (recipe as? ParentRecipe)?.getRecipe(it) ?: SimpleRecipeApi.getBestRecipe(it)
             if (visitedRecipes.contains(recipe)) return@forEach
             val recipeOutput = recipe?.output?.amount ?: 1
-            val totalRequired = it.amount * amount
+            val totalRequired = Math.multiplyExact(it.amount, amount)
             val carriedOver = context[it].coerceAtMost(totalRequired)
             val requiredAmount = totalRequired - carriedOver
             val carriedOverOver = context[it] - carriedOver
-            val craftsRequired = (requiredAmount / recipeOutput.toFloat()).ceil()
-            val remainder = (craftsRequired * recipeOutput - requiredAmount).coerceAtLeast(0)
+            val craftsRequired = Math.ceilDiv(requiredAmount, recipeOutput)
+            val remainder = (craftsRequired.toLong() * recipeOutput - requiredAmount).toInt()
             context[it] = remainder + carriedOverOver
 
             if (recipe != null) {
@@ -60,7 +59,7 @@ sealed interface CraftHelperEntry {
         get() = 0
 }
 
-sealed interface CraftHelperNode: CraftHelperEntry
+sealed interface CraftHelperNode : CraftHelperEntry
 
 data class CraftHelperLeafNode(override val output: Ingredient) : CraftHelperNode {
     override val outputWithAmount: Ingredient get() = output

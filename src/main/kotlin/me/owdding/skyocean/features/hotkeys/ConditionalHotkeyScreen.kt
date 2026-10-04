@@ -6,10 +6,12 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.RIGHT
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
-import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.features.hotkeys.system.Hotkey
 import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
+import me.owdding.skyocean.features.text.MoveTextReplacementModal
+import me.owdding.skyocean.features.text.TextReplacementManager
+import me.owdding.skyocean.features.text.TextReplacementScreen
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils
@@ -37,6 +39,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.font
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import kotlin.math.max
 
@@ -48,6 +51,10 @@ import kotlin.math.max
  *  - Held item condition (probably with extra item conditions??)
  */
 object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), IgnoreHotkeyInputs {
+
+    val FONT = SkyOcean.id("hotkey_screen")
+    val chevronUp = Text.of("^") { this.font = FONT }
+    val chevronDown = Text.of("v") { this.font = FONT }
 
     private var tryDeleting: Hotkey? = null
 
@@ -267,13 +274,16 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
 
     fun createRightPanel(sliceWidth: Int, height: Int): LayoutElement {
         val panelWidth = sliceWidth * 2 + SPACER
-        val entry = getHotkeysInCategory().sortedBy { it.timeCreated }
+        val entry = getHotkeysInCategory().sortedBy { it.ordering }
+        entry.forEachIndexed { index, hotkey ->
+            hotkey.ordering = index.toLong()
+        }
         val header = createHeader(sliceWidth, panelWidth, entry)
 
         val mainSectionHeight = height - header.height - SPACER
         val mainSection = LayoutFactory.vertical {
             entry.forEach { hotkey ->
-                createEntry(hotkey, panelWidth, SPACER * 7).add()
+                createEntry(entry, hotkey, panelWidth, SPACER * 7).add()
                 createSeparator(panelWidth - SPACER * 2).add {
                     alignHorizontallyCenter()
                 }
@@ -390,78 +400,123 @@ object ConditionalHotkeyScreen : SkyOceanScreen("Island Specific Keybinds"), Ign
         rebuildWidgets()
     }
 
-    private fun createEntry(hotkey: Hotkey, width: Int, height: Int): LayoutElement = LayoutFactory.frame(width, height) {
+    private fun createEntry(hotkeys: List<Hotkey>, hotkey: Hotkey, width: Int, height: Int): LayoutElement = LayoutFactory.frame(width, height) {
         val keyComponent = hotkey.formatKeys()
-        LayoutFactory.vertical {
-            createText(hotkey.name) {
-                color = CatppuccinColors.Mocha.text
-            }.withPadding(bottom = 2).add()
-            createText(keyComponent).withPadding(4).withTexturedBackground("hotkey/header").add()
-        }.withPadding(left = SPACER).add(middleLeft)
-        LayoutFactory.vertical(alignment = RIGHT, spacing = 1) {
-            createButton(
-                texture = headerSprite,
-                text = if (hotkey.enabled) enabled else disabled,
-                width = toggleWidth + SPACER * 2,
-                height = 15,
-                click = withRebuild {
-                    hotkey.enabled = !hotkey.enabled
-                    HotkeyManager.save()
-                },
-            ).add()
-            horizontal(1) {
-                val edit = Text.of("Edit")
+        LayoutFactory.horizontal {
+            LayoutFactory.frame(SPACER * 4, 30) {
                 createButton(
-                    texture = headerSprite,
-                    text = edit,
-                    width = McFont.width(edit) + SPACER * 2,
-                    color = unhovered,
-                    height = 15,
-                    click = setScreen {
-                        EditHotkeyModal(this@ConditionalHotkeyScreen, hotkey) { keybind, action, condition, name, enabled ->
-                            hotkey.keybind = keybind
-                            hotkey.action = action
-                            hotkey.condition = condition
-                            hotkey.name = name
-                            hotkey.enabled = enabled
-                            HotkeyManager.save()
-                        }
-                    },
-                ).add()
-
-                val duplicate = Text.of("⎘")
-                createButton(
-                    texture = headerSprite,
-                    text = duplicate,
-                    width = McFont.width(duplicate) + SPACER * 2,
-                    color = unhovered,
+                    texture = null,
+                    text = chevronUp,
+                    width = McFont.width(chevronUp) + SPACER * 2,
+                    color = if (hotkey.ordering == 0L) unhovered else hovered,
                     height = 15,
                     click = withRebuild {
-                        HotkeyManager.register(hotkey.duplicate())
-                    }
-                ).add()
+                        hotkeys.find { it.ordering == (hotkey.ordering - 1) }?.ordering += 1
+                        hotkey.ordering -= 1
+                    },
+                ).add(topCenter)
+                createButton(
+                    texture = null,
+                    text = chevronDown,
+                    width = McFont.width(chevronDown) + SPACER * 2,
+                    color = if (hotkey.ordering == hotkeys.lastIndex.toLong()) unhovered else hovered,
+                    height = 15,
+                    click = withRebuild {
+                        hotkeys.find { it.ordering == (hotkey.ordering + 1) }?.ordering -= 1
+                        hotkey.ordering += 1
+                    },
+                ).add(bottomCenter)
+            }.add(middleLeft)
+            vertical {
+                createText(hotkey.name) {
+                    color = CatppuccinColors.Mocha.text
+                }.withPadding(bottom = 2).add()
+                createText(keyComponent).withPadding(4).withTexturedBackground("hotkey/header").add()
+            }
+        }.withPadding(left = SPACER).add(middleLeft)
+        LayoutFactory.vertical(alignment = RIGHT, spacing = 1) {
+            val secondRow = LayoutFactory.horizontal(1) {
+                    val edit = Text.of("Edit")
+                    createButton(
+                        texture = headerSprite,
+                        text = edit,
+                        width = McFont.width(edit) + SPACER * 2,
+                        color = unhovered,
+                        height = 15,
+                        click = setScreen {
+                            EditHotkeyModal(this@ConditionalHotkeyScreen, hotkey) { keybind, action, condition, name, enabled ->
+                                hotkey.keybind = keybind
+                                hotkey.action = action
+                                hotkey.condition = condition
+                                hotkey.name = name
+                                hotkey.enabled = enabled
+                                HotkeyManager.save()
+                            }
+                        },
+                    ).add()
 
-                val instantDelete = tryDeleting === hotkey
-                val text = if (instantDelete) {
-                    Text.of("Confirm?", CatppuccinColors.Mocha.red)
-                } else {
-                    Text.of("Delete", CatppuccinColors.Mocha.red)
+                    val duplicate = Text.of("⎘")
+                    createButton(
+                        texture = headerSprite,
+                        text = duplicate,
+                        width = McFont.width(duplicate) + SPACER * 2,
+                        color = unhovered,
+                        height = 15,
+                        click = withRebuild {
+                            HotkeyManager.register(hotkey.duplicate())
+                        },
+                    ).add()
+
+                    val instantDelete = tryDeleting === hotkey
+                    val text = if (instantDelete) {
+                        Text.of("Confirm?", CatppuccinColors.Mocha.red)
+                    } else {
+                        Text.of("Delete", CatppuccinColors.Mocha.red)
+                    }
+                    createButton(
+                        texture = headerSprite,
+                        text = text,
+                        width = McFont.width(text) + SPACER * 2,
+                        height = 15,
+                        click = withRebuild(resetDelete = false) {
+                            if (instantDelete) {
+                                HotkeyManager.unregister(hotkey)
+                                tryDeleting = null
+                            } else {
+                                tryDeleting = hotkey
+                            }
+                        },
+                    ).add()
                 }
+            horizontal {
+                val move = Text.of("Move")
                 createButton(
                     texture = headerSprite,
-                    text = text,
-                    width = McFont.width(text) + SPACER * 2,
+                    text = move,
+                    width = secondRow.width - (toggleWidth + SPACER * 2) - 1,
                     height = 15,
-                    click = withRebuild(resetDelete = false) {
-                        if (instantDelete) {
-                            HotkeyManager.unregister(hotkey)
-                            tryDeleting = null
-                        } else {
-                            tryDeleting = hotkey
-                        }
+                    color = if (HotkeyManager.categories.isEmpty()) CatppuccinColors.Mocha.surface2Color else unhovered,
+                    click = setScreen {
+                        MoveHotkeyModal(ConditionalHotkeyScreen, hotkey)
+                    },
+                ).apply {
+                    if (HotkeyManager.categories.isEmpty()) {
+                        this.asDisabled()
+                    }
+                }.add()
+                spacer(width = 1)
+                createButton(
+                    texture = headerSprite,
+                    text = if (hotkey.enabled) enabled else disabled,
+                    width = toggleWidth + SPACER * 2,
+                    height = 15,
+                    click = withRebuild {
+                        hotkey.enabled = !hotkey.enabled
+                        HotkeyManager.save()
                     },
                 ).add()
             }
+            secondRow.add()
         }.withPadding(right = SPACER * 2).add(middleRight)
 
     }

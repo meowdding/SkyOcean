@@ -1,4 +1,4 @@
-accessWidener v2 official
+classTweaker v1 official
 accessible method net/minecraft/network/chat/MutableComponent <init> (Lnet/minecraft/network/chat/ComponentContents;Ljava/util/List;Lnet/minecraft/network/chat/Style;)V
 accessible class net/minecraft/client/gui/layouts/FrameLayout$ChildContainer
 accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher renderers Ljava/util/Map;
@@ -21,3 +21,6 @@ accessible field net/minecraft/client/particle/Particle z D
 
 # 26.1
 accessible field net/minecraft/client/renderer/block/FluidStateModelSet WATER_MODEL Lnet/minecraft/client/renderer/block/FluidModel$Unbaked;
+
+inject-interface net/minecraft/client/gui/screens/inventory/AbstractRecipeBookScreen me/owdding/skyocean/accessors/AbstractRecipeBookScreenAccessor
+inject-interface net/minecraft/network/chat/MutableComponent me/owdding/skyocean/accessors/SafeMutableComponentAccessor

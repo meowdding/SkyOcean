@@ -26,9 +26,7 @@ object StoragePreview : AbstractItemModifier() {
 
     override fun appliesTo(itemStack: ItemStack): Boolean {
         val screen = McScreen.asMenu ?: return false
-        if (!screen.title.stripped.contains("Storage")) return false
-
-        return itemStack.hoverName.stripped.matches(regex)
+        return screen.title.stripped.contains("Storage") && itemStack.hoverName.stripped.matches(regex)
     }
 
     private var storageInstance: PlayerStorageInstance? = null

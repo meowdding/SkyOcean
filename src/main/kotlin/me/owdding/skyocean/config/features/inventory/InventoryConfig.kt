@@ -1,7 +1,12 @@
 package me.owdding.skyocean.config.features.inventory
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
+import me.owdding.skyocean.config.separator
+import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper
+import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelperScreen
 import me.owdding.skyocean.features.inventory.buttons.ButtonConfigScreen
+import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
@@ -14,6 +19,32 @@ object InventoryConfig : CategoryKt("inventory") {
 
     var minionHelper by boolean(true) {
         translation = "skyocean.config.inventory.minion_helper"
+    }
+
+    init {
+        separator("skyocean.config.inventory.accessories_helper.info")
+    }
+
+    var accessoriesHelper by boolean(true) {
+        translation = "skyocean.config.inventory.accessories_helper"
+    }
+
+    var disabledAccessoryIcons by select<AccessoriesHelper.AccessoryResult> {
+        translation = "skyocean.config.inventory.accessories_helper.disabled_icons"
+    }
+
+    init {
+        button {
+            title = "skyocean.config.inventory.accessories_helper.open_screen"
+            text = "skyocean.config.inventory.accessories_helper.open_screen.text"
+            description = "skyocean.config.inventory.accessories_helper.open_screen.desc"
+
+            onClick {
+                if (LocationAPI.isOnSkyBlock && !SkyBlockIsland.THE_RIFT.inIsland()) {
+                    McClient.setScreen(AccessoriesHelperScreen)
+                }
+            }
+        }
     }
 
     init {

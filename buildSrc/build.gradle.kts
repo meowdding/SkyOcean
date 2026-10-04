@@ -22,10 +22,9 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.kotlin.gradle.plugin.api)
-    implementation(plugin(libs.plugins.detekt))
     implementation(plugin(libs.plugins.kotlin.symbol.processor))
     implementation(plugin(libs.plugins.meowdding.auto.mixins))
     implementation(plugin(libs.plugins.fabric.loom.asProvider()))
     implementation(plugin(libs.plugins.fabric.loom.remap))
-    implementation("dev.kikugie.stonecutter:dev.kikugie.stonecutter.gradle.plugin:0.10-alpha.2")
+    implementation("dev.kikugie.stonecutter:dev.kikugie.stonecutter.gradle.plugin:0.10-alpha.12")
 }

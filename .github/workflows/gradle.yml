@@ -2,18 +2,22 @@ name: Build
 
 on:
     push:
-        branches: [ "main" ]
+        branches: [ "*" ]
     pull_request:
         branches: [ "main" ]
 
 permissions:
     contents: read
 jobs:
-    build:
+    build-matrix:
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                version: [ '26.1', '26.2', '26.3' ]
         steps:
             -   uses: actions/checkout@v5
-            -   name: Setup JDK 21
+            -   name: Setup JDK 25
                 uses: actions/setup-java@v5
                 with:
                     distribution: temurin
@@ -22,13 +26,19 @@ jobs:
                 uses: gradle/actions/setup-gradle@v5
             -   run: chmod +x gradlew
             -   name: Build
-                run: ./gradlew build -PskipDetekt -Pdatagen
+                run: ./gradlew :${{ matrix.version }}:build
             -   name: Upload Artifact
                 uses: actions/upload-artifact@v7.0.0
                 with:
+                    name: ${{ matrix.version }}
                     archive: false
-                    path: build/libs/*-26.1.jar
-            -   uses: actions/upload-artifact@v7.0.0
-                with:
-                    archive: false
-                    path: build/libs/*-26.2.jar
+                    path: build/libs/*-${{ matrix.version }}.jar
+
+    build:
+        runs-on: ubuntu-latest
+        needs: build-matrix
+        if: always()
+        steps:
+            -   name: Check matrix result
+                if: ${{ needs.build-matrix.result != 'success' }}
+                run: exit 1

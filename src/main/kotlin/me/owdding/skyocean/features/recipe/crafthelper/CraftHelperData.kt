@@ -13,6 +13,7 @@ abstract class CraftHelperRecipe(val type: CraftHelperRecipeType) {
         var amount: Int
         fun withAmount(amount: Int = this.amount): CraftHelperRecipe
     }
+
     interface MultiplesOf {
         val multiples: Int
     }

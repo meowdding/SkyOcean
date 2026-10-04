@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.recipe.crafthelper.views
 
+import com.mojang.blaze3d.platform.InputConstants
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.constants.MinecraftColors
@@ -11,14 +12,20 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.features.item.sources.ForgeItemContext
 import me.owdding.skyocean.features.item.sources.ItemSources
-import me.owdding.skyocean.features.recipe.*
+import me.owdding.skyocean.features.recipe.CurrencyIngredient
+import me.owdding.skyocean.features.recipe.Ingredient
+import me.owdding.skyocean.features.recipe.ItemLikeIngredient
+import me.owdding.skyocean.features.recipe.RecipeType
+import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperEntry
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperNode
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperParentNode
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipeNode
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperNode
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.eval.TrackedItem
+import me.owdding.skyocean.features.recipe.serialize
+import me.owdding.skyocean.features.recipe.serializeWithAmount
 import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.ComponentIcons
@@ -29,15 +36,19 @@ import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
+import tech.thatgravyboat.skyblockapi.api.profile.profile.ProfileAPI
+import tech.thatgravyboat.skyblockapi.api.profile.profile.ProfileType
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
+import tech.thatgravyboat.skyblockapi.utils.extentions.until
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.join
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.extentions.until
 
 fun interface RecipeView {
 
@@ -295,6 +306,9 @@ class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallb
             ItemSources.HUNTING_BOX,
             join(ComponentIcons.BOX, " Hunting Box"),
         )
+        addSimple(
+            ItemSources.CRYSTAL, !"Heart of the Mountain Crystal",
+        )
 
         if (sources.containsKey(ItemSources.FORGE)) {
             addUsedSources()
@@ -308,7 +322,14 @@ class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallb
 
         if (idOrNull() != null && state.recipeType != RecipeType.UNKNOWN) {
             if (this.isNotEmpty()) add(CommonComponents.EMPTY)
-            add(!"§eClick to open recipe!")
+            add(Text.of("Left-Click to open recipe!", TextColor.YELLOW))
+        }
+
+        add(Text.of("Middle-click to copy amount!", TextColor.YELLOW))
+
+        if (ProfileAPI.profileType == ProfileType.NORMAL) {
+            add(Text.of("Right-click to open bazaar!", TextColor.YELLOW))
+            add(Text.of("Shift + Right-click to open bazaar!", TextColor.YELLOW))
         }
     }.takeUnless { it.isEmpty() }?.toMutableList()?.let {
         Tooltip.create(
@@ -320,6 +341,9 @@ class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallb
 
     context(state: CraftHelperState)
     fun idOrNull() = (state.ingredient as? SkyOceanItemIngredient)?.skyblockId
+
+    context(state: CraftHelperState)
+    fun nameOrNull() = (state.ingredient as? SkyOceanItemIngredient)?.itemName
 
     context(state: CraftHelperState)
     fun text(prefix: String = "") = Displays.component(
@@ -374,10 +398,26 @@ class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallb
         it.withTexture(null)
         it.withSize(text.getWidth(), text.getHeight())
         it.withRenderer(DisplayWidget.displayRenderer(text))
-        it.withCallback {
+        it.withCallback(InputConstants.MOUSE_BUTTON_MIDDLE) {
+            McClient.clipboard = (state.required - state.amount).toString()
+            Text.of("Copied amount to clipboard!").sendWithPrefix()
+        }
+        it.withCallback(InputConstants.MOUSE_BUTTON_RIGHT) {
+            val name = this.nameOrNull() ?: return@withCallback
+            if (ProfileAPI.profileType != ProfileType.NORMAL) {
+                return@withCallback
+            }
+
+            if (McScreen.isShiftDown) {
+                McClient.sendCommand("ahs ${name.stripped}")
+                return@withCallback
+            }
+            McClient.sendCommand("bz ${name.stripped}")
+        }
+        it.withCallback(InputConstants.MOUSE_BUTTON_LEFT) {
             val id = this.idOrNull() ?: return@withCallback
             when (state.recipeType) {
-                RecipeType.CUSTOM -> SkyOcean.debug("Custom recipes dont support click actions!")
+                RecipeType.CUSTOM -> Text.of("Custom recipes dont support click actions!").sendWithPrefix()
                 RecipeType.UNKNOWN -> SkyOcean.debug("Clicked unknown recipe type for $id")
                 RecipeType.KAT -> Text.of("No preview yet, go to Kat :(").sendWithPrefix()
                 RecipeType.SHOP -> Text.of("No preview for Shop Recipes yet :(").sendWithPrefix()
