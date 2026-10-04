@@ -1,0 +1,67 @@
+name: Bug Report
+description: Create a report to help us improve
+type: Bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!WARNING]
+        > Issues suspected of being created, documented, or aided with
+        > AI/LLM usage will be closed without further discussion.
+        > *We are perfectly capable of understanding logs ourselves,*
+        > *and don't tolerate usage of generative models.*
+
+        Thanks for taking the time to fill out this bug report!
+        
+        Before continuing to make the issue, please make sure there are no similar issues on [the issue tracker](../issues).
+        If there are, consider contributing your information in there instead!
+        > [!TIP]
+        > You can also join the [Discord](https://meowdd.ing/discord) for more help.
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Bug Description
+      description: 'A clear explanation of what the issue is, with steps to reproduce if applicable.'
+      placeholder: Leave a comment
+    validations:
+      required: true
+
+  - type: input
+    id: minecraft-version
+    attributes:
+      label: Minecraft Version
+      description: What version of Minecraft are you using?
+      placeholder: ex. Minecraft 26.3
+    validations:
+      required: true
+
+  - type: input
+    id: mod-version
+    attributes:
+      label: SkyOcean Version
+      description: What version of SkyOcean are you running? Run "/skyocean version" ingame to see this.
+      placeholder: ex. 1.17.2
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log output
+      description: |
+        Please provide log files of the game session in which the issue happened.
+        
+        **Do not upload the whole log file**. Instead upload it to [mclo.gs](https://mclo.gs/) or similar. (Launchers like Prism already have an option to upload the log there.)
+      placeholder: ex. https://mclo.gs/WnMMikq
+    validations:
+      required: false
+
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: 'Add any other context about the problem here, such as images or other information'
+    validations:
+      required: false
