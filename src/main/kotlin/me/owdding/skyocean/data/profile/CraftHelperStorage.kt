@@ -48,12 +48,12 @@ object CraftHelperStorage {
 
     fun set(recipe: CraftHelperRecipe) {
         storage.set(recipe)
-        storage.save()
+        save()
     }
 
     fun setSelected(item: SkyBlockId?) {
         storage.set(NormalCraftHelperRecipe(item))
-        storage.save()
+        save()
     }
 
     fun setAmount(amount: Int) {
@@ -65,22 +65,22 @@ object CraftHelperStorage {
         }
 
         storage.set(data.withAmount(amount))
-        storage.save()
+        save()
     }
 
     fun setSkyShards(recipe: SkyShardsMethod) {
         storage.set(SkyShardsRecipe(recipe))
-        storage.save()
+        save()
     }
 
     fun setRepoLibRecipe(recipe: RepoApiRecipe) {
         storage.set(RepoLibRecipeTree(recipe, recipe.output?.amount ?: 1))
-        storage.save()
+        save()
     }
 
     fun clear() {
         storage.set(NormalCraftHelperRecipe(null))
-        storage.save()
+        save()
     }
 
     fun save() {
@@ -89,6 +89,7 @@ object CraftHelperStorage {
 
     fun <T> addToIngredientRecipe(recipe: T) where T : CraftHelperRecipe, T : CraftHelperRecipe.Ingredients {
         getOrCreateIngredientRecipe().add(recipe.entriesForAddition.map { it.withAmount(it.amount * recipe.amount) })
+        save()
     }
 
     fun getOrCreateIngredientRecipe(): IngredientCraftHelperRecipe {
@@ -102,7 +103,6 @@ object CraftHelperStorage {
             add(inputs.map { it.withAmount(it.amount * data.amount) })
         }
         storage.set(newRecipe)
-        storage.save()
         return newRecipe
     }
 
