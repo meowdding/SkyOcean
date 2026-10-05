@@ -25,9 +25,7 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
-import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ARMOR_NOT_FOUND
-import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ITEM_NOT_FOUND
-import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.*
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.add
@@ -54,6 +52,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
+import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -63,13 +62,22 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import java.util.*
 
 @Module
 @ItemModifier
 object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
+    data class State(
+        var item: Item? = null,
+        var onClick: ((Int) -> Unit)? = null,
+        var componentModifier: ((item: ItemStack, list: MutableList<Component>, previousResult: Result?) -> Result) = { _, _, _ -> Result.unmodified },
+        var clientComponentModifier: ((item: ItemStack, list: MutableList<ClientTooltipComponent>) -> Result) = { _, _ -> Result.unmodified },
+    )
+
+    private val modifierCache: MutableMap<ItemStack, State> = WeakHashMap()
+
 
     private val logger: MeowddingLogger = SkyOcean.featureLogger()
-    private val modifierCache: MutableMap<String, Pair<ComponentModifier?, TooltipComponentModifier?>> = mutableMapOf()
 
     private val group = RemoteStrings.resolve()
     val museumRegex by group.regex(".*[Mm]useum.*")
@@ -88,30 +96,6 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
             }
         }
     override val isEnabled: Boolean = true
-
-    context(item: ItemStack)
-    private fun registerModifier(component: ComponentModifier) {
-        modifierCache[item.cleanName] = component to null
-    }
-
-    context(item: ItemStack)
-    private fun buildModifiers(init: ModifierBuilder.() -> Unit) {
-        val builder = object : ModifierBuilder {
-            override var component: ComponentModifier? = null
-            override var tooltip: TooltipComponentModifier? = null
-
-            override fun registerModifier(component: ComponentModifier) {
-                this.component = component
-            }
-
-            override fun registerComponentModifier(modifier: TooltipComponentModifier) {
-                this.tooltip = modifier
-            }
-        }
-        builder.init()
-        if (builder.component == null && builder.tooltip == null) return
-        modifierCache[item.cleanName] = builder.component to builder.tooltip
-    }
 
     @MustBeContainer
     @OnlyOnSkyBlock
@@ -150,28 +134,35 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
         }
     }
 
+    private fun ItemStack.deferModifications(init: State.() -> Unit) {
+        modifierCache[this] = State().apply(init)
+    }
+
     private fun MuseumItem.handleMuseumItemData(event: InventoryChangeEvent) {
         val data = this
         val id = data.skyblockId
         val copy = itemTracker.snapshot()
         val items = copy.takeN(id, 1)
         val amount = items.sumOf { it.amount }
-        event.item.skyoceanReplace(false) {
+        event.item.deferModifications {
             if (amount >= 1) {
                 this.item = Items.DYE.green()
-                registerModifier {
-                    beforeWiki()
-                    add("This item was found on your profile!") { this.color = TextColor.GREEN }
-                    space()
-                    addAll(items.first().context.collectLines())
-                    skipRemaining()
+                componentModifier = { _, list, _ ->
+                    withMerger(list) {
+                        beforeWiki()
+                        add("This item was found on your profile!") { this.color = TextColor.GREEN }
+                        space()
+                        addAll(items.first().context.collectLines())
+                        skipRemaining()
+                        Result.modified
+                    }
                 }
-                onClick {
+                onClick = {
                     val item = items.first()
                     ItemHighlighter.setHighlight(ReferenceItemFilter.create(item.context, item.itemStack))
                     item.context.open()
                 }
-                return@skyoceanReplace
+                return@deferModifications
             }
 
             val rootState = copy.toState(id)
@@ -180,33 +171,42 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
                 logger.debug("Recipe is null $id")
                 this.item = Items.DYE.red()
 
-                registerModifier {
-                    beforeWiki()
-                    add("No recipe found for item!") { this.color = TextColor.RED }
-                    space()
+                componentModifier = { _, list, _ ->
+                    withMerger(list) {
+                        beforeWiki()
+                        add("No recipe found for item!") { this.color = TextColor.RED }
+                        space()
+                        Result.modified
+                    }
                 }
-                return@skyoceanReplace
+                return@deferModifications
             }
 
             if (rootState.childrenDone) {
                 this.item = Items.DYE.yellow()
-                registerModifier {
-                    beforeWiki()
-                    add("You have all materials to craft this item!") { this.color = TextColor.GREEN }
-                    add("Click to set as craft helper item!") { this.color = TextColor.GREEN }
-                    skipRemaining()
+                componentModifier = { _, list, _ ->
+                    withMerger(list) {
+                        beforeWiki()
+                        add("You have all materials to craft this item!") { this.color = TextColor.GREEN }
+                        add("Click to set as craft helper item!") { this.color = TextColor.GREEN }
+                        skipRemaining()
+                        Result.modified
+                    }
                 }
             } else {
                 this.item = Items.DYE.orange()
-                registerModifier {
-                    beforeWiki()
-                    add("This item can be crafted!") { this.color = TextColor.GRAY }
-                    add("Click to set as craft helper item!") { this.color = TextColor.YELLOW }
-                    skipRemaining()
+                componentModifier = { _, list, _ ->
+                    withMerger(list) {
+                        beforeWiki()
+                        add("This item can be crafted!") { this.color = TextColor.GRAY }
+                        add("Click to set as craft helper item!") { this.color = TextColor.YELLOW }
+                        skipRemaining()
+                        Result.modified
+                    }
                 }
             }
 
-            onClick {
+            onClick = {
                 CraftHelperStorage.setSelected(id)
                 CraftHelperStorage.setAmount(1)
                 CraftHelperStorage.save()
@@ -232,44 +232,50 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
         val copy = itemTracker.snapshot()
 
         val itemList = items.map { it to it.toItem() }.sortedBy { (_, item) -> item.getPriority() }
-        buildModifiers {
-            if (MiscConfig.itemSearchMuseumIntegration) registerModifier {
-                beforeWiki()
-                val copy = copy.snapshot()
-                itemList.forEach { (id, stack) ->
-                    val take = copy.takeN(id, 1)
-                    if (take.sumOf { it.amount } >= 1) {
+        event.item.deferModifications {
+            if (MiscConfig.itemSearchMuseumIntegration) componentModifier = { _, list, _ ->
+                withMerger(list) {
+                    beforeWiki()
+                    val copy = copy.snapshot()
+                    itemList.forEach { (id, stack) ->
+                        val take = copy.takeN(id, 1)
+                        if (take.sumOf { it.amount } >= 1) {
+                            add {
+                                append(Icons.CHECKMARK) { this.color = TextColor.GREEN }
+                                append(" ")
+                                append(stack.hoverName)
+                            }
+                            return@forEach
+                        }
+
+                        val state = copy.toState(id)
                         add {
-                            append(Icons.CHECKMARK) { this.color = TextColor.GREEN }
+                            if (state == null || !state.childrenDone) {
+                                append(Icons.CROSS) { this.color = TextColor.RED }
+                            } else {
+                                append(Icons.WARNING) { this.color = TextColor.YELLOW }
+                            }
                             append(" ")
                             append(stack.hoverName)
-                        }
-                        return@forEach
-                    }
 
-                    val state = copy.toState(id)
-                    add {
-                        if (state == null || !state.childrenDone) {
-                            append(Icons.CROSS) { this.color = TextColor.RED }
-                        } else {
-                            append(Icons.WARNING) { this.color = TextColor.YELLOW }
                         }
-                        append(" ")
-                        append(stack.hoverName)
-
                     }
+                    space()
+                    Result.modified
                 }
-                space()
             }
-            if (MiscConfig.museumArmourPieces) registerComponentModifier {
-                addUntil { it.getWidth(McFont.self) <= McFont.self.width(" ") && it is ClientTextTooltip }
-                read()
-                add(
-                    InventoryTooltipComponent(
-                        itemList.map { it.second },
-                        4, true,
-                    ),
-                )
+            if (MiscConfig.museumArmourPieces) clientComponentModifier = { item, list ->
+                withComponentMerger(list) {
+                    addUntil { it.getWidth(McFont.self) <= McFont.self.width(" ") && it is ClientTextTooltip }
+                    read()
+                    add(
+                        InventoryTooltipComponent(
+                            itemList.map { it.second },
+                            4, true,
+                        ),
+                    )
+                    Result.modified
+                }
             }
         }
     }
@@ -303,38 +309,12 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
 
     override fun appliesTo(itemStack: ItemStack): Boolean = itemCache.hasValue()
 
-    override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?): Result {
-        if (item.cleanName !in modifierCache) return Result.unmodified
-        return withMerger(list) {
-            modifierCache[item.cleanName]?.first?.publicMerge(this)
-            Result.modified
-        }
+    override fun itemOverride(itemStack: ItemStack): Item? = modifierCache[itemStack]?.item
+    override fun clickAction(itemStack: ItemStack): ((Int) -> Unit?)? = modifierCache[itemStack]?.onClick
+    override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?): Result = modifierCache[item]?.componentModifier?.invoke(item, list, previousResult) ?: Result.unmodified
+    override fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>): Result = modifierCache[item]?.clientComponentModifier?.invoke(item, list) ?: Result.unmodified
+
+    override fun modified(itemStack: ItemStack, visualItem: ItemStack?) {
+        modifierCache[visualItem ?: return] = modifierCache[itemStack] ?: return
     }
-
-
-    override fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>): Result {
-        if (item.cleanName !in modifierCache) return Result.unmodified
-        return withComponentMerger(list) {
-            modifierCache[item.cleanName]?.second?.publicMerge(this)
-            Result.modified
-        }
-    }
-}
-
-private fun interface ComponentModifier {
-    fun publicMerge(merger: ListMerger<Component>) = merger.merge()
-    fun ListMerger<Component>.merge()
-}
-
-private fun interface TooltipComponentModifier {
-    fun publicMerge(merger: ListMerger<ClientTooltipComponent>) = merger.merge()
-    fun ListMerger<ClientTooltipComponent>.merge()
-}
-
-private interface ModifierBuilder {
-    var component: ComponentModifier?
-    var tooltip: TooltipComponentModifier?
-
-    fun registerModifier(component: ComponentModifier)
-    fun registerComponentModifier(modifier: TooltipComponentModifier)
 }

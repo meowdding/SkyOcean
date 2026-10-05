@@ -133,6 +133,8 @@ abstract class AbstractItemModifier {
         while (canRead()) copy()
     }
 
+    open fun modified(itemStack: ItemStack, visualItem: ItemStack?) {}
+
     /**
      * @param modified Indicates whether there was any modification made
      * @param propagateFurther If true, lower priority modifiers will get a chance to modify as well, if false, no other modifier will be called.
@@ -260,6 +262,9 @@ object ItemModifiers {
             }
         }
         modifiedItems[itemStack.getVisualItem() ?: itemStack] = usedModifiers
+        usedModifiers.forEach {
+            it.modified(itemStack, itemStack.getVisualItem())
+        }
     }
 
     context(map: MutableMap<DataMarker<*>, Any>, state: State<Boolean>, itemStack: ItemStack)
