@@ -17,6 +17,7 @@ import me.owdding.skyocean.features.item.search.search.ReferenceItemFilter
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
+import me.owdding.skyocean.features.recipe.crafthelper.data.IngredientCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperContext
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState
@@ -42,7 +43,9 @@ import me.owdding.skyocean.utils.chat.Icons
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
+import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -52,12 +55,13 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.screen.ContainerCloseEvent
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
-import tech.thatgravyboat.skyblockapi.api.item.getVisualItem
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import tech.thatgravyboat.skyblockapi.impl.ColoredItems
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -233,33 +237,39 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
 
         val itemList = items.map { it to it.toItem() }.sortedBy { (_, item) -> item.getPriority() }
         event.item.deferModifications {
+            var canBeCrafted = true
+            var hasAllItems = true
+            val extra: MutableList<MutableComponent.() -> Unit> = mutableListOf()
+            val copy = copy.snapshot()
+            itemList.forEach { (id, stack) ->
+                val take = copy.takeN(id, 1)
+                if (take.sumOf { it.amount } >= 1) {
+                    extra.add {
+                        append(Icons.CHECKMARK) { this.color = TextColor.GREEN }
+                        append(" ")
+                        append(stack.hoverName)
+                    }
+                    return@forEach
+                }
+                hasAllItems = false
+
+                val state = copy.toState(id)
+                extra.add {
+                    if (state == null || !state.childrenDone) {
+                        append(Icons.CROSS) { this.color = TextColor.RED }
+                        canBeCrafted = false
+                    } else {
+                        append(Icons.WARNING) { this.color = TextColor.YELLOW }
+                    }
+                    append(" ")
+                    append(stack.hoverName)
+
+                }
+            }
             if (MiscConfig.itemSearchMuseumIntegration) componentModifier = { _, list, _ ->
                 withMerger(list) {
                     beforeWiki()
-                    val copy = copy.snapshot()
-                    itemList.forEach { (id, stack) ->
-                        val take = copy.takeN(id, 1)
-                        if (take.sumOf { it.amount } >= 1) {
-                            add {
-                                append(Icons.CHECKMARK) { this.color = TextColor.GREEN }
-                                append(" ")
-                                append(stack.hoverName)
-                            }
-                            return@forEach
-                        }
-
-                        val state = copy.toState(id)
-                        add {
-                            if (state == null || !state.childrenDone) {
-                                append(Icons.CROSS) { this.color = TextColor.RED }
-                            } else {
-                                append(Icons.WARNING) { this.color = TextColor.YELLOW }
-                            }
-                            append(" ")
-                            append(stack.hoverName)
-
-                        }
-                    }
+                    extra.forEach { add(it) }
                     space()
                     Result.modified
                 }
@@ -275,6 +285,42 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
                         ),
                     )
                     Result.modified
+                }
+            }
+            if (MiscConfig.itemSearchMuseumIntegration) {
+                if (hasAllItems) {
+                    //? >= 26.3
+                    item = Items.CUSHION.green
+                    //? < 26.3
+                    //item = ColoredItems.GREEN_DYE
+                } else if (canBeCrafted) {
+                    //? >= 26.3
+                    item = Items.CUSHION.yellow
+                    //? < 26.3
+                    //item = ColoredItems.YELLOW_DYE
+                } else {
+                    //? >= 26.3
+                    item = Items.CUSHION.orange
+                    //? < 26.3
+                    //item = ColoredItems.ORANGE_DYE
+                }
+
+                val previous = componentModifier
+
+                componentModifier = { item, list, result ->
+                    previous.invoke(item, list, result)
+                    list.add(CommonComponents.EMPTY)
+                    list.add(Text.of("Click to set as craft helper items!") { this.color = TextColor.GREEN })
+                    Result.modified
+                }
+
+                onClick = {
+                    CraftHelperStorage.set(
+                        IngredientCraftHelperRecipe(
+                            itemList.map { SkyOceanItemIngredient(it.first) }.toMutableList()
+                        )
+                    )
+                    McScreen.refreshScreen()
                 }
             }
         }
@@ -311,8 +357,11 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
 
     override fun itemOverride(itemStack: ItemStack): Item? = modifierCache[itemStack]?.item
     override fun clickAction(itemStack: ItemStack): ((Int) -> Unit?)? = modifierCache[itemStack]?.onClick
-    override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?): Result = modifierCache[item]?.componentModifier?.invoke(item, list, previousResult) ?: Result.unmodified
-    override fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>): Result = modifierCache[item]?.clientComponentModifier?.invoke(item, list) ?: Result.unmodified
+    override fun modifyTooltip(item: ItemStack, list: MutableList<Component>, previousResult: Result?): Result =
+        modifierCache[item]?.componentModifier?.invoke(item, list, previousResult) ?: Result.unmodified
+
+    override fun appendComponents(item: ItemStack, list: MutableList<ClientTooltipComponent>): Result =
+        modifierCache[item]?.clientComponentModifier?.invoke(item, list) ?: Result.unmodified
 
     override fun modified(itemStack: ItemStack, visualItem: ItemStack?) {
         modifierCache[visualItem ?: return] = modifierCache[itemStack] ?: return
