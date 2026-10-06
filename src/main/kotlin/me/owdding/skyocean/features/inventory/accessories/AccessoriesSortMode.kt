@@ -34,11 +34,14 @@ private enum class AdditionalSortMode(comparator: Comparator<TrackedAccessory>) 
     ;
 
     companion object {
-        fun getPrice(accessory: TrackedAccessory): Long = accessory.items.minOfOrNull { item -> item.getItemValue().rawPrice.takeIf { it > 0 } ?: Long.MAX_VALUE } ?: Long.MAX_VALUE
+        fun getPrice(accessory: TrackedAccessory): Long =
+            accessory.items.minOfOrNull { item -> item.getItemValue().rawPrice.takeIf { it > 0 } ?: Long.MAX_VALUE } ?: Long.MAX_VALUE
+
         // TODO: handle accessory upgrades of recombed accessories
         private fun getAp(accessory: TrackedAccessory): Int {
             return AccessoriesAPI.getAp(accessory.items.firstOrNull() ?: return 1)
         }
+
         // TODO: handle accessory upgrades of recombed accessories?
         private fun getRarity(accessory: TrackedAccessory): SkyBlockRarity {
             return accessory.items.firstOrNull()?.getRealRarity() ?: COMMON

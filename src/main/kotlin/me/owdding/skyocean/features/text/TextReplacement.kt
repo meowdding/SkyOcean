@@ -10,7 +10,7 @@ import java.util.*
 
 @GenerateCodec
 data class TextReplacement(
-    val category: UUID?,
+    var category: UUID?,
     var key: String,
     @NamedCodec("customComponentCodec") var value: Component,
     @OptionalBoolean(true) var enabled: Boolean = true,

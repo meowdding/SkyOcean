@@ -2,12 +2,9 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.IngredientParser
-import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
-import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.contains

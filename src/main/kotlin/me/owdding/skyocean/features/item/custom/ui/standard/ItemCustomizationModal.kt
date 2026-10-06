@@ -406,7 +406,7 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                     showCloseWarning = false
                     buttonClick()
                     reset(copiedItem)
-                    McScreen.self?.onClose()
+                    McClient.setScreen(background)
                 }
             }.apply { buttons.add(this) },
 
@@ -417,8 +417,8 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                 it.withCallback {
                     buttonClick()
                     showCloseWarning = false
-                    McScreen.self?.onClose()
                     save(item, copiedItem)
+                    McClient.setScreen(background)
                 }
             }.apply { buttons.add(this) },
         )
@@ -540,12 +540,23 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                     Widgets.button().apply {
                         withTexture(UIConstants.DANGER_BUTTON)
                         withSize(80, 24)
-                        withRenderer(ExtraWidgetRenderers.text("No"))
+                        withRenderer(ExtraWidgetRenderers.text("Don't Save"))
                         withCallback {
                             buttonClick()
                             showCloseWarning = false
                             reset(copiedItem)
-                            McClient.setScreen(null)
+                            McClient.setScreen(background)
+                        }
+                    },
+                )
+                withAction(
+                    Widgets.button().apply {
+                        withTexture(UIConstants.DARK_BUTTON)
+                        withSize(80, 24)
+                        withRenderer(ExtraWidgetRenderers.text("Cancel"))
+                        withCallback {
+                            buttonClick()
+                            McScreen.self?.onClose()
                         }
                     },
                 )
@@ -553,12 +564,12 @@ class ItemCustomizationModal(val item: ItemStack, parent: Screen?) : Overlay(par
                     Widgets.button().apply {
                         withTexture(UIConstants.PRIMARY_BUTTON)
                         withSize(80, 24)
-                        withRenderer(ExtraWidgetRenderers.text("Yes"))
+                        withRenderer(ExtraWidgetRenderers.text("Save"))
                         withCallback {
                             buttonClick()
                             showCloseWarning = false
                             save(item, copiedItem)
-                            McClient.setScreen(null)
+                            McClient.setScreen(background)
                         }
                     },
                 )

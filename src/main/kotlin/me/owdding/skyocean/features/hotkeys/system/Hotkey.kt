@@ -25,8 +25,9 @@ data class Hotkey(
     var condition: HotkeyCondition,
     var name: String,
     @OptionalBoolean(true) var enabled: Boolean = true,
-    val group: UUID?,
+    var group: UUID?,
     @FieldName("created_at") val timeCreated: Long = System.currentTimeMillis(),
+    var ordering: Long = timeCreated,
 ) {
     fun isActive() = enabled && condition.test() && keybind.settings.context.isActive
 
@@ -47,6 +48,7 @@ data class Hotkey(
     }
 
     fun formatKeys(override: Boolean? = null) = formatKeys(keybind.keys, override ?: keybind.settings.orderSensitive)
+
     companion object {
         fun formatKeys(keys: List<InputConstants.Key>, orderSensitive: Boolean) = Text.join(
             keys.map {

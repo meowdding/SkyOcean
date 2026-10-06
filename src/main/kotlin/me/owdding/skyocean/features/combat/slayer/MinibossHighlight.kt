@@ -3,7 +3,6 @@ package me.owdding.skyocean.features.combat.slayer
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.combat.SlayerConfig
 import me.owdding.skyocean.helpers.glowingColor
-import me.owdding.skyocean.helpers.isGlowing
 import tech.thatgravyboat.skyblockapi.api.area.slayer.SlayerMiniBoss
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlySlayerMiniBosses
@@ -23,11 +22,10 @@ object MinibossHighlight {
 
         val entity = event.slayerInfo.entity
         if (!SlayerConfig.highlightMini) {
-            entity.isGlowing = false
+            entity.glowingColor = null
             return
         }
 
-        entity.isGlowing = true
         if (SlayerConfig.highlightBigBoys && type.isBigBoy) {
             entity.glowingColor = TextColor.DARK_RED
         } else {

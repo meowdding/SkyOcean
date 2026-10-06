@@ -17,7 +17,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
-import kotlin.collections.chunked
 
 fun Display.withTextFormattingInfo() = withTooltip {
     add("The text field below supports a some formatting tags!")
@@ -44,7 +43,7 @@ fun Display.withTextFormattingInfo() = withTooltip {
         val color = value.value
 
         text("<${name}>") {
-            this.color =color
+            this.color = color
         }
     }.chunked(5).forEach {
         add {
@@ -86,9 +85,11 @@ fun Display.withTextFormattingInfo() = withTooltip {
         append("trans ", CatppuccinColors.Mocha.green)
         append("dir", CatppuccinColors.Mocha.yellow)
         append(":<[")
-        append(GradientTextShader.Direction.entries.joinToComponent(Text.of("|", CatppuccinColors.Mocha.overlay0)) {
-            Text.of(it.toString().lowercase(), CatppuccinColors.Mocha.text)
-        })
+        append(
+            GradientTextShader.Direction.entries.joinToComponent(Text.of("|", CatppuccinColors.Mocha.overlay0)) {
+                Text.of(it.toString().lowercase(), CatppuccinColors.Mocha.text)
+            },
+        )
         append("]>")
         append(" speed", CatppuccinColors.Mocha.yellow)
         append(":")

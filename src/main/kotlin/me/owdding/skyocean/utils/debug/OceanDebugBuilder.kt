@@ -90,7 +90,7 @@ open class DebugBuilder : ApiDebugBuilder(CommonComponents.EMPTY, CommonComponen
                     }
                     clipboard = copyValue
                 },
-                copyValue
+                copyValue,
             ),
         )
     }
@@ -137,6 +137,7 @@ open class DebugBuilder : ApiDebugBuilder(CommonComponents.EMPTY, CommonComponen
                     },
                 )
             }
+
             else -> {
                 when (value) {
                     is SkyBlockId -> superValue = value.id

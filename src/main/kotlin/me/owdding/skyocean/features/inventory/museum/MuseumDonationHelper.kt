@@ -25,7 +25,9 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
-import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.*
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ARMOR_NOT_FOUND
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ITEM_NOT_FOUND
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.add
@@ -87,11 +89,13 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
         }
     override val isEnabled: Boolean = true
 
-    private context(item: ItemStack) fun registerModifier(component: ComponentModifier) {
+    context(item: ItemStack)
+    private fun registerModifier(component: ComponentModifier) {
         modifierCache[item.cleanName] = component to null
     }
 
-    private context(item: ItemStack) fun buildModifiers(init: ModifierBuilder.() -> Unit) {
+    context(item: ItemStack)
+    private fun buildModifiers(init: ModifierBuilder.() -> Unit) {
         val builder = object : ModifierBuilder {
             override var component: ComponentModifier? = null
             override var tooltip: TooltipComponentModifier? = null

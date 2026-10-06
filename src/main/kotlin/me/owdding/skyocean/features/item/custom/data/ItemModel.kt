@@ -10,12 +10,9 @@ import me.owdding.skyocean.utils.extensions.model
 import me.owdding.skyocean.utils.extensions.withModel
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
-import tech.thatgravyboat.skyblockapi.utils.builders.ItemBuilder
-import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
 import kotlin.reflect.KClass
 
 

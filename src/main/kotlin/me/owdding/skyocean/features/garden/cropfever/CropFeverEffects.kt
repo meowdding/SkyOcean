@@ -9,7 +9,6 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.garden.CropFeverEffectsConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.garden.cropfever.CoinRainOverlay.fallingCoinsList
-import me.owdding.skyocean.mixins.GameRendererAccessor
 import me.owdding.skyocean.mixins.PostChainAccessor
 import me.owdding.skyocean.mixins.PostPassAccessor
 import me.owdding.skyocean.utils.RemoteStrings
@@ -28,7 +27,6 @@ import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.location.ServerDisconnectEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.GARDEN
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
@@ -38,6 +36,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.*
 import kotlin.time.Instant
+import me.owdding.skyocean.mixins.GameRendererAccessor
 
 @Module
 object CropFeverEffects {

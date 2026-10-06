@@ -3,7 +3,6 @@ package me.owdding.skyocean.features.inventory
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import earth.terrarium.olympus.client.ui.context.ContextMenu
-import earth.terrarium.olympus.client.utils.ListenableState
 import me.owdding.ktmodules.Module
 import me.owdding.lib.builder.DisplayFactory
 import me.owdding.lib.builder.LayoutFactory
@@ -13,7 +12,6 @@ import me.owdding.lib.extensions.shorten
 import me.owdding.lib.layouts.withPadding
 import me.owdding.skyocean.config.features.inventory.SackValueConfig
 import me.owdding.skyocean.helpers.InventorySideGui
-import me.owdding.skyocean.utils.Utils.next
 import me.owdding.skyocean.utils.Utils.nextCycling
 import me.owdding.skyocean.utils.Utils.unaryMinus
 import me.owdding.skyocean.utils.chat.ChatUtils
@@ -31,14 +29,13 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.extentions.containerHeight
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
-import tech.thatgravyboat.skyblockapi.utils.extentions.parseFormattedLong
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Module
-object SackValue : InventorySideGui("inventorySideGui.sackValue.title",".* Sack|Sack of Sacks", { SackValueConfig.alignment }) {
+object SackValue : InventorySideGui("inventorySideGui.sackValue.title", ".* Sack|Sack of Sacks", { SackValueConfig.alignment }) {
 
     private const val SCROLLBAR_WIDTH = 10
     private val gemstoneLevel = listOf("ROUGH", "FLAWED", "FINE")

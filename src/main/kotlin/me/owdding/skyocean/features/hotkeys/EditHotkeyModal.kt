@@ -118,18 +118,8 @@ class EditHotkeyModal(
             this@EditHotkeyModal.action = it
             rebuildWidgets()
         }
-        if (action == null) {
-            state.registerListener {
-                callback(it.builder!!.invoke())
-            }
-            val dropdown = dropdown
-            LayoutFactory.frame(widgetContext.width) {
-                dropdown.add(middleLeft)
-            }.withTexturedBackground(widgetContext.background).add()
-        } else {
-            context(widgetContext) {
-                action.toWidget(callback).withTexturedBackground(widgetContext.background).add()
-            }
+        context(widgetContext) {
+            action.toWidget(callback).withTexturedBackground(widgetContext.background).add()
         }
         widgetContext.advance()
     }
@@ -230,11 +220,14 @@ class EditHotkeyModal(
                 LayoutFactory.vertical {
                     horizontal {
                         createText("Allow Extra Keys", CatppuccinColors.Mocha.text).withPadding(1).add(bottomLeft)
-                        createInfo(Text.of {
-                            append("Changes whether any extra keys that are unrelated to this keybind may be pressed.\n")
-                            append("If the keys are set to (a + b) pressing (a + c + b) does nothing if this setting is off.\n")
-                            append("Setting it to on however i till still find the match in (a + [ignored c] + b).")
-                        }, CatppuccinColors.Mocha.text).add()
+                        createInfo(
+                            Text.of {
+                                append("Changes whether any extra keys that are unrelated to this keybind may be pressed.\n")
+                                append("If the keys are set to (a + b) pressing (a + c + b) does nothing if this setting is off.\n")
+                                append("Setting it to on however i till still find the match in (a + [ignored c] + b).")
+                            },
+                            CatppuccinColors.Mocha.text,
+                        ).add()
                     }
                     createToggleButton(
                         allowExtraKeys,
@@ -248,10 +241,13 @@ class EditHotkeyModal(
                 LayoutFactory.vertical {
                     horizontal {
                         createText("Order Sensitive", CatppuccinColors.Mocha.text).withPadding(1).add(bottomLeft)
-                        createInfo(Text.of {
-                            append("Changes whether the order keybinds are pressed in is important.\n")
-                            append("If on pressing (a + b) is not the same as pressing (b + a).")
-                        }, CatppuccinColors.Mocha.text).add()
+                        createInfo(
+                            Text.of {
+                                append("Changes whether the order keybinds are pressed in is important.\n")
+                                append("If on pressing (a + b) is not the same as pressing (b + a).")
+                            },
+                            CatppuccinColors.Mocha.text,
+                        ).add()
                     }
                     createToggleButton(
                         orderSensitive,

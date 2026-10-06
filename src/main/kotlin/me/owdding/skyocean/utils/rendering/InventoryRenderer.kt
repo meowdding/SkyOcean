@@ -1,5 +1,14 @@
 package me.owdding.skyocean.utils.rendering
 
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
+import com.mojang.renderpearl.api.pipeline.UniformType
+import earth.terrarium.olympus.client.utils.Orientation
+import me.owdding.skyocean.SkyOcean
+import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.renderer.RenderPipelines.register
+import org.joml.Matrix3x2f
+import org.joml.Vector2i
+
 //? >= 26.2
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout
 //? 26.1 {
@@ -7,20 +16,12 @@ import com.mojang.renderpearl.api.pipeline.BindGroupLayout
 import com.mojang.renderpearl.api.pipeline.ColorTargetState
 import com.mojang.renderpearl.api.pipeline.DepthStencilState
 *///? }
-import com.mojang.renderpearl.api.pipeline.RenderPipeline
-import com.mojang.renderpearl.api.pipeline.UniformType
 //? 26.1 {
 /*import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.renderpearl.api.vertex.VertexFormat
 *///? }
-import earth.terrarium.olympus.client.utils.Orientation
-import me.owdding.skyocean.SkyOcean
-import net.minecraft.client.gui.GuiGraphicsExtractor
 //? >= 26.2
 import net.minecraft.client.renderer.RenderPipelines
-import net.minecraft.client.renderer.RenderPipelines.register
-import org.joml.Matrix3x2f
-import org.joml.Vector2i
 
 object InventoryRenderer {
 
@@ -35,9 +36,11 @@ object InventoryRenderer {
             //? < 26.3
             //.withShaderDefine("NO_LAYOUT")
             //? >= 26.2 {
-            .withBindGroupLayout(BindGroupLayout.builder()
-                .withUniform(POLY_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
-                .build())
+            .withBindGroupLayout(
+                BindGroupLayout.builder()
+                    .withUniform(POLY_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
+                    .build(),
+            )
             //?} else {
             /*.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
             .withDepthStencilState(DepthStencilState.DEFAULT)
@@ -61,9 +64,11 @@ object InventoryRenderer {
             //? < 26.3
             //.withShaderDefine("NO_LAYOUT")
             //? >= 26.2 {
-            .withBindGroupLayout(BindGroupLayout.builder()
-                .withUniform(MONO_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
-                .build())
+            .withBindGroupLayout(
+                BindGroupLayout.builder()
+                    .withUniform(MONO_UNIFORM_NAME, UniformType.UNIFORM_BUFFER)
+                    .build(),
+            )
             //?} else {
             /*.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
             .withDepthStencilState(DepthStencilState.DEFAULT)

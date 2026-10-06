@@ -1,7 +1,6 @@
 package me.owdding.skyocean.data.profile
 
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.features.recipe.Recipe
 import me.owdding.skyocean.features.recipe.RepoApiRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe

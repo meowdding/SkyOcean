@@ -30,7 +30,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.font
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.shadowColor
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Instant
@@ -138,11 +137,6 @@ internal object ChatUtils {
         this.textShader = if (useSelected) Config.prefixGradient else OceanGradients.DEFAULT
     }
 
-    fun MutableComponent.withoutShadow(): MutableComponent = this.apply {
-        this.shadowColor = null
-        this.siblings.filterIsInstance<MutableComponent>().forEach { it.withoutShadow() }
-    }
-
     fun chat(text: String, init: MutableComponent.() -> Unit = {}) = chat(Text.of(text, init))
     fun chat(text: Component) = Text.join(prefix, text).withPotentialShadow().send()
     fun chat(text: Component, id: String) = Text.join(prefix, text).withPotentialShadow().send(id)
@@ -185,9 +179,7 @@ enum class OceanGradients(val colors: List<Int>, private val shader: GradientTex
     override val id: Identifier = id("named_gradient")
     val isDisabled = this.colors.size == 1
 
-    constructor(vararg colors: Int) : this(
-        colors.toMutableList().apply { if (size > 1) addLast(first()) }
-    )
+    constructor(vararg colors: Int) : this(colors.toMutableList().apply { if (size > 1) addLast(first()) })
 
     override fun getTranslationKey() = "skyocean.gradients.${name.lowercase()}"
 

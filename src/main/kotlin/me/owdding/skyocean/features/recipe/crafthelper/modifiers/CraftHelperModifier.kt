@@ -5,15 +5,9 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
 import me.owdding.skyocean.compat.CatharsisSupport.withCatharsisId
 import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
-import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
-import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.data.profile.CraftHelperStorage.set
-import me.owdding.skyocean.features.recipe.SimpleRecipeApi
-import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.generated.SkyOceanCraftHelperModifiers
-import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
 import net.minecraft.core.component.DataComponents

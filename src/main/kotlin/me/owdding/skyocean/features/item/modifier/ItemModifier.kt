@@ -309,7 +309,7 @@ object ItemModifiers {
 
         val standardModifiers = this@ItemModifiers.modifiedItems.getOrDefault(item, emptyList())
         if (usedLoreModifiers.isEmpty() && standardModifiers.isEmpty()) {
-            return null
+            return@let null
         }
 
         when (Config.modifyIndicator) {

@@ -13,7 +13,6 @@ import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.codecs.CodecHelpers
-import me.owdding.skyocean.utils.extensions.runCatching
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow

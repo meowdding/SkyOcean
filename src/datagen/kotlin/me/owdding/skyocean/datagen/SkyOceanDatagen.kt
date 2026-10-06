@@ -5,6 +5,7 @@ import me.owdding.skyocean.datagen.dispatcher.SkyOceanDataGeneratorEntrypoint
 import me.owdding.skyocean.datagen.font.StylizedChatPrefixesFontProvider
 import me.owdding.skyocean.datagen.font.EmptyFontProvider
 import me.owdding.skyocean.datagen.font.FontIconsProvider
+import me.owdding.skyocean.datagen.font.HotkeyFontProvider
 import me.owdding.skyocean.datagen.font.MobTypesFontProvider
 import me.owdding.skyocean.features.textures.KnownMobIcon
 import me.owdding.skyocean.features.textures.MobIcons
@@ -19,6 +20,7 @@ object SkyOceanDatagen : SkyOceanDataGeneratorEntrypoint() {
         createPack.register { StylizedChatPrefixesFontProvider(it) }
         createPack.register { FontIconsProvider(it) }
         createPack.register { EmptyFontProvider(it) }
+        createPack.register { HotkeyFontProvider(it) }
         createPack.addProvider(::EntityTagProvider)
     }
 }

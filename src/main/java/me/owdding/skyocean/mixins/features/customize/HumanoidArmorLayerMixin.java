@@ -25,7 +25,7 @@ public class HumanoidArmorLayerMixin {
         at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;")
     )
     private static <T> T get(ItemStack instance, DataComponentType<T> dataComponentType, Operation<T> original) {
-        return Utils.nonNullElseGet(CustomItemsHelper.getData(instance, dataComponentType), () -> original.call(instance, dataComponentType));
+        return CustomItemsHelper.replace(instance, dataComponentType, original);
     }
 
     @WrapOperation(

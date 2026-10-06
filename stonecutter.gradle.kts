@@ -1,7 +1,6 @@
 import dev.kikugie.stonecutter.build.config.ReplacementContainer
 
 plugins {
-    id("dev.kikugie.stonecutter")
     id("net.fabricmc.fabric-loom-remap") apply false
     id("net.fabricmc.fabric-loom") apply false
 }
@@ -12,8 +11,10 @@ stonecutter parameters {
 
     swaps["mod_version"] = "\"" + property("version") + "\";"
     swaps["minecraft"] = "\"" + node.metadata.version + "\";"
-
-    filters.include("**/*.fsh", "**/*.vsh")
+    constants["renderchest"] = versionCatalogs
+        .named("libs" + current.version.replace(".", ""))
+        .findLibrary("renderchest")
+        .isPresent
 
     Replacements.read(project).replacements.forEach { (name, replacement) ->
         when (replacement) {
@@ -31,8 +32,10 @@ stonecutter parameters {
                 }
                 direction = eval(current.version, replacement.condition)
                 replace(
-                    replacement.regex to replacement.to,
-                    replacement.reverseRegex to replacement.reverse
+                    replacement.regex,
+                    replacement.to,
+                    replacement.reverseRegex,
+                    replacement.reverse
                 )
             }
         }

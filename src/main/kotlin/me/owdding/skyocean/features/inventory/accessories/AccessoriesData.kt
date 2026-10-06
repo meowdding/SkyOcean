@@ -3,7 +3,11 @@
 package me.owdding.skyocean.features.inventory.accessories
 
 import com.mojang.serialization.Codec
-import me.owdding.ktcodecs.*
+import me.owdding.ktcodecs.Compact
+import me.owdding.ktcodecs.FieldName
+import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.ktcodecs.GenerateDispatchCodec
+import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktmodules.Module
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.skyocean.SkyOcean
@@ -67,7 +71,7 @@ object AccessoriesAPI {
     private fun calculateIsDisallowedOrigin(family: AccessoryFamily): Boolean {
         return family.flatMapItems().any { id ->
             val data = ItemData.getItemData(id.skyblockId) ?: return@any false
-            when(data.origin) {
+            when (data.origin) {
                 BINGO -> true
                 RIFT -> !data.riftTransferable
                 else -> false
@@ -267,6 +271,7 @@ data class AccessoryRarityUpgraded(
 ) : Set<SkyBlockRarity> by rarities {
     fun isMax(rarity: SkyBlockRarity) = rarities.maxOrNull() == rarity
     fun nextAfter(rarity: SkyBlockRarity): SkyBlockRarity? = firstOrNull { it > rarity }
+
     companion object {
         val CODEC: Codec<AccessoryRarityUpgraded> = SkyOceanCodecs.getCodec()
     }

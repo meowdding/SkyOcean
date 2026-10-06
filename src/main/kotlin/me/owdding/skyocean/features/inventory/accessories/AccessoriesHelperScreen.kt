@@ -9,8 +9,13 @@ import me.owdding.lib.builder.LEFT
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.MIDDLE
 import me.owdding.lib.builder.RIGHT
-import me.owdding.lib.displays.*
+import me.owdding.lib.displays.Display
+import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
+import me.owdding.lib.displays.asButton
+import me.owdding.lib.displays.asWidget
+import me.owdding.lib.displays.withPadding
+import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.extensions.rightPad
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
@@ -179,7 +184,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                 return Displays.item(
                     item,
                     customStackText = (if (accessory.type == MISSING) AccessoriesHelper.AccessoryResult.MISSING
-                    else AccessoriesHelper.AccessoryResult.UPGRADE).takeUnless { it in InventoryConfig.disabledAccessoryIcons }?.component
+                    else AccessoriesHelper.AccessoryResult.UPGRADE).takeUnless { it in InventoryConfig.disabledAccessoryIcons }?.component,
                 ).withTooltip {
                     add(item.hoverName)
                     item.getLore().forEach(::add)
@@ -233,7 +238,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
             }
 
             val size = tierItems.size
-            val itemDisplay = when  {
+            val itemDisplay = when {
                 size == 0 -> return@mapNotNull null
                 size > 1 && cycling -> {
                     val itemDisplays = tierItems.map(::createItemDisplay)
@@ -242,6 +247,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                         itemDisplays[(seconds % itemDisplays.size).toInt()]
                     }
                 }
+
                 else -> createItemDisplay(tierItems.first())
             }
 
@@ -275,12 +281,15 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                         val maxWidth = tierItems.maxOf { McFont.width(it.hoverName) }
 
                         menu.add {
-                            Widgets.dropdown(dropdownState, tierItems, { it.hoverName }, { it: Button ->
-                                it.withSize(maxWidth + 20, 20)
-                            },
+                            Widgets.dropdown(
+                                dropdownState, tierItems, { it.hoverName },
+                                { it: Button ->
+                                    it.withSize(maxWidth + 20, 20)
+                                },
                                 { builder ->
                                     builder.withCallback(::setCraftHelper)
-                                })
+                                },
+                            )
                         }
 
                     }

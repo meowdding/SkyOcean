@@ -8,11 +8,11 @@ import me.owdding.skyocean.config.features.misc.MobIconsConfig
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils.visitSiblings
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener
 import net.minecraft.util.GsonHelper
@@ -20,6 +20,7 @@ import net.minecraft.util.profiling.ProfilerFiller
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.entity.EntityInfoLineEvent
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
@@ -44,7 +45,7 @@ object MobIcons {
     private val MOB_TYPES = Regex(KnownMobIcon.entries.joinToString("|") { it.icon })
 
     init {
-        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(MobIconSettingsListener)
+        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(MobIconSettingsListener.id, MobIconSettingsListener)
     }
 
     fun getSetting(icon: KnownMobIcon): MobIconSettings = settings[icon] ?: DEFAULT_SETTINGS
@@ -80,7 +81,7 @@ object MobIcons {
     }
 }
 
-private object MobIconSettingsListener : SimplePreparableReloadListener<Map<KnownMobIcon, MobIconSettings>>(), IdentifiableResourceReloadListener {
+private object MobIconSettingsListener : SimplePreparableReloadListener<Map<KnownMobIcon, MobIconSettings>>(), PreparableReloadListener {
 
     private val CODEC = CodecUtils.map(SkyOceanCodecs.getCodec<KnownMobIcon>(), SkyOceanCodecs.getCodec<MobIconSettings>())
 
@@ -100,7 +101,7 @@ private object MobIconSettingsListener : SimplePreparableReloadListener<Map<Know
         MobIcons.settings = data
     }
 
-    override fun getFabricId(): Identifier = id("mob_icon_settings")
+    val id = id("mob_icon_settings")
 
 }
 

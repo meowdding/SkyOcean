@@ -13,7 +13,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object DrillUpgradeItemSource : ItemSource {
-    private val cache = MemoizeUtil.memoize { id: SkyBlockId -> id.cleanId in SkyblockItemTagKey.DRILLS  }
+    private val cache = MemoizeUtil.memoize { id: SkyBlockId -> id.cleanId in SkyblockItemTagKey.DRILLS }
     override val type: ItemSources = ItemSources.DRILL_UPGRADE
     override fun getAll(): List<SimpleTrackedItem> = emptyList()
 

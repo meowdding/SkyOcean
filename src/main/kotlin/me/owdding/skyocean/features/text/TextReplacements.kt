@@ -1,6 +1,5 @@
 package me.owdding.skyocean.features.text
 
-import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.text_replacements.TextReplacementConfig
 import me.owdding.skyocean.features.text.MarkdownChat.toComponent
 import net.minecraft.network.chat.MutableComponent
@@ -12,7 +11,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import java.util.*
 import java.util.function.Supplier
-import kotlin.to
 
 object TextReplacements {
     const val MINUS_ONE: Short = -1

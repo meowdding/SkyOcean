@@ -38,6 +38,7 @@ import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.TagKey
@@ -112,7 +113,7 @@ object Utils {
     operator fun BlockPos.plus(vec: BlockPos): BlockPos = this.offset(vec.x, vec.y, vec.z)
 
     fun Path.readAsJson(): JsonElement = JsonParser.parseString(this.readText())
-    fun <T : JsonElement> Path.readJson(): T = this.readAsJson() as T
+    fun <T : JsonElement> Path.readJson(): T = this.readAsJson().unsafeCast()
     fun Path.writeJson(
         element: JsonElement,
         charset: Charset = Charsets.UTF_8,
@@ -229,11 +230,11 @@ object Utils {
         }
     }
 
-    operator fun <Key : Any, Value : Any> Cache<Key, Value>.get(key: Key) = this.getIfPresent(key)
+    operator fun <Key : Any, Value : Any> Cache<Key, Value>.get(key: Key): Value? = this.getIfPresent(key)
     operator fun <Key : Any, Value : Any> Cache<Key, Value>.set(key: Key, value: Value) = this.put(key, value)
 
-    fun MutableComponent.appendSafe(other: Component): MutableComponent? = (this as? SafeMutableComponentAccessor)?.`skyocean$appendSafe`(other)
-    fun MutableComponent.mutableSiblings(): MutableList<Component>? = (this as? SafeMutableComponentAccessor)?.`skyocean$mutableSiblings`()
+    fun MutableComponent.appendSafe(other: Component): MutableComponent? = this.`skyocean$appendSafe`(other)
+    fun MutableComponent.mutableSiblings(): MutableList<Component>? = this.`skyocean$mutableSiblings`()
     var MutableComponent.textContents: ComponentContents
         get() = this.contents
         set(value) {
@@ -254,7 +255,8 @@ object Utils {
     fun TooltipBuilder.copyFrom(itemStack: ItemStack) = lines().addAll(itemStack.getLore())
     fun MutableComponent.wrap(wrap: String) = this.wrap(wrap, wrap)
 
-    context(_: ItemStack) fun ItemBuilder.skyOceanIndicator() = when (Config.modifyIndicator) {
+    context(_: ItemStack)
+    fun ItemBuilder.skyOceanIndicator() = when (Config.modifyIndicator) {
         SkyOceanModifyIndicator.PREFIX -> this.namePrefix(ChatUtils.ICON_SPACE_COMPONENT)
         SkyOceanModifyIndicator.SUFFIX -> this.nameSuffix(ChatUtils.SPACE_ICON_COMPONENT)
         SkyOceanModifyIndicator.LORE -> this.alterTooltip {
@@ -276,7 +278,8 @@ object Utils {
         }
     }
 
-    context(_: ItemStack) inline fun ItemBuilder.alterTooltip(crossinline init: TooltipBuilder.() -> Unit) {
+    context(_: ItemStack)
+    inline fun ItemBuilder.alterTooltip(crossinline init: TooltipBuilder.() -> Unit) {
         this.tooltip {
             lines().addAll(this@alterTooltip.build().getLore())
             init()
@@ -310,22 +313,35 @@ object Utils {
     fun jsonObject(init: context(JsonObject) () -> Unit) = JsonObject().apply(init)
     fun jsonArray(init: context(JsonArray) () -> Unit) = JsonArray().apply(init)
 
-    context(parent: JsonObject) fun putString(property: String, value: String) = parent.addProperty(property, value)
-    context(parent: JsonObject) fun putNumber(property: String, value: Number) = parent.addProperty(property, value)
-    context(parent: JsonObject) fun putBoolean(property: String, value: Boolean) = parent.addProperty(property, value)
-    context(parent: JsonObject) fun putChar(property: String, value: Char) = parent.addProperty(property, value)
-    context(parent: JsonObject) fun putElement(property: String, value: JsonElement) = parent.add(property, value)
+    context(parent: JsonObject)
+    fun putString(property: String, value: String) = parent.addProperty(property, value)
+    context(parent: JsonObject)
+    fun putNumber(property: String, value: Number) = parent.addProperty(property, value)
+    context(parent: JsonObject)
+    fun putBoolean(property: String, value: Boolean) = parent.addProperty(property, value)
+    context(parent: JsonObject)
+    fun putChar(property: String, value: Char) = parent.addProperty(property, value)
+    context(parent: JsonObject)
+    fun putElement(property: String, value: JsonElement) = parent.add(property, value)
 
-    context(parent: JsonArray) fun putString(value: String) = parent.add(value)
-    context(parent: JsonArray) fun putNumber(value: Number) = parent.add(value)
-    context(parent: JsonArray) fun putBoolean(value: Boolean) = parent.add(value)
-    context(parent: JsonArray) fun putChar(value: Char) = parent.add(value)
+    context(parent: JsonArray)
+    fun putString(value: String) = parent.add(value)
+    context(parent: JsonArray)
+    fun putNumber(value: Number) = parent.add(value)
+    context(parent: JsonArray)
+    fun putBoolean(value: Boolean) = parent.add(value)
+    context(parent: JsonArray)
+    fun putChar(value: Char) = parent.add(value)
 
-    context(parent: JsonArray) fun putArray(init: context(JsonArray) () -> Unit) = parent.add(JsonArray().apply(init))
-    context(parent: JsonObject) fun putArray(property: String, init: context(JsonArray) () -> Unit) = parent.add(property, JsonArray().apply(init))
+    context(parent: JsonArray)
+    fun putArray(init: context(JsonArray) () -> Unit) = parent.add(JsonArray().apply(init))
+    context(parent: JsonObject)
+    fun putArray(property: String, init: context(JsonArray) () -> Unit) = parent.add(property, JsonArray().apply(init))
 
-    context(parent: JsonArray) fun putObject(init: context(JsonObject) () -> Unit) = parent.add(JsonObject().apply(init))
-    context(parent: JsonObject) fun putObject(property: String, init: context(JsonObject) () -> Unit) = parent.add(property, JsonObject().apply(init))
+    context(parent: JsonArray)
+    fun putObject(init: context(JsonObject) () -> Unit) = parent.add(JsonObject().apply(init))
+    context(parent: JsonObject)
+    fun putObject(property: String, init: context(JsonObject) () -> Unit) = parent.add(property, JsonObject().apply(init))
 
     fun List<Slot>.container() = this.filterNot { it.container is Inventory }
     fun List<Slot>.containerItems() = this.filterNot { it.container is Inventory }.map { it.item }
@@ -411,6 +427,13 @@ object Utils {
     inline fun <T : Any> MeowddingStorageData<T>.edit(block: T.() -> Unit) {
         get().block()
         save()
+    }
+
+    fun ClientboundLevelParticlesPacket.hasMaxSpeed(speed: Float): Boolean {
+        //? if >= 26.3
+        return this.xMaxSpeed == speed && this.yMaxSpeed == speed && this.zMaxSpeed == speed
+        //? else
+        // return this.maxSpeed == speed
     }
 }
 

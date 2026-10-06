@@ -20,5 +20,6 @@ fun Vector3f.horizontalDistance(other: Vec3): Float {
     val dz = this.z - other.z.toFloat()
     return sqrt(dx * dx + dz * dz)
 }
+
 fun Vector3f.verticalDistance(other: Vec3): Float = abs(this.y - other.y.toFloat())
 fun Vector3f.toBlockPos() = BlockPos(x.floor(), y.floor(), z.floor())

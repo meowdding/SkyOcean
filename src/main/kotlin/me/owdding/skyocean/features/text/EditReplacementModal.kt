@@ -14,21 +14,16 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.layouts.withPadding
-import me.owdding.lib.rendering.text.textShader
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.features.hotkeys.ShowMessageModal
 import me.owdding.skyocean.features.item.custom.ui.standard.HEADER_HEIGHT
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
-import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.CatppuccinColors
-import me.owdding.skyocean.utils.chat.OceanColors
-import me.owdding.skyocean.utils.chat.OceanGradients
 import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.bottomLeft
 import me.owdding.skyocean.utils.extensions.createButton
 import me.owdding.skyocean.utils.extensions.createIntInput
-import net.minecraft.network.chat.TextColor as McTextColor
 import me.owdding.skyocean.utils.extensions.createText
 import me.owdding.skyocean.utils.extensions.createTextInput
 import me.owdding.skyocean.utils.extensions.createToggleButton
@@ -38,7 +33,6 @@ import me.owdding.skyocean.utils.extensions.middleRight
 import me.owdding.skyocean.utils.extensions.withPadding
 import me.owdding.skyocean.utils.extensions.withTextFormattingInfo
 import me.owdding.skyocean.utils.rendering.ExtraWidgetRenderers
-import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout
@@ -51,13 +45,8 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
-import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 
 class EditReplacementModal(
     val parent: Screen?,

@@ -1,6 +1,5 @@
 package me.owdding.skyocean.features.misc
 
-import com.mojang.authlib.properties.Property
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
@@ -12,9 +11,8 @@ import tech.thatgravyboat.skyblockapi.api.area.hub.ElectionAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
-import tech.thatgravyboat.skyblockapi.api.remote.RepoMobsAPI
+import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockMobsRepo
 import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
-import tech.thatgravyboat.skyblockapi.platform.ResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
@@ -34,18 +32,13 @@ object MinisterInCalendar {
             return
         }
         val minister = ElectionAPI.minister ?: return
-        val texture = RepoMobsAPI.getMobOrNull("${minister.candidateName}_MAYOR")?.texture() ?: return
+        val texture = SkyBlockMobsRepo.getLazyItemStack("${minister.candidateName}_MAYOR")?.get(DataComponents.PROFILE) ?: return
 
         event.item.disableCatharsisModifications()
         event.item.skyoceanReplace {
             item = Items.PLAYER_HEAD
 
-            set(
-                DataComponents.PROFILE,
-                ResolvableProfile {
-                    put("textures", Property("textures", texture))
-                },
-            )
+            set(DataComponents.PROFILE, texture)
 
             name(
                 Text.of("Minister ${minister.candidateName}") {

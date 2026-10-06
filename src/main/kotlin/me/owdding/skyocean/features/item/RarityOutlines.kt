@@ -3,7 +3,6 @@ package me.owdding.skyocean.features.item
 import com.mojang.blaze3d.buffers.Std140Builder
 import com.mojang.blaze3d.buffers.Std140SizeCalculator
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.renderpearl.api.buffers.GpuBuffer
 import com.mojang.renderpearl.api.pipeline.BlendFunction
 import com.mojang.renderpearl.api.pipeline.ColorTargetState
@@ -26,6 +25,7 @@ import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
 import java.util.*
 import java.util.function.BiFunction
+import com.mojang.blaze3d.vertex.DefaultVertexFormat
 
 //? >= 26.2 {
 import com.mojang.renderpearl.api.pipeline.PrimitiveTopology

@@ -15,7 +15,6 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
-import kotlin.text.decodeToString
 
 object HotkeyUtils {
     const val DATA_PREFIX = "<skyocean:keybinds>"
