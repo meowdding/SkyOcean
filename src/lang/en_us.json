@@ -686,10 +686,6 @@
           "@value": "Previous Server Time",
           "desc": "The time a server is cached and shows up as previously joined."
         },
-        "hideLightning": {
-          "@value": "Hide Lightning",
-          "desc": "Hides lightning bolts and sky flash effect."
-        },
         "fullTextShadow": {
           "@value": "Full Text Shadow",
           "desc": [
@@ -705,26 +701,6 @@
         "totemAnimation": {
           "@value": "Totem Animation",
           "desc": "Plays the Totem of Undying animation when an invulnerability item (like the Bonzo Mask) is used up."
-        },
-        "islandCloudHider": {
-          "@value": "Island Cloud Hider",
-          "desc": [
-            "Specify what island shouldn't render Clouds.",
-            "Useful for islands like the Dwarven Mines where clouds can be annoying."
-          ],
-          "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
-        },
-        "netherFogDarkening": {
-          "@value": "Nether Fog Darkening",
-          "desc": "Darkens the Crimson Isle sky. Only has an effect with Night Vision.",
-          "warning": "<yellow>SkyOcean now darkens Crimson Isle's sky! You can disable it in the misc config by searching <gold>Nether Fog Darkening</gold>."
-        },
-        "netherFogScale": {
-          "@value": "Nether Fog Scale",
-          "desc": [
-            "How bright the Crimson Isle sky should be.",
-            "<yellow>Requires Nether Fog Darkening to be enabled!</yellow>"
-          ]
         },
         "customization_vanilla_integration": {
           "@value": "Animate dyes and skins in inventories",
@@ -2022,6 +1998,30 @@
         }
       },
       "environmental": {
+        "hideLightning": {
+          "@value": "Hide Lightning",
+          "desc": "Hides lightning bolts and sky flash effect."
+        },
+        "islandCloudHider": {
+          "@value": "Island Cloud Hider",
+          "desc": [
+            "Specify what island shouldn't render Clouds.",
+            "Useful for islands like the Dwarven Mines where clouds can be annoying."
+          ],
+          "warning": "<yellow>SkyOcean hides clouds on this island by default, if you wish to change this open the config and search for <gold>Island Cloud Hider</gold>!"
+        },
+        "netherFogDarkening": {
+          "@value": "Nether Fog Darkening",
+          "desc": "Darkens the Crimson Isle sky. Only has an effect with Night Vision.",
+          "warning": "<yellow>SkyOcean now darkens Crimson Isle's sky! You can disable it in the misc config by searching <gold>Nether Fog Darkening</gold>."
+        },
+        "netherFogScale": {
+          "@value": "Nether Fog Scale",
+          "desc": [
+            "How bright the Crimson Isle sky should be.",
+            "<yellow>Requires Nether Fog Darkening to be enabled!</yellow>"
+          ]
+        },
         "weather": {
           "@value": "Weather",
           "desc": "Customize settings about the weather",

@@ -2,26 +2,15 @@ package me.owdding.skyocean.config.features.misc
 
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.lib.utils.KnownMods
-import me.owdding.skyocean.config.defaultEnabledMessage
 import me.owdding.skyocean.config.duration
 import me.owdding.skyocean.config.features.inventory.SackValueConfig
 import me.owdding.skyocean.config.separator
 import me.owdding.skyocean.features.item.search.highlight.ItemHighlightMode
 import me.owdding.skyocean.utils.MinecraftColor
-import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.transparency
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.CRYSTAL_HOLLOWS
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.Companion.inAnyIsland
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.DUNGEON_HUB
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.DWARVEN_MINES
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.KUUDRA
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.MINESHAFT
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.THE_CATACOMBS
 import kotlin.time.DurationUnit.SECONDS
 
 object MiscConfig : CategoryKt("misc") {
-    private val defaultCloudIslands = listOf(DWARVEN_MINES, CRYSTAL_HOLLOWS, MINESHAFT, THE_CATACOMBS, DUNGEON_HUB, KUUDRA)
     override val name get() = Translated("skyocean.config.misc")
 
     var ministerInCalendar by boolean(true) {
@@ -61,11 +50,6 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.quickJoinIp"
     }
 
-    // TODO: move into environmental config
-    var hideLightning by boolean(false) {
-        translation = "skyocean.config.misc.hideLightning"
-    }
-
     var fullTextShadow by boolean(false) {
         translation = "skyocean.config.misc.fullTextShadow"
     }
@@ -82,18 +66,6 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.hideImplosions"
     }
 
-    // TODO: move into environmental config
-    var islandCloudHider by defaultEnabledMessage(
-        select(*defaultCloudIslands.toTypedArray()) {
-            translation = "skyocean.config.misc.islandCloudHider"
-        },
-        { +"skyocean.config.misc.islandCloudHider.warning" },
-        "islandCloudHider",
-        predicate = { inAnyIsland(defaultCloudIslands) },
-    )
-
-    val shouldHideClouds get() = SkyBlockIsland.inAnyIsland(islandCloudHider.toList())
-
     var museumArmourPieces by boolean(true) {
         translation = "skyocean.config.misc.museumArmourPieces"
     }
@@ -109,22 +81,6 @@ object MiscConfig : CategoryKt("misc") {
 
     var queueEstimation by boolean(true) {
         translation = "skyocean.config.misc.queueEstimation"
-    }
-
-    // TODO: move into environmental config
-    var netherFogDarkening by defaultEnabledMessage(
-        boolean(true) {
-            translation = "skyocean.config.misc.netherFogDarkening"
-        },
-        { +"skyocean.config.misc.netherFogDarkening.warning" }, "netherFogDarkening",
-        predicate = { SkyBlockIsland.CRIMSON_ISLE.inIsland() },
-    )
-
-    // TODO: move into environmental config
-    var netherFogScale by float(0.25f) {
-        translation = "skyocean.config.misc.netherFogScale"
-        slider = true
-        range = 0f..1f
     }
 
     var ratHitbox by boolean(false) {

@@ -1,5 +1,6 @@
 package me.owdding.skyocean.mixins.features.hidelightning;
 
+import me.owdding.skyocean.config.features.environmental.EnvironmentalConfig;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.multiplayer.ClientLevel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +13,7 @@ public class ClientLevelMixin {
 
     @Inject(method = "setSkyFlashTime", at = @At("HEAD"), cancellable = true)
     private void setSkyFlashTime(CallbackInfo ci) {
-        if (MiscConfig.INSTANCE.getHideLightning()) {
+        if (EnvironmentalConfig.INSTANCE.getHideLightning()) {
             ci.cancel();
         }
     }
