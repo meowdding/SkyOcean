@@ -24,6 +24,13 @@ object EnvironmentalConfig : CategoryKt("environmental") {
         }
     }
 
+    var alertOtherIslands by boolean(false) {
+        this.translation = "alert_other_islands"
+    }
+
+    var weatherTitleAlert by boolean(true) {
+        this.translation = "$baseTranslation.weather_title_alert"
+    }
 
 
 }

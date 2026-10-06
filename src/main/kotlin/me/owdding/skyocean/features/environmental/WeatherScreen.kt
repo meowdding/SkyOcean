@@ -16,6 +16,7 @@ import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withTooltip
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.data.profile.WeatherAlertStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
@@ -159,28 +160,33 @@ class WeatherScreen : SkyOceanScreen() {
                             vertical(alignment = MIDDLE) {
                                 spacer(width = cardWidth, height = 6)
 
-                                display(Displays.text(Text.of(group.island.toString(), TextColor.YELLOW)))
+                                display(Displays.text(Text.of(group.formattedName, TextColor.YELLOW)))
 
                                 spacer(height = 10)
 
-                                // TODO: current/next string
-                                if (WeatherAPI.isActive) {
+                                val (title, event) = if (WeatherAPI.isActive) {
                                     val event = when (WeatherAPI.currentIntensity) {
                                         WeatherIntensity.EXTREME -> group.extreme
                                         else -> group.mild
                                     }
-                                    widget(
-                                        Displays.text(Text.of(event.type.icon.toString(), event.type.color))
-                                            .withTooltip(buildBonusTooltip(event))
-                                            .asButtonLeft {
-                                                // TODO: reminder adding
-                                            },
-                                    )
-
-                                    spacer(height = 6)
-
-                                    display(Displays.text(Text.of(event.type.weatherName, TextColor.WHITE)))
+                                    "Current" to event
+                                } else {
+                                    val event = when (WeatherAPI.nextIntensity) {
+                                        WeatherIntensity.EXTREME -> group.extreme
+                                        else -> group.mild
+                                    }
+                                    "Next" to event
                                 }
+
+                                display(Displays.text(Text.of(title)))
+                                spacer(height = 6)
+                                widget(
+                                    Displays.text(Text.of(event.type.icon.toString(), event.type.color))
+                                        .withTooltip(buildBonusTooltip(event))
+                                        .asButtonLeft { onButtonPress(group, event) },
+                                )
+                                spacer(height = 6)
+                                display(Displays.text(Text.of(event.type.weatherName, TextColor.WHITE)))
 
                                 spacer(height = 12)
 
@@ -196,17 +202,13 @@ class WeatherScreen : SkyOceanScreen() {
                                     widget(
                                         Displays.text(Text.of(group.mild.type.icon.toString(), group.mild.type.color))
                                             .withTooltip(buildBonusTooltip(group.mild))
-                                            .asButtonLeft {
-                                                // TODO: reminder adding
-                                            },
+                                            .asButtonLeft { onButtonPress(group, group.mild) },
                                     )
                                     spacer(width = 20)
                                     widget(
                                         Displays.text(Text.of(group.extreme.type.icon.toString(), group.extreme.type.color))
                                             .withTooltip(buildBonusTooltip(group.extreme))
-                                            .asButtonLeft {
-                                                // TODO: reminder adding
-                                            },
+                                            .asButtonLeft { onButtonPress(group, group.extreme) },
                                     )
                                 }
                             }
@@ -218,6 +220,15 @@ class WeatherScreen : SkyOceanScreen() {
             }
         }.asScrollable(listWidth, listHeight).add {
             alignHorizontallyCenter()
+        }
+    }
+
+    private fun onButtonPress(group: WeatherGroup, event: WeatherEvent) {
+        val enabled = WeatherAlertStorage.toggleAlert(group, event.intensity)
+        if (enabled) {
+            Text.of("Added reminder for ${group.island} ${event.intensity.displayName}!", TextColor.GREEN).sendWithPrefix()
+        } else {
+            Text.of("Removed reminder for ${group.island} ${event.intensity.displayName}.", TextColor.RED).sendWithPrefix()
         }
     }
 
@@ -291,13 +302,14 @@ class WeatherScreen : SkyOceanScreen() {
                     )
                 }
 
-                if (event.specialEffect != null)
+                event.specialEffect?.let {
                     add(
                         Text.of {
                             append(" • ", TextColor.DARK_GRAY)
-                            append(event.specialEffect)
+                            append(it)
                         },
                     )
+                }
                 add(CommonText.EMPTY)
                 add(Text.of("Click to toggle reminder!", TextColor.YELLOW))
             },
@@ -317,14 +329,16 @@ class WeatherScreen : SkyOceanScreen() {
                     "add group"(EnumArgument<WeatherGroup>()) {
                         "intensity"(EnumArgument<WeatherIntensity>()) {
                             execute { group, intensity ->
-                                Text.of("add $group $intensity").sendWithPrefix()
+                                WeatherAlertStorage.addAlert(group, intensity)
+                                Text.of("Added reminder for $group $intensity").sendWithPrefix()
                             }
                         }
                     }
                     "remove group"(EnumArgument<WeatherGroup>()) {
                         "intensity"(EnumArgument<WeatherIntensity>()) {
                             execute { group, intensity ->
-                                Text.of("remove $group $intensity").sendWithPrefix()
+                                WeatherAlertStorage.removeAlert(group, intensity)
+                                Text.of("Removed reminder for $group $intensity").sendWithPrefix()
                             }
                         }
                     }

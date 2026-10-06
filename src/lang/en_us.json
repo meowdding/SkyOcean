@@ -2021,6 +2021,25 @@
           "desc": "Opens the hotkey edit screen."
         }
       },
+      "environmental": {
+        "weather": {
+          "@value": "Weather",
+          "desc": "Customize settings about the weather",
+          "button": {
+            "text": "Open",
+            "title": "Open the SkyOcean Weather Report",
+            "desc": "Opens the Weather Report Screen where you can add/remove reminders about specific weather."
+          },
+          "alert_other_islands": {
+            "@value": "Alert on other Islands",
+            "desc": "Weather reminders work on Weather that happens on other SkyBlock Islands"
+          },
+          "weather_title_alert": {
+            "@value": "Alert Title",
+            "desc": "Sends a title with the chat alert about the weather."
+          }
+        }
+      },
       "text_replacements": {
         "@value": "Text Replacements",
         "enabled": {
