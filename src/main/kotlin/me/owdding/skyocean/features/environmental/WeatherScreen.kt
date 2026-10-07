@@ -102,35 +102,28 @@ class WeatherScreen : SkyOceanScreen() {
 
                 vertical(alignment = LEFT) {
                     display(Displays.text(Text.of("Hypixel SkyBlock", TextColor.WHITE)))
-                    horizontal {
+                    horizontal(alignment = MIDDLE) {
                         display(Displays.text(Text.of("Extended $foreCastType", TextColor.GOLD)))
-                        spacer(width = 10)
-                        widget(
-                            Widgets.text(
-                                Text.of("Brought to you by: ") {
-                                    color = TextColor.WHITE
-                                    append(Text.player(ResolvableProfile.createUnresolved(UUID.fromString("2c3c97d7-2b1c-4355-b856-dae991ddf5db")))) {
-                                        hover = Text.of("ALAND_", TextColor.RED)
-                                    }
-                                    append(" & ")
-                                    append(
-                                        Text.player(
-                                            GameProfile {
-                                                put(
-                                                    "textures",
-                                                    Property(
-                                                        "textures",
-                                                        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGViMmU0ZGIzYmNmYjA1MDNmMWZmZmIzMzk4ODhlNWQ0MzIzOThiMjc2OTljNWExYTFjZDgwNzljOGQ5N2QifX19",
-                                                    ),
-                                                )
-                                            }.toResolvableProfile(),
-                                        ),
-                                    ) {
-                                        hover = Text.of("Sunny", TextColor.GOLD)
-                                    }
-                                },
-                            ) { it.withShadow() },
-                        )
+
+                        // Hide the more useless element if the screen space isn't enough
+                        if (frameWidth >= 550) {
+                            spacer(width = 10)
+                            display(Displays.text(Text.of("Brought to you by: ", TextColor.WHITE)))
+
+                            widget(
+                                Displays.text(Text.player(ResolvableProfile.createUnresolved(ALAND)))
+                                    .withTooltip(Text.of("ALAND_", TextColor.RED))
+                                    .asWidget(),
+                            )
+
+                            display(Displays.text(Text.of(" & ", TextColor.WHITE)))
+
+                            widget(
+                                Displays.text(Text.player(GameProfile { put("textures", Property("textures", SUNNY)) }.toResolvableProfile()))
+                                    .withTooltip(Text.of("Sunny", TextColor.GOLD))
+                                    .asWidget(),
+                            )
+                        }
                     }
                 }
 
@@ -318,6 +311,10 @@ class WeatherScreen : SkyOceanScreen() {
 
     @Module
     companion object {
+        private const val SUNNY =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGViMmU0ZGIzYmNmYjA1MDNmMWZmZmIzMzk4ODhlNWQ0MzIzOThiMjc2OTljNWExYTFjZDgwNzljOGQ5N2QifX19"
+        private val ALAND = UUID.fromString("2c3c97d7-2b1c-4355-b856-dae991ddf5db")
+
         @Subscription
         fun onCommand(event: RegisterSkyOceanCommandEvent) {
             event.command("weather") {
