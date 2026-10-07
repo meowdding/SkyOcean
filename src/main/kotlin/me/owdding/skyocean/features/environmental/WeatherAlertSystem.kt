@@ -15,16 +15,31 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.regex.Regexes.group
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.command
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 
 @Module
 object WeatherAlertSystem {
+
+    // TODO: smth in sbapi?
+    private val warps = mapOf(
+        WeatherGroup.DWARVEN_MINES to "mines",
+        WeatherGroup.CRYSTAL_HOLLOWS to "nucleus",
+        WeatherGroup.GLACITE_TUNNELS to "tunnels",
+        WeatherGroup.SPIDERS_DEN to "spider",
+        WeatherGroup.THE_END to "end",
+        WeatherGroup.CRIMSON_ISLE to "isle",
+        WeatherGroup.MOONGLADE_MARSH to "moonglade",
+        WeatherGroup.BACKWATER_BAYOU to "bayou",
+        WeatherGroup.LOTUS_ATOLL to "lotus",
+        WeatherGroup.GARDEN to "garden",
+        WeatherGroup.JERRYS_WORKSHOP to "savethejerrys",
+    )
 
     private val alertedGroups = mutableSetOf<WeatherGroup>()
     private var wasActive = false
@@ -71,6 +86,9 @@ object WeatherAlertSystem {
                 append(" weather event has started in ")
                 append(group.formattedName, TextColor.GOLD)
                 append("!")
+
+                hover = Text.of("Click to warp", TextColor.GRAY)
+                command = group.warp()
             }.sendWithPrefix("skyocean-weather-alert")
         } else {
             Text.of {
@@ -82,7 +100,8 @@ object WeatherAlertSystem {
                         val event = if (intensity == WeatherIntensity.EXTREME) it.extreme else it.mild
                         Text.of(it.formattedName) {
                             color = TextColor.GOLD
-                            hover = event.type.component
+                            hover = Text.multiline(event.type.component, "", Text.of("Click to warp", TextColor.GRAY))
+                            command = it.warp()
                         }
                     },
                 )
@@ -102,5 +121,10 @@ object WeatherAlertSystem {
         }
 
         McClient.playSound(SoundEvents.NOTE_BLOCK_PLING.value(), 1f, 1f)
+    }
+
+    private fun WeatherGroup.warp(): String = when (this) {
+        WeatherGroup.JERRYS_WORKSHOP -> "savethejerrys"
+        else -> "warp ${warps[this]}"
     }
 }
