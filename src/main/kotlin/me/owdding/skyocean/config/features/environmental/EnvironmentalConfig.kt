@@ -21,12 +21,12 @@ object EnvironmentalConfig : CategoryKt("environmental") {
     private val defaultCloudIslands = listOf(DWARVEN_MINES, CRYSTAL_HOLLOWS, MINESHAFT, THE_CATACOMBS, DUNGEON_HUB, KUUDRA)
 
     var hideLightning by boolean(false) {
-        translation = "skyocean.config.misc.hideLightning"
+        translation = "hideLightning"
     }
 
     var islandCloudHider by defaultEnabledMessage(
         select(*defaultCloudIslands.toTypedArray()) {
-            translation = "skyocean.config.misc.islandCloudHider"
+            translation = "islandCloudHider"
         },
         { +"skyocean.config.misc.islandCloudHider.warning" },
         "islandCloudHider",
@@ -36,7 +36,7 @@ object EnvironmentalConfig : CategoryKt("environmental") {
 
     var netherFogDarkening by defaultEnabledMessage(
         boolean(true) {
-            translation = "skyocean.config.misc.netherFogDarkening"
+            translation = "netherFogDarkening"
         },
         { +"skyocean.config.misc.netherFogDarkening.warning" }, "netherFogDarkening",
         predicate = { SkyBlockIsland.CRIMSON_ISLE.inIsland() },
@@ -64,11 +64,11 @@ object EnvironmentalConfig : CategoryKt("environmental") {
     }
 
     var alertOtherIslands by boolean(false) {
-        this.translation = "alert_other_islands"
+        this.translation = "weather.alert_other_islands"
     }
 
     var weatherTitleAlert by boolean(true) {
-        this.translation = "$baseTranslation.weather_title_alert"
+        this.translation = "weather.weather_title_alert"
     }
 
 

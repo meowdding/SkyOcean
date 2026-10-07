@@ -1998,6 +1998,8 @@
         }
       },
       "environmental": {
+        "@value": "Environmental",
+
         "hideLightning": {
           "@value": "Hide Lightning",
           "desc": "Hides lightning bolts and sky flash effect."
