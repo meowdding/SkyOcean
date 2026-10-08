@@ -292,17 +292,17 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
                     //? >= 26.3
                     item = Items.CUSHION.green
                     //? < 26.3
-                    //item = ColoredItems.GREEN_DYE
+                    //item = Items.GREEN_DYE
                 } else if (canBeCrafted) {
                     //? >= 26.3
                     item = Items.CUSHION.yellow
                     //? < 26.3
-                    //item = ColoredItems.YELLOW_DYE
+                    //item = Items.YELLOW_DYE
                 } else {
                     //? >= 26.3
                     item = Items.CUSHION.orange
                     //? < 26.3
-                    //item = ColoredItems.ORANGE_DYE
+                    //item = Items.ORANGE_DYE
                 }
 
                 val previous = componentModifier
