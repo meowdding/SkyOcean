@@ -101,7 +101,7 @@ private fun <Uniform : RenderPipelineUniforms> submit(
             //? }
 
             bufferBuilder.addVertex(0f, 0f, 0f).setUv(0f, 0f).setColor(color)
-            bufferBuilder.addVertex(0f, width, 0f).setUv(0f, 1f).setColor(color)
+            bufferBuilder.addVertex(0f, height, 0f).setUv(0f, 1f).setColor(color)
             bufferBuilder.addVertex(width, height, 0f).setUv(1f, 1f).setColor(color)
             bufferBuilder.addVertex(width, 0f, 0f).setUv(1f, 0f).setColor(color)
 

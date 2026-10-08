@@ -11,6 +11,10 @@ stonecutter parameters {
 
     swaps["mod_version"] = "\"" + property("version") + "\";"
     swaps["minecraft"] = "\"" + node.metadata.version + "\";"
+    constants["renderchest"] = versionCatalogs
+        .named("libs" + current.version.replace(".", ""))
+        .findLibrary("renderchest")
+        .isPresent
 
     Replacements.read(project).replacements.forEach { (name, replacement) ->
         when (replacement) {

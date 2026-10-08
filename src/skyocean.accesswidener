@@ -19,8 +19,5 @@ accessible field net/minecraft/client/particle/Particle x D
 accessible field net/minecraft/client/particle/Particle y D
 accessible field net/minecraft/client/particle/Particle z D
 
-# 26.1
-accessible field net/minecraft/client/renderer/block/FluidStateModelSet WATER_MODEL Lnet/minecraft/client/renderer/block/FluidModel$Unbaked;
-
 inject-interface net/minecraft/client/gui/screens/inventory/AbstractRecipeBookScreen me/owdding/skyocean/accessors/AbstractRecipeBookScreenAccessor
 inject-interface net/minecraft/network/chat/MutableComponent me/owdding/skyocean/accessors/SafeMutableComponentAccessor
