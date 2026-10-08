@@ -237,7 +237,7 @@ class WeatherScreen : SkyOceanScreen() {
                 setSize(frameWidth - 20, 20)
                 withTexture(null)
                 withRenderer { graphics, widget, ticks ->
-                    val regionName = WeatherGroup.getCurrentGroup()?.island?.toString() ?: "None"
+                    val regionName = WeatherGroup.getCurrentGroup()?.formattedName ?: "None"
                     val isActive = WeatherAPI.isActive
                     val intensity = WeatherAPI.currentIntensity?.component ?: Text.of("None")
                     val event = WeatherAPI.currentEvent?.type?.component ?: Text.of("Clear")
