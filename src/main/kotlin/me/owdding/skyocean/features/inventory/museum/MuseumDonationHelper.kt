@@ -153,7 +153,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
                 this.item = Items.DYE.green()
                 componentModifier = { _, list, _ ->
                     withMerger(list) {
-                        
+                        addRemaining()
                         add("This item was found on your profile!") { this.color = TextColor.GREEN }
                         space()
                         addAll(items.first().context.collectLines())
@@ -177,9 +177,8 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
 
                 componentModifier = { _, list, _ ->
                     withMerger(list) {
-                        
+                        addRemaining()
                         add("No recipe found for item!") { this.color = TextColor.RED }
-                        space()
                         Result.modified
                     }
                 }
@@ -190,7 +189,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
                 this.item = Items.DYE.yellow()
                 componentModifier = { _, list, _ ->
                     withMerger(list) {
-                        
+                        addRemaining()
                         add("You have all materials to craft this item!") { this.color = TextColor.GREEN }
                         add("Click to set as craft helper item!") { this.color = TextColor.GREEN }
                         skipRemaining()
@@ -201,7 +200,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
                 this.item = Items.DYE.orange()
                 componentModifier = { _, list, _ ->
                     withMerger(list) {
-                        
+                        addRemaining()
                         add("This item can be crafted!") { this.color = TextColor.GRAY }
                         add("Click to set as craft helper item!") { this.color = TextColor.YELLOW }
                         skipRemaining()
@@ -265,9 +264,8 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
             }
             if (MiscConfig.itemSearchMuseumIntegration) componentModifier = { _, list, _ ->
                 withMerger(list) {
-                    
+                    addRemaining()
                     extra.forEach { add(it) }
-                    space()
                     Result.modified
                 }
             }
