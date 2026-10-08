@@ -38,7 +38,6 @@ object WeatherAlertSystem {
         WeatherGroup.BACKWATER_BAYOU to "bayou",
         WeatherGroup.LOTUS_ATOLL to "lotus",
         WeatherGroup.GARDEN to "garden",
-        WeatherGroup.JERRYS_WORKSHOP to "savethejerrys",
     )
 
     private val alertedGroups = mutableSetOf<WeatherGroup>()

@@ -19,6 +19,8 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.data.profile.WeatherAlertStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.utils.SkyOceanScreen
+import me.owdding.skyocean.utils.Utils.refreshScreen
+import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.extensions.asScrollable
 import net.minecraft.network.chat.Component
@@ -31,6 +33,7 @@ import tech.thatgravyboat.skyblockapi.api.environmental.WeatherGroup
 import tech.thatgravyboat.skyblockapi.api.environmental.WeatherIntensity
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.GameProfile
 import tech.thatgravyboat.skyblockapi.platform.toResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.command.EnumArgument
@@ -175,7 +178,7 @@ class WeatherScreen : SkyOceanScreen() {
                                 spacer(height = 6)
                                 widget(
                                     Displays.text(Text.of(event.type.icon.toString(), event.type.color))
-                                        .withTooltip(buildBonusTooltip(event))
+                                        .withTooltip(buildBonusTooltip(group, event))
                                         .asButtonLeft { onButtonPress(group, event) },
                                 )
                                 spacer(height = 6)
@@ -194,13 +197,13 @@ class WeatherScreen : SkyOceanScreen() {
                                 horizontal(alignment = MIDDLE) {
                                     widget(
                                         Displays.text(Text.of(group.mild.type.icon.toString(), group.mild.type.color))
-                                            .withTooltip(buildBonusTooltip(group.mild))
+                                            .withTooltip(buildBonusTooltip(group, group.mild))
                                             .asButtonLeft { onButtonPress(group, group.mild) },
                                     )
                                     spacer(width = 20)
                                     widget(
                                         Displays.text(Text.of(group.extreme.type.icon.toString(), group.extreme.type.color))
-                                            .withTooltip(buildBonusTooltip(group.extreme))
+                                            .withTooltip(buildBonusTooltip(group, group.extreme))
                                             .asButtonLeft { onButtonPress(group, group.extreme) },
                                     )
                                 }
@@ -223,6 +226,7 @@ class WeatherScreen : SkyOceanScreen() {
         } else {
             Text.of("Removed reminder for ${group.island} ${event.intensity.displayName}.", TextColor.RED).sendWithPrefix()
         }
+        McScreen.refreshScreen()
     }
 
     private fun VerticalLayoutBuilder.addFooter(frameWidth: Int) {
@@ -270,7 +274,7 @@ class WeatherScreen : SkyOceanScreen() {
         }.add()
     }
 
-    private fun buildBonusTooltip(event: WeatherEvent): Component {
+    private fun buildBonusTooltip(group: WeatherGroup, event: WeatherEvent): Component {
         return Text.multiline(
             buildList {
                 add(event.type.component)
@@ -304,7 +308,16 @@ class WeatherScreen : SkyOceanScreen() {
                     )
                 }
                 add(CommonText.EMPTY)
-                add(Text.of("Click to toggle reminder!", TextColor.YELLOW))
+                add(Text.of("Click to ") {
+                    if (WeatherAlertStorage.hasAlert(group, event.intensity)) {
+                        append("remove")
+                        color = CatppuccinColors.Mocha.red
+                    } else {
+                        append("add")
+                        color = CatppuccinColors.Mocha.green
+                    }
+                    append(" reminder!")
+                })
             },
         )
     }

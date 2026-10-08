@@ -3,16 +3,18 @@ package me.owdding.skyocean.data.profile
 import com.mojang.serialization.Codec
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.CodecUtils
+import me.owdding.skyocean.generated.EnumCodec
+import me.owdding.skyocean.generated.SkyOceanCodecs
 import tech.thatgravyboat.skyblockapi.api.environmental.WeatherGroup
 import tech.thatgravyboat.skyblockapi.api.environmental.WeatherIntensity
 
 object WeatherAlertStorage {
     private val storage = SkyOcean.storage(
         "weather_alert",
-        { mutableMapOf<WeatherGroup, MutableSet<WeatherIntensity>>() },
+        { mutableMapOf() },
         CodecUtils.map(
-            Codec.STRING.xmap({ WeatherGroup.valueOf(it) }, { it.name }),
-            CodecUtils.mutableSet(Codec.STRING.xmap({ WeatherIntensity.valueOf(it) }, { it.name }))
+            SkyOceanCodecs.getCodec<WeatherGroup>(),
+            CodecUtils.mutableSet(SkyOceanCodecs.getCodec<WeatherIntensity>())
         )
     )
 
