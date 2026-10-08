@@ -6,6 +6,7 @@
   "description": "SkyOcean is a hypixel skyblock mod that aims to provide a better playing experience by integrating QOL elements in an unnoticeable way.",
   "license": "Modified MIT",
   "icon": "assets/skyocean/skyocean-big.png",
+  "environment": "client",
   "entrypoints": {
     "client": [
       {
