@@ -80,18 +80,29 @@ object CraftHelperCommand {
                     color = CatppuccinColors.Mocha.green
                 }.sendWithPrefix()
             }
-            "remove id"(StringArgumentType.greedyString(), CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider)) executes { id ->
+            "remove id"(
+                StringArgumentType.greedyString(),
+                CombinedSuggestionProvider(RecipeIdSuggestionProvider, RecipeNameSuggestionProvider),
+            ) executes { id ->
                 val item = toId(id) ?: return@executes Text.of("Failed to find item with id $id", CatppuccinColors.Mocha.red).sendWithPrefix()
-                val inputs = CraftHelperStorage.getOrCreateIngredientRecipe().inputs
-                inputs.replaceWith(inputs.mapNotNull {
-                    if (it is ItemLikeIngredient && it.id == item.id) {
-                        if (it.amount - item.amount <= 0) null else item.withAmount(it.amount - item.amount)
-                    } else it
-                })
+                val recipe = CraftHelperStorage.getOrCreateIngredientRecipe()
+                val inputs = recipe.inputs
+                inputs.replaceWith(
+                    inputs.mapNotNull {
+                        if (it is ItemLikeIngredient && it.id == item.id) {
+                            if (it.amount - item.amount <= 0) null else item.withAmount(it.amount - item.amount)
+                        } else it
+                    },
+                )
                 if (inputs.isEmpty()) {
                     CraftHelperStorage.clear()
                     Text.of("Removed item and cleared recipe!", CatppuccinColors.Mocha.green).sendWithPrefix()
                     return@executes
+                }
+                if (inputs.size == 1) run {
+                    val first = inputs.first() as? ItemLikeIngredient ?: return@run
+                    CraftHelperStorage.setSelected(first.id)
+                    CraftHelperStorage.setAmount(recipe.amount * first.amount)
                 }
                 Text.of {
                     append("Removed ")
