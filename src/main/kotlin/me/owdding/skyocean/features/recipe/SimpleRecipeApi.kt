@@ -48,12 +48,9 @@ object SimpleRecipeApi : MeowddingLogger by SkyOcean.featureLogger(), LateInitLo
             debug("Loaded ${illegalShopRecipes.size} illegal shop recipes")
         }
 
-        supportedTypes.forEach { (recipe, type) ->
+        supportedTypes.forEach { (recipe, _) ->
             recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe ->
-                RepoApiRecipeWrapper(
-                    recipe,
-                    type,
-                )
+                RepoApiRecipeWrapper(recipe)
             }
         }
         recipes.removeIf {

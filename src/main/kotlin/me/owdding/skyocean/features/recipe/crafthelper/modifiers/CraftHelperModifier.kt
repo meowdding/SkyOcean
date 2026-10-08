@@ -5,8 +5,12 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.compat.CatharsisSupport.disableCatharsisModifications
 import me.owdding.skyocean.compat.CatharsisSupport.withCatharsisId
 import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
+import me.owdding.skyocean.data.profile.CraftHelperStorage
+import me.owdding.skyocean.data.profile.CraftHelperStorage.addToIngredientRecipe
 import me.owdding.skyocean.data.profile.CraftHelperStorage.set
+import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperManager
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.data.IngredientCraftHelperRecipe
 import me.owdding.skyocean.generated.SkyOceanCraftHelperModifiers
 import me.owdding.skyocean.utils.Utils.refreshScreen
 import me.owdding.skyocean.utils.Utils.skyoceanReplace
@@ -41,10 +45,39 @@ abstract class AbstractCraftHelperModifier {
                 add("Set as selected craft helper item!") {
                     this.color = TextColor.GRAY
                 }
+                if (ingredient is CraftHelperRecipe.Ingredients) {
+                    add("Hold Shift to add it to your current recipe!") {
+                        this.color = TextColor.GRAY
+                    }
+                }
             }
 
             onClick {
-                set(ingredient)
+                if (McScreen.isShiftDown && ingredient is CraftHelperRecipe.Ingredients) {
+                    addToIngredientRecipe(ingredient)
+                } else {
+                    if (CraftHelperStorage.data is IngredientCraftHelperRecipe) {
+                        return@onClick event.item.skyoceanReplace {
+                            this.item = Items.COPPER_PICKAXE
+                            set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT.withHidden(DataComponents.ATTRIBUTE_MODIFIERS, true))
+                            name(
+                                Text.of("Override Custom Recipe?") {
+                                    this.color = TextColor.GRAY
+                                },
+                            )
+                            tooltip {
+                                add("Click again to override custom recipe!") {
+                                    this.color = TextColor.RED
+                                }
+                            }
+                            onClick {
+                                set(ingredient)
+                                McScreen.refreshScreen()
+                            }
+                        }
+                    }
+                    set(ingredient)
+                }
                 McScreen.refreshScreen()
             }
         }
