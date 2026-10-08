@@ -2,11 +2,8 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
-import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
-import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.contains
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
@@ -16,7 +13,7 @@ import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 @CraftHelperModifier
 object ForgeModifier : AbstractCraftHelperModifier() {
 
-    override fun applies(event: InventoryChangeEvent): CraftHelperRecipe? {
+    override fun applies(event: InventoryChangeEvent): NormalCraftHelperRecipe? {
         if (event.title != "Confirm Process") return null
         if (event.slot.index != 22 && event.slot.index != 23) return null
 

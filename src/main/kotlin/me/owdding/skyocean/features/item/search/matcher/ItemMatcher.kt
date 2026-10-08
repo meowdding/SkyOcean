@@ -31,9 +31,9 @@ object ItemMatcher {
     }
 
     fun <T> dataType(type: DataType<T>): (ItemStack) -> T? = { it.getData(type) }
-    fun <T> component(type: DataComponentType<T>): (ItemStack) -> T? = { it.get(type) }
+    fun <T : Any> component(type: DataComponentType<T>): (ItemStack) -> T? = { it.get(type) }
     fun <T> isSame(first: ItemStack, second: ItemStack, type: DataType<T>) = isSame(first, second, dataType(type))
-    fun <T> isSame(first: ItemStack, second: ItemStack, type: DataComponentType<T>) = isSame(first, second, component(type))
+    fun <T : Any> isSame(first: ItemStack, second: ItemStack, type: DataComponentType<T>) = isSame(first, second, component(type))
     fun <T> isSame(first: ItemStack, second: ItemStack, dataGetter: (ItemStack) -> T?): Boolean {
         val firstComponent: T? = dataGetter(first)
         val secondComponent: T? = dataGetter(second)

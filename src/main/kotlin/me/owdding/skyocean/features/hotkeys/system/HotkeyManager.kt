@@ -7,18 +7,18 @@ import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.generated.SkyOceanCodecs
+import me.owdding.skyocean.utils.Utils.edit
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.debugToggle
-import me.owdding.skyocean.utils.storage.DataStorage
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.util.Util
-import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderHudEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
@@ -50,9 +50,9 @@ object HotkeyManager {
         @NamedCodec("hotkey_set") val hotkeys: HashSet<Hotkey>,
     )
 
-    private val storage: DataStorage<StoredData> = DataStorage(
-        { StoredData(mutableSetOf(), HashSet()) },
+    private val storage = SkyOcean.storage(
         "hotkeys",
+        { StoredData(mutableSetOf(), HashSet()) },
         Codec.withAlternative(
             SkyOceanCodecs.HotkeyDataCodec.codec(),
             hotkeySet.xmap({ StoredData(mutableSetOf(), it) }, { it.hotkeys }),
@@ -132,10 +132,10 @@ object HotkeyManager {
         if (HotkeyConfig.disabled) return false
         if (McScreen.self is IgnoreHotkeyInputs) return false
         val key by key
-        if (action == GLFW.GLFW_RELEASE) {
+        if (action == 0) {
             this.pressedKeys.remove(key)
         }
-        if (action != GLFW.GLFW_PRESS) return false
+        if (action != 1) return false
         lastUpdated = System.currentTimeMillis()
         buffer.add(key)
         pressedKeys.add(key)
@@ -164,8 +164,7 @@ object HotkeyManager {
 
     @JvmStatic
     fun handle(event: KeyEvent, action: Int): Boolean {
-        if (!McClient.options.keyDebugModifier.isDown) return handleKey(lazy { InputConstants.getKey(event) }, action)
-        return false
+        return !McClient.options.keyDebugModifier.isDown && handleKey(lazy { InputConstants.getKey(event) }, action)
     }
 
     fun clearBuffers() {

@@ -30,7 +30,8 @@ interface ItemContext {
 
     fun requiresCookie(allowOnBingo: Boolean = false, runnable: () -> Unit) {
         if (!(EffectsAPI.isBoosterCookieActive ||
-                (allowOnBingo && ProfileAPI.profileType == ProfileType.BINGO))) {
+                (allowOnBingo && ProfileAPI.profileType == ProfileType.BINGO))
+        ) {
             Text.of("Requires a booster cookie!").sendWithPrefix()
             return
         }

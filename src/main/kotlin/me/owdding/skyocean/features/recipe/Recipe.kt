@@ -15,7 +15,8 @@ interface ParentRecipe : Recipe {
 }
 
 @GenerateCodec
-data class RepoApiRecipe(val recipe: RepoRecipe<*>, override val recipeType: RecipeType) : Recipe {
+data class RepoApiRecipe(val recipe: RepoRecipe<*>) : Recipe {
+    override val recipeType = RecipeType.fromRepoLibType(recipe.type()) ?: RecipeType.UNKNOWN
     override val inputs: List<Ingredient> by lazy { RecipeVisitor.getInputs(recipe) }
     override val output: ItemLikeIngredient? by lazy { RecipeVisitor.getOutput(recipe) }
 }

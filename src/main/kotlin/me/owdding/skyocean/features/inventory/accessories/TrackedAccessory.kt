@@ -50,6 +50,7 @@ data class UpgradeRarityAccessory(
     val data: AccessoriesHelper.AccessoryRarityUpgradeData,
 ) : TrackedAccessory, HasCurrentTier {
     override val familyName: String get() = data.family.family
+
     // TODO: handle accessories with the same id but different rarity (pulse ring, book of stats, etc)
     override val items: List<ItemStack> = data.family.first().map(SimpleItemAPI::getItemById)
     override val type: TrackedAccessoryType = UPGRADE

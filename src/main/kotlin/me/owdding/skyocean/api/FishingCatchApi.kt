@@ -49,6 +49,7 @@ object FishingCatchApi {
                 lastCatchSound = currentInstant()
                 handleBobber()
             }
+
             SoundEvents.NOTE_BLOCK_PLING.value() -> {
                 if (event.pitch != 1f || event.volume != 1f) return
                 if (McPlayer.distanceSqr(event.pos) > DISTANCE_SQR) return

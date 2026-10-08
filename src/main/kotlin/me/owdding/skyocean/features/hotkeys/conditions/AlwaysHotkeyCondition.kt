@@ -3,7 +3,7 @@ package me.owdding.skyocean.features.hotkeys.conditions
 import com.mojang.serialization.MapCodec
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.skyocean.features.hotkeys.WidgetContext
-import me.owdding.skyocean.utils.extensions.*
+import me.owdding.skyocean.utils.extensions.topLeft
 import net.minecraft.client.gui.layouts.LayoutElement
 
 data object AlwaysHotkeyCondition : HotkeyCondition {

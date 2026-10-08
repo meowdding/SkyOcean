@@ -2,25 +2,22 @@ package me.owdding.skyocean.data.profile
 
 import me.owdding.ktcodecs.FieldName
 import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.extensions.asBlueprint
 import me.owdding.skyocean.utils.items.ItemStackBlueprint
 import me.owdding.skyocean.utils.levelBound
-import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.ItemStack
 import java.util.concurrent.CopyOnWriteArrayList
 
 object IslandChestStorage {
 
-    private val storage = ProfileStorage(
-        0,
-        { CopyOnWriteArrayList() },
+    private val storage = SkyOcean.profileStorage(
         "chests",
-        {
-            CodecHelpers.copyOnWriteList(SkyOceanCodecs.ChestItemCodec.codec())
-        },
+        { CopyOnWriteArrayList() },
+        CodecHelpers.copyOnWriteList(SkyOceanCodecs.ChestItemCodec.codec()),
     )
 
     fun getItems(): List<ChestItem> {

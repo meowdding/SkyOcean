@@ -20,7 +20,15 @@ object SkyShardsTreeResolver : TreeResolver<SkyShardsRecipe> {
             if (parent == null) {
                 CraftHelperTree(null, self.shard.toIngredient(self.quantity))
             } else if (self is SkyShardsRecipeElement) {
-                CraftHelperRecipeNode(null, self.quantity, self.quantity, self.quantity, 0, self.shard.toIngredient(self.quantity), RecipeRemainder.EMPTY).apply {
+                CraftHelperRecipeNode(
+                    null,
+                    self.quantity,
+                    self.quantity,
+                    self.quantity,
+                    0,
+                    self.shard.toIngredient(self.quantity),
+                    RecipeRemainder.EMPTY,
+                ).apply {
                     parent.addChild(this)
                 }
             } else {

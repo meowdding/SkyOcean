@@ -21,7 +21,7 @@ public abstract class MutableComponentMixin implements SafeMutableComponentAcces
     private List<Component> siblings;
 
     @Shadow
-    public abstract MutableComponent append(Component $$0);
+    public abstract MutableComponent append(Component component);
 
     @Mutable
     @Shadow
@@ -30,7 +30,7 @@ public abstract class MutableComponentMixin implements SafeMutableComponentAcces
 
     @Override
     public MutableComponent skyocean$appendSafe(Component component) {
-        skyocean$mutableSiblings();
+        var _ = skyocean$mutableSiblings();
         return append(component);
     }
 

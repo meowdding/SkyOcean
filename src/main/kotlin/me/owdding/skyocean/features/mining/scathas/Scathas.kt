@@ -5,9 +5,9 @@ import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.mining.ScathaConfig
-import me.owdding.skyocean.utils.Utils.derpyMaxHp
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
+import me.owdding.skyocean.utils.Utils.derpyMaxHp
 import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents

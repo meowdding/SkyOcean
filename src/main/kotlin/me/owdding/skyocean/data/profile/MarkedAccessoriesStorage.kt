@@ -1,9 +1,8 @@
 package me.owdding.skyocean.data.profile
 
 import com.mojang.serialization.Codec
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.CodecUtils
-import me.owdding.skyocean.utils.storage.ProfileStorage
-
 
 private typealias FamilyName = String
 
@@ -11,10 +10,10 @@ private typealias Tier = Int
 
 object MarkedAccessoriesStorage {
 
-    private val storage = ProfileStorage(
-        defaultData = ::LinkedHashMap,
+    private val storage = SkyOcean.profileStorage(
         fileName = "marked_accessories",
-        codec = { CodecUtils.map(Codec.STRING, Codec.INT) },
+        defaultData = ::LinkedHashMap,
+        codec = CodecUtils.map(Codec.STRING, Codec.INT),
     )
 
     private val data get() = storage.get()

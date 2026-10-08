@@ -18,7 +18,11 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import tech.thatgravyboat.skyblockapi.platform.*
+import tech.thatgravyboat.skyblockapi.platform.drawGradient
+import tech.thatgravyboat.skyblockapi.platform.drawString
+import tech.thatgravyboat.skyblockapi.platform.pushPop
+import tech.thatgravyboat.skyblockapi.platform.scale
+import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.extentions.since

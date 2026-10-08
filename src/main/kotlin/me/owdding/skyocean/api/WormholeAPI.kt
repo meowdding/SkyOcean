@@ -4,6 +4,7 @@ import me.owdding.ktmodules.Module
 import me.owdding.skyocean.events.fishing.FishCatchEvent
 import me.owdding.skyocean.events.fishing.WormholeEvent
 import me.owdding.skyocean.features.fishing.WormholeFeatures
+import me.owdding.skyocean.utils.Utils.hasMaxSpeed
 import me.owdding.skyocean.utils.Utils.roundToHalf
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket
@@ -13,7 +14,6 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
-import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
@@ -94,8 +94,8 @@ object WormholeAPI {
 
     private fun ClientboundLevelParticlesPacket.isHotSpotParticle(): Boolean {
         return when (this.particle.type) {
-            ParticleTypes.ENCHANT -> this.count == 4 && this.maxSpeed == -1.2f
-            ParticleTypes.PORTAL -> this.count == 5 && this.maxSpeed == 0.25f
+            ParticleTypes.ENCHANT -> this.count == 4 && this.hasMaxSpeed(-1.2f)
+            ParticleTypes.PORTAL -> this.count == 5 && this.hasMaxSpeed(0.25f)
             else -> false
         }
     }
@@ -106,7 +106,7 @@ object WormholeAPI {
 data class WormholeData(
     var pos: Vector3f? = null,
     var radius: Double? = null,
-    var fishedIn: Boolean = false
+    var fishedIn: Boolean = false,
 ) {
     var lastParticleTime: Instant = currentInstant()
 

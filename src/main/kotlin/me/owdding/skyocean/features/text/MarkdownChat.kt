@@ -9,11 +9,8 @@ import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.FormattedText
 import net.minecraft.network.chat.HoverEvent
-import net.minecraft.network.chat.MutableComponent
-import net.minecraft.network.chat.Style
 import net.minecraft.util.FormattedCharSequence
 import tech.thatgravyboat.skyblockapi.utils.extentions.stripColor
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.substring
 import kotlin.experimental.and
 import kotlin.experimental.or
@@ -68,7 +65,8 @@ object MarkdownChat : MeowddingLogger by SkyOcean.featureLogger() {
                                         }
 
 
-                                        return@let it.withObfuscated(true).withHoverEvent(HoverEvent.ShowText(sequence.toComponent().substring(start - 1, start + obfuscatedRun - 1)))
+                                        return@let it.withObfuscated(true)
+                                            .withHoverEvent(HoverEvent.ShowText(sequence.toComponent().substring(start - 1, start + obfuscatedRun - 1)))
                                     }
                                     obfuscatedStart = null
 
@@ -145,11 +143,13 @@ object MarkdownChat : MeowddingLogger by SkyOcean.featureLogger() {
         UNDERLINE(requireDouble('_')),
         OBFUSCATED(requireDouble('|')),
         STRIKETHROUGH(requireDouble('~')),
-        ITALIC({ _, previous ->
-            if ((previous == '_' && ChatConfig.allowUnderscoreItalic) || previous == '*') {
-                "$previous"
-            } else null
-        }),
+        ITALIC(
+            { _, previous ->
+                if ((previous == '_' && ChatConfig.allowUnderscoreItalic) || previous == '*') {
+                    "$previous"
+                } else null
+            },
+        ),
         ;
 
 

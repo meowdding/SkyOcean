@@ -1,5 +1,9 @@
 #version 330
 
+#ifndef NO_LAYOUT
+#extension GL_ARB_separate_shader_objects : require
+#endif
+
 // Can't moj_import in things used during startup, when resource packs don't exist.
 // This is a copy of dynamicimports.glsl & globals.glsl
 layout(std140) uniform DynamicTransforms {
@@ -36,10 +40,17 @@ const vec4 baseRarityColor = BASE_RARITY_COLOR;
 #endif
 uniform sampler2D Sampler0;
 
+#ifdef NO_LAYOUT
 in vec2 texCoord0;
 in vec4 vertexColor;
 
 out vec4 fragColor;
+#else
+layout(location = 0) in vec2 texCoord0;
+layout(location = 1) in vec4 vertexColor;
+
+layout(location = 0) out vec4 fragColor;
+#endif
 
 vec4 checkOutline(vec2 texCoord0, vec2 slotStart, float slotDimensions) {
     float splitAmount = slotDimensions / (1024 / GuiScale);
@@ -81,6 +92,7 @@ vec4 SMOOTHY(float x) {
 
 void main() {
     vec4 color = texture(Sampler0, texCoord0);
+
     if (color.a < AlphaCutoff) {
         float AtlasStep = 1.0 / AtlasDimensions;
         float SlotWidth = AtlasStep * SlotSize;
@@ -104,6 +116,6 @@ void main() {
         if (color.a < 0.03) {
             discard;
         }
-        fragColor = color * ColorModulator * vertexColor;
+        fragColor = color * vertexColor;
     }
 }

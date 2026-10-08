@@ -57,9 +57,9 @@ object NpcRecipeParser {
     @OnlyOnSkyBlock
     @MustBeContainer
     private fun InventoryChangeEvent.inventory() = ifEnabled {
-        if (isSkyBlockFiller) return
+        if (isSkyBlockFiller) return@ifEnabled
         val lore = item.getRawLore().joinToString("\n")
-        val id = item.getSkyBlockId() ?: return
+        val id = item.getSkyBlockId() ?: return@ifEnabled
 
         val output = IngredientParser.parse(item.hoverName.stripped)?.amount ?: 1
 
@@ -104,9 +104,9 @@ object NpcRecipeParser {
     @Subscription
     @OnlyOnSkyBlock
     private fun ScreenMouseClickEvent.Pre() = ifEnabled {
-        val clickedSlot = McScreen.asMenu?.getHoveredSlot() ?: return
-        if (clickedSlot.container is Inventory) return
-        val data = lastInv[clickedSlot.index] ?: return
+        val clickedSlot = McScreen.asMenu?.getHoveredSlot() ?: return@ifEnabled
+        if (clickedSlot.container is Inventory) return@ifEnabled
+        val data = lastInv[clickedSlot.index] ?: return@ifEnabled
         data.save = !data.save
         clickedSlot.item.replaceVisually {
             copyFrom(clickedSlot.item)

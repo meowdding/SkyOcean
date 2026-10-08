@@ -9,7 +9,6 @@ import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.extensions.addAll
-import me.owdding.skyocean.utils.extensions.runCatching
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
@@ -49,12 +48,9 @@ object SimpleRecipeApi : MeowddingLogger by SkyOcean.featureLogger(), LateInitLo
             debug("Loaded ${illegalShopRecipes.size} illegal shop recipes")
         }
 
-        supportedTypes.forEach { (recipe, type) ->
+        supportedTypes.forEach { (recipe, _) ->
             recipes += RepoAPI.recipes().getRecipes(recipe).map { recipe ->
-                RepoApiRecipeWrapper(
-                    recipe,
-                    type,
-                )
+                RepoApiRecipeWrapper(recipe)
             }
         }
         recipes.removeIf {

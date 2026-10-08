@@ -5,8 +5,6 @@ import earth.terrarium.olympus.client.ui.UIIcons
 import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.RIGHT
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
-import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.text_replacements.TextReplacementConfig
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.features.hotkeys.ShowMessageModal
@@ -22,12 +20,12 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
-import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.width
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.underlined
 import kotlin.math.max
 
-object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), IgnoreHotkeyInputs, DisableReplacements  {
+object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), IgnoreHotkeyInputs, DisableReplacements {
 
     private var tryDeleting: TextReplacement? = null
 
@@ -45,6 +43,7 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
     )
     var toggleWidth = 0
 
+    val move = Text.of("Move")
     var currentCategoryScroll = { 0 }
     var currentMainScroll = { 0 }
     const val SPACER = 5
@@ -362,13 +361,15 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                 createText(
                     Text.of(textReplacement.priority.toString()) {
                         color = CatppuccinColors.Mocha.subtext0
-                    }
+                    },
                 ).withPadding(SPACER).add(middleLeft)
                 vertical {
-                    createText(Text.join(
-                        textReplacement.key.chars().mapToObj { Char(it) }.toList(),
-                        separator = Text.of("\u200c")
-                    )) {
+                    createText(
+                        Text.join(
+                            textReplacement.key.chars().mapToObj { Char(it) }.toList(),
+                            separator = Text.of("\u200c"),
+                        ),
+                    ) {
                         color = CatppuccinColors.Mocha.text
                     }.withPadding(bottom = 2).add()
                     createText(textReplacement.value).withPadding(4).withTexturedBackground("text_replacements/header").add()
@@ -376,16 +377,7 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
             }
         }.withPadding(left = SPACER).add(middleLeft)
         LayoutFactory.vertical(alignment = RIGHT, spacing = 1) {
-            createButton(
-                texture = headerSprite,
-                text = if (textReplacement.enabled) enabled else disabled,
-                width = toggleWidth + SPACER * 2,
-                height = 15,
-                click = withRebuild {
-                    textReplacement.enabled = !textReplacement.enabled
-                },
-            ).add()
-            horizontal(1) {
+            val secondRow = LayoutFactory.horizontal(1) {
                 val edit = Text.of("Edit")
                 createButton(
                     texture = headerSprite,
@@ -396,7 +388,7 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                     click = setScreen {
                         EditReplacementModal(
                             this@TextReplacementScreen,
-                            textReplacement
+                            textReplacement,
                         ) { key, value, priority, wholeWord, ignoreCase, enabled ->
                             textReplacement.key = key
                             textReplacement.value = value
@@ -431,6 +423,32 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                     },
                 ).add()
             }
+            horizontal {
+                createButton(
+                    texture = headerSprite,
+                    text = move,
+                    width = secondRow.width - move.width - 1,
+                    height = 15,
+                    color = if (TextReplacementManager.categories.isEmpty()) CatppuccinColors.Mocha.surface2Color else unhovered,
+                    click = setScreen {
+                        MoveTextReplacementModal(TextReplacementScreen, textReplacement)
+                    },
+                ).apply {
+                    if (TextReplacementManager.categories.isEmpty()) {
+                        this.asDisabled()
+                    }
+                }.add()
+                createButton(
+                    texture = headerSprite,
+                    text = if (textReplacement.enabled) enabled else disabled,
+                    width = toggleWidth + SPACER * 2,
+                    height = 15,
+                    click = withRebuild {
+                        textReplacement.enabled = !textReplacement.enabled
+                    },
+                ).add()
+            }
+            secondRow.add()
         }.withPadding(right = SPACER * 2).add(middleRight)
 
     }

@@ -12,7 +12,6 @@ import me.owdding.lib.layouts.setPos
 import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.config.features.inventory.ButtonConfig
 import me.owdding.skyocean.config.features.inventory.Buttons
-import me.owdding.skyocean.mixins.AbstractRecipeBookScreenAccessor
 import me.owdding.skyocean.utils.Utils.resetCursor
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -175,7 +174,7 @@ class ButtonConfigScreen(val previousScreen: Screen?) : InventoryScreen(McPlayer
         column.arrangeElements()
         column.visitWidgets(::addRenderableWidget)
 
-        val recipebook = (this as AbstractRecipeBookScreenAccessor).`skyocean$getRecipeBookComponent`()
+        val recipebook = this.`skyocean$getRecipeBookComponent`()
         if (recipebook.isVisible) recipebook.toggleVisibility()
     }
 

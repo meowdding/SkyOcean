@@ -7,7 +7,6 @@ import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.utils.items.ItemStackBlueprint.Companion.of
 import net.minecraft.core.Holder
 import net.minecraft.core.component.DataComponentPatch
 import net.minecraft.core.registries.BuiltInRegistries
@@ -51,7 +50,7 @@ sealed interface ItemStackBlueprint {
         fun of(holder: Optional<Holder<Item>>, count: Int = 1, patch: DataComponentPatch = DataComponentPatch.EMPTY): ItemStackBlueprint = of(
             holder.getOrNull() ?: Items.AIR.holder,
             count,
-            patch
+            patch,
         )
 
         fun of(holder: Holder<Item>, count: Int = 1, patch: DataComponentPatch = DataComponentPatch.EMPTY): ItemStackBlueprint {

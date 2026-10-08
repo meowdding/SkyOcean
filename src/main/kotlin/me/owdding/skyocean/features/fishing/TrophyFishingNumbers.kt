@@ -7,13 +7,13 @@ import me.owdding.skyocean.config.features.fishing.FishingConfig
 import me.owdding.skyocean.utils.chat.ChatUtils
 import me.owdding.skyocean.utils.debug.DebugBuilder
 import net.minecraft.network.chat.CommonComponents
-import tech.thatgravyboat.skyblockapi.api.area.isle.trophyfish.TrophyFishTier
 import tech.thatgravyboat.skyblockapi.api.area.isle.trophyfish.TrophyFishType
 import tech.thatgravyboat.skyblockapi.api.area.isle.trophyfish.TrophyFishingAPI
+import tech.thatgravyboat.skyblockapi.api.datatype.defaults.trophy.TrophyTier
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
-import tech.thatgravyboat.skyblockapi.api.events.location.isle.TrophyFishCaughtEvent
+import tech.thatgravyboat.skyblockapi.api.events.location.TrophyCaughtEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -29,11 +29,11 @@ object TrophyFishingNumbers {
     val messageRegex = Regex(". TROPHY FISH! You caught .*")
 
     var lastFishCaught: TrophyFishType? = null
-    var lastFishTier: TrophyFishTier? = null
+    var lastFishTier: TrophyTier? = null
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRIMSON_ISLE)
-    fun catchThingy(event: TrophyFishCaughtEvent) {
+    fun catchThingy(event: TrophyCaughtEvent.Fish) {
         if (!FishingConfig.enableTrophyNumbers) return
         lastFishCaught = event.type
         lastFishTier = event.tier

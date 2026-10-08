@@ -4,10 +4,12 @@ import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.api.IngredientParser
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setAmount
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
+import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
 import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperTree
+import me.owdding.skyocean.features.recipe.crafthelper.data.IngredientCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.utils.Utils
 import me.owdding.skyocean.utils.Utils.contains
@@ -41,11 +43,14 @@ object VisitorModifier : AbstractCraftHelperModifier() {
         val index = lore.indexOfOrNull("Items Required:") ?: return null
         val items = lore.subList(index + 1, lore.indexOfOrNull(String::isBlank) ?: return null)
 
-        if (items.size != 1) return null // Only support single item requests for now
+        val ingredient = items.mapNotNullTo(mutableListOf()) { IngredientParser.parse(it.trim()) }.takeUnless { it.isEmpty() } ?: return null
 
-        val ingredient = IngredientParser.parse(items[0].trim()) as? SkyOceanItemIngredient ?: return null
+        if (ingredient.size == 1 && ingredient.first() is ItemLikeIngredient) {
+            val ingredient = ingredient.first() as ItemLikeIngredient
+            val amount = SimpleRecipeApi.getBestRecipe(ingredient.id)?.output?.amount ?: 1
+            return NormalCraftHelperRecipe(ingredient.id, Utils.nextUp(ingredient.amount, amount))
+        }
 
-        val amount = SimpleRecipeApi.getBestRecipe(ingredient.id)?.output?.amount ?: 1
-        return NormalCraftHelperRecipe(ingredient.id, Utils.nextUp(ingredient.amount, amount))
+        return IngredientCraftHelperRecipe(ingredient)
     }
 }

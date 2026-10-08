@@ -11,8 +11,13 @@ import me.owdding.skyocean.utils.MinecraftColor
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.transparency
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
-import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.*
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.CRYSTAL_HOLLOWS
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.Companion.inAnyIsland
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.DUNGEON_HUB
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.DWARVEN_MINES
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.KUUDRA
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.MINESHAFT
+import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.THE_CATACOMBS
 import kotlin.time.DurationUnit.SECONDS
 
 object MiscConfig : CategoryKt("misc") {

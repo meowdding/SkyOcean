@@ -1,7 +1,6 @@
 package me.owdding.skyocean.helpers
 
 import me.owdding.ktmodules.Module
-import me.owdding.skyocean.config.features.mining.MiningConfig
 import tech.thatgravyboat.skyblockapi.api.area.dungeon.DungeonAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.TimePassed

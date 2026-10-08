@@ -20,9 +20,9 @@ import me.owdding.skyocean.config.features.mining.MineshaftConfig
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.config.features.mining.MiningRetexture
 import me.owdding.skyocean.config.features.mining.ScathaConfig
-import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.config.features.misc.MobIconsConfig
+import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 import me.owdding.skyocean.config.features.text_replacements.TextReplacementConfig
 import me.owdding.skyocean.config.hidden.OverlayPositions

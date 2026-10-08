@@ -7,6 +7,7 @@ import me.owdding.skyocean.events.fishing.FishCatchEvent
 import me.owdding.skyocean.events.fishing.HotspotEvent
 import me.owdding.skyocean.features.fishing.HotspotFeatures
 import me.owdding.skyocean.utils.RemoteStrings
+import me.owdding.skyocean.utils.Utils.hasMaxSpeed
 import me.owdding.skyocean.utils.Utils.roundToHalf
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.DustParticleOptions
@@ -27,11 +28,11 @@ import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.forEachBelow
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -61,7 +62,7 @@ object HotspotAPI {
             val fluid = McLevel[it].fluidState
 
             if (!fluid.isEmpty) {
-                hotspot.pos = Vector3f(pos.x.toFloat(), it.y + fluid.getHeight(McLevel.self, it) + 0.1f, pos.z.toFloat())
+                hotspot.pos = Vector3f(pos.x.toFloat(), it.y + fluid.getHeight(event.infoLineEntity.level(), it) + 0.1f, pos.z.toFloat())
                 HotspotEvent.Spawn(hotspot).post(SkyBlockAPI.eventBus)
                 return
             }
@@ -141,7 +142,7 @@ object HotspotAPI {
         // (a bit less) strict bs :-D
         if (this.count != 0) return false
         if (this.xDist != 1f) return false
-        if (this.maxSpeed != 1f)  return false
+        if (!this.hasMaxSpeed(1f)) return false
 
         return true
     }

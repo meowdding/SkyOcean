@@ -1,7 +1,12 @@
 package me.owdding.skyocean.utils.animation
 
 import net.minecraft.client.gui.components.AbstractWidget
-import net.minecraft.client.gui.layouts.*
+import net.minecraft.client.gui.layouts.FrameLayout
+import net.minecraft.client.gui.layouts.GridLayout
+import net.minecraft.client.gui.layouts.Layout
+import net.minecraft.client.gui.layouts.LayoutElement
+import net.minecraft.client.gui.layouts.LinearLayout
+import net.minecraft.client.gui.layouts.SpacerElement
 
 object DeferredLayoutFactory {
     fun vertical(init: DeferredLinearLayout.() -> Unit = {}) = DeferredLinearLayout(LinearLayout.vertical()).apply(init)
@@ -22,7 +27,8 @@ abstract class DeferredLayout<Type : Layout> {
     abstract fun <T : LayoutElement> add(widget: T)
 
     companion object {
-        context(onAnimationStart: MutableList<() -> Unit>) fun <T : AbstractWidget> T.onAnimationStart(runnable: () -> Unit) {
+        context(onAnimationStart: MutableList<() -> Unit>)
+        fun <T : AbstractWidget> T.onAnimationStart(runnable: () -> Unit) {
             onAnimationStart.add(runnable)
         }
     }
@@ -38,7 +44,8 @@ abstract class DeferredLayout<Type : Layout> {
 
     fun applyDefault(manager: AnimationManager) = context(manager) { apply(true) }
 
-    context(_: AnimationManager) fun apply(animationStart: Boolean = false) {
+    context(_: AnimationManager)
+    fun apply(animationStart: Boolean = false) {
         deferred.forEach { runnable -> runnable(onAnimationStart) }
         if (animationStart) {
             onAnimationStart.forEach { it() }

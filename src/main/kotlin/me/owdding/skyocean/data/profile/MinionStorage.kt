@@ -2,9 +2,9 @@ package me.owdding.skyocean.data.profile
 
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.codecs.CodecHelpers
-import me.owdding.skyocean.utils.storage.ProfileStorage
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.InventoryTitle
@@ -16,13 +16,10 @@ import java.util.concurrent.CopyOnWriteArrayList
 @Module
 object MinionStorage {
 
-    private val storage = ProfileStorage(
-        0,
-        { CopyOnWriteArrayList() },
+    private val storage = SkyOcean.profileStorage(
         "minions",
-        {
-            CodecHelpers.copyOnWriteList(SkyOceanCodecs.getCodec<Minion>())
-        },
+        { CopyOnWriteArrayList() },
+        CodecHelpers.copyOnWriteList(SkyOceanCodecs.getCodec<Minion>()),
     )
 
     val unlockedMinions: CopyOnWriteArrayList<Minion> get() = storage.get() ?: CopyOnWriteArrayList()

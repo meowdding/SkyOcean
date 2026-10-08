@@ -1,7 +1,9 @@
 package me.owdding.skyocean.data.profile
 
+import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.recipe.RepoApiRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
+import me.owdding.skyocean.features.recipe.crafthelper.data.IngredientCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.RepoLibRecipeTree
 import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsMethod
@@ -9,16 +11,15 @@ import me.owdding.skyocean.features.recipe.crafthelper.data.SkyShardsRecipe
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.codecs.CodecHelpers
-import me.owdding.skyocean.utils.storage.ProfileStorage
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import kotlin.math.ceil
 
 @LateInitModule
 object CraftHelperStorage {
-    private val storage = ProfileStorage<CraftHelperRecipe>(
-        2,
-        { NormalCraftHelperRecipe(null) },
+    private val storage = SkyOcean.profileStorage<CraftHelperRecipe>(
         "craft_helper",
+        { NormalCraftHelperRecipe(null) },
+        2,
     ) { version ->
         when (version) {
             0 -> SkyOceanCodecs.NormalCraftHelperRecipeCodec.codec().xmap(
@@ -85,4 +86,24 @@ object CraftHelperStorage {
     fun save() {
         storage.save()
     }
+
+    fun <T> addToIngredientRecipe(recipe: T) where T : CraftHelperRecipe, T : CraftHelperRecipe.Ingredients {
+        getOrCreateIngredientRecipe().add(recipe.entriesForAddition.map { it.withAmount(it.amount * recipe.amount) })
+        save()
+    }
+
+    fun getOrCreateIngredientRecipe(): IngredientCraftHelperRecipe {
+        val data = data
+        if (data is IngredientCraftHelperRecipe) {
+            return data
+        }
+
+        val newRecipe = IngredientCraftHelperRecipe().apply {
+            val inputs = (data as? CraftHelperRecipe.Ingredients)?.entriesForAddition ?: return@apply
+            add(inputs.map { it.withAmount(it.amount * data.amount) })
+        }
+        storage.set(newRecipe)
+        return newRecipe
+    }
+
 }

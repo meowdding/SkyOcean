@@ -53,6 +53,7 @@ object SourceToWidget {
     private fun LayoutBuilder.text(text: Component) = SourceToWidget.text(text).add()
 
     fun CalculationEntry.asWidget(callback: () -> Unit): LayoutElement {
+        @Suppress("REDUNDANT_ELSE_IN_WHEN") // in case another entry is added that's not known to the current implementation
         return when (this) {
             is ItemEntry -> {
                 var id = this.itemId
