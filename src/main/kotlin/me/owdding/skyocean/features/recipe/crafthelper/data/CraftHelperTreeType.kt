@@ -13,6 +13,7 @@ enum class CraftHelperRecipeType(override val type: KClass<out CraftHelperRecipe
     SKY_SHARDS(SkyShardsRecipe::class),
     REPO_LIB_RECIPE(RepoLibRecipeTree::class, RepoLibRecipeTree.CODEC),
     INGREDIENT_RECIPE(IngredientCraftHelperRecipe::class),
+    FETCHUR(FetchurCraftHelperRecipe::class),
     ;
 
     override val codec: MapCodec<out CraftHelperRecipe>
