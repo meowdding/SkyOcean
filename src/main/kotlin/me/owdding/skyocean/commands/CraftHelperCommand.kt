@@ -72,6 +72,9 @@ object CraftHelperCommand {
                 }
                 Text.of {
                     append("Added ")
+                    if (item.amount > 1) {
+                        append(item.amount.toFormattedString(), TextColor.GRAY).append("x ", TextColor.GRAY)
+                    }
                     append(item.itemName)
                     append(" to recipe!")
                     color = CatppuccinColors.Mocha.green
@@ -92,6 +95,9 @@ object CraftHelperCommand {
                 }
                 Text.of {
                     append("Removed ")
+                    if (item.amount > 1) {
+                        append(item.amount.toFormattedString(), TextColor.GRAY).append("x ", TextColor.GRAY)
+                    }
                     append(item.itemName)
                     append(" from recipe!")
                     color = CatppuccinColors.Mocha.green
