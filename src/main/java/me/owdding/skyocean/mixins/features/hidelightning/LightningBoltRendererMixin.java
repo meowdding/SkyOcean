@@ -1,5 +1,6 @@
 package me.owdding.skyocean.mixins.features.hidelightning;
 
+import me.owdding.skyocean.config.features.environmental.EnvironmentalConfig;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.renderer.entity.LightningBoltRenderer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +17,7 @@ public class LightningBoltRendererMixin {
         cancellable = true
     )
     private void renderLightningBolt(CallbackInfo ci) {
-        if (MiscConfig.INSTANCE.getHideLightning()) {
+        if (EnvironmentalConfig.INSTANCE.getHideLightning()) {
             ci.cancel();
         }
     }

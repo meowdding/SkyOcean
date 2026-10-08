@@ -2,6 +2,7 @@ package me.owdding.skyocean.mixins.features;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import me.owdding.skyocean.config.features.environmental.EnvironmentalConfig;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.CloudStatus;
 import net.minecraft.client.Options;
@@ -12,7 +13,7 @@ public class OptionsMixin {
 
     @WrapMethod(method = "getCloudStatus")
     private CloudStatus modifyCloudsType(Operation<CloudStatus> original) {
-        if (MiscConfig.INSTANCE.getShouldHideClouds()) {
+        if (EnvironmentalConfig.INSTANCE.getShouldHideClouds()) {
             return CloudStatus.OFF;
         }
         return original.call();

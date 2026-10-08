@@ -1,0 +1,25 @@
+{
+  "type": "skyocean:compound",
+  "patches": [
+    {
+      "type": "skyocean:move",
+      "from": "misc.netherFogScale",
+      "to": "environmental.netherFogScale"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "misc.netherFogDarkening",
+      "to": "environmental.netherFogDarkening"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "misc.islandCloudHider",
+      "to": "environmental.islandCloudHider"
+    },
+    {
+      "type": "skyocean:move",
+      "from": "misc.hideLightning",
+      "to": "environmental.hideLightning"
+    }
+  ]
+}

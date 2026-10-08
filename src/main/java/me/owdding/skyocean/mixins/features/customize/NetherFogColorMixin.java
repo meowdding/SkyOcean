@@ -2,6 +2,7 @@ package me.owdding.skyocean.mixins.features.customize;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import me.owdding.skyocean.config.features.environmental.EnvironmentalConfig;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.fog.FogRenderer;
@@ -26,12 +27,12 @@ public class NetherFogColorMixin {
         @SuppressWarnings("NameDoesntMatchTargetClass") float partialTicks,
         Operation<Float> original
     ) {
-        if (!MiscConfig.INSTANCE.getNetherFogDarkening()
+        if (!EnvironmentalConfig.INSTANCE.getNetherFogDarkening()
             || !SkyBlockIsland.CRIMSON_ISLE.inIsland()
             || !(livingEntity instanceof LocalPlayer)) {
             return original.call(livingEntity, partialTicks);
         }
 
-        return MiscConfig.INSTANCE.getNetherFogScale();
+        return EnvironmentalConfig.INSTANCE.getNetherFogScale();
     }
 }
