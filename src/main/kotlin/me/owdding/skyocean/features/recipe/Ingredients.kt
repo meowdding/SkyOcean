@@ -1,17 +1,15 @@
 package me.owdding.skyocean.features.recipe
 
 import com.mojang.serialization.Codec
-import com.mojang.serialization.MapCodec
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.ktcodecs.IncludedCodec
 import me.owdding.skyocean.features.item.custom.CustomItems
-import me.owdding.skyocean.features.item.custom.data.AnimatedSkyblockSkin
 import me.owdding.skyocean.features.item.custom.data.CustomItemData
 import me.owdding.skyocean.features.item.custom.data.CustomItemDataComponents
-import me.owdding.skyocean.features.item.custom.data.ItemKey
 import me.owdding.skyocean.features.item.custom.data.RotatingModel
 import me.owdding.skyocean.features.item.custom.data.UuidKey
+import me.owdding.skyocean.features.recipe.crafthelper.data.FetchurCraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.IngredientCraftHelperRecipe
 import me.owdding.skyocean.generated.DispatchHelper
 import me.owdding.skyocean.generated.SkyOceanCodecs
@@ -68,7 +66,10 @@ interface ItemLikeIngredient : Ingredient {
     fun getRecipe() = SimpleRecipeApi.getBestRecipe(id)
 }
 
-data class CustomRecipeIngredient(val parent: IngredientCraftHelperRecipe) : ItemLikeIngredient {
+data class CustomRecipeIngredient(val parents: List<Ingredient>, val name: Component) : ItemLikeIngredient {
+    constructor(parent: IngredientCraftHelperRecipe) : this(parent.inputs, Text.of("Custom Recipe"))
+    constructor(parent: FetchurCraftHelperRecipe) : this(parent.inputs, Text.of("Fetchur Item") { if (parent.inputs.size > 1) append("s - Any") })
+
     override val amount: Int = 1
     override val type: IngredientType = IngredientType.ITEM
 
@@ -88,12 +89,11 @@ data class CustomRecipeIngredient(val parent: IngredientCraftHelperRecipe) : Ite
             )
             CustomItems.staticMap[uuid] = CustomItemData(uuid, mutableMapOf()).apply {
                 this[CustomItemDataComponents.MODEL] = RotatingModel(
-                    parent.inputs.filterIsInstance<ItemLikeIngredient>().takeUnless { it.isEmpty() } ?: listOf(
-                        SkyOceanItemIngredient(SkyBlockId.item("crafting_table")),
-                    ),
+                    parents.filterIsInstance<ItemLikeIngredient>().takeUnless { it.isEmpty() } ?:
+                    listOf(SkyOceanItemIngredient(SkyBlockId.item("crafting_table"))),
                 )
             }
-            name(Text.of("Custom Recipe"))
+            name(name)
         }
     override val itemName: Component get() = item.hoverName
 }

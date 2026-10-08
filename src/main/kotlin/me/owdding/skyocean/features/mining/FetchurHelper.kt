@@ -1,10 +1,14 @@
 package me.owdding.skyocean.features.mining
 
+import com.mojang.brigadier.arguments.StringArgumentType
 import me.owdding.ktcodecs.Compact
 import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.mining.MiningConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
+import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
+import me.owdding.skyocean.features.recipe.SkyOceanItemIngredient
+import me.owdding.skyocean.features.recipe.crafthelper.data.FetchurCraftHelperRecipe
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils
@@ -21,8 +25,10 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.findGroup
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.onClick
 
 @Module
@@ -42,9 +48,17 @@ object FetchurHelper {
 
             onClick {
                 val item = fetchurItem ?: return@onClick
-                // TODO: what the fuck do we do with the items that have multiple answers
-                //  maybe marie's pr?? #186
-                //  use that pr, custom title "Fetchur - <name>" with "(any)" suffix is multiple
+                CraftHelperStorage.set(
+                    FetchurCraftHelperRecipe(
+                        item.items.mapTo(mutableListOf()) { SkyOceanItemIngredient(it) },
+                        item.amount,
+                    ),
+                )
+                Text.of("Added ") {
+                    color = OceanColors.BASE_TEXT
+                    append(item.itemName, TextColor.BLUE)
+                    append(" to CraftHelper.")
+                }.sendWithPrefix()
             }
         }
     }
@@ -58,7 +72,11 @@ object FetchurHelper {
             return
         }
         if (!MiningConfig.fetchurHelper) return
-        val item = fetchurItems.find { it.message.equals(message, true) } ?: return
+        fetchurThing(message)
+    }
+
+    private fun fetchurThing(dialogue: String) {
+        val item = fetchurItems.find { it.message.equals(dialogue, true) } ?: return
         fetchurItem = item
         McClient.runNextTick {
             text {
@@ -74,6 +92,15 @@ object FetchurHelper {
         fetchurItem = null
     }
 
+    @Subscription
+    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+        event.command("dev testfetchur") {
+            "string"(StringArgumentType.greedyString()) executes { string ->
+                fetchurThing(string)
+            }
+        }
+    }
+
     @Subscription(ProfileChangeEvent::class)
     fun onProfileChange() = reset()
 
@@ -84,9 +111,11 @@ object FetchurHelper {
         val amount: Int,
         val override: String?,
     ) {
-        val itemName: String = override ?: run {
-            require(items.size == 1) { "Fetchur items must have exactly one item if no override is provided" }
-            items.single().toItem().cleanName
+        val itemName: String by lazy {
+            override ?: run {
+                require(items.size == 1) { "Fetchur items must have exactly one item if no override is provided" }
+                items.single().toItem().cleanName
+            }
         }
     }
 }
