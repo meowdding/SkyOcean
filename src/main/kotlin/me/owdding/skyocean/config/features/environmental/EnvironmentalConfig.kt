@@ -51,11 +51,11 @@ object EnvironmentalConfig : CategoryKt("environmental") {
 
     init {
         separator {
-            this.translation = "$baseTranslation.weather"
+            this.translation = "weather"
         }
 
         button {
-            this.text = "weather.button.text"
+            this.text = "${baseTranslation}.weather.button.text"
             this.title = "weather.button.title"
             this.description = "weather.button.desc"
             onClick {
