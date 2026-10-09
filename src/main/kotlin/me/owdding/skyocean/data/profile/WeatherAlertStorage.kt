@@ -11,8 +11,8 @@ import tech.thatgravyboat.skyblockapi.api.environmental.WeatherIntensity
 object WeatherAlertStorage {
     private val storage = SkyOcean.storage(
         "weather_alert",
-        { mutableMapOf() },
-        CodecUtils.map(
+        defaultData = { mutableMapOf() },
+        codec = CodecUtils.map(
             SkyOceanCodecs.getCodec<WeatherGroup>(),
             CodecUtils.mutableSet(SkyOceanCodecs.getCodec<WeatherIntensity>())
         )

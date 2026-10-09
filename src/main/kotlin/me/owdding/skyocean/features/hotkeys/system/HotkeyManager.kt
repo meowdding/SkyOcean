@@ -13,7 +13,6 @@ import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.Utils.edit
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.debugToggle
 import net.minecraft.client.input.KeyEvent
@@ -52,8 +51,8 @@ object HotkeyManager {
 
     private val storage = SkyOcean.storage(
         "hotkeys",
-        { StoredData(mutableSetOf(), HashSet()) },
-        Codec.withAlternative(
+        defaultData = { StoredData(mutableSetOf(), HashSet()) },
+        codec = Codec.withAlternative(
             SkyOceanCodecs.HotkeyDataCodec.codec(),
             hotkeySet.xmap({ StoredData(mutableSetOf(), it) }, { it.hotkeys }),
         ),
@@ -87,7 +86,7 @@ object HotkeyManager {
     fun register(hotkey: Hotkey) {
         registerInternal(hotkey)
         this.storage.edit {
-            hotkeys.add(hotkey)
+            if (hotkeys.add(hotkey)) Unit else null
         }
     }
 
@@ -97,7 +96,7 @@ object HotkeyManager {
         buffer = EvictingQueue.create(tree.maxDepth())
 
         this.storage.edit {
-            hotkeys.removeIf { it === hotkey }
+            if (hotkeys.removeIf { it === hotkey }) Unit else null
         }
     }
 
@@ -216,15 +215,15 @@ object HotkeyManager {
     fun createCategory(name: String, madeBy: String): HotkeyCategory {
         val category = HotkeyCategory(UUID.randomUUID(), name, madeBy)
         this.storage.edit {
-            categories.add(category)
+            if (categories.add(category)) Unit else null
         }
         return category
     }
 
     fun deleteCategory(category: HotkeyCategory) {
         this.storage.edit {
-            hotkeys.removeAll { it.group == category.identifier }
-            categories.removeIf { it.identifier == category.identifier }
+            if (hotkeys.removeAll { it.group == category.identifier } ||
+                categories.removeIf { it.identifier == category.identifier }) Unit else null
         }
     }
 

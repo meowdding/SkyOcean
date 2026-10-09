@@ -9,7 +9,7 @@ import me.owdding.skyocean.utils.extensions.truncate
 @LateInitModule
 object RecentColorStorage {
 
-    internal val storage = SkyOcean.storage("recent_colors", { mutableListOf() }, CodecHelpers.mutableList<ItemColor>())
+    internal val storage = SkyOcean.storage("recent_colors", defaultData = { mutableListOf() }, codec = CodecHelpers.mutableList<ItemColor>())
 
     fun getColorAt(index: Int) = storage.get().getOrNull(index)
     fun addColor(color: ItemColor) {

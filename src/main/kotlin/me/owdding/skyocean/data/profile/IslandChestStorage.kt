@@ -16,8 +16,8 @@ object IslandChestStorage {
 
     private val storage = SkyOcean.profileStorage(
         "chests",
-        { CopyOnWriteArrayList() },
-        CodecHelpers.copyOnWriteList(SkyOceanCodecs.ChestItemCodec.codec()),
+        defaultData = { CopyOnWriteArrayList() },
+        codec = CodecHelpers.copyOnWriteList(SkyOceanCodecs.ChestItemCodec.codec()),
     )
 
     fun getItems(): List<ChestItem> {

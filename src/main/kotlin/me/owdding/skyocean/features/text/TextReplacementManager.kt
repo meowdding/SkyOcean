@@ -10,15 +10,13 @@ import me.owdding.lib.utils.mod.data.MeowddingStorageData
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanCodecs
-import me.owdding.skyocean.utils.Utils.edit
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.extensions.indexOfOrNull
 import net.minecraft.util.Util
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import java.util.HashSet
-import java.util.UUID
+import java.util.*
 import java.util.function.Function
 
 @Module
@@ -43,8 +41,8 @@ object TextReplacementManager {
 
     private val storage: MeowddingStorageData<StoredData> = SkyOcean.storage(
         "text_replacements",
-        { StoredData(mutableSetOf(), HashSet()) },
-        Codec.withAlternative(
+        defaultData = { StoredData(mutableSetOf(), HashSet()) },
+        codec = Codec.withAlternative(
             SkyOceanCodecs.TextReplacementDataCodec.codec(),
             textReplacementSet.xmap({ StoredData(mutableSetOf(), it) }, { it.replacements }),
         ),
@@ -77,7 +75,7 @@ object TextReplacementManager {
     fun register(replacement: TextReplacement) {
         registerInternal(replacement)
         this.storage.edit {
-            replacements.add(replacement)
+            if (replacements.add(replacement)) Unit else null
         }
     }
 
@@ -85,22 +83,22 @@ object TextReplacementManager {
         replacements.remove(replacement)
 
         this.storage.edit {
-            replacements.removeIf { it === replacement }
+            if (replacements.removeIf { it === replacement }) Unit else null
         }
     }
 
     fun createCategory(name: String, madeBy: String): TextReplacementCategory {
         val category = TextReplacementCategory(UUID.randomUUID(), name, madeBy)
         this.storage.edit {
-            categories.add(category)
+            if (categories.add(category)) Unit else null
         }
         return category
     }
 
     fun deleteCategory(category: TextReplacementCategory) {
         this.storage.edit {
-            replacements.removeAll { it.category == category.identifier }
-            categories.removeIf { it.identifier == category.identifier }
+            if (replacements.removeAll { it.category == category.identifier } ||
+                categories.removeIf { it.identifier == category.identifier }) Unit else null
         }
     }
 

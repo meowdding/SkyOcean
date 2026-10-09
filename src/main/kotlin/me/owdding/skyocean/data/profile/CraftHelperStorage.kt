@@ -18,26 +18,27 @@ import kotlin.math.ceil
 object CraftHelperStorage {
     private val storage = SkyOcean.profileStorage<CraftHelperRecipe>(
         "craft_helper",
-        { NormalCraftHelperRecipe(null) },
-        2,
-    ) { version ->
-        when (version) {
-            0 -> SkyOceanCodecs.NormalCraftHelperRecipeCodec.codec().xmap(
-                { (item, amount) ->
-                    NormalCraftHelperRecipe(
-                        item?.id?.let { SkyBlockId.unknownType(it) },
-                        amount,
-                    )
-                },
-                { it },
-            ).xmap({ it as CraftHelperRecipe }, { it as NormalCraftHelperRecipe })
+        defaultData = { NormalCraftHelperRecipe(null) },
+        version = 2,
+        codec = { version ->
+            when (version) {
+                0 -> SkyOceanCodecs.NormalCraftHelperRecipeCodec.codec().xmap(
+                    { (item, amount) ->
+                        NormalCraftHelperRecipe(
+                            item?.id?.let { SkyBlockId.unknownType(it) },
+                            amount,
+                        )
+                    },
+                    { it },
+                ).xmap({ it as CraftHelperRecipe }, { it as NormalCraftHelperRecipe })
 
-            1 -> SkyOceanCodecs.NormalCraftHelperRecipeCodec.codec().xmap({ it as CraftHelperRecipe }, { it as NormalCraftHelperRecipe })
+                1 -> SkyOceanCodecs.NormalCraftHelperRecipeCodec.codec().xmap({ it as CraftHelperRecipe }, { it as NormalCraftHelperRecipe })
 
-            2 -> SkyOceanCodecs.CraftHelperRecipeCodec.codec()
-            else -> CodecHelpers.unit { NormalCraftHelperRecipe(null, 1) }
+                2 -> SkyOceanCodecs.CraftHelperRecipeCodec.codec()
+                else -> CodecHelpers.unit { NormalCraftHelperRecipe(null, 1) }
+            }
         }
-    }
+    )
 
     val canModifyCount: Boolean get() = storage.get() is CraftHelperRecipe.MutableCount
     val recipeType get() = storage.get()?.type

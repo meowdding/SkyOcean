@@ -17,7 +17,7 @@ object SackOfSacksItemStorage {
     private val storage = SkyOcean.profileStorage(
         fileName = "sack_of_sacks",
         defaultData = { mutableListOf() },
-        CodecHelpers.mutableList<ItemStack>(),
+        codec = CodecHelpers.mutableList<ItemStack>(),
     )
 
     val items: List<ItemStack> get() = storage.get().orEmpty()

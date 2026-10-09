@@ -18,8 +18,8 @@ object MinionStorage {
 
     private val storage = SkyOcean.profileStorage(
         "minions",
-        { CopyOnWriteArrayList() },
-        CodecHelpers.copyOnWriteList(SkyOceanCodecs.getCodec<Minion>()),
+        defaultData =  { CopyOnWriteArrayList() },
+        codec = CodecHelpers.copyOnWriteList(SkyOceanCodecs.getCodec<Minion>()),
     )
 
     val unlockedMinions: CopyOnWriteArrayList<Minion> get() = storage.get() ?: CopyOnWriteArrayList()

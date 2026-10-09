@@ -424,11 +424,6 @@ object Utils {
 
     fun componentList(init: TooltipBuilder.() -> Unit) = TooltipBuilder().apply(init).lines()
 
-    inline fun <T : Any> MeowddingStorageData<T>.edit(block: T.() -> Unit) {
-        get().block()
-        save()
-    }
-
     fun ClientboundLevelParticlesPacket.hasMaxSpeed(speed: Float): Boolean {
         //? if >= 26.3
         return this.xMaxSpeed == speed && this.yMaxSpeed == speed && this.zMaxSpeed == speed
