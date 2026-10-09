@@ -18,6 +18,7 @@ fun getSmallFont(): Map<Char, BufferedImage> {
     return fontMap
 }
 
+// Must be an ARGB image, otherwise will error out
 fun Graphics2D.drawImageTinted(
     image: BufferedImage,
     x: Int,
