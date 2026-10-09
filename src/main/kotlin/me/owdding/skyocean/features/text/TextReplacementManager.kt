@@ -75,7 +75,7 @@ object TextReplacementManager {
     fun register(replacement: TextReplacement) {
         registerInternal(replacement)
         this.storage.edit {
-            if (replacements.add(replacement)) Unit else null
+            replacements.add(replacement)
         }
     }
 
@@ -83,22 +83,22 @@ object TextReplacementManager {
         replacements.remove(replacement)
 
         this.storage.edit {
-            if (replacements.removeIf { it === replacement }) Unit else null
+            replacements.removeIf { it === replacement }
         }
     }
 
     fun createCategory(name: String, madeBy: String): TextReplacementCategory {
         val category = TextReplacementCategory(UUID.randomUUID(), name, madeBy)
         this.storage.edit {
-            if (categories.add(category)) Unit else null
+            categories.add(category)
         }
         return category
     }
 
     fun deleteCategory(category: TextReplacementCategory) {
         this.storage.edit {
-            if (replacements.removeAll { it.category == category.identifier } ||
-                categories.removeIf { it.identifier == category.identifier }) Unit else null
+            replacements.removeAll { it.category == category.identifier } ||
+                categories.removeIf { it.identifier == category.identifier }
         }
     }
 

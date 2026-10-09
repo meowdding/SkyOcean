@@ -86,7 +86,7 @@ object HotkeyManager {
     fun register(hotkey: Hotkey) {
         registerInternal(hotkey)
         this.storage.edit {
-            if (hotkeys.add(hotkey)) Unit else null
+            hotkeys.add(hotkey)
         }
     }
 
@@ -96,7 +96,7 @@ object HotkeyManager {
         buffer = EvictingQueue.create(tree.maxDepth())
 
         this.storage.edit {
-            if (hotkeys.removeIf { it === hotkey }) Unit else null
+            hotkeys.removeIf { it === hotkey }
         }
     }
 
@@ -215,15 +215,15 @@ object HotkeyManager {
     fun createCategory(name: String, madeBy: String): HotkeyCategory {
         val category = HotkeyCategory(UUID.randomUUID(), name, madeBy)
         this.storage.edit {
-            if (categories.add(category)) Unit else null
+            categories.add(category)
         }
         return category
     }
 
     fun deleteCategory(category: HotkeyCategory) {
         this.storage.edit {
-            if (hotkeys.removeAll { it.group == category.identifier } ||
-                categories.removeIf { it.identifier == category.identifier }) Unit else null
+            hotkeys.removeAll { it.group == category.identifier } ||
+                categories.removeIf { it.identifier == category.identifier }
         }
     }
 
