@@ -28,7 +28,7 @@ object EnvironmentalConfig : CategoryKt("environmental") {
         select(*defaultCloudIslands.toTypedArray()) {
             translation = "islandCloudHider"
         },
-        { +"skyocean.config.misc.islandCloudHider.warning" },
+        { +"skyocean.config.environmental.islandCloudHider.warning" },
         "islandCloudHider",
         predicate = { inAnyIsland(defaultCloudIslands) },
     )
@@ -38,7 +38,8 @@ object EnvironmentalConfig : CategoryKt("environmental") {
         boolean(true) {
             translation = "netherFogDarkening"
         },
-        { +"skyocean.config.misc.netherFogDarkening.warning" }, "netherFogDarkening",
+        { +"skyocean.config.environmental.netherFogDarkening.warning" },
+        "netherFogDarkening",
         predicate = { SkyBlockIsland.CRIMSON_ISLE.inIsland() },
     )
 
