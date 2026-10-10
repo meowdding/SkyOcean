@@ -26,7 +26,7 @@ object RatHitboxes {
 
     @TimePassed("5t")
     @Subscription(TickEvent::class)
-    fun tick() {
+    private fun tick() {
         rats.clear()
         if (!McLevel.hasLevel) return
         if (!MiscConfig.ratHitbox) return
@@ -46,7 +46,7 @@ object RatHitboxes {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.HUB)
-    fun entityRenderEvent(event: RenderWorldEvent.AfterTranslucent) {
+    private fun entityRenderEvent(event: RenderWorldEvent.AfterTranslucent) {
         if (!renderHitbox()) return
 
         event.atCamera {

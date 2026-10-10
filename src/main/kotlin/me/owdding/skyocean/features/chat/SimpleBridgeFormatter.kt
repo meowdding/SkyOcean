@@ -25,7 +25,7 @@ object SimpleBridgeFormatter {
     private val regex = ComponentRegex("(?<chatType>Guild|Officer) > (?:[^\\s:]+ )?(?<name>\\w{3,18})(?: \\[\\w+])?: (?<message>.+)")
 
     @Subscription
-    fun onChatReceivedPost(event: ChatReceivedEvent.Post) {
+    private fun onChatReceivedPost(event: ChatReceivedEvent.Post) {
         if (!ChatConfig.enableBridgeFormatter) return
         regex.match(event.component, "name", "message") { (name, message) ->
             if (name.stripped != ChatConfig.bridgeFormatterIgn) return@match

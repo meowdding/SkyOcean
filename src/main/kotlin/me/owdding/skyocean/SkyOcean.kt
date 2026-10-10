@@ -129,7 +129,7 @@ object SkyOcean : MeowddingMod("skyocean") {
     }
 
     @Subscription
-    fun onSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("version") {
             Text.of("Version: $VERSION").withColor(TextColor.GRAY).sendWithPrefix()
         }

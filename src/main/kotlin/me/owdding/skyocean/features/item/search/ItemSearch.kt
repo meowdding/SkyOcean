@@ -28,7 +28,7 @@ object ItemSearch {
     }
 
     @Subscription
-    fun onKey(event: ScreenKeyReleasedEvent) {
+    private fun onKey(event: ScreenKeyReleasedEvent) {
         if (!key.matches(event) || !MiscConfig.itemSearchKeybindOnHover) return
         val screen = event.screen as? AbstractContainerScreen<*> ?: return
         val item = screen.getHoveredSlot()?.item ?: return
@@ -43,7 +43,7 @@ object ItemSearch {
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("search") {
             then("query", StringArgumentType.greedyString()) {
                 callback { open(StringArgumentType.getString(this, "query")) }

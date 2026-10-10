@@ -71,7 +71,7 @@ object DungeonGamblingRenderer {
     }
 
     @Subscription
-    fun onItemList(event: ItemListEvent.RegisterExcludedScreen) {
+    private fun onItemList(event: ItemListEvent.RegisterExcludedScreen) {
         if (start.isDistantPast) return
 
         event.exclude("SkyOcean Dungeon Gambling")

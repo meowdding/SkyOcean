@@ -42,7 +42,7 @@ object SkyOceanDatagenDispatcher {
     }
 
     @Subscription(DatagenFinishEvent::class)
-    fun postProcess() {
+    private fun postProcess() {
         if (target != DatagenTarget.RESOURCE_PACKS) return
         val root = Path.of(System.getProperty("fabric-api.datagen.output-dir"))
         val output = runCatching { Path.of(System.getProperty("skyocean.datagen.output")) }

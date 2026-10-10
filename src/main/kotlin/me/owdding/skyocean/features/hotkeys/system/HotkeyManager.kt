@@ -101,7 +101,7 @@ object HotkeyManager {
     }
 
     @Subscription(TickEvent::class)
-    fun tick() {
+    private fun tick() {
         if (buffer.isEmpty()) return
         if (lastUpdated + MAX_INPUT_DELAY > System.currentTimeMillis()) return
         invokeValid()
@@ -175,7 +175,7 @@ object HotkeyManager {
     fun releaseAll() = clearBuffers()
 
     @Subscription
-    fun registerCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun registerCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("keybinds") {
             McClient.setScreenAsync { ConditionalHotkeyScreen }
         }
@@ -185,7 +185,7 @@ object HotkeyManager {
     }
 
     @Subscription
-    fun renderDebug(event: RenderHudEvent) {
+    private fun renderDebug(event: RenderHudEvent) {
         if (!debug) return
         val graphics = event.graphics
         var width = 10

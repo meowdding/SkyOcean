@@ -15,7 +15,7 @@ object NBSMusicManager : MeowddingLogger by SkyOcean.featureLogger("NBS Music Ma
 
     @Subscription
     context(event: RegisterSkyOceanCommandEvent)
-    fun commands() {
+    private fun commands() {
         event.registerDev("nbs") {
             thenCallback("start id", StringArgumentType.string()) {
                 play("command", argument<String>("id"))

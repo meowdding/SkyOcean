@@ -20,7 +20,7 @@ object CustomizeKeybind {
     private val key = SkyOceanKeybind("customize")
 
     @Subscription
-    fun onKeyPress(event: ScreenKeyReleasedEvent) {
+    private fun onKeyPress(event: ScreenKeyReleasedEvent) {
         if (!key.matches(event)) return
         val screen = event.screen as? AbstractContainerScreen<*> ?: return
         val item = screen.getHoveredSlot()?.item ?: return

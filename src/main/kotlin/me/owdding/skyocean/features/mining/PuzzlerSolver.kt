@@ -42,13 +42,13 @@ object PuzzlerSolver {
     private var solution: BlockPos? = null
 
     @Subscription(event = [ServerChangeEvent::class])
-    fun reset() {
+    private fun reset() {
         solution = null
     }
 
     @Subscription
     @OnlyIn(SkyBlockIsland.DWARVEN_MINES)
-    fun onRenderWorld(event: RenderWorldEvent.AfterTranslucent) {
+    private fun onRenderWorld(event: RenderWorldEvent.AfterTranslucent) {
         if (!MiningConfig.puzzlerSolver) return
         val solution = solution ?: return
         val level = McLevel.self ?: return
@@ -81,7 +81,7 @@ object PuzzlerSolver {
 
     @Subscription(receiveCancelled = true)
     @OnlyIn(SkyBlockIsland.DWARVEN_MINES)
-    fun onChat(event: ChatReceivedEvent.Pre) {
+    private fun onChat(event: ChatReceivedEvent.Pre) {
         if (!event.text.startsWith("[NPC] Puzzler: ")) return
         if (!regex.matches(event.text)) return reset()
 

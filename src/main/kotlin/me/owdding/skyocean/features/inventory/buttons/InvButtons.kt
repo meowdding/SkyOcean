@@ -27,7 +27,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 @Module
 object InvButtons {
     @Subscription
-    fun onScreen(event: ScreenInitializedEvent) {
+    private fun onScreen(event: ScreenInitializedEvent) {
         if (!shouldShowButtons(event.screen)) return
         val screen = event.screen as AbstractContainerScreen<*>
 
@@ -75,7 +75,7 @@ object InvButtons {
     }
 
     @Subscription
-    fun onScreenBackground(event: RenderScreenBackgroundEvent) {
+    private fun onScreenBackground(event: RenderScreenBackgroundEvent) {
         if (!shouldShowButtons(event.screen)) return
         Screens.getWidgets(event.screen).forEach {
             if (it is InvButton) {
@@ -87,7 +87,7 @@ object InvButtons {
     }
 
     @Subscription
-    fun onScreenForeground(event: RenderScreenForegroundEvent) {
+    private fun onScreenForeground(event: RenderScreenForegroundEvent) {
         if (!shouldShowButtons(event.screen)) return
         Screens.getWidgets(event.screen).forEach {
             if (it is InvButton) {
@@ -100,7 +100,7 @@ object InvButtons {
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("buttons") {
             if (InventoryConfig.inventoryButtons) {
                 McClient.setScreenAsync { ButtonConfigScreen(null) }

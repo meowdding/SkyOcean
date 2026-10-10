@@ -65,7 +65,7 @@ class SlotMachineSpinner(
     }
 
     @Subscription(inherited = true)
-    fun onHudRender(event: RenderHudElementEvent) {
+    private fun onHudRender(event: RenderHudElementEvent) {
         if (event.element == HudElement.CHAT && hideChat) {
             event.cancel()
         }

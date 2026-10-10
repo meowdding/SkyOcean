@@ -23,7 +23,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.splitToWidth
 object MinisterInCalendar {
 
     @Subscription
-    fun onInventoryChange(event: InventoryChangeEvent) {
+    private fun onInventoryChange(event: InventoryChangeEvent) {
         if (!enabled()) return
         if (event.slot.index != 38) return
         if (event.title != "Calendar and Events") return

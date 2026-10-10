@@ -102,7 +102,7 @@ object ProfileInChat {
 
     @Subscription(TabListChangeEvent::class)
     @OnlyOnSkyBlock
-    fun onTablistUpdate() {
+    private fun onTablistUpdate() {
         if (!ChatConfig.enableProfileInChat) return
 
         McClient.players.forEach { player ->
@@ -123,7 +123,7 @@ object ProfileInChat {
 
     @OnlyOnSkyBlock
     @Subscription(priority = LOWEST)
-    fun onChat(event: ChatReceivedEvent.Post) {
+    private fun onChat(event: ChatReceivedEvent.Post) {
         try {
             if (!ChatConfig.enableProfileInChat) return
             matcher.decompose(event.component) {
@@ -144,7 +144,7 @@ object ProfileInChat {
 
     @OnlyOnSkyBlock
     @Subscription(ServerChangeEvent::class)
-    fun onServerChange() {
+    private fun onServerChange() {
         usernameToProfileTypeCache.invalidateAll()
     }
 }

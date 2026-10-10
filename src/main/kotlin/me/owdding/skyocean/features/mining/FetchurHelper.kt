@@ -65,7 +65,7 @@ object FetchurHelper {
 
     @Subscription
     @OnlyIn(DWARVEN_MINES)
-    fun onChatReceived(event: ChatReceivedEvent.Pre) {
+    private fun onChatReceived(event: ChatReceivedEvent.Pre) {
         val message = regex.findGroup(event.text, "message") ?: return
         if (message.equals(correctItem, true)) {
             reset()
@@ -93,7 +93,7 @@ object FetchurHelper {
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.command("dev testfetchur") {
             "string"(StringArgumentType.greedyString()) executes { string ->
                 fetchurThing(string)
@@ -102,7 +102,7 @@ object FetchurHelper {
     }
 
     @Subscription(ProfileChangeEvent::class)
-    fun onProfileChange() = reset()
+    private fun onProfileChange() = reset()
 
     @GenerateCodec
     data class FetchurItem(

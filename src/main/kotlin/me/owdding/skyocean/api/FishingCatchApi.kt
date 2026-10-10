@@ -34,13 +34,13 @@ object FishingCatchApi {
 
     @Subscription(TickEvent::class)
     @OnlyOnSkyBlock
-    fun onTick() {
+    private fun onTick() {
         lastHookPos = hook?.position() ?: return
     }
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onSound(event: SoundPlayedEvent) {
+    private fun onSound(event: SoundPlayedEvent) {
         when (event.sound) {
             SoundEvents.PLAYER_SPLASH -> {
                 if (event.volume != 0.25f) return
@@ -67,7 +67,7 @@ object FishingCatchApi {
     }
 
     @Subscription(IslandChangeEvent::class)
-    fun onWorldChange() {
+    private fun onWorldChange() {
         lastHookPos = null
         lastPlingSound = Instant.DISTANT_PAST
         lastCatchSound = Instant.DISTANT_PAST

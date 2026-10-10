@@ -21,7 +21,7 @@ object PlayerUtils {
     fun getLastMoveTime(uuid: UUID): Instant? = lastMoveTime[uuid]
 
     @Subscription
-    fun onPacket(event: PacketReceivedEvent) {
+    private fun onPacket(event: PacketReceivedEvent) {
         val level = McLevel.selfOrNull ?: return
         val packet = event.packet as? ClientboundPlayerPositionPacket ?: return
         val player = level.getEntity(packet.id) as? Player ?: return
@@ -31,13 +31,13 @@ object PlayerUtils {
     }
 
     @Subscription
-    fun onEntityRemove(event: EntityRemovedEvent) {
+    private fun onEntityRemove(event: EntityRemovedEvent) {
         val player = event.entity as? Player ?: return
         lastMoveTime.remove(player.uuid)
     }
 
     @Subscription(ServerChangeEvent::class)
-    fun onWorldChange() {
+    private fun onWorldChange() {
         lastMoveTime.clear()
     }
 

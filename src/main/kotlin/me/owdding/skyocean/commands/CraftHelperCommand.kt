@@ -41,7 +41,7 @@ import kotlin.io.encoding.Base64
 @Module
 object CraftHelperCommand {
     @Subscription
-    fun registerCommands(event: RegisterSkyOceanCommandEvent) {
+    private fun registerCommands(event: RegisterSkyOceanCommandEvent) {
         fun toId(input: String): ItemLikeIngredient? {
             var amount = 1
             val id = SkyBlockId.fromName(input, dropLast = false) ?: SkyBlockId.unknownType(input) ?: run {

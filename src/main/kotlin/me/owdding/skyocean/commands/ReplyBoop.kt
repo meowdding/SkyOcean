@@ -31,7 +31,7 @@ object ReplyBoop {
     }
 
     @Subscription
-    fun onRegisterCommands(event: RegisterCommandsEvent) {
+    private fun onRegisterCommands(event: RegisterCommandsEvent) {
         if (!ChatConfig.replyBoop) return
         event.registerWithCallback("rboop") {
             val ign = lastIgn ?: return@registerWithCallback noUser()
@@ -41,7 +41,7 @@ object ReplyBoop {
     }
 
     @Subscription
-    fun onChatReceived(event: ChatReceivedEvent.Pre) {
+    private fun onChatReceived(event: ChatReceivedEvent.Pre) {
         regex.find(event.text, "author") { (author) ->
             lastIgn = author
             time = currentInstant()

@@ -86,13 +86,13 @@ object RemoteStrings : StringGroup, MeowddingLogger by SkyOcean.featureLogger() 
     val stringOverwrites: MutableMap<String, String> = mutableMapOf()
 
     @Subscription(StartRepoLoadingEvent::class)
-    fun repoStartLoading() {
+    private fun repoStartLoading() {
         stringOverwrites.clear()
         list.forEach(CompletedElementDelegate<*>::update)
     }
 
     @Subscription(FinishRepoLoadingEvent::class)
-    fun repoLoaded() {
+    private fun repoLoaded() {
         val data = RemoteRepo.getFileContentAsJson("skyocean/strings.json") as? JsonObject ?: return
 
         val map = HashMap<String, String>()

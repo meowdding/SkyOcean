@@ -71,7 +71,7 @@ object HotspotFeatures {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onRenderWorldEvent(event: RenderWorldEvent.CollectSubmits) {
+    private fun onRenderWorldEvent(event: RenderWorldEvent.CollectSubmits) {
         if (!isEnabled()) return
 
         HotspotAPI.hotspots.forEach { (_, type, pos, radius) ->
@@ -108,7 +108,7 @@ object HotspotFeatures {
     }
 
     @Subscription
-    fun onHotspotDespawn(event: HotspotEvent.Despawn) {
+    private fun onHotspotDespawn(event: HotspotEvent.Despawn) {
         if (!HotspotFeaturesConfig.warning) return
         val hotspot = event.hotspot
         if (!hotspot.fishedIn || HotspotAPI.lastHotspotFish.since() > 30.seconds) return
@@ -132,7 +132,7 @@ object HotspotFeatures {
     @Subscription(TickEvent::class)
     @TimePassed("10t")
     @OnlyOnSkyBlock
-    fun onTick() {
+    private fun onTick() {
         if (HotspotFeaturesConfig.announce == HotspotFeaturesConfig.AnnouncementType.OFF) return
 
         val availableHotspots = HotspotAPI.hotspots
@@ -188,7 +188,7 @@ object HotspotFeatures {
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("testHotspot") {
             callback {
                 HotspotType.entries.random().let { type ->

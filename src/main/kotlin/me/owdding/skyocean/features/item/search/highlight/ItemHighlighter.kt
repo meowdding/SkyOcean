@@ -147,7 +147,7 @@ object ItemHighlighter {
     @Subscription
     @OnlyOnSkyBlock
     @OptIn(ItemSearchComponent::class)
-    fun onItem(event: ItemStackCreateEvent) {
+    private fun onItem(event: ItemStackCreateEvent) {
         val filter = currentSearch ?: return
         if (filter.test(event.itemStack)) {
             event.itemStack.highlight()
@@ -157,7 +157,7 @@ object ItemHighlighter {
     /** Low priority so that [me.owdding.skyocean.features.misc.ChestTracker.onClose] gets called first */
     @OnlyOnSkyBlock
     @Subscription(ContainerCloseEvent::class, priority = Subscription.LOW)
-    fun onContainerClose() {
+    private fun onContainerClose() {
         if (!hasHighlightInCurrentInventory) return
         hasHighlightInCurrentInventory = false
         if (SkyBlockIsland.PRIVATE_ISLAND.inIsland() && !LocationAPI.isGuest) recalculateChests()
@@ -167,7 +167,7 @@ object ItemHighlighter {
     @OnlyNonGuest
     @MustBeContainer
     @OnlyIn(PRIVATE_ISLAND)
-    fun onInventoryChange(event: InventoryChangeEvent) {
+    private fun onInventoryChange(event: InventoryChangeEvent) {
         val filter = currentSearch ?: return
         if (filter.test(event.item)) {
             hasHighlightInCurrentInventory = true
@@ -179,7 +179,7 @@ object ItemHighlighter {
     @OnlyOnSkyBlock
     @MustBeContainer
     @InventoryTitle("Sack of Sacks")
-    fun onSackScreen(event: InventoryChangeEvent) {
+    private fun onSackScreen(event: InventoryChangeEvent) {
         val filter = currentSearch ?: return
         if (event.isInBottomRow) return
         if (event.isSkyBlockFiller) return
@@ -212,7 +212,7 @@ object ItemHighlighter {
     @OnlyOnSkyBlock
     @MustBeContainer
     @InventoryTitle("Storage")
-    fun onStorage(event: InventoryChangeEvent) {
+    private fun onStorage(event: InventoryChangeEvent) {
         val filter = currentSearch ?: return
         if (event.isInBottomRow) return
         val item = event.item

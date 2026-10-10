@@ -20,7 +20,7 @@ object OceanOverlays {
     }
 
     @Subscription
-    fun finishEditing(event: FinishOverlayEditingEvent) {
+    private fun finishEditing(event: FinishOverlayEditingEvent) {
         if (event.modId == SkyOcean.MOD_ID) {
             SkyOcean.config.save()
         }

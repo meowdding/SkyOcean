@@ -24,7 +24,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object CorpseKeyAnnouncement {
 
     @Subscription
-    fun onCorpseSpawn(event: CorpseSpawnEvent) {
+    private fun onCorpseSpawn(event: CorpseSpawnEvent) {
         if (!MineshaftConfig.keyAnnouncement) return
 
         sendKeys(event.corpses)
@@ -65,7 +65,7 @@ object CorpseKeyAnnouncement {
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerDev("test corpsekey") {
             callback {
                 val test = CorpseType.entries.map(::Corpse)

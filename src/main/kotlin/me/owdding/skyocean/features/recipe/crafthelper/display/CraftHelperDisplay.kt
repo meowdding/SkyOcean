@@ -57,7 +57,7 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
     private const val BACKGROUND_PADDING = 14
 
     @Subscription
-    fun onScreenInit(event: ScreenInitializedEvent) {
+    private fun onScreenInit(event: ScreenInitializedEvent) {
         if (!CraftHelperConfig.enabled && !ignoreChecks) return
         if (!LocationAPI.isOnSkyBlock && !ignoreChecks) return
         if (CatharsisSupport.isModElementHidden("skyocean:crafthelper")) return
@@ -90,14 +90,14 @@ object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
     }
 
     @Subscription
-    fun onItemListRender(event: ItemListEvent.RegisterExclusionZones) {
+    private fun onItemListRender(event: ItemListEvent.RegisterExclusionZones) {
         craftHelperLayout?.let {
             event.register(it.x, it.y, it.width, it.height)
         }
     }
 
     @Subscription(ContainerCloseEvent::class)
-    fun onScreenClose() {
+    private fun onScreenClose() {
         craftHelperLayout = null
     }
 

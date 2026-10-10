@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object SackNotification {
 
     @Subscription
-    fun onSack(event: SacksChangeEvent) {
+    private fun onSack(event: SacksChangeEvent) {
         if (!ChatConfig.enableSackNotification) return
 
         val amount = event.changedItems.filter { it.diff > 0 }.map {

@@ -132,7 +132,7 @@ object ForgeRecipeScreenHandler {
     val forgeRecipes by lazy { RepoAPI.recipes().getRecipes(Recipe.Type.FORGE) }
 
     @Subscription
-    fun onCommand(event: RegisterCommandsEvent) {
+    private fun onCommand(event: RegisterCommandsEvent) {
         event.register("viewforgerecipe") {
             then("recipe", StringArgumentType.greedyString(), ForgeSuggestionProvider) {
                 callback {

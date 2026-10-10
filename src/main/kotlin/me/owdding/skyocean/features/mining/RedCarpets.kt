@@ -14,7 +14,7 @@ object RedCarpets {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.DWARVEN_MINES)
-    fun onBlockModel(event: BlockModelEvent) {
+    private fun onBlockModel(event: BlockModelEvent) {
         if (!MiningRetexture.recolorCarpets) return
         if (event.block !in BlockTagKey.DWARVEN_MINES_CARPETS) return
         event.block = Blocks.CARPET.red()

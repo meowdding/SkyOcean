@@ -20,7 +20,7 @@ object AnvilHelper {
     private val slots = intArrayOf(29, 33)
 
     @Subscription
-    fun onInventoryChange(event: InventoryChangeEvent) {
+    private fun onInventoryChange(event: InventoryChangeEvent) {
         if (!MiscConfig.anvilHelper) return
         if (event.title != "Anvil") return
         if (!event.isInPlayerInventory) return
@@ -41,7 +41,7 @@ object AnvilHelper {
     }
 
     @Subscription(ContainerCloseEvent::class)
-    fun onInventoryClose() {
+    private fun onInventoryClose() {
         if (!MiscConfig.anvilHelper) return
         McPlayer.inventory.forEach { itemStack -> itemStack.replaceVisually(null) }
     }

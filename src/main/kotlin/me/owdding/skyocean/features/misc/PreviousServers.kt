@@ -18,7 +18,7 @@ object PreviousServers {
     private val lastServers: MutableList<Server> = mutableListOf()
 
     @Subscription
-    fun onServerChange(event: ServerChangeEvent) {
+    private fun onServerChange(event: ServerChangeEvent) {
         if (!MiscConfig.previousServer) return
 
         // Update time of the last server because we still want to alert about being in it,

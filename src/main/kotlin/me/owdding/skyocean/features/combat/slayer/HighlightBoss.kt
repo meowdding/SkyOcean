@@ -22,7 +22,7 @@ object HighlightBoss {
 
     @Subscription
     @OnlySlayerBosses
-    fun onBlazeSlayerLineChange(event: SlayerEvent) {
+    private fun onBlazeSlayerLineChange(event: SlayerEvent) {
         if (event.slayerInfo.type == SlayerType.INFERNO_DEMONLORD && SlayerConfig.enableBlazeHighlight) {
             return
         }

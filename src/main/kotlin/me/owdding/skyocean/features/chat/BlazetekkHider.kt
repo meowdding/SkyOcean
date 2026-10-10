@@ -17,7 +17,7 @@ object BlazetekkHider {
     @Subscription
     @OnlyOnSkyBlock
     context(event: ChatReceivedEvent.Pre)
-    fun onChat() {
+    private fun onChat() {
         if (!ChatConfig.hideBlazetekkMessages) return
         if (event.text in messages) {
             event.cancel()

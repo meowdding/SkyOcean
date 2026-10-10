@@ -16,7 +16,7 @@ object BobberTime {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onRender(event: RenderWorldEvent.AfterTranslucent) {
+    private fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         if (!FishingConfig.bobberTime) return
         val rod = McPlayer.self?.fishing ?: return
         val time = rod.tickCount / 20.0

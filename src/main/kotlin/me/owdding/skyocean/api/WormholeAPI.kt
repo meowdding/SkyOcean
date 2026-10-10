@@ -35,7 +35,7 @@ object WormholeAPI {
     private val islands = listOf(SkyBlockIsland.LOTUS_ATOLL, SkyBlockIsland.CRIMSON_ISLE)
 
     @Subscription
-    fun onCatch(event: FishCatchEvent) {
+    private fun onCatch(event: FishCatchEvent) {
         val hookY = event.hookPos.y
         val hookPosD = event.hookPos.toVector3f()
 
@@ -49,13 +49,13 @@ object WormholeAPI {
     }
 
     @Subscription(ServerChangeEvent::class)
-    fun onServerChange() {
+    private fun onServerChange() {
         _wormholes.clear()
     }
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onParticle(event: PacketReceivedEvent) {
+    private fun onParticle(event: PacketReceivedEvent) {
         if (!inWormholeIsland()) return
 
         val packet = event.packet as? ClientboundLevelParticlesPacket ?: return

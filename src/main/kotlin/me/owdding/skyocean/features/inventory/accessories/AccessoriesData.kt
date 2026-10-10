@@ -86,7 +86,7 @@ object AccessoriesAPI {
     fun isDisallowedOrigin(id: SkyBlockId): Boolean = getFamily(id)?.isDisallowed() == true
 
     @Subscription(FinishRepoLoadingEvent::class)
-    fun onRepo() {
+    private fun onRepo() {
         families = emptyMap()
         unobtainable = emptySet()
         rarityUpgraded = emptyMap()
@@ -117,7 +117,7 @@ object AccessoriesAPI {
     }
 
     @Subscription
-    fun onRegisterSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onRegisterSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerDev("accessories") {
             then("copy") {
                 fun <T : Any> copy(prop: KProperty0<T>, codec: Codec<T>, name: String = prop.name) {

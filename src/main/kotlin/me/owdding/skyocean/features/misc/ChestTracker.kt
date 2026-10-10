@@ -43,7 +43,7 @@ object ChestTracker {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.PRIVATE_ISLAND)
-    fun onBlockInteract(event: RightClickBlockEvent) {
+    private fun onBlockInteract(event: RightClickBlockEvent) {
         val blockState = McLevel[event.pos]
         if (blockState !in BlockTagKey.CHESTS) return
         val chestType = blockState.getValue(BlockStateProperties.CHEST_TYPE)
@@ -99,7 +99,7 @@ object ChestTracker {
 
     @Subscription(ContainerCloseEvent::class)
     @OnlyIn(SkyBlockIsland.PRIVATE_ISLAND)
-    fun onClose() {
+    private fun onClose() {
         val container = container ?: return
         val first = first ?: return
         val second = second
@@ -125,7 +125,7 @@ object ChestTracker {
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("reset islandchests") {
             IslandChestStorage.clear()
             Text.of("Successfully cleared all island chests!").sendWithPrefix()

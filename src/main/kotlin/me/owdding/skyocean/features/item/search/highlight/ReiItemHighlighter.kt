@@ -22,7 +22,7 @@ object ReiItemHighlighter {
 
     @OnlyOnSkyBlock
     @Subscription(TickEvent::class)
-    fun onTick() {
+    private fun onTick() {
         val search = REIRuntimeCompatability.getCurrentSearchBar() ?: return
         if (!REIRuntimeCompatability.isSearchBarHighlighting()) {
             stop()

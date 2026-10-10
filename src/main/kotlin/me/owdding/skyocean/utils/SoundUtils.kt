@@ -30,7 +30,7 @@ object SoundUtils {
     }
 
     @Subscription
-    fun onTick(event: TickEvent) {
+    private fun onTick(event: TickEvent) {
         repeatingSounds.removeIf { sound ->
             sound.tick(event.ticks)
             sound.remaining <= 0

@@ -15,7 +15,7 @@ object ComponentAnimatorDebug {
     private val component by ComponentAnimator("Component Animator Debug", 0xFF0000, 0x00FF00)
 
     @Subscription
-    fun onRender(event: RenderHudEvent) {
+    private fun onRender(event: RenderHudEvent) {
         if (!toggle) return
         event.graphics.text(
             McFont.self,

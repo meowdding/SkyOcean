@@ -59,13 +59,13 @@ object CorpseWaypoint {
 
     //? >= 26.2
     @Subscription
-    fun onRender(event: RenderWorldEvent.AfterTranslucent) {
+    private fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         RenderTranslucentFeatures(event).post(SkyBlockAPI.eventBus)
     }
 
     @Subscription
     @OnlyIn(SkyBlockIsland.MINESHAFT)
-    fun onRender(event: RenderTranslucentFeatures) {
+    private fun onRender(event: RenderTranslucentFeatures) {
         if (!MineshaftConfig.corpseWaypoint) return
         val mineshaft = mineshaftCorpses?.entries?.find { it.key == MineshaftAPI.mineshaftType } ?: return
         val corpses = mineshaft.value.entries.find { it.key == MineshaftAPI.mineshaftVariant }?.value ?: return
@@ -77,7 +77,7 @@ object CorpseWaypoint {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.MINESHAFT)
-    fun onInteract(event: RightClickEntityEvent) {
+    private fun onInteract(event: RightClickEntityEvent) {
         if (!MineshaftConfig.corpseWaypoint) return
         val entity = event.entity as? ArmorStand ?: return
 

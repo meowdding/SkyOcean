@@ -20,7 +20,7 @@ object FishingWarningScale {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onEntityNameChange(event: NameChangedEvent) {
+    private fun onEntityNameChange(event: NameChangedEvent) {
         if (!FishingConfig.hookTextScaleToggle) return
         if (!event.component.stripped.matches(hookWarningRegex)) return
         if (event.attachedTo != McPlayer.self?.fishing) return

@@ -126,7 +126,7 @@ class ItemValueScreen(val item: ItemStack) : SkyOceanScreen("Item Value") {
         val ITEM_VALUE_KEY = SkyOceanKeybind("item_value", InputConstants.KEY_J)
 
         @Subscription
-        fun onKeypress(event: ScreenKeyReleasedEvent) {
+        private fun onKeypress(event: ScreenKeyReleasedEvent) {
             if (!ITEM_VALUE_KEY.matches(event)) return
             val item = McScreen.asMenu?.getHoveredSlot()?.item?.takeUnless { it.isEmpty } ?: return
             McClient.setScreenAsync { ItemValueScreen(item) }

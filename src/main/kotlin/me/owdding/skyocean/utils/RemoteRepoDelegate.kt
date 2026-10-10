@@ -30,7 +30,7 @@ class RemoteRepoDelegate<T : Any>(private val path: String, private val loader: 
         private val instances: MutableSet<RemoteRepoDelegate<*>> = CopyOnWriteArraySet()
 
         @Subscription(FinishRepoLoadingEvent::class)
-        fun onRepoLoad() {
+        private fun onRepoLoad() {
             instances.forEach { it.update() }
         }
 

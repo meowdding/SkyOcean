@@ -77,7 +77,7 @@ object CraftHelperManager {
 
     @Subscription(TickEvent::class)
     @TimePassed("5t")
-    fun onTick() {
+    private fun onTick() {
         if (lastData != CraftHelperStorage.data) {
             this.lastData = CraftHelperStorage.data
             hasBeenNotified = false
@@ -128,21 +128,21 @@ object CraftHelperManager {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onItemListKeybind(event: ScreenKeyReleasedEvent.Pre) {
+    private fun onItemListKeybind(event: ScreenKeyReleasedEvent.Pre) {
         if (!keybind.matches(event)) return
         highlight(McScreen.asMenu?.getHoveredSlot()?.item)
     }
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onItemListKeybind(event: ItemListEvent.HoveredItemKeyPress) {
+    private fun onItemListKeybind(event: ItemListEvent.HoveredItemKeyPress) {
         if (!keybind.key.matches(event.event)) return
         setItem(event.stack)
     }
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onItemListWidget(event: ItemListEvent.RecipeButtonAdd) {
+    private fun onItemListWidget(event: ItemListEvent.RecipeButtonAdd) {
         event.itemStack.getSkyBlockId() ?: return
         event.register(
             Button.builder(Text.of("\uD83E\uDE93")) {

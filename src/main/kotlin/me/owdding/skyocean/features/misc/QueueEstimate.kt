@@ -35,7 +35,7 @@ object QueueEstimate {
     private val regex by group.regex("You are #(?<position>\\d+) in the queue!")
 
     @Subscription
-    fun onTick(event: TickEvent) {
+    private fun onTick(event: TickEvent) {
         if (!MiscConfig.queueEstimation) return
         //? >= 26.2 {
         val title = McClient.self.gui.hud.subtitle?.stripped
@@ -61,7 +61,7 @@ object QueueEstimate {
     }
 
     @Subscription
-    fun onRender(event: RenderHudEvent) {
+    private fun onRender(event: RenderHudEvent) {
         if (!MiscConfig.queueEstimation) return
         if (history.isEmpty()) return
         val title = Text.of {

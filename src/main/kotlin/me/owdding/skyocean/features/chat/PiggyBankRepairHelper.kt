@@ -19,7 +19,7 @@ object PiggyBankRepairHelper {
     private val regex by group.regex("You died(?: and your piggy bank cracked!|, lost [\\d.,]* coins and your piggy bank broke!)")
 
     @Subscription
-    fun onChat(event: ChatReceivedEvent.Pre) {
+    private fun onChat(event: ChatReceivedEvent.Pre) {
         if (!ChatConfig.piggyRepairHelper) return
         if (!regex.matches(event.text)) return
 

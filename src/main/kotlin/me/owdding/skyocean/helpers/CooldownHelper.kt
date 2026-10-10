@@ -38,7 +38,7 @@ class CooldownHelper(
 
         @Subscription(TickEvent::class)
         @TimePassed("5s")
-        fun onTick() {
+        private fun onTick() {
             cooldowns.forEach { helper ->
                 if (helper.lastUsed.since() >= helper.cooldown()) {
                     if (helper.busyOption() && isBusy()) {

@@ -31,7 +31,7 @@ object MuteTheFuckingStereoPants {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onEntity(event: EntityEquipmentUpdateEvent) {
+    private fun onEntity(event: EntityEquipmentUpdateEvent) {
         val player = event.entity as? Player ?: return
         if (players.containsKey(player)) return
         if (player.getLeggings().getSkyBlockId()?.equals("MUSIC_PANTS", true) == true) {
@@ -41,7 +41,7 @@ object MuteTheFuckingStereoPants {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onSound(event: SoundPlayedEvent) {
+    private fun onSound(event: SoundPlayedEvent) {
         if (!MiscConfig.stereoPantsMute) return
         val shouldHide = players.keys.any { it.distanceToSqr(event.pos) < 3.0 } && event.sound in sounds
 
@@ -52,13 +52,13 @@ object MuteTheFuckingStereoPants {
 
 
     @Subscription
-    fun onEntityLeave(event: EntityRemovedEvent) {
+    private fun onEntityLeave(event: EntityRemovedEvent) {
         val player = event.entity as? AbstractClientPlayer ?: return
         players.remove(player)
     }
 
     @Subscription
-    fun onWorldSwitch(event: ServerChangeEvent) {
+    private fun onWorldSwitch(event: ServerChangeEvent) {
         players.clear()
     }
 }

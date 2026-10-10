@@ -84,7 +84,7 @@ object ForgeReminder {
     )
 
     @Subscription(ProfileChangeEvent::class)
-    fun onProfileSwitch() {
+    private fun onProfileSwitch() {
         helper.reset()
     }
 

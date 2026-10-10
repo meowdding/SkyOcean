@@ -24,7 +24,7 @@ object DeskPestHighlight {
     @Subscription
     @InventoryTitle("Configure Plots")
     @OnlyIn(SkyBlockIsland.GARDEN)
-    fun onInv(event: InventoryChangeEvent) {
+    private fun onInv(event: InventoryChangeEvent) {
         if (!GardenConfig.deskPestHighlight) return
         regex.anyMatch(event.item.getRawLore(), "amount") { (amount) ->
             val amount = amount.toIntValue().takeUnless { it == 0 } ?: return@anyMatch

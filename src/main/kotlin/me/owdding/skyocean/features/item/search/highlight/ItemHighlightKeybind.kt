@@ -18,14 +18,14 @@ object ItemHighlightKeybind {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onItemListKeybind(event: ScreenKeyReleasedEvent.Pre) {
+    private fun onItemListKeybind(event: ScreenKeyReleasedEvent.Pre) {
         if (!keybind.matches(event)) return
         highlight(McScreen.asMenu?.getHoveredSlot()?.item)
     }
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onItemListKeybind(event: ItemListEvent.HoveredItemKeyPress) {
+    private fun onItemListKeybind(event: ItemListEvent.HoveredItemKeyPress) {
         if (!keybind.key.matches(event.event)) return
         highlight(event.stack)
     }

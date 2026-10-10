@@ -30,7 +30,7 @@ object PityMessage {
 
     @Subscription
     @OnlyWidget(TabWidget.PITY)
-    fun onWidget(event: TabWidgetChangeEvent) {
+    private fun onWidget(event: TabWidgetChangeEvent) {
         if (!MineshaftConfig.mineshaftFoundPity) return
         regex.anyMatch(event.new, "current", "max") { (current, max) ->
             lastPity = current.toIntValue()
@@ -39,7 +39,7 @@ object PityMessage {
     }
 
     @Subscription
-    fun onMineshaftFound(event: MineshaftFoundEvent) {
+    private fun onMineshaftFound(event: MineshaftFoundEvent) {
         if (!MineshaftConfig.mineshaftFoundPity || lastPity == -1) return
         McClient.runNextTick {
             Text.join(

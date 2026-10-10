@@ -151,7 +151,7 @@ object MetalDetectorSolver {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onActionBar(event: ActionBarReceivedEvent.Pre) {
+    private fun onActionBar(event: ActionBarReceivedEvent.Pre) {
         if (!isEnabled()) return
         val distanceFromActionbar = event.text.split("     ").firstNotNullOfOrNull {
             actionbarDistanceRegex.findGroup(it, "distance")?.toDoubleOrNull()
@@ -165,7 +165,7 @@ object MetalDetectorSolver {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onEntityNamed(event: NameChangedEvent) {
+    private fun onEntityNamed(event: NameChangedEvent) {
         if (center != null || locations.isNotEmpty()) return
         if (event.infoLineEntity !is ArmorStand || !event.literalComponent.startsWith("Keeper of ")) return
 
@@ -178,11 +178,11 @@ object MetalDetectorSolver {
     }
 
     @Subscription
-    fun onServerChange(event: ServerChangeEvent) = fullReset()
+    private fun onServerChange(event: ServerChangeEvent) = fullReset()
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onChatMessage(event: ChatReceivedEvent.Pre) {
+    private fun onChatMessage(event: ChatReceivedEvent.Pre) {
         if (!isEnabled()) return
         if (foundTreasureRegex.matches(event.text)) {
             reset()
@@ -215,7 +215,7 @@ object MetalDetectorSolver {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onTick(event: TickEvent) {
+    private fun onTick(event: TickEvent) {
         if (!isEnabled()) return
         val playerPosition = McPlayer.position ?: return
 
@@ -257,7 +257,7 @@ object MetalDetectorSolver {
     class PosAndTime(val time: Long, val position: Vec3)
 
     @Subscription
-    fun onRightClick(event: RightClickEvent) {
+    private fun onRightClick(event: RightClickEvent) {
         if (!isEnabled()) return
         if (event.stack.isDetector() && McPlayer.self?.isCrouching == true) {
             Text.of("Resetting Metal Detector Solver").sendWithPrefix()

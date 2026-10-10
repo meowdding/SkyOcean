@@ -28,7 +28,7 @@ object MinionStorage {
 
     @Subscription(priority = Subscription.HIGHEST)
     @InventoryTitle("\\(\\d+/\\d+\\) Crafted Minions")
-    fun onOpen(event: ContainerInitializedEvent) {
+    private fun onOpen(event: ContainerInitializedEvent) {
         val currentMinions = storage.get() ?: CopyOnWriteArrayList()
         var dataChanged = false
 

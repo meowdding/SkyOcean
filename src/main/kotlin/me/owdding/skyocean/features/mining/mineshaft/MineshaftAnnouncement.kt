@@ -79,18 +79,18 @@ object MineshaftAnnouncement {
     )
 
     @Subscription
-    fun onShaftFind(event: MineshaftFoundEvent) {
+    private fun onShaftFind(event: MineshaftFoundEvent) {
         lastFound = System.currentTimeMillis()
     }
 
     @Subscription
-    fun onShaftEnter(event: MineshaftEnteredEvent) {
+    private fun onShaftEnter(event: MineshaftEnteredEvent) {
         foundShaftType = true
         McClient.runNextTick { trySend() }
     }
 
     @Subscription
-    fun onCorpseSpawn(event: CorpseSpawnEvent) {
+    private fun onCorpseSpawn(event: CorpseSpawnEvent) {
         foundCorpse = true
         McClient.runNextTick { trySend() }
     }
@@ -141,7 +141,7 @@ object MineshaftAnnouncement {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.MINESHAFT)
-    fun onChatMessage(event: ChatReceivedEvent.Pre) {
+    private fun onChatMessage(event: ChatReceivedEvent.Pre) {
         if (hasSend && sentPartyMessage?.let { event.text.endsWith(it) } == true) {
             sentPartyMessage = null
             event.cancel()
@@ -149,7 +149,7 @@ object MineshaftAnnouncement {
     }
 
     @Subscription
-    fun onWorldSwitch(event: ServerChangeEvent) = reset()
+    private fun onWorldSwitch(event: ServerChangeEvent) = reset()
 
     private fun reset() {
         if (lastFound != 0L && !hasSend) {

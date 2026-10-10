@@ -132,7 +132,7 @@ object CropFeverEffects {
     @Subscription
     @OnlyIn(GARDEN)
     @OnlyNonGuest
-    fun onChatMessage(event: ChatReceivedEvent.Pre) {
+    private fun onChatMessage(event: ChatReceivedEvent.Pre) {
         if (!CropFeverEffectsConfig.enabled) return
         if (startRegex.matches(event.text)) {
             if (isFeverActive) return
@@ -174,12 +174,12 @@ object CropFeverEffects {
     }
 
     @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class)
-    fun onServerChange() {
+    private fun onServerChange() {
         turnOff()
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerDev("farming crop_fever") {
             then("start") {
                 callback {

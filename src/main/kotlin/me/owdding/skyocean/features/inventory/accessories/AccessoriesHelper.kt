@@ -175,7 +175,7 @@ object AccessoriesHelper : AbstractItemModifier() {
     }
 
     @Subscription
-    fun onRegisterSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onRegisterSkyOceanCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("accessories") {
             callback {
                 if (!LocationAPI.isOnSkyBlock) {

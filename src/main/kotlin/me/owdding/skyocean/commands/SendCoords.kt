@@ -13,7 +13,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.component3
 object SendCoords {
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("sendcoords") {
             val (x, y, z) = McPlayer.self?.blockPosition() ?: return@registerWithCallback
             McClient.self.player?.connection?.sendChat("x: $x, y: $y, z: $z")

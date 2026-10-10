@@ -62,7 +62,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object CustomizeCommand {
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.register("customize") {
             callback {
                 val item = McPlayer.heldItem

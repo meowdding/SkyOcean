@@ -60,14 +60,14 @@ object Scathas : MeowddingLogger by SkyOcean.featureLogger() {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onEntityEquipment(event: EntityEquipmentUpdateEvent) {
+    private fun onEntityEquipment(event: EntityEquipmentUpdateEvent) {
         if (!ScathaConfig.wormAnnouncer) return
         tryAdd(event.entity)
     }
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onEntityHealthChange(event: EntityAttributesUpdateEvent) {
+    private fun onEntityHealthChange(event: EntityAttributesUpdateEvent) {
         if (!ScathaConfig.wormAnnouncer) return
         if (Attributes.MAX_HEALTH !in event.changed) return
         tryAdd(event.entity)
@@ -106,7 +106,7 @@ object Scathas : MeowddingLogger by SkyOcean.featureLogger() {
     @Subscription(TickEvent::class)
     @TimePassed("5t")
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onTick() {
+    private fun onTick() {
         if (ScathaConfig.wormAnnouncer && worm?.isAlive == true) {
             McClient.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP)
         }
@@ -129,20 +129,20 @@ object Scathas : MeowddingLogger by SkyOcean.featureLogger() {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onEntityRemoved(event: EntityRemovedEvent) {
+    private fun onEntityRemoved(event: EntityRemovedEvent) {
         val worm = worm ?: return
         if (worm.entity == event.entity) this.worm = null
     }
 
     @Subscription(ServerChangeEvent::class, ServerDisconnectEvent::class)
-    fun onServerChange() {
+    private fun onServerChange() {
         this.worm = null
         cooldown = false
     }
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onChat(event: ChatReceivedEvent.Pre) {
+    private fun onChat(event: ChatReceivedEvent.Pre) {
         if (spawnWormRegex.matches(event.text)) {
             lastSpawn = currentInstant()
             cooldown = true
@@ -151,7 +151,7 @@ object Scathas : MeowddingLogger by SkyOcean.featureLogger() {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRYSTAL_HOLLOWS)
-    fun onPetDrop(event: ChatReceivedEvent.Post) {
+    private fun onPetDrop(event: ChatReceivedEvent.Post) {
         scathaPetDropRegex.match(event.component) { matcher ->
             val pet = matcher["pet"] ?: return@match
             val mf: Component? = matcher["mf"]

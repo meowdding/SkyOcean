@@ -55,7 +55,7 @@ object TextReplacementManager {
     }
 
     @Subscription
-    fun registerCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun registerCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("text_replacements") {
             McClient.setScreenAsync { TextReplacementScreen }
         }

@@ -30,7 +30,7 @@ object StylizedChatPrefixes {
     private val npcRegex = "^\\[NPC]".toRegex()
 
     @Subscription(priority = Subscription.LOW)
-    fun onChat(event: ChatReceivedEvent.Post) {
+    private fun onChat(event: ChatReceivedEvent.Post) {
         if (!ChatConfig.enableStylizedChatPrefixes) return
 
         findWhen(event.text) {

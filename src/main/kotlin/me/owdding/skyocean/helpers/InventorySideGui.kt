@@ -60,13 +60,13 @@ abstract class InventorySideGui(
     // show the list before the items are resent so it doesn't
     // fall in and out.
     @Subscription(inherited = true, priority = Subscription.LOW)
-    fun onInvChange(event: ContainerInitializedEvent) {
+    private fun onInvChange(event: ContainerInitializedEvent) {
         this.lastEvent = event
         refresh()
     }
 
     @Subscription(inherited = true)
-    fun onScreenInit(event: ScreenInitializedEvent) {
+    private fun onScreenInit(event: ScreenInitializedEvent) {
         isBeingShown = enabled && regex.matches(event.screen.title.stripped)
         if (!isBeingShown) return
 
@@ -83,7 +83,7 @@ abstract class InventorySideGui(
     }
 
     @Subscription(inherited = true)
-    fun onItemListRender(event: ItemListEvent.RegisterExclusionZones) {
+    private fun onItemListRender(event: ItemListEvent.RegisterExclusionZones) {
         if (!isBeingShown) return
 
         oldWidget?.let {
@@ -92,7 +92,7 @@ abstract class InventorySideGui(
     }
 
     @Subscription(ContainerCloseEvent::class, inherited = true)
-    fun onContainerClose() {
+    private fun onContainerClose() {
         isBeingShown = false
         oldList = null
         lastEvent = null

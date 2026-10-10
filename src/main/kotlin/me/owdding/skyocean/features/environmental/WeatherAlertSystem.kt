@@ -46,7 +46,7 @@ object WeatherAlertSystem {
     @Subscription(TickEvent::class)
     @TimePassed("1s")
     @OnlyOnSkyBlock
-    fun onTick() {
+    private fun onTick() {
         val isActive = WeatherAPI.isActive
 
         if (!isActive) {

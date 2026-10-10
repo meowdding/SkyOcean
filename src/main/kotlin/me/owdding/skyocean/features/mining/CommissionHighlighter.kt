@@ -15,7 +15,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 object CommissionHighlighter {
 
     @Subscription
-    fun onInventoryChange(event: InventoryChangeEvent) {
+    private fun onInventoryChange(event: InventoryChangeEvent) {
         if (!MiningConfig.modifyCommissions) return
         if (event.title != "Commissions") return
         if (event.isInPlayerInventory) return

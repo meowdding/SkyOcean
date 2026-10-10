@@ -21,7 +21,7 @@ object MuteTheFuckingPhantoms {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onSound(event: SoundPlayedEvent) {
+    private fun onSound(event: SoundPlayedEvent) {
         if (!GalateaConfig.muteThePhantoms) return
 
         if (event.sound in phantom) {

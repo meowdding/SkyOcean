@@ -329,7 +329,7 @@ class WeatherScreen : SkyOceanScreen() {
         private val ALAND = UUID.fromString("2c3c97d7-2b1c-4355-b856-dae991ddf5db")
 
         @Subscription
-        fun onCommand(event: RegisterSkyOceanCommandEvent) {
+        private fun onCommand(event: RegisterSkyOceanCommandEvent) {
             event.command("weather") {
                 execute {
                     McClient.setScreenAsync { WeatherScreen() }

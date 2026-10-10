@@ -47,7 +47,7 @@ object DungeonGambling {
     }
 
     @Subscription
-    fun onScreenChange(event: InventoryChangeEvent) {
+    private fun onScreenChange(event: InventoryChangeEvent) {
         if (!GamblingConfig.dungeonsGambling) return
         val floor = when (event.item) {
             in Items.BARRIER -> DungeonAPI.dungeonFloor ?: return
@@ -78,30 +78,30 @@ object DungeonGambling {
     }
 
     @Subscription
-    fun onScreenRender(event: RenderScreenBackgroundEvent) {
+    private fun onScreenRender(event: RenderScreenBackgroundEvent) {
         val menu = (event.screen as? ContainerScreen)?.menu
         rendering = menu != null && menu.containerId == this.menu && DungeonGamblingRenderer.extract(event.graphics)
         if (rendering) event.cancel()
     }
 
     @Subscription(ContainerCloseEvent::class)
-    fun onScreenClose() {
+    private fun onScreenClose() {
         DungeonGamblingRenderer.cancel()
         rendering = false
         menu = null
     }
 
     @Subscription
-    fun onScreenMouseClicked(event: ScreenMouseClickEvent) = cancelIfRendering(event)
+    private fun onScreenMouseClicked(event: ScreenMouseClickEvent) = cancelIfRendering(event)
 
     @Subscription
-    fun onScreenMouseReleased(event: ScreenMouseReleasedEvent) = cancelIfRendering(event)
+    private fun onScreenMouseReleased(event: ScreenMouseReleasedEvent) = cancelIfRendering(event)
 
     @Subscription
-    fun onScreenKeyReleased(event: ScreenKeyReleasedEvent) = cancelIfRendering(event)
+    private fun onScreenKeyReleased(event: ScreenKeyReleasedEvent) = cancelIfRendering(event)
 
     @Subscription
-    fun onScreenKeyPressed(event: ScreenKeyPressedEvent) {
+    private fun onScreenKeyPressed(event: ScreenKeyPressedEvent) {
         cancelIfRendering(event)
         if (event.key == InputConstants.KEY_ESCAPE && rendering) {
             onScreenClose()
@@ -109,7 +109,7 @@ object DungeonGambling {
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerDev("gambling dungeons") {
             then("floor", EnumArgumentType(DungeonFloor::class)) {
                 then("chest", EnumArgumentType(DungeonChestType::class)) {

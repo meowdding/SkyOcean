@@ -52,7 +52,7 @@ object MobIcons {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun attachmentModifyEvent(event: EntityInfoLineEvent) {
+    private fun attachmentModifyEvent(event: EntityInfoLineEvent) {
         if (!MobIconsConfig.enabled) return
         val stripped = event.literalComponent
         if (!stripped.contains(MOB_TYPES)) return

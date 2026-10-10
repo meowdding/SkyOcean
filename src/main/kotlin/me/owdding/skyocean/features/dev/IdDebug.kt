@@ -28,7 +28,7 @@ object IdDebug {
     }
 
     @Subscription
-    fun debug(event: ItemDebugTooltipEvent) = ifEnabled {
+    private fun debug(event: ItemDebugTooltipEvent) = ifEnabled {
         event.add(
             Text.of {
                 append("SkyBlockId: ")

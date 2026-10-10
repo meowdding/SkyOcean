@@ -25,7 +25,7 @@ data object LevelBoundValueHolder {
 
     @Subscription
     context(_: ClientLevelChangeEvent)
-    fun onLevelChange() {
+    private fun onLevelChange() {
         val iterator = list.iterator()
 
         while (iterator.hasNext()) {

@@ -32,7 +32,7 @@ object Timber {
     private var timestamp = Instant.DISTANT_PAST
 
     @Subscription
-    fun onMessage(event: ChatReceivedEvent.Pre) {
+    private fun onMessage(event: ChatReceivedEvent.Pre) {
         if (!FunConfig.timberSilly) return
 
         val text = event.text
@@ -54,7 +54,7 @@ object Timber {
     }
 
     @Subscription
-    fun render(event: RenderHudEvent) {
+    private fun render(event: RenderHudEvent) {
         if (!FunConfig.timberSilly) return
         val graphics = event.graphics
         val time = timestamp.since().inWholeMilliseconds

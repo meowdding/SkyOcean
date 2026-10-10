@@ -189,7 +189,7 @@ enum class OceanGradients(val colors: List<Int>, private val shader: GradientTex
         val CODEC: MapCodec<OceanGradients> = SkyOceanCodecs.getCodec<OceanGradients>().fieldOf("name")
 
         @Subscription
-        fun registerShaders(event: RegisterTextShaderEvent) {
+        private fun registerShaders(event: RegisterTextShaderEvent) {
             event.register(ID, CODEC)
         }
     }

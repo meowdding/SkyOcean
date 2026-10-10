@@ -77,12 +77,12 @@ object HotfHelper {
 
     // The reminded perks are different per profile and the levels are different, meaning that the cache needs to be updated
     @Subscription(ProfileChangeEvent::class)
-    fun onProfileChange() = cachedPerkCost.clear()
+    private fun onProfileChange() = cachedPerkCost.clear()
 
     @Subscription(TickEvent::class)
     @TimePassed("1s")
     @OnlyOnSkyBlock
-    fun onTick() {
+    private fun onTick() {
         val reminders = reminders
         // If there's a perk we dont have the cost for, recalculate the cost
         if (reminders.keys != cachedPerkCost.keys) {
@@ -264,7 +264,7 @@ object HotfHelper {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onInventoryUpdate(event: InventoryChangeEvent) {
+    private fun onInventoryUpdate(event: InventoryChangeEvent) {
         if (!config.hotfDisplayTotalLeft && !config.hotfDisplayShiftCost && !config.hotfTotalProgress && !config.hotfStackSize) return
         if (event.title != "Heart of the Forest") return
         if (event.isInPlayerInventory) return

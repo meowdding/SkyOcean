@@ -33,7 +33,7 @@ object TrophyFishingNumbers {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRIMSON_ISLE)
-    fun catchThingy(event: TrophyCaughtEvent.Fish) {
+    private fun catchThingy(event: TrophyCaughtEvent.Fish) {
         if (!FishingConfig.enableTrophyNumbers) return
         lastFishCaught = event.type
         lastFishTier = event.tier
@@ -41,7 +41,7 @@ object TrophyFishingNumbers {
 
     @Subscription
     @OnlyIn(SkyBlockIsland.CRIMSON_ISLE)
-    fun modifyChatMessage(event: ChatReceivedEvent.Post) {
+    private fun modifyChatMessage(event: ChatReceivedEvent.Post) {
         if (!FishingConfig.enableTrophyNumbers) return
         if (!messageRegex.matches(event.text)) return
         val lastCaught = lastFishCaught ?: return

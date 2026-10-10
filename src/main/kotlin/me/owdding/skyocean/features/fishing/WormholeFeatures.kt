@@ -55,7 +55,7 @@ object WormholeFeatures {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onRenderWorldEvent(event: RenderWorldEvent.CollectSubmits) {
+    private fun onRenderWorldEvent(event: RenderWorldEvent.CollectSubmits) {
         if (!isEnabled()) return
 
         WormholeAPI.wormholes.forEach { (pos, radius) ->
@@ -92,7 +92,7 @@ object WormholeFeatures {
     }
 
     @Subscription
-    fun onWormholeDespawn(event: WormholeEvent.Despawn) {
+    private fun onWormholeDespawn(event: WormholeEvent.Despawn) {
         if (!WormholeFeaturesConfig.warning) return
         val wormhole = event.wormhole
         if (!wormhole.fishedIn || WormholeAPI.lastWormholeFish.since() > 30.seconds) return

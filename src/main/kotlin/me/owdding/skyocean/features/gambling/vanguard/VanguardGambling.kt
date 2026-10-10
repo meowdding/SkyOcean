@@ -78,7 +78,7 @@ object VanguardGambling {
     }
 
     @Subscription
-    fun onMessage(event: ChatReceivedEvent.Pre) {
+    private fun onMessage(event: ChatReceivedEvent.Pre) {
         if (!GamblingConfig.vanguardGambling) return
         when {
             startRegex.match(event.text) -> {
@@ -103,7 +103,7 @@ object VanguardGambling {
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerDevWithCallback("gambling vanguard") {
             val possibleLoot = List(7) {
                 val item = data.items.keys.random().toItem()

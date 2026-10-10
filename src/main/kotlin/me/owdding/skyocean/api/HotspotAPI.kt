@@ -51,7 +51,7 @@ object HotspotAPI {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onNameChanged(event: NameChangedEvent) {
+    private fun onNameChanged(event: NameChangedEvent) {
         val pos = event.infoLineEntity.position()
         val type = HotspotType.getType(event.literalComponent) ?: return
         val hotspot = _hotspots.getOrPut(pos.toVec2d()) {
@@ -70,7 +70,7 @@ object HotspotAPI {
     }
 
     @Subscription
-    fun onCatch(event: FishCatchEvent) {
+    private fun onCatch(event: FishCatchEvent) {
         val hookY = event.hookPos.y
         val hookPosD = event.hookPos.toVector3f()
         _hotspots.values.filter {
@@ -83,11 +83,11 @@ object HotspotAPI {
     }
 
     @Subscription(ServerChangeEvent::class)
-    fun onServerChange() = _hotspots.clear()
+    private fun onServerChange() = _hotspots.clear()
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onEntityRemoved(event: EntityRemovedEvent) {
+    private fun onEntityRemoved(event: EntityRemovedEvent) {
         val pos = event.entity.position().toVec2d()
         val hotspot = _hotspots[pos] ?: return
         if (hotspot.id == event.entity.id) {
@@ -98,7 +98,7 @@ object HotspotAPI {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onParticle(event: PacketReceivedEvent) {
+    private fun onParticle(event: PacketReceivedEvent) {
         val packet = event.packet as? ClientboundLevelParticlesPacket ?: return
         if (!packet.isHotSpotParticle()) return
 

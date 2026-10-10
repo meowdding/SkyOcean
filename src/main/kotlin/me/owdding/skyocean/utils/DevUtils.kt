@@ -56,7 +56,7 @@ internal object DevUtils {
     fun isOn(location: Identifier) = states.getOrDefault(location, false)
 
     @Subscription
-    fun onCommandRegister(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommandRegister(event: RegisterSkyOceanCommandEvent) {
         event.registerDev("toggle") {
             then("location", VirtualResourceArgument(states.keys, SkyOcean.MOD_ID), DevToolSuggestionProvider) {
                 callback {

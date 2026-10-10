@@ -104,7 +104,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
     @MustBeContainer
     @OnlyOnSkyBlock
     @Subscription
-    fun inventoryChangeEvent(event: InventoryChangeEvent) {
+    private fun inventoryChangeEvent(event: InventoryChangeEvent) {
         if (!museumRegex.matches(event.title)) return
         if (event.item !in Items.DYE.gray()) return
         if (!MiscConfig.museumArmourPieces && !MiscConfig.itemSearchMuseumIntegration) return
@@ -337,7 +337,7 @@ object MuseumDonationHelper : RecipeView, AbstractItemModifier() {
     }
 
     @Subscription(ContainerCloseEvent::class)
-    fun containerClose() {
+    private fun containerClose() {
         itemCache.invalidate()
         modifierCache.clear()
     }

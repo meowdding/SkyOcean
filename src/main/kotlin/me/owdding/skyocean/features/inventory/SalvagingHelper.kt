@@ -34,7 +34,7 @@ object SalvagingHelper : AbstractItemModifier() {
     private val items: WeakHashMap<ItemStack, Unit> = WeakHashMap()
 
     @Subscription(ContainerCloseEvent::class)
-    fun onInventoryClose() {
+    private fun onInventoryClose() {
         if (!InventoryConfig.salvagingHelper) return
         items.clear()
     }

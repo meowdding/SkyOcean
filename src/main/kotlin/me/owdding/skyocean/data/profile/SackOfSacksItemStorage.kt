@@ -25,7 +25,7 @@ object SackOfSacksItemStorage {
     @Subscription
     @OnlyOnSkyBlock
     @MustBeContainer
-    fun onInventoryChange(event: InventoryChangeEvent) {
+    private fun onInventoryChange(event: InventoryChangeEvent) {
         if (!event.title.equals("sack of sacks", true)) return
 
         val sacks = event.inventory.containerItems().filterNot { it.getSkyBlockId() == null }

@@ -48,7 +48,7 @@ object PestWarning {
     @Subscription
     @OnlyIn(GARDEN)
     @OnlyNonGuest
-    fun onBlockClick(event: LeftClickBlockEvent) {
+    private fun onBlockClick(event: LeftClickBlockEvent) {
         if (Crop.entries.none { it.isCrop(McLevel[event.pos]) }) return
         val pests = PlotAPI.currentPestAmount
         val minAmount = GardenConfig.pestWarningAmount.amount
@@ -78,7 +78,7 @@ object PestWarning {
     }
 
     @Subscription(ServerChangeEvent::class)
-    fun onWorldChange() {
+    private fun onWorldChange() {
         lastWarning = Instant.DISTANT_PAST
     }
 

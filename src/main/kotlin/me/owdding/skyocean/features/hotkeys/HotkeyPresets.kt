@@ -25,12 +25,12 @@ object HotkeyPresets : MeowddingLogger by SkyOcean.featureLogger() {
     val presets: MutableList<HotkeyPreset> = mutableListOf()
 
     @Subscription(StartRepoLoadingEvent::class)
-    fun startLoading() {
+    private fun startLoading() {
         presets.clear()
     }
 
     @Subscription(FinishRepoLoadingEvent::class)
-    fun load() = runCatching {
+    private fun load() = runCatching {
         presets.addAll(Utils.loadRemoteRepoData("skyocean/keybind_presets", CodecHelpers.list()))
     }.warn("Failed to load presets!")
 

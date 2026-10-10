@@ -26,7 +26,7 @@ object ImplosionHider {
 
     @Subscription
     @OnlyOnSkyBlock
-    fun onParticle(event: ParticleEmitEvent) {
+    private fun onParticle(event: ParticleEmitEvent) {
         if (!MiscConfig.hideImplosions) return
         val self = McPlayer.self ?: return
         val particle = event.particle as? HugeExplosionParticle ?: return
@@ -38,7 +38,7 @@ object ImplosionHider {
     @TimePassed("2t")
     @Subscription(TickEvent::class)
     @OnlyOnSkyBlock
-    fun tick() {
+    private fun tick() {
         if (!MiscConfig.hideImplosions) return
         players.clear()
         McLevel.selfOrNull?.players()?.filter {

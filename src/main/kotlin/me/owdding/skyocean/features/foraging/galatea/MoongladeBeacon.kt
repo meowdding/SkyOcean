@@ -33,12 +33,12 @@ object MoongladeBeacon {
     @Subscription
     @OnlyWidget(MOONGLADE_BEACON)
     @OnlyIn(GALATEA)
-    fun onWidget(event: TabWidgetChangeEvent) {
+    private fun onWidget(event: TabWidgetChangeEvent) {
         beaconActive = !inactiveRegex.anyMatch(event.new)
     }
 
     @Subscription(ServerChangeEvent::class)
-    fun onServerChange() {
+    private fun onServerChange() {
         beaconActive = false
     }
 

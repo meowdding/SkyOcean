@@ -25,7 +25,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 object CalcCommand {
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerDev("powdercalc") {
             then("maxLevel", IntegerArgumentType.integer(5)) {
                 then("expression", StringArgumentType.greedyString()) {
