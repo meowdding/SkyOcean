@@ -27,7 +27,7 @@ private typealias Mode = AdditionalSortMode
 private enum class AdditionalSortMode(comparator: Comparator<TrackedAccessory>) : Comparator<TrackedAccessory> by comparator {
     MARKED(reversed(Comparator.comparing { it.marked })),
     HAS_PRICE(reversed(Comparator.comparing { getPrice(it) != Long.MAX_VALUE })),
-    AP(reversed(Comparator.comparing(::getAp))),
+    AP(reversed(Comparator.comparing { getAp(it) })),
     PRICE(Comparator.comparing { getPrice(it) }),
     RARITY(reversed(Comparator.comparing { getRarity(it) })),
     PRICE_PER_AP(Comparator.comparing { getPrice(it) / getAp(it) }),
