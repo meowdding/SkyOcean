@@ -102,8 +102,8 @@ object RarityOutlines {
     }
 
     //? } else {
-    /*
-    @JvmField
+    
+    /*@JvmField
     val GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED: BiFunction<Int, OptionalInt, RenderPipeline> = Util.memoize { color, baseRarity ->
         RenderPipelines.register(
             RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)

@@ -11,9 +11,9 @@ import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 //? renderchest {
-/*import net.azureaaron.renderchest.api.CustomGlowCallback
+import net.azureaaron.renderchest.api.CustomGlowCallback
 import net.azureaaron.renderchest.api.GlowConstants
-*///?}
+//?}
 
 internal interface EntityRenderStateAccessor {
     fun `ocean$getNameTagScale`(): Float
@@ -57,11 +57,11 @@ object EntityHelper {
     private val entityGlowMap = Int2IntOpenHashMap()
 
     //? renderchest {
-    /*init {
+    init {
         CustomGlowCallback.EVENT.register { entity, _ ->
             entityGlowMap.getOrDefault(entity.id, GlowConstants.NO_GLOW)
         }
-   }*///?}
+   }//?}
 
     @Subscription(ServerChangeEvent::class)
     private fun onWorldChange() {
