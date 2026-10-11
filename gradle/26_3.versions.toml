@@ -9,6 +9,7 @@ resourceful-lib = "6.0.0"
 resourceful-config = "6.0.1"
 olympus = "1.9.5"
 placeholders = "3.1.0-beta.1+26.2"
+renderchest = "2.0.0-beta.1+26.3"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -19,3 +20,4 @@ resourceful-lib = { module = "com.teamresourceful.resourcefullib:resourcefullib-
 resourceful-config = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.3", version.ref = "resourceful-config" }
 olympus = { module = "earth.terrarium.olympus:olympus-fabric-26.3", version.ref = "olympus" }
 placeholders = { module = "eu.pb4:placeholder-api", version.ref = "placeholders" }
+renderchest = { module = "net.azureaaron:render-chest", version.ref = "renderchest" }
