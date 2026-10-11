@@ -62,8 +62,8 @@ object InventoryConfig : CategoryKt("inventory") {
     init {
         button {
             title = "skyocean.config.inventory.inventory_buttons.edit"
-            text = "Open"
             description = "skyocean.config.inventory.inventory_buttons.edit.desc"
+            text = "skyocean.config.inventory.inventory_buttons.open"
             onClick {
                 McClient.setScreen(McScreen.self?.let { ButtonConfigScreen(it) })
             }

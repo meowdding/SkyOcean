@@ -37,7 +37,7 @@ object ChatConfig : CategoryKt("chat") {
 
     init {
         separator {
-            title = "Stylized Chat Prefixes"
+            title = "skyocean.config.chat.stylized_chat_prefixes.title"
         }
     }
 
@@ -53,7 +53,7 @@ object ChatConfig : CategoryKt("chat") {
 
     init {
         separator {
-            title = "Bridge Formatter"
+            title = "skyocean.config.chat.bridge_formatter.title"
         }
     }
 
@@ -71,7 +71,7 @@ object ChatConfig : CategoryKt("chat") {
 
     init {
         separator {
-            title = "Sack Notification"
+            title = "skyocean.config.chat.sack_notification"
         }
     }
 
@@ -86,7 +86,7 @@ object ChatConfig : CategoryKt("chat") {
     init {
         // Allow for Text replacement config options as well probably
         separator {
-            title = "Text Modification"
+            title = "skyocean.config.chat.text_modification"
         }
     }
 

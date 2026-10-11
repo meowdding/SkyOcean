@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulconfig.api.loader.Configurator
 import me.owdding.ktmodules.AutoCollect
 import me.owdding.ktmodules.Module
 import me.owdding.lib.compat.RemoteConfig
+import me.owdding.lib.compat.meowdding.MeowddingConfigTranslationChecker
 import me.owdding.lib.events.FinishRepoLoadingEvent
 import me.owdding.lib.overlays.EditOverlaysScreen
 import me.owdding.lib.utils.MeowddingUpdateChecker
@@ -21,11 +22,11 @@ import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.generated.SkyOceanPreInitModules
 import me.owdding.skyocean.helpers.MixinHelper
-import me.owdding.skyocean.utils.DevUtils
 import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.debug.DebugBuilder
 import me.owdding.skyocean.utils.debug.RegisterSkyOceanDebugEvent
+import me.owdding.skyocean.utils.debugToggle
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.registries.VanillaRegistries
@@ -64,22 +65,23 @@ object SkyOcean : MeowddingMod("skyocean") {
     val configurator = Configurator("skyocean")
     val config = Config.register(configurator)
 
+    private val devModules by debugToggle("dev_modules", "Forces loading dev modules even when not in dev env. Needs a restart to work")
+
     override fun onInitializeClient() {
         MixinHelper.isStarted = true
         if (!McClient.isDev) RemoteConfig.lockConfig(Config.register(configurator), "https://remote-configs.owdding.me/skyocean.json", SELF)
         MeowddingUpdateChecker("dIczrQAR", SELF, ::sendUpdateMessage)
-        SkyOceanModules.init {
-            SkyBlockAPI.eventBus.register(it)
-        }
 
-        if (DevUtils.isOn(id("dev_modules")) || FabricLoader.getInstance().isDevelopmentEnvironment) {
-            SkyOceanDevModules.init {
-                SkyBlockAPI.eventBus.register(it)
-            }
+        registerEvents(SkyOceanModules.collected)
+
+        if (devModules || McClient.isDev) {
+            registerEvents(SkyOceanDevModules.collected)
         }
 
         apiRepo = RepoAPI.isInitialized()
         meowddingRepo = RemoteRepo.isInitialized()
+
+        MeowddingConfigTranslationChecker.addModToWarn(MOD_ID)
 
         onRepoReady()
     }

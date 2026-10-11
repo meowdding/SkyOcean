@@ -140,7 +140,8 @@
             "desc": [
               "Send a chat or party message when you enter a Mineshaft.",
               "Will send in chat if not in a party."
-            ]
+            ],
+            "title": "Mineshaft Announcement"
           },
           "announce-type": {
             "@value": "Announcement Type",
@@ -148,7 +149,8 @@
           },
           "waypoint": {
             "@value": "Corpse Waypoint",
-            "desc": "Show a waypoint on all possible Corpse Locations in a Mineshaft."
+            "desc": "Show a waypoint on all possible Corpse Locations in a Mineshaft.",
+            "title": "Corpse Waypoint"
           },
           "show_title": {
             "@value": "Show Title",
@@ -156,7 +158,8 @@
           },
           "key-announce": {
             "@value": "Key Announce",
-            "desc": "Send a chat message how many keys of the current mineshaft corpses you have in your sacks."
+            "desc": "Send a chat message how many keys of the current mineshaft corpses you have in your sacks.",
+            "title": "Mineshaft Keys"
           }
         },
         "scatha": {
@@ -336,7 +339,8 @@
               "Configure Buttons in a separate UI.",
               "<italic>Also accessible through <gray>/skyocean buttons</gray></italic>"
             ]
-          }
+          },
+          "open": "Open"
         },
         "salvaging_helper": {
           "@value": "Salvaging Helper",
@@ -457,7 +461,8 @@
         },
         "stylized_chat_prefixes": {
           "@value": "Enable Stylized Chat Prefixes",
-          "desc": "Replaces vanilla chat prefixes, such as \"<dark_green>Guild \\></dark_green>\", for more stylized ones, like \"<white><font 'skyocean:stylized_chat_prefixes'>G</font></white>\"."
+          "desc": "Replaces vanilla chat prefixes, such as \"<dark_green>Guild \\></dark_green>\", for more stylized ones, like \"<white><font 'skyocean:stylized_chat_prefixes'>G</font></white>\".",
+          "title": "Stylized Chat Prefixes"
         },
         "allowed_stylized_chat_prefixes": {
           "@value": "Allowed Stylized Chat Prefixes",
@@ -468,7 +473,8 @@
           "desc": [
             "Enables a bridge formatter, replacing all guild messages sent by a certain player as if it was a discord chat.",
             "Example: \"<color #5865f2>Discord \\> </color><white>Empa: hi!</white>\""
-          ]
+          ],
+          "title": "Bridge Formatter"
         },
         "bridge_formatter_ign": {
           "@value": "Bridge Formatter Ign",
@@ -497,6 +503,7 @@
           "@value": "Hide Blazetekk™ Ham Radio Messages",
           "desc": "Hides status messages from the Blazetekk™ Ham Radio."
         },
+        "text_modification": "Text Modification",
         "markdown_chat": {
           "@value": "Markdown Chat",
           "desc": [
@@ -1998,7 +2005,8 @@
         },
         "edit": {
           "@value": "Edit hotkeys",
-          "desc": "Opens the hotkey edit screen."
+          "desc": "Opens the hotkey edit screen.",
+          "text": "Open"
         }
       },
       "environmental": {

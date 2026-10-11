@@ -22,10 +22,10 @@ object HotkeyConfig : CategoryKt("hotkeys") {
     init {
         button {
             title = "skyocean.config.hotkeys.edit"
-            text = "Open"
             description = "skyocean.config.hotkeys.edit.desc"
+            text = "skyocean.config.hotkeys.edit.text"
             onClick {
-                McClient.setScreen(McScreen.self?.let { ConditionalHotkeyScreen })
+                McClient.setScreen(ConditionalHotkeyScreen)
             }
         }
     }

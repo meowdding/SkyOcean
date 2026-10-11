@@ -98,4 +98,4 @@ object CraftHelperModifiers {
 @AutoCollect("CraftHelperModifiers")
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
-annotation class CraftHelperModifier
+internal annotation class CraftHelperModifier

@@ -18,7 +18,7 @@ import net.minecraft.world.entity.EntityTypes
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 @AutoCollect("AnimalModifiers")
-annotation class RegisterAnimalModifier
+internal annotation class RegisterAnimalModifier
 
 private val dyeColors = DyeColor.entries
 
