@@ -50,7 +50,7 @@ import kotlin.math.max
 @LateInitModule
 object CraftHelperDisplay : MeowddingLogger by SkyOcean.featureLogger() {
 
-    private val ignoreChecks by debugToggle("cafthelper/ignore_checks")
+    private val ignoreChecks by debugToggle("crafthelper/ignore_checks")
 
     private var craftHelperLayout: LayoutElement? = null
 

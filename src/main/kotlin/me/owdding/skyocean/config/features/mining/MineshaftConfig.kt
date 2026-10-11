@@ -12,7 +12,7 @@ object MineshaftConfig : CategoryKt("mineshaft") {
 
     init {
         separator {
-            this.title = "Mineshaft Announcement"
+            this.title = "skyocean.config.mining.mineshaft.announce.title"
         }
     }
 
@@ -30,7 +30,7 @@ object MineshaftConfig : CategoryKt("mineshaft") {
 
     init {
         separator {
-            this.title = "Corpse Waypoint"
+            this.title = "skyocean.config.mining.mineshaft.waypoint.title"
         }
     }
 
@@ -40,7 +40,7 @@ object MineshaftConfig : CategoryKt("mineshaft") {
 
     init {
         separator {
-            this.title = "Mineshaft Keys"
+            this.title = "skyocean.config.mining.mineshaft.key-announce.title"
         }
     }
 

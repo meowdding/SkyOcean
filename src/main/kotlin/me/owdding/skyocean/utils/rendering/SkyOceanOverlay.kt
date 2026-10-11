@@ -30,4 +30,4 @@ object OceanOverlays {
 @AutoCollect("Overlays")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
-annotation class Overlay
+internal annotation class Overlay

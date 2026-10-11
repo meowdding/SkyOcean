@@ -27,7 +27,7 @@ object MobIconsConfig : CategoryKt("mob_icons") {
             observable(
                 color(it.name.lowercase(), 0xFFFFFF) {
                     allowAlpha = false
-                    name = Translated(it.name.toTitleCase())
+                    name = Literal(it.name.toTitleCase())
                     condition = { MobIcons.getSetting(it).shouldColor }
                 },
             ) { _, new ->

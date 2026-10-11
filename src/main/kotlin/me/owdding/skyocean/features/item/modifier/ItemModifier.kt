@@ -379,4 +379,4 @@ object ItemModifiers {
 @AutoCollect("ItemModifiers")
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
-annotation class ItemModifier
+internal annotation class ItemModifier
