@@ -1,5 +1,6 @@
 package me.owdding.skyocean.features.item.search.screen
 
+import com.mojang.blaze3d.platform.InputConstants
 import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.dropdown.DropdownState
@@ -42,6 +43,9 @@ import me.owdding.skyocean.utils.rendering.ExtraDisplays
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.Layout
+import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonInfo
+import net.minecraft.core.NonNullList.withSize
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
@@ -163,10 +167,27 @@ object ItemSearchScreen : SkyOceanScreen() {
                                 spacer(width = 4)
                             }
 
-                            textBox = Widgets.textInput(state) { box ->
-                                box.withChangeCallback(::refreshSearch)
-                                box.withPlaceholder("Search...")
-                                box.withSize(100, 20)
+                            textBox = object : TextBox(state) {
+                                override fun isValidClickButton(buttonInfo: MouseButtonInfo): Boolean {
+                                    return super.isValidClickButton(buttonInfo) || buttonInfo.button() == InputConstants.MOUSE_BUTTON_RIGHT
+                                }
+
+                                override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+                                    if (this.active && this.visible && this.isMouseOver(event.x(), event.y())) {
+                                        if (event.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
+                                            this.value = ""
+                                            this.isFocused = true
+
+                                            return true
+                                        }
+                                    }
+
+                                    return super.mouseClicked(event, doubleClick)
+                                }
+                            }.apply {
+                                withChangeCallback(::refreshSearch)
+                                withPlaceholder("Search...")
+                                withSize(100, 20)
                             }
                             textBox.add {
                                 alignVerticallyMiddle()
