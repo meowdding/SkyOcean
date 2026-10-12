@@ -177,12 +177,10 @@ class WeatherScreen : SkyOceanScreen() {
                                 display(Displays.text(Text.of(title)))
                                 spacer(height = 6)
                                 widget(
-                                    Displays.text(Text.of(event.type.icon.toString(), event.type.color))
+                                    Displays.text(event.type.component)
                                         .withTooltip(buildBonusTooltip(group, event))
                                         .asButtonLeft { onButtonPress(group, event) },
                                 )
-                                spacer(height = 6)
-                                display(Displays.text(Text.of(event.type.weatherName, TextColor.WHITE)))
 
                                 spacer(height = 12)
 
