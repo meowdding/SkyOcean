@@ -109,7 +109,7 @@ class WeatherScreen : SkyOceanScreen() {
                         display(Displays.text(Text.of("Extended $foreCastType", TextColor.GOLD)))
 
                         // Hide the more useless element if the screen space isn't enough
-                        if (frameWidth >= 550) {
+                        if (frameWidth >= 450) {
                             spacer(width = 10)
                             display(Displays.text(Text.of("Brought to you by: ", TextColor.WHITE)))
 
