@@ -3,18 +3,19 @@ package me.owdding.skyocean.features.chat
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.chat.ChatConfig
+import me.owdding.skyocean.features.text.MarkdownChat.toComponent
 import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.components.ComponentStateMachine
+import tech.thatgravyboat.skyblockapi.utils.extentions.asString
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
-import tech.thatgravyboat.skyblockapi.utils.regex.findWhen
 import tech.thatgravyboat.skyblockapi.utils.text.SkyBlockColor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.font
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
-import tech.thatgravyboat.skyblockapi.utils.text.TextUtils.substring
 
 @Module
 object StylizedChatPrefixes {
@@ -26,31 +27,50 @@ object StylizedChatPrefixes {
     val STYLIZED_CHAT_PREFIXES = SkyOcean.id("stylized_chat_prefixes")
     val EMPTY_FONT = SkyOcean.id("empty_font")
 
-    private val normalChatPrefixRegex = "^(?<type>[\\w-]+) >".toRegex()
-    private val npcRegex = "^\\[NPC]".toRegex()
+    val matcher = ComponentStateMachine.build {
+        fork {
+            branch {
+                capture("type") {
+                    literal("[NPC]")
+                }
+            }
+            branch {
+                capture("type") {
+                    fork {
+                        literal("Party")
+                        literal("Guild")
+                        literal("Officer")
+                        literal("Friend")
+                        literal("Co-op")
+                    }
+                }
+                literal(" >")
+                capture("content") {
+                    wildcard({ true })
+                }
+            }
+        }
+    }
 
     @Subscription(priority = Subscription.LOW)
     private fun onChat(event: ChatReceivedEvent.Post) {
         if (!ChatConfig.enableStylizedChatPrefixes) return
 
-        findWhen(event.text) {
-            case(normalChatPrefixRegex) { match ->
-                val chat = ConfigChatPrefix.fromChat(match["type"]!!) ?: return@case
-                if (!shouldReplace(chat)) return@case
+        matcher.decompose(event.component) {
+            val type = it["type"]?.asString() ?: return@decompose
+            val content = it["content"] ?: return@decompose
 
-                event.component = Text.of {
-                    append(chat.component)
-                    append(event.component.substring(match.string.length))
-                }
+            val prefix = if (type == "[NPC]") {
+                ConfigChatPrefix.NPC
+            } else {
+                ConfigChatPrefix.fromChat(type) ?: return@decompose
             }
+            if (!shouldReplace(prefix)) return@decompose
 
-            case(npcRegex) { match ->
-                if (!shouldReplace(NPC)) return@case
 
-                event.component = Text.of {
-                    append(ConfigChatPrefix.NPC.component)
-                    append(event.component.substring(match.string.length))
-                }
+            event.component = Text.of {
+                append(prefix.component)
+                append(content.toComponent())
             }
         }
     }
