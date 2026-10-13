@@ -113,6 +113,10 @@ object AccessoriesHelper : AbstractItemModifier() {
         constructor(icon: String, color: Int) : this(Text.of(icon, color), color)
 
         override fun getTranslationKey(): String = "skyocean.config.inventory.accessories_helper.icons.${name.lowercase()}"
+
+        companion object {
+            val defaultDisabled = listOf(MAXED)
+        }
     }
 
     val currentIds: Set<SkyBlockId> by CachedValue(1.seconds) { getCurrentAccessories().toSet() }

@@ -29,7 +29,7 @@ object InventoryConfig : CategoryKt("inventory") {
         translation = "skyocean.config.inventory.accessories_helper"
     }
 
-    var disabledAccessoryIcons by select<AccessoriesHelper.AccessoryResult> {
+    var disabledAccessoryIcons by select(*AccessoriesHelper.AccessoryResult.defaultDisabled.toTypedArray()) {
         translation = "skyocean.config.inventory.accessories_helper.disabled_icons"
     }
 
