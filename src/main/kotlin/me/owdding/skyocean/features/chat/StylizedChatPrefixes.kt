@@ -45,10 +45,10 @@ object StylizedChatPrefixes {
                     }
                 }
                 literal(" >")
-                capture("content") {
-                    wildcard({ true })
-                }
             }
+        }
+        capture("content") {
+            wildcard({ true })
         }
     }
 
