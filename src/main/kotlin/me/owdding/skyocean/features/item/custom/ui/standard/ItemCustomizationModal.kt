@@ -18,6 +18,7 @@ import me.owdding.lib.displays.DisplayWidget
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
+import me.owdding.lib.rendering.text.serialization.TagComponentSerialization
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.data.RecentColorStorage
 import me.owdding.skyocean.features.item.custom.CustomItems
@@ -54,7 +55,6 @@ import me.owdding.skyocean.utils.asColumn
 import me.owdding.skyocean.utils.asLayoutWidget
 import me.owdding.skyocean.utils.asWidgetTable
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
-import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.asScrollableWidget
 import me.owdding.skyocean.utils.extensions.associateWithNotNull
 import me.owdding.skyocean.utils.extensions.setFrameContent

@@ -14,13 +14,13 @@ import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.layouts.asWidget
 import me.owdding.lib.layouts.withPadding
+import me.owdding.lib.rendering.text.serialization.TagComponentSerialization
 import me.owdding.skyocean.SkyOcean.id
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.features.hotkeys.ShowMessageModal
 import me.owdding.skyocean.features.item.custom.ui.standard.HEADER_HEIGHT
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.utils.chat.CatppuccinColors
-import me.owdding.skyocean.utils.components.TagComponentSerialization
 import me.owdding.skyocean.utils.extensions.bottomLeft
 import me.owdding.skyocean.utils.extensions.createButton
 import me.owdding.skyocean.utils.extensions.createIntInput
