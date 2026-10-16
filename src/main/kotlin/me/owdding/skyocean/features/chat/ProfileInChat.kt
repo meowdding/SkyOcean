@@ -112,6 +112,8 @@ object ProfileInChat {
             StringDecomposer.iterateFormatted(suffix, Style.EMPTY) { _, style, codepoint ->
                 Character.toString(codepoint).forEach { char ->
                     if (profileTypes.containsKey(char)) {
+                        val color = profileTypes[char]
+                        if (color != null && style.color?.value != color) return@forEach
                         val data = profileTypeLookup(char, style.color?.value ?: TextColor.WHITE)
                         usernameToProfileTypeCache[name] = data
                     }
