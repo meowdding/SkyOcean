@@ -189,7 +189,7 @@ object HotspotFeatures {
 
     @Subscription
     private fun onCommand(event: RegisterSkyOceanCommandEvent) {
-        event.register("testHotspot") {
+        event.registerDev("testHotspot") {
             callback {
                 HotspotType.entries.random().let { type ->
                     val chatPos = McPlayer.position?.toBlockPos() ?: return@callback
