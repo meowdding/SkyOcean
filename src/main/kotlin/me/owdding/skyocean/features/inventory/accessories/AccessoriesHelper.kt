@@ -6,12 +6,6 @@ import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesAPI.isDisallowed
-import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.DOWNGRADE
-import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.DUPLICATE
-import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.MAXED
-import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.MISSING
-import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.UPGRADE
-import me.owdding.skyocean.features.inventory.accessories.AccessoriesHelper.AccessoryResult.UPGRADEABLE
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
@@ -204,7 +198,7 @@ object AccessoriesHelper : AbstractItemModifier() {
     override fun appliesTo(itemStack: ItemStack): Boolean {
         if (itemStack.isEmpty) return false
         val category = itemStack[DataTypes.CATEGORY] ?: return false
-        if (!category.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY)) return false
+        if (!category.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY, ignoreDungeon = true)) return false
         val id = itemStack.getSkyBlockId() ?: return false
         return getResult(id) != null
     }
