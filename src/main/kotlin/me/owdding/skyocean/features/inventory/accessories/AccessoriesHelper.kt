@@ -70,6 +70,7 @@ object AccessoriesHelper : AbstractItemModifier() {
 
     fun getResult(id: SkyBlockId): AccessoryResult? {
         val (family, tier) = getFamilyAndTier(id) ?: return null
+        if (family.isDisallowed()) return null
         val hasId = id in currentIds
         // If you have another accessory of the same line, in the same tier
         if (hasId && hasDuplicate(id) && !ignoreDuplicate(id)) return DUPLICATE
