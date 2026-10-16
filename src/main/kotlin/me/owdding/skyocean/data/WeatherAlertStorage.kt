@@ -1,9 +1,7 @@
-package me.owdding.skyocean.data.profile
+package me.owdding.skyocean.data
 
-import com.mojang.serialization.Codec
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.generated.CodecUtils
-import me.owdding.skyocean.generated.EnumCodec
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import tech.thatgravyboat.skyblockapi.api.environmental.WeatherGroup
 import tech.thatgravyboat.skyblockapi.api.environmental.WeatherIntensity

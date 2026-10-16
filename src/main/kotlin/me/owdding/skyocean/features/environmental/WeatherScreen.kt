@@ -1,7 +1,6 @@
 package me.owdding.skyocean.features.environmental
 
 import com.mojang.authlib.properties.Property
-import earth.terrarium.olympus.client.components.Widgets
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
 import me.owdding.ktmodules.Module
@@ -16,7 +15,7 @@ import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withTooltip
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.data.profile.WeatherAlertStorage
+import me.owdding.skyocean.data.WeatherAlertStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.Utils.refreshScreen
@@ -44,7 +43,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import java.util.*
 import kotlin.random.Random
 
@@ -306,16 +304,18 @@ class WeatherScreen : SkyOceanScreen() {
                     )
                 }
                 add(CommonText.EMPTY)
-                add(Text.of("Click to ") {
-                    if (WeatherAlertStorage.hasAlert(group, event.intensity)) {
-                        append("remove")
-                        color = CatppuccinColors.Mocha.red
-                    } else {
-                        append("add")
-                        color = CatppuccinColors.Mocha.green
-                    }
-                    append(" reminder!")
-                })
+                add(
+                    Text.of("Click to ") {
+                        if (WeatherAlertStorage.hasAlert(group, event.intensity)) {
+                            append("remove")
+                            color = CatppuccinColors.Mocha.red
+                        } else {
+                            append("add")
+                            color = CatppuccinColors.Mocha.green
+                        }
+                        append(" reminder!")
+                    },
+                )
             },
         )
     }

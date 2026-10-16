@@ -2,7 +2,7 @@ package me.owdding.skyocean.features.environmental
 
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.environmental.EnvironmentalConfig
-import me.owdding.skyocean.data.profile.WeatherAlertStorage
+import me.owdding.skyocean.data.WeatherAlertStorage
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.chat.OceanColors
 import me.owdding.skyocean.utils.extensions.joinToComponent
