@@ -146,7 +146,6 @@ object AccessoriesHelper : AbstractItemModifier() {
     fun getUpgradeableRarityAccessories(): List<AccessoryRarityUpgradeData> {
         return MaxwellAPI.accessories
             .asSequence()
-            //.map { it.item }
             .mapNotNull { item ->
                 val id = item.getSkyBlockId() ?: return@mapNotNull null
                 val upgraded = AccessoriesAPI.getRarityUpgraded(id) ?: return@mapNotNull null
@@ -169,7 +168,6 @@ object AccessoriesHelper : AbstractItemModifier() {
     fun getUpgradeableAccessories(): List<AccessoryUpgradeData> {
         return MaxwellAPI.accessories
             .asSequence()
-            //.map { it.item }
             .mapNotNull { item ->
                 val id = item.getSkyBlockId() ?: return@mapNotNull null
                 val family = AccessoriesAPI.getFamily(id) ?: return@mapNotNull null
