@@ -353,6 +353,7 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
         if (resetDelete) this.tryDeleting = null
         action()
         rebuildWidgets()
+        TextReplacementManager.save()
     }
 
     private fun createEntry(textReplacement: TextReplacement, width: Int, height: Int): LayoutElement = LayoutFactory.frame(width, height) {
