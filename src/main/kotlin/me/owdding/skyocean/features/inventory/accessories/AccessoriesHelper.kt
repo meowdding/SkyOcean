@@ -130,7 +130,7 @@ object AccessoriesHelper : AbstractItemModifier() {
         val ids = currentIds
         return AccessoriesAPI.families.values.filterTo(mutableSetOf()) { family ->
             val hasAccessory = family.flatMapItems().any { it in ids }
-            if (!hasAccessory) return@filterTo false
+            if (hasAccessory) return@filterTo false
             if (family.isDisallowed()) return@filterTo false
             if (family.isRiftPrism() && MaxwellAPI.consumedRiftPrism) return@filterTo false
             return@filterTo true
@@ -144,9 +144,9 @@ object AccessoriesHelper : AbstractItemModifier() {
     )
 
     fun getUpgradeableRarityAccessories(): List<AccessoryRarityUpgradeData> {
-        return AccessoryBagAPI.getItems()
+        return MaxwellAPI.accessories
             .asSequence()
-            .map { it.item }
+            //.map { it.item }
             .mapNotNull { item ->
                 val id = item.getSkyBlockId() ?: return@mapNotNull null
                 val upgraded = AccessoriesAPI.getRarityUpgraded(id) ?: return@mapNotNull null
@@ -167,9 +167,9 @@ object AccessoriesHelper : AbstractItemModifier() {
     )
 
     fun getUpgradeableAccessories(): List<AccessoryUpgradeData> {
-        return AccessoryBagAPI.getItems()
+        return MaxwellAPI.accessories
             .asSequence()
-            .map { it.item }
+            //.map { it.item }
             .mapNotNull { item ->
                 val id = item.getSkyBlockId() ?: return@mapNotNull null
                 val family = AccessoriesAPI.getFamily(id) ?: return@mapNotNull null
