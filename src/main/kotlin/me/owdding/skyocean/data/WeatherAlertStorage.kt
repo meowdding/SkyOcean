@@ -10,6 +10,7 @@ object WeatherAlertStorage {
     private val storage = SkyOcean.storage(
         "weather_alert",
         defaultData = { mutableMapOf() },
+        differentAlphaData = false,
         codec = CodecUtils.map(
             SkyOceanCodecs.getCodec<WeatherGroup>(),
             CodecUtils.mutableSet(SkyOceanCodecs.getCodec<WeatherIntensity>())
