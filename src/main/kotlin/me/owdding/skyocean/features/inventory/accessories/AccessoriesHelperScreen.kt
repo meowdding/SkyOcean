@@ -19,6 +19,7 @@ import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
 import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.extensions.rightPad
+import me.owdding.lib.layouts.ScalableWidget
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.utils.SkyOceanScreen
@@ -66,6 +67,8 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
 
     private var cycling = true
 
+    private lateinit var textBox: TextBox
+
     val currentWidgets = mutableListOf<AbstractWidget>()
 
     val trackedAccessories = mutableListOf<TrackedAccessory>()
@@ -74,6 +77,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
         super.onClose()
         requireRebuild = true
         search = null
+        state.set("")
         trackedAccessories.clear()
     }
 
@@ -96,7 +100,7 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                         spacer(width)
                         LayoutFactory.horizontal {
                             spacer(height = 24)
-                            object : TextBox(state) {
+                            textBox = object : TextBox(state) {
                                 override fun isValidClickButton(buttonInfo: MouseButtonInfo): Boolean {
                                     return super.isValidClickButton(buttonInfo) || buttonInfo.button() == InputConstants.MOUSE_BUTTON_RIGHT
                                 }
@@ -117,7 +121,8 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
                                 withChangeCallback(::refreshSearch)
                                 withPlaceholder("Search...")
                                 withSize(100, 20)
-                            }.add {
+                            }
+                            textBox.add {
                                 alignVerticallyMiddle()
                             }
                             spacer(width = 2)
@@ -170,6 +175,11 @@ object AccessoriesHelperScreen : SkyOceanScreen() {
         body.applyLayout()
 
         addItems()
+    }
+
+    override fun setInitialFocus() {
+        val widget = this.children().find { ((it as? ScalableWidget)?.original ?: it) == textBox } ?: return
+        focused = widget
     }
 
     fun addItems() {
