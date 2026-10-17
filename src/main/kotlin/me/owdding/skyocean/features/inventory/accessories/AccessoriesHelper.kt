@@ -6,6 +6,7 @@ import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.features.inventory.InventoryConfig
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.features.inventory.accessories.AccessoriesAPI.isDisallowed
+import me.owdding.skyocean.features.inventory.accessories.AccessoriesAPI.isRiftPrism
 import me.owdding.skyocean.features.item.modifier.AbstractItemModifier
 import me.owdding.skyocean.features.item.modifier.ItemModifier
 import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
@@ -20,6 +21,7 @@ import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.profile.items.accessory.AccessoryBagAPI
+import tech.thatgravyboat.skyblockapi.api.profile.maxwell.MaxwellAPI
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -64,7 +66,10 @@ object AccessoriesHelper : AbstractItemModifier() {
 
     fun getResult(id: SkyBlockId): AccessoryResult? {
         val (family, tier) = getFamilyAndTier(id) ?: return null
+        // if the accessory family has the source of bingo/rift, we return null
         if (family.isDisallowed()) return null
+        // if the accessory is a rift prism, and we have already consumed a rift prism, we return maxed
+        if (family.isRiftPrism() && MaxwellAPI.consumedRiftPrism) return MAXED
         val hasId = id in currentIds
         // If you have another accessory of the same line, in the same tier
         if (hasId && hasDuplicate(id) && !ignoreDuplicate(id)) return DUPLICATE
@@ -124,7 +129,11 @@ object AccessoriesHelper : AbstractItemModifier() {
     fun getMissingAccessories(): Set<AccessoryFamily> {
         val ids = currentIds
         return AccessoriesAPI.families.values.filterTo(mutableSetOf()) { family ->
-            family.flatMapItems().none { it in ids } && !family.isDisallowed()
+            val hasAccessory = family.flatMapItems().any { it in ids }
+            if (!hasAccessory) return@filterTo false
+            if (family.isDisallowed()) return@filterTo false
+            if (family.isRiftPrism() && MaxwellAPI.consumedRiftPrism) return@filterTo false
+            return@filterTo true
         }
     }
 
@@ -143,6 +152,7 @@ object AccessoriesHelper : AbstractItemModifier() {
                 val upgraded = AccessoriesAPI.getRarityUpgraded(id) ?: return@mapNotNull null
                 val family = AccessoriesAPI.getFamily(id) ?: return@mapNotNull null
                 if (family.isDisallowed()) return@mapNotNull null
+                if (family.isRiftPrism() && MaxwellAPI.consumedRiftPrism) return@mapNotNull null
                 val realRarity = item.getRealRarity() ?: return@mapNotNull null
                 val next = upgraded.nextAfter(realRarity) ?: return@mapNotNull null
                 AccessoryRarityUpgradeData(family, item, next)
@@ -164,6 +174,7 @@ object AccessoriesHelper : AbstractItemModifier() {
                 val id = item.getSkyBlockId() ?: return@mapNotNull null
                 val family = AccessoriesAPI.getFamily(id) ?: return@mapNotNull null
                 if (family.isDisallowed()) return@mapNotNull null
+                if (family.isRiftPrism() && MaxwellAPI.consumedRiftPrism) return@mapNotNull null
                 val tier = family.indexOfFirst { id in it } + 1
                 val nextTier = family.getOrNull(tier) ?: return@mapNotNull null
                 AccessoryUpgradeData(item, family, nextTier, tier)

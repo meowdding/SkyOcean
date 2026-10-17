@@ -65,6 +65,7 @@ object AccessoriesAPI {
     }
 
     fun AccessoryFamily.isDisallowed(): Boolean = isDisallowedOriginFamily(family)
+    fun AccessoryFamily.isRiftPrism(): Boolean = family == "rift_prism"
 
     fun getAp(item: ItemStack): Int = accessoryPower?.getAccessoryPower(item) ?: 1
 
