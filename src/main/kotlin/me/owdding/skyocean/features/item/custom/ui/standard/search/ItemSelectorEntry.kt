@@ -33,7 +33,7 @@ object ItemSearchEntries {
                 .bakedItemModels()
                 .keys
                 .map { ItemModelSearchEntry(it) },
-            SimpleItemAPI.getAllIds().map { SkyBlockModelEntry(it) },
+            SimpleItemAPI.getAllIds().distinctBy { it.skyblockId }.map { SkyBlockModelEntry(it) },
         ).flatten().sortedBy { it.name.stripped }
     }
 }
