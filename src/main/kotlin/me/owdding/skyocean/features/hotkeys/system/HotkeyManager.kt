@@ -52,6 +52,7 @@ object HotkeyManager {
     private val storage = SkyOcean.storage(
         "hotkeys",
         defaultData = { StoredData(mutableSetOf(), HashSet()) },
+        differentAlphaData = false,
         codec = Codec.withAlternative(
             SkyOceanCodecs.HotkeyDataCodec.codec(),
             hotkeySet.xmap({ StoredData(mutableSetOf(), it) }, { it.hotkeys }),

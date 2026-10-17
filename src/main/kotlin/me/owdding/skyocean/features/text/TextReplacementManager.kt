@@ -42,6 +42,7 @@ object TextReplacementManager {
     private val storage: MeowddingStorageData<StoredData> = SkyOcean.storage(
         "text_replacements",
         defaultData = { StoredData(mutableSetOf(), HashSet()) },
+        differentAlphaData = false,
         codec = Codec.withAlternative(
             SkyOceanCodecs.TextReplacementDataCodec.codec(),
             textReplacementSet.xmap({ StoredData(mutableSetOf(), it) }, { it.replacements }),

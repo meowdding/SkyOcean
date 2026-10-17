@@ -10,6 +10,7 @@ object DefaultEnabledMessageHelper {
     private val storage = SkyOcean.storage(
         "default_enabled_messages",
         defaultData = { mutableListOf() },
+        differentAlphaData = false,
         codec = CodecHelpers.mutableList<String>(),
     )
 

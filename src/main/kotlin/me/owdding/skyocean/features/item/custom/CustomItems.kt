@@ -50,6 +50,7 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger(), LateInitLoader
         SkyOcean.storage(
             "custom_items",
             defaultData = { mutableListOf() },
+            differentAlphaData = false,
             codec = CodecHelpers.mutableList(),
         )
     }
