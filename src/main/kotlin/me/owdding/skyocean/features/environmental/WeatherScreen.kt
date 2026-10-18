@@ -36,6 +36,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.GameProfile
 import tech.thatgravyboat.skyblockapi.platform.toResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.command.EnumArgument
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.extentions.toReadableTime
 import tech.thatgravyboat.skyblockapi.utils.extentions.until
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
@@ -285,12 +286,11 @@ class WeatherScreen : SkyOceanScreen() {
                 )
 
                 event.bonuses.forEach { (stat, value) ->
-                    val formattedValue = if (value % 1.0 == 0.0) value.toInt().toString() else value.toString()
+                    val formattedValue = if (value % 1.0 == 0.0) value.toInt().toFormattedString() else value.toFormattedString()
                     add(
                         Text.of {
                             append(" • ", TextColor.DARK_GRAY)
-                            append("+$formattedValue ", TextColor.GREEN)
-                            append(stat.toString())
+                            append("+$formattedValue${stat.icon} $stat", stat.color)
                         },
                     )
                 }
