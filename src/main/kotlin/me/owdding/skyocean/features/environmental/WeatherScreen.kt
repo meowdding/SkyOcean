@@ -144,7 +144,7 @@ class WeatherScreen : SkyOceanScreen() {
         val columns = (listWidth / (cardWidth + 4)).coerceAtLeast(1)
         val listHeight = frameHeight - 100
 
-        LayoutFactory.vertical {
+        LayoutFactory.vertical(alignment = MIDDLE) {
             WeatherGroup.entries.chunked(columns).forEach { row ->
                 horizontal(alignment = MIDDLE) {
                     row.forEach { group ->
