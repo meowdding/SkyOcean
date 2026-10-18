@@ -2044,6 +2044,10 @@
             "title": "Open the SkyOcean Weather Report",
             "desc": "Opens the Weather Report Screen where you can add/remove reminders about specific weather."
           },
+          "next_weather_instant_display_mode": {
+            "@value": "Next Weather Time Display Mode",
+            "desc": "Changes how the time until the next weather is displayed in the weather screen."
+          },
           "alert_other_islands": {
             "@value": "Alert on other Islands",
             "desc": "Weather reminders work on Weather that happens on other SkyBlock Islands"

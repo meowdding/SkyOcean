@@ -64,6 +64,10 @@ object EnvironmentalConfig : CategoryKt("environmental") {
         }
     }
 
+    var nextWeatherInstantDisplayMode by enum(WeatherScreen.NextWeatherInstantDisplayMode.MINUTES) {
+        this.translation = "weather.next_weather_instant_display_mode"
+    }
+
     var alertOtherIslands by boolean(false) {
         this.translation = "weather.alert_other_islands"
     }
@@ -71,6 +75,5 @@ object EnvironmentalConfig : CategoryKt("environmental") {
     var weatherTitleAlert by boolean(true) {
         this.translation = "weather.weather_title_alert"
     }
-
 
 }

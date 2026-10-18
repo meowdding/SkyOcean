@@ -3,18 +3,20 @@ package me.owdding.skyocean.features.environmental
 import com.mojang.authlib.properties.Property
 import earth.terrarium.olympus.client.components.buttons.Button
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.char
+import kotlinx.datetime.toLocalDateTime
 import me.owdding.ktmodules.Module
-import me.owdding.lib.builder.LEFT
-import me.owdding.lib.builder.LayoutFactory
-import me.owdding.lib.builder.MIDDLE
-import me.owdding.lib.builder.RIGHT
-import me.owdding.lib.builder.VerticalLayoutBuilder
+import me.owdding.lib.builder.*
 import me.owdding.lib.displays.Displays
 import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withTooltip
 import me.owdding.skyocean.SkyOcean
+import me.owdding.skyocean.config.features.environmental.EnvironmentalConfig
 import me.owdding.skyocean.data.WeatherAlertStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.utils.SkyOceanScreen
@@ -24,18 +26,14 @@ import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import me.owdding.skyocean.utils.extensions.asScrollable
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.component.ResolvableProfile
-import tech.thatgravyboat.skyblockapi.api.environmental.DateTimeAPI
-import tech.thatgravyboat.skyblockapi.api.environmental.SkyBlockInstant
-import tech.thatgravyboat.skyblockapi.api.environmental.WeatherAPI
-import tech.thatgravyboat.skyblockapi.api.environmental.WeatherEvent
-import tech.thatgravyboat.skyblockapi.api.environmental.WeatherGroup
-import tech.thatgravyboat.skyblockapi.api.environmental.WeatherIntensity
+import tech.thatgravyboat.skyblockapi.api.environmental.*
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.GameProfile
 import tech.thatgravyboat.skyblockapi.platform.toResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.command.EnumArgument
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.extentions.toReadableTime
 import tech.thatgravyboat.skyblockapi.utils.extentions.until
@@ -46,6 +44,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.*
 import kotlin.random.Random
+import kotlin.time.Instant
 
 class WeatherScreen : SkyOceanScreen() {
     private val widgetWidth get() = (width * 0.85).toInt().coerceAtLeast(400)
@@ -256,13 +255,28 @@ class WeatherScreen : SkyOceanScreen() {
                             append("Clear", TextColor.WHITE)
                         }
 
-                        append("   Next: ", TextColor.GRAY)
-                        if (nextIntensity != null && nextWeatherInstant != null) {
-                            append(nextIntensity.component)
-                            append(" in ${nextWeatherInstant.instant.until().toReadableTime()}")
-                        } else {
-                            append("N/A", TextColor.RED)
-                        }
+                        append(Text.of {
+                            append("   Next: ", TextColor.GRAY)
+                            if (nextIntensity != null && nextWeatherInstant != null) {
+                                append(nextIntensity.component)
+                                when (EnvironmentalConfig.nextWeatherInstantDisplayMode) {
+                                    TIME -> append(" at ${nextWeatherInstant.instant.toReadableTime()}")
+                                    MINUTES -> append(" in ${nextWeatherInstant.instant.until().toReadableTime()}")
+                                    BOTH -> append(
+                                        " in ${
+                                            nextWeatherInstant.instant.until().toReadableTime()
+                                        } (at ${nextWeatherInstant.instant.toReadableTime()})"
+                                    )
+
+                                    else -> {}
+                                }
+                            } else {
+                                append("N/A", TextColor.RED)
+                            }
+
+                            // TODO: Make weatherApi support returning multiple next weather events, instead of just the next to support the over thing
+                            /*this.hover = Text.of {}*/
+                        })
                     }
 
                     WidgetRenderers.text<Button>(text).apply { withShadow() }.render(graphics, widget, ticks)
@@ -270,6 +284,15 @@ class WeatherScreen : SkyOceanScreen() {
             }
         }.add()
     }
+
+    // HH:mm
+    private val formatter = LocalDateTime.Format {
+        hour()
+        char(':')
+        minute()
+    }
+
+    private fun Instant.toReadableTime(): String = this.toLocalDateTime(TimeZone.currentSystemDefault()).format(formatter)
 
     private fun buildBonusTooltip(group: WeatherGroup, event: WeatherEvent): Component {
         return Text.multiline(
@@ -353,5 +376,16 @@ class WeatherScreen : SkyOceanScreen() {
                 }
             }
         }
+    }
+
+    enum class NextWeatherInstantDisplayMode {
+        NONE,
+        TIME, // at 15:35
+        MINUTES, // in 16 Minutes
+        BOTH, // in 16 Minutes (at 15:35)
+        ;
+
+        private val formattedName = toFormattedName()
+        override fun toString(): String = formattedName
     }
 }
