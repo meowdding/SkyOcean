@@ -62,6 +62,11 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.hideEntityFire"
     }
 
+    var showOwnNameTag by boolean(false) {
+        translation = "skyocean.config.misc.showOwnNameTag"
+        searchTerms = listOf("nametag", "name", "tag", "third", "person", "self")
+    }
+
     var hideImplosions by boolean(false) {
         translation = "skyocean.config.misc.hideImplosions"
     }
@@ -150,4 +155,3 @@ object MiscConfig : CategoryKt("misc") {
         translation = "skyocean.config.misc.transparentArmor.others"
     }
 }
-
