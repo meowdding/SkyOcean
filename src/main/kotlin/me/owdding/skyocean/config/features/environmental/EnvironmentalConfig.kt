@@ -68,6 +68,12 @@ object EnvironmentalConfig : CategoryKt("environmental") {
         this.translation = "weather.next_weather_instant_display_mode"
     }
 
+    var nextWeatherHoverAmount by int(4) {
+        this.translation = "weather.next_weather_hover_amount"
+        this.slider = true
+        this.range = 0..10
+    }
+
     var alertOtherIslands by boolean(false) {
         this.translation = "weather.alert_other_islands"
     }

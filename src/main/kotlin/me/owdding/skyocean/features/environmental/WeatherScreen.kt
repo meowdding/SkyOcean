@@ -27,6 +27,13 @@ import me.owdding.skyocean.utils.extensions.asScrollable
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.component.ResolvableProfile
 import tech.thatgravyboat.skyblockapi.api.environmental.*
+import tech.thatgravyboat.skyblockapi.api.environmental.DateTimeAPI
+import tech.thatgravyboat.skyblockapi.api.environmental.SkyBlockInstant
+import tech.thatgravyboat.skyblockapi.api.environmental.WeatherAPI
+import tech.thatgravyboat.skyblockapi.api.environmental.WeatherEvent
+import tech.thatgravyboat.skyblockapi.api.environmental.WeatherGroup
+import tech.thatgravyboat.skyblockapi.api.environmental.WeatherIntensity
+import tech.thatgravyboat.skyblockapi.api.environmental.skyblockDays
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -34,6 +41,7 @@ import tech.thatgravyboat.skyblockapi.platform.GameProfile
 import tech.thatgravyboat.skyblockapi.platform.toResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.command.EnumArgument
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedName
+import tech.thatgravyboat.skyblockapi.utils.extentions.format
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.extentions.toReadableTime
 import tech.thatgravyboat.skyblockapi.utils.extentions.until
@@ -42,6 +50,9 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.*
 import kotlin.random.Random
 import kotlin.time.Instant
@@ -232,6 +243,31 @@ class WeatherScreen : SkyOceanScreen() {
             button {
                 setSize(frameWidth - 20, 20)
                 withTexture(null)
+
+                @Suppress("Deprecation")
+                val upcomingWeathers = getUpcomingWeathers(EnvironmentalConfig.nextWeatherHoverAmount)
+                if (upcomingWeathers.isNotEmpty()) {
+                    val tooltipText = Text.multiline(
+                        buildList {
+                            add(Text.of("Upcoming Weather", TextColor.GOLD))
+                            add(CommonText.EMPTY)
+
+                            upcomingWeathers.forEach { (intensity, instant) ->
+                                val localTime = instant.instant.toLocalDateTime(TimeZone.currentSystemDefault()).format(formatter)
+                                add(
+                                    Text.of {
+                                        append(" • ", TextColor.DARK_GRAY)
+                                        append(intensity.component)
+                                        append(" at ", TextColor.GRAY)
+                                        append(localTime, TextColor.WHITE)
+                                    }
+                                )
+                            }
+                        }
+                    )
+                    withTooltip(tooltipText)
+                }
+
                 withRenderer { graphics, widget, ticks ->
                     val regionName = WeatherGroup.getCurrentGroup()?.formattedName ?: "None"
                     val isActive = WeatherAPI.isActive
@@ -273,9 +309,6 @@ class WeatherScreen : SkyOceanScreen() {
                             } else {
                                 append("N/A", TextColor.RED)
                             }
-
-                            // TODO: Make weatherApi support returning multiple next weather events, instead of just the next to support the over thing
-                            /*this.hover = Text.of {}*/
                         })
                     }
 
@@ -374,6 +407,37 @@ class WeatherScreen : SkyOceanScreen() {
                         }
                     }
                 }
+            }
+        }
+
+        @Deprecated("Replace with sbapi WeatherAPI function when released")
+        // TODO: replace
+        private fun getUpcomingWeathers(count: Int): List<Pair<WeatherIntensity, SkyBlockInstant>> {
+            val season = DateTimeAPI.season ?: return emptyList()
+            val day = DateTimeAPI.day
+            if (day <= 0) return emptyList()
+            val year = SkyBlockInstant.now().year
+
+            val daysPerYear = 372
+            val baseYear = 518
+
+            val dayOfYear = season.ordinal * 31 + (day - 1)
+            val currentDay = (year - baseYear).toLong() * daysPerYear + dayOfYear
+
+            val remainder = (currentDay % 3).toInt()
+            val nextDay = currentDay + if (remainder == 2) 3 else (2 - remainder)
+
+            val startOfDay = SkyBlockInstant(
+                year = year,
+                month = season.ordinal + 1,
+                day = day,
+            )
+
+            return (0 until count).map { i ->
+                val dayOffset = nextDay + (i * 3)
+                val intensity = if ((dayOffset / 3) % 3 == 1L) WeatherIntensity.EXTREME else WeatherIntensity.MILD
+                val instant = startOfDay + (dayOffset - currentDay).toInt().skyblockDays
+                intensity to instant
             }
         }
     }

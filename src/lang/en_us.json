@@ -2048,6 +2048,10 @@
             "@value": "Next Weather Time Display Mode",
             "desc": "Changes how the time until the next weather is displayed in the weather screen."
           },
+          "next_weather_hover_amount": {
+            "@value": "Next Weather Tooltip Amount",
+            "desc": "Changes how many upcoming weather intensities are shown in the tooltip when hovering over the footer."
+          },
           "alert_other_islands": {
             "@value": "Alert on other Islands",
             "desc": "Weather reminders work on Weather that happens on other SkyBlock Islands"
