@@ -1,11 +1,13 @@
 package me.owdding.skyocean.api
 
 import me.owdding.ktmodules.Module
+import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.events.fishing.FishCatchEvent
 import me.owdding.skyocean.events.fishing.WormholeEvent
 import me.owdding.skyocean.features.fishing.WormholeFeatures
 import me.owdding.skyocean.utils.Utils.hasMaxSpeed
 import me.owdding.skyocean.utils.Utils.roundToHalf
+import me.owdding.skyocean.utils.chat.ChatUtils.sendWithPrefix
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket
 import org.joml.Vector3f
@@ -17,6 +19,7 @@ import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.extentions.since
+import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.time.Duration.Companion.seconds
@@ -25,8 +28,8 @@ import kotlin.time.Instant
 @Module
 object WormholeAPI {
 
-    private val _wormholes = mutableListOf<WormholeData>()
-    val wormholes: List<WormholeData> get() = _wormholes
+    val wormholes: List<WormholeData>
+        field = mutableListOf<WormholeData>()
 
     var lastWormholeFish = Instant.DISTANT_PAST
         private set
@@ -39,7 +42,7 @@ object WormholeAPI {
         val hookY = event.hookPos.y
         val hookPosD = event.hookPos.toVector3f()
 
-        _wormholes.filter {
+        wormholes.filter {
             val y = it.pos?.y ?: return@filter false
             abs(hookY - y) < 3
         }.minByOrNull { it.pos?.distanceSquared(hookPosD) ?: Float.MAX_VALUE }?.let {
@@ -50,7 +53,7 @@ object WormholeAPI {
 
     @Subscription(ServerChangeEvent::class)
     private fun onServerChange() {
-        _wormholes.clear()
+        wormholes.clear()
     }
 
     @Subscription
@@ -61,7 +64,7 @@ object WormholeAPI {
         val packet = event.packet as? ClientboundLevelParticlesPacket ?: return
         if (!packet.isHotSpotParticle()) return
 
-        val iterator = _wormholes.iterator()
+        val iterator = wormholes.iterator()
         while (iterator.hasNext()) {
             val wormhole = iterator.next()
             if (wormhole.lastParticleTime.since() > 3.seconds) {
@@ -72,7 +75,7 @@ object WormholeAPI {
 
         val searchRadius = MAX_RADIUS * 2
 
-        val closestMatch = _wormholes.asSequence().mapNotNull { entry ->
+        val closestMatch = wormholes.asSequence().mapNotNull { entry ->
             val pos = entry.pos ?: return@mapNotNull null
             val distanceSq = (packet.x - pos.x).pow(2) + (packet.z - pos.z).pow(2)
 
@@ -81,7 +84,7 @@ object WormholeAPI {
         }.minByOrNull { it.second }?.first
 
         val isNew = closestMatch == null
-        val wormhole = closestMatch ?: WormholeData().also { _wormholes.add(it) }
+        val wormhole = closestMatch ?: WormholeData().also { wormholes.add(it) }
 
         wormhole.addParticle(packet.x, packet.y, packet.z)
 
@@ -97,6 +100,14 @@ object WormholeAPI {
             ParticleTypes.ENCHANT -> this.count == 4 && this.hasMaxSpeed(-1.2f)
             ParticleTypes.PORTAL -> this.count == 5 && this.hasMaxSpeed(0.25f)
             else -> false
+        }
+    }
+
+    @Subscription
+    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+        event.registerWithCallback("reset_wormholes") {
+            wormholes.clear()
+            Text.of("Cleared Wormhole locations").sendWithPrefix()
         }
     }
 
