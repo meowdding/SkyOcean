@@ -2,6 +2,8 @@
 
 > [!WARNING]
 > Pull requests suspected of being created, documented, or aided with AI/LLM usage will be closed without further discussion.
+>
+> This includes, but is not limited to, translations. We do not require all translations to be in all languages, and translations made with AI/translators will not be accepted.
 
 If you have questions, join our [Discord](https://meowdd.ing/discord).
 
