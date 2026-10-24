@@ -151,7 +151,7 @@ object HotspotAPI {
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("reset_hotspots") {
             _hotspots.clear()
             Text.of("Cleared Hotspot locations").sendWithPrefix()

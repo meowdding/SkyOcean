@@ -104,7 +104,7 @@ object WormholeAPI {
     }
 
     @Subscription
-    fun onCommand(event: RegisterSkyOceanCommandEvent) {
+    private fun onCommand(event: RegisterSkyOceanCommandEvent) {
         event.registerWithCallback("reset_wormholes") {
             wormholes.clear()
             Text.of("Cleared Wormhole locations").sendWithPrefix()
