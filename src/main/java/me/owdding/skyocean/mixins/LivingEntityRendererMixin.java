@@ -1,11 +1,14 @@
 package me.owdding.skyocean.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.time.Instant;
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import me.owdding.skyocean.accessors.WalkAnimationStateAccessor;
+import me.owdding.skyocean.config.features.misc.MiscConfig;
 import me.owdding.skyocean.features.misc.fun.animal.PlayerAnimals;
 import me.owdding.skyocean.utils.PlayerUtils;
 import net.minecraft.client.Minecraft;
@@ -47,6 +50,14 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(EntityRendererProvider.Context context, EntityModel model, float shadow, CallbackInfo ci) {
         this.skyocean$blockModelResolver = context.getBlockModelResolver();
+    }
+
+    @ModifyReturnValue(method = "shouldShowName", at = @At("RETURN"))
+    public boolean showOwnNameTag(boolean original, @Local(argsOnly = true) LivingEntity entity) {
+        if (MiscConfig.INSTANCE.getShowOwnNameTag() && entity instanceof LocalPlayer) {
+            return true;
+        }
+        return original;
     }
 
     @WrapMethod(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V")
