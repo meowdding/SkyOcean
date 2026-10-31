@@ -329,7 +329,7 @@ class WidgetBuilder(val includeParentOverride: Boolean? = null, val refreshCallb
 
         if (ProfileAPI.profileType == ProfileType.NORMAL) {
             add(Text.of("Right-click to open bazaar!", TextColor.YELLOW))
-            add(Text.of("Shift + Right-click to open bazaar!", TextColor.YELLOW))
+            add(Text.of("Shift + Right-click to open auction house!", TextColor.YELLOW))
         }
     }.takeUnless { it.isEmpty() }?.toMutableList()?.let {
         Tooltip.create(
