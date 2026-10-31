@@ -309,7 +309,7 @@
               "- <red>❌ <bold>MISSING</bold></red> (You don't own any accessories of this accessory family or group)",
               "- <dark_purple>☰ <bold>DUPLICATE</bold></dark_purple> (You own multiple accessories like this one)",
               "- <gray>▼ <bold>DOWNGRADE</bold></gray> (You already own an upgraded version of this accessory)"
-              ]
+            ]
           },
           "open_screen": {
             "@value": "Open Accessories Helper Screen",
@@ -728,6 +728,10 @@
         "hideEntityFire": {
           "@value": "Hide entity fire",
           "desc": "Removes the fire effect from all entities."
+        },
+        "showOwnNameTag": {
+          "@value": "Render Own Name Tag",
+          "desc": "Renders your own name tag in third person."
         },
         "hideImplosions": {
           "@value": "Hide Implosion Particles",
