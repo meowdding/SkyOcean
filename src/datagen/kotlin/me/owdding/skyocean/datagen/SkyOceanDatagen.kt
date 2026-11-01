@@ -2,11 +2,11 @@ package me.owdding.skyocean.datagen
 
 import me.owdding.skyocean.datagen.dispatcher.SkyOceanDataGenerator
 import me.owdding.skyocean.datagen.dispatcher.SkyOceanDataGeneratorEntrypoint
-import me.owdding.skyocean.datagen.font.StylizedChatPrefixesFontProvider
 import me.owdding.skyocean.datagen.font.EmptyFontProvider
 import me.owdding.skyocean.datagen.font.FontIconsProvider
 import me.owdding.skyocean.datagen.font.HotkeyFontProvider
 import me.owdding.skyocean.datagen.font.MobTypesFontProvider
+import me.owdding.skyocean.datagen.font.StylizedChatPrefixesFontProvider
 import me.owdding.skyocean.features.textures.KnownMobIcon
 import me.owdding.skyocean.features.textures.MobIcons
 

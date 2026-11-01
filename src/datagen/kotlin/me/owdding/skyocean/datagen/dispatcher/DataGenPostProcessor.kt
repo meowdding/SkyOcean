@@ -12,7 +12,15 @@ import me.owdding.skyocean.utils.Utils.writeJson
 import me.owdding.skyocean.utils.codecs.PACK_FORMAT
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import kotlin.io.path.*
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.name
+import kotlin.io.path.nameWithoutExtension
+import kotlin.io.path.readBytes
+import kotlin.io.path.walk
+import kotlin.io.path.writeBytes
 
 object DataGenPostProcessor {
 

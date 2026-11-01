@@ -3,7 +3,6 @@ package me.owdding.skyocean.mixins.features.customize;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.owdding.skyocean.config.features.environmental.EnvironmentalConfig;
-import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.world.entity.LivingEntity;

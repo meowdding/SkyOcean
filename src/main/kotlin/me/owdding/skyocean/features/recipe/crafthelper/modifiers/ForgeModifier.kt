@@ -2,7 +2,6 @@ package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.features.recipe.SimpleRecipeApi
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.NormalCraftHelperRecipe
 import me.owdding.skyocean.utils.Utils.contains
 import net.minecraft.world.item.Items

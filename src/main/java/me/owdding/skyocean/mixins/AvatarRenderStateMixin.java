@@ -1,14 +1,13 @@
 package me.owdding.skyocean.mixins;
 
-import kotlin.time.Instant;
 import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-
 import java.util.UUID;
+import kotlin.time.Instant;
 
 @Mixin(AvatarRenderState.class)
 public class AvatarRenderStateMixin implements AvatarRenderStateAccessor {

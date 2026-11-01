@@ -13,7 +13,7 @@ import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.minecraft.sounds.SoundPlayedEvent
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLeggings
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
-import java.util.*
+import java.util.WeakHashMap
 
 @Module
 object MuteTheFuckingStereoPants {

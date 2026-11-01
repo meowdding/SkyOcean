@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import me.owdding.skyocean.features.item.custom.CustomItemsHelper;
-import me.owdding.skyocean.utils.Utils;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;

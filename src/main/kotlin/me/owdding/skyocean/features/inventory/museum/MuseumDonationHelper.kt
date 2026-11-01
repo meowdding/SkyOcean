@@ -1,7 +1,6 @@
 package me.owdding.skyocean.features.inventory.museum
 
 import me.owdding.ktmodules.Module
-import me.owdding.lib.extensions.ListMerger
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingLogger.Companion.featureLogger
 import me.owdding.skyocean.SkyOcean
@@ -26,7 +25,9 @@ import me.owdding.skyocean.features.recipe.crafthelper.views.WidgetBuilder
 import me.owdding.skyocean.repo.museum.MuseumArmour
 import me.owdding.skyocean.repo.museum.MuseumItem
 import me.owdding.skyocean.repo.museum.MuseumRepoData
-import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.*
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ARMOR_NOT_FOUND
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.ITEM_NOT_FOUND
+import me.owdding.skyocean.repo.museum.MuseumRepoData.MuseumDataError.Type.NO_MATCHING_MUSEUM_ITEM
 import me.owdding.skyocean.utils.RemoteStrings
 import me.owdding.skyocean.utils.StringGroup.Companion.resolve
 import me.owdding.skyocean.utils.Utils.add
@@ -58,15 +59,13 @@ import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.impl.ColoredItems
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import java.util.*
+import java.util.WeakHashMap
 
 @Module
 @ItemModifier

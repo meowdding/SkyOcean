@@ -5,8 +5,8 @@ import com.google.common.hash.HashingOutputStream
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.datagen.providers.PngHolder
 import me.owdding.skyocean.datagen.providers.SkyOceanFontProvider
-import me.owdding.skyocean.features.chat.StylizedChatPrefixes
 import me.owdding.skyocean.features.chat.KnownChatPrefix
+import me.owdding.skyocean.features.chat.StylizedChatPrefixes
 import me.owdding.skyocean.utils.Utils
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput
 import net.minecraft.data.CachedOutput

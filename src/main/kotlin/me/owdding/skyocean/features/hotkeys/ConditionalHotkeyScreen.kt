@@ -9,9 +9,6 @@ import me.owdding.skyocean.config.features.hotkey.HotkeyConfig
 import me.owdding.skyocean.features.hotkeys.system.Hotkey
 import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
-import me.owdding.skyocean.features.text.MoveTextReplacementModal
-import me.owdding.skyocean.features.text.TextReplacementManager
-import me.owdding.skyocean.features.text.TextReplacementScreen
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils

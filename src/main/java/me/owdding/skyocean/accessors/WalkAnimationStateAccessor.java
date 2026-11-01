@@ -1,7 +1,5 @@
 package me.owdding.skyocean.accessors;
 
-import kotlin.time.Instant;
-
 public interface    WalkAnimationStateAccessor {
 
     static Integer getMoveStartTime(Object player) {

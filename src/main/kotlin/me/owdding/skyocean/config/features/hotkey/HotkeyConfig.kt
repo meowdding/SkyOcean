@@ -3,7 +3,6 @@ package me.owdding.skyocean.config.features.hotkey
 import com.teamresourceful.resourcefulconfigkt.api.CategoryKt
 import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
 object HotkeyConfig : CategoryKt("hotkeys") {
     override val name = Translated("skyocean.config.hotkeys")

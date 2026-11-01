@@ -25,6 +25,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemDisplayContext
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import net.minecraft.client.renderer.entity.state.*
 
 object PlayerAnimals {
 

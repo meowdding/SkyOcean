@@ -15,7 +15,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.utils.extentions.holder
-import java.util.*
+import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 sealed interface ItemStackBlueprint {

@@ -9,7 +9,7 @@ import net.minecraft.util.FormattedCharSink
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.asComponent
-import java.util.*
+import java.util.Arrays
 import java.util.function.Supplier
 
 object TextReplacements {

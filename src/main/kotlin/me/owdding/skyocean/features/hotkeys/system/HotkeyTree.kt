@@ -1,7 +1,7 @@
 package me.owdding.skyocean.features.hotkeys.system
 
 import com.mojang.blaze3d.platform.InputConstants
-import java.util.*
+import java.util.IdentityHashMap
 import kotlin.math.max
 
 private sealed interface HotkeyTreeNode {

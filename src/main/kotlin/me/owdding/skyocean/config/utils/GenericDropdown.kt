@@ -22,7 +22,7 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Block
-import java.util.*
+import java.util.UUID
 
 class GenericDropdown<T>(
     val element: ResourcefulConfigElement,

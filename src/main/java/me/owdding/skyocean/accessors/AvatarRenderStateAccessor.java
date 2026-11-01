@@ -1,11 +1,10 @@
 package me.owdding.skyocean.accessors;
 
-import kotlin.time.Instant;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.UUID;
+import kotlin.time.Instant;
 
 public interface AvatarRenderStateAccessor {
 

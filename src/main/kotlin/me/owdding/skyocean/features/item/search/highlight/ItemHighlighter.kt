@@ -2,11 +2,6 @@ package me.owdding.skyocean.features.item.search.highlight
 
 import com.google.common.collect.Queues
 import com.teamresourceful.resourcefullib.common.color.Color
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import me.owdding.ktmodules.Module
 import me.owdding.skyocean.config.features.misc.MiscConfig
 import me.owdding.skyocean.data.profile.ChestItem
@@ -44,8 +39,15 @@ import tech.thatgravyboat.skyblockapi.impl.tagkey.ItemTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.clearAnd
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
-import java.util.*
+import java.util.Collections
+import java.util.Queue
+import java.util.WeakHashMap
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Module
