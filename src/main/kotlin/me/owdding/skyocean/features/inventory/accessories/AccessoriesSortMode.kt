@@ -30,7 +30,10 @@ private enum class AdditionalSortMode(comparator: Comparator<TrackedAccessory>) 
     AP(reversed(Comparator.comparing { getAp(it) })),
     PRICE(Comparator.comparing { getPrice(it) }),
     RARITY(reversed(Comparator.comparing { getRarity(it) })),
-    PRICE_PER_AP(Comparator.comparing { getPrice(it) / getAp(it) }),
+    PRICE_PER_AP(Comparator.comparing {
+        val ap = getAp(it)
+        if (ap == 0) Long.MAX_VALUE else getPrice(it) / ap
+    }),
     ;
 
     companion object {
@@ -39,7 +42,7 @@ private enum class AdditionalSortMode(comparator: Comparator<TrackedAccessory>) 
 
         // TODO: handle accessory upgrades of recombed accessories
         private fun getAp(accessory: TrackedAccessory): Int {
-            return AccessoriesAPI.getAp(accessory.items.firstOrNull() ?: return 1)
+            return AccessoriesAPI.getAp(accessory.items.firstOrNull() ?: return 0)
         }
 
         // TODO: handle accessory upgrades of recombed accessories?
