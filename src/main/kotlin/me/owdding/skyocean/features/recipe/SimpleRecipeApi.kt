@@ -8,7 +8,6 @@ import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.LateInitLoader
 import me.owdding.skyocean.utils.LateInitModule
 import me.owdding.skyocean.utils.Utils
-import me.owdding.skyocean.utils.extensions.addAll
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
