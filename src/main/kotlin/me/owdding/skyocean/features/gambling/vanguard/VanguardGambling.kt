@@ -25,7 +25,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.toIntValue
 import tech.thatgravyboat.skyblockapi.utils.regex.RegexUtils.match
 import tech.thatgravyboat.skyblockapi.utils.text.CommonText
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.Text.imitateServerMessage
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
@@ -133,8 +133,7 @@ object VanguardGambling {
                     color = TextColor.GREEN
                 },
             ).forEach { component ->
-                ChatReceivedEvent.Pre(component).post(SkyBlockAPI.eventBus)
-                component.send()
+                component.imitateServerMessage()
             }
         }
     }

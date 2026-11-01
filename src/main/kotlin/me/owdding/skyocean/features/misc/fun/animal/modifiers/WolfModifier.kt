@@ -4,9 +4,10 @@ import com.teamresourceful.resourcefulconfig.api.types.info.Translatable
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
-import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
-import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.*
+import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.ANGRY
+import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.TAME
+import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.WILD
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
 import net.minecraft.client.renderer.block.BlockModelResolver
@@ -16,6 +17,7 @@ import net.minecraft.core.ClientAsset
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.animal.wolf.Wolf
 import net.minecraft.world.entity.animal.wolf.WolfVariant
 import net.minecraft.world.entity.animal.wolf.WolfVariants

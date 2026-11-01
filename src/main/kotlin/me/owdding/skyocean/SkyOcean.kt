@@ -43,6 +43,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.url
 import kotlin.jvm.optionals.getOrNull
+import kotlin.reflect.KType
 
 @Module
 object SkyOcean : MeowddingMod("skyocean") {
@@ -166,7 +167,8 @@ object SkyOcean : MeowddingMod("skyocean") {
         }
     }
 
-    override fun <T : Any> getCodec(clazz: Class<T>): Codec<T> = SkyOceanCodecs.getCodec(clazz).unsafeCast()
+    override fun <T : Any> getCodec(type: KType): Codec<T> = SkyOceanCodecs.getCodec(type).unsafeCast()
+    @Deprecated("unused") override fun <T : Any> getCodec(clazz: Class<T>): Codec<T> = SkyOceanCodecs.getCodec(clazz).unsafeCast()
 
     fun minecraft(path: String): Identifier = Identifier.withDefaultNamespace(path)
     fun olympus(path: String): Identifier = Identifier.fromNamespaceAndPath("olympus", path)

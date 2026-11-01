@@ -36,7 +36,7 @@ import kotlin.time.Duration.Companion.seconds
 @ItemModifier
 object AccessoriesHelper : AbstractItemModifier() {
 
-    private fun getCurrentAccessories(): List<SkyBlockId> = AccessoryBagAPI.getItems().mapNotNullTo(mutableListOf()) { it.item.getSkyBlockId() }
+    private fun getCurrentAccessories(): List<SkyBlockId> = MaxwellAPI.accessories.mapNotNullTo(mutableListOf()) { it.getSkyBlockId() }
 
     fun getFamilyAndTier(id: SkyBlockId): Pair<AccessoryFamily, AccessoryTier>? {
         val family = AccessoriesAPI.getFamily(id) ?: return null
@@ -207,7 +207,7 @@ object AccessoriesHelper : AbstractItemModifier() {
     override fun appliesTo(itemStack: ItemStack): Boolean {
         if (itemStack.isEmpty) return false
         val category = itemStack[DataTypes.CATEGORY] ?: return false
-        if (!category.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY, ignoreDungeon = true)) return false
+        if (!category.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY, ignoreModifiers = true)) return false
         val id = itemStack.getSkyBlockId() ?: return false
         return getResult(id) != null
     }
