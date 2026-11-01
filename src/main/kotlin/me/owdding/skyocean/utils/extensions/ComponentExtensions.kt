@@ -34,12 +34,8 @@ fun Display.withTextFormattingInfo() = withTooltip {
         append(" and <obfuscated>")
     }
     ChatFormatting.entries.filter { it < ChatFormatting.OBFUSCATED }.map {
-        //? >= 26.2
         val value = net.minecraft.network.chat.TextColor.fromLegacyFormat(it)!!
-
-        //~ if >= 26.2 'it.serializedName' -> 'value.serialize()'
         val name = value.serialize()
-        //~ if >= 26.2 'it.color!!' -> 'value.value'
         val color = value.value
 
         text("<${name}>") {

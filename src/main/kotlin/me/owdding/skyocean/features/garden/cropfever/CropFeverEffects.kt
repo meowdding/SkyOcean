@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.LevelTargetBundle
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import org.lwjgl.system.MemoryStack
-import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyIn
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyNonGuest
@@ -29,7 +28,7 @@ import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland.GARDEN
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import tech.thatgravyboat.skyblockapi.utils.text.Text
-import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.Text.imitateServerMessage
 import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
@@ -202,8 +201,7 @@ object CropFeverEffects {
                             color = TextColor.GREEN
                         }
                     }
-                    ChatReceivedEvent.Pre(startMessageComponent).post(SkyBlockAPI.eventBus)
-                    startMessageComponent.send()
+                    startMessageComponent.imitateServerMessage()
                 }
             }
             then("stop") {
@@ -227,8 +225,7 @@ object CropFeverEffects {
                             color = TextColor.RED
                         }
                     }
-                    ChatReceivedEvent.Pre(endMessageComponent).post(SkyBlockAPI.eventBus)
-                    endMessageComponent.send()
+                    endMessageComponent.imitateServerMessage()
                 }
             }
         }

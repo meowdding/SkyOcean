@@ -35,11 +35,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.scissor
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.function.Supplier
 
-//? 26.1
-//import net.minecraft.client.renderer.MultiBufferSource
-//? 26.1
-//import java.util.function.Function
-
 private const val BUTTON_SIZE = 5
 
 data class ItemWidgetItemState(
@@ -54,19 +49,15 @@ data class ItemWidgetItemState(
 ) : MeowddingPipState<ItemWidgetItemState>() {
     override val shrinkToScissor: Boolean = false
 
-    //? if >= 26.2 {
     override fun getFactory(): Supplier<PictureInPictureRenderer<ItemWidgetItemState>> = Supplier { ItemWidgetRenderer() }
-    //? } else
-    //override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<ItemWidgetItemState>> = Function { buffer -> ItemWidgetRenderer(buffer) }
 }
 
-//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> '() : ', '(buffer)' -> '()'
 class ItemWidgetRenderer() : PictureInPictureRenderer<ItemWidgetItemState>() {
 
     override fun getRenderStateClass(): Class<ItemWidgetItemState> = ItemWidgetItemState::class.java
     override fun getTextureLabel(): String = "skyocean_item_widget"
 
-    override fun renderToTexture(state: ItemWidgetItemState, stack: PoseStack/*? >= 26.2 >> ')'*/, submitNodeCollector: SubmitNodeCollector) {
+    override fun renderToTexture(state: ItemWidgetItemState, stack: PoseStack, submitNodeCollector: SubmitNodeCollector) {
         val bounds = state.bounds ?: return
 
         stack.pushPose()
@@ -77,13 +68,8 @@ class ItemWidgetRenderer() : PictureInPictureRenderer<ItemWidgetItemState>() {
         //~ if >= 26.3 'mulPose' -> 'rotate'
         stack.rotate(Axis.YN.rotationDegrees(state.rotation))
 
-        //~ if >= 26.2 '.lighting' -> '.lighting()'
         McClient.self.gameRenderer.lighting().setupFor(if (state.item.usesBlockLight()) Lighting.Entry.ITEMS_3D else Lighting.Entry.ITEMS_FLAT)
 
-        //? 26.1 {
-        /*val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
-        val submitNodeCollector = featureRenderer.submitNodeStorage
-        *///? }
         state.item.submit(
             stack,
             submitNodeCollector,

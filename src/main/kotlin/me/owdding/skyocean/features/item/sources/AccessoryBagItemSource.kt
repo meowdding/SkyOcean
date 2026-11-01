@@ -2,13 +2,13 @@ package me.owdding.skyocean.features.item.sources
 
 import me.owdding.skyocean.features.item.sources.system.ItemContext
 import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
-import tech.thatgravyboat.skyblockapi.api.profile.items.accessory.AccessoryBagAPI
+import tech.thatgravyboat.skyblockapi.api.profile.maxwell.MaxwellAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object AccessoryBagItemSource : ItemSource {
-    override fun getAll() = AccessoryBagAPI.getItems().map { (stack, page) -> SimpleTrackedItem(stack, AccessoryBagItemContext(page)) }
+    override fun getAll() = MaxwellAPI.accessoryEntries.map { (stack, page) -> SimpleTrackedItem(stack, AccessoryBagItemContext(page)) }
 
     override val type = ItemSources.ACCESSORY_BAG
 }

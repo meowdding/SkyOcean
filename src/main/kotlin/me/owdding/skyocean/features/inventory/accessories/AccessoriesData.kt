@@ -176,7 +176,7 @@ object AccessoriesAPI {
     private fun checkMissingAccessories() {
         val allAccessories = SimpleItemAPI.getAllIds().filterTo(mutableSetOf()) {
             val category = it.toItem().getData(DataTypes.CATEGORY) ?: return@filterTo false
-            category.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY, ignoreDungeon = true)
+            category.equalsAny(SkyBlockCategory.ACCESSORY, SkyBlockCategory.HATCESSORY, ignoreModifiers = true)
         }
         val storedAccessories: Set<SkyBlockId> = buildSet {
             families.values.forEach { family ->

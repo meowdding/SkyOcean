@@ -27,10 +27,6 @@ import kotlin.math.max
 import kotlin.math.sin
 import me.owdding.lib.rendering.world.RenderTypes as MLibRenderTypes
 
-//? 26.1 {
-/*import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.ShapeRenderer*///?}
-
 interface PostEffectApplicator {
     fun `skyocean$applyPostEffect`(id: Identifier)
 
@@ -54,22 +50,10 @@ internal fun renderShape(
     lineWidth: Float = 1f,
     throughWalls: Boolean = false,
     collector: SubmitNodeCollector,
-    //? 26.1
-    //buffer: MultiBufferSource,
 ) {
-
-    //? 26.1 {
-    /*ShapeRenderer.renderShape(
-        poseStack,
-        buffer.getBuffer(vertexConsumer),
-        shape,
-        offsetX, offsetY, offsetZ, color, lineWidth,
-    )
-    *///? } else {
     poseStack.translated(offsetX, offsetY, offsetZ) {
         collector.submitShapeOutline(poseStack, shape, vertexConsumer, color, 1f, throughWalls)
     }
-    //? }
 }
 
 
@@ -86,8 +70,6 @@ object RenderUtils {
             pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), color,
             throughWalls = throughWalls,
             collector = submitNodeCollector,
-            //? 26.1
-            //buffer = buffer
         )
     }
 

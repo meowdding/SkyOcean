@@ -57,7 +57,6 @@ object CorpseWaypoint {
         CODEC,
     )
 
-    //? >= 26.2
     @Subscription
     private fun onRender(event: RenderWorldEvent.AfterTranslucent) {
         RenderTranslucentFeatures(event).post(SkyBlockAPI.eventBus)

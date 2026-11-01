@@ -17,7 +17,6 @@ public class NetherFogColorMixin {
         method = "computeFogColor",
         at = @At(
             value = "INVOKE",
-            //~ if >= 26.2 'getNightVisionScale' -> 'nightVisionScale'
             target = "Lnet/minecraft/client/renderer/GameRenderer;nightVisionScale(Lnet/minecraft/world/entity/LivingEntity;F)F"
         )
     )

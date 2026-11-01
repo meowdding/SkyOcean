@@ -3,12 +3,12 @@ package me.owdding.skyocean.features.misc.`fun`.animal.modifiers
 import me.owdding.skyocean.config.features.misc.`fun`.PlayerAnimalConfig
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
-import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
 import net.minecraft.client.renderer.block.BlockModelResolver
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.entity.state.BoggedRenderState
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.monster.skeleton.Bogged
 
 @RegisterAnimalModifier

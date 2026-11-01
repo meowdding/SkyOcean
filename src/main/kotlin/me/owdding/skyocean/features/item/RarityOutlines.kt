@@ -4,6 +4,7 @@ import com.mojang.blaze3d.buffers.Std140Builder
 import com.mojang.blaze3d.buffers.Std140SizeCalculator
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.renderpearl.api.buffers.GpuBuffer
+import com.mojang.renderpearl.api.pipeline.BindGroupLayout
 import com.mojang.renderpearl.api.pipeline.BlendFunction
 import com.mojang.renderpearl.api.pipeline.ColorTargetState
 import com.mojang.renderpearl.api.pipeline.RenderPipeline
@@ -23,21 +24,8 @@ import net.minecraft.world.item.ItemStack
 import org.lwjgl.system.MemoryStack
 import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.datatype.getData
-import java.util.*
+import java.util.OptionalInt
 import java.util.function.BiFunction
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
-
-//? >= 26.2 {
-import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
-import com.mojang.renderpearl.api.pipeline.BindGroupLayout
-import net.minecraft.client.renderer.BindGroupLayouts
-import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.McVersion
-import tech.thatgravyboat.skyblockapi.utils.McVersionGroup
-
-//? } else 26.1 {
-//import com.mojang.renderpearl.api.vertex.VertexFormat
-//? }
 
 /*
 Maybe add Leather color as outline color sometime
@@ -72,9 +60,6 @@ object RarityOutlines {
         }
     }
 
-
-    //? if >= 26.2 {
-
     private val RARITY_BIND_GROUP: BindGroupLayout = BindGroupLayout.builder()
         .withUniform(Buffer.NAME, UniformType.UNIFORM_BUFFER)
         .build()
@@ -100,32 +85,6 @@ object RarityOutlines {
                 .build(),
         )
     }
-
-    //? } else {
-    
-    /*@JvmField
-    val GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED: BiFunction<Int, OptionalInt, RenderPipeline> = Util.memoize { color, baseRarity ->
-        RenderPipelines.register(
-            RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
-                .withLocation(id("rarity_outlines/$color"))
-                .withVertexShader(id("core/rarity_outlines"))
-                .withFragmentShader(id("core/rarity_outlines"))
-                .withShaderDefineColor("RARITY_COLOR", color)
-                .apply {
-                    if (baseRarity.isPresent) {
-                        withShaderDefine("IS_RARITY_UPGRADE").withShaderDefineColor("BASE_RARITY_COLOR", baseRarity.asInt)
-                    }
-                }
-                .withSampler("Sampler0")
-                .withUniform(Buffer.NAME, UniformType.UNIFORM_BUFFER)
-                .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
-                .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT))
-                .build()
-        )
-    }
-
-    *///? }
-
 
     @JvmField
     val RARITY: RenderStateDataKey<Int> = RenderStateDataKey.create { id("rarity").toString() }

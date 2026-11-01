@@ -2,6 +2,7 @@ package me.owdding.skyocean.utils.rendering
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
 import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineSubmit
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniforms
@@ -18,20 +19,10 @@ import org.joml.Vector2i
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.util.function.Supplier
 
-//? >= 26.2
-import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
 //? 26.2 {
 /*import com.mojang.blaze3d.vertex.BufferBuilder
 import com.mojang.blaze3d.vertex.ByteBufferBuilder
 *///? }
-//? 26.1 {
-/*import com.mojang.blaze3d.vertex.Tesselator
-import com.mojang.renderpearl.api.vertex.VertexFormat
-*///? }
-//? 26.1
-//import net.minecraft.client.renderer.MultiBufferSource
-//? 26.1
-//import java.util.function.Function
 
 val MONO_TEXTURE = SkyOcean.id("textures/gui/inventory/mono.png")
 val POLY_TEXTURE = SkyOcean.id("textures/gui/inventory/poly.png")
@@ -49,10 +40,7 @@ data class MonoInventoryPipState(
 ) : MeowddingPipState<MonoInventoryPipState>() {
     override val shrinkToScissor: Boolean = false
 
-    //? if >= 26.2 {
     override fun getFactory(): Supplier<PictureInPictureRenderer<MonoInventoryPipState>> = Supplier { MonoInventoryPipRenderer() }
-    //? } else
-    //override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<MonoInventoryPipState>> = Function { buffer -> MonoInventoryPipRenderer(buffer) }
 }
 
 data class PolyInventoryPipState(
@@ -67,10 +55,7 @@ data class PolyInventoryPipState(
 ) : MeowddingPipState<PolyInventoryPipState>() {
     override val shrinkToScissor: Boolean = false
 
-    //? if >= 26.2 {
     override fun getFactory(): Supplier<PictureInPictureRenderer<PolyInventoryPipState>> = Supplier { PolyInventoryPipRenderer() }
-    //? } else
-    //override fun getFactory(): Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<PolyInventoryPipState>> = Function { buffer -> PolyInventoryPipRenderer(buffer) }
 }
 
 private fun <Uniform : RenderPipelineUniforms> submit(
@@ -80,12 +65,10 @@ private fun <Uniform : RenderPipelineUniforms> submit(
     uniformStorage: Supplier<DynamicGpuDataStorage<Uniform>>,
     uniform: Uniform,
     texture: AbstractTexture,
-    color: Int,/*? >= 26.2 >> ')'*/
+    color: Int,
     submitNodeCollector: SubmitNodeCollector,
 ) {
-    //? if 26.1 {
-    //val bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
-    //? else 26.2 {
+    //? 26.2 {
     /*ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_TEX_COLOR.vertexSize * 4).use {
     val bufferBuilder = BufferBuilder(it, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
     *///? }
@@ -116,7 +99,6 @@ private fun <Uniform : RenderPipelineUniforms> submit(
 
 }
 
-//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> ' : ', '(buffer)' -> '()'
 class MonoInventoryPipRenderer : PictureInPictureRenderer<MonoInventoryPipState>() {
     private var lastState: MonoInventoryPipState? = null
 
@@ -124,7 +106,7 @@ class MonoInventoryPipRenderer : PictureInPictureRenderer<MonoInventoryPipState>
 
     override fun textureIsReadyToBlit(state: MonoInventoryPipState): Boolean = lastState != null && lastState == state
 
-    override fun renderToTexture(state: MonoInventoryPipState, stack: PoseStack/*? >= 26.2 >> ')'*/, submitNodeCollector: SubmitNodeCollector) {
+    override fun renderToTexture(state: MonoInventoryPipState, stack: PoseStack, submitNodeCollector: SubmitNodeCollector) {
         val bounds = state.bounds ?: return
 
         val scale = McClient.window.guiScale.toFloat()
@@ -142,7 +124,6 @@ class MonoInventoryPipRenderer : PictureInPictureRenderer<MonoInventoryPipState>
             MonoInventoryUniform(state.size, if (state.vertical) 1 else 0),
             texture,
             state.color,
-            //? >= 26.2
             submitNodeCollector,
         )
 
@@ -153,7 +134,6 @@ class MonoInventoryPipRenderer : PictureInPictureRenderer<MonoInventoryPipState>
 
 }
 
-//~ if >= 26.2 '(buffer: MultiBufferSource.BufferSource) : ' -> ' : ', '(buffer)' -> '()'
 class PolyInventoryPipRenderer : PictureInPictureRenderer<PolyInventoryPipState>() {
     private var lastState: PolyInventoryPipState? = null
 
@@ -161,7 +141,7 @@ class PolyInventoryPipRenderer : PictureInPictureRenderer<PolyInventoryPipState>
 
     override fun textureIsReadyToBlit(state: PolyInventoryPipState): Boolean = lastState != null && lastState == state
 
-    override fun renderToTexture(state: PolyInventoryPipState, stack: PoseStack/*? >= 26.2 >> ')'*/, submitNodeCollector: SubmitNodeCollector) {
+    override fun renderToTexture(state: PolyInventoryPipState, stack: PoseStack, submitNodeCollector: SubmitNodeCollector) {
         val bounds = state.bounds ?: return
 
         val scale = McClient.window.guiScale.toFloat()
@@ -178,7 +158,6 @@ class PolyInventoryPipRenderer : PictureInPictureRenderer<PolyInventoryPipState>
             PolyInventoryUniform(state.size),
             texture,
             state.color,
-            //? >= 26.2
             submitNodeCollector,
         )
 

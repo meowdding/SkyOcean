@@ -34,7 +34,6 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
         method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V",
         at = @At(
             value = "INVOKE",
-            //~ if >= 26.2 'ZIDLnet' -> 'ZILnet'
             target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZILnet/minecraft/client/renderer/state/level/CameraRenderState;)V"
         )
     )
@@ -46,8 +45,6 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
         Component name,
         boolean seeThrough,
         int lightCoords,
-        //? 26.1
-         //double distanceToCamera,
         CameraRenderState cameraRenderState,
         Operation<Void> original,
         @Local(argsOnly = true) EntityRenderState state
@@ -68,8 +65,6 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
             name,
             seeThrough,
             lightCoords,
-            //? 26.1
-            //distanceToCamera,
             cameraRenderState
         );
         if (scale != 1f) {
