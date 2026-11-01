@@ -1,7 +1,8 @@
-
 [versions]
+
 fabric-loader = "0.18.3"
 fabric-language-kotlin = "1.13.12+kotlin.2.4.0"
+
 kotlin = "2.4.0"
 kotlin-gradle-plugin = "2.4.0"
 kotlin-symbol-processor = "2.3.11"
@@ -9,135 +10,53 @@ gson = "2.12.1"
 skyblockapi = "4.2.42"
 skyblockapi-repo = "3.0.2"
 keval = "1.1.1"
+
 hypixel-modapi-fabric = "1.0.2+build.1+mc26.1"
+
 rconfigkt = "4.0.0-beta.1"
-meowdding-lib = "4.3.1"
+
+meowdding-lib = "4.2.38"
 meowdding-ktmodules = "1.0.6"
 meowdding-ktcodecs = "1.1.14"
 meowdding-resources = "1.0.21"
 meowdding-auto-mixins = "1.0.11"
+
 moulberry-mixinconstraints = "1.0.8"
+
 fabric-loom = "1.18-SNAPSHOT"
 
-[libraries.fabric-loader]
-module = "net.fabricmc:fabric-loader"
+[libraries]
 
-[libraries.fabric-loader.version]
-ref = "fabric-loader"
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
 
-[libraries.fabric-language-kotlin]
-module = "net.fabricmc:fabric-language-kotlin"
+skyblockapi = { module = "tech.thatgravyboat:skyblock-api", version.ref = "skyblockapi" }
+skyblockapi-repo = { module = "tech.thatgravyboat.repo-lib:repo-lib", version.ref = "skyblockapi-repo" }
+keval = { module = "com.notkamui.libs:keval", version.ref = "keval" }
 
-[libraries.fabric-language-kotlin.version]
-ref = "fabric-language-kotlin"
+hypixel-modapi-fabric = { module = "maven.modrinth:hypixel-mod-api", version.ref = "hypixel-modapi-fabric" }
 
-[libraries.skyblockapi]
-module = "tech.thatgravyboat:skyblock-api"
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
-[libraries.skyblockapi.version]
-ref = "skyblockapi"
+resourceful-config-kotlin = { module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-26.1-rc-1", version.ref = "rconfigkt" }
 
-[libraries.skyblockapi-repo]
-module = "tech.thatgravyboat.repo-lib:repo-lib"
+meowdding-lib = { module = "me.owdding.meowdding-lib:meowdding-lib", version.ref = "meowdding-lib" }
+meowdding-ktmodules = { module = "me.owdding.ktmodules:KtModules", version.ref = "meowdding-ktmodules" }
+meowdding-ktcodecs = { module = "me.owdding.ktcodecs:KtCodecs", version.ref = "meowdding-ktcodecs" }
+meowdding-resources = { module = "me.owdding.repo:compacting-resources", version.ref = "meowdding-resources" }
 
-[libraries.skyblockapi-repo.version]
-ref = "skyblockapi-repo"
+moulberry-mixinconstraints = { module = "com.moulberry:mixinconstraints", version.ref = "moulberry-mixinconstraints" }
 
-[libraries.keval]
-module = "com.notkamui.libs:keval"
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
-[libraries.keval.version]
-ref = "keval"
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin-gradle-plugin" }
 
-[libraries.hypixel-modapi-fabric]
-module = "maven.modrinth:hypixel-mod-api"
+[plugins]
+meowdding-auto-mixins = { id = "me.owdding.auto-mixins", version.ref = "meowdding-auto-mixins" }
+meowdding-resources = { id = "me.owdding.resources" }
 
-[libraries.hypixel-modapi-fabric.version]
-ref = "hypixel-modapi-fabric"
+kotlin-symbol-processor = { id = "com.google.devtools.ksp", version.ref = "kotlin-symbol-processor" }
 
-[libraries.gson]
-module = "com.google.code.gson:gson"
-
-[libraries.gson.version]
-ref = "gson"
-
-[libraries.resourceful-config-kotlin]
-module = "com.teamresourceful.resourcefulconfigkt:resourcefulconfigkt-26.1-rc-1"
-
-[libraries.resourceful-config-kotlin.version]
-ref = "rconfigkt"
-
-[libraries.meowdding-lib]
-module = "me.owdding.meowdding-lib:meowdding-lib"
-
-[libraries.meowdding-lib.version]
-ref = "meowdding-lib"
-
-[libraries.meowdding-ktmodules]
-module = "me.owdding.ktmodules:KtModules"
-
-[libraries.meowdding-ktmodules.version]
-ref = "meowdding-ktmodules"
-
-[libraries.meowdding-ktcodecs]
-module = "me.owdding.ktcodecs:KtCodecs"
-
-[libraries.meowdding-ktcodecs.version]
-ref = "meowdding-ktcodecs"
-
-[libraries.meowdding-resources]
-module = "me.owdding.repo:compacting-resources"
-
-[libraries.meowdding-resources.version]
-ref = "meowdding-resources"
-
-[libraries.moulberry-mixinconstraints]
-module = "com.moulberry:mixinconstraints"
-
-[libraries.moulberry-mixinconstraints.version]
-ref = "moulberry-mixinconstraints"
-
-[libraries.kotlin-stdlib]
-module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-
-[libraries.kotlin-stdlib.version]
-ref = "kotlin"
-
-[libraries.kotlin-gradle-plugin]
-module = "org.jetbrains.kotlin:kotlin-gradle-plugin"
-
-[libraries.kotlin-gradle-plugin.version]
-ref = "kotlin-gradle-plugin"
-
-[libraries.kotlin-gradle-plugin-api]
-module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api"
-
-[libraries.kotlin-gradle-plugin-api.version]
-ref = "kotlin-gradle-plugin"
-
-[plugins.meowdding-auto-mixins]
-id = "me.owdding.auto-mixins"
-
-[plugins.meowdding-auto-mixins.version]
-ref = "meowdding-auto-mixins"
-
-[plugins.meowdding-resources]
-id = "me.owdding.resources"
-
-[plugins.kotlin-symbol-processor]
-id = "com.google.devtools.ksp"
-
-[plugins.kotlin-symbol-processor.version]
-ref = "kotlin-symbol-processor"
-
-[plugins.fabric-loom-remap]
-id = "net.fabricmc.fabric-loom-remap"
-
-[plugins.fabric-loom-remap.version]
-ref = "fabric-loom"
-
-[plugins.fabric-loom]
-id = "net.fabricmc.fabric-loom"
-
-[plugins.fabric-loom.version]
-ref = "fabric-loom"
+fabric-loom-remap = { id = "net.fabricmc.fabric-loom-remap", version.ref = "fabric-loom" }
+fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }
