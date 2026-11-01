@@ -6,7 +6,7 @@ import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktcodecs.OptionalBoolean
 import net.minecraft.network.chat.Component
 import net.minecraft.util.FormattedCharSequence
-import java.util.*
+import java.util.UUID
 
 @GenerateCodec
 data class TextReplacement(

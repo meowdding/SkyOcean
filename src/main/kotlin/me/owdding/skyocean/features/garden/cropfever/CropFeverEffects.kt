@@ -34,7 +34,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.bold
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import java.util.*
+import java.util.Optional
 import kotlin.time.Instant
 import me.owdding.skyocean.mixins.GameRendererAccessor
 

@@ -6,9 +6,7 @@ import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier
 import me.owdding.skyocean.features.misc.`fun`.animal.AnimalModifier.Companion.createTranslationKey
 import me.owdding.skyocean.features.misc.`fun`.animal.EntityTypes
 import me.owdding.skyocean.features.misc.`fun`.animal.RegisterAnimalModifier
-import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.ANGRY
-import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.TAME
-import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.WILD
+import me.owdding.skyocean.features.misc.`fun`.animal.modifiers.WolfModifier.State.*
 import me.owdding.skyocean.utils.Utils.list
 import me.owdding.skyocean.utils.Utils.lookup
 import net.minecraft.client.renderer.block.BlockModelResolver

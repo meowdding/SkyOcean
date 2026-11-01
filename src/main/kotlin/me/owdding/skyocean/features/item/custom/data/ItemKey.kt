@@ -4,7 +4,7 @@ import me.owdding.ktcodecs.GenerateCodec
 import me.owdding.ktcodecs.GenerateDispatchCodec
 import me.owdding.skyocean.generated.DispatchHelper
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.KClass
 
 

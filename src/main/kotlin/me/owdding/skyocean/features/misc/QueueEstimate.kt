@@ -37,10 +37,7 @@ object QueueEstimate {
     @Subscription
     private fun onTick(event: TickEvent) {
         if (!MiscConfig.queueEstimation) return
-        //? >= 26.2 {
         val title = McClient.self.gui.hud.subtitle?.stripped
-        //?} else
-        //val title = McClient.self.gui.subtitle?.stripped
         if (title == null) {
             lastTitle = null
             history.clear()

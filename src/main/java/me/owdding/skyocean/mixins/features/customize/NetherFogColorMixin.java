@@ -3,7 +3,6 @@ package me.owdding.skyocean.mixins.features.customize;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.owdding.skyocean.config.features.environmental.EnvironmentalConfig;
-import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +17,6 @@ public class NetherFogColorMixin {
         method = "computeFogColor",
         at = @At(
             value = "INVOKE",
-            //~ if >= 26.2 'getNightVisionScale' -> 'nightVisionScale'
             target = "Lnet/minecraft/client/renderer/GameRenderer;nightVisionScale(Lnet/minecraft/world/entity/LivingEntity;F)F"
         )
     )

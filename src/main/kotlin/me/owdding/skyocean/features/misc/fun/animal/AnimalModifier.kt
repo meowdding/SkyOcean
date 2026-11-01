@@ -12,18 +12,12 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
 import tech.thatgravyboat.skyblockapi.platform.texture
 
-//? >= 26.2
-import net.minecraft.world.entity.EntityTypes
-
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 @AutoCollect("AnimalModifiers")
 internal annotation class RegisterAnimalModifier
 
 private val dyeColors = DyeColor.entries
-
-//~ if >= 26.2 '= EntityType<*>' -> '= EntityTypes'
-typealias EntityTypes = EntityTypes
 
 interface AnimalModifier<Type : LivingEntity, State : LivingEntityRenderState> {
     val type: EntityType<Type>

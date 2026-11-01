@@ -8,11 +8,9 @@ import me.owdding.skyocean.config.features.chat.ChatConfig
 import me.owdding.skyocean.features.text.MarkdownChat.toComponent
 import me.owdding.skyocean.utils.Utils.get
 import me.owdding.skyocean.utils.Utils.set
-import me.owdding.skyocean.utils.Utils.visitSiblings
 import me.owdding.skyocean.utils.chat.ChatUtils
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
-import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket
 import net.minecraft.util.StringDecomposer
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription.Companion.LOWEST
@@ -20,17 +18,13 @@ import tech.thatgravyboat.skyblockapi.api.events.base.predicates.OnlyOnSkyBlock
 import tech.thatgravyboat.skyblockapi.api.events.chat.ChatReceivedEvent
 import tech.thatgravyboat.skyblockapi.api.events.hypixel.ServerChangeEvent
 import tech.thatgravyboat.skyblockapi.api.events.info.TabListChangeEvent
-import tech.thatgravyboat.skyblockapi.api.events.level.PacketEvent
-import tech.thatgravyboat.skyblockapi.api.events.level.PacketReceivedEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.components.ComponentStateMachine
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
-import java.util.Optional
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 

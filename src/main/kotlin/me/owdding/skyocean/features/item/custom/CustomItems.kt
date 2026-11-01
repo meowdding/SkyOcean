@@ -26,7 +26,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.extentions.getTag
-import java.util.*
+import java.util.UUID
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 import kotlin.uuid.ExperimentalUuidApi

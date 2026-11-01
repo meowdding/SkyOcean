@@ -3,10 +3,10 @@ package me.owdding.skyocean.accessors;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
-
-import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.helpers.CheckReturnValue;
+
+import java.util.List;
 
 public interface SafeMutableComponentAccessor {
 

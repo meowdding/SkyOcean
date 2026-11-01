@@ -17,7 +17,13 @@ import me.owdding.skyocean.features.hotkeys.system.HotkeyCategory
 import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
 import me.owdding.skyocean.features.item.custom.ui.standard.PADDING
 import me.owdding.skyocean.utils.chat.CatppuccinColors
-import me.owdding.skyocean.utils.extensions.*
+import me.owdding.skyocean.utils.extensions.asScrollable
+import me.owdding.skyocean.utils.extensions.createButton
+import me.owdding.skyocean.utils.extensions.createSeparator
+import me.owdding.skyocean.utils.extensions.middleCenter
+import me.owdding.skyocean.utils.extensions.middleLeft
+import me.owdding.skyocean.utils.extensions.middleRight
+import me.owdding.skyocean.utils.extensions.withPadding
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.layouts.FrameLayout

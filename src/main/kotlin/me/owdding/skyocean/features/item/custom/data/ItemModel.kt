@@ -7,15 +7,14 @@ import me.owdding.skyocean.features.item.custom.ui.standard.search.ModelSearchEn
 import me.owdding.skyocean.features.item.custom.ui.standard.search.SkyBlockModelEntry
 import me.owdding.skyocean.features.recipe.ItemLikeIngredient
 import me.owdding.skyocean.generated.DispatchHelper
-import net.minecraft.core.component.DataComponents
 import me.owdding.skyocean.utils.extensions.withModel
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
-import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
 import kotlin.reflect.KClass
 
 

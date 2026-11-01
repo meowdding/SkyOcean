@@ -8,13 +8,12 @@ import me.owdding.skyocean.accessors.AvatarRenderStateAccessor;
 import me.owdding.skyocean.config.features.misc.MiscConfig;
 import me.owdding.skyocean.helpers.HeadLayerAlphaHolder;
 import net.minecraft.client.model.object.skull.SkullModelBase;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.core.Direction;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 

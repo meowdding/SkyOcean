@@ -1,11 +1,9 @@
 package me.owdding.skyocean.mixins.features.item_outlines;
 
-//~ if >= 26.2 'Matrix3x2f' -> 'Matrix3x2fc' {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
-import java.util.Set;
 import me.owdding.skyocean.features.item.RarityOutlines;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.GuiItemAtlas;
@@ -20,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tech.thatgravyboat.skyblockapi.helpers.McClient;
+
+import java.util.Set;
 
 @Mixin(GuiRenderer.class)
 public class GuiRendererMixin {
@@ -72,4 +72,3 @@ public class GuiRendererMixin {
         }
     }
 }
-//~}

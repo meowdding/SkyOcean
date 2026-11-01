@@ -37,7 +37,6 @@ fun <T> CategoryBuilder.observable(entry: ConfigDelegateProvider<RConfigKtEntry<
 
 fun CategoryBuilder.requiresChunkRebuild(entry: ConfigDelegateProvider<RConfigKtEntry<Boolean>>) = observable(entry) {
     runCatching {
-        //~ if >= 26.2 'levelRenderer' -> 'levelExtractor'
         McClient.self.levelExtractor.allChanged()
     }
 }

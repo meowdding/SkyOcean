@@ -1,7 +1,7 @@
 package me.owdding.skyocean.mixins.features.fishing;
 
-import me.owdding.skyocean.features.fishing.LavaReplacement;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import me.owdding.skyocean.features.fishing.LavaReplacement;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.block.FluidStateModelSet;
 import net.minecraft.world.level.material.Fluid;

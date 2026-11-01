@@ -1,9 +1,7 @@
 package me.owdding.skyocean.features.recipe.crafthelper.modifiers
 
 import me.owdding.skyocean.SkyOcean
-import me.owdding.skyocean.features.recipe.RecipeType
 import me.owdding.skyocean.features.recipe.RepoApiRecipe
-import me.owdding.skyocean.features.recipe.crafthelper.CraftHelperRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.data.RepoLibRecipeTree
 import me.owdding.skyocean.features.recipe.mergeSameTypes
 import me.owdding.skyocean.features.recipe.toCraftingIngredient

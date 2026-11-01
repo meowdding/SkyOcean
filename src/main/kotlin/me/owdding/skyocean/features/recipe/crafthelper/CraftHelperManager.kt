@@ -10,7 +10,6 @@ import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperNotificat
 import me.owdding.skyocean.data.profile.CraftHelperStorage
 import me.owdding.skyocean.data.profile.CraftHelperStorage.setSelected
 import me.owdding.skyocean.features.item.sources.ItemSources
-import me.owdding.skyocean.features.recipe.RecipeType
 import me.owdding.skyocean.features.recipe.RepoApiRecipe
 import me.owdding.skyocean.features.recipe.crafthelper.eval.ItemTracker
 import me.owdding.skyocean.features.recipe.crafthelper.views.CraftHelperState

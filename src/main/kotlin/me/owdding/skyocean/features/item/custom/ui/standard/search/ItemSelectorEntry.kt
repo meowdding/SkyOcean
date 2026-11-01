@@ -24,7 +24,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
-import java.util.*
+import java.util.UUID
 
 object ItemSearchEntries {
     val ENTRIES by lazy {

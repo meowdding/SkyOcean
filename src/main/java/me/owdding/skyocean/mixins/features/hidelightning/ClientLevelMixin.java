@@ -1,7 +1,6 @@
 package me.owdding.skyocean.mixins.features.hidelightning;
 
 import me.owdding.skyocean.config.features.environmental.EnvironmentalConfig;
-import me.owdding.skyocean.config.features.misc.MiscConfig;
 import net.minecraft.client.multiplayer.ClientLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

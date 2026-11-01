@@ -2,7 +2,6 @@ package me.owdding.skyocean.mixins;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import me.owdding.skyocean.config.features.misc.MiscConfig;
 import me.owdding.skyocean.config.features.text_replacements.TextReplacementConfig;
 import me.owdding.skyocean.features.text.MarkdownChat;
 import me.owdding.skyocean.features.text.TextReplacements;

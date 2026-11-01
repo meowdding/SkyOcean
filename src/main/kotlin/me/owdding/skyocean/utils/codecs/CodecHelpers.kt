@@ -1,13 +1,10 @@
 package me.owdding.skyocean.utils.codecs
 
 import com.mojang.blaze3d.platform.InputConstants
-import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.owdding.ktcodecs.IncludedCodec
-import me.owdding.lib.helper.TextShaderHolder
-import me.owdding.lib.rendering.text.TextShaders
 import me.owdding.lib.rendering.text.serialization.TextCodecs
 import me.owdding.skyocean.generated.CodecUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
@@ -17,7 +14,6 @@ import net.minecraft.core.ClientAsset
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.ComponentSerialization
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.network.chat.contents.KeybindContents
 import net.minecraft.network.chat.contents.NbtContents
@@ -30,11 +26,7 @@ import net.minecraft.resources.Identifier
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
-import tech.thatgravyboat.skyblockapi.utils.extentions.forNullGetter
-import tech.thatgravyboat.skyblockapi.utils.text.Text
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.function.Function
-import kotlin.jvm.optionals.getOrNull
 
 internal fun createContentCodec(): MapCodec<ComponentContents> {
     val idMapper = ExtraCodecs.LateBoundIdMapper<String, MapCodec<out ComponentContents>>()
