@@ -44,7 +44,12 @@ object RarityOutlines {
         val rarity = item.itemStackRenderState().getData(RARITY) ?: return base
         val baseRarity = item.itemStackRenderState().getData(BASE_RARITY).asOptionalInt()
 
-        return GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED.apply(rarity, baseRarity)
+        val pipeline = GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED.apply(rarity, baseRarity)
+        if (RenderSystem.getCompiledPipelineNullable(pipeline) == null) { // pipeline hasn't finished compiling yet
+            return base
+        }
+
+        return pipeline
     }
 
     fun Int?.asOptionalInt(): OptionalInt = OptionalInt.of(this ?: return OptionalInt.empty())
@@ -66,24 +71,22 @@ object RarityOutlines {
 
     @JvmField
     val GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED: BiFunction<Int, OptionalInt, RenderPipeline> = Util.memoize { color, baseRarity ->
-        RenderPipelines.register(
-            RenderPipeline.builder(RenderPipelines.GUI_TEXTURED_SNIPPET)
-                .withLocation(id("rarity_outlines/$color"))
-                .withVertexShader(id("core/rarity_outlines"))
-                .withFragmentShader(id("core/rarity_outlines"))
-                .withShaderDefineColor("RARITY_COLOR", color)
-                .apply {
-                    if (baseRarity.isPresent) {
-                        withShaderDefine("IS_RARITY_UPGRADE").withShaderDefineColor("BASE_RARITY_COLOR", baseRarity.asInt)
-                    }
-
-                    //? < 26.3
-                    //withShaderDefine("NO_LAYOUT")
+        RenderPipeline.builder(RenderPipelines.GUI_TEXTURED_SNIPPET)
+            .withLocation(id("rarity_outlines/$color"))
+            .withVertexShader(id("core/rarity_outlines"))
+            .withFragmentShader(id("core/rarity_outlines"))
+            .withShaderDefineColor("RARITY_COLOR", color)
+            .apply {
+                if (baseRarity.isPresent) {
+                    withShaderDefine("IS_RARITY_UPGRADE").withShaderDefineColor("BASE_RARITY_COLOR", baseRarity.asInt)
                 }
-                .withBindGroupLayout(RARITY_BIND_GROUP)
-                .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT_PREMULTIPLIED_ALPHA))
-                .build(),
-        )
+
+                //? < 26.3
+                //withShaderDefine("NO_LAYOUT")
+            }
+            .withBindGroupLayout(RARITY_BIND_GROUP)
+            .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT_PREMULTIPLIED_ALPHA))
+            .build()
     }
 
     @JvmField

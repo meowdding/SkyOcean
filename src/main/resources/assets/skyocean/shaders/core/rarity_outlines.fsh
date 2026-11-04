@@ -6,22 +6,8 @@
 
 // Can't moj_import in things used during startup, when resource packs don't exist.
 // This is a copy of dynamicimports.glsl & globals.glsl
-layout(std140) uniform DynamicTransforms {
-    mat4 ModelViewMat;
-    vec4 ColorModulator;
-    vec3 ModelOffset;
-    mat4 TextureMat;
-};
-
-layout(std140) uniform Globals {
-    ivec3 CameraBlockPos;
-    vec3 CameraOffset;
-    vec2 ScreenSize;
-    float GlintAlpha;
-    float GameTime;
-    int MenuBlurRadius;
-    int UseRgss;
-};
+#include <minecraft:dynamictransforms.glsl>
+#include <minecraft:projection.glsl>
 
 layout(std140) uniform SkyoceanRarityUniform {
     float AtlasDimensions;                    // width.toFloat())
