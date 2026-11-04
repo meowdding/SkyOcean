@@ -45,9 +45,9 @@ object RarityOutlines {
         val baseRarity = item.itemStackRenderState().getData(BASE_RARITY).asOptionalInt()
 
         val pipeline = GUI_TEXTURED_PREMULTIPLIED_ALPHA_OUTLINED.apply(rarity, baseRarity)
-        if (RenderSystem.getCompiledPipelineNullable(pipeline) == null) { // pipeline hasn't finished compiling yet
-            return base
-        }
+        // pipeline hasn't finished compiling yet
+        //? >= 26.3
+        if (RenderSystem.getCompiledPipelineNullable(pipeline) == null) return base
 
         return pipeline
     }
