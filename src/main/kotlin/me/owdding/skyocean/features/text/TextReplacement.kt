@@ -26,4 +26,14 @@ data class TextReplacement(
 
     fun isEnabled(): Boolean = enabled && getCategory().enabled
 
+    fun duplicate(): TextReplacement = TextReplacement(
+        category = category,
+        key = key,
+        value = value,
+        enabled = enabled,
+        priority = priority,
+        wholeWord = wholeWord,
+        ignoreCase = ignoreCase,
+        timeCreated = System.currentTimeMillis(),
+    )
 }

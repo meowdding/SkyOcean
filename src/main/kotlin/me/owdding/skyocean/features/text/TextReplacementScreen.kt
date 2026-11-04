@@ -6,8 +6,10 @@ import me.owdding.lib.builder.LayoutFactory
 import me.owdding.lib.builder.RIGHT
 import me.owdding.skyocean.SkyOcean
 import me.owdding.skyocean.config.features.text_replacements.TextReplacementConfig
+import me.owdding.skyocean.features.hotkeys.ConditionalHotkeyScreen
 import me.owdding.skyocean.features.hotkeys.IgnoreHotkeyInputs
 import me.owdding.skyocean.features.hotkeys.ShowMessageModal
+import me.owdding.skyocean.features.hotkeys.system.HotkeyManager
 import me.owdding.skyocean.utils.SkyOceanScreen
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.ChatUtils
@@ -413,6 +415,18 @@ object TextReplacementScreen : SkyOceanScreen("Text replacement screen"), Ignore
                             textReplacement.ignoreCase = ignoreCase
                             TextReplacementManager.save()
                         }
+                    },
+                ).add()
+
+                val duplicate = Text.of("⎘")
+                createButton(
+                    texture = headerSprite,
+                    text = duplicate,
+                    width = McFont.width(duplicate) + SPACER * 2,
+                    color = unhovered,
+                    height = 15,
+                    click = withRebuild {
+                        TextReplacementManager.register(textReplacement.duplicate())
                     },
                 ).add()
 
