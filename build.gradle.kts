@@ -18,7 +18,6 @@ plugins {
 repositories {
     fun scopedMaven(url: String, vararg paths: String) = maven(url) { content { paths.forEach(::includeGroupAndSubgroups) } }
 
-    scopedMaven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1", "me.djtheredstoner")
     scopedMaven("https://repo.hypixel.net/repository/Hypixel", "net.hypixel")
     scopedMaven("https://maven.parchmentmc.org/", "org.parchmentmc")
     scopedMaven("https://api.modrinth.com/maven", "maven.modrinth")
@@ -80,6 +79,18 @@ loom {
 
     if (accessWidenerFile.exists()) {
         accessWidenerPath.set(accessWidenerFile)
+    }
+}
+
+tasks.named("runClient") {
+    if (!project.hasProperty("meowdding.skipLogin")) {
+        dependsOn("microsoftLogin")
+    }
+}
+
+tasks.named("microsoftLogin") {
+    doFirst {
+        logger.lifecycle("NOTE: If you don't want to sign in, run with -Pmeowdding.skipLogin or set meowdding.skipLogin=true in your gradle.properties.")
     }
 }
 
@@ -226,12 +237,14 @@ dependencies {
 
     api(versionedCatalog["skyblockapi"]) {
         capabilities { requireCapability("tech.thatgravyboat:skyblock-api-${stonecutter.current.version}") }
+        exclude(group = "me.djtheredstoner", module = "DevAuth-fabric")
     }
     "include"(versionedCatalog["skyblockapi"]) {
         capabilities { requireCapability("tech.thatgravyboat:skyblock-api-${stonecutter.current.version}") }
     }
     api(versionedCatalog["meowdding.lib"]) {
         capabilities { requireCapability("me.owdding.meowdding-lib:meowdding-lib-${stonecutter.current.version}") }
+        exclude(group = "me.djtheredstoner", module = "DevAuth-fabric")
     }
     "include"(versionedCatalog["meowdding.lib"]) {
         capabilities { requireCapability("me.owdding.meowdding-lib:meowdding-lib-${stonecutter.current.version}") }
