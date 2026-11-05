@@ -21,3 +21,7 @@ accessible field net/minecraft/client/particle/Particle z D
 
 inject-interface net/minecraft/client/gui/screens/inventory/AbstractRecipeBookScreen me/owdding/skyocean/accessors/AbstractRecipeBookScreenAccessor
 inject-interface net/minecraft/network/chat/MutableComponent me/owdding/skyocean/accessors/SafeMutableComponentAccessor
+
+accessible method net/minecraft/world/entity/animal/feline/Cat getSoundSet ()Lnet/minecraft/world/entity/animal/feline/CatSoundVariant$CatSoundSet;
+accessible method net/minecraft/world/entity/animal/feline/Cat setSoundVariant (Lnet/minecraft/core/Holder;)V
+accessible method net/minecraft/world/entity/animal/feline/Cat setVariant (Lnet/minecraft/core/Holder;)V

@@ -8,4 +8,5 @@ object OverlayPositions : CategoryKt("overlays") {
 
     val craftHelper by obj(ConfigPosition(5, 200))
     val cropFeverCoinRain by obj(ConfigPosition(0, 0))
+    val mamow by obj(ConfigPosition(0, 0))
 }
