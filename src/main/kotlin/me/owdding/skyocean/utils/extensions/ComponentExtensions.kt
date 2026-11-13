@@ -4,6 +4,7 @@ import me.owdding.lib.displays.Display
 import me.owdding.lib.displays.withTooltip
 import me.owdding.lib.rendering.text.builtin.GradientTextShader
 import me.owdding.lib.rendering.text.textShader
+import me.owdding.lib.utils.GradientDirection
 import me.owdding.skyocean.utils.Utils.text
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import me.owdding.skyocean.utils.chat.OceanColors
@@ -67,11 +68,11 @@ fun Display.withTextFormattingInfo() = withTooltip {
     add {
         append(" • ")
         append("<gradient ")
-        append("#color1 ") { this.color = TextColor.BLUE }
-        append("#color2 ") { this.color = TextColor.GREEN }
-        append("... ") { this.color = TextColor.GRAY }
-        append("#colorN ") { this.color = TextColor.MAGENTA }
-        append("#color1") { this.color = TextColor.BLUE }
+        append("#color1 ", TextColor.BLUE)
+        append("#color2 ", TextColor.GREEN)
+        append("... ", TextColor.GRAY)
+        append("#colorN ", TextColor.MAGENTA)
+        append("#color1", TextColor.BLUE)
         append(">")
     }
     space()
@@ -82,7 +83,7 @@ fun Display.withTextFormattingInfo() = withTooltip {
         append("dir", CatppuccinColors.Mocha.yellow)
         append(":<[")
         append(
-            GradientTextShader.Direction.entries.joinToComponent(Text.of("|", CatppuccinColors.Mocha.overlay0)) {
+            GradientDirection.entries.joinToComponent(Text.of("|", CatppuccinColors.Mocha.overlay0)) {
                 Text.of(it.toString().lowercase(), CatppuccinColors.Mocha.text)
             },
         )
@@ -94,7 +95,5 @@ fun Display.withTextFormattingInfo() = withTooltip {
     }
     add("This also works for the generic gradient.")
     space()
-    add("Note! To get a gradient that loops perfectly you\n must include the start color at the end again!") {
-        this.color = TextColor.YELLOW
-    }
+    add("Note! To get a gradient that loops perfectly you\n must include the start color at the end again!", TextColor.YELLOW)
 }
