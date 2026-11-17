@@ -3,6 +3,7 @@ package me.owdding.skyocean.features.text
 import com.google.gson.JsonObject
 import com.mojang.serialization.MapCodec
 import me.owdding.ktcodecs.GenerateCodec
+import me.owdding.skyocean.features.hotkeys.HotkeyUtils
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.Utils.unsafeCast
 import tech.thatgravyboat.skyblockapi.utils.json.Json.readJson
@@ -10,10 +11,10 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.util.Base64
 import java.util.UUID
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
+import kotlin.io.encoding.Base64
 
 object TextReplacementUtils {
 
@@ -60,12 +61,12 @@ object TextReplacementUtils {
             }
         }
 
-        DATA_PREFIX + Base64.getEncoder().encodeToString(byteArray.toByteArray())
+        HotkeyUtils.DATA_PREFIX + Base64.encode(byteArray.toByteArray())
     }
 
     fun readData(data: String): Result<TextReplacementData<*>> = runCatching {
         val data = data.removePrefix(DATA_PREFIX)
-        val (version, rawData) = GZIPInputStream(ByteArrayInputStream(Base64.getDecoder().decode(data))).use {
+        val (version, rawData) = GZIPInputStream(ByteArrayInputStream(Base64.decode(data))).use {
             it.read() to it.readAllBytes().decodeToString().readJson<JsonObject>()
         }
 
