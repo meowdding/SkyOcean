@@ -17,7 +17,6 @@ import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.debugToggle
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonInfo
-import net.minecraft.util.Util
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.render.RenderHudEvent
 import tech.thatgravyboat.skyblockapi.api.events.time.TickEvent
@@ -25,14 +24,14 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.drawString
-import java.util.UUID
 import java.util.function.Function
+import kotlin.uuid.Uuid
 
 @Module
 object HotkeyManager {
 
     val defaultCategory = HotkeyCategory(
-        Util.NIL_UUID,
+        Uuid.NIL,
         "Uncategorized",
     )
     val categories: MutableSet<HotkeyCategory> get() = storage.get().categories
@@ -214,7 +213,7 @@ object HotkeyManager {
     }
 
     fun createCategory(name: String, madeBy: String): HotkeyCategory {
-        val category = HotkeyCategory(UUID.randomUUID(), name, madeBy)
+        val category = HotkeyCategory(Uuid.random(), name, madeBy)
         this.storage.edit {
             categories.add(category)
         }

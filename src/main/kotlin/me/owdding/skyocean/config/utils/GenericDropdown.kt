@@ -22,7 +22,7 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Block
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 class GenericDropdown<T>(
     val element: ResourcefulConfigElement,
@@ -119,7 +119,7 @@ class GenericDropdown<T>(
             id: String? = null,
             init: TypeBuilder.() -> Unit = {},
         ): CachedTransformedEntry<String, T> {
-            val renderer = Identifier.fromNamespaceAndPath("skyocean_dropdown", UUID.randomUUID().toString())
+            val renderer = Identifier.fromNamespaceAndPath("skyocean_dropdown", Uuid.random().toString())
             ResourcefulConfigUI.registerElementRenderer(renderer) { element -> GenericDropdown(element, options, toString) }
 
             val init: StringBuilder.() -> Unit = {

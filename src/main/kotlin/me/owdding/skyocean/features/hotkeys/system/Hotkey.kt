@@ -10,7 +10,7 @@ import me.owdding.skyocean.utils.Utils.not
 import me.owdding.skyocean.utils.chat.CatppuccinColors
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 /**
  * Terminology
@@ -25,7 +25,7 @@ data class Hotkey(
     var condition: HotkeyCondition,
     var name: String,
     @OptionalBoolean(true) var enabled: Boolean = true,
-    var group: UUID?,
+    var group: Uuid?,
     @FieldName("created_at") val timeCreated: Long = System.currentTimeMillis(),
     var ordering: Long = timeCreated,
 ) {

@@ -12,10 +12,10 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.util.UUID
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import kotlin.io.encoding.Base64
+import kotlin.uuid.Uuid
 
 object HotkeyUtils {
     const val DATA_PREFIX = "<skyocean:keybinds>"
@@ -46,7 +46,7 @@ object HotkeyUtils {
     ) = v1HotkeyData(category, hotkeys)
 
     fun writeData(category: HotkeyCategory): Result<String> = runCatching {
-        val newUuid = UUID.randomUUID()
+        val newUuid = Uuid.random()
         val newCategory = category.copy(identifier = newUuid)
         val hotkeys = category.getHotkeysInCategory().map {
             it.copy(group = newUuid)

@@ -17,13 +17,13 @@ rconfigkt = "4.0.0-beta.1"
 
 meowdding-lib = "4.3.8"
 meowdding-ktmodules = "1.0.6"
-meowdding-ktcodecs = "1.1.18"
+meowdding-ktcodecs = "1.1.20"
 meowdding-resources = "1.0.21"
 meowdding-auto-mixins = "1.0.11"
 
 moulberry-mixinconstraints = "1.0.8"
 
-fabric-loom = "1.18-SNAPSHOT"
+fabric-loom = "1.19-SNAPSHOT"
 
 [libraries]
 

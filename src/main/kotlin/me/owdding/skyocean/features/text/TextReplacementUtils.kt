@@ -11,10 +11,10 @@ import tech.thatgravyboat.skyblockapi.utils.json.Json.toDataOrThrow
 import tech.thatgravyboat.skyblockapi.utils.json.Json.toJsonOrThrow
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.util.UUID
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import kotlin.io.encoding.Base64
+import kotlin.uuid.Uuid
 
 object TextReplacementUtils {
 
@@ -46,7 +46,7 @@ object TextReplacementUtils {
     ) = v1TextReplacementData(category, textReplacements)
 
     fun writeData(category: TextReplacementCategory): Result<String> = runCatching {
-        val newUuid = UUID.randomUUID()
+        val newUuid = Uuid.random()
         val newCategory = category.copy(identifier = newUuid)
         val textReplacements = category.getReplacementsInCategory().map {
             it.copy(category = newUuid)

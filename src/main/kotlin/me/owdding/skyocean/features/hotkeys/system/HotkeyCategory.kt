@@ -2,11 +2,11 @@ package me.owdding.skyocean.features.hotkeys.system
 
 import me.owdding.ktcodecs.GenerateCodec
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 @GenerateCodec
 data class HotkeyCategory(
-    val identifier: UUID,
+    val identifier: Uuid,
     var name: String,
     var username: String = McPlayer.name,
 ) {

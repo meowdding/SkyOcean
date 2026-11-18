@@ -27,6 +27,7 @@ import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
 import java.util.UUID
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.time.Instant
 
 @Overlay
@@ -41,7 +42,7 @@ object CoinRainOverlay : SkyOceanOverlay() {
     data class FallingCoin(val x: Float, val spawnTime: Instant, val speed: Float, val item: ItemStack)
 
     val fallingCoinsList = mutableListOf<FallingCoin>()
-    private val random = java.util.concurrent.ThreadLocalRandom.current()
+    private val random = ThreadLocalRandom.current()
     private val ticktracker = TickTracker()
 
     fun headBlueprintFromTexture(texture: String): ItemStackBlueprint { // this should maybe be moved somewhere else?

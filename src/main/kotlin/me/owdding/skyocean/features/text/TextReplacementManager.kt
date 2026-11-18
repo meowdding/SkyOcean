@@ -12,18 +12,17 @@ import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.generated.SkyOceanCodecs
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import me.owdding.skyocean.utils.extensions.indexOfOrNull
-import net.minecraft.util.Util
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import java.util.UUID
 import java.util.function.Function
+import kotlin.uuid.Uuid
 
 @Module
 object TextReplacementManager {
 
     val defaultCategory = TextReplacementCategory(
-        Util.NIL_UUID,
+        Uuid.NIL,
         "Uncategorized",
     )
 
@@ -89,7 +88,7 @@ object TextReplacementManager {
     }
 
     fun createCategory(name: String, madeBy: String): TextReplacementCategory {
-        val category = TextReplacementCategory(UUID.randomUUID(), name, madeBy)
+        val category = TextReplacementCategory(Uuid.random(), name, madeBy)
         this.storage.edit {
             categories.add(category)
         }
@@ -110,7 +109,7 @@ object TextReplacementManager {
 
 @GenerateCodec
 data class TextReplacementCategory(
-    val identifier: UUID,
+    val identifier: Uuid,
     var name: String,
     var username: String = McPlayer.name,
     @OptionalBoolean(true) var enabled: Boolean = true,

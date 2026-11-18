@@ -26,8 +26,8 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
-import java.util.UUID
 import kotlin.reflect.KClass
+import kotlin.uuid.Uuid
 import tech.thatgravyboat.repolib.api.recipes.ingredient.AttributeIngredient as RepoAttributeIngredient
 import tech.thatgravyboat.repolib.api.recipes.ingredient.EnchantmentIngredient as RepoEnchantmentIngredient
 import tech.thatgravyboat.repolib.api.recipes.ingredient.ItemIngredient as RepoItemIngredient
@@ -73,7 +73,7 @@ data class CustomRecipeIngredient(val parents: List<Ingredient>, val name: Compo
     override val amount: Int = 1
     override val type: IngredientType = IngredientType.ITEM
 
-    private val uuid = UuidKey(UUID.randomUUID())
+    private val uuid = UuidKey(Uuid.random())
     override fun withAmount(amount: Int): Ingredient = this
     override val skyblockId: String = "bedrock"
     override val id: SkyBlockId = SkyBlockId.item("bedrock")

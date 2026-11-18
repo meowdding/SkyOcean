@@ -26,12 +26,10 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.extentions.get
 import tech.thatgravyboat.skyblockapi.utils.extentions.getTag
-import java.util.UUID
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
-import kotlin.uuid.toJavaUuid
+import kotlin.uuid.toKotlinUuid
 
 @LateInitModule
 object CustomItems : MeowddingLogger by SkyOcean.featureLogger(), LateInitLoader {
@@ -81,14 +79,13 @@ object CustomItems : MeowddingLogger by SkyOcean.featureLogger(), LateInitLoader
         data
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     fun ItemStack.createKey(): ItemKey? = when {
-        this.getTag("skyocean:customization_item") != null -> UuidKey(Uuid.fromLongs(0, 0).toJavaUuid())
+        this.getTag("skyocean:customization_item") != null -> UuidKey(Uuid.fromLongs(0, 0))
         this.getTag("skyocean:static_item") != null -> UuidKey(
-            this.getTag("skyocean:static_item")!!.asString().map { UUID.fromString(it) }.orElseGet { UUID.randomUUID() },
+            this.getTag("skyocean:static_item")!!.asString().map { Uuid.parse(it) }.orElseGet { Uuid.random() },
         )
 
-        this[DataTypes.UUID] != null -> UuidKey(this[DataTypes.UUID]!!)
+        this[DataTypes.UUID] != null -> UuidKey(this[DataTypes.UUID]!!.toKotlinUuid())
         this[DataTypes.TIMESTAMP] != null && this.getSkyBlockId() != null -> IdAndTimeKey(
             this.getSkyBlockId()!!,
             this[DataTypes.TIMESTAMP]!!.toEpochMilliseconds(),

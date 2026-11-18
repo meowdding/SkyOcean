@@ -24,7 +24,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 object ItemSearchEntries {
     val ENTRIES by lazy {
@@ -85,7 +85,7 @@ data class SkyBlockModelEntry(
         this[CustomItemDataComponents.SKIN] = skin
     }
 
-    val uuidString = UUID.randomUUID().toString()
+    val uuidString = Uuid.random().toString()
 
     override fun resolve(parent: ItemStack): ItemStack = itemBuilder(parent) {
         val item = model.toItem()

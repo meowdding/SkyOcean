@@ -6,11 +6,11 @@ import me.owdding.ktcodecs.NamedCodec
 import me.owdding.ktcodecs.OptionalBoolean
 import net.minecraft.network.chat.Component
 import net.minecraft.util.FormattedCharSequence
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 @GenerateCodec
 data class TextReplacement(
-    var category: UUID?,
+    var category: Uuid?,
     var key: String,
     @NamedCodec("customComponentCodec") var value: Component,
     @OptionalBoolean(true) var enabled: Boolean = true,
