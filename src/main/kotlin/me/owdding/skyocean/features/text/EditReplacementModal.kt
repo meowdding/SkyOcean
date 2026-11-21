@@ -246,11 +246,11 @@ class EditReplacementModal(
 
                                     callback(
                                         key.get().takeUnless { it.isEmpty() } ?: run {
-                                            require("Key")
+                                            require("Original")
                                             return@createButton
                                         },
                                         preview.takeUnless { it.stripped.isEmpty() } ?: run {
-                                            require("Value")
+                                            require("Replacement")
                                             return@createButton
                                         },
                                         priority.get(),
