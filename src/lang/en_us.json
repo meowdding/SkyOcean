@@ -2147,6 +2147,10 @@
     },
     "overlays": {
       "crafthelper": "Crafthelper",
+      "sack_hud": {
+        "selected": "Selected Items",
+        "available": "Available Items"
+      },
       "background": {
         "disable": "Disable background",
         "enable": "Enable background"
