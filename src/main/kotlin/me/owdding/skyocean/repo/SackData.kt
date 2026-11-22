@@ -6,8 +6,8 @@ import me.owdding.skyocean.utils.RemoteRepoDelegate
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
-import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
+import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
 @PreInitModule
