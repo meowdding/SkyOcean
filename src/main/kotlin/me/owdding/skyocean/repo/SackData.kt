@@ -7,12 +7,29 @@ import me.owdding.skyocean.utils.codecs.CodecHelpers
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
+import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
+import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
 @PreInitModule
 object SackData {
     val sackRegex = Regex("(LARGE|MEDIUM|SMALL)_")
 
     val data: List<Sack>? by RemoteRepoDelegate.load("sacks", CodecHelpers.list<Sack>())
+
+    private var cachedSource: List<Sack>? = null
+    private var cachedItems: Map<String, LazyItemStack> = emptyMap()
+
+    val sackItems: Map<String, LazyItemStack>
+        get() {
+            val source = data ?: return emptyMap()
+            if (source !== cachedSource) {
+                cachedItems = source.flatMap { it.items }
+                    .mapNotNull { id -> SkyBlockItemsRepo.getLazyItemStack(id)?.let { id to it } }
+                    .sortedBy { (_, stack) -> stack.getDisplayName().stripped }.toMap()
+                cachedSource = source
+            }
+            return cachedItems
+        }
 
     fun normalizedSackId(id: String) = id.replace(sackRegex, "")
 
