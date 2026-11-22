@@ -36,6 +36,7 @@ object SackHudOverlay : SkyOceanOverlay() {
 
     private val background get() = SackHudConfig.background
     private val padding get() = if (background) 3 else 0
+
     override val name: Component = +"overlays.sack_hud"
     override val position: Position = OverlayPositions.sackHud
     override val bounds: Pair<Int, Int> get() = (display.getWidth() + padding * 2) to (display.getHeight() + padding * 2)

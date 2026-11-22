@@ -77,10 +77,10 @@ class SackHudEditScreen : SkyOceanScreen("Sack HUD Editor") {
         }
 
         LayoutFactory.vertical {
-                display(Displays.text(if (left) +"overlays.sack_hud.selected" else +"overlays.sack_hud.available"))
-                spacer(height = 4)
-                widget(textBox)
-                }.apply {
+            display(Displays.text(if (left) +"overlays.sack_hud.selected" else +"overlays.sack_hud.available"))
+            spacer(height = 4)
+            widget(textBox)
+        }.apply {
             setPosition(columnX(left), originY + 8)
             arrangeElements()
             visitWidgets(this@SackHudEditScreen::addRenderableWidget)
@@ -147,7 +147,7 @@ class SackHudEditScreen : SkyOceanScreen("Sack HUD Editor") {
 
     @Module
     companion object {
-            @Subscription
+        @Subscription
         private fun onCommand(event: RegisterSkyOceanCommandEvent) {
             event.command("sackhud") {
                 execute {
