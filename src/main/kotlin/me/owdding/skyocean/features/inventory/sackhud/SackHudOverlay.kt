@@ -52,7 +52,7 @@ object SackHudOverlay : SkyOceanOverlay() {
                     display(Displays.item(stack))
                     string(stack.hoverName)
                     val amount = SacksAPI.sackItems[id] ?: 0
-                    string(Text.of("x${amount.toFormattedString()}") { color = TextColor.PINK })
+                    string(Text.of("x${amount.toFormattedString()}", TextColor.PINK))
                 }
             }
         }
