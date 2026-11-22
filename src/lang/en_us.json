@@ -250,6 +250,29 @@
       },
       "inventory": {
         "@value": "Inventory",
+        "sack_hud": {
+          "@value": "Sack HUD",
+          "desc": "Shows a HUD with the amounts of selected items stored in your sacks. Move it with the overlay editor.",
+          "edit": "Edit Sack HUD",
+          "background": {
+            "@value": "Background",
+            "desc": "Draws a background behind the sack HUD."
+          },
+          "editor_theme": {
+            "@value": "Editor Theme",
+            "desc": "The look of the sack HUD editor screen.",
+            "light": "Light",
+            "dark": "Dark"
+          },
+          "open_editor": {
+            "@value": "Choose HUD Items",
+            "desc": [
+              "Opens the editor where you pick which sack items are shown in the HUD.",
+              "<italic>You can also open this with <gray>/skyocean sackhud</gray></italic>"
+            ],
+            "text": "Open"
+          }
+        },
         "sack_value": {
           "@value": "Sack Value",
           "desc": "Shows the value of all items in your sacks.",
@@ -2148,6 +2171,8 @@
     "overlays": {
       "crafthelper": "Crafthelper",
       "sack_hud": {
+        "@value": "Sack HUD",
+        "edit": "Open Sack HUD Editor",
         "selected": "Selected Items",
         "available": "Available Items"
       },

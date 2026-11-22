@@ -12,6 +12,8 @@ import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.config.features.inventory.SackHudConfig
+import me.owdding.skyocean.config.features.inventory.SackHudConfig.EditorTheme
 import me.owdding.skyocean.config.hidden.SackHudStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.repo.SackData
@@ -23,6 +25,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 
 class SackHudEditScreen : SkyOceanScreen("Sack HUD Editor") {
@@ -32,6 +35,7 @@ class SackHudEditScreen : SkyOceanScreen("Sack HUD Editor") {
     private var leftSearch = ""
     private var rightSearch = ""
 
+    private val scrollGetters = arrayOf({ 0 }, { 0 })
     private val leftWidgets = mutableListOf<AbstractWidget>()
     private val rightWidgets = mutableListOf<AbstractWidget>()
     private val panelWidth get() = (width * 0.65).toInt().coerceAtLeast(320)
@@ -42,6 +46,7 @@ class SackHudEditScreen : SkyOceanScreen("Sack HUD Editor") {
     private val originX get() = (width - panelWidth) / 2
     private val originY get() = (height - panelHeight) / 2
 
+    private val dark get() = SackHudConfig.editorTheme == EditorTheme.DARK
     private fun columnX(left: Boolean) = originX + 8 + if (left) 0 else columnWidth + 5
 
     private var selectedItems: List<String>
@@ -53,9 +58,7 @@ class SackHudEditScreen : SkyOceanScreen("Sack HUD Editor") {
 
     override fun init() {
         super.init()
-
-        background(olympus("buttons/normal"), panelWidth, panelHeight).asWidget().center().applyAsRenderable()
-
+        background(olympus(if (dark) "buttons/dark/normal" else "buttons/normal"), panelWidth, panelHeight).asWidget().center().applyAsRenderable()
         buildColumn(left = true)
         buildColumn(left = false)
     }
@@ -68,6 +71,7 @@ class SackHudEditScreen : SkyOceanScreen("Sack HUD Editor") {
             withSize(columnWidth - 10, 20)
             withChangeCallback {
                 if (left) leftSearch = it else rightSearch = it
+                scrollGetters[if (left) 0 else 1] = { 0 }
                 rebuildList(left)
             }
         }
@@ -86,6 +90,8 @@ class SackHudEditScreen : SkyOceanScreen("Sack HUD Editor") {
     }
 
     private fun rebuildList(left: Boolean) {
+        val scrollIndex = if (left) 0 else 1
+        val previousScroll = scrollGetters[scrollIndex]()
         val tracked = if (left) leftWidgets else rightWidgets
         tracked.forEach(this::removeWidget)
         tracked.clear()
@@ -104,24 +110,32 @@ class SackHudEditScreen : SkyOceanScreen("Sack HUD Editor") {
 
         val width = columnWidth - 10
         val rows = LayoutFactory.vertical {
-            entries.forEachIndexed { index, (id, stack) ->
-                val color = if (index % 2 == 0) 0xFFA1A3A3u else 0xFFC7C6C9u
+            entries.forEach { (id, stack) ->
                 val content = DisplayFactory.vertical {
                     spacer(width = width - 4)
                     horizontal(5, Alignment.CENTER) {
                         display(Displays.item(stack))
                         string(stack.hoverName)
+                        val used = 16 + 5 + McFont.width(stack.hoverName)
+                        if (width - 4 > used) spacer(width = width - 4 - used)
                     }
                 }
-                val display = background(color, content.withPadding(2))
-                display.asButtonLeft {
+                content.withPadding(2).asButtonLeft {
                     selectedItems = if (id in selectedItems) selectedItems - id else selectedItems + id
                     rebuildList(left = true)
                     rebuildList(left = false)}.let { widget(it) }
             }
         }
 
-        val list = rows.asScrollable(columnWidth, listHeight, alwaysShowScrollBar = true).apply {
+        val list = rows.asScrollable(
+            columnWidth,
+            listHeight,
+            init = {
+                withScrollY(previousScroll)
+                scrollGetters[scrollIndex] = { yScroll }
+            },
+            alwaysShowScrollBar = true,
+        ).apply {
             setPosition(columnX(left), originY + 56)
             arrangeElements()
         }
