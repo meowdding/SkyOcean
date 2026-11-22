@@ -11,10 +11,9 @@ import me.owdding.lib.displays.Displays.background
 import me.owdding.lib.displays.asButtonLeft
 import me.owdding.lib.displays.asWidget
 import me.owdding.lib.displays.withPadding
-import me.owdding.skyocean.config.Config
 import me.owdding.skyocean.config.features.inventory.SackHudConfig
 import me.owdding.skyocean.config.features.inventory.SackHudConfig.EditorTheme
-import me.owdding.skyocean.config.hidden.SackHudStorage
+import me.owdding.skyocean.data.SackHudStorage
 import me.owdding.skyocean.events.RegisterSkyOceanCommandEvent
 import me.owdding.skyocean.repo.SackData
 import me.owdding.skyocean.utils.SkyOceanScreen
@@ -50,10 +49,9 @@ class SackHudEditScreen : SkyOceanScreen("Sack HUD Editor") {
     private fun columnX(left: Boolean) = originX + 8 + if (left) 0 else columnWidth + 5
 
     private var selectedItems: List<String>
-        get() = SackHudStorage.items.toList()
+        get() = SackHudStorage.items
         set(value) {
-            SackHudStorage.items = value.toTypedArray()
-            Config.save()
+            SackHudStorage.items = value
         }
 
     override fun init() {

@@ -27,7 +27,6 @@ import me.owdding.skyocean.config.features.misc.crafthelper.CraftHelperConfig
 import me.owdding.skyocean.config.features.misc.`fun`.FunConfig
 import me.owdding.skyocean.config.features.text_replacements.TextReplacementConfig
 import me.owdding.skyocean.config.hidden.OverlayPositions
-import me.owdding.skyocean.config.hidden.SackHudStorage
 import me.owdding.skyocean.config.patcher.ConfigPatches
 import me.owdding.skyocean.utils.SkyOceanModifyIndicator
 import me.owdding.skyocean.utils.chat.ChatUtils
@@ -53,7 +52,7 @@ object Config : ConfigKt("skyocean/config") {
         category(MiscConfig) {
             categories(MobIconsConfig, CraftHelperConfig, FunConfig)
         }
-        categories(Buttons, OverlayPositions, SackHudStorage)
+        categories(Buttons, OverlayPositions)
 
         separator("skyocean.config.main.modifications")
     }

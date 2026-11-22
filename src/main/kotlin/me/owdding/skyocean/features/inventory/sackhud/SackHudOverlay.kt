@@ -9,7 +9,7 @@ import me.owdding.lib.overlays.Position
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.features.inventory.SackHudConfig
 import me.owdding.skyocean.config.hidden.OverlayPositions
-import me.owdding.skyocean.config.hidden.SackHudStorage
+import me.owdding.skyocean.data.SackHudStorage
 import me.owdding.skyocean.repo.SackData
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.rendering.OceanTextures
@@ -25,7 +25,6 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.extentions.translated
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.time.Duration.Companion.seconds
 
 @Overlay

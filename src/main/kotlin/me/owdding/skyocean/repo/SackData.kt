@@ -5,10 +5,10 @@ import me.owdding.skyocean.utils.PreInitModule
 import me.owdding.skyocean.utils.RemoteRepoDelegate
 import me.owdding.skyocean.utils.codecs.CodecHelpers
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
-import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 
 @PreInitModule
 object SackData {
@@ -23,9 +23,13 @@ object SackData {
         get() {
             val source = data ?: return emptyMap()
             if (source !== cachedSource) {
-                cachedItems = source.flatMap { it.items }
-                    .mapNotNull { id -> SkyBlockItemsRepo.getLazyItemStack(id)?.let { id to it } }
-                    .sortedBy { (_, stack) -> stack.getDisplayName().stripped }.toMap()
+                cachedItems = source.flatMap { it.containingItems }
+                    .mapNotNull { lazyStack ->
+                        val stack = lazyStack.create()
+                        stack.getSkyBlockId()?.let { id -> Triple(id, lazyStack, stack.cleanName) }
+                    }
+                    .sortedBy { it.third }
+                    .associate { it.first to it.second }
                 cachedSource = source
             }
             return cachedItems
