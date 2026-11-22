@@ -9,7 +9,7 @@ import me.owdding.lib.overlays.Position
 import me.owdding.skyocean.config.CachedValue
 import me.owdding.skyocean.config.features.inventory.SackHudConfig
 import me.owdding.skyocean.config.hidden.OverlayPositions
-import me.owdding.skyocean.data.SackHudStorage
+import me.owdding.skyocean.data.profile.SackHudStorage
 import me.owdding.skyocean.repo.SackData
 import me.owdding.skyocean.utils.Utils.unaryPlus
 import me.owdding.skyocean.utils.rendering.OceanTextures
@@ -18,7 +18,6 @@ import me.owdding.skyocean.utils.rendering.SkyOceanOverlay
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
-import tech.thatgravyboat.skyblockapi.api.profile.items.sacks.SacksAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.platform.drawSprite
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
@@ -50,7 +49,7 @@ object SackHudOverlay : SkyOceanOverlay() {
                 horizontal(5, Alignment.CENTER) {
                     display(Displays.item(stack))
                     string(stack.hoverName)
-                    val amount = SacksAPI.sackItems[id] ?: 0
+                    val amount = SackData.amountOf(id)
                     string(Text.of("x${amount.toFormattedString()}", TextColor.PINK))
                 }
             }
