@@ -21,5 +21,5 @@ data object AccessoryBagItemContext : ItemContext {
 
     override val source = ItemSources.ACCESSORY_BAG
 
-    override fun open() = requiresOverworld(true) { requiresCookie { McClient.sendCommand("/ab $page") } }
+    override fun open() = requiresOverworld(true) { requiresCookie { McClient.sendCommand("/ab") } }
 }
