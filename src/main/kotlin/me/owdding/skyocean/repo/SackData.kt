@@ -37,6 +37,7 @@ object SackData {
             return cachedItems
         }
 
+    // TODO: Switch to SacksAPI.items when sbapi 4.3.3 releases
     fun amountOf(id: SkyBlockId): Int = SacksAPI.sackItems.entries.firstOrNull { it.key.equals(id.cleanId, ignoreCase = true) }?.value ?: 0
     fun normalizedSackId(id: String) = id.replace(sackRegex, "")
 
