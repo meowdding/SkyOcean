@@ -5,18 +5,17 @@ import me.owdding.skyocean.features.item.sources.system.SimpleTrackedItem
 import tech.thatgravyboat.skyblockapi.api.profile.maxwell.MaxwellAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 object AccessoryBagItemSource : ItemSource {
-    override fun getAll() = MaxwellAPI.accessoryEntries.map { (stack, page) -> SimpleTrackedItem(stack, AccessoryBagItemContext(page)) }
+    override fun getAll() = MaxwellAPI.accessories.map { stack -> SimpleTrackedItem(stack, AccessoryBagItemContext) }
 
     override val type = ItemSources.ACCESSORY_BAG
 }
 
-data class AccessoryBagItemContext(val page: Int) : ItemContext {
+data object AccessoryBagItemContext : ItemContext {
     override fun collectLines() = build {
-        add("Accessory bag page $page") { color = TextColor.GRAY }
-        requiresOverworld { add("Click to open accessories!") { color = TextColor.YELLOW } }
+        add("Accessory bag", TextColor.GRAY)
+        requiresOverworld { add("Click to open accessories!", TextColor.YELLOW) }
         riftWarning()
     }
 
