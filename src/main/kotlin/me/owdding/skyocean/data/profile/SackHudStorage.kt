@@ -13,7 +13,7 @@ object SackHudStorage {
     )
 
     private val data get() = storage.get()
-    val items: Set<SkyBlockId> get() = data?.toSet().orEmpty()
+    val items: Set<SkyBlockId> get() = data.orEmpty()
 
     fun add(id: SkyBlockId) {
         val data = data ?: return
