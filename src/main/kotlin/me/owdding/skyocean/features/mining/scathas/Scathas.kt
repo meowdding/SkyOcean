@@ -82,8 +82,8 @@ object Scathas : MeowddingLogger by SkyOcean.featureLogger() {
             return
         }
         val isScatha = when (val hp = entity.derpyMaxHp().roundToInt()) {
-            5 -> false
-            10 -> true
+            5, 20 -> false
+            10, 40 -> true
             else -> {
                 error("Worm has invalid hp: $hp")
                 return
