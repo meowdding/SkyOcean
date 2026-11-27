@@ -15,6 +15,7 @@ object InventoryConfig : CategoryKt("inventory") {
 
     init {
         obj("sackValue", SackValueConfig) { this.translation = "skyocean.config.inventory.sack_value" }
+        obj("sackHud", SackHudConfig) { this.translation = "skyocean.config.inventory.sack_hud" }
     }
 
     var minionHelper by boolean(true) {
