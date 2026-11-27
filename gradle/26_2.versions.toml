@@ -7,7 +7,7 @@ fabric-api = "0.155.2+26.2"
 
 resourceful-lib = "5.0.2"
 resourceful-config = "5.0.0"
-olympus = "1.9.3"
+olympus = "1.9.5"
 placeholders = "3.1.0-beta.1+26.2"
 renderchest = "1.0.3+26.2"
 
